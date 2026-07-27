@@ -179,6 +179,89 @@ class ApiController extends Controller {
         exit;
     }
 
+    public function change_passwordAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $user_id = Session::get('user_id');
+
+        if (empty($user_id)) {
+            $response['message'] = 'Your session has expired. Sign in again.';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (empty($this->post['pw1'])) {
+            $response['message'] = 'Password is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (empty($this->post['pw2'])) {
+            $response['message'] = 'Confirm your new password';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($this->post['pw1'] !== $this->post['pw2']) {
+            $response['message'] = 'The two passwords do not match';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (strlen($this->post['pw1']) < 12) {
+            $response['message'] = 'Password must be at least 12 characters';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!preg_match('/[A-Z]/', $this->post['pw1'])) {
+            $response['message'] = 'Password must contain an uppercase letter';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!preg_match('/[a-z]/', $this->post['pw1'])) {
+            $response['message'] = 'Password must contain a lowercase letter';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!preg_match('/[0-9]/', $this->post['pw1'])) {
+            $response['message'] = 'Password must contain a number';
+            echo json_encode($response);
+            exit;
+        }
+
+        $rows = $this->user_model->get_user_by_id($user_id);
+
+        if (empty($rows)) {
+            $response['message'] = 'Your session has expired. Sign in again.';
+            echo json_encode($response);
+            exit;
+        }
+
+        $user = $rows[0];
+
+        if (password_verify($this->post['pw1'], $user['p_word'])) {
+            $response['message'] = 'Choose a password you have not used before';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->user_model->change_password($user_id, $this->post['pw1']);
+
+        Session::set('reset_pw', 0);
+
+        $response['success'] = true;
+        $response['message'] = 'Your password has been changed';
+        echo json_encode($response);
+        exit;
+    }
+
     public function logoutAction(){
         Main::do_logout();
         exit;

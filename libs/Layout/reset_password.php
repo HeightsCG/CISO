@@ -69,12 +69,18 @@ $(document).ready(function () {
 </script>
 </head>
 <body>
-<main class="auth">
+<div class="auth">
+<div class="auth__module">
 
-    <div class="auth__panel" id="reset_view">
-        <div class="auth__brand"><strong>CISO</strong>.aero</div>
-        <p class="auth__purpose">Security and compliance management</p>
-        <h1 class="auth__title">Choose a New Password</h1>
+    <aside class="auth__brandbar">
+        <div class="auth__mark"><strong>CISO</strong>.aero</div>
+        <p class="auth__tagline">Security and compliance management for aviation organisations.</p>
+    </aside>
+
+    <main class="auth__stage">
+
+    <div class="auth__form" id="reset_view">
+        <h1 class="auth__heading">Choose a New Password</h1>
         <input type="hidden" id="reset_token" value="<?php echo htmlspecialchars($this->reset_token, ENT_QUOTES, 'UTF-8'); ?>">
         <div class="auth__fields">
             <div class="field">
@@ -90,11 +96,14 @@ $(document).ready(function () {
         <div class="auth__submit">
             <button type="button" id="do_reset" class="btn btn--primary btn--block">Change Password</button>
         </div>
-        <div class="auth__aside">
+        <div class="auth__actions">
             <a href="/">Back to Sign In</a>
         </div>
     </div>
 
-</main>
+    </main>
+
+</div>
+</div>
 </body>
 </html>

@@ -88,18 +88,6 @@ class UsersModel extends Model {
         return $raw_token;
     }
 
-    public function clear_reset_token($user_id){
-        $where = array(
-            'user_id' => $user_id
-        );
-        $data = array(
-            'reset_token'         => null,
-            'reset_token_expires' => null,
-            'date_updated'        => date('Y-m-d H:i:s')
-        );
-        parent::update('user_accounts', $data, 'user_id = :user_id', $where);
-    }
-
     public function change_password($user_id, $p_word){
         $where = array(
             'user_id' => $user_id

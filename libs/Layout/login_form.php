@@ -126,49 +126,61 @@ $(document).ready(function () {
 </script>
 </head>
 <body>
-<main class="auth">
+<div class="auth">
+<div class="auth__module">
 
-    <div class="auth__panel" id="login_view">
-        <div class="auth__brand"><strong>CISO</strong>.aero</div>
-        <p class="auth__purpose">Security and compliance management</p>
-        <h1 class="auth__title">Sign In</h1>
-        <div class="auth__fields">
-            <div class="field">
-                <label for="u_name">Username <abbr title="required">*</abbr></label>
-                <input type="text" id="u_name" name="u_name" autocomplete="username" autocapitalize="none" spellcheck="false" required>
-            </div>
-            <div class="field">
-                <label for="p_word">Password <abbr title="required">*</abbr></label>
-                <input type="password" id="p_word" name="p_word" autocomplete="current-password" required>
-            </div>
+    <aside class="auth__brandbar">
+        <div class="auth__lockup">
+            <svg class="auth__logo" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                <path d="M8 27 L20.5 5 L27 5 L27 27 Z" fill="currentColor"/>
+                <path d="M2 27 L2 22 L15.5 22 L12.5 27 Z" fill="currentColor" opacity="0.5"/>
+            </svg>
+            <div class="auth__mark"><strong>CISO</strong><span class="auth__mark-tld">.aero</span></div>
         </div>
-        <div class="auth__submit">
-            <button type="button" id="do_login" class="btn btn--primary btn--block">Sign In</button>
-        </div>
-        <div class="auth__aside">
-            <button type="button" id="show_forgot" class="btn btn--tertiary">Forgot?</button>
-        </div>
-    </div>
+    </aside>
 
-    <div class="auth__panel" id="forgot_view" hidden>
-        <div class="auth__brand"><strong>CISO</strong>.aero</div>
-        <p class="auth__purpose">Security and compliance management</p>
-        <h1 class="auth__title">Reset Password</h1>
-        <div class="auth__fields">
-            <div class="field">
-                <label for="reset_email">Email address <abbr title="required">*</abbr></label>
-                <input type="email" id="reset_email" name="reset_email" autocomplete="email" autocapitalize="none" spellcheck="false" required>
-                <span class="field__help">We will send a link to reset your password. It is valid for one hour.</span>
+    <main class="auth__stage">
+
+        <div class="auth__form" id="login_view">
+            <h1 class="auth__heading">Sign In</h1>
+            <div class="auth__fields">
+                <div class="field">
+                    <label for="u_name">Username <abbr title="required">*</abbr></label>
+                    <input type="text" id="u_name" name="u_name" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+                </div>
+                <div class="field">
+                    <label for="p_word">Password <abbr title="required">*</abbr></label>
+                    <input type="password" id="p_word" name="p_word" autocomplete="current-password" required>
+                </div>
+            </div>
+            <div class="auth__submit">
+                <button type="button" id="do_login" class="btn btn--primary btn--block">Sign In</button>
+            </div>
+            <div class="auth__actions">
+                <button type="button" id="show_forgot" class="btn btn--tertiary">Forgot your password?</button>
             </div>
         </div>
-        <div class="auth__submit">
-            <button type="button" id="do_forgot" class="btn btn--primary btn--block">Continue</button>
-        </div>
-        <div class="auth__aside">
-            <button type="button" id="show_login" class="btn btn--tertiary">Back to Sign In</button>
-        </div>
-    </div>
 
-</main>
+        <div class="auth__form" id="forgot_view" hidden>
+            <h1 class="auth__heading">Reset Password</h1>
+            <p class="auth__note">Enter the email address on your account and we will send a link to choose a new password. It expires in one hour.</p>
+            <div class="auth__fields">
+                <div class="field">
+                    <label for="reset_email">Email address <abbr title="required">*</abbr></label>
+                    <input type="email" id="reset_email" name="reset_email" autocomplete="email" autocapitalize="none" spellcheck="false" required>
+                </div>
+            </div>
+            <div class="auth__submit">
+                <button type="button" id="do_forgot" class="btn btn--primary btn--block">Send Reset Link</button>
+            </div>
+            <div class="auth__actions">
+                <button type="button" id="show_login" class="btn btn--tertiary">Back to Sign In</button>
+            </div>
+        </div>
+
+    </main>
+
+</div>
+</div>
 </body>
 </html>
