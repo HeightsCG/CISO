@@ -83,8 +83,8 @@ class UsersModel extends Model {
             'reset_token_expires' => date('Y-m-d H:i:s', strtotime('+1 hour')),
             'date_updated'        => date('Y-m-d H:i:s')
         );
-        
-        parent::update('user_accounts', $data, $where);
+
+        parent::update('user_accounts', $data, 'user_id = :user_id', $where);
         return $raw_token;
     }
 
@@ -97,7 +97,7 @@ class UsersModel extends Model {
             'reset_token_expires' => null,
             'date_updated'        => date('Y-m-d H:i:s')
         );
-        parent::update('user_accounts', $data, $where);
+        parent::update('user_accounts', $data, 'user_id = :user_id', $where);
     }
 
     public function change_password($user_id, $p_word){
@@ -112,7 +112,7 @@ class UsersModel extends Model {
             'updated_by'          => $user_id,
             'date_updated'        => date('Y-m-d H:i:s')
         );
-        parent::update('user_accounts', $data, $where);
+        parent::update('user_accounts', $data, 'user_id = :user_id', $where);
     }
 
     public function add_user($first_name, $last_name, $u_name, $user_email, $enc_pw){
