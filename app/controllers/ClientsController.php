@@ -1,5 +1,5 @@
 <?php
-class SettingsController extends Controller {
+class ClientsController extends Controller {
 
     public $protected = 1;
 
@@ -8,11 +8,6 @@ class SettingsController extends Controller {
     }
 
     public function indexAction(){
-        $this->view->page_title = 'Settings';
-        $this->view->render();
-    }
-
-    public function usersAction(){
         $this->view->render();
     }
 

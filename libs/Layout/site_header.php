@@ -85,7 +85,7 @@ $(document).ready(function () {
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="/users">
+                        <a class="dropdown-item" href="/settings/users">
                             <i class="fa-thin fa-users"></i>
                             <span>Users</span>
                         </a>
