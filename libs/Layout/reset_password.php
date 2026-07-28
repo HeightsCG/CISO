@@ -88,7 +88,7 @@ $(document).ready(function () {
 
     <aside class="auth__brandbar">
         <div class="auth__mark"><strong>CISO</strong>.aero</div>
-        <p class="auth__tagline">Security and compliance management for aviation organisations.</p>
+        <p class="auth__tagline">Security and compliance management for aviation organizations.</p>
     </aside>
 
     <main class="auth__stage">

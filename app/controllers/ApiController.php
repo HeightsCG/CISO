@@ -70,6 +70,14 @@ class ApiController extends Controller {
 
         session_regenerate_id(true);
 
+        $company = $this->companies_model->get_company($user['company_id']);
+
+        if (is_array($company) && count($company) === 1) {
+            Session::set('session_timeout_minutes', (int) $company[0]['session_timeout_minutes']);
+        }
+
+        Session::set('last_activity', time());
+
         $response['success'] = true;
         $response['message'] = 'Signed in successfully';
         echo json_encode($response);
@@ -362,7 +370,7 @@ class ApiController extends Controller {
             exit;
         }
 
-        $taken = $this->user_model->get_email_owner($this->post['user_email'], $user_id);
+        $taken = $this->user_model->check_email($this->post['user_email'], $user_id);
 
         if (!empty($taken)) {
             $response['message'] = 'That email address is already in use';
@@ -389,6 +397,84 @@ class ApiController extends Controller {
         exit;
     }
 
+
+    /**
+     * Build the timezone picker list from the IANA database. Offsets are derived
+     * from each zone at runtime so daylight saving is always correct; the value
+     * stored is the IANA identifier, never a fixed offset.
+     */
+    private function timezone_list(): array
+    {
+        $groups = array(
+            'America'    => 'Americas',
+            'Atlantic'   => 'Americas',
+            'Europe'     => 'Europe',
+            'Africa'     => 'Africa',
+            'Asia'       => 'Asia',
+            'Indian'     => 'Asia',
+            'Australia'  => 'Australia',
+            'Pacific'    => 'Pacific'
+        );
+
+        $now = new DateTime('now');
+        $list = array();
+
+        foreach (timezone_identifiers_list() as $id) {
+
+            $zone = new DateTimeZone($id);
+            $prefix = explode('/', $id)[0];
+            $group = $groups[$prefix] ?? 'Other';
+
+            $city = str_replace('_', ' ', substr($id, strrpos($id, '/') === false ? 0 : strrpos($id, '/') + 1));
+            $name = IntlTimeZone::createTimeZone($id)->getDisplayName(false, IntlTimeZone::DISPLAY_LONG_GENERIC, 'en_US');
+
+            $current = $zone->getOffset($now);
+            $standard = $current;
+            $daylight = $current;
+
+            foreach ($zone->getTransitions($now->getTimestamp() - 31536000, $now->getTimestamp() + 31536000) as $transition) {
+                if ($transition['isdst']) {
+                    $daylight = $transition['offset'];
+                } else {
+                    $standard = $transition['offset'];
+                }
+            }
+
+            $offset = $this->format_offset($standard);
+
+            if ($daylight !== $standard) {
+                $offset .= ' / ' . $this->format_offset($daylight) . ' DST';
+            }
+
+            $location = $zone->getLocation();
+            $country_code = (string) ($location['country_code'] ?? '');
+            $country = ($country_code !== '' && $country_code !== '??') ? (string) Locale::getDisplayRegion('-' . $country_code, 'en') : '';
+
+            $list[] = array(
+                'id' => $id,
+                'group' => $group,
+                'label' => $name . ' — ' . $city . ' (' . $offset . ')',
+                'tokens' => trim($city . ' ' . $country . ' ' . $country_code . ' ' . $name . ' ' . $this->format_offset($current) . ' ' . str_replace('_', ' ', $id) . ' ' . $now->setTimezone($zone)->format('T'))
+            );
+        }
+
+        usort($list, function ($a, $b) {
+            return ($a['group'] === $b['group']) ? strcmp($a['label'], $b['label']) : strcmp($a['group'], $b['group']);
+        });
+
+        return $list;
+    }
+
+    private function format_offset($seconds): string
+    {
+        $sign = ($seconds < 0) ? "\xE2\x88\x92" : '+';
+        $seconds = abs($seconds);
+        $hours = intdiv($seconds, 3600);
+        $minutes = intdiv($seconds % 3600, 60);
+
+        return 'UTC' . $sign . $hours . ($minutes > 0 ? ':' . str_pad((string) $minutes, 2, '0', STR_PAD_LEFT) : '');
+    }
+
     public function get_companyAction(){
 
         $response = array(
@@ -404,15 +490,317 @@ class ApiController extends Controller {
 
         $company = $this->companies_model->get_company(Session::get('company_id'));
 
-        if (is_array($company) && count($company) === 1) {
-            $response['message'] = 'That organisation could not be found';
+        if (!is_array($company) || count($company) !== 1) {
+            $response['message'] = 'That organization could not be found';
             echo json_encode($response);
             exit;
         }
 
         $response['success'] = true;
-        $response['message'] = 'Organisation loaded';
+        $response['message'] = 'Organization loaded';
         $response['data'] = $company[0];
+        $response['timezones'] = $this->timezone_list();
+        echo json_encode($response);
+        exit;
+    }
+
+    public function save_companyAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        if (empty(Session::get('user_id'))) {
+            $response['message'] = 'Your session has expired. Sign in again.';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (empty($this->post['company_name'])) {
+            $response['message'] = 'Organization name is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!empty($this->post['website']) && !filter_var($this->post['website'], FILTER_VALIDATE_URL)) {
+            $response['message'] = 'Enter a valid website address, including https://';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!empty($this->post['email_domain']) && !preg_match('/^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.(?!-)[A-Za-z0-9-]{1,63}(?<!-))+$/', $this->post['email_domain'])) {
+            $response['message'] = 'Enter a valid email domain, such as example.aero';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (empty($this->post['timezone']) || !in_array($this->post['timezone'], timezone_identifiers_list())) {
+            $response['message'] = 'Select a valid timezone';
+            echo json_encode($response);
+            exit;
+        }
+
+        $date_formats = array('d M Y', 'd/m/Y', 'm/d/Y', 'Y-m-d', 'j F Y');
+
+        if (empty($this->post['date_format']) || !in_array($this->post['date_format'], $date_formats)) {
+            $response['message'] = 'Select a valid date format';
+            echo json_encode($response);
+            exit;
+        }
+
+        $time_formats = array('H:i', 'g:i A');
+
+        if (empty($this->post['time_format']) || !in_array($this->post['time_format'], $time_formats)) {
+            $response['message'] = 'Select a valid time format';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (empty($this->post['brand_color']) || !preg_match('/^#[0-9A-Fa-f]{6}$/', $this->post['brand_color'])) {
+            $response['message'] = 'Enter a valid primary brand color as a six digit hex value';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!empty($this->post['brand_color_secondary']) && !preg_match('/^#[0-9A-Fa-f]{6}$/', $this->post['brand_color_secondary'])) {
+            $response['message'] = 'Enter a valid secondary brand color as a six digit hex value';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!empty($this->post['brand_color_accent']) && !preg_match('/^#[0-9A-Fa-f]{6}$/', $this->post['brand_color_accent'])) {
+            $response['message'] = 'Enter a valid accent brand color as a six digit hex value';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->companies_model->update_company(
+            Session::get('company_id'),
+            $this->post['company_name'],
+            $this->post['trading_name'],
+            $this->post['address_1'],
+            $this->post['address_2'],
+            $this->post['city'],
+            $this->post['state'],
+            $this->post['postal_code'],
+            $this->post['country'],
+            $this->post['website'],
+            strtolower($this->post['email_domain']),
+            $this->post['timezone'],
+            $this->post['date_format'],
+            $this->post['time_format'],
+            strtoupper($this->post['brand_color']),
+            strtoupper($this->post['brand_color_secondary']),
+            strtoupper($this->post['brand_color_accent']),
+            Session::get('user_id')
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'Organization details updated';
+        echo json_encode($response);
+        exit;
+    }
+
+    public function save_securityAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        if (empty(Session::get('user_id'))) {
+            $response['message'] = 'Your session has expired. Sign in again.';
+            echo json_encode($response);
+            exit;
+        }
+
+        $session_timeout_enabled = (empty($this->post['session_timeout_enabled']) ? 0 : 1);
+        $password_expiry_enabled = (empty($this->post['password_expiry_enabled']) ? 0 : 1);
+        $account_lockout_enabled = (empty($this->post['account_lockout_enabled']) ? 0 : 1);
+        $mfa_enabled = (empty($this->post['mfa_enabled']) ? 0 : 1);
+
+        $required = array();
+
+        if ($session_timeout_enabled === 1) {
+            $required['session_timeout_minutes'] = array('Sign out after', 5, 1440);
+        }
+
+        if ($password_expiry_enabled === 1) {
+            $required['password_expiry_days'] = array('Change every', 1, 3650);
+        }
+
+        if ($account_lockout_enabled === 1) {
+            $required['lockout_attempts'] = array('Failed attempts', 1, 100);
+            $required['lockout_minutes'] = array('Lock for', 1, 1440);
+        }
+
+        foreach ($required as $field => $rule) {
+
+            $value = (string) ($this->post[$field] ?? '');
+
+            if ($value === '' || !ctype_digit($value) || (int) $value < 1) {
+                $response['message'] = $rule[0] . ' must be a whole number greater than zero';
+                echo json_encode($response);
+                exit;
+            }
+
+            if ((int) $value < $rule[1] || (int) $value > $rule[2]) {
+                $response['message'] = $rule[0] . ' must be between ' . $rule[1] . ' and ' . $rule[2];
+                echo json_encode($response);
+                exit;
+            }
+        }
+
+        $allowed_methods = array('authenticator', 'email');
+        $methods = array();
+
+        foreach (explode(',', (string) ($this->post['mfa_methods'] ?? '')) as $method) {
+
+            $method = trim($method);
+
+            if ($method !== '' && in_array($method, $allowed_methods) && !in_array($method, $methods)) {
+                $methods[] = $method;
+            }
+        }
+
+        if ($mfa_enabled === 1 && count($methods) === 0) {
+            $response['message'] = 'Choose at least one multi-factor method';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->companies_model->update_security(
+            Session::get('company_id'),
+            $session_timeout_enabled,
+            (int) ($this->post['session_timeout_minutes'] ?? 0),
+            $password_expiry_enabled,
+            (int) ($this->post['password_expiry_days'] ?? 0),
+            $account_lockout_enabled,
+            (int) ($this->post['lockout_attempts'] ?? 0),
+            (int) ($this->post['lockout_minutes'] ?? 0),
+            $mfa_enabled,
+            implode(',', $methods),
+            Session::get('user_id')
+        );
+
+        Session::set('session_timeout_minutes', ($session_timeout_enabled === 1 ? (int) $this->post['session_timeout_minutes'] : 0));
+
+        $response['success'] = true;
+        $response['message'] = 'Security settings updated';
+        echo json_encode($response);
+        exit;
+    }
+
+    public function save_logoAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        if (empty(Session::get('user_id'))) {
+            $response['message'] = 'Your session has expired. Sign in again.';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!isset($_FILES['logo_file']) || $_FILES['logo_file']['error'] !== UPLOAD_ERR_OK) {
+            $response['message'] = 'Choose a logo file to upload';
+            echo json_encode($response);
+            exit;
+        }
+
+        $tmp_name = $_FILES['logo_file']['tmp_name'];
+
+        if (!is_uploaded_file($tmp_name)) {
+            $response['message'] = 'That upload could not be read';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($_FILES['logo_file']['size'] > 2097152) {
+            $response['message'] = 'The logo must be 2MB or smaller';
+            echo json_encode($response);
+            exit;
+        }
+
+        $size = getimagesize($tmp_name);
+
+        if ($size === false || !in_array($size[2], array(IMAGETYPE_PNG, IMAGETYPE_JPEG))) {
+            $response['message'] = 'The logo must be a PNG or JPG image';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($size[0] < 120 || $size[1] < 40) {
+            $response['message'] = 'The logo must be at least 120 by 40 pixels to print cleanly on reports';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!S3Service::configured()) {
+            $response['message'] = 'File storage is not configured';
+            echo json_encode($response);
+            exit;
+        }
+
+        $company_id = Session::get('company_id');
+        $extension = ($size[2] === IMAGETYPE_PNG ? 'png' : 'jpg');
+        $content_type = ($size[2] === IMAGETYPE_PNG ? 'image/png' : 'image/jpeg');
+        $key = 'branding/' . $company_id . '/logo_' . bin2hex(random_bytes(8)) . '.' . $extension;
+
+        $original_name = basename((string) $_FILES['logo_file']['name']);
+        $logo_size = (int) $_FILES['logo_file']['size'];
+        $logo_path = S3Service::upload_file($key, $tmp_name, $content_type);
+
+        if ($logo_path === '') {
+            $response['message'] = 'The logo could not be saved';
+            echo json_encode($response);
+            exit;
+        }
+
+        $company = $this->companies_model->get_company($company_id);
+
+        if (is_array($company) && count($company) === 1 && $company[0]['logo_path'] !== '') {
+            S3Service::delete_by_url($company[0]['logo_path']);
+        }
+
+        $this->companies_model->update_logo($company_id, $logo_path, $original_name, $logo_size, Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'Logo updated';
+        $response['logo_path'] = $logo_path;
+        $response['logo_filename'] = $original_name;
+        $response['logo_size'] = $logo_size;
+        echo json_encode($response);
+        exit;
+    }
+
+    public function remove_logoAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        if (empty(Session::get('user_id'))) {
+            $response['message'] = 'Your session has expired. Sign in again.';
+            echo json_encode($response);
+            exit;
+        }
+
+        $company_id = Session::get('company_id');
+        $company = $this->companies_model->get_company($company_id);
+
+        if (is_array($company) && count($company) === 1 && $company[0]['logo_path'] !== '') {
+            S3Service::delete_by_url($company[0]['logo_path']);
+        }
+
+        $this->companies_model->update_logo($company_id, '', '', 0, Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'Logo removed';
         echo json_encode($response);
         exit;
     }

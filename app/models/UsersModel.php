@@ -59,7 +59,7 @@ class UsersModel extends Model {
         return parent::select($sql, $where);
     }
 
-    public function get_email_owner($user_email, $exclude_user_id)
+    public function check_email($user_email, $exclude_user_id)
     {
         $where = array(
             'user_email' => $user_email,

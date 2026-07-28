@@ -11,7 +11,6 @@ var ApiDataSvc = {
     apiCall: apiCall
 };
 
-// Send CSRF token as header on all AJAX POST requests (covers FormData uploads)
 $.ajaxSetup({
     beforeSend: function(xhr, settings) {
         if (settings.type && settings.type.toUpperCase() === 'POST') {
@@ -23,24 +22,9 @@ $.ajaxSetup({
     }
 });
 
-// Header scroll detection for glassmorphism effect
-$(document).ready(function() {
-    var header = $('#mainHeader');
-    
-    $(window).scroll(function() {
-        if ($(window).scrollTop() > 50) {
-            header.addClass('scrolled');
-        } else {
-            header.removeClass('scrolled');
-        }
-    });
-});
-
 function apiCall(type, endpoint, body, success, callFail) {
 
     var url  = this.baseUrl + endpoint;
-
-    // Attach CSRF token to POST requests
     if (type === 'post' && body && typeof body === 'object' && !(body instanceof FormData)) {
         var csrfMeta = document.querySelector('meta[name="csrf-token"]');
         if (csrfMeta) {

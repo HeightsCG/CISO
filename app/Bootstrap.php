@@ -17,6 +17,7 @@ class Bootstrap
         $this->configure_session($config, $env);
 
         Session::init();
+        $this->enforce_idle_timeout();
 
         $c = Main::controller_name();
         $m = Main::method_name();
@@ -59,6 +60,50 @@ class Bootstrap
             }
             echo 'An unexpected error occurred.';
         });
+    }
+
+    /**
+     * Company-wide idle timeout. The limit is written to the session at login so
+     * enforcement costs no query per request; a value of 0 disables it.
+     */
+    private function enforce_idle_timeout(): void
+    {
+        if (empty(Session::get('user_id'))) {
+            return;
+        }
+
+        $minutes = (int) Session::get('session_timeout_minutes');
+
+        if ($minutes <= 0) {
+            Session::set('last_activity', time());
+            return;
+        }
+
+        $last_activity = (int) Session::get('last_activity');
+
+        if ($last_activity > 0 && (time() - $last_activity) > ($minutes * 60)) {
+
+            Session::destroy();
+
+            // An API caller must get JSON back. Redirecting here returns a 302 with an
+            // empty body, which every JSON.parse in the browser then chokes on.
+            if (strtolower(Main::controller_name()) === 'apicontroller') {
+
+                $response = array(
+                    'success' => false,
+                    'message' => 'Your session has expired. Sign in again.'
+                );
+
+                header('Content-Type: application/json');
+                echo json_encode($response);
+                exit;
+            }
+
+            header('Location: /');
+            exit;
+        }
+
+        Session::set('last_activity', time());
     }
 
     private function configure_session(array $config, string $env): void

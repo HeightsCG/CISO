@@ -47,7 +47,7 @@
                 </div>
                 <div class="panel__body">
                     <dl class="datalist datalist--stacked">
-                        <dt>Organisation</dt>
+                        <dt>Organization</dt>
                         <dd><?php echo htmlspecialchars((string) $this->profile['company_name'], ENT_QUOTES, 'UTF-8'); ?></dd>
                         <dt>Role</dt>
                         <dd><?php echo htmlspecialchars((string) $this->profile['role_name'], ENT_QUOTES, 'UTF-8'); ?></dd>
