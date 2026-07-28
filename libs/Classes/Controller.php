@@ -7,6 +7,8 @@ class Controller {
     public $controller;
     public $method;
     public $post;
+    public $json;
+    public $public_actions = array();
 
     public function __construct() {
         $this->env = $this->get_environment();
@@ -14,6 +16,34 @@ class Controller {
         $this->method = preg_replace('/action/', '', strtolower(Main::method_name()));
         $this->view = new View($this->protected);
         $this->post = self::clean_post_data();
+        $this->enforce_protection();
+    }
+
+    /**
+     * Protected controllers that answer with JSON have no layout to fall back on,
+     * so the session is enforced here rather than in each action. View controllers
+     * keep their existing behaviour: layout.php renders the login form instead.
+     */
+    private function enforce_protection(): void
+    {
+        if (empty($this->json) || empty($this->protected)) {
+            return;
+        }
+
+        if (in_array(Main::method_name(), $this->public_actions, true)) {
+            return;
+        }
+
+        if (!empty(Session::get('user_id'))) {
+            return;
+        }
+
+        http_response_code(401);
+        echo json_encode(array(
+            'success' => false,
+            'message' => 'Your session has expired. Sign in again.'
+        ));
+        exit;
     }
 
     public static function clean_post_data(){

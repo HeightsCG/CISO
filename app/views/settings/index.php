@@ -119,10 +119,13 @@
                                 <div class="form-floating">
                                     <select id="date_format" class="form-select">
                                         <option value="d M Y">31 Dec 2026</option>
+                                        <option value="D, d M Y">Thu, 31 Dec 2026</option>
+                                        <option value="j F Y">31 December 2026</option>
+                                        <option value="F j, Y">December 31, 2026</option>
                                         <option value="d/m/Y">31/12/2026</option>
                                         <option value="m/d/Y">12/31/2026</option>
+                                        <option value="d.m.Y">31.12.2026</option>
                                         <option value="Y-m-d">2026-12-31</option>
-                                        <option value="j F Y">31 December 2026</option>
                                     </select>
                                     <label for="date_format">Date Format</label>
                                 </div>
@@ -131,7 +134,10 @@
                                 <div class="form-floating">
                                     <select id="time_format" class="form-select">
                                         <option value="H:i">14:30 &mdash; 24 hour</option>
+                                        <option value="H:i:s">14:30:00 &mdash; 24 hour with seconds</option>
                                         <option value="g:i A">2:30 PM &mdash; 12 hour</option>
+                                        <option value="g:i a">2:30 pm &mdash; 12 hour lowercase</option>
+                                        <option value="g:i:s A">2:30:00 PM &mdash; 12 hour with seconds</option>
                                     </select>
                                     <label for="time_format">Time Format</label>
                                 </div>

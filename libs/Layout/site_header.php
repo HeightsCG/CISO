@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/2.3.8/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.4/css/buttons.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
 <link rel="stylesheet" href="/css/site.css">
 
@@ -18,6 +19,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/2.3.8/js/dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/2.3.8/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.2.4/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.2.4/js/buttons.bootstrap5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
 <script src="https://kit.fontawesome.com/5ec0dddd80.js" crossorigin="anonymous"></script>
 <script src="/js/api.data.js"></script>
@@ -53,11 +56,11 @@ $(document).ready(function () {
         <nav class="shell__menu" aria-label="Primary">
             <div class="shell__group">
                 <p class="shell__group-label">Menu</p>
-                <a class="shell__link" href="/">
+                <a class="shell__link<?php echo $this->controller == 'index' ? ' is-active' : ''; ?>" href="/">
                     <i class="fa-thin fa-house"></i>
                     <span>Dashboard</span>
                 </a>
-                <a class="shell__link" href="/clients">
+                <a class="shell__link<?php echo $this->controller == 'clients' ? ' is-active' : ''; ?>" href="/clients">
                     <i class="fa-thin fa-shield-halved"></i>
                     <span>Clients</span>
                 </a>

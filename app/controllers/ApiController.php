@@ -2,15 +2,23 @@
 class ApiController extends Controller {
 
     public $protected = 1;
+    public $json = 1;
+    public $public_actions = array(
+        'loginAction',
+        'forgot_passwordAction',
+        'reset_passwordAction'
+    );
     public $user_model;
     public $notifications_model;
     public $companies_model;
+    public $clients_model;
 
     public function __construct(){
         parent::__construct();
         $this->user_model = new UsersModel();
         $this->notifications_model = new NotificationsModel();
         $this->companies_model = new CompaniesModel();
+        $this->clients_model = new ClientsModel();
     }
 
     public function loginAction(){
@@ -81,7 +89,6 @@ class ApiController extends Controller {
         $response['success'] = true;
         $response['message'] = 'Signed in successfully';
         echo json_encode($response);
-        exit;
     }
 
     public function forgot_passwordAction(){
@@ -114,7 +121,6 @@ class ApiController extends Controller {
         $response['success'] = true;
         $response['message'] = 'If that account is on our system, a reset link is on its way.';
         echo json_encode($response);
-        exit;
     }
 
     public function reset_passwordAction(){
@@ -198,7 +204,6 @@ class ApiController extends Controller {
         $response['success'] = true;
         $response['message'] = 'Your password has been changed';
         echo json_encode($response);
-        exit;
     }
 
     public function change_passwordAction(){
@@ -209,12 +214,6 @@ class ApiController extends Controller {
         );
 
         $user_id = Session::get('user_id');
-
-        if (empty($user_id)) {
-            $response['message'] = 'Your session has expired. Sign in again.';
-            echo json_encode($response);
-            exit;
-        }
 
         if (empty($this->post['pw1'])) {
             $response['message'] = 'Password is required';
@@ -308,7 +307,6 @@ class ApiController extends Controller {
         $response['success'] = true;
         $response['message'] = 'Your password has been changed';
         echo json_encode($response);
-        exit;
     }
 
     public function save_profileAction(){
@@ -394,15 +392,8 @@ class ApiController extends Controller {
         $response['success'] = true;
         $response['message'] = 'Your profile has been updated';
         echo json_encode($response);
-        exit;
     }
 
-
-    /**
-     * Build the timezone picker list from the IANA database. Offsets are derived
-     * from each zone at runtime so daylight saving is always correct; the value
-     * stored is the IANA identifier, never a fixed offset.
-     */
     private function timezone_list(): array
     {
         $groups = array(
@@ -471,7 +462,6 @@ class ApiController extends Controller {
         $seconds = abs($seconds);
         $hours = intdiv($seconds, 3600);
         $minutes = intdiv($seconds % 3600, 60);
-
         return 'UTC' . $sign . $hours . ($minutes > 0 ? ':' . str_pad((string) $minutes, 2, '0', STR_PAD_LEFT) : '');
     }
 
@@ -481,12 +471,6 @@ class ApiController extends Controller {
             'success' => false,
             'message' => 'Something went wrong'
         );
-
-        if (empty(Session::get('user_id'))) {
-            $response['message'] = 'Your session has expired. Sign in again.';
-            echo json_encode($response);
-            exit;
-        }
 
         $company = $this->companies_model->get_company(Session::get('company_id'));
 
@@ -501,7 +485,6 @@ class ApiController extends Controller {
         $response['data'] = $company[0];
         $response['timezones'] = $this->timezone_list();
         echo json_encode($response);
-        exit;
     }
 
     public function save_companyAction(){
@@ -510,12 +493,6 @@ class ApiController extends Controller {
             'success' => false,
             'message' => 'Something went wrong'
         );
-
-        if (empty(Session::get('user_id'))) {
-            $response['message'] = 'Your session has expired. Sign in again.';
-            echo json_encode($response);
-            exit;
-        }
 
         if (empty($this->post['company_name'])) {
             $response['message'] = 'Organization name is required';
@@ -541,7 +518,7 @@ class ApiController extends Controller {
             exit;
         }
 
-        $date_formats = array('d M Y', 'd/m/Y', 'm/d/Y', 'Y-m-d', 'j F Y');
+        $date_formats = array('d M Y', 'D, d M Y', 'j F Y', 'F j, Y', 'd/m/Y', 'm/d/Y', 'd.m.Y', 'Y-m-d');
 
         if (empty($this->post['date_format']) || !in_array($this->post['date_format'], $date_formats)) {
             $response['message'] = 'Select a valid date format';
@@ -549,7 +526,7 @@ class ApiController extends Controller {
             exit;
         }
 
-        $time_formats = array('H:i', 'g:i A');
+        $time_formats = array('H:i', 'H:i:s', 'g:i A', 'g:i a', 'g:i:s A');
 
         if (empty($this->post['time_format']) || !in_array($this->post['time_format'], $time_formats)) {
             $response['message'] = 'Select a valid time format';
@@ -599,7 +576,6 @@ class ApiController extends Controller {
         $response['success'] = true;
         $response['message'] = 'Organization details updated';
         echo json_encode($response);
-        exit;
     }
 
     public function save_securityAction(){
@@ -608,12 +584,6 @@ class ApiController extends Controller {
             'success' => false,
             'message' => 'Something went wrong'
         );
-
-        if (empty(Session::get('user_id'))) {
-            $response['message'] = 'Your session has expired. Sign in again.';
-            echo json_encode($response);
-            exit;
-        }
 
         $session_timeout_enabled = (empty($this->post['session_timeout_enabled']) ? 0 : 1);
         $password_expiry_enabled = (empty($this->post['password_expiry_enabled']) ? 0 : 1);
@@ -689,7 +659,6 @@ class ApiController extends Controller {
         $response['success'] = true;
         $response['message'] = 'Security settings updated';
         echo json_encode($response);
-        exit;
     }
 
     public function save_logoAction(){
@@ -698,12 +667,6 @@ class ApiController extends Controller {
             'success' => false,
             'message' => 'Something went wrong'
         );
-
-        if (empty(Session::get('user_id'))) {
-            $response['message'] = 'Your session has expired. Sign in again.';
-            echo json_encode($response);
-            exit;
-        }
 
         if (!isset($_FILES['logo_file']) || $_FILES['logo_file']['error'] !== UPLOAD_ERR_OK) {
             $response['message'] = 'Choose a logo file to upload';
@@ -774,7 +737,6 @@ class ApiController extends Controller {
         $response['logo_filename'] = $original_name;
         $response['logo_size'] = $logo_size;
         echo json_encode($response);
-        exit;
     }
 
     public function remove_logoAction(){
@@ -783,12 +745,6 @@ class ApiController extends Controller {
             'success' => false,
             'message' => 'Something went wrong'
         );
-
-        if (empty(Session::get('user_id'))) {
-            $response['message'] = 'Your session has expired. Sign in again.';
-            echo json_encode($response);
-            exit;
-        }
 
         $company_id = Session::get('company_id');
         $company = $this->companies_model->get_company($company_id);
@@ -802,7 +758,137 @@ class ApiController extends Controller {
         $response['success'] = true;
         $response['message'] = 'Logo removed';
         echo json_encode($response);
-        exit;
+    }
+
+    public function load_clientsAction(){
+
+        $data = $this->clients_model->get_clients(Session::get('company_id'));
+        $company = $this->companies_model->get_company(Session::get('company_id'));
+        $format = 'd M Y';
+
+        if (is_array($company) && count($company) === 1) {
+            $format = $company[0]['date_format'];
+        }
+
+        foreach ($data as $index => $row) {
+            $data[$index]['date_created_display'] = ($row['date_created'] === null ? '' : date($format, strtotime($row['date_created'])));
+            $data[$index]['date_updated_display'] = ($row['date_updated'] === null ? '' : date($format, strtotime($row['date_updated'])));
+        }
+
+        echo json_encode($data);
+    }
+
+    public function save_clientAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $client_id = (int) ($this->post['client_id'] ?? 0);
+        $company_id = Session::get('company_id');
+
+        if (empty($this->post['company_name'])) {
+            $response['message'] = 'Company name is required';
+            echo json_encode($response);
+            return;
+        }
+
+        $email = html_entity_decode((string) ($this->post['contact_email'] ?? ''), ENT_QUOTES, 'UTF-8');
+
+        if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $response['message'] = 'Enter a valid contact email address';
+            echo json_encode($response);
+            return;
+        }
+
+        $website = html_entity_decode((string) ($this->post['website'] ?? ''), ENT_QUOTES, 'UTF-8');
+
+        if ($website !== '' && !filter_var($website, FILTER_VALIDATE_URL)) {
+            $response['message'] = 'Enter a valid website address, including https://';
+            echo json_encode($response);
+            return;
+        }
+
+        if ($client_id > 0) {
+
+            $client = $this->clients_model->get_client($client_id, $company_id);
+
+            if (!is_array($client) || count($client) !== 1) {
+                $response['message'] = 'That client could not be found';
+                echo json_encode($response);
+                return;
+            }
+
+            $this->clients_model->update_client(
+                $client_id,
+                $company_id,
+                $this->post['company_name'],
+                $this->post['contact_name'],
+                $this->post['contact_title'],
+                $this->post['contact_email'],
+                $this->post['contact_phone'],
+                $this->post['website'],
+                $this->post['address_1'],
+                $this->post['address_2'],
+                $this->post['city'],
+                $this->post['state'],
+                $this->post['postal_code'],
+                $this->post['country'],
+                Session::get('user_id')
+            );
+
+            $response['success'] = true;
+            $response['message'] = 'Client updated';
+            $response['client_id'] = $client_id;
+            echo json_encode($response);
+            return;
+        }
+
+        $response['client_id'] = $this->clients_model->add_client(
+            $company_id,
+            $this->post['company_name'],
+            $this->post['contact_name'],
+            $this->post['contact_title'],
+            $this->post['contact_email'],
+            $this->post['contact_phone'],
+            $this->post['website'],
+            $this->post['address_1'],
+            $this->post['address_2'],
+            $this->post['city'],
+            $this->post['state'],
+            $this->post['postal_code'],
+            $this->post['country'],
+            Session::get('user_id')
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'Client added';
+        echo json_encode($response);
+    }
+
+    public function delete_clientAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $client_id = (int) ($this->post['client_id'] ?? 0);
+        $company_id = Session::get('company_id');
+        $client = $this->clients_model->get_client($client_id, $company_id);
+
+        if (!is_array($client) || count($client) !== 1) {
+            $response['message'] = 'That client could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        $this->clients_model->delete_client($client_id, $company_id, Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'Client deleted';
+        echo json_encode($response);
     }
 
 }
