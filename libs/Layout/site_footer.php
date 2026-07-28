@@ -1,5 +1,4 @@
         </main>
-
         <footer class="shell__footer">
             <span>&copy; <?php echo date('Y'); ?> CISO.aero</span>
             <span class="shell__footer-sep">&middot;</span>
@@ -7,11 +6,8 @@
             <span class="shell__footer-sep">&middot;</span>
             <button type="button" class="shell__footer-link" data-bs-toggle="modal" data-bs-target="#terms_modal">Terms of Use</button>
         </footer>
-
     </div>
-
 </div>
-
 <div class="modal fade policy-modal" id="privacy_modal" tabindex="-1" aria-labelledby="privacy_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -44,7 +40,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade policy-modal" id="terms_modal" tabindex="-1" aria-labelledby="terms_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -77,6 +72,5 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>

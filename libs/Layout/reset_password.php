@@ -100,7 +100,7 @@ $(document).ready(function () {
             <div class="field">
                 <label for="pw1">New password <abbr title="required">*</abbr></label>
                 <input type="password" id="pw1" name="pw1" autocomplete="new-password" required>
-                <span class="field__help">At least 12 characters, with an uppercase letter, a lowercase letter and a number.</span>
+                <span class="field__help">At least 12 characters, with an uppercase letter, a lowercase letter, a number and a special character.</span>
             </div>
             <div class="field">
                 <label for="pw2">Confirm new password <abbr title="required">*</abbr></label>

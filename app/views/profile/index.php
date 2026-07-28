@@ -1,80 +1,102 @@
-<div class="page page--narrow">
-
+<div class="page">
     <div class="page__head">
         <div>
             <h1 class="page__title">My Profile</h1>
             <p class="page__desc">Your account details and password.</p>
         </div>
     </div>
+    <div class="page__grid">
+        <div class="page__col">
+            <div class="panel">
+                <div class="panel__head">
+                    <h2 class="panel__title">Personal Details</h2>
+                    <button type="button" class="btn btn--secondary btn--sm" data-bs-toggle="modal" data-bs-target="#password_modal">Change Password</button>
+                </div>
+                <div class="panel__body">
+                    <div class="form-row">
+                        <div class="field">
+                            <label for="first_name">First Name <abbr title="required">*</abbr></label>
+                            <input type="text" id="first_name" name="first_name" value="<?php echo htmlspecialchars($this->profile['first_name'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                        </div>
+                        <div class="field">
+                            <label for="last_name">Last Name <abbr title="required">*</abbr></label>
+                            <input type="text" id="last_name" name="last_name" value="<?php echo htmlspecialchars($this->profile['last_name'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="field">
+                            <label for="u_name">Username <abbr title="required">*</abbr></label>
+                            <input type="text" id="u_name" name="u_name" value="<?php echo htmlspecialchars($this->profile['u_name'], ENT_QUOTES, 'UTF-8'); ?>" autocapitalize="none" spellcheck="false" required>
+                        </div>
+                        <div class="field">
+                            <label for="user_email">Email Address <abbr title="required">*</abbr></label>
+                            <input type="email" id="user_email" name="user_email" value="<?php echo htmlspecialchars($this->profile['user_email'], ENT_QUOTES, 'UTF-8'); ?>" autocapitalize="none" spellcheck="false" required>
+                        </div>
+                    </div>
+                    <div class="panel__actions">
+                        <button type="button" id="do_save_profile" class="btn btn--primary">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <aside class="page__aside">
 
-    <div class="panel">
-        <div class="panel__head">
-            <h2 class="panel__title">Personal details</h2>
-        </div>
-        <div class="panel__body">
-            <div class="field">
-                <label for="first_name">First name <abbr title="required">*</abbr></label>
-                <input type="text" id="first_name" name="first_name" value="<?php echo htmlspecialchars($this->profile['first_name'], ENT_QUOTES, 'UTF-8'); ?>" required>
+            <div class="panel">
+                <div class="panel__head">
+                    <h2 class="panel__title">Account</h2>
+                </div>
+                <div class="panel__body">
+                    <dl class="datalist datalist--stacked">
+                        <dt>Organisation</dt>
+                        <dd><?php echo htmlspecialchars((string) $this->profile['company_name'], ENT_QUOTES, 'UTF-8'); ?></dd>
+                        <dt>Role</dt>
+                        <dd><?php echo htmlspecialchars((string) $this->profile['role_name'], ENT_QUOTES, 'UTF-8'); ?></dd>
+                        <dt>Status</dt>
+                        <dd><span class="status status--ok"><?php echo htmlspecialchars($this->profile['user_status'], ENT_QUOTES, 'UTF-8'); ?></span></dd>
+                        <dt>Member since</dt>
+                        <dd><?php echo date('j F Y', strtotime($this->profile['date_created'])); ?></dd>
+                    </dl>
+                </div>
             </div>
-            <div class="field">
-                <label for="last_name">Last name <abbr title="required">*</abbr></label>
-                <input type="text" id="last_name" name="last_name" value="<?php echo htmlspecialchars($this->profile['last_name'], ENT_QUOTES, 'UTF-8'); ?>" required>
-            </div>
-            <div class="field">
-                <label for="user_email">Email address <abbr title="required">*</abbr></label>
-                <input type="email" id="user_email" name="user_email" value="<?php echo htmlspecialchars($this->profile['user_email'], ENT_QUOTES, 'UTF-8'); ?>" autocapitalize="none" spellcheck="false" required>
-                <span class="field__help">Used for password resets and system notifications.</span>
-            </div>
-            <div class="panel__actions">
-                <button type="button" id="do_save_profile" class="btn btn--primary">Save Changes</button>
-            </div>
-        </div>
+        </aside>
     </div>
+</div>
 
-    <div class="panel">
-        <div class="panel__head">
-            <h2 class="panel__title">Change password</h2>
-        </div>
-        <div class="panel__body">
-            <div class="field">
-                <label for="current_pw">Current password <abbr title="required">*</abbr></label>
-                <input type="password" id="current_pw" name="current_pw" autocomplete="current-password" required>
+<div class="modal fade" id="password_modal" tabindex="-1" aria-labelledby="password_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="password_modal_title">Change Password</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="field">
-                <label for="pw1">New password <abbr title="required">*</abbr></label>
-                <input type="password" id="pw1" name="pw1" autocomplete="new-password" required>
-                <span class="field__help">At least 12 characters, with an uppercase letter, a lowercase letter and a number.</span>
+            <div class="modal-body">
+                <div class="field">
+                    <label for="current_pw">Current Password <abbr title="required">*</abbr></label>
+                    <input type="password" id="current_pw" name="current_pw" autocomplete="current-password" required>
+                </div>
+                <div class="field">
+                    <label for="pw1">New Password <abbr title="required">*</abbr></label>
+                    <input type="password" id="pw1" name="pw1" autocomplete="new-password" required>
+                </div>
+                <div class="field">
+                    <label for="pw2">Confirm New Password <abbr title="required">*</abbr></label>
+                    <input type="password" id="pw2" name="pw2" autocomplete="new-password" required>
+                </div>
+                <ul class="pwcheck" id="pw_rules" aria-live="polite">
+                    <li class="pwcheck__item" id="rule_length"><span class="pwcheck__mark"></span>At least 12 characters</li>
+                    <li class="pwcheck__item" id="rule_upper"><span class="pwcheck__mark"></span>One uppercase letter</li>
+                    <li class="pwcheck__item" id="rule_lower"><span class="pwcheck__mark"></span>One lowercase letter</li>
+                    <li class="pwcheck__item" id="rule_number"><span class="pwcheck__mark"></span>One number</li>
+                    <li class="pwcheck__item" id="rule_special"><span class="pwcheck__mark"></span>One special character</li>
+                    <li class="pwcheck__item" id="rule_match"><span class="pwcheck__mark"></span>Both entries match</li>
+                </ul>
             </div>
-            <div class="field">
-                <label for="pw2">Confirm new password <abbr title="required">*</abbr></label>
-                <input type="password" id="pw2" name="pw2" autocomplete="new-password" required>
-            </div>
-            <div class="panel__actions">
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" id="do_change_pw" class="btn btn--primary">Update Password</button>
             </div>
         </div>
     </div>
-
-    <div class="panel">
-        <div class="panel__head">
-            <h2 class="panel__title">Account</h2>
-        </div>
-        <div class="panel__body">
-            <dl class="datalist">
-                <dt>Username</dt>
-                <dd><?php echo htmlspecialchars($this->profile['u_name'], ENT_QUOTES, 'UTF-8'); ?></dd>
-                <dt>Organisation</dt>
-                <dd><?php echo htmlspecialchars((string) $this->profile['company_name'], ENT_QUOTES, 'UTF-8'); ?></dd>
-                <dt>Role</dt>
-                <dd><?php echo htmlspecialchars((string) $this->profile['role_name'], ENT_QUOTES, 'UTF-8'); ?></dd>
-                <dt>Status</dt>
-                <dd><span class="status status--ok"><?php echo htmlspecialchars($this->profile['user_status'], ENT_QUOTES, 'UTF-8'); ?></span></dd>
-                <dt>Member since</dt>
-                <dd><?php echo date('j F Y', strtotime($this->profile['date_created'])); ?></dd>
-            </dl>
-        </div>
-    </div>
-
 </div>
 
 <script>
@@ -93,10 +115,52 @@ $(document).ready(function () {
         set_loading("do_change_pw", false);
     });
 
+    function set_rule(rule_id, passed) {
+        if (passed) {
+            $("#" + rule_id).addClass("is-met");
+        } else {
+            $("#" + rule_id).removeClass("is-met");
+        }
+    }
+
+    function check_rules() {
+
+        var pw1 = $("#pw1").val();
+        var pw2 = $("#pw2").val();
+
+        set_rule("rule_length", pw1.length >= 12);
+        set_rule("rule_upper", /[A-Z]/.test(pw1));
+        set_rule("rule_lower", /[a-z]/.test(pw1));
+        set_rule("rule_number", /[0-9]/.test(pw1));
+        set_rule("rule_special", /[^A-Za-z0-9]/.test(pw1));
+        set_rule("rule_match", pw1 !== "" && pw1 === pw2);
+    }
+
+    function rules_pass() {
+        return $("#pw_rules .pwcheck__item:not(.is-met)").length === 0;
+    }
+
+    $("#pw1, #pw2").on("keyup change", function () {
+        check_rules();
+    });
+
+    $("#password_modal").on("hidden.bs.modal", function () {
+        $("#current_pw").val("");
+        $("#pw1").val("");
+        $("#pw2").val("");
+        $("#current_pw, #pw1, #pw2").removeClass("is-invalid");
+        check_rules();
+    });
+
+    $("#password_modal").on("shown.bs.modal", function () {
+        $("#current_pw").focus();
+    });
+
     $("#do_save_profile").click(function(){
 
         $("#first_name").removeClass("is-invalid");
         $("#last_name").removeClass("is-invalid");
+        $("#u_name").removeClass("is-invalid");
         $("#user_email").removeClass("is-invalid");
 
         var errors = 0;
@@ -108,6 +172,11 @@ $(document).ready(function () {
 
         if ($("#last_name").val().trim() === "") {
             $("#last_name").addClass("is-invalid");
+            errors++;
+        }
+
+        if ($("#u_name").val().trim() === "") {
+            $("#u_name").addClass("is-invalid");
             errors++;
         }
 
@@ -124,6 +193,7 @@ $(document).ready(function () {
         var obj = {
             first_name: $("#first_name").val().trim(),
             last_name: $("#last_name").val().trim(),
+            u_name: $("#u_name").val().trim(),
             user_email: $("#user_email").val().trim()
         };
 
@@ -149,25 +219,16 @@ $(document).ready(function () {
         $("#pw1").removeClass("is-invalid");
         $("#pw2").removeClass("is-invalid");
 
-        var errors = 0;
-
         if ($("#current_pw").val().trim() === "") {
             $("#current_pw").addClass("is-invalid");
-            errors++;
+            toastr.error("Enter your current password.");
+            return;
         }
 
-        if ($("#pw1").val().trim() === "") {
+        if (!rules_pass()) {
             $("#pw1").addClass("is-invalid");
-            errors++;
-        }
-
-        if ($("#pw2").val().trim() === "") {
             $("#pw2").addClass("is-invalid");
-            errors++;
-        }
-
-        if (errors > 0) {
-            toastr.error("Please fix the errors before continuing.");
+            toastr.error("Your new password does not meet all requirements.");
             return;
         }
 
@@ -183,15 +244,15 @@ $(document).ready(function () {
             var obj = JSON.parse(data);
             if (obj.success) {
                 toastr.success(obj.message);
-                $("#current_pw").val("");
-                $("#pw1").val("");
-                $("#pw2").val("");
+                bootstrap.Modal.getInstance(document.getElementById("password_modal")).hide();
             } else {
                 toastr.error(obj.message);
             }
         });
 
     });
+
+    check_rules();
 
 });
 </script>

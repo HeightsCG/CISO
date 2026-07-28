@@ -31,6 +31,34 @@ class UsersModel extends Model {
         return parent::select($sql, $where);
     }
 
+    public function get_users_by_company($company_id)
+    {
+        $where = array(
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    u.user_id,
+                    u.u_name,
+                    u.user_email,
+                    u.first_name,
+                    u.last_name,
+                    u.user_status,
+                    u.reset_pw,
+                    u.date_created,
+                    r.role_name
+                FROM
+                    user_accounts u
+                    LEFT JOIN user_roles r ON r.id = u.role_id and r.deleted = 0
+                WHERE
+                    u.company_id = :company_id
+                    and
+                    u.deleted = 0
+                ORDER BY
+                    u.first_name,
+                    u.last_name";
+        return parent::select($sql, $where);
+    }
+
     public function get_email_owner($user_email, $exclude_user_id)
     {
         $where = array(
@@ -50,7 +78,26 @@ class UsersModel extends Model {
         return parent::select($sql, $where);
     }
 
-    public function update_profile($user_id, $first_name, $last_name, $user_email)
+    public function check_username($u_name, $exclude_user_id)
+    {
+        $where = array(
+            'u_name' => $u_name,
+            'exclude_user_id' => $exclude_user_id
+        );
+        $sql = "SELECT
+                    u.user_id
+                FROM
+                    user_accounts u
+                WHERE
+                    u.u_name = :u_name
+                    and
+                    u.user_id != :exclude_user_id
+                    and
+                    u.deleted = 0";
+        return parent::select($sql, $where);
+    }
+
+    public function update_profile($user_id, $first_name, $last_name, $u_name, $user_email)
     {
         $where = array(
             'user_id' => $user_id
@@ -58,6 +105,7 @@ class UsersModel extends Model {
         $data = array(
             'first_name' => $first_name,
             'last_name' => $last_name,
+            'u_name' => $u_name,
             'user_email' => $user_email,
             'updated_by' => $user_id,
             'date_updated' => date('Y-m-d H:i:s')
