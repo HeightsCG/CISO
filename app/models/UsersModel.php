@@ -191,7 +191,6 @@ class UsersModel extends Model {
             'reset_token_expires' => date('Y-m-d H:i:s', strtotime('+1 hour')),
             'date_updated'        => date('Y-m-d H:i:s')
         );
-
         parent::update('user_accounts', $data, 'user_id = :user_id', $where);
         return $raw_token;
     }
