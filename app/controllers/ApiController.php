@@ -891,4 +891,90 @@ class ApiController extends Controller {
         echo json_encode($response);
     }
 
+    public function address_suggestAction(){
+
+        $query = trim((string) html_entity_decode((string) ($this->post['query'] ?? ''), ENT_QUOTES, 'UTF-8'));
+        $country = trim((string) html_entity_decode((string) ($this->post['country'] ?? ''), ENT_QUOTES, 'UTF-8'));
+
+        if (strlen($query) < 4) {
+            echo json_encode(array('success' => true, 'message' => '', 'data' => array()));
+            return;
+        }
+
+        $result = PlacesService::autocomplete($query, self::country_code($country));
+
+        echo json_encode(array(
+            'success' => ($result['error'] === ''),
+            'message' => $result['error'],
+            'data'    => $result['items']
+        ));
+    }
+
+    public function address_placeAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'That address could not be loaded'
+        );
+
+        $result = PlacesService::get_place(html_entity_decode((string) ($this->post['place_id'] ?? ''), ENT_QUOTES, 'UTF-8'));
+
+        if ($result['error'] !== '') {
+            $response['message'] = $result['error'];
+            echo json_encode($response);
+            return;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Address loaded';
+        $response['data'] = $result['address'];
+        echo json_encode($response);
+    }
+
+    /**
+     * Amazon Location filters countries by ISO code. Users type a country name in
+     * the form, so a name is mapped to its code when recognised; anything else is
+     * ignored so international addresses are never blocked.
+     */
+    private static function country_code($country): string
+    {
+        $country = trim($country);
+
+        if ($country === '') {
+            return '';
+        }
+
+        if (preg_match('/^[A-Za-z]{3}$/', $country)) {
+            return strtoupper($country);
+        }
+
+        $map = array(
+            'switzerland' => 'CHE',
+            'united states' => 'USA',
+            'usa' => 'USA',
+            'united kingdom' => 'GBR',
+            'uk' => 'GBR',
+            'germany' => 'DEU',
+            'france' => 'FRA',
+            'austria' => 'AUT',
+            'norway' => 'NOR',
+            'sweden' => 'SWE',
+            'denmark' => 'DNK',
+            'netherlands' => 'NLD',
+            'belgium' => 'BEL',
+            'ireland' => 'IRL',
+            'italy' => 'ITA',
+            'spain' => 'ESP',
+            'portugal' => 'PRT',
+            'poland' => 'POL',
+            'czechia' => 'CZE',
+            'czech republic' => 'CZE',
+            'canada' => 'CAN',
+            'australia' => 'AUS',
+            'new zealand' => 'NZL'
+        );
+
+        return (string) ($map[strtolower($country)] ?? '');
+    }
+
 }
