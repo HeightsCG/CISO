@@ -877,26 +877,48 @@ table.data {
 }
 
 table.data thead th {
-    padding: var(--space-2) var(--space-3);
-    font-size: var(--fs-table-head);
+    padding: var(--space-3);
+    font-size: 11px;
     font-weight: var(--fw-semibold);
-    letter-spacing: 0.04em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
     text-align: left;
-    color: var(--text-secondary);
-    background: var(--surface-inset);
-    border-bottom: 1px solid var(--border-strong);
+    color: var(--text-on-nav-active);
+    background: var(--surface-nav);
+    border-bottom: 0;
     white-space: nowrap;
+}
+
+div.dt-scroll-body table.data thead th {
+    padding-top: 0;
+    padding-bottom: 0;
+    background: transparent;
+    border: 0;
 }
 
 table.data tbody td {
     padding: var(--space-3);
+    color: var(--text-secondary);
     border-bottom: 1px solid var(--border);
     vertical-align: middle;
 }
 
+table.data tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+table.data tbody td:first-child {
+    font-weight: var(--fw-semibold);
+    color: var(--accent);
+}
+
 table.data tbody tr:hover {
-    background: var(--surface-inset);
+    background: var(--accent-subtle);
+}
+
+table.data tbody tr:hover td:first-child {
+    color: var(--accent-hover);
+    text-decoration: underline;
 }
 
 table.data .num,
@@ -2620,6 +2642,8 @@ select.input {
     flex-wrap: wrap;
     justify-content: flex-start;
     gap: var(--space-3) var(--space-4);
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
 }
 
 .roster__search {
@@ -2773,4 +2797,41 @@ table.data tbody tr[tabindex] {
 table.data tbody tr:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: -2px;
+}
+
+table.data thead th div.dt-column-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-1);
+}
+
+table.data thead th span.dt-column-order {
+    opacity: 0.35;
+}
+
+table.data thead th.dt-ordering-asc span.dt-column-order,
+table.data thead th.dt-ordering-desc span.dt-column-order {
+    opacity: 1;
+}
+
+table.data thead th span.dt-column-order {
+    flex: 0 0 auto;
+}
+
+table.data th.dt-type-date,
+table.data td.dt-type-date,
+table.data th.dt-type-numeric,
+table.data td.dt-type-numeric {
+    text-align: left;
+}
+
+table.data thead th.dt-type-date div.dt-column-header,
+table.data thead th.dt-type-numeric div.dt-column-header {
+    flex-direction: row;
+}
+
+
+.page--list .panel {
+    border-color: var(--border-strong);
 }

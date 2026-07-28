@@ -1,4 +1,4 @@
-<div class="page">
+<div class="page page--list">
     <div class="page__head">
         <div>
             <h1 class="page__title">Clients</h1>
@@ -44,7 +44,22 @@ $(document).ready(function () {
                 targets: 0,
                 visible: false
             },{
+                targets: 1,
+                width: '34%'
+            },{
+                targets: 2,
+                width: '26%',
+                render: {
+                    display: function (data) {
+                        if (!data) {
+                            return '<span class="roster__none">&mdash;</span>';
+                        }
+                        return data;
+                    }
+                }
+            },{
                 targets: [3, 4],
+                width: '20%',
                 render: {
                     _: 'sort',
                     display: 'display'
