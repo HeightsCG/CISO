@@ -1193,3 +1193,50 @@ table.data .actions {
     }
 }
 
+.page--narrow {
+    max-width: 720px;
+}
+
+.page .panel {
+    margin-bottom: var(--space-6);
+}
+
+.panel__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border);
+}
+
+.datalist {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: var(--space-3) var(--space-4);
+    margin: 0;
+}
+
+.datalist dt {
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-medium);
+    color: var(--text-secondary);
+}
+
+.datalist dd {
+    margin: 0;
+    font-size: var(--fs-body);
+    color: var(--text-primary);
+}
+
+@media (max-width: 560px) {
+
+    .datalist {
+        grid-template-columns: 1fr;
+        gap: var(--space-1) 0;
+    }
+
+    .datalist dd {
+        margin-bottom: var(--space-3);
+    }
+}

@@ -246,6 +246,21 @@ class ApiController extends Controller {
 
         $user = $rows[0];
 
+        if (Session::get('reset_pw') != 1) {
+
+            if (empty($this->post['current_pw'])) {
+                $response['message'] = 'Enter your current password';
+                echo json_encode($response);
+                exit;
+            }
+
+            if (!password_verify($this->post['current_pw'], $user['p_word'])) {
+                $response['message'] = 'Your current password is incorrect';
+                echo json_encode($response);
+                exit;
+            }
+        }
+
         if (password_verify($this->post['pw1'], $user['p_word'])) {
             $response['message'] = 'Choose a password you have not used before';
             echo json_encode($response);
@@ -258,6 +273,70 @@ class ApiController extends Controller {
 
         $response['success'] = true;
         $response['message'] = 'Your password has been changed';
+        echo json_encode($response);
+        exit;
+    }
+
+    public function save_profileAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $user_id = Session::get('user_id');
+
+        if (empty($user_id)) {
+            $response['message'] = 'Your session has expired. Sign in again.';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (empty($this->post['first_name'])) {
+            $response['message'] = 'First name is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (empty($this->post['last_name'])) {
+            $response['message'] = 'Last name is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (empty($this->post['user_email'])) {
+            $response['message'] = 'Email address is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!filter_var($this->post['user_email'], FILTER_VALIDATE_EMAIL)) {
+            $response['message'] = 'Enter a valid email address';
+            echo json_encode($response);
+            exit;
+        }
+
+        $taken = $this->user_model->get_email_owner($this->post['user_email'], $user_id);
+
+        if (!empty($taken)) {
+            $response['message'] = 'That email address is already in use';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->user_model->update_profile(
+            $user_id,
+            $this->post['first_name'],
+            $this->post['last_name'],
+            $this->post['user_email']
+        );
+
+        Session::set('first_name', $this->post['first_name']);
+        Session::set('last_name', $this->post['last_name']);
+        Session::set('user_email', $this->post['user_email']);
+
+        $response['success'] = true;
+        $response['message'] = 'Your profile has been updated';
         echo json_encode($response);
         exit;
     }

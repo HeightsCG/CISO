@@ -147,6 +147,8 @@ $(document).ready(function () {
                         <span class="shell__user-meta-email"><?php echo htmlspecialchars((string) Session::get('user_email'), ENT_QUOTES, 'UTF-8'); ?></span>
                     </li>
                     <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/profile">My Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
                     <li><button type="button" class="dropdown-item" id="do_logout">Sign out</button></li>
                 </ul>
             </div>
