@@ -12,6 +12,7 @@ class ApiController extends Controller {
     public $notifications_model;
     public $companies_model;
     public $clients_model;
+    public $projects_model;
 
     public function __construct(){
         parent::__construct();
@@ -19,6 +20,7 @@ class ApiController extends Controller {
         $this->notifications_model = new NotificationsModel();
         $this->companies_model = new CompaniesModel();
         $this->clients_model = new ClientsModel();
+        $this->projects_model = new ProjectsModel();
     }
 
     public function loginAction(){
@@ -762,13 +764,8 @@ class ApiController extends Controller {
 
     public function load_clientsAction(){
 
-        $data = $this->clients_model->get_clients(Session::get('company_id'));
-        $company = $this->companies_model->get_company(Session::get('company_id'));
-        $format = 'd M Y';
-
-        if (is_array($company) && count($company) === 1) {
-            $format = $company[0]['date_format'];
-        }
+        $data = $this->clients_model->load_clients(Session::get('company_id'));
+        $format = $this->companies_model->date_format(Session::get('company_id'));
 
         foreach ($data as $index => $row) {
             $data[$index]['date_created_display'] = ($row['date_created'] === null ? '' : date($format, strtotime($row['date_created'])));
@@ -777,6 +774,20 @@ class ApiController extends Controller {
 
         echo json_encode($data);
     }
+
+    public function load_projectsAction(){
+
+        $data = $this->projects_model->load_projects(Session::get('company_id'));
+        $format = $this->companies_model->date_format(Session::get('company_id'));
+
+        foreach ($data as $index => $row) {
+            $data[$index]['start_date_display'] = ($row['start_date'] === null ? '' : date($format, strtotime($row['start_date'])));
+            $data[$index]['end_date_display'] = ($row['end_date'] === null ? '' : date($format, strtotime($row['end_date'])));
+        }
+
+        echo json_encode($data);
+    }
+
 
     public function save_clientAction(){
 

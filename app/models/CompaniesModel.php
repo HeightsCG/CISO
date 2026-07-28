@@ -5,6 +5,18 @@ class CompaniesModel extends Model {
         parent::__construct();
     }
 
+    /** Display date format from Regional Defaults, falling back to the column default. */
+    public function date_format($company_id): string
+    {
+        $company = $this->get_company($company_id);
+
+        if (is_array($company) && count($company) === 1 && $company[0]['date_format'] !== '') {
+            return (string) $company[0]['date_format'];
+        }
+
+        return 'd M Y';
+    }
+
     public function get_company($company_id)
     {
         $where = array(

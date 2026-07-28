@@ -5,27 +5,7 @@ class ClientsModel extends Model {
         parent::__construct();
     }
 
-    /**
-     * Values are stored HTML-entity encoded because Controller::clean_post_data()
-     * runs htmlentities() over every POST field. Decoding on read gives callers the
-     * real text, so escaping happens exactly once at whichever layer renders it.
-     */
-    private function decode_rows($rows)
-    {
-        $skip = array('id', 'company_id', 'created_by', 'updated_by', 'deleted');
-
-        foreach ($rows as $index => $row) {
-            foreach ($row as $key => $value) {
-                if (!in_array($key, $skip) && is_string($value)) {
-                    $rows[$index][$key] = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
-                }
-            }
-        }
-
-        return $rows;
-    }
-
-    public function get_clients($company_id)
+    public function load_clients($company_id)
     {
         $where = array(
             'company_id' => $company_id
@@ -55,7 +35,7 @@ class ClientsModel extends Model {
                 ORDER BY
                     c.date_created DESC,
                     c.id DESC";
-        return $this->decode_rows(parent::select($sql, $where));
+        return parent::select($sql, $where);
     }
 
     public function get_client($client_id, $company_id)
@@ -74,7 +54,7 @@ class ClientsModel extends Model {
                     c.company_id = :company_id
                     and
                     c.deleted = 0";
-        return $this->decode_rows(parent::select($sql, $where));
+        return parent::select($sql, $where);
     }
 
     public function add_client(
