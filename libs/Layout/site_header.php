@@ -23,9 +23,8 @@
 <script src="/js/api.data.js"></script>
 <script src="/js/site.js"></script>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
 
 <script>
 $(document).ready(function () {
@@ -56,11 +55,11 @@ $(document).ready(function () {
             <div class="shell__group">
                 <p class="shell__group-label">Menu</p>
                 <a class="shell__link" href="/">
-                    <svg class="shell__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+                    <i class="fa-thin fa-house"></i>
                     <span>Dashboard</span>
                 </a>
                 <a class="shell__link" href="/clients">
-                    <svg class="shell__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 20v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm14 10v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <i class="fa-thin fa-shield-halved"></i>
                     <span>Clients</span>
                 </a>
             </div>
@@ -75,18 +74,36 @@ $(document).ready(function () {
             <div class="shell__topbar-spacer"></div>
             <div class="shell__user dropdown">
                 <button type="button" class="shell__user-btn" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-user"></i>
+                    <span class="shell__avatar"><?php echo htmlspecialchars(strtoupper(substr(Session::get('first_name'), 0, 1) . substr(Session::get('last_name'), 0, 1)), ENT_QUOTES, 'UTF-8'); ?></span>
+                    <span class="shell__user-name"><?php echo htmlspecialchars(Session::get('first_name') . ' ' . Session::get('last_name'), ENT_QUOTES, 'UTF-8'); ?></span>
+                    <svg class="shell__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end shell__user-menu">
-                    <li class="shell__user-meta">
-                        <span class="shell__user-meta-name"><?php echo htmlspecialchars(Session::get('u_name'), ENT_QUOTES, 'UTF-8'); ?></span>
-                        <span class="shell__user-meta-email"><?php echo htmlspecialchars((string) Session::get('user_email'), ENT_QUOTES, 'UTF-8'); ?></span>
+                    <li>
+                        <a class="dropdown-item" href="/profile">
+                            <i class="fa-thin fa-user"></i>
+                            <span>My Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="/users">
+                            <i class="fa-thin fa-users"></i>
+                            <span>Users</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="/settings">
+                            <i class="fa-thin fa-gear"></i>
+                            <span>Settings</span>
+                        </a>
                     </li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="/profile">My Profile</a></li>
-                    <li><a class="dropdown-item" href="/settings">Settings</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><button type="button" class="dropdown-item" id="logout">Logout</button></li>
+                    <li>
+                        <button type="button" class="dropdown-item shell__menu-danger" id="logout">
+                            <i class="fa-thin fa-right-from-bracket"></i>
+                            <span>Logout</span>
+                        </button>
+                    </li>
                 </ul>
             </div>
         </header>

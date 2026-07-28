@@ -10,17 +10,13 @@ class ProfileController extends Controller {
     }
 
     public function indexAction(){
-
-        $rows = $this->user_model->get_profile(Session::get('user_id'));
-
-        if (empty($rows)) {
+        $profile = $this->user_model->get_profile(Session::get('user_id'));
+        if (is_array($profile) && count($profile) === 1) {
+            $this->view->profile = $profile[0];
+            $this->view->render();
+        } else {
             Errors::page_not_found();
-            return;
         }
-
-        $this->view->page_title = 'My Profile';
-        $this->view->profile = $rows[0];
-        $this->view->render();
     }
 
 }
