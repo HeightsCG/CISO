@@ -65,6 +65,10 @@ $(document).ready(function () {
                     <i class="fa-thin fa-shield-halved"></i>
                     <span>Clients</span>
                 </a>
+                <a class="shell__link<?php echo $this->controller == 'projects' ? ' is-active' : ''; ?>" href="/projects">
+                    <i class="fa-thin fa-project-diagram"></i>
+                    <span>Projects</span>
+                </a>
             </div>
         </nav>
     </aside>
