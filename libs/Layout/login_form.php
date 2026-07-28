@@ -129,20 +129,16 @@ $(document).ready(function () {
 <div class="auth">
 <div class="auth__module">
 
-    <aside class="auth__brandbar">
-        <div class="auth__lockup">
-            <svg class="auth__logo" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                <path d="M8 27 L20.5 5 L27 5 L27 27 Z" fill="currentColor"/>
-                <path d="M2 27 L2 22 L15.5 22 L12.5 27 Z" fill="currentColor" opacity="0.5"/>
-            </svg>
-            <div class="auth__mark"><strong>CISO</strong><span class="auth__mark-tld">.aero</span></div>
-        </div>
-    </aside>
-
     <main class="auth__stage">
 
+        <header class="auth__intro">
+            <img class="auth__logo-img" src="/images/logo-light.png" alt="CISO.aero">
+            <h1 class="auth__pitch">Aviation cybersecurity governance, centralized.</h1>
+            <p class="auth__sub">Manage risk, compliance, evidence, and executive oversight from one secure platform.</p>
+        </header>
+
         <div class="auth__form" id="login_view">
-            <h1 class="auth__heading">Sign In</h1>
+            <h2 class="auth__heading">Sign In</h2>
             <div class="auth__fields">
                 <div class="field">
                     <label for="u_name">Username <abbr title="required">*</abbr></label>
@@ -162,7 +158,7 @@ $(document).ready(function () {
         </div>
 
         <div class="auth__form" id="forgot_view" hidden>
-            <h1 class="auth__heading">Reset Password</h1>
+            <h2 class="auth__heading">Reset Password</h2>
             <p class="auth__note">Enter the email address on your account and we will send a link to choose a new password. It expires in one hour.</p>
             <div class="auth__fields">
                 <div class="field">
@@ -178,9 +174,20 @@ $(document).ready(function () {
             </div>
         </div>
 
+        <footer class="auth__footer">&copy; 2026 CISO.aero &nbsp;&middot;&nbsp; Privacy &nbsp;&middot;&nbsp; Security</footer>
+
     </main>
 
 </div>
+
+<div class="auth__visual">
+    <img class="auth__visual-img" src="/images/auth-cover.jpg" alt="">
+    <div class="auth__caption">
+        <p class="auth__caption-title">Built for aviation security leadership</p>
+        <p class="auth__caption-sub">Operational clarity from the boardroom to the flight line.</p>
+    </div>
+</div>
+
 </div>
 </body>
 </html>
