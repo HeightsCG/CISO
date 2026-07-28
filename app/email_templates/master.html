@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="x-apple-disable-message-reformatting">
+<meta name="format-detection" content="telephone=no,address=no,email=no,url=no">
+<title>{subject}</title>
+<style>
+    a[x-apple-data-detectors] {
+        color: inherit !important;
+        text-decoration: none !important;
+        font-size: inherit !important;
+        font-family: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+    }
+    .footer a {
+        color: #7A8794 !important;
+        text-decoration: none !important;
+    }
+    @media only screen and (max-width: 520px) {
+        .shell { width: 100% !important; }
+        .pad { padding-left: 24px !important; padding-right: 24px !important; }
+    }
+</style>
+</head>
+<body style="margin:0;padding:0;background-color:#F5F7F9;">
+
+<div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">{preheader}</div>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F5F7F9;">
+<tr>
+<td align="center" style="padding:40px 16px;">
+
+    <table role="presentation" class="shell" width="520" cellpadding="0" cellspacing="0" border="0" style="width:520px;max-width:520px;background-color:#FFFFFF;border:1px solid #D6DCE3;">
+
+        <tr>
+            <td class="pad" style="padding:24px 32px;border-bottom:1px solid #D6DCE3;">
+                <img src="{logo_url}" alt="CISO.aero" width="150" style="display:block;width:150px;max-width:150px;height:auto;border:0;outline:none;text-decoration:none;">
+            </td>
+        </tr>
+
+        <tr>
+            <td class="pad" style="padding:32px;">
+                {content}
+            </td>
+        </tr>
+
+        <tr>
+            <td class="pad" style="padding:16px 32px;border-top:1px solid #D6DCE3;background-color:#FAFBFC;">
+                <p style="margin:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:12px;line-height:18px;color:#55636F;">{footnote}</p>
+            </td>
+        </tr>
+
+    </table>
+
+    <table role="presentation" class="shell footer" width="520" cellpadding="0" cellspacing="0" border="0" style="width:520px;max-width:520px;">
+    <tr>
+        <td class="pad" align="center" style="padding:16px 32px;">
+            <span style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:12px;line-height:18px;color:#7A8794;">{site_name} &nbsp;&middot;&nbsp; {year}</span>
+        </td>
+    </tr>
+    </table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

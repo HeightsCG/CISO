@@ -22,6 +22,18 @@
 <script>
 $(document).ready(function () {
 
+    function set_loading(button_id, loading) {
+        if (loading) {
+            $("#" + button_id).addClass("is-loading").prop("disabled", true);
+        } else {
+            $("#" + button_id).removeClass("is-loading").prop("disabled", false);
+        }
+    }
+
+    $(document).ajaxComplete(function () {
+        set_loading("do_reset", false);
+    });
+
     $("#do_reset").click(function(){
 
         $("#pw1").removeClass("is-invalid");
@@ -42,6 +54,8 @@ $(document).ready(function () {
             pw1: $("#pw1").val().trim(),
             pw2: $("#pw2").val().trim()
         };
+
+        set_loading("do_reset", true);
 
         ApiDataSvc.apiCall('post', 'reset_password', obj, function (data) {
             var obj = JSON.parse(data);

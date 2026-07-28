@@ -22,20 +22,29 @@
 <script>
 $(document).ready(function () {
 
-    $("#show_forgot").click(function(){
+    function set_loading(button_id, loading) {
+        if (loading) {
+            $("#" + button_id).addClass("is-loading").prop("disabled", true);
+        } else {
+            $("#" + button_id).removeClass("is-loading").prop("disabled", false);
+        }
+    }
 
+    $(document).ajaxComplete(function () {
+        set_loading("do_login", false);
+        set_loading("do_forgot", false);
+    });
+
+    $("#show_forgot").click(function(){
         $("#login_view").prop("hidden", true);
         $("#forgot_view").prop("hidden", false);
         $("#reset_email").focus();
-
     });
 
     $("#show_login").click(function(){
-
         $("#forgot_view").prop("hidden", true);
         $("#login_view").prop("hidden", false);
         $("#u_name").focus();
-
     });
 
     $("#do_login").click(function(){
@@ -65,10 +74,13 @@ $(document).ready(function () {
             p_word: $("#p_word").val().trim()
         };
 
+        set_loading("do_login", true);
+
         ApiDataSvc.apiCall('post', 'login', obj, function (data) {
             var obj = JSON.parse(data);
             if (obj.success) {
                 toastr.success(obj.message);
+                set_loading("do_login", true);
                 setTimeout(function() {
                     location.reload();
                 }, 1000);
@@ -99,10 +111,15 @@ $(document).ready(function () {
             reset_email: $("#reset_email").val().trim()
         };
 
+        set_loading("do_forgot", true);
+
         ApiDataSvc.apiCall('post', 'forgot_password', obj, function (data) {
             var obj = JSON.parse(data);
             if (obj.success) {
                 toastr.success(obj.message);    
+                setTimeout(function() {
+                    $("#show_login").click();
+                }, 2000);
             } else {
                 toastr.error(obj.message);
             }
@@ -174,7 +191,13 @@ $(document).ready(function () {
             </div>
         </div>
 
-        <footer class="auth__footer">&copy; 2026 CISO.aero &nbsp;&middot;&nbsp; Privacy &nbsp;&middot;&nbsp; Security</footer>
+        <footer class="auth__footer">
+            &copy; 2026 CISO.aero
+            &nbsp;&middot;&nbsp;
+            <button type="button" class="auth__footer-link" data-bs-toggle="modal" data-bs-target="#privacy_modal">Privacy</button>
+            &nbsp;&middot;&nbsp;
+            <button type="button" class="auth__footer-link" data-bs-toggle="modal" data-bs-target="#terms_modal">Terms of Use</button>
+        </footer>
 
     </main>
 
@@ -189,5 +212,96 @@ $(document).ready(function () {
 </div>
 
 </div>
+
+<div class="modal fade policy-modal" id="privacy_modal" tabindex="-1" aria-labelledby="privacy_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="privacy_modal_title">Privacy Policy</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="policy-modal__meta">Last updated 28 July 2026</p>
+
+                <h3>1. Scope</h3>
+                <p>This policy explains what personal data CISO.aero collects when you use the platform, why it is held, and how long it is kept. It applies to the CISO.aero application and its supporting services.</p>
+
+                <h3>2. Data we collect</h3>
+                <p>Account records: your first and last name, username, email address, the organisation you belong to, your assigned role and your account status. Passwords are stored only as a one-way hash and are never held in readable form.</p>
+                <p>Authentication records: session identifiers, the time of your last sign-in, password reset requests and their expiry, and whether a password change is required.</p>
+                <p>Client programme data: the compliance, risk, assessment and evidence records that your organisation enters into the platform.</p>
+
+                <h3>3. How data is used</h3>
+                <p>To authenticate you, to enforce access control, to operate the compliance and reporting features you use, to send transactional email such as password resets, and to maintain security and audit records.</p>
+
+                <h3>4. Legal basis</h3>
+                <p>Processing is carried out to perform the contract between your organisation and CISO.aero, and to meet our legitimate interest in operating and securing the service.</p>
+
+                <h3>5. Sharing</h3>
+                <p>Data is not sold. It is shared only with the infrastructure and email providers required to deliver the service, and where disclosure is required by law.</p>
+
+                <h3>6. Retention</h3>
+                <p>Account and programme data is retained for the life of your organisation's agreement and for the period afterwards required by applicable record-keeping obligations. Password reset tokens expire one hour after issue and are single use.</p>
+
+                <h3>7. Your rights</h3>
+                <p>Depending on your jurisdiction you may request access to, correction of, or deletion of your personal data, and may object to or restrict certain processing. Requests are handled through your organisation's administrator.</p>
+
+                <h3>8. Security</h3>
+                <p>Access is restricted by role, transport is encrypted, passwords are hashed, and administrative access to client data is logged.</p>
+
+                <h3>9. Contact</h3>
+                <p>Questions about this policy should be directed to your organisation's administrator or to the CISO.aero support address.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade policy-modal" id="terms_modal" tabindex="-1" aria-labelledby="terms_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="terms_modal_title">Terms of Use</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="policy-modal__meta">Last updated 28 July 2026</p>
+
+                <h3>1. Acceptance</h3>
+                <p>By accessing CISO.aero you agree to these terms. If you are using the platform on behalf of an organisation, you confirm you are authorised to accept them for that organisation.</p>
+
+                <h3>2. Accounts and access</h3>
+                <p>Accounts are issued to named individuals and must not be shared. You are responsible for keeping your credentials confidential and for activity carried out under your account. Report suspected compromise to your administrator immediately.</p>
+
+                <h3>3. Acceptable use</h3>
+                <p>You may use the platform only for your organisation's own security and compliance programme. You must not attempt to access another organisation's data, probe or test the platform's security without written authorisation, interfere with its operation, or reverse engineer any part of it.</p>
+
+                <h3>4. Client data</h3>
+                <p>Your organisation retains ownership of the compliance, risk and evidence records it enters. You are responsible for ensuring you hold the rights to upload that material, including any licensed standards text or restricted information.</p>
+
+                <h3>5. Availability</h3>
+                <p>The platform is provided on the basis set out in your organisation's agreement. Maintenance windows and service levels are governed by that agreement rather than by these terms.</p>
+
+                <h3>6. Intellectual property</h3>
+                <p>CISO.aero, its software, framework mappings and assessment content remain the property of the operator. No licence is granted beyond the right to use the platform for its intended purpose.</p>
+
+                <h3>7. Suspension</h3>
+                <p>Access may be suspended where these terms are breached, where an account is compromised, or where required to protect the platform or its other users.</p>
+
+                <h3>8. Liability</h3>
+                <p>The platform supports compliance decision-making but does not constitute legal, regulatory or audit advice. Responsibility for regulatory compliance rests with your organisation.</p>
+
+                <h3>9. Changes</h3>
+                <p>These terms may be updated. Continued use after a change takes effect constitutes acceptance of the revised terms.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
