@@ -11,7 +11,6 @@
             <input type="search" id="standard_search" class="input roster__search" placeholder="Search by name or code..." autocomplete="off" spellcheck="false">
             <div class="roster__filters">
                 <div class="roster__filter">
-                    <label for="status_filter">Status</label>
                     <select id="status_filter" class="form-select">
                         <option value="Active" selected>Active</option>
                         <option value="Archived">Archived</option>

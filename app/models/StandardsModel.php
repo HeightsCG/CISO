@@ -218,7 +218,8 @@ class StandardsModel extends Model {
                     $control['description'],
                     $control['family'],
                     $control['sort_order'],
-                    $created_by
+                    $created_by,
+                    $control['parent_identifier'] ?? ''
                 );
             }
 
@@ -242,6 +243,7 @@ class StandardsModel extends Model {
                     sc.id,
                     sc.standard_id,
                     sc.control_identifier,
+                    sc.parent_identifier,
                     sc.control_title,
                     sc.description,
                     sc.family,
@@ -343,12 +345,14 @@ class StandardsModel extends Model {
         $description,
         $family,
         $sort_order,
-        $created_by
+        $created_by,
+        $parent_identifier = ''
     )
     {
         $data = array(
             'standard_id' => $standard_id,
             'control_identifier' => $control_identifier,
+            'parent_identifier' => $parent_identifier,
             'control_title' => $control_title,
             'description' => $description,
             'family' => $family,
@@ -437,7 +441,8 @@ class StandardsModel extends Model {
                     $control['description'],
                     $control['family'],
                     $sort_order,
-                    $created_by
+                    $created_by,
+                    $control['parent_identifier'] ?? ''
                 );
             }
 

@@ -692,71 +692,111 @@ function source_fedramp(string $sheet, string $label, int $expected): array
     );
 }
 
-/** HIPAA Security Rule - 45 CFR 164 subpart C, verbatim from the eCFR API. */
+/**
+ * HIPAA - 45 CFR 164 subparts C, D and E plus 45 CFR 160 subpart C, verbatim from
+ * the eCFR API. Every standard and implementation specification becomes its own
+ * control; a section that declares neither is carried whole.
+ */
 function source_hipaa(): array
 {
-    $file = fetch(
-        'https://www.ecfr.gov/api/versioner/v1/full/2026-07-01/title-45.xml?subtitle=A&subchapter=C&part=164',
-        'hipaa-164.xml'
+    $parts = array(
+        array(
+            'file' => 'hipaa-164.xml',
+            'url' => 'https://www.ecfr.gov/api/versioner/v1/full/2026-07-01/title-45.xml?subtitle=A&subchapter=C&part=164',
+            'part' => '164',
+            'subparts' => array('C', 'D', 'E')
+        ),
+        array(
+            'file' => 'hipaa-160.xml',
+            'url' => 'https://www.ecfr.gov/api/versioner/v1/full/2026-07-01/title-45.xml?subtitle=A&subchapter=C&part=160',
+            'part' => '160',
+            'subparts' => array('C')
+        )
     );
 
-    $xml = simplexml_load_file($file);
     $out = array();
 
-    foreach ($xml->xpath('//DIV6') as $subpart) {
+    foreach ($parts as $spec) {
 
-        if ((string) $subpart['N'] !== 'C') {
-            continue;
-        }
+        $xml = simplexml_load_file(fetch($spec['url'], $spec['file']));
 
-        foreach ($subpart->xpath('.//DIV8') as $section) {
+        foreach ($xml->xpath('//DIV6') as $subpart) {
 
-            $head = tidy(preg_replace('/\s+/', ' ', (string) $section->HEAD));
+            $letter = (string) $subpart['N'];
 
-            if (!preg_match('/^\x{00A7}?\s*(164\.\d+)\s*(.*)$/u', $head, $m)) {
+            if (!in_array($letter, $spec['subparts'], true)) {
                 continue;
             }
 
-            $number = $m[1];
-            $title = rtrim(trim($m[2]), '.');
+            foreach ($subpart->xpath('.//DIV8') as $section) {
 
-            $family = preg_match('/(Administrative|Physical|Technical|Organizational)\s+(safeguards|requirements)/i', $title, $s)
-                ? 'Subpart C '.EMDASH.' '.ucfirst(strtolower($s[1])).' Safeguards'
-                : 'Subpart C '.EMDASH.' General Rules';
+                $head = tidy(preg_replace('/\s+/', ' ', (string) $section->HEAD));
 
-            $inner = hipaa_paragraphs($section, $number, $family);
-
-            if ($inner) {
-                $out = array_merge($out, $inner);
-                continue;
-            }
-
-            $body = array();
-
-            foreach ($section->children() as $child) {
-                if ($child->getName() === 'HEAD') {
+                if (!preg_match('/^\x{00A7}?\s*('.$spec['part'].'\.\d+)\s*(.*)$/u', $head, $m)) {
                     continue;
                 }
-                $t = tidy(preg_replace('/\s+/', ' ', strip_tags($child->asXML())));
-                if ($t !== '') {
-                    $body[] = $t;
-                }
-            }
 
-            $out[] = array($number, $title === '' ? $number : $title, tidy(implode("\n\n", $body)), $family);
+                $number = $m[1];
+                $title = rtrim(trim($m[2]), '.');
+                $family = hipaa_family($spec['part'], $letter, $title);
+
+                $inner = hipaa_paragraphs($section, $number, $family);
+
+                if ($inner) {
+                    $out = array_merge($out, $inner);
+                    continue;
+                }
+
+                $body = array();
+
+                foreach ($section->children() as $child) {
+                    if ($child->getName() === 'HEAD') {
+                        continue;
+                    }
+                    $t = tidy(preg_replace('/\s+/', ' ', strip_tags($child->asXML())));
+                    if ($t !== '') {
+                        $body[] = $t;
+                    }
+                }
+
+                $out[] = array($number, $title === '' ? $number : $title, tidy(implode("\n\n", $body)), $family);
+            }
         }
     }
 
     return array(
-        'standard_name' => 'HIPAA Security Rule',
+        'standard_name' => 'HIPAA Administrative Simplification',
         'short_code' => 'HIPAA-SEC',
-        'version' => '45 CFR 164 Subpart C',
-        'description' => 'Security Standards for the Protection of Electronic Protected Health Information. '
-            .'Regulation text imported verbatim from the eCFR API. Each standard and implementation specification is a '
-            .'control, and every specification records whether it is required or addressable.',
+        'version' => '45 CFR 160 & 164',
+        'description' => 'The HIPAA Security Rule (45 CFR 164 subpart C), Breach Notification Rule (subpart D) and '
+            .'Privacy Rule (subpart E), together with the compliance and investigation provisions of 45 CFR 160 '
+            .'subpart C. Regulation text imported verbatim from the eCFR API. Each standard and implementation '
+            .'specification is its own control, and Security Rule specifications record whether they are required '
+            .'or addressable.',
         'expected' => 0,
         'controls' => $out
     );
+}
+
+function hipaa_family(string $part, string $letter, string $title): string
+{
+    if ($part === '160') {
+        return '45 CFR 160 Subpart C '.EMDASH.' Compliance and Investigations';
+    }
+
+    if ($letter === 'D') {
+        return 'Subpart D '.EMDASH.' Breach Notification';
+    }
+
+    if ($letter === 'E') {
+        return 'Subpart E '.EMDASH.' Privacy Rule';
+    }
+
+    if (preg_match('/(Administrative|Physical|Technical|Organizational)\s+(safeguards|requirements)/i', $title, $s)) {
+        return 'Subpart C '.EMDASH.' '.ucfirst(strtolower($s[1])).' Safeguards';
+    }
+
+    return 'Subpart C '.EMDASH.' General Rules';
 }
 
 /**
@@ -808,8 +848,42 @@ function hipaa_paragraphs(SimpleXMLElement $section, string $number, string $fam
 
         $citation = $number.implode('', $levels);
 
-        if (preg_match('/^Standard:\s*([^.]+)\.\s*(.*)$/s', $rest, $s)) {
-            $out[] = array($citation, tidy($s[1]), tidy($s[2]), $family);
+        // The Security Rule writes "Standard: Risk analysis." while the Privacy and
+        // Breach Notification rules write "Standard-Notice of privacy practices-(1)
+        // Right to notice." Both forms, and their implementation specifications, are
+        // recognised here; the name runs to the first period or dash.
+        if (preg_match('/^(Standard|Implementation specifications?)\s*[:\x{2014}\x{2013}-]\s*(.*)$/us', $rest, $s)) {
+
+            $tail = ltrim($s[2]);
+            $tail = preg_replace('/^\([a-zA-Z0-9]{1,4}\)\s*/', '', $tail);
+
+            // "Implementation specifications:" on its own is a heading introducing
+            // the lettered specifications below it, each of which is already its
+            // own control. Only a heading that carries text is a control itself.
+            if (trim($tail) === '') {
+                continue;
+            }
+
+            preg_match('/^([^.\x{2014}\x{2013}]{2,200})/u', $tail, $n);
+            $name = tidy($n[1] ?? $tail);
+
+            // Security Rule specifications name themselves and then declare their
+            // status - "Response and reporting (Required)." The status belongs in
+            // the body, not the title.
+            $status = '';
+
+            if (preg_match('/^(.*?)\s*\((Required|Addressable)\)\s*$/s', $name, $r)) {
+                $name = tidy($r[1]);
+                $status = strtolower($r[2]);
+            }
+
+            $out[] = array(
+                $citation,
+                $name === '' ? $citation : $name,
+                tidy(tidy($s[0]).($status === '' ? '' : "\n\nThis implementation specification is ".$status.'.')),
+                $family
+            );
+
             continue;
         }
 
@@ -1327,6 +1401,131 @@ function cmmc_domain_names(): array
     );
 }
 
+/* -------------------------------------------------------------------- SOC 2 */
+
+/**
+ * SOC 2 Trust Services Criteria, loaded from the ciso.aero workbook.
+ *
+ * The Trust Services Criteria are copyrighted by the AICPA. Only the criterion
+ * identifiers, titles and category structure are referenced; every description in
+ * the workbook is original wording authored for this product, and is imported
+ * exactly as written. Nothing here rewrites or renumbers a single row.
+ */
+function source_soc2(): array
+{
+    $file = __DIR__.'/SOC2_TSC_Complete.xlsx';
+
+    if (!is_file($file)) {
+        throw new RuntimeException('SOC2_TSC_Complete.xlsx not found in the repo root');
+    }
+
+    $rows = xlsx_rows($file, 'Criteria');
+    $header = array_map('trim', array_shift($rows));
+
+    foreach (array('Identifier', 'Title', 'Description', 'Family') as $column) {
+        if (!in_array($column, $header, true)) {
+            throw new RuntimeException('the Criteria sheet has no "'.$column.'" column');
+        }
+    }
+
+    $at = array_flip($header);
+    $out = array();
+    $skipped = 0;
+
+    foreach ($rows as $r) {
+
+        $identifier = trim($r[$at['Identifier']] ?? '');
+        $title = trim($r[$at['Title']] ?? '');
+        $description = trim($r[$at['Description']] ?? '');
+        $family = trim($r[$at['Family']] ?? '');
+
+        if ($identifier === '' && $title === '' && $description === '' && $family === '') {
+            continue;
+        }
+
+        if ($identifier === '' || $title === '' || $family === '') {
+            $skipped++;
+            continue;
+        }
+
+        // Guidance rows carry a .G suffix under the criterion they expand on;
+        // the parent is the identifier with that suffix removed.
+        $parent = preg_match('/^(.+)\.G\d+$/', $identifier, $m) ? $m[1] : '';
+
+        $out[] = array($identifier, $title, $description, $family, $parent);
+    }
+
+    if ($skipped > 0) {
+        throw new RuntimeException($skipped.' rows are missing an identifier, title or family; nothing written');
+    }
+
+    // Everything is checked before a single row is written, so a workbook that
+    // fails any of these leaves the existing SOC 2 standard exactly as it was.
+    $verify = function (array $controls) {
+
+        $criteria = array();
+        $guidance = array();
+        $families = array();
+        $ids = array();
+
+        foreach ($controls as $c) {
+            $ids[$c[0]] = ($ids[$c[0]] ?? 0) + 1;
+            $families[$c[3]] = 1;
+            if ($c[4] === '') {
+                $criteria[$c[0]] = 1;
+            } else {
+                $guidance[] = $c;
+            }
+        }
+
+        $duplicates = array_keys(array_filter($ids, function ($n) { return $n > 1; }));
+
+        if ($duplicates) {
+            throw new RuntimeException('duplicate identifiers: '.implode(', ', array_slice($duplicates, 0, 5)));
+        }
+
+        $orphans = array();
+
+        foreach ($guidance as $g) {
+            if (!isset($criteria[$g[4]])) {
+                $orphans[] = $g[0].' -> '.$g[4];
+            }
+        }
+
+        if ($orphans) {
+            throw new RuntimeException(count($orphans).' guidance rows have no parent criterion: '
+                .implode(', ', array_slice($orphans, 0, 5)));
+        }
+
+        $checks = array(
+            'total rows' => array(count($controls), 246),
+            'criteria' => array(count($criteria), 61),
+            'guidance rows' => array(count($guidance), 185),
+            'families' => array(count($families), 13)
+        );
+
+        foreach ($checks as $what => $pair) {
+            if ($pair[0] !== $pair[1]) {
+                throw new RuntimeException('FAILED CHECK - '.$what.': got '.$pair[0].', expected '.$pair[1]
+                    .'; nothing written');
+            }
+        }
+    };
+
+    return array(
+        'standard_name' => 'SOC 2',
+        'short_code' => 'SOC2',
+        'version' => 'TSC 2017 (rev 2022)',
+        'verify' => $verify,
+        'description' => 'SOC 2 Trust Services Criteria with implementation guidance. The Trust Services Criteria are '
+            .'copyrighted by the AICPA; criterion identifiers, titles and category structure are referenced for '
+            .'interoperability, and all descriptions and guidance rows are original wording authored for ciso.aero. '
+            .'Guidance identifiers such as CC6.1.G1 are a ciso.aero numbering convention, not AICPA identifiers.',
+        'expected' => 246,
+        'controls' => $out
+    );
+}
+
 /* ---------------------------------------------------------------- the loading */
 
 function load_standard(StandardsModel $model, int $company_id, array $source): array
@@ -1344,6 +1543,7 @@ function load_standard(StandardsModel $model, int $company_id, array $source): a
     foreach ($rows as $r) {
 
         list($identifier, $title, $description, $family) = $r;
+        $parent = $r[4] ?? '';
 
         $identifier = trim($identifier);
         $title = trim($title) === '' ? $identifier : trim($title);
@@ -1363,6 +1563,7 @@ function load_standard(StandardsModel $model, int $company_id, array $source): a
 
         $clean[] = array(
             'control_identifier' => mb_substr($identifier, 0, 120),
+            'parent_identifier' => mb_substr(trim($parent), 0, 120),
             'control_title' => mb_substr($title, 0, 400),
             'description' => $description,
             'family' => mb_substr($family, 0, 200)
@@ -1414,13 +1615,14 @@ $sources = array(
     'NYDFS 23 NYCRR 500' => 'source_nydfs',
     'CMMC Level 1' => 'source_cmmc_l1',
     'CMMC Level 2' => 'source_cmmc_l2',
-    'CMMC Level 3' => 'source_cmmc_l3'
+    'CMMC Level 3' => 'source_cmmc_l3',
+    'SOC 2' => 'source_soc2'
 );
 
 // CMMC practice counts are fixed by 32 CFR part 170; a parse that lands anywhere
 // else means the rule was misread, so those loads abort rather than record a
 // number nobody can trust.
-$strict = array('CMMC Level 1', 'CMMC Level 2', 'CMMC Level 3');
+$strict = array('CMMC Level 1', 'CMMC Level 2', 'CMMC Level 3', 'SOC 2');
 
 $report = array();
 
@@ -1432,6 +1634,10 @@ foreach ($sources as $label => $builder) {
 
         $source = $builder();
         $expected = (int) $source['expected'];
+
+        if (isset($source['verify'])) {
+            $source['verify']($source['controls']);
+        }
 
         if (in_array($label, $strict, true) && count($source['controls']) !== $expected) {
             throw new RuntimeException('FAILED COUNT CHECK - parsed '.count($source['controls'])
