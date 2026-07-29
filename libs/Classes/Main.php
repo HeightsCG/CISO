@@ -33,7 +33,6 @@ class Main {
     public static function get_config(): array
     {
         $config_file = self::config_path().'/app.ini';
-        echo $config_file . "\r\n";
         if (is_file($config_file)) {
             $parsed = parse_ini_file($config_file, true);
             return is_array($parsed) ? $parsed : array();
