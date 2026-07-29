@@ -18,11 +18,13 @@ class UsersModel extends Model {
                     u.last_name,
                     u.user_status,
                     u.date_created,
+                    DATE_FORMAT(u.date_created, df.sql_format) AS date_created_display,
                     c.company_name,
                     r.role_name
                 FROM
                     user_accounts u
                     LEFT JOIN companies c ON c.id = u.company_id and c.deleted = 0
+                    LEFT JOIN date_formats df ON df.id = c.date_format_id
                     LEFT JOIN user_roles r ON r.id = u.role_id and r.deleted = 0
                 WHERE
                     u.user_id = :user_id

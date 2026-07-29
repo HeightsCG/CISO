@@ -3128,3 +3128,265 @@ table.data thead th.dt-type-numeric div.dt-column-header {
     flex: 1 1 320px;
     width: auto;
 }
+
+
+.notice {
+    margin-bottom: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--fs-body);
+    line-height: var(--lh-normal);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.notice--warn {
+    color: var(--high);
+    background: var(--high-bg);
+    border-color: var(--high-border);
+}
+
+.badge--critical {
+    color: var(--critical);
+    background: var(--critical-bg);
+    border-color: var(--critical-border);
+}
+
+.progress {
+    height: 6px;
+    overflow: hidden;
+    background: var(--surface-inset);
+    border-radius: var(--radius);
+}
+
+.progress--lg {
+    height: 10px;
+    margin-top: var(--space-4);
+}
+
+.progress__bar {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.2s ease-in-out;
+}
+
+.progress__label {
+    display: block;
+    margin-top: var(--space-1);
+    font-size: var(--fs-meta);
+    color: var(--text-secondary);
+}
+
+.rollup {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.rollup__stat {
+    flex: 1 1 140px;
+    padding: var(--space-3);
+    background: var(--surface-sunken);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.rollup__n {
+    display: block;
+    font-size: 22px;
+    font-weight: var(--fw-semibold);
+    line-height: 1.1;
+    color: var(--text-primary);
+}
+
+.rollup__label {
+    display: block;
+    margin-top: var(--space-1);
+    font-size: var(--fs-meta);
+    color: var(--text-secondary);
+}
+
+.rollup__pct {
+    display: block;
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-medium);
+    color: var(--accent);
+}
+
+table.data tbody tr.item__row,
+table.data tbody tr.evidence__row {
+    cursor: default;
+}
+
+table.data tbody tr.item__row {
+    cursor: pointer;
+}
+
+.item__control {
+    font-size: var(--fs-subsection);
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+}
+
+.item__id {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    color: var(--accent);
+}
+
+.item__family {
+    margin-bottom: var(--space-3);
+    font-size: var(--fs-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.evidence__list {
+    margin: 0 0 var(--space-3);
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.evidence__list--pick {
+    max-height: 320px;
+    margin-top: var(--space-4);
+    overflow-y: auto;
+}
+
+.evidence__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--fs-body);
+}
+
+.evidence__item + .evidence__item {
+    border-top: 1px solid var(--border);
+}
+
+.evidence__meta {
+    display: block;
+    margin-top: 1px;
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+.evidence__none {
+    padding: var(--space-3);
+    font-size: var(--fs-body);
+    color: var(--text-muted);
+}
+
+.panel__body > .datalist + .record__group {
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border);
+}
+
+/* Two panes side by side: the control text has to stay readable while the
+   assessor fills the form, and neither may push the other out of view. The
+   modal body itself never scrolls - each pane scrolls on its own. */
+.assess {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0;
+    max-height: calc(100vh - 220px);
+    padding: 0;
+}
+
+.assess__pane {
+    min-width: 0;
+    padding: var(--space-4) var(--space-5);
+    overflow-y: auto;
+}
+
+.assess__pane--control {
+    background: var(--surface-sunken);
+    border-left: 1px solid var(--border);
+}
+
+.assess__eyebrow {
+    margin-bottom: var(--space-2);
+    line-height: var(--lh-normal);
+}
+
+.assess__sep {
+    margin: 0 var(--space-1);
+    color: var(--border-strong);
+}
+
+.assess__id {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-semibold);
+    color: var(--accent);
+}
+
+.assess__family {
+    font-size: var(--fs-meta);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.assess__title {
+    max-width: 72ch;
+    font-size: var(--fs-section);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    color: var(--text-primary);
+}
+
+.assess__text {
+    margin-top: var(--space-3);
+    font-size: var(--fs-body);
+    line-height: var(--lh-normal);
+    color: var(--text-secondary);
+    white-space: pre-line;
+}
+
+.assess__evidence {
+    margin-top: var(--space-5);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border);
+}
+
+@media (max-width: 900px) {
+
+    .assess {
+        grid-template-columns: minmax(0, 1fr);
+        max-height: calc(100vh - 180px);
+        overflow-y: auto;
+    }
+
+    .assess__pane {
+        overflow-y: visible;
+    }
+
+    .assess__pane--control {
+        border-left: 0;
+        border-top: 1px solid var(--border);
+    }
+}
+
+.assess__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+}
+
+/* Inside a modal the group rule is the only thing separating the sections, so it
+   needs more room than it does on a record page. */
+.modal-body .record__group + .record__group {
+    margin-top: var(--space-5);
+    padding-top: var(--space-5);
+}
+
+.modal-body .record__group-title {
+    margin-bottom: var(--space-3);
+}

@@ -54,7 +54,7 @@
                         <dt>Status</dt>
                         <dd><span class="status status--ok"><?php echo htmlspecialchars($this->profile['user_status'], ENT_QUOTES, 'UTF-8'); ?></span></dd>
                         <dt>Member since</dt>
-                        <dd><?php echo date('j F Y', strtotime($this->profile['date_created'])); ?></dd>
+                        <dd><?php echo htmlspecialchars((string) $this->profile['date_created_display'], ENT_QUOTES, 'UTF-8'); ?></dd>
                     </dl>
                 </div>
             </div>
