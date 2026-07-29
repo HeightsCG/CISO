@@ -3365,18 +3365,26 @@ table.data--light tbody tr .vault__menu:focus-within {
     cursor: default;
 }
 
+/* The cell keeps the chip on one line; the popover must not inherit that. */
+
 .links__menu {
-    width: 340px;
-    max-height: 300px;
+    width: 320px;
+    max-height: 320px;
     overflow-y: auto;
-    padding: var(--space-2);
+    padding: var(--space-1);
+    white-space: normal;
 }
 
 .links__item {
     display: block;
-    padding: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius);
     color: var(--text-primary);
     text-decoration: none;
+}
+
+.links__item + .links__item {
+    margin-top: 1px;
 }
 
 .links__item:hover {
@@ -3388,16 +3396,25 @@ table.data--light tbody tr .vault__menu:focus-within {
     display: block;
     font-family: var(--font-mono);
     font-size: var(--fs-meta);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.01em;
     color: var(--accent);
 }
 
 .links__title {
-    display: block;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    margin-top: 1px;
     font-size: var(--fs-body);
+    line-height: 1.35;
+    overflow-wrap: anywhere;
 }
 
 .links__meta {
     display: block;
+    margin-top: var(--space-1);
     font-size: var(--fs-meta);
     color: var(--text-muted);
 }
