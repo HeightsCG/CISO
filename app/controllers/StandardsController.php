@@ -69,9 +69,5 @@ class StandardsController extends Controller {
      * in the table whichever route the text took; the views escape on output.
      */
 
-    private function clean_cell($value): string
-    {
-        return trim(mb_convert_encoding((string) $value, 'UTF-8', 'UTF-8'));
-    }
 
 }

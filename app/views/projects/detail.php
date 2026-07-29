@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="page__actions">
-            <?php echo ((int) $this->project['client_id'] === 0 ? '' : '<a class="btn btn--secondary" href="/clients/evidence/id/'.((int) $this->project['client_id']).'/from/project/ref/'.((int) $this->project['id']).'"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>'); ?>
+            <a class="btn btn--secondary" href="/projects/evidence/id/<?php echo (int) $this->project['id']; ?>"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>
             <a class="btn btn--secondary" href="/projects/form/id/<?php echo (int) $this->project['id']; ?>"><i class="fa-regular fa-pen"></i> Edit</a>
             <button type="button" class="btn btn--primary" id="do_assessment_add"><i class="fa-regular fa-plus"></i> Assessment</button>
             <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i></button>

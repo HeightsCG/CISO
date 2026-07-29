@@ -9,11 +9,11 @@
                 <span class="client__segment"><?php echo htmlspecialchars($this->assessment['standard_name'], ENT_QUOTES, 'UTF-8'); ?></span>
                 <span class="client__segment"><?php echo htmlspecialchars($this->assessment['short_code'], ENT_QUOTES, 'UTF-8'); ?><?php echo ($this->assessment['version'] === '' ? '' : ' &middot; '.htmlspecialchars($this->assessment['version'], ENT_QUOTES, 'UTF-8')); ?></span>
                 <span class="client__segment"><?php echo (int) $this->assessment['item_count']; ?> items</span>
-                <span class="client__segment"><?php echo ($this->assessment['client_name'] === null ? 'No client &mdash; evidence cannot be attached' : 'Evidence vault: '.htmlspecialchars($this->assessment['client_name'], ENT_QUOTES, 'UTF-8')); ?></span>
+                <span class="client__segment">Evidence vault: <?php echo htmlspecialchars($this->assessment['project_name'], ENT_QUOTES, 'UTF-8'); ?></span>
             </div>
         </div>
         <div class="page__actions">
-            <?php echo ((int) $this->assessment['client_id'] === 0 ? '' : '<a class="btn btn--secondary" href="/clients/evidence/id/'.((int) $this->assessment['client_id']).'/from/assessment/ref/'.((int) $this->assessment['id']).'"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>'); ?>
+            <a class="btn btn--secondary" href="/projects/evidence/id/<?php echo (int) $this->assessment['project_id']; ?>/from/assessment/ref/<?php echo (int) $this->assessment['id']; ?>"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>
             <button type="button" class="btn btn--primary" id="do_complete"><i class="fa-regular fa-circle-check"></i> Mark Complete</button>
             <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete</button>
         </div>
@@ -134,7 +134,7 @@
             </div>
             <div class="modal-body">
                 <div class="pick__head">
-                    <p class="pick__label">Files in <span id="pick_client"></span>&rsquo;s evidence vault <span class="pick__count" id="pick_count"></span></p>
+                    <p class="pick__label">Files in <span id="pick_project"></span>&rsquo;s evidence vault <span class="pick__count" id="pick_count"></span></p>
                     <div class="pick__search-wrap">
                         <input type="search" id="vault_search" class="input pick__search" placeholder="Search file name or description..." autocomplete="off" spellcheck="false">
                     </div>
@@ -170,7 +170,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="import__hint">The file is stored in this client&rsquo;s vault and attached to this control. It can be reused on any other control without uploading it again.</p>
+                <p class="import__hint">The file is stored in this project&rsquo;s vault and attached to this control. It can be reused on any other control without uploading it again.</p>
                 <div class="field">
                     <label for="evidence_title">Title <abbr title="required">*</abbr></label>
                     <input type="text" id="evidence_title" placeholder="Information security policy, signed">
@@ -200,7 +200,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Delete <strong><?php echo htmlspecialchars($this->assessment['assessment_name'], ENT_QUOTES, 'UTF-8'); ?></strong> and all <?php echo (int) $this->assessment['item_count']; ?> of its items, including results and notes? Evidence itself stays in the client&rsquo;s vault. This cannot be undone.</p>
+                <p>Delete <strong><?php echo htmlspecialchars($this->assessment['assessment_name'], ENT_QUOTES, 'UTF-8'); ?></strong> and all <?php echo (int) $this->assessment['item_count']; ?> of its items, including results and notes? Evidence itself stays in the project&rsquo;s vault. This cannot be undone.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
@@ -214,8 +214,7 @@
 $(document).ready(function () {
 
     var assessment_id = <?php echo (int) $this->assessment['id']; ?>;
-    var client_id = <?php echo (int) $this->assessment['client_id']; ?>;
-    var client_name = "<?php echo ($this->assessment['client_name'] === null ? '' : htmlspecialchars($this->assessment['client_name'], ENT_QUOTES, 'UTF-8')); ?>";
+    var project_name = "<?php echo htmlspecialchars($this->assessment['project_name'], ENT_QUOTES, 'UTF-8'); ?>";
     var items = [];
     var current_item = null;
 
@@ -581,13 +580,8 @@ $(document).ready(function () {
 
     $('#do_attach_open').click(function () {
 
-        if (client_id === 0) {
-            toastr.error('Assign a client to this project before attaching evidence.');
-            return;
-        }
-
         $('#vault_search').val('');
-        $('#pick_client').text(client_name);
+        $('#pick_project').text(project_name);
         mark_sort();
         load_vault(true);
         modal('attach_modal').show();
@@ -641,7 +635,7 @@ $(document).ready(function () {
         }).get();
 
         ApiDataSvc.apiCall('post', 'search_evidence', {
-            client_id: client_id,
+            project_id: project_id,
             search: vault.term,
             limit: PAGE_SIZE,
             offset: vault.offset,
@@ -678,7 +672,7 @@ $(document).ready(function () {
 
             $('.pick__table').toggle(shown > 0);
             $('#vault_empty').prop('hidden', shown > 0).text(vault.term === ''
-                ? esc(client_name) + ' has no evidence yet. Close this and choose Upload New \u2014 the file is saved to this client\'s vault and attached here in one step.'
+                ? esc(project_name) + ' has no evidence yet. Close this and choose Upload New \u2014 the file is saved to this project\'s vault and attached here in one step.'
                 : 'No files match \u201c' + vault.term + '\u201d.');
         });
     }
@@ -743,11 +737,6 @@ $(document).ready(function () {
 
     $('#do_upload_open').click(function () {
 
-        if (client_id === 0) {
-            toastr.error('Assign a client to this project before uploading evidence.');
-            return;
-        }
-
         $('#evidence_title, #evidence_description').val('').removeClass('is-invalid');
         $('#evidence_file').val('');
         modal('upload_modal').show();
@@ -772,7 +761,7 @@ $(document).ready(function () {
         var form_data = new FormData();
 
         form_data.append('evidence_file', file);
-        form_data.append('client_id', client_id);
+        form_data.append('project_id', project_id);
         form_data.append('evidence_title', title);
         form_data.append('description', $('#evidence_description').val().trim());
         form_data.append('csrf_token', $('meta[name="csrf-token"]').attr('content'));

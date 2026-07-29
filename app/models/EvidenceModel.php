@@ -5,15 +5,16 @@ class EvidenceModel extends Model {
         parent::__construct();
     }
 
-    /** The client's vault: every piece of evidence with how widely it is reused. */
-    public function load_evidence($client_id, $company_id)
+    /** The project's vault: every piece of evidence with how widely it is reused. */
+    public function load_evidence($project_id, $company_id)
     {
         $where = array(
-            'client_id' => $client_id,
+            'project_id' => $project_id,
             'company_id' => $company_id
         );
         $sql = "SELECT
                     e.id,
+                    e.folder_id,
                     e.evidence_title,
                     e.description,
                     e.file_name,
@@ -30,13 +31,14 @@ class EvidenceModel extends Model {
                     LEFT JOIN user_accounts u ON u.user_id = e.uploaded_by
                     LEFT JOIN evidence_links el ON el.evidence_id = e.id
                 WHERE
-                    e.client_id = :client_id
+                    e.project_id = :project_id
                     and
                     e.company_id = :company_id
                     and
                     e.deleted = 0
                 GROUP BY
                     e.id,
+                    e.folder_id,
                     e.evidence_title,
                     e.description,
                     e.file_name,
@@ -55,11 +57,11 @@ class EvidenceModel extends Model {
     /**
      * Paged, filtered vault lookup for the evidence picker.
      *
-     * The vault is per client but can still run to thousands of files, so the
+     * The vault is per project but can still run to thousands of files, so the
      * filtering and the slicing both happen in SQL - the browser never receives
      * more than one page.
      */
-    public function search_evidence($client_id, $company_id, $term, $limit, $offset, $sort = 'date_created', $dir = 'desc')
+    public function search_evidence($project_id, $company_id, $term, $limit, $offset, $sort = 'date_created', $dir = 'desc')
     {
         $limit = max(1, min(200, (int) $limit));
         $offset = max(0, (int) $offset);
@@ -77,7 +79,7 @@ class EvidenceModel extends Model {
         $direction = (strtolower($dir) === 'asc') ? 'ASC' : 'DESC';
 
         $where = array(
-            'client_id' => $client_id,
+            'project_id' => $project_id,
             'company_id' => $company_id
         );
 
@@ -105,7 +107,7 @@ class EvidenceModel extends Model {
                     JOIN date_formats df ON df.id = co.date_format_id
                     LEFT JOIN evidence_links el ON el.evidence_id = e.id
                 WHERE
-                    e.client_id = :client_id
+                    e.project_id = :project_id
                     and
                     e.company_id = :company_id
                     and
@@ -126,10 +128,10 @@ class EvidenceModel extends Model {
         return parent::select($sql, $where);
     }
 
-    public function count_evidence($client_id, $company_id, $term)
+    public function count_evidence($project_id, $company_id, $term)
     {
         $where = array(
-            'client_id' => $client_id,
+            'project_id' => $project_id,
             'company_id' => $company_id
         );
 
@@ -144,7 +146,7 @@ class EvidenceModel extends Model {
 
         $sql = "SELECT COUNT(*) AS total
                 FROM evidence e
-                WHERE e.client_id = :client_id
+                WHERE e.project_id = :project_id
                     and e.company_id = :company_id
                     and e.deleted = 0
                     ".$filter;
@@ -163,13 +165,13 @@ class EvidenceModel extends Model {
         $sql = "SELECT
                     e.*,
                     DATE_FORMAT(e.date_created, df.sql_format) AS date_created_display,
-                    c.company_name AS client_name,
+                    pr.project_name,
                     CONCAT(u.first_name, ' ', u.last_name) AS uploaded_by_name
                 FROM
                     evidence e
                     JOIN companies co ON co.id = e.company_id
                     JOIN date_formats df ON df.id = co.date_format_id
-                    LEFT JOIN clients c ON c.id = e.client_id
+                    LEFT JOIN projects pr ON pr.id = e.project_id
                     LEFT JOIN user_accounts u ON u.user_id = e.uploaded_by
                 WHERE
                     e.id = :id
@@ -182,7 +184,8 @@ class EvidenceModel extends Model {
 
     public function add_evidence(
         $company_id,
-        $client_id,
+        $project_id,
+        $folder_id,
         $evidence_title,
         $description,
         $file_key,
@@ -194,7 +197,8 @@ class EvidenceModel extends Model {
     {
         $data = array(
             'company_id' => $company_id,
-            'client_id' => $client_id,
+            'project_id' => $project_id,
+            'folder_id' => $folder_id,
             'evidence_title' => $evidence_title,
             'description' => $description,
             'file_key' => $file_key,
@@ -332,7 +336,7 @@ class EvidenceModel extends Model {
     /**
      * Both sides are re-checked against the session's org before a link is made:
      * the evidence and the item must belong to the same company, and the evidence
-     * to the same client as the item's project.
+     * to the same project as the item's assessment.
      */
     public function link_evidence($evidence_id, $item_id, $company_id, $created_by)
     {
@@ -345,7 +349,7 @@ class EvidenceModel extends Model {
              WHERE e.id = :evidence_id
                 and e.company_id = :company_id
                 and a.company_id = :company_id2
-                and e.client_id = p.client_id
+                and e.project_id = p.id
                 and e.deleted = 0
                 and ai.deleted = 0
                 and a.deleted = 0",
@@ -407,6 +411,203 @@ class EvidenceModel extends Model {
             'evidence_id = :evidence_id and assessment_item_id = :item_id',
             array('evidence_id' => $evidence_id, 'item_id' => $item_id)
         );
+    }
+
+
+    /* ------------------------------------------------------------- folders */
+
+    /** The whole tree for one project, with a file count against each folder. */
+    public function load_folders($project_id, $company_id)
+    {
+        $where = array(
+            'project_id' => $project_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    f.id,
+                    f.parent_id,
+                    f.folder_name,
+                    (SELECT COUNT(*) FROM evidence e WHERE e.folder_id = f.id and e.deleted = 0) AS file_count
+                FROM
+                    evidence_folders f
+                WHERE
+                    f.project_id = :project_id
+                    and
+                    f.company_id = :company_id
+                    and
+                    f.deleted = 0
+                ORDER BY
+                    f.folder_name";
+        return parent::select($sql, $where);
+    }
+
+    public function get_folder($folder_id, $company_id)
+    {
+        $where = array(
+            'id' => $folder_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    f.id,
+                    f.company_id,
+                    f.project_id,
+                    f.parent_id,
+                    f.folder_name
+                FROM
+                    evidence_folders f
+                WHERE
+                    f.id = :id
+                    and
+                    f.company_id = :company_id
+                    and
+                    f.deleted = 0";
+        return parent::select($sql, $where);
+    }
+
+    /** Two folders cannot share a name under the same parent. */
+    public function check_folder_name($project_id, $parent_id, $folder_name, $exclude_folder_id = 0)
+    {
+        $where_text = '';
+
+        $where = array(
+            'project_id' => $project_id,
+            'parent_id' => $parent_id,
+            'folder_name' => $folder_name
+        );
+
+        if ($exclude_folder_id > 0) {
+            $where['exclude_folder_id'] = $exclude_folder_id;
+            $where_text = ' and f.id != :exclude_folder_id';
+        }
+
+        $sql = "SELECT
+                    f.id
+                FROM
+                    evidence_folders f
+                WHERE
+                    f.project_id = :project_id
+                    and
+                    f.parent_id = :parent_id
+                    and
+                    f.folder_name = :folder_name
+                    and
+                    f.deleted = 0" . $where_text;
+        return parent::select($sql, $where);
+    }
+
+    public function add_folder($company_id, $project_id, $parent_id, $folder_name, $created_by)
+    {
+        $data = array(
+            'company_id' => $company_id,
+            'project_id' => $project_id,
+            'parent_id' => $parent_id,
+            'folder_name' => $folder_name,
+            'created_by' => $created_by,
+            'updated_by' => $created_by,
+            'date_created' => date('Y-m-d H:i:s'),
+            'date_updated' => date('Y-m-d H:i:s'),
+            'deleted' => 0
+        );
+        return parent::insert('evidence_folders', $data);
+    }
+
+    public function update_folder($folder_id, $company_id, $parent_id, $folder_name, $updated_by)
+    {
+        $where = array(
+            'id' => $folder_id,
+            'company_id' => $company_id
+        );
+        $data = array(
+            'parent_id' => $parent_id,
+            'folder_name' => $folder_name,
+            'updated_by' => $updated_by,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+        return parent::update('evidence_folders', $data, 'id = :id and company_id = :company_id', $where);
+    }
+
+    /**
+     * Every folder beneath one, itself included. Stops a folder being moved
+     * inside its own subtree, which would cut that branch off the root, and
+     * gathers a subtree for deletion.
+     */
+    public function folder_subtree($folder_id, $company_id)
+    {
+        $folder = $this->get_folder($folder_id, $company_id);
+
+        if (count($folder) !== 1) {
+            return array();
+        }
+
+        $ids = array((int) $folder_id);
+        $frontier = array((int) $folder_id);
+        $all = $this->load_folders($folder[0]['project_id'], $company_id);
+
+        while (count($frontier) > 0) {
+
+            $next = array();
+
+            foreach ($all as $row) {
+                if (in_array((int) $row['parent_id'], $frontier, true) && !in_array((int) $row['id'], $ids, true)) {
+                    $ids[] = (int) $row['id'];
+                    $next[] = (int) $row['id'];
+                }
+            }
+
+            $frontier = $next;
+        }
+
+        return $ids;
+    }
+
+    /**
+     * Deleting a folder takes its subfolders with it. The files inside are not
+     * destroyed - they surface at the parent, because a folder is a filing
+     * decision and losing the evidence with it would be indefensible.
+     */
+    public function delete_folder($folder_id, $company_id, $updated_by)
+    {
+        $folder = $this->get_folder($folder_id, $company_id);
+
+        if (count($folder) !== 1) {
+            return 0;
+        }
+
+        $ids = $this->folder_subtree($folder_id, $company_id);
+        $parent_id = (int) $folder[0]['parent_id'];
+
+        foreach ($ids as $id) {
+
+            parent::update(
+                'evidence',
+                array('folder_id' => $parent_id, 'updated_by' => $updated_by, 'date_updated' => date('Y-m-d H:i:s')),
+                'folder_id = :from_folder_id and company_id = :company_id',
+                array('from_folder_id' => $id, 'company_id' => $company_id)
+            );
+
+            parent::update(
+                'evidence_folders',
+                array('deleted' => 1, 'updated_by' => $updated_by, 'date_updated' => date('Y-m-d H:i:s')),
+                'id = :id and company_id = :company_id',
+                array('id' => $id, 'company_id' => $company_id)
+            );
+        }
+
+        return count($ids);
+    }
+
+    public function move_evidence($evidence_id, $company_id, $folder_id, $updated_by)
+    {
+        $where = array(
+            'id' => $evidence_id,
+            'company_id' => $company_id
+        );
+        $data = array(
+            'folder_id' => $folder_id,
+            'updated_by' => $updated_by,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+        return parent::update('evidence', $data, 'id = :id and company_id = :company_id', $where);
     }
 
 }

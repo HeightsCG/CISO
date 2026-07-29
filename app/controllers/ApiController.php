@@ -3,6 +3,15 @@ class ApiController extends Controller {
 
     public $protected = 1;
 
+    // Evidence is whatever the assessor was handed: policies, screenshots, config
+    // dumps, signed contracts. Anything executable is refused outright.
+    const MAX_UPLOAD_BYTES = 26214400;
+    const ALLOWED_EXTENSIONS = array(
+        'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'csv', 'rtf', 'odt', 'ods',
+        'png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp', 'tif', 'tiff', 'heic',
+        'zip', 'gz', 'tgz', '7z', 'json', 'xml', 'log', 'msg', 'eml'
+    );
+
     public $public_actions = array(
         'loginAction',
         'forgot_passwordAction',
@@ -2064,23 +2073,171 @@ class ApiController extends Controller {
         echo json_encode($response);
     }
 
-    public function load_evidenceAction(){
 
-        $client_id = (int) ($this->post['client_id'] ?? 0);
+    public function load_foldersAction(){
 
-        if (!$this->owns_client($client_id)) {
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+
+        if (!$this->owns_project($project_id)) {
             echo json_encode(array());
             exit;
         }
 
-        echo json_encode($this->evidence_model->load_evidence($client_id, Session::get('company_id')));
+        echo json_encode($this->evidence_model->load_folders($project_id, Session::get('company_id')));
+    }
+
+    public function save_folderAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $folder_id = (int) ($this->post['folder_id'] ?? 0);
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+        $parent_id = (int) ($this->post['parent_id'] ?? 0);
+        $folder_name = $this->input('folder_name');
+        $company_id = Session::get('company_id');
+
+        if (!$this->owns_project($project_id)) {
+            $response['message'] = 'That project could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($folder_name === '') {
+            $response['message'] = 'Folder name is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($parent_id > 0) {
+
+            $parent = $this->evidence_model->get_folder($parent_id, $company_id);
+
+            if (count($parent) !== 1 || (int) $parent[0]['project_id'] !== $project_id) {
+                $response['message'] = 'That parent folder could not be found';
+                echo json_encode($response);
+                exit;
+            }
+        }
+
+        if (count($this->evidence_model->check_folder_name($project_id, $parent_id, $folder_name, $folder_id)) > 0) {
+            $response['message'] = 'A folder with that name is already here';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($folder_id > 0) {
+
+            $folder = $this->evidence_model->get_folder($folder_id, $company_id);
+
+            if (count($folder) !== 1) {
+                $response['message'] = 'That folder could not be found';
+                echo json_encode($response);
+                exit;
+            }
+
+            if (in_array($parent_id, $this->evidence_model->folder_subtree($folder_id, $company_id), true)) {
+                $response['message'] = 'A folder cannot be moved inside itself';
+                echo json_encode($response);
+                exit;
+            }
+
+            $this->evidence_model->update_folder($folder_id, $company_id, $parent_id, $folder_name, Session::get('user_id'));
+
+            $response['success'] = true;
+            $response['message'] = 'Folder updated';
+            $response['folder_id'] = $folder_id;
+            echo json_encode($response);
+            exit;
+        }
+
+        $response['folder_id'] = (int) $this->evidence_model->add_folder($company_id, $project_id, $parent_id, $folder_name, Session::get('user_id'));
+        $response['success'] = true;
+        $response['message'] = 'Folder created';
+        echo json_encode($response);
+    }
+
+    public function delete_folderAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $folder_id = (int) ($this->post['folder_id'] ?? 0);
+        $company_id = Session::get('company_id');
+
+        if (count($this->evidence_model->get_folder($folder_id, $company_id)) !== 1) {
+            $response['message'] = 'That folder could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $removed = $this->evidence_model->delete_folder($folder_id, $company_id, Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'Folder deleted'
+            .($removed > 1 ? ' with '.($removed - 1).' '.($removed - 1 === 1 ? 'subfolder' : 'subfolders') : '')
+            .'. Any files inside moved up a level.';
+        echo json_encode($response);
+    }
+
+    public function move_evidenceAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $evidence_id = (int) ($this->post['evidence_id'] ?? 0);
+        $folder_id = (int) ($this->post['folder_id'] ?? 0);
+        $company_id = Session::get('company_id');
+
+        $evidence = $this->evidence_model->get_evidence($evidence_id, $company_id);
+
+        if (count($evidence) !== 1) {
+            $response['message'] = 'That evidence could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($folder_id > 0) {
+
+            $folder = $this->evidence_model->get_folder($folder_id, $company_id);
+
+            if (count($folder) !== 1 || (int) $folder[0]['project_id'] !== (int) $evidence[0]['project_id']) {
+                $response['message'] = 'That folder could not be found';
+                echo json_encode($response);
+                exit;
+            }
+        }
+
+        $this->evidence_model->move_evidence($evidence_id, $company_id, $folder_id, Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'Evidence moved';
+        echo json_encode($response);
+    }
+
+    public function load_evidenceAction(){
+
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+
+        if (!$this->owns_project($project_id)) {
+            echo json_encode(array());
+            exit;
+        }
+
+        echo json_encode($this->evidence_model->load_evidence($project_id, Session::get('company_id')));
     }
 
     public function search_evidenceAction(){
 
-        $client_id = (int) ($this->post['client_id'] ?? 0);
+        $project_id = (int) ($this->post['project_id'] ?? 0);
 
-        if (!$this->owns_client($client_id)) {
+        if (!$this->owns_project($project_id)) {
             echo json_encode(array('total' => 0, 'rows' => array()));
             exit;
         }
@@ -2095,11 +2252,11 @@ class ApiController extends Controller {
         // the first page and carried by the client for the rest. Re-counting on
         // every scroll page doubled the work for a number that never moved.
         $response = array(
-            'rows' => $this->evidence_model->search_evidence($client_id, Session::get('company_id'), $term, $limit, $offset, $sort, $dir)
+            'rows' => $this->evidence_model->search_evidence($project_id, Session::get('company_id'), $term, $limit, $offset, $sort, $dir)
         );
 
         if ($offset === 0) {
-            $response['total'] = $this->evidence_model->count_evidence($client_id, Session::get('company_id'), $term);
+            $response['total'] = $this->evidence_model->count_evidence($project_id, Session::get('company_id'), $term);
         }
 
         echo json_encode($response);
@@ -2112,12 +2269,13 @@ class ApiController extends Controller {
             'message' => 'Something went wrong'
         );
 
-        $client_id = (int) ($this->post['client_id'] ?? 0);
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+        $folder_id = (int) ($this->post['folder_id'] ?? 0);
         $evidence_title = $this->input('evidence_title');
         $description = $this->input('description');
 
-        if (!$this->owns_client($client_id)) {
-            $response['message'] = 'That client could not be found';
+        if (!$this->owns_project($project_id)) {
+            $response['message'] = 'That project could not be found';
             echo json_encode($response);
             exit;
         }
@@ -2126,6 +2284,17 @@ class ApiController extends Controller {
             $response['message'] = 'Evidence title is required';
             echo json_encode($response);
             exit;
+        }
+
+        if ($folder_id > 0) {
+
+            $folder = $this->evidence_model->get_folder($folder_id, Session::get('company_id'));
+
+            if (count($folder) !== 1 || (int) $folder[0]['project_id'] !== $project_id) {
+                $response['message'] = 'That folder could not be found';
+                echo json_encode($response);
+                exit;
+            }
         }
 
         if (!isset($_FILES['evidence_file']) || $_FILES['evidence_file']['error'] !== UPLOAD_ERR_OK) {
@@ -2174,9 +2343,9 @@ class ApiController extends Controller {
             }
         }
 
-        // Private, and keyed by company then client so a stray key can never be
+        // Private, and keyed by company then project so a stray key can never be
         // read across orgs even if the bucket policy is loosened later.
-        $key = 'evidence/'.Session::get('company_id').'/'.$client_id.'/'
+        $key = 'evidence/'.Session::get('company_id').'/'.$project_id.'/'
             .bin2hex(random_bytes(12)).'.'.$extension;
 
         if (!S3Service::put_private($key, $tmp_name, $content_type)) {
@@ -2187,7 +2356,8 @@ class ApiController extends Controller {
 
         $evidence_id = $this->evidence_model->add_evidence(
             Session::get('company_id'),
-            $client_id,
+            $project_id,
+            $folder_id,
             $evidence_title,
             $description,
             $key,
@@ -2368,6 +2538,12 @@ class ApiController extends Controller {
         $client = $this->clients_model->get_client($client_id, Session::get('company_id'));
 
         return is_array($client) && count($client) === 1;
+    }
+
+
+    private function clean_cell($value): string
+    {
+        return trim(mb_convert_encoding((string) $value, 'UTF-8', 'UTF-8'));
     }
 
 }

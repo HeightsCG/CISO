@@ -5,14 +5,6 @@ class ClientsController extends Controller {
     public $clients_model;
     public $evidence_model;
 
-    // Evidence is whatever the assessor was handed: policies, screenshots, config
-    // dumps, signed contracts. Anything executable is refused outright.
-    const MAX_UPLOAD_BYTES = 26214400;
-    const ALLOWED_EXTENSIONS = array(
-        'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'csv', 'rtf', 'odt', 'ods',
-        'png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp', 'tif', 'tiff', 'heic',
-        'zip', 'gz', 'tgz', '7z', 'json', 'xml', 'log', 'msg', 'eml'
-    );
 
     public function __construct(){
         parent::__construct();
@@ -65,18 +57,6 @@ class ClientsController extends Controller {
         $this->view->render();
     }
 
-    public function evidenceAction(){
-
-        $client = $this->clients_model->get_client(Main::get_param('id'), Session::get('company_id'));
-
-        if (!is_array($client) || count($client) !== 1) {
-            Errors::page_not_found();
-            return;
-        }
-
-        $this->view->client = $client[0];
-        $this->view->render();
-    }
 
 
     /** Paged, filtered vault lookup - the picker never pulls the whole vault. */
