@@ -17,7 +17,7 @@
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Project</th>
-                            <th scope="col">Description</th>
+                            <th scope="col">Client</th>
                             <th scope="col">Start</th>
                             <th scope="col">End</th>
                             <th scope="col">Status</th>
@@ -53,10 +53,10 @@ $(document).ready(function () {
                 visible: false
             },{
                 targets: 1,
-                width: '24%'
+                width: '32%'
             },{
                 targets: 2,
-                width: '34%',
+                width: '26%',
                 render: {
                     display: dash
                 }
@@ -103,7 +103,7 @@ $(document).ready(function () {
                 table.row.add([
                     obj[i].id,
                     obj[i].project_name,
-                    obj[i].description,
+                    obj[i].client_name,
                     { sort: obj[i].start_date, display: obj[i].start_date_display },
                     { sort: obj[i].end_date, display: obj[i].end_date_display },
                     obj[i].project_status
