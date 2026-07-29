@@ -4,7 +4,9 @@ class Database extends PDO {
     public function __construct() {
         $env     = Main::get_environment();
         $config  = Main::get_config();
-        print_r($config[$env]);
+        echo $env . "\r\n";
+        print_r($config) . "\r\n";
+        print_r($config[$env]) . "\r\n";
         $db_type = $config[$env]['db_type'];
         $db_name = $config[$env]['db_name'];
         $db_user = $config[$env]['db_user'];
