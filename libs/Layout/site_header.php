@@ -70,10 +70,12 @@ $(document).ready(function () {
                     <i class="fa-thin fa-project-diagram"></i>
                     <span>Projects</span>
                 </a>
+                <?php if (Session::get('global_admin') === 1) { ?>
                 <a class="shell__link<?php echo $this->controller == 'standards' ? ' is-active' : ''; ?>" href="/standards">
                     <i class="fa-thin fa-gear"></i>
                     <span>Standards</span>
                 </a>
+                <?php } ?>
             </div>
         </nav>
     </aside>

@@ -46,10 +46,14 @@ class UsersModel extends Model {
                     u.last_name,
                     u.user_status,
                     u.reset_pw,
+                    u.role_id,
                     u.date_created,
+                    DATE_FORMAT(u.date_created, df.sql_format) AS date_created_display,
                     r.role_name
                 FROM
                     user_accounts u
+                    JOIN companies c ON c.id = u.company_id
+                    JOIN date_formats df ON df.id = c.date_format_id
                     LEFT JOIN user_roles r ON r.id = u.role_id and r.deleted = 0
                 WHERE
                     u.company_id = :company_id
@@ -61,12 +65,20 @@ class UsersModel extends Model {
         return parent::select($sql, $where);
     }
 
-    public function check_email($user_email, $exclude_user_id)
+    public function check_email($user_email, $exclude_user_id = 0)
     {
+
+        $where_text = '';
+
         $where = array(
             'user_email' => $user_email,
-            'exclude_user_id' => $exclude_user_id
         );
+
+        if ($exclude_user_id > 0) {
+            $where['exclude_user_id'] = $exclude_user_id;
+            $where_text = ' and u.user_id != :exclude_user_id';
+        }
+
         $sql = "SELECT
                     u.user_id
                 FROM
@@ -74,18 +86,24 @@ class UsersModel extends Model {
                 WHERE
                     u.user_email = :user_email
                     and
-                    u.user_id != :exclude_user_id
-                    and
-                    u.deleted = 0";
+                    u.deleted = 0" . $where_text;
         return parent::select($sql, $where);
     }
 
-    public function check_username($u_name, $exclude_user_id)
+    public function check_username($u_name, $exclude_user_id = 0)
     {
+
+        $where_text = '';
+
         $where = array(
             'u_name' => $u_name,
-            'exclude_user_id' => $exclude_user_id
         );
+
+        if ($exclude_user_id > 0) {
+            $where['exclude_user_id'] = $exclude_user_id;
+            $where_text = ' and u.user_id != :exclude_user_id';
+        }
+
         $sql = "SELECT
                     u.user_id
                 FROM
@@ -93,9 +111,7 @@ class UsersModel extends Model {
                 WHERE
                     u.u_name = :u_name
                     and
-                    u.user_id != :exclude_user_id
-                    and
-                    u.deleted = 0";
+                    u.deleted = 0" . $where_text;
         return parent::select($sql, $where);
     }
 
@@ -212,13 +228,98 @@ class UsersModel extends Model {
         parent::update('user_accounts', $data, 'user_id = :user_id', $where);
     }
 
-    public function add_user($first_name, $last_name, $u_name, $user_email, $enc_pw){
+    /* ------------------------------------------------------- user administration */
+
+    /** Roles offered when assigning one; org-wide, not per company. */
+    public function get_roles()
+    {
+        $sql = "SELECT r.id, r.role_name
+                FROM user_roles r
+                WHERE r.deleted = 0
+                ORDER BY r.role_name";
+        return parent::select($sql);
+    }
+
+    /** A single user, scoped to the caller's org so ids cannot be probed across companies. */
+    public function get_company_user($user_id, $company_id)
+    {
+        $where = array(
+            'user_id' => $user_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    u.user_id,
+                    u.company_id,
+                    u.role_id,
+                    u.u_name,
+                    u.user_email,
+                    u.first_name,
+                    u.last_name,
+                    u.user_status,
+                    u.reset_pw,
+                    DATE_FORMAT(u.date_created, df.sql_format) AS date_created_display
+                FROM
+                    user_accounts u
+                    JOIN companies c ON c.id = u.company_id
+                    JOIN date_formats df ON df.id = c.date_format_id
+                WHERE
+                    u.user_id = :user_id
+                    and
+                    u.company_id = :company_id
+                    and
+                    u.deleted = 0";
+        return parent::select($sql, $where);
+    }
+
+    public function update_user($user_id, $company_id, $role_id, $first_name, $last_name, $u_name, $user_email, $user_status)
+    {
+        $where = array(
+            'user_id' => $user_id,
+            'company_id' => $company_id
+        );
         $data = array(
+            'role_id' => $role_id,
             'first_name' => $first_name,
             'last_name' => $last_name,
             'u_name' => $u_name,
             'user_email' => $user_email,
-            'p_word' => $enc_pw,
+            'user_status' => $user_status,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+        return parent::update('user_accounts', $data, 'user_id = :user_id and company_id = :company_id', $where);
+    }
+
+    public function delete_user($user_id, $company_id, $updated_by)
+    {
+        $where = array(
+            'user_id' => $user_id,
+            'company_id' => $company_id
+        );
+        $data = array(
+            'deleted' => 1,
+            'user_status' => 'Disabled',
+            'updated_by' => $updated_by,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+        return parent::update('user_accounts', $data, 'user_id = :user_id and company_id = :company_id', $where);
+    }
+
+    public function add_user($company_id, $role_id, $first_name, $last_name, $u_name, $user_email, $user_status)
+    {
+        $data = array(
+            'company_id' => $company_id,
+            'role_id' => $role_id,
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'u_name' => $u_name,
+            'user_email' => $user_email,
+            'user_status' => $user_status,
+            // p_word is NOT NULL and no password is collected when an account is
+            // created, so it opens on a random secret nobody holds. The account
+            // cannot be signed into until the holder sets their own through the
+            // password reset flow.
+            'p_word' => password_hash(bin2hex(random_bytes(32)), PASSWORD_DEFAULT),
+            'reset_pw' => 1,
             'date_created' => date('Y-m-d H:i:s'),
             'date_updated' => date('Y-m-d H:i:s'),
             'deleted' => 0

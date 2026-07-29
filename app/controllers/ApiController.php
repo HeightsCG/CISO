@@ -2,17 +2,19 @@
 class ApiController extends Controller {
 
     public $protected = 1;
-    public $json = 1;
+
     public $public_actions = array(
         'loginAction',
         'forgot_passwordAction',
         'reset_passwordAction'
     );
+
     public $user_model;
     public $notifications_model;
     public $companies_model;
     public $clients_model;
     public $projects_model;
+    public $standards_model;
 
     public function __construct(){
         parent::__construct();
@@ -884,6 +886,278 @@ class ApiController extends Controller {
 
         $response['success'] = true;
         $response['message'] = 'Client deleted';
+        echo json_encode($response);
+    }
+
+    /* ------------------------------------------------------------ user admin */
+
+    public function load_project_usersAction(){
+
+        $project = $this->projects_model->get_project($this->post['project_id'], Session::get('company_id'));
+
+        if (count($project) !== 1) {
+            echo json_encode(array());
+            exit;
+        }
+
+        echo json_encode($this->projects_model->load_project_users($this->post['project_id'], Session::get('company_id')));
+    }
+
+    public function load_available_usersAction(){
+
+        $project = $this->projects_model->get_project($this->post['project_id'], Session::get('company_id'));
+
+        if (count($project) !== 1) {
+            echo json_encode(array());
+            exit;
+        }
+
+        echo json_encode($this->projects_model->available_users($this->post['project_id'], Session::get('company_id')));
+    }
+
+    public function save_project_userAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $company_id = Session::get('company_id');
+
+        $project_roles = array(
+            'Project Lead',
+            'Lead Assessor',
+            'Assessor',
+            'Reviewer',
+            'Contributor',
+            'Observer'
+        );
+
+        if (!in_array($this->post['project_role'], $project_roles)) {
+            $response['message'] = 'Choose a project role';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($this->post['id'] > 0) {
+
+            $project_user = $this->projects_model->get_project_user($this->post['id'], $company_id);
+
+            if (count($project_user) !== 1) {
+                $response['message'] = 'That team member could not be found';
+                echo json_encode($response);
+                exit;
+            }
+
+            $this->projects_model->update_project_user($this->post['id'], $company_id, $this->post['project_role'], Session::get('user_id'));
+
+            $response['success'] = true;
+            $response['message'] = 'Project role updated';
+            echo json_encode($response);
+            exit;
+        }
+
+        $project = $this->projects_model->get_project($this->post['project_id'], $company_id);
+
+        if (count($project) !== 1) {
+            $response['message'] = 'That project could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (count($this->user_model->get_company_user($this->post['user_id'], $company_id)) !== 1) {
+            $response['message'] = 'That user could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (count($this->projects_model->check_project_user($this->post['project_id'], $this->post['user_id'])) > 0) {
+            $response['message'] = 'They are already on this project';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->projects_model->add_project_user(
+            $company_id,
+            $this->post['project_id'],
+            $this->post['user_id'],
+            $this->post['project_role'],
+            Session::get('user_id')
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'User added to the project';
+        echo json_encode($response);
+    }
+
+    public function delete_project_userAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $company_id = Session::get('company_id');
+
+        if (count($this->projects_model->get_project_user($this->post['id'], $company_id)) !== 1) {
+            $response['message'] = 'That team member could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->projects_model->delete_project_user($this->post['id'], $company_id, Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'User removed from the project';
+        echo json_encode($response);
+    }
+
+    public function load_usersAction(){
+        echo json_encode($this->user_model->get_users_by_company(Session::get('company_id')));
+    }
+
+    public function load_rolesAction(){
+        echo json_encode($this->user_model->get_roles());
+    }
+
+    public function save_userAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $toDo = $this->post['toDo'];
+        
+        if ($toDo === '') {
+            $response['message'] = 'Something went wrong';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($this->post['first_name'] === '') {
+            $response['message'] = 'First name is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($this->post['last_name'] === '') {
+            $response['message'] = 'Last name is required';
+            echo json_encode($response);
+            exit;
+        }
+        
+        if ($this->post['u_name'] === '') {
+            $response['message'] = 'Username is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($this->post['user_email'] === '') {
+            $response['message'] = 'Email is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($this->post['user_status'] === '') {
+            $response['message'] = 'Status is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        $company_id = Session::get('company_id');
+
+        $check_email = ($toDo === 'add' ? $this->user_model->check_email($this->post['user_email']) : $this->user_model->check_email($this->post['user_email'], $this->post['user_id']));
+        if (count($check_email) > 0) {
+            $response['message'] = 'That email address is already in use';
+            echo json_encode($response);
+            exit;
+        }
+
+        $check_username = ($toDo === 'add' ? $this->user_model->check_username($this->post['u_name']) : $this->user_model->check_username($this->post['u_name'], $this->post['user_id']));
+        if (count($check_username) > 0) {
+            $response['message'] = 'That username is already in use';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($toDo === 'update') {
+
+            if (empty($this->post['user_id'])) {
+                $response['message'] = 'User ID is required';
+                echo json_encode($response);
+                exit;
+            }
+
+            $this->user_model->update_user(
+                $this->post['user_id'],
+                $company_id,
+                $this->post['role_id'],
+                $this->post['first_name'],
+                $this->post['last_name'],
+                $this->post['u_name'],
+                $this->post['user_email'],
+                $this->post['user_status']
+            );
+            $response['success'] = true;
+            $response['message'] = 'User updated';
+            echo json_encode($response);
+            exit;
+        } else if ($toDo === 'add') {
+            $this->user_model->add_user(
+                Session::get('company_id'),
+                $this->post['role_id'],
+                $this->post['first_name'],
+                $this->post['last_name'],
+                $this->post['u_name'],
+                $this->post['user_email'],
+                $this->post['user_status']
+            );
+
+            $response['success'] = true;
+            $response['message'] = 'User added';
+            echo json_encode($response);
+            exit;
+        }
+
+        echo json_encode($response);
+    }
+
+    public function delete_userAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $this->user_model->delete_user($this->post['user_id'], Session::get('company_id'), Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'User removed';
+        echo json_encode($response);
+    }
+
+    public function reset_user_passwordAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $rows = $this->user_model->get_company_user($this->post['user_id'], Session::get('company_id'));
+
+        if (count($rows) !== 1) {
+            $response['message'] = 'That user could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $user = $rows[0];
+        $raw_token = $this->user_model->set_reset_token($user['user_id']);
+        $this->notifications_model->send_password_reset($user['user_email'], $user['first_name'], $raw_token);
+
+        $response['success'] = true;
+        $response['message'] = 'A reset link has been sent to ' . $user['user_email'];
         echo json_encode($response);
     }
 

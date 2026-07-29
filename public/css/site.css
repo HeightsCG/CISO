@@ -300,6 +300,34 @@ a:hover {
     color: var(--critical);
 }
 
+.btn--primary:disabled,
+.btn--primary[aria-disabled="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--text-inverse);
+}
+
+.btn--secondary:disabled,
+.btn--secondary[aria-disabled="true"] {
+    background: var(--surface-app);
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+}
+
+.btn--tertiary:disabled,
+.btn--tertiary[aria-disabled="true"] {
+    background: none;
+    border-color: transparent;
+    color: var(--text-secondary);
+}
+
+.btn--destructive:disabled,
+.btn--destructive[aria-disabled="true"] {
+    background: var(--surface-app);
+    border-color: var(--critical-border);
+    color: var(--critical);
+}
+
 .btn.is-busy {
     pointer-events: none;
     opacity: 0.7;
@@ -3631,5 +3659,12 @@ table.data tbody tr.item__row {
 }
 
 .pick__zero {
+    color: var(--text-muted);
+}
+
+.users__hint {
+    display: block;
+    margin-top: var(--space-1);
+    font-size: var(--fs-meta);
     color: var(--text-muted);
 }

@@ -181,4 +181,160 @@ class ProjectsModel extends Model {
         return $rows;
     }
 
+    /* ------------------------------------------------------------ project team */
+
+    public function load_project_users($project_id, $company_id)
+    {
+        $where = array(
+            'project_id' => $project_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    pu.id,
+                    pu.user_id,
+                    pu.project_role,
+                    u.first_name,
+                    u.last_name,
+                    u.u_name,
+                    u.user_email,
+                    u.user_status,
+                    r.role_name,
+                    pu.date_created,
+                    DATE_FORMAT(pu.date_created, df.sql_format) AS date_created_display
+                FROM
+                    project_users pu
+                    JOIN projects p ON p.id = pu.project_id and p.deleted = 0
+                    JOIN user_accounts u ON u.user_id = pu.user_id and u.deleted = 0
+                    JOIN companies co ON co.id = pu.company_id
+                    JOIN date_formats df ON df.id = co.date_format_id
+                    LEFT JOIN user_roles r ON r.id = u.role_id and r.deleted = 0
+                WHERE
+                    pu.project_id = :project_id
+                    and
+                    pu.company_id = :company_id
+                    and
+                    pu.deleted = 0
+                ORDER BY
+                    u.first_name,
+                    u.last_name";
+        return parent::select($sql, $where);
+    }
+
+    /**
+     * Only accounts that can actually sign in and are not already on the project
+     * are offered, so the picker cannot create a duplicate or seat a disabled user.
+     */
+    public function available_users($project_id, $company_id)
+    {
+        $where = array(
+            'project_id' => $project_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    u.user_id,
+                    u.first_name,
+                    u.last_name,
+                    u.user_email
+                FROM
+                    user_accounts u
+                    LEFT JOIN project_users pu ON pu.user_id = u.user_id and pu.project_id = :project_id and pu.deleted = 0
+                WHERE
+                    u.company_id = :company_id
+                    and
+                    u.user_status = 'Active'
+                    and
+                    u.deleted = 0
+                    and
+                    pu.id IS NULL
+                ORDER BY
+                    u.first_name,
+                    u.last_name";
+        return parent::select($sql, $where);
+    }
+
+    public function get_project_user($id, $company_id)
+    {
+        $where = array(
+            'id' => $id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    pu.id,
+                    pu.project_id,
+                    pu.user_id,
+                    pu.project_role
+                FROM
+                    project_users pu
+                WHERE
+                    pu.id = :id
+                    and
+                    pu.company_id = :company_id
+                    and
+                    pu.deleted = 0";
+        return parent::select($sql, $where);
+    }
+
+    public function check_project_user($project_id, $user_id)
+    {
+        $where = array(
+            'project_id' => $project_id,
+            'user_id' => $user_id
+        );
+        $sql = "SELECT
+                    pu.id
+                FROM
+                    project_users pu
+                WHERE
+                    pu.project_id = :project_id
+                    and
+                    pu.user_id = :user_id
+                    and
+                    pu.deleted = 0";
+        return parent::select($sql, $where);
+    }
+
+    public function add_project_user($company_id, $project_id, $user_id, $project_role, $created_by)
+    {
+        $data = array(
+            'company_id' => $company_id,
+            'project_id' => $project_id,
+            'user_id' => $user_id,
+            'project_role' => $project_role,
+            'created_by' => $created_by,
+            'updated_by' => $created_by,
+            'date_created' => date('Y-m-d H:i:s'),
+            'date_updated' => date('Y-m-d H:i:s'),
+            'deleted' => 0
+        );
+        return parent::insert('project_users', $data);
+    }
+
+    public function update_project_user($id, $company_id, $project_role, $updated_by)
+    {
+        $where = array(
+            'id' => $id,
+            'company_id' => $company_id
+        );
+        $data = array(
+            'project_role' => $project_role,
+            'updated_by' => $updated_by,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+        return parent::update('project_users', $data, 'id = :id and company_id = :company_id', $where);
+    }
+
+    public function delete_project_user($id, $company_id, $updated_by)
+    {
+        $where = array(
+            'id' => $id,
+            'company_id' => $company_id
+        );
+        $data = array(
+            'deleted' => 1,
+            'updated_by' => $updated_by,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+        return parent::update('project_users', $data, 'id = :id and company_id = :company_id', $where);
+    }
+
 }
