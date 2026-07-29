@@ -61,7 +61,7 @@ class EvidenceModel extends Model {
      * filtering and the slicing both happen in SQL - the browser never receives
      * more than one page.
      */
-    public function search_evidence($project_id, $company_id, $term, $limit, $offset, $sort = 'date_created', $dir = 'desc')
+    public function search_evidence($project_id, $company_id, $term, $limit, $offset, $sort = 'date_created', $dir = 'desc', $folder_id = null)
     {
         $limit = max(1, min(200, (int) $limit));
         $offset = max(0, (int) $offset);
@@ -90,6 +90,14 @@ class EvidenceModel extends Model {
             $where['term_a'] = '%'.$term.'%';
             $where['term_b'] = '%'.$term.'%';
             $where['term_c'] = '%'.$term.'%';
+        }
+
+        // A null folder means the whole vault, which is what a search wants; an
+        // integer restricts to one folder so the picker can open a branch at a
+        // time instead of pulling every file down.
+        if ($folder_id !== null) {
+            $filter .= " and e.folder_id = :folder_id";
+            $where['folder_id'] = (int) $folder_id;
         }
 
         // LIMIT and OFFSET are cast to int above; they cannot be bound as
@@ -128,7 +136,7 @@ class EvidenceModel extends Model {
         return parent::select($sql, $where);
     }
 
-    public function count_evidence($project_id, $company_id, $term)
+    public function count_evidence($project_id, $company_id, $term, $folder_id = null)
     {
         $where = array(
             'project_id' => $project_id,
@@ -142,6 +150,11 @@ class EvidenceModel extends Model {
             $where['term_a'] = '%'.$term.'%';
             $where['term_b'] = '%'.$term.'%';
             $where['term_c'] = '%'.$term.'%';
+        }
+
+        if ($folder_id !== null) {
+            $filter .= " and e.folder_id = :folder_id";
+            $where['folder_id'] = (int) $folder_id;
         }
 
         $sql = "SELECT COUNT(*) AS total

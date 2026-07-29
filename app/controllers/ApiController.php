@@ -2242,6 +2242,7 @@ class ApiController extends Controller {
             exit;
         }
 
+        $folder_id = (isset($this->post['folder_id']) && $this->post['folder_id'] !== '' ? (int) $this->post['folder_id'] : null);
         $term = $this->input('search');
         $limit = (int) ($this->post['limit'] ?? 50);
         $offset = (int) ($this->post['offset'] ?? 0);
@@ -2252,11 +2253,11 @@ class ApiController extends Controller {
         // the first page and carried by the client for the rest. Re-counting on
         // every scroll page doubled the work for a number that never moved.
         $response = array(
-            'rows' => $this->evidence_model->search_evidence($project_id, Session::get('company_id'), $term, $limit, $offset, $sort, $dir)
+            'rows' => $this->evidence_model->search_evidence($project_id, Session::get('company_id'), $term, $limit, $offset, $sort, $dir, $folder_id)
         );
 
         if ($offset === 0) {
-            $response['total'] = $this->evidence_model->count_evidence($project_id, Session::get('company_id'), $term);
+            $response['total'] = $this->evidence_model->count_evidence($project_id, Session::get('company_id'), $term, $folder_id);
         }
 
         echo json_encode($response);

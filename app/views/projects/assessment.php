@@ -140,13 +140,13 @@
                     </div>
                 </div>
                 <div class="pick__scroll">
-                    <table class="data pick__table">
+                    <table class="data pick__table" id="vault_table">
                         <thead>
                             <tr>
-                                <th scope="col" class="pick__sort is-sortable" data-sort="file_name">File</th>
-                                <th scope="col" class="pick__num pick__sort is-sortable" data-sort="file_size">Size</th>
-                                <th scope="col" class="pick__num pick__sort is-sortable" data-sort="date_created">Uploaded</th>
-                                <th scope="col" class="pick__mid pick__sort is-sortable" data-sort="link_count">Used</th>
+                                <th scope="col" class="pick__sort is-sortable" data-sort="file_name">Name</th>
+                                <th scope="col" class="pick__sort is-sortable" data-sort="file_size">Size</th>
+                                <th scope="col" class="pick__sort is-sortable" data-sort="date_created">Uploaded</th>
+                                <th scope="col" class="pick__sort is-sortable" data-sort="link_count">Controls</th>
                                 <th scope="col"><span class="visually-hidden">Attach</span></th>
                             </tr>
                         </thead>
@@ -214,6 +214,7 @@
 $(document).ready(function () {
 
     var assessment_id = <?php echo (int) $this->assessment['id']; ?>;
+    var project_id = <?php echo (int) $this->assessment['project_id']; ?>;
     var project_name = "<?php echo htmlspecialchars($this->assessment['project_name'], ENT_QUOTES, 'UTF-8'); ?>";
     var items = [];
     var current_item = null;
@@ -582,6 +583,15 @@ $(document).ready(function () {
 
         $('#vault_search').val('');
         $('#pick_project').text(project_name);
+
+        vault_open = {};
+        vault_loaded = {};
+
+        ApiDataSvc.apiCall('post', 'load_folders', { project_id: project_id }, function (data) {
+            vault_folders = JSON.parse(data);
+            render_vault_tree();
+        });
+
         mark_sort();
         load_vault(true);
         modal('attach_modal').show();
@@ -595,20 +605,160 @@ $(document).ready(function () {
     var PAGE_SIZE = 50;
     var vault = { offset: 0, total: 0, term: '', loading: false, done: false, token: 0,
                   sort: 'date_created', dir: 'desc' };
+    var vault_folders = [];
+    var vault_open = {};
+    var vault_loaded = {};
 
-    function vault_row(row, attached) {
+    function attached_ids() {
+        return $('#item_evidence .evidence__item').map(function () {
+            return String($(this).attr('data-id'));
+        }).get();
+    }
+
+    function vault_children(parent_id) {
+        var out = [];
+        for (var i = 0; i < vault_folders.length; i++) {
+            if (parseInt(vault_folders[i].parent_id, 10) === parseInt(parent_id, 10)) {
+                out.push(vault_folders[i]);
+            }
+        }
+        return out;
+    }
+
+    function vault_rails(rails, last) {
+
+        if (rails === null) {
+            return '';
+        }
+
+        var html = '';
+
+        for (var i = 0; i < rails.length; i++) {
+            html += '<span class="rail' + (rails[i] ? ' is-line' : '') + '"></span>';
+        }
+
+        return '<span class="tree__rails">' + html
+            + '<span class="rail ' + (last ? 'is-elbow' : 'is-tee') + '"></span></span>';
+    }
+
+    function vault_summary(folder) {
+
+        var subfolders = vault_children(folder.id).length;
+        var files = parseInt(folder.file_count, 10);
+        var parts = [];
+
+        if (subfolders > 0) {
+            parts.push(subfolders + (subfolders === 1 ? ' folder' : ' folders'));
+        }
+
+        parts.push(files + (files === 1 ? ' file' : ' files'));
+
+        return parts.join(' \u00b7 ');
+    }
+
+    function vault_folder_row(folder, rails, last) {
+
+        var open = vault_open[folder.id] === true;
+        var has_kids = vault_children(folder.id).length > 0 || parseInt(folder.file_count, 10) > 0;
+
+        return '<tr class="pick__row pick__row--folder" data-folder="' + folder.id + '">'
+            + '<td><span class="tree__row">' + vault_rails(rails, last)
+            + '<span class="tree__toggle' + (has_kids ? '' : ' is-empty') + '" data-folder="' + folder.id + '">'
+            + (has_kids ? '<i class="fa-regular fa-chevron-' + (open ? 'down' : 'right') + '"></i>' : '') + '</span>'
+            + '<span class="tree__main"><span class="roster__name"><i class="fa-regular fa-folder' + (open ? '-open' : '') + '"></i> ' + esc(folder.folder_name) + '</span>'
+            + '<span class="roster__sub">' + vault_summary(folder) + '</span></span></span></td>'
+            + '<td><span class="roster__none">&mdash;</span></td>'
+            + '<td><span class="roster__none">&mdash;</span></td>'
+            + '<td><span class="roster__none">&mdash;</span></td>'
+            + '<td class="controls__actions"></td></tr>';
+    }
+
+    /* Folders and files arrive from different requests, so whether the list is
+       empty can only be judged once both have landed. */
+    function sync_vault_visibility() {
+
+        var files = $('#vault_list tr').not('.pick__row--folder').length;
+        var rows = $('#vault_list tr').length;
+
+        $('#pick_count').text(files >= vault.total
+            ? vault.total + (vault.total === 1 ? ' file' : ' files')
+            : files + ' of ' + vault.total);
+
+        $('.pick__table').toggle(rows > 0);
+        $('#vault_empty').prop('hidden', rows > 0).text(vault.term === ''
+            ? esc(project_name) + ' has no evidence yet. Close this and choose Upload New \u2014 the file is saved to this project\'s vault and attached here in one step.'
+            : 'No files match \u201c' + vault.term + '\u201d.');
+    }
+
+    function render_vault_tree() {
+
+        var attached = attached_ids();
+        var html = '';
+
+        function walk(parent_id, rails) {
+
+            var kids = vault_children(parent_id);
+
+            for (var f = 0; f < kids.length; f++) {
+
+                var files = vault_loaded[kids[f].id] || [];
+                var last = (f === kids.length - 1);
+
+                html += vault_folder_row(kids[f], rails, last);
+
+                if (vault_open[kids[f].id] === true) {
+
+                    var inner = (rails === null ? [] : rails.concat([!last]));
+
+                    walk(kids[f].id, inner);
+
+                    for (var r = 0; r < files.length; r++) {
+                        html += vault_row(files[r], attached, inner, r === files.length - 1);
+                    }
+                }
+            }
+        }
+
+        walk(0, null);
+
+        $('#vault_list').find('.pick__row--folder, .pick__row--nested').remove();
+        $('#vault_list').prepend(html);
+
+        sync_vault_visibility();
+    }
+
+    function load_folder_files(folder_id) {
+
+        ApiDataSvc.apiCall('post', 'search_evidence', {
+            project_id: project_id,
+            folder_id: folder_id,
+            search: '',
+            limit: PAGE_SIZE,
+            offset: 0,
+            sort: vault.sort,
+            dir: vault.dir
+        }, function (data) {
+            vault_loaded[folder_id] = JSON.parse(data).rows;
+            render_vault_tree();
+        });
+    }
+
+    function vault_row(row, attached, rails, last) {
 
         var used = parseInt(row.link_count, 10);
         var already = attached.indexOf(String(row.id)) !== -1;
 
         return '<tr class="pick__row">'
-            + '<td class="pick__file"><span class="pick__name">' + esc(row.file_name) + '</span>'
-            + (row.evidence_title ? '<span class="pick__desc">' + esc(row.evidence_title) + '</span>' : '')
-            + '</td>'
-            + '<td class="pick__num">' + size_label(row.file_size) + '</td>'
-            + '<td class="pick__num">' + esc(row.date_created_display) + '</td>'
-            + '<td class="pick__mid">' + (used === 0 ? '<span class="pick__zero">0</span>' : used) + '</td>'
-            + '<td class="pick__act">' + (already
+            + '<td><span class="tree__row">' + vault_rails(rails, last)
+            + '<span class="tree__toggle is-empty"></span>'
+            + '<span class="tree__main"><a href="#" class="evidence__open roster__name" data-id="' + row.id + '"><i class="fa-regular fa-file"></i> ' + esc(row.evidence_title || row.file_name) + '</a>'
+            + '<span class="roster__sub">' + esc(row.file_name) + '</span></span></span></td>'
+            + '<td>' + size_label(row.file_size) + '</td>'
+            + '<td>' + esc(row.date_created_display) + '</td>'
+            + '<td>' + (used > 0
+                ? '<span class="badge badge--active">' + used + (used === 1 ? ' control' : ' controls') + '</span>'
+                : '<span class="roster__none">Not attached</span>') + '</td>'
+            + '<td class="controls__actions">' + (already
                 ? '<span class="badge badge--active">Attached</span>'
                 : '<button type="button" class="btn btn--secondary btn--sm" data-action="attach" data-id="' + row.id + '">Attach</button>')
             + '</td></tr>';
@@ -630,12 +780,11 @@ $(document).ready(function () {
         vault.loading = true;
         vault.term = $('#vault_search').val().trim();
 
-        var attached = $('#item_evidence .evidence__item').map(function () {
-            return String($(this).attr('data-id'));
-        }).get();
+        var attached = attached_ids();
 
         ApiDataSvc.apiCall('post', 'search_evidence', {
             project_id: project_id,
+            folder_id: (vault.term === '' ? 0 : ''),
             search: vault.term,
             limit: PAGE_SIZE,
             offset: vault.offset,
@@ -652,7 +801,7 @@ $(document).ready(function () {
             var html = '';
 
             for (var i = 0; i < obj.rows.length; i++) {
-                html += vault_row(obj.rows[i], attached);
+                html += vault_row(obj.rows[i], attached, null, true);
             }
 
             $('#vault_list').append(html);
@@ -664,18 +813,27 @@ $(document).ready(function () {
             vault.done = obj.rows.length < PAGE_SIZE || vault.offset >= vault.total;
             vault.loading = false;
 
-            var shown = $('#vault_list tr').length;
+            if (reset && vault.term === '') {
+                render_vault_tree();
+            }
 
-            $('#pick_count').text(shown >= vault.total
-                ? vault.total + (vault.total === 1 ? ' file' : ' files')
-                : shown + ' of ' + vault.total);
-
-            $('.pick__table').toggle(shown > 0);
-            $('#vault_empty').prop('hidden', shown > 0).text(vault.term === ''
-                ? esc(project_name) + ' has no evidence yet. Close this and choose Upload New \u2014 the file is saved to this project\'s vault and attached here in one step.'
-                : 'No files match \u201c' + vault.term + '\u201d.');
+            sync_vault_visibility();
         });
     }
+
+    $(document).on('click', '#attach_modal .tree__toggle', function () {
+
+        var id = $(this).attr('data-folder');
+
+        vault_open[id] = vault_open[id] !== true;
+
+        if (vault_open[id] === true && vault_loaded[id] === undefined) {
+            load_folder_files(id);
+            return;
+        }
+
+        render_vault_tree();
+    });
 
     function mark_sort() {
         $('.pick__sort').removeClass('is-asc is-desc');

@@ -3046,9 +3046,20 @@ table.data thead th.dt-type-numeric div.dt-column-header {
     cursor: grab;
 }
 
+/* Cells are outlined individually by an inset shadow, which draws a line
+   between every column. The row is boxed instead: top and bottom on each cell,
+   and the left and right edges only on the first and last. */
 tr.is-drop-target > td {
     background: var(--accent-subtle);
-    box-shadow: inset 0 0 0 1px var(--accent);
+    box-shadow: inset 0 1px 0 var(--accent), inset 0 -1px 0 var(--accent);
+}
+
+tr.is-drop-target > td:first-child {
+    box-shadow: inset 0 1px 0 var(--accent), inset 0 -1px 0 var(--accent), inset 1px 0 0 var(--accent);
+}
+
+tr.is-drop-target > td:last-child {
+    box-shadow: inset 0 1px 0 var(--accent), inset 0 -1px 0 var(--accent), inset -1px 0 0 var(--accent);
 }
 
 .tree__crumb.is-drop-target {
@@ -3062,11 +3073,428 @@ tr.is-drop-target > td {
     border-bottom: 0;
 }
 
+/* The connectors are the only lines a tree should have. Row rules cut every
+   rail at the row boundary and collide with the elbows, so they come off here;
+   hover carries the row instead. */
+
+/* Evidence vault: folder tree beside a files-only table. Folders never appear
+   in the table, so no row carries an empty data column. */
+.vault {
+    display: grid;
+    grid-template-columns: 350px minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: start;
+}
+
+.vault__tree,
+.vault__files {
+    background: var(--surface-app);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.vault__tree-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--border);
+}
+
+.vault__tree-title {
+    font-size: 11px;
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.vault__list {
+    margin: 0;
+    padding: var(--space-2) 0;
+    list-style: none;
+}
+
+.vault__item {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.vault__link {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+    padding: var(--space-2) var(--space-3);
+    padding-right: calc(var(--space-3) + 26px);
+    padding-left: calc(var(--space-3) + (var(--tree-depth, 0) * var(--space-4)));
+    font-family: inherit;
+    font-size: var(--fs-body);
+    color: var(--text-primary);
+    text-align: left;
+    background: none;
+    border: 0;
+    border-left: 2px solid transparent;
+    cursor: pointer;
+}
+
+.vault__item:hover .vault__link {
+    background: var(--surface-sunken);
+}
+
+.vault__item.is-on .vault__link {
+    font-weight: var(--fw-semibold);
+    color: var(--accent);
+    background: var(--accent-subtle);
+    border-left-color: var(--accent);
+}
+
+.vault__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Sits left of the space reserved for the folder menu, so hover never overlaps it. */
+
+.vault__count {
+    margin-left: auto;
+    font-size: var(--fs-meta);
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--fw-regular);
+    color: var(--text-muted);
+}
+
+.vault__count--empty {
+    color: var(--border-strong);
+}
+
+/* Folder actions stay out of sight until the row is hovered. */
+.vault__menu {
+    position: absolute;
+    right: var(--space-2);
+    opacity: 0;
+}
+
+.vault__item:hover .vault__menu,
+.vault__menu.show,
+.vault__menu:focus-within {
+    opacity: 1;
+}
+
+.vault__menu .btn--tertiary {
+    padding: 0 var(--space-1);
+    color: var(--text-muted);
+    background: none;
+}
+
+.vault__menu .btn--tertiary:hover {
+    color: var(--text-primary);
+    background: none;
+}
+
+.drag__ghost {
+    position: fixed;
+    z-index: 1080;
+    max-width: 260px;
+    padding: var(--space-1) var(--space-2);
+    overflow: hidden;
+    font-size: var(--fs-meta);
+    color: var(--text-inverse);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: var(--accent);
+    border-radius: var(--radius);
+    pointer-events: none;
+}
+
+body.is-dragging {
+    user-select: none;
+    cursor: grabbing;
+}
+
+.vault__link.is-drop-target {
+    color: var(--accent);
+    background: var(--accent-subtle);
+    box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.vault__toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    border-bottom: 1px solid var(--border);
+}
+
+.vault__search {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.vault__filter {
+    flex: 0 0 auto;
+    width: auto;
+}
+
+/* A content table, not a header band: the app's dark thead is heavier than the
+   sidebar and overpowers a list this dense. */
+table.data--light thead th {
+    color: var(--text-muted);
+    background: var(--surface-app);
+    border-bottom: 1px solid var(--border);
+}
+
+table.data--light {
+    table-layout: fixed;
+}
+
+table.data--light tbody td {
+    vertical-align: middle;
+}
+
+.vault__cell-name {
+    max-width: 0;
+}
+
+.vault__line {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vault__title {
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+}
+
+.vault__title:hover {
+    color: var(--accent);
+}
+
+.vault__file {
+    margin-left: var(--space-2);
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+/* table-layout is fixed so the name column can truncate, which means every
+   other column needs a real width rather than a shrink-to-fit hint. */
+.vault__col-size {
+    width: 90px;
+}
+
+.vault__col-date {
+    width: 130px;
+}
+
+.vault__col-links {
+    width: 100px;
+}
+
+table.data--light th:last-child,
+table.data--light td:last-child {
+    width: 56px;
+}
+
+.vault__col-size,
+.vault__col-date,
+.vault__col-links {
+    white-space: nowrap;
+}
+
+table.data--light tbody tr .vault__menu {
+    position: static;
+    opacity: 0;
+}
+
+table.data--light tbody tr:hover .vault__menu,
+table.data--light tbody tr .vault__menu.show,
+table.data--light tbody tr .vault__menu:focus-within {
+    opacity: 1;
+}
+
+/* A count, not a status: neutral rather than the success green. */
+.chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    height: 22px;
+    padding: 0 var(--space-2);
+    font-family: inherit;
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+    background: var(--surface-inset);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
+.chip:hover {
+    border-color: var(--border-strong);
+}
+
+.chip--empty {
+    color: var(--text-muted);
+    background: none;
+    border-color: transparent;
+    cursor: default;
+}
+
+.links__menu {
+    width: 340px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding: var(--space-2);
+}
+
+.links__item {
+    display: block;
+    padding: var(--space-2);
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.links__item:hover {
+    background: var(--surface-sunken);
+    text-decoration: none;
+}
+
+.links__id {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    color: var(--accent);
+}
+
+.links__title {
+    display: block;
+    font-size: var(--fs-body);
+}
+
+.links__meta {
+    display: block;
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+.links__note {
+    margin: 0;
+    padding: var(--space-2);
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+.dropdown-item {
+    font-size: .75rem;
+    padding: .5rem 1rem;
+}
+
+.dropdown-item--danger {
+    color: var(--critical);
+}
+
+.vault__empty {
+    margin: 0;
+    padding: var(--space-6) var(--space-4);
+    font-size: var(--fs-body);
+    color: var(--text-muted);
+}
+
+.vault__files.is-drop-target {
+    border-color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.vault__drop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    font-size: var(--fs-body);
+    color: var(--accent);
+    background: var(--accent-subtle);
+    border-top: 1px solid var(--accent);
+}
+
+@media (max-width: 900px) {
+    .vault {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.tree__crumbs {
+    flex: 0 0 auto;
+    padding: 0;
+    border-bottom: 0;
+}
+
+/* The connectors are the only lines a tree should have. Row rules cut every
+   rail at the row boundary and collide with the elbows, so they come off here;
+   hover carries the row instead. */
+
 .tree__row {
     display: flex;
     align-items: flex-start;
     gap: var(--space-2);
-    padding-left: calc(var(--row-depth, 0) * var(--space-5));
+}
+
+/* Connectors, not dividers: a rail per ancestor level, and an elbow or tee
+   turning into the row itself. The segments bleed past the cell padding so a
+   branch reads as one continuous line rather than a stub per row. */
+.tree__rails {
+    display: flex;
+    flex: 0 0 auto;
+    align-self: stretch;
+}
+
+.rail {
+    position: relative;
+    flex: 0 0 auto;
+    width: 22px;
+}
+
+/* Geometry, measured against the row: a rail is 22px, then an 8px flex gap, a
+   14px toggle and another 8px gap before the icon. The vertical sits at 7px so
+   it falls under the parent's chevron, and the arm runs 44px to meet the child's
+   icon rather than stopping inside the rail. */
+.rail.is-line::before,
+.rail.is-tee::before {
+    content: "";
+    position: absolute;
+    top: calc(var(--space-3) * -1);
+    bottom: calc(var(--space-3) * -1);
+    left: 7px;
+    width: 1px;
+    background: var(--border-strong);
+}
+
+.rail.is-elbow::before {
+    content: "";
+    position: absolute;
+    top: calc(var(--space-3) * -1);
+    height: calc(var(--space-3) + 10px);
+    left: 7px;
+    width: 1px;
+    background: var(--border-strong);
+}
+
+.rail.is-elbow::after,
+.rail.is-tee::after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 7px;
+    width: 44px;
+    height: 1px;
+    background: var(--border-strong);
 }
 
 .tree__main {
@@ -3091,6 +3519,11 @@ tr.is-drop-target > td {
 
 tr.evidence__row.is-on > td {
     background: var(--accent-subtle);
+}
+
+.panel__head.is-drop-target {
+    background: var(--accent-subtle);
+    box-shadow: inset 0 0 0 1px var(--accent);
 }
 
 .tree__crumbs {
@@ -3152,14 +3585,14 @@ tr.evidence__row.is-on > td {
     vertical-align: top;
 }
 
-.controls__table td.controls__actions {
+td.controls__actions {
     width: 1%;
     white-space: nowrap;
     text-align: right;
     vertical-align: top;
 }
 
-.controls__table td.controls__actions .btn + .btn {
+td.controls__actions .btn + .btn {
     margin-left: var(--space-1);
 }
 
@@ -3665,9 +4098,32 @@ table.data tbody tr.item__row {
     white-space: nowrap;
 }
 
+/* The picker opens over the assess modal, so the two are given the same height
+   rather than one poking out from behind the other. */
+#item_modal .modal-dialog,
+#attach_modal .modal-dialog {
+    height: calc(100vh - 3.5rem);
+}
+
+#item_modal .modal-content,
+#attach_modal .modal-content {
+    height: 100%;
+}
+
+#item_modal .modal-body,
+#attach_modal .modal-body {
+    min-height: 0;
+}
+
+#attach_modal .modal-body {
+    display: flex;
+    flex-direction: column;
+}
+
 .pick__scroll {
     flex: 1 1 auto;
     min-height: 320px;
+    max-height: 100%;
     overflow-y: auto;
     border: 1px solid var(--border);
     border-radius: var(--radius);
