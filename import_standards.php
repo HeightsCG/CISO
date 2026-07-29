@@ -1022,6 +1022,311 @@ function source_nydfs(): array
     );
 }
 
+/* ---------------------------------------------------------------- CMMC 2.0 */
+
+/**
+ * 32 CFR part 170 is the CMMC rule and the authority for all three levels: it
+ * carries the Level 3 requirement table in full, the Level 1 practice-to-objective
+ * mapping, the practice numbering scheme, and the domain abbreviations.
+ */
+function cmmc_rule(): SimpleXMLElement
+{
+    return simplexml_load_file(fetch(
+        'https://www.ecfr.gov/api/versioner/v1/full/2026-07-01/title-32.xml?subtitle=A&chapter=I&subchapter=G&part=170',
+        'cmmc-32cfr170.xml'
+    ));
+}
+
+function cmmc_section(SimpleXMLElement $rule, string $number): ?SimpleXMLElement
+{
+    foreach ($rule->xpath('//DIV8') as $s) {
+        if (strpos((string) $s->HEAD, $number) !== false) {
+            return $s;
+        }
+    }
+
+    return null;
+}
+
+function cmmc_table_rows(SimpleXMLElement $section): array
+{
+    $out = array();
+
+    foreach ($section->xpath('.//TR') as $tr) {
+
+        $cells = array();
+
+        foreach ($tr->children() as $td) {
+            $cells[] = tidy(preg_replace('/\s+/', ' ', strip_tags($td->asXML())));
+        }
+
+        if ($cells) {
+            $out[] = $cells;
+        }
+    }
+
+    return $out;
+}
+
+/**
+ * Domain abbreviation for each SP 800-171 R2 family, read out of the rule rather
+ * than assumed: every Level 2 identifier the rule cites carries both, so the
+ * mapping is recovered from the rule's own text.
+ */
+function cmmc_domains(SimpleXMLElement $rule): array
+{
+    $text = preg_replace('/\s+/', ' ', strip_tags($rule->asXML()));
+
+    preg_match_all('/([A-Z]{2})\.L[123]-(3\.(\d+)\.\d+)/', $text, $m, PREG_SET_ORDER);
+
+    $map = array();
+
+    foreach ($m as $e) {
+        $map['3.'.$e[3]][$e[1]] = ($map['3.'.$e[3]][$e[1]] ?? 0) + 1;
+    }
+
+    $domains = array();
+
+    foreach ($map as $family => $counts) {
+        arsort($counts);
+        $domains[$family] = key($counts);
+    }
+
+    return $domains;
+}
+
+/** CMMC Level 1 - the 48 CFR 52.204-21 basic safeguarding requirements. */
+function source_cmmc_l1(): array
+{
+    $rule = cmmc_rule();
+    $section = cmmc_section($rule, '170.15');
+
+    if ($section === null) {
+        throw new RuntimeException('32 CFR 170.15 not found in the rule');
+    }
+
+    // Table 2 to 170.15(c)(1)(ii) pairs each practice with its SP 800-171A
+    // Jun2018 objectives. Three FAR requirements are assessed as separate
+    // phrases, so the table has more rows than there are practices.
+    $identifiers = array();
+    $objectives = array();
+
+    foreach (cmmc_table_rows($section) as $cells) {
+
+        if (count($cells) < 2 || !preg_match('/([A-Z]{2}\.L1-b\.1\.[ivx]+)/', $cells[0], $m)) {
+            continue;
+        }
+
+        $id = $m[1];
+
+        if (!in_array($id, $identifiers, true)) {
+            $identifiers[] = $id;
+        }
+
+        $objectives[$id][] = trim($cells[1]);
+    }
+
+    if (count($identifiers) === 0) {
+        throw new RuntimeException('no Level 1 practice identifiers found in 32 CFR 170.15');
+    }
+
+    $far = simplexml_load_file(fetch(
+        'https://www.ecfr.gov/api/versioner/v1/full/2026-07-01/title-48.xml?chapter=1&subchapter=H&part=52',
+        'far-52.xml'
+    ));
+
+    $clause = null;
+
+    foreach ($far->xpath('//DIV8') as $s) {
+        if (strpos((string) $s->HEAD, '52.204-21') !== false) {
+            $clause = $s;
+            break;
+        }
+    }
+
+    if ($clause === null) {
+        throw new RuntimeException('48 CFR 52.204-21 not found');
+    }
+
+    $requirements = array();
+
+    foreach ($clause->xpath('.//EXTRACT')[0]->children() as $c) {
+
+        $t = tidy(preg_replace('/\s+/', ' ', strip_tags($c->asXML())));
+
+        if (!preg_match('/^\((i|ii|iii|iv|v|vi|vii|viii|ix|x|xi|xii|xiii|xiv|xv)\)\s+(.+)$/s', $t, $m)) {
+            continue;
+        }
+
+        $requirements[$m[1]] = tidy($m[2]);
+    }
+
+    $names = cmmc_domain_names();
+    $rows = array();
+
+    foreach ($identifiers as $id) {
+
+        preg_match('/^([A-Z]{2})\.L1-b\.1\.([ivx]+)$/', $id, $m);
+
+        $roman = $m[2];
+
+        if (!isset($requirements[$roman])) {
+            throw new RuntimeException('48 CFR 52.204-21(b)(1)('.$roman.') missing for '.$id);
+        }
+
+        $text = $requirements[$roman];
+        $mapped = $objectives[$id] ?? array();
+
+        $rows[] = array(
+            $id,
+            clip($text),
+            $text
+                ."\n\nSource: 48 CFR 52.204-21(b)(1)(".$roman.').'
+                .($mapped ? "\nAssessed against NIST SP 800-171A Jun2018 objectives ".implode(', ', $mapped).'.' : ''),
+            $names[$m[1]] ?? $m[1]
+        );
+    }
+
+    return array(
+        'standard_name' => 'CMMC Level 1',
+        'short_code' => 'CMMC-L1',
+        'version' => '2.0 (32 CFR 170)',
+        'description' => 'Cybersecurity Maturity Model Certification Level 1. The security requirements are those set '
+            .'forth in 48 CFR 52.204-21(b)(1)(i) through (xv), per 32 CFR 170.14(c)(2). Requirement text is imported '
+            .'verbatim from the eCFR, and practice identifiers from Table 2 to 32 CFR 170.15(c)(1)(ii).',
+        'expected' => 15,
+        'controls' => $rows
+    );
+}
+
+/** CMMC Level 2 - identical to the NIST SP 800-171 R2 requirements. */
+function source_cmmc_l2(): array
+{
+    $rule = cmmc_rule();
+    $domains = cmmc_domains($rule);
+    $names = cmmc_domain_names();
+
+    $file = fetch(
+        'https://csrc.nist.gov/extensions/nudp/services/json/nudp/framework/version/SP_800_171_2_0_0/export/excel',
+        '800-171r2.xlsx',
+        true
+    );
+
+    $rows = xlsx_rows($file, 'SP 800-171 Rev 2');
+    $out = array();
+    $family = '';
+
+    foreach (array_slice($rows, 1) as $r) {
+
+        $fam = trim($r[0] ?? '');
+        $req = trim($r[1] ?? '');
+
+        if ($fam !== '' && preg_match('/^\s*\(([\d.]+)\):\s*(.+)$/s', $fam, $m)) {
+            $family = title_case(trim($m[2]));
+        }
+
+        if ($req === '' || !preg_match('/^\s*\(([\d.]+)\):\s*(.+)$/s', $req, $m)) {
+            continue;
+        }
+
+        $number = $m[1];
+        $group = implode('.', array_slice(explode('.', $number), 0, 2));
+
+        if (!isset($domains[$group])) {
+            throw new RuntimeException('no CMMC domain abbreviation for 800-171 family '.$group);
+        }
+
+        // 32 CFR 170.14(c)(1): the identifier is DD.L#-REQ, where DD is the
+        // two-letter domain abbreviation and REQ the 800-171 R2 requirement number.
+        $identifier = $domains[$group].'.L2-'.$number;
+        $text = tidy($m[2]);
+        $discussion = tidy($r[2] ?? '');
+
+        $out[] = array(
+            $identifier,
+            clip($text),
+            $text
+                .($discussion === '' ? '' : "\n\nDiscussion: ".$discussion)
+                ."\n\nSource: NIST SP 800-171 R2 requirement ".$number.'.',
+            $names[$domains[$group]] ?? $family
+        );
+    }
+
+    return array(
+        'standard_name' => 'CMMC Level 2',
+        'short_code' => 'CMMC-L2',
+        'version' => '2.0 (32 CFR 170)',
+        'description' => 'Cybersecurity Maturity Model Certification Level 2. Per 32 CFR 170.14(c)(3) the security '
+            .'requirements are identical to NIST SP 800-171 R2, whose text is imported verbatim from the NIST CPRT '
+            .'export. Practice identifiers follow the numbering scheme in 32 CFR 170.14(c)(1).',
+        'expected' => 110,
+        'controls' => $out
+    );
+}
+
+/** CMMC Level 3 - the SP 800-172 requirements selected by 32 CFR 170.14(c)(4). */
+function source_cmmc_l3(): array
+{
+    $rule = cmmc_rule();
+    $section = cmmc_section($rule, '170.14');
+
+    if ($section === null) {
+        throw new RuntimeException('32 CFR 170.14 not found in the rule');
+    }
+
+    $names = cmmc_domain_names();
+    $out = array();
+
+    foreach (cmmc_table_rows($section) as $cells) {
+
+        if (count($cells) < 2 || !preg_match('/([A-Z]{2})\.L3-([0-9.]+e)/', $cells[0], $m)) {
+            continue;
+        }
+
+        $identifier = $m[1].'.L3-'.$m[2];
+        $text = tidy($cells[1]);
+
+        $out[] = array(
+            $identifier,
+            clip($text),
+            $text."\n\nSource: NIST SP 800-172 Feb2021 requirement ".$m[2]
+                .', as selected and parameterised by Table 1 to 32 CFR 170.14(c)(4).',
+            $names[$m[1]] ?? $m[1]
+        );
+    }
+
+    return array(
+        'standard_name' => 'CMMC Level 3',
+        'short_code' => 'CMMC-L3',
+        'version' => '2.0 (32 CFR 170)',
+        'description' => 'Cybersecurity Maturity Model Certification Level 3. The security requirements are selected '
+            .'from NIST SP 800-172 Feb2021 with DoD organization-defined parameters assigned, and are imported '
+            .'verbatim from Table 1 to 32 CFR 170.14(c)(4).',
+        'expected' => 24,
+        'controls' => $out
+    );
+}
+
+function cmmc_domain_names(): array
+{
+    return array(
+        'AC' => 'Access Control',
+        'AT' => 'Awareness and Training',
+        'AU' => 'Audit and Accountability',
+        'CA' => 'Security Assessment',
+        'CM' => 'Configuration Management',
+        'IA' => 'Identification and Authentication',
+        'IR' => 'Incident Response',
+        'MA' => 'Maintenance',
+        'MP' => 'Media Protection',
+        'PE' => 'Physical Protection',
+        'PS' => 'Personnel Security',
+        'RA' => 'Risk Assessment',
+        'SC' => 'System and Communications Protection',
+        'SI' => 'System and Information Integrity'
+    );
+}
+
 /* ---------------------------------------------------------------- the loading */
 
 function load_standard(StandardsModel $model, int $company_id, array $source): array
@@ -1106,8 +1411,16 @@ $sources = array(
     'FedRAMP High' => function () { return source_fedramp('High Baseline', 'High', 410); },
     'HIPAA Security Rule' => 'source_hipaa',
     'FTC Safeguards Rule' => 'source_ftc',
-    'NYDFS 23 NYCRR 500' => 'source_nydfs'
+    'NYDFS 23 NYCRR 500' => 'source_nydfs',
+    'CMMC Level 1' => 'source_cmmc_l1',
+    'CMMC Level 2' => 'source_cmmc_l2',
+    'CMMC Level 3' => 'source_cmmc_l3'
 );
+
+// CMMC practice counts are fixed by 32 CFR part 170; a parse that lands anywhere
+// else means the rule was misread, so those loads abort rather than record a
+// number nobody can trust.
+$strict = array('CMMC Level 1', 'CMMC Level 2', 'CMMC Level 3');
 
 $report = array();
 
@@ -1118,9 +1431,14 @@ foreach ($sources as $label => $builder) {
     try {
 
         $source = $builder();
-        $result = load_standard($model, $company_id, $source);
-
         $expected = (int) $source['expected'];
+
+        if (in_array($label, $strict, true) && count($source['controls']) !== $expected) {
+            throw new RuntimeException('FAILED COUNT CHECK - parsed '.count($source['controls'])
+                .' practices, the rule defines '.$expected.'; nothing written');
+        }
+
+        $result = load_standard($model, $company_id, $source);
         $counted = isset($source['expected_of']) ? (int) $source['expected_of'] : $result['loaded'];
         $drift = $expected > 0 ? abs($counted - $expected) / $expected * 100 : 0.0;
 
