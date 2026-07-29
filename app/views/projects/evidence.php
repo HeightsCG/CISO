@@ -735,7 +735,7 @@ $(document).ready(function () {
         $('#delete_id').val(e.id);
         $('#delete_title').text(e.evidence_title);
         $('#delete_warning').prop('hidden', links === 0).html('<strong>Attached to ' + links
-            + (links === 1 ? ' control' : ' controls') + '.</strong> Those attachments go with it; the assessment results stay.');
+            + (links === 1 ? ' control' : ' controls') + '.</strong>');
 
         modal('delete_modal').show();
     });

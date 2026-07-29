@@ -25,6 +25,7 @@
     --accent-border:        #9CC2D6;
 
     --critical:             #B42318;
+    --critical-hover:       #971B12;
     --critical-bg:          #FEF3F2;
     --critical-border:      #FECDCA;
 
@@ -3062,21 +3063,6 @@ tr.is-drop-target > td:last-child {
     box-shadow: inset 0 1px 0 var(--accent), inset 0 -1px 0 var(--accent), inset -1px 0 0 var(--accent);
 }
 
-.tree__crumb.is-drop-target {
-    background: var(--accent-subtle);
-    box-shadow: inset 0 0 0 1px var(--accent);
-}
-
-.roster__toolbar .tree__crumbs {
-    flex: 0 0 auto;
-    padding: 0;
-    border-bottom: 0;
-}
-
-/* The connectors are the only lines a tree should have. Row rules cut every
-   rail at the row boundary and collide with the elbows, so they come off here;
-   hover carries the row instead. */
-
 /* Evidence vault: folder tree beside a files-only table. Folders never appear
    in the table, so no row carries an empty data column. */
 .vault {
@@ -3465,93 +3451,6 @@ table.data--light tbody tr .vault__menu:focus-within {
     }
 }
 
-.tree__crumbs {
-    flex: 0 0 auto;
-    padding: 0;
-    border-bottom: 0;
-}
-
-/* The connectors are the only lines a tree should have. Row rules cut every
-   rail at the row boundary and collide with the elbows, so they come off here;
-   hover carries the row instead. */
-
-.tree__row {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--space-2);
-}
-
-/* Connectors, not dividers: a rail per ancestor level, and an elbow or tee
-   turning into the row itself. The segments bleed past the cell padding so a
-   branch reads as one continuous line rather than a stub per row. */
-.tree__rails {
-    display: flex;
-    flex: 0 0 auto;
-    align-self: stretch;
-}
-
-.rail {
-    position: relative;
-    flex: 0 0 auto;
-    width: 22px;
-}
-
-/* Geometry, measured against the row: a rail is 22px, then an 8px flex gap, a
-   14px toggle and another 8px gap before the icon. The vertical sits at 7px so
-   it falls under the parent's chevron, and the arm runs 44px to meet the child's
-   icon rather than stopping inside the rail. */
-.rail.is-line::before,
-.rail.is-tee::before {
-    content: "";
-    position: absolute;
-    top: calc(var(--space-3) * -1);
-    bottom: calc(var(--space-3) * -1);
-    left: 7px;
-    width: 1px;
-    background: var(--border-strong);
-}
-
-.rail.is-elbow::before {
-    content: "";
-    position: absolute;
-    top: calc(var(--space-3) * -1);
-    height: calc(var(--space-3) + 10px);
-    left: 7px;
-    width: 1px;
-    background: var(--border-strong);
-}
-
-.rail.is-elbow::after,
-.rail.is-tee::after {
-    content: "";
-    position: absolute;
-    top: 10px;
-    left: 7px;
-    width: 44px;
-    height: 1px;
-    background: var(--border-strong);
-}
-
-.tree__main {
-    min-width: 0;
-}
-
-.tree__toggle {
-    display: flex;
-    flex: 0 0 auto;
-    align-items: center;
-    justify-content: center;
-    width: 14px;
-    height: 20px;
-    font-size: 11px;
-    color: var(--text-muted);
-    cursor: pointer;
-}
-
-.tree__toggle.is-empty {
-    cursor: default;
-}
-
 tr.evidence__row.is-on > td {
     background: var(--accent-subtle);
 }
@@ -3559,31 +3458,6 @@ tr.evidence__row.is-on > td {
 .panel__head.is-drop-target {
     background: var(--accent-subtle);
     box-shadow: inset 0 0 0 1px var(--accent);
-}
-
-.tree__crumbs {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-2);
-    margin: 0;
-    padding: var(--space-3) var(--space-4);
-    border-bottom: 1px solid var(--border);
-}
-
-.tree__crumb {
-    padding: 0;
-    font-family: inherit;
-    font-size: var(--fs-meta);
-    color: var(--accent);
-    background: none;
-    border: 0;
-    cursor: pointer;
-}
-
-.tree__sep {
-    font-size: var(--fs-meta);
-    color: var(--text-muted);
 }
 
 .controls__scroll {
@@ -3779,6 +3653,30 @@ td.controls__actions .btn + .btn {
     color: var(--high);
     background: var(--high-bg);
     border-color: var(--high-border);
+}
+
+/* A notice is the last thing in a confirm dialog, so its stacking margin would
+   otherwise double up with the footer's own padding. */
+
+.modal-body > .notice:last-child {
+    margin-bottom: 0;
+}
+
+/* In a confirm dialog the destructive button is the committing action, so it
+   takes solid weight; Cancel stays the quiet outline beside it. Elsewhere
+   (page headers, toolbars) Delete stays an outline, since nothing is at stake
+   until the dialog it opens. */
+
+.modal-footer .btn--destructive {
+    color: var(--text-inverse);
+    background: var(--critical);
+    border-color: var(--critical);
+}
+
+.modal-footer .btn--destructive:hover:not(:disabled) {
+    color: var(--text-inverse);
+    background: var(--critical-hover);
+    border-color: var(--critical-hover);
 }
 
 .badge--critical {
@@ -4111,19 +4009,10 @@ table.data tbody tr.item__row {
     overflow: hidden;
 }
 
-.pick__head {
-    margin-bottom: var(--space-3);
-}
-
 .pick__label {
     margin-bottom: var(--space-2);
     font-size: var(--fs-body);
     color: var(--text-secondary);
-}
-
-.pick__search {
-    display: block;
-    width: 100%;
 }
 
 .pick__count {
@@ -4155,81 +4044,44 @@ table.data tbody tr.item__row {
     flex-direction: column;
 }
 
-.pick__scroll {
+/* The picker is the vault laid out inside a fixed-height modal, so the two
+   panes take the body's height and only the file list scrolls. */
+
+.vault--pick {
     flex: 1 1 auto;
-    min-height: 320px;
-    max-height: 100%;
-    overflow-y: auto;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    min-width: 0;
+    min-height: 0;
+    grid-template-columns: 260px minmax(0, 1fr);
+    align-items: stretch;
 }
 
-.pick__table thead th {
+.vault--pick .vault__tree,
+.vault--pick .vault__files {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.vault--pick .vault__list {
+    overflow-y: auto;
+}
+
+.pick__scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.pick__scroll table.data--light thead th {
     position: sticky;
     top: 0;
     z-index: 1;
-    padding: var(--space-2) var(--space-3);
 }
 
-.pick__table tbody td {
-    padding: 5px var(--space-3);
-    line-height: 1.35;
-    vertical-align: middle;
-    white-space: nowrap;
-}
-
-.pick__table tbody tr:hover td {
-    background: var(--accent-subtle);
-}
-
-.pick__file {
-    max-width: 0;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.pick__name {
-    font-weight: var(--fw-medium);
-    color: var(--text-primary);
-}
-
-.pick__num {
-    width: 1%;
-    font-size: var(--fs-meta);
-    color: var(--text-secondary);
+table.data--light th.pick__col-attach,
+table.data--light td.pick__col-attach {
+    width: 104px;
     text-align: right;
-}
-
-.pick__table thead th.pick__num,
-.pick__table thead th.pick__num div.dt-column-header {
-    text-align: right;
-    justify-content: flex-end;
-}
-
-.pick__mid {
-    width: 1%;
-    font-size: var(--fs-meta);
-    color: var(--text-secondary);
-    text-align: center;
-    white-space: nowrap;
-}
-
-.pick__table thead th.pick__mid,
-.pick__table thead th.pick__mid div.dt-column-header {
-    text-align: center;
-    justify-content: center;
-}
-
-.pick__act {
-    width: 1%;
-    text-align: right;
-}
-
-.pick__desc {
-    margin-left: var(--space-2);
-    font-size: var(--fs-meta);
-    color: var(--text-muted);
 }
 
 .pick__sort.is-sortable {
@@ -4261,10 +4113,6 @@ table.data tbody tr.item__row {
 .pick__sort.is-desc::after {
     border-top: 5px solid currentColor;
     opacity: 0.85;
-}
-
-.pick__zero {
-    color: var(--text-muted);
 }
 
 .users__hint {
