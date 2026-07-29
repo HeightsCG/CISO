@@ -3,6 +3,7 @@
         <div>
             <h1 class="page__title">Projects</h1>
         </div>
+        <a class="btn btn--primary" href="/projects/form"><i class="fa-regular fa-plus"></i> Add Project</a>
     </div>
 
     <div class="panel">

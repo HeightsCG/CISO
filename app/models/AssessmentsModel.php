@@ -184,6 +184,15 @@ class AssessmentsModel extends Model {
         $rows = parent::update('assessments', $data, 'id = :id and company_id = :company_id', $where);
 
         if ($rows > 0) {
+
+            // Without this the evidence keeps reporting links to items that no
+            // longer exist, and the vault's usage counts drift upward.
+            parent::delete_all(
+                'evidence_links',
+                'assessment_item_id IN (SELECT id FROM assessment_items WHERE assessment_id = :assessment_id)',
+                array('assessment_id' => $assessment_id)
+            );
+
             parent::update(
                 'assessment_items',
                 array('deleted' => 1, 'date_updated' => date('Y-m-d H:i:s')),

@@ -63,11 +63,50 @@ class ProjectsModel extends Model {
         return parent::select($sql, $where);
     }
 
+    public function add_project(
+        $company_id,
+        $client_id,
+        $project_name,
+        $description,
+        $start_date,
+        $end_date,
+        $project_status,
+        $created_by
+    )
+    {
+        $data = array(
+            'company_id' => $company_id,
+            'client_id' => $client_id,
+            'project_name' => $project_name,
+            'description' => $description,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'project_status' => $project_status,
+            'created_by' => $created_by,
+            'updated_by' => $created_by,
+            'date_created' => date('Y-m-d H:i:s'),
+            'date_updated' => date('Y-m-d H:i:s'),
+            'deleted' => 0
+        );
+        return parent::insert('projects', $data);
+    }
+
     /**
-     * The evidence vault belongs to the client, so a project has to name one before
-     * its assessments can collect anything.
+     * The client is set here rather than from the project page: it decides which
+     * evidence vault every assessment on the project reads from, so it belongs
+     * behind the edit form rather than one stray click away on a read view.
      */
-    public function set_client($project_id, $company_id, $client_id, $updated_by)
+    public function update_project(
+        $project_id,
+        $company_id,
+        $client_id,
+        $project_name,
+        $description,
+        $start_date,
+        $end_date,
+        $project_status,
+        $updated_by
+    )
     {
         $where = array(
             'id' => $project_id,
@@ -75,10 +114,71 @@ class ProjectsModel extends Model {
         );
         $data = array(
             'client_id' => $client_id,
+            'project_name' => $project_name,
+            'description' => $description,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'project_status' => $project_status,
             'updated_by' => $updated_by,
             'date_updated' => date('Y-m-d H:i:s')
         );
         return parent::update('projects', $data, 'id = :id and company_id = :company_id', $where);
+    }
+
+    /**
+     * Deleting a project takes its assessments and their items with it, and drops
+     * the evidence links those items held. The evidence itself belongs to the
+     * client's vault and is left alone - it is very likely in use elsewhere.
+     */
+    public function delete_project($project_id, $company_id, $updated_by)
+    {
+        $where = array(
+            'id' => $project_id,
+            'company_id' => $company_id
+        );
+
+        $rows = parent::update(
+            'projects',
+            array('deleted' => 1, 'updated_by' => $updated_by, 'date_updated' => date('Y-m-d H:i:s')),
+            'id = :id and company_id = :company_id',
+            $where
+        );
+
+        if ($rows === 0) {
+            return 0;
+        }
+
+        $assessments = parent::select(
+            "SELECT a.id FROM assessments a WHERE a.project_id = :project_id and a.company_id = :company_id",
+            array('project_id' => $project_id, 'company_id' => $company_id)
+        );
+
+        foreach ($assessments as $assessment) {
+
+            // A link pointing at a removed item would keep inflating the "used on
+            // N controls" count shown against the evidence in the vault.
+            parent::delete_all(
+                'evidence_links',
+                'assessment_item_id IN (SELECT id FROM assessment_items WHERE assessment_id = :assessment_id)',
+                array('assessment_id' => $assessment['id'])
+            );
+
+            parent::update(
+                'assessment_items',
+                array('deleted' => 1, 'date_updated' => date('Y-m-d H:i:s')),
+                'assessment_id = :assessment_id',
+                array('assessment_id' => $assessment['id'])
+            );
+        }
+
+        parent::update(
+            'assessments',
+            array('deleted' => 1, 'updated_by' => $updated_by, 'date_updated' => date('Y-m-d H:i:s')),
+            'project_id = :project_id and company_id = :company_id',
+            array('project_id' => $project_id, 'company_id' => $company_id)
+        );
+
+        return $rows;
     }
 
 }

@@ -5,7 +5,8 @@ class ProjectsController extends Controller {
     public $protected = 1;
     public $json_actions = array(
         'load_projectsAction',
-        'save_project_clientAction',
+        'save_projectAction',
+        'delete_projectAction',
         'load_assessmentsAction',
         'load_active_standardsAction',
         'create_assessmentAction',
@@ -76,6 +77,27 @@ class ProjectsController extends Controller {
         $this->view->render();
     }
 
+    public function formAction() {
+
+        $project_id = Main::get_param('id');
+
+        if (empty($project_id)) {
+            $this->view->project = null;
+            $this->view->render();
+            return;
+        }
+
+        $project = $this->projects_model->get_project($project_id, Session::get('company_id'));
+
+        if (!is_array($project) || count($project) !== 1) {
+            Errors::page_not_found();
+            return;
+        }
+
+        $this->view->project = $project[0];
+        $this->view->render();
+    }
+
     public function assessmentAction() {
 
         $assessment = $this->assessments_model->get_assessment(Main::get_param('id'), Session::get('company_id'));
@@ -97,7 +119,7 @@ class ProjectsController extends Controller {
         echo json_encode($this->standards_model->active_standards(Session::get('company_id')));
     }
 
-    public function save_project_clientAction(){
+    public function save_projectAction(){
 
         $response = array(
             'success' => false,
@@ -106,9 +128,34 @@ class ProjectsController extends Controller {
 
         $project_id = (int) ($this->post['project_id'] ?? 0);
         $client_id = (int) ($this->post['client_id'] ?? 0);
+        $project_name = $this->input('project_name');
+        $description = $this->input('description');
+        $start_date = $this->input('start_date');
+        $end_date = $this->input('end_date');
+        $project_status = $this->input('project_status');
 
-        if (!$this->owns_project($project_id)) {
-            $response['message'] = 'That project could not be found';
+        if ($project_name === '') {
+            $response['message'] = 'Project name is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!in_array($project_status, array('Active', 'Complete'), true)) {
+            $response['message'] = 'Choose a valid status';
+            echo json_encode($response);
+            exit;
+        }
+
+        foreach (array('start_date' => $start_date, 'end_date' => $end_date) as $label => $value) {
+            if ($value === '' || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
+                $response['message'] = 'Enter a valid '.str_replace('_', ' ', $label);
+                echo json_encode($response);
+                exit;
+            }
+        }
+
+        if ($end_date < $start_date) {
+            $response['message'] = 'The end date cannot fall before the start date';
             echo json_encode($response);
             exit;
         }
@@ -124,10 +171,64 @@ class ProjectsController extends Controller {
             }
         }
 
-        $this->projects_model->set_client($project_id, Session::get('company_id'), $client_id, Session::get('user_id'));
+        $company_id = Session::get('company_id');
+        $user_id = Session::get('user_id');
+
+        if ($project_id === 0) {
+
+            $new_id = $this->projects_model->add_project(
+                $company_id, $client_id, $project_name, $description,
+                $start_date, $end_date, $project_status, $user_id
+            );
+
+            $response['success'] = true;
+            $response['message'] = 'Project created';
+            $response['project_id'] = (int) $new_id;
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!$this->owns_project($project_id)) {
+            $response['message'] = 'That project could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->projects_model->update_project(
+            $project_id, $company_id, $client_id, $project_name, $description,
+            $start_date, $end_date, $project_status, $user_id
+        );
 
         $response['success'] = true;
-        $response['message'] = 'Client updated';
+        $response['message'] = 'Project updated';
+        $response['project_id'] = $project_id;
+        echo json_encode($response);
+    }
+
+    public function delete_projectAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+
+        if (!$this->owns_project($project_id)) {
+            $response['message'] = 'That project could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $assessments = $this->assessments_model->load_assessments($project_id, Session::get('company_id'));
+
+        $this->projects_model->delete_project($project_id, Session::get('company_id'), Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'Project deleted'
+            .(count($assessments) > 0
+                ? ', '.count($assessments).' '.(count($assessments) === 1 ? 'assessment' : 'assessments').' removed'
+                : '');
         echo json_encode($response);
     }
 

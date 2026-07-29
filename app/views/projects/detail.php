@@ -12,11 +12,13 @@
         </div>
         <div class="page__actions">
             <?php echo ((int) $this->project['client_id'] === 0 ? '' : '<a class="btn btn--secondary" href="/clients/evidence/id/'.((int) $this->project['client_id']).'/from/project/ref/'.((int) $this->project['id']).'"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>'); ?>
-            <button type="button" class="btn btn--primary" id="do_assessment_add"><i class="fa-regular fa-plus"></i> New Assessment</button>
+            <a class="btn btn--secondary" href="/projects/form/id/<?php echo (int) $this->project['id']; ?>"><i class="fa-regular fa-pen"></i> Edit</a>
+            <button type="button" class="btn btn--primary" id="do_assessment_add"><i class="fa-regular fa-plus"></i> Assessment</button>
+            <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i></button>
         </div>
     </div>
 
-    <?php echo ((int) $this->project['client_id'] === 0 ? '<div class="notice notice--warn"><strong>No client assigned.</strong> Evidence is collected into a client&rsquo;s vault, so assessments on this project cannot attach evidence until a client is set.</div>' : ''); ?>
+    <?php echo ((int) $this->project['client_id'] === 0 ? '<div class="notice notice--warn"><strong>No client assigned.</strong> Evidence is collected into a client&rsquo;s vault, so assessments on this project cannot attach evidence until a client is set. <a href="/projects/form/id/'.((int) $this->project['id']).'">Edit the project</a> to assign one.</div>' : ''); ?>
 
     <div class="row g-4">
         <div class="col-lg-8">
@@ -57,28 +59,30 @@
                         <dd><?php echo htmlspecialchars($this->project['start_date_display'], ENT_QUOTES, 'UTF-8'); ?></dd>
                         <dt>End</dt>
                         <dd><?php echo htmlspecialchars($this->project['end_date_display'], ENT_QUOTES, 'UTF-8'); ?></dd>
+                        <dt>Description</dt>
+                        <dd><?php echo ($this->project['description'] === '' ? '<span class="roster__none">&mdash;</span>' : nl2br(htmlspecialchars($this->project['description'], ENT_QUOTES, 'UTF-8'))); ?></dd>
                     </dl>
-                    <div class="record__group">
-                        <h2 class="record__group-title">Assign Client</h2>
-                        <div class="field">
-                            <label for="client_id">Client</label>
-                            <select id="client_id" class="form-select">
-                                <option value="0">No client</option>
-                            </select>
-                        </div>
-                        <div class="panel__actions">
-                            <button type="button" id="do_client_save" class="btn btn--secondary">Save Client</button>
-                        </div>
-                    </div>
                 </div>
             </div>
-            <div class="panel record__panel">
-                <div class="panel__head">
-                    <h2 class="panel__title">Description</h2>
-                </div>
-                <div class="panel__body">
-                    <p class="standard__description"><?php echo ($this->project['description'] === '' ? '<span class="roster__none">&mdash;</span>' : nl2br(htmlspecialchars($this->project['description'], ENT_QUOTES, 'UTF-8'))); ?></p>
-                </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop="static" id="delete_modal" tabindex="-1" aria-labelledby="delete_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="delete_modal_title">Delete Project</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Delete <strong><?php echo htmlspecialchars($this->project['project_name'], ENT_QUOTES, 'UTF-8'); ?></strong>? This cannot be undone.</p>
+                <div class="notice notice--warn" id="delete_warning" hidden></div>
+                <p class="import__hint">Evidence stays in the client&rsquo;s vault &mdash; only the attachments to this project&rsquo;s controls are removed.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="do_delete" class="btn btn--destructive">Delete Project</button>
             </div>
         </div>
     </div>
@@ -116,7 +120,6 @@
 $(document).ready(function () {
 
     var project_id = <?php echo (int) $this->project['id']; ?>;
-    var current_client_id = <?php echo (int) $this->project['client_id']; ?>;
 
     function set_loading(target, loading) {
         if (loading) {
@@ -260,42 +263,51 @@ $(document).ready(function () {
         });
     });
 
-    $('#do_client_save').click(function () {
+    // The confirm names what goes with the project rather than asking for a
+    // blind yes.
+    $('#do_delete_open').click(function () {
 
-        set_loading('#do_client_save', true);
+        $.post('/projects/load_assessments', { project_id: project_id }, function (data) {
 
-        $.post('/projects/save_project_client', { project_id: project_id, client_id: $('#client_id').val() }, function (data) {
+            var list = JSON.parse(data);
+            var items = 0;
+
+            for (var i = 0; i < list.length; i++) {
+                items += parseInt(list[i].item_count, 10) || 0;
+            }
+
+            if (list.length === 0) {
+                $('#delete_warning').attr('hidden', true);
+            } else {
+                $('#delete_warning').removeAttr('hidden').html('<strong>'
+                    + list.length + ' ' + (list.length === 1 ? 'assessment' : 'assessments')
+                    + ' and ' + items + ' assessed ' + (items === 1 ? 'item' : 'items')
+                    + '</strong> will be deleted with it, including every result and note.');
+            }
+
+            modal('delete_modal').show();
+        });
+    });
+
+    $('#do_delete').click(function () {
+
+        set_loading('#do_delete', true);
+
+        $.post('/projects/delete_project', { project_id: project_id }, function (data) {
 
             var obj = JSON.parse(data);
 
-            set_loading('#do_client_save', false);
+            set_loading('#do_delete', false);
 
             if (!obj.success) {
                 toastr.error(obj.message);
                 return;
             }
 
-            window.location.reload();
+            window.location.href = '/projects';
         });
     });
 
-    function load_clients() {
-        $.post('/api/load_clients', {}, function (data) {
-
-            var list = JSON.parse(data);
-            var options = '<option value="0">No client</option>';
-
-            for (var i = 0; i < list.length; i++) {
-                options += '<option value="' + list[i].id + '"'
-                    + (parseInt(list[i].id, 10) === current_client_id ? ' selected' : '') + '>'
-                    + esc(list[i].company_name) + '</option>';
-            }
-
-            $('#client_id').html(options);
-        });
-    }
-
-    load_clients();
     load();
 
 });
