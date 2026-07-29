@@ -5,16 +5,20 @@ class CompaniesModel extends Model {
         parent::__construct();
     }
 
-    /** Display date format from Regional Defaults, falling back to the column default. */
-    public function date_format($company_id): string
+    /** Selectable date formats, ordered for the Settings dropdown. */
+    public function get_date_formats()
     {
-        $company = $this->get_company($company_id);
-
-        if (is_array($company) && count($company) === 1 && $company[0]['date_format'] !== '') {
-            return (string) $company[0]['date_format'];
-        }
-
-        return 'd M Y';
+        $sql = "SELECT
+                    d.id,
+                    d.php_format,
+                    d.label
+                FROM
+                    date_formats d
+                WHERE
+                    d.deleted = 0
+                ORDER BY
+                    d.sort_order";
+        return parent::select($sql);
     }
 
     public function get_company($company_id)
@@ -23,9 +27,12 @@ class CompaniesModel extends Model {
             'id' => $company_id
         );
         $sql = "SELECT
-                    c.*
+                    c.*,
+                    d.php_format AS date_format,
+                    d.sql_format AS date_format_sql
                 FROM
                     companies c
+                    JOIN date_formats d ON d.id = c.date_format_id
                 WHERE
                     c.id = :id";
         return parent::select($sql, $where);
@@ -44,7 +51,7 @@ class CompaniesModel extends Model {
         $website,
         $email_domain,
         $timezone,
-        $date_format,
+        $date_format_id,
         $time_format,
         $brand_color,
         $brand_color_secondary,
@@ -67,7 +74,7 @@ class CompaniesModel extends Model {
             'website' => $website,
             'email_domain' => $email_domain,
             'timezone' => $timezone,
-            'date_format' => $date_format,
+            'date_format_id' => $date_format_id,
             'time_format' => $time_format,
             'brand_color' => $brand_color,
             'brand_color_secondary' => $brand_color_secondary,

@@ -486,6 +486,7 @@ class ApiController extends Controller {
         $response['message'] = 'Organization loaded';
         $response['data'] = $company[0];
         $response['timezones'] = $this->timezone_list();
+        $response['date_formats'] = $this->companies_model->get_date_formats();
         echo json_encode($response);
     }
 
@@ -520,9 +521,9 @@ class ApiController extends Controller {
             exit;
         }
 
-        $date_formats = array('d M Y', 'D, d M Y', 'j F Y', 'F j, Y', 'd/m/Y', 'm/d/Y', 'd.m.Y', 'Y-m-d');
+        $date_format_ids = array_column($this->companies_model->get_date_formats(), 'id');
 
-        if (empty($this->post['date_format']) || !in_array($this->post['date_format'], $date_formats)) {
+        if (!in_array((int) ($this->post['date_format_id'] ?? 0), array_map('intval', $date_format_ids), true)) {
             $response['message'] = 'Select a valid date format';
             echo json_encode($response);
             exit;
@@ -567,7 +568,7 @@ class ApiController extends Controller {
             $this->post['website'],
             strtolower($this->post['email_domain']),
             $this->post['timezone'],
-            $this->post['date_format'],
+            (int) $this->post['date_format_id'],
             $this->post['time_format'],
             strtoupper($this->post['brand_color']),
             strtoupper($this->post['brand_color_secondary']),
@@ -763,28 +764,12 @@ class ApiController extends Controller {
     }
 
     public function load_clientsAction(){
-
         $data = $this->clients_model->load_clients(Session::get('company_id'));
-        $format = $this->companies_model->date_format(Session::get('company_id'));
-
-        foreach ($data as $index => $row) {
-            $data[$index]['date_created_display'] = ($row['date_created'] === null ? '' : date($format, strtotime($row['date_created'])));
-            $data[$index]['date_updated_display'] = ($row['date_updated'] === null ? '' : date($format, strtotime($row['date_updated'])));
-        }
-
         echo json_encode($data);
     }
 
     public function load_projectsAction(){
-
         $data = $this->projects_model->load_projects(Session::get('company_id'));
-        $format = $this->companies_model->date_format(Session::get('company_id'));
-
-        foreach ($data as $index => $row) {
-            $data[$index]['start_date_display'] = ($row['start_date'] === null ? '' : date($format, strtotime($row['start_date'])));
-            $data[$index]['end_date_display'] = ($row['end_date'] === null ? '' : date($format, strtotime($row['end_date'])));
-        }
-
         echo json_encode($data);
     }
 

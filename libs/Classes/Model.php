@@ -30,27 +30,6 @@ class Model {
         $sth->execute();
         return $sth->fetchAll($fetchMode);
     }
-    
-    /**
-     * Controller::clean_post_data() runs htmlentities() over every POST field, so
-     * text lands in the database entity-encoded. Decoding on read hands callers the
-     * real text and lets escaping happen exactly once, at whichever layer renders
-     * it. Identity and bookkeeping columns are left alone.
-     */
-    protected function decode_rows($rows, $skip = array())
-    {
-        $skip = array_merge(array('id', 'company_id', 'created_by', 'updated_by', 'deleted'), $skip);
-
-        foreach ($rows as $index => $row) {
-            foreach ($row as $key => $value) {
-                if (!in_array($key, $skip) && is_string($value)) {
-                    $rows[$index][$key] = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
-                }
-            }
-        }
-
-        return $rows;
-    }
 
     public function insert($table, $data)
     {

@@ -117,17 +117,8 @@
                         <div class="grid grid--2">
                             <div class="field">
                                 <div class="form-floating">
-                                    <select id="date_format" class="form-select">
-                                        <option value="d M Y">31 Dec 2026</option>
-                                        <option value="D, d M Y">Thu, 31 Dec 2026</option>
-                                        <option value="j F Y">31 December 2026</option>
-                                        <option value="F j, Y">December 31, 2026</option>
-                                        <option value="d/m/Y">31/12/2026</option>
-                                        <option value="m/d/Y">12/31/2026</option>
-                                        <option value="d.m.Y">31.12.2026</option>
-                                        <option value="Y-m-d">2026-12-31</option>
-                                    </select>
-                                    <label for="date_format">Date Format</label>
+                                    <select id="date_format_id" class="form-select"></select>
+                                    <label for="date_format_id">Date Format</label>
                                 </div>
                             </div>
                             <div class="field">
@@ -400,7 +391,7 @@ $(document).ready(function () {
     }
 
     function update_format_example() {
-        var d = $("#date_format option:selected").text();
+        var d = $("#date_format_id option:selected").text();
         var t = $("#time_format option:selected").text().split(" — ")[0];
         $("#format_example").text("Dates and times will read: " + d + " at " + t);
     }
@@ -485,7 +476,7 @@ $(document).ready(function () {
             postal_code: $("#postal_code").val().trim(),
             country: $("#country").val().trim(),
             timezone: $("#timezone").val(),
-            date_format: $("#date_format").val(),
+            date_format_id: $("#date_format_id").val(),
             time_format: $("#time_format").val(),
             brand_color: $("#brand_color").val().trim().toUpperCase(),
             brand_color_secondary: $("#brand_color_secondary").val().trim().toUpperCase(),
@@ -611,6 +602,14 @@ $(document).ready(function () {
                 $("#timezone").append($("<optgroup>").attr("label", name).append(groups[name]));
             });
 
+            $("#date_format_id").empty();
+
+            $.each(obj.date_formats, function (index, format) {
+                $("#date_format_id").append(
+                    $("<option>").attr("value", format.id).text(format.label)
+                );
+            });
+
             var selected = company.timezone;
 
             if (!selected) {
@@ -641,7 +640,7 @@ $(document).ready(function () {
             $("#state").val(company.state);
             $("#postal_code").val(company.postal_code);
             $("#country").val(company.country);
-            $("#date_format").val(company.date_format);
+            $("#date_format_id").val(company.date_format_id);
             $("#time_format").val(company.time_format);
             set_color("brand_color", "brand_swatch", company.brand_color, "#075985");
             set_color("brand_color_secondary", "brand_swatch_secondary", company.brand_color_secondary, "#334155");
@@ -692,7 +691,7 @@ $(document).ready(function () {
         refresh_savebar();
     });
 
-    $("#date_format, #time_format").change(function () {
+    $("#date_format_id, #time_format").change(function () {
         update_format_example();
     });
 

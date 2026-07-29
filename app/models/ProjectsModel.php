@@ -16,11 +16,15 @@ class ProjectsModel extends Model {
                     p.description,
                     p.start_date,
                     p.end_date,
-                    p.status,
+                    DATE_FORMAT(p.start_date, df.sql_format) AS start_date_display,
+                    DATE_FORMAT(p.end_date, df.sql_format) AS end_date_display,
+                    p.project_status,
                     p.date_created,
                     p.date_updated
                 FROM
                     projects p
+                    JOIN companies co ON co.id = p.company_id
+                    JOIN date_formats df ON df.id = co.date_format_id
                 WHERE
                     p.company_id = :company_id
                     and
@@ -38,9 +42,13 @@ class ProjectsModel extends Model {
             'company_id' => $company_id
         );
         $sql = "SELECT
-                    p.*
+                    p.*,
+                    DATE_FORMAT(p.start_date, df.sql_format) AS start_date_display,
+                    DATE_FORMAT(p.end_date, df.sql_format) AS end_date_display
                 FROM
                     projects p
+                    JOIN companies co ON co.id = p.company_id
+                    JOIN date_formats df ON df.id = co.date_format_id
                 WHERE
                     p.id = :id
                     and

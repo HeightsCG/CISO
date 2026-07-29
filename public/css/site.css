@@ -2876,10 +2876,6 @@ table.data thead th.dt-type-numeric div.dt-column-header {
     align-items: center;
     gap: var(--space-2);
 }
-
-
-
-
 .field input[type="text"]:hover:not(:focus),
 .field input[type="email"]:hover:not(:focus) {
     border-color: var(--text-muted);
@@ -2955,4 +2951,180 @@ table.data thead th.dt-type-numeric div.dt-column-header {
 .addr-suggest__item.is-active {
     background: var(--accent-subtle);
     color: var(--accent);
+}
+
+
+.standard__description {
+    font-size: var(--fs-body);
+    line-height: var(--lh-normal);
+    color: var(--text-secondary);
+}
+
+.controls__table tbody tr.controls__family td {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--fs-table-head);
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    background: var(--surface-sunken);
+    border-bottom: 1px solid var(--border);
+}
+
+.controls__table tbody tr.controls__family:hover td {
+    background: var(--surface-sunken);
+}
+
+.controls__table td.controls__id {
+    width: 18%;
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    white-space: nowrap;
+    vertical-align: top;
+}
+
+.controls__table td.controls__actions {
+    width: 1%;
+    white-space: nowrap;
+    text-align: right;
+    vertical-align: top;
+}
+
+.controls__table td.controls__actions .btn + .btn {
+    margin-left: var(--space-1);
+}
+
+.controls__title {
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+}
+
+.controls__detail > summary {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+    cursor: pointer;
+    list-style: none;
+}
+
+.controls__detail > summary::-webkit-details-marker {
+    display: none;
+}
+
+.controls__detail > summary::before {
+    content: "";
+    flex: 0 0 auto;
+    align-self: center;
+    width: 0;
+    height: 0;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 5px solid var(--text-muted);
+    transition: transform 0.12s ease-in-out;
+}
+
+.controls__detail[open] > summary::before {
+    transform: rotate(90deg);
+}
+
+.controls__detail > summary:hover {
+    color: var(--accent);
+}
+
+.controls__detail > summary:hover::before {
+    border-left-color: var(--accent);
+}
+
+.controls__detail > summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.controls__desc {
+    max-width: 90ch;
+    margin: var(--space-2) 0 0 calc(5px + var(--space-2));
+    font-size: var(--fs-body);
+    line-height: var(--lh-normal);
+    color: var(--text-secondary);
+    white-space: pre-line;
+}
+
+.controls__empty {
+    padding: var(--space-6) var(--space-4);
+    font-size: var(--fs-body);
+    color: var(--text-muted);
+}
+
+.import__hint {
+    margin-bottom: var(--space-4);
+    font-size: var(--fs-meta);
+    line-height: var(--lh-normal);
+    color: var(--text-secondary);
+}
+
+.import__file {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--fs-body);
+    color: var(--text-primary);
+    background: var(--surface-app);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.import__file:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-subtle);
+}
+
+.import__result {
+    margin-top: var(--space-4);
+    padding: var(--space-3);
+    background: var(--critical-bg);
+    border: 1px solid var(--critical-border);
+    border-radius: var(--radius);
+}
+
+.import__failed {
+    font-size: var(--fs-body);
+    font-weight: var(--fw-medium);
+    color: var(--critical);
+}
+
+.import__errors {
+    max-height: 220px;
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    overflow-y: auto;
+    list-style: none;
+}
+
+.import__errors li {
+    display: flex;
+    gap: var(--space-2);
+    padding: var(--space-1) 0;
+    font-size: var(--fs-meta);
+    color: var(--text-primary);
+}
+
+.import__row {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-weight: var(--fw-semibold);
+    color: var(--critical);
+}
+
+@media (max-width: 640px) {
+
+    .controls__table td.controls__id {
+        width: auto;
+    }
+}
+
+.roster__toolbar:has(.roster__filters) .roster__search {
+    flex: 1 1 320px;
+    width: auto;
 }

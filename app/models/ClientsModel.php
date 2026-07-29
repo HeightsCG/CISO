@@ -25,9 +25,13 @@ class ClientsModel extends Model {
                     c.state,
                     c.postal_code,
                     c.date_created,
-                    c.date_updated
+                    c.date_updated,
+                    DATE_FORMAT(c.date_created, df.sql_format) AS date_created_display,
+                    DATE_FORMAT(c.date_updated, df.sql_format) AS date_updated_display
                 FROM
                     clients c
+                    JOIN companies co ON co.id = c.company_id
+                    JOIN date_formats df ON df.id = co.date_format_id
                 WHERE
                     c.company_id = :company_id
                     and
@@ -45,9 +49,13 @@ class ClientsModel extends Model {
             'company_id' => $company_id
         );
         $sql = "SELECT
-                    c.*
+                    c.*,
+                    DATE_FORMAT(c.date_created, df.sql_format) AS date_created_display,
+                    DATE_FORMAT(c.date_updated, df.sql_format) AS date_updated_display
                 FROM
                     clients c
+                    JOIN companies co ON co.id = c.company_id
+                    JOIN date_formats df ON df.id = co.date_format_id
                 WHERE
                     c.id = :id
                     and

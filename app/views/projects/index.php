@@ -105,7 +105,7 @@ $(document).ready(function () {
                     obj[i].description,
                     { sort: obj[i].start_date, display: obj[i].start_date_display },
                     { sort: obj[i].end_date, display: obj[i].end_date_display },
-                    obj[i].status
+                    obj[i].project_status
                 ]);
             }
             table.draw();
