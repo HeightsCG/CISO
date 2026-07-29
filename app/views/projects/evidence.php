@@ -34,8 +34,7 @@
                     <option value="other">Other</option>
                 </select>
             </div>
-            <div class="table-wrap">
-                <table class="data data--light" id="evidence_table">
+            <table class="data data--light" id="evidence_table">
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
@@ -46,8 +45,7 @@
                         </tr>
                     </thead>
                     <tbody id="evidence_body"></tbody>
-                </table>
-            </div>
+            </table>
             <p class="vault__empty" id="evidence_empty" hidden></p>
             <div class="vault__drop" id="drop_hint" hidden><i class="fa-regular fa-arrow-up-from-bracket"></i> Drop to upload into <strong id="drop_folder"></strong></div>
         </section>
