@@ -3161,15 +3161,33 @@ tr.is-drop-target > td:last-child {
 /* Sits left of the space reserved for the folder menu, so hover never overlaps it. */
 
 .vault__count {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    height: 22px;
     margin-left: auto;
+    padding: 0 var(--space-2);
     font-size: var(--fs-meta);
+    font-weight: var(--fw-medium);
     font-variant-numeric: tabular-nums;
-    font-weight: var(--fw-regular);
-    color: var(--text-muted);
+    color: var(--text-secondary);
+    background: var(--surface-inset);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
 }
 
 .vault__count--empty {
-    color: var(--border-strong);
+    color: var(--text-muted);
+    background: none;
+    border-color: transparent;
+}
+
+.vault__item.is-on .vault__count {
+    color: var(--accent);
+    background: var(--surface);
+    border-color: var(--accent-border);
 }
 
 /* Folder actions stay out of sight until the row is hovered. */
