@@ -2451,7 +2451,39 @@ table.data .actions {
 }
 
 .segmented--wrap .segmented__btn.is-on {
+    color: var(--text-inverse);
+    background: var(--accent);
     border-color: var(--accent);
+}
+
+.segmented--wrap .segmented__btn.is-on[data-value="Implemented"] {
+    color: var(--ok);
+    background: var(--ok-bg);
+    border-color: var(--ok-border);
+}
+
+.segmented--wrap .segmented__btn.is-on[data-value="Partially Implemented"] {
+    color: var(--high);
+    background: var(--high-bg);
+    border-color: var(--high-border);
+}
+
+.segmented--wrap .segmented__btn.is-on[data-value="Not Implemented"] {
+    color: var(--critical);
+    background: var(--critical-bg);
+    border-color: var(--critical-border);
+}
+
+.segmented--wrap .segmented__btn.is-on[data-value="Not Applicable"] {
+    color: var(--info);
+    background: var(--info-bg);
+    border-color: var(--info-border);
+}
+
+.segmented--wrap .segmented__btn.is-on[data-value="Not Assessed"] {
+    color: var(--text-muted);
+    background: var(--surface-inset);
+    border-color: var(--border-strong);
 }
 
 .savebar {
