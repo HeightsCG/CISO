@@ -22,8 +22,10 @@
     <div class="panel record__panel">
         <div class="panel__body">
             <div class="rollup" id="rollup"></div>
-            <div class="progress progress--lg"><div class="progress__bar" id="rollup_bar" style="width:0%"></div></div>
-            <p class="progress__label" id="rollup_label">&nbsp;</p>
+            <div class="rollup__progress">
+                <div class="progress progress--lg"><div class="progress__bar" id="rollup_bar" style="width:0%"></div></div>
+                <span class="progress__label" id="rollup_label">&nbsp;</span>
+            </div>
         </div>
     </div>
 
@@ -236,6 +238,13 @@ $(document).ready(function () {
         'Not Implemented': 'badge--critical',
         'Not Applicable': 'badge--prospect'
     };
+    var RESULT_DOT = {
+        'Not Assessed': 'is-none',
+        'Implemented': 'is-ok',
+        'Partially Implemented': 'is-partial',
+        'Not Implemented': 'is-gap',
+        'Not Applicable': 'is-na'
+    };
 
     function set_result(item_result) {
         $('#item_result .segmented__btn').removeClass('is-on').attr('aria-pressed', 'false');
@@ -291,15 +300,14 @@ $(document).ready(function () {
         var html = '';
 
         for (var k = 0; k < RESULTS.length; k++) {
-            var n = counts[RESULTS[k]];
-            html += '<div class="rollup__stat"><span class="rollup__n">' + n + '</span>'
-                + '<span class="rollup__label">' + esc(RESULTS[k]) + '</span>'
-                + '<span class="rollup__pct">' + (total > 0 ? Math.round(n / total * 100) : 0) + '%</span></div>';
+            html += '<span class="rollup__stat"><span class="rollup__dot ' + (RESULT_DOT[RESULTS[k]] || '') + '"></span>'
+                + '<span class="rollup__n">' + counts[RESULTS[k]] + '</span>'
+                + '<span class="rollup__label">' + esc(RESULTS[k]) + '</span></span>';
         }
 
-        html += '<div class="rollup__stat"><span class="rollup__n">' + evidenced + '</span>'
-            + '<span class="rollup__label">With evidence</span>'
-            + '<span class="rollup__pct">' + (total > 0 ? Math.round(evidenced / total * 100) : 0) + '%</span></div>';
+        html += '<span class="rollup__stat rollup__stat--split"><i class="fa-regular fa-paperclip"></i>'
+            + '<span class="rollup__n">' + evidenced + '</span>'
+            + '<span class="rollup__label">with evidence</span></span>';
 
         $('#rollup').html(html);
         $('#rollup_bar').css('width', pct + '%');

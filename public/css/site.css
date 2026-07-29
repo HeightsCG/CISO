@@ -3655,8 +3655,13 @@ td.controls__actions .btn + .btn {
     border-color: var(--high-border);
 }
 
-/* A notice is the last thing in a confirm dialog, so its stacking margin would
-   otherwise double up with the footer's own padding. */
+/* Paragraphs carry no bottom margin, so the notice sets its own space from
+   whatever sits above it. As the last child its bottom margin comes off, or it
+   would double up with the footer's own padding. */
+
+.modal-body > * + .notice {
+    margin-top: var(--space-4);
+}
 
 .modal-body > .notice:last-child {
     margin-bottom: 0;
@@ -3693,8 +3698,8 @@ td.controls__actions .btn + .btn {
 }
 
 .progress--lg {
-    height: 10px;
-    margin-top: var(--space-4);
+    height: 6px;
+    margin-top: var(--space-3);
 }
 
 .progress__bar {
@@ -3710,40 +3715,87 @@ td.controls__actions .btn + .btn {
     color: var(--text-secondary);
 }
 
+/* One scannable line, not six cards: the breakdown reads left to right and the
+   bar under it carries progress, so neither repeats the other. */
+
 .rollup {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-3);
+    align-items: center;
+    gap: var(--space-2) var(--space-5);
 }
 
 .rollup__stat {
-    flex: 1 1 140px;
-    padding: var(--space-3);
-    background: var(--surface-sunken);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    white-space: nowrap;
+}
+
+.rollup__stat--split {
+    margin-left: auto;
+    color: var(--text-muted);
+}
+
+.rollup__stat--split i {
+    font-size: var(--fs-meta);
+}
+
+.rollup__dot {
+    align-self: center;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.rollup__dot.is-none {
+    background: var(--border-strong);
+}
+
+.rollup__dot.is-ok {
+    background: var(--ok);
+}
+
+.rollup__dot.is-partial {
+    background: var(--high);
+}
+
+.rollup__dot.is-gap {
+    background: var(--critical);
+}
+
+.rollup__dot.is-na {
+    background: var(--info);
 }
 
 .rollup__n {
-    display: block;
-    font-size: 22px;
+    font-size: var(--fs-body);
     font-weight: var(--fw-semibold);
-    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
     color: var(--text-primary);
 }
 
 .rollup__label {
-    display: block;
-    margin-top: var(--space-1);
     font-size: var(--fs-meta);
     color: var(--text-secondary);
 }
 
-.rollup__pct {
-    display: block;
-    font-size: var(--fs-meta);
-    font-weight: var(--fw-medium);
-    color: var(--accent);
+.rollup__progress {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+}
+
+.rollup__progress .progress {
+    flex: 1 1 auto;
+    margin-top: 0;
+}
+
+.rollup__progress .progress__label {
+    flex: 0 0 auto;
+    margin-top: 0;
+    white-space: nowrap;
 }
 
 table.data tbody tr.item__row,

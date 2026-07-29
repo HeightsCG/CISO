@@ -122,9 +122,8 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" id="folder_delete_id" value="0">
-                <p>Delete <strong id="folder_delete_name"></strong>?</p>
+                <p>Delete <strong id="folder_delete_name"></strong>? This cannot be undone.</p>
                 <div class="notice notice--warn" id="folder_delete_warning" hidden></div>
-                <p class="import__hint">Subfolders are removed with it. Files are never deleted &mdash; they move up to the parent folder.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
@@ -197,7 +196,7 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" id="delete_id" value="0">
-                <p>Delete <strong id="delete_title"></strong>? The file is removed from storage and cannot be recovered.</p>
+                <p>Delete <strong id="delete_title"></strong>? This cannot be undone.</p>
                 <div class="notice notice--warn" id="delete_warning" hidden></div>
             </div>
             <div class="modal-footer">
@@ -538,14 +537,18 @@ $(document).ready(function () {
         $('#folder_delete_id').val(f.id);
         $('#folder_delete_name').text(f.folder_name);
 
-        if (files === 0 && ids.length === 1) {
-            $('#folder_delete_warning').prop('hidden', true);
-        } else {
-            $('#folder_delete_warning').prop('hidden', false).html('<strong>'
-                + (ids.length - 1) + ' ' + (ids.length - 1 === 1 ? 'subfolder' : 'subfolders')
-                + ' and ' + files + ' ' + (files === 1 ? 'file' : 'files')
-                + '</strong> sit inside. The files move up to ' + esc(folder_name_of(f.parent_id)) + '.');
+        var subfolders = ids.length - 1;
+        var parts = [];
+
+        if (subfolders > 0) {
+            parts.push('<strong>' + subfolders + (subfolders === 1 ? ' subfolder</strong> is' : ' subfolders</strong> are') + ' deleted with it.');
         }
+
+        if (files > 0) {
+            parts.push('<strong>' + files + (files === 1 ? ' file</strong> moves' : ' files</strong> move') + ' to ' + esc(folder_name_of(f.parent_id)) + '.');
+        }
+
+        $('#folder_delete_warning').prop('hidden', parts.length === 0).html(parts.join(' '));
 
         modal('folder_delete_modal').show();
     });
