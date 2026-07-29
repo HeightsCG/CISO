@@ -70,7 +70,6 @@ class ProjectsModel extends Model {
         $description,
         $start_date,
         $end_date,
-        $project_status,
         $created_by
     )
     {
@@ -81,7 +80,7 @@ class ProjectsModel extends Model {
             'description' => $description,
             'start_date' => $start_date,
             'end_date' => $end_date,
-            'project_status' => $project_status,
+            'project_status' => 'Active',
             'created_by' => $created_by,
             'updated_by' => $created_by,
             'date_created' => date('Y-m-d H:i:s'),
@@ -104,7 +103,6 @@ class ProjectsModel extends Model {
         $description,
         $start_date,
         $end_date,
-        $project_status,
         $updated_by
     )
     {
@@ -118,7 +116,6 @@ class ProjectsModel extends Model {
             'description' => $description,
             'start_date' => $start_date,
             'end_date' => $end_date,
-            'project_status' => $project_status,
             'updated_by' => $updated_by,
             'date_updated' => date('Y-m-d H:i:s')
         );
@@ -179,6 +176,43 @@ class ProjectsModel extends Model {
         );
 
         return $rows;
+    }
+
+    /**
+     * A project is only complete once every assessment on it is. Answering a
+     * control anywhere therefore reopens it, which is what stops a project
+     * reading Complete while work is still going on inside it.
+     */
+    public function sync_project_status($project_id, $company_id, $updated_by)
+    {
+        $where = array(
+            'project_id' => $project_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    COUNT(*) AS assessment_count,
+                    SUM(CASE WHEN a.assessment_status <> 'Complete' THEN 1 ELSE 0 END) AS open_count
+                FROM
+                    assessments a
+                WHERE
+                    a.project_id = :project_id
+                    and
+                    a.company_id = :company_id
+                    and
+                    a.deleted = 0";
+        $rows = parent::select($sql, $where);
+
+        $complete = ((int) $rows[0]['assessment_count'] > 0 && (int) $rows[0]['open_count'] === 0);
+        $project_status = ($complete ? 'Complete' : 'Active');
+
+        $data = array(
+            'project_status' => $project_status,
+            'updated_by' => $updated_by,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+        parent::update('projects', $data, 'id = :id and company_id = :company_id', array('id' => $project_id, 'company_id' => $company_id));
+
+        return $project_status;
     }
 
     /* ------------------------------------------------------------ project team */

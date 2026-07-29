@@ -124,7 +124,7 @@ $(document).ready(function () {
     });
 
     function load(){
-        $.post('/standards/load_standards', {}, function (data) {
+        ApiDataSvc.apiCall('post', 'load_standards', {}, function (data) {
             var obj = JSON.parse(data);
             table.clear();
             for (var i = 0; i < obj.length; i++) {

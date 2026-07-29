@@ -14,7 +14,7 @@
         </div>
         <div class="page__actions">
             <?php echo ((int) $this->assessment['client_id'] === 0 ? '' : '<a class="btn btn--secondary" href="/clients/evidence/id/'.((int) $this->assessment['client_id']).'/from/assessment/ref/'.((int) $this->assessment['id']).'"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>'); ?>
-            <button type="button" class="btn btn--secondary" id="do_settings_open"><i class="fa-regular fa-pen"></i> Edit</button>
+            <button type="button" class="btn btn--primary" id="do_complete"><i class="fa-regular fa-circle-check"></i> Mark Complete</button>
             <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete</button>
         </div>
     </div>
@@ -56,7 +56,7 @@
             </div>
         </div>
         <div class="panel__body panel__body--flush">
-            <div class="table-wrap">
+            <div class="table-wrap controls__scroll">
                 <table class="data controls__table" id="items_table">
                     <thead>
                         <tr>
@@ -84,14 +84,14 @@
             <div class="modal-body assess">
                 <div class="assess__pane assess__pane--form">
                     <div class="field">
-                        <label for="item_result">Result</label>
-                        <select id="item_result" class="form-select">
-                            <option value="Not Assessed">Not Assessed</option>
-                            <option value="Implemented">Implemented</option>
-                            <option value="Partially Implemented">Partially Implemented</option>
-                            <option value="Not Implemented">Not Implemented</option>
-                            <option value="Not Applicable">Not Applicable</option>
-                        </select>
+                        <label id="item_result_label">Result</label>
+                        <div class="segmented segmented--wrap" id="item_result" role="group" aria-labelledby="item_result_label">
+                            <button type="button" class="segmented__btn" data-value="Not Assessed" aria-pressed="false">Not Assessed</button>
+                            <button type="button" class="segmented__btn" data-value="Implemented" aria-pressed="false">Implemented</button>
+                            <button type="button" class="segmented__btn" data-value="Partially Implemented" aria-pressed="false">Partially Implemented</button>
+                            <button type="button" class="segmented__btn" data-value="Not Implemented" aria-pressed="false">Not Implemented</button>
+                            <button type="button" class="segmented__btn" data-value="Not Applicable" aria-pressed="false">Not Applicable</button>
+                        </div>
                     </div>
                     <div class="field">
                         <label for="item_notes">Notes and observations</label>
@@ -119,7 +119,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="do_item_save" class="btn btn--primary">Save Item</button>
+                <button type="button" id="do_item_save" class="btn btn--primary">Save</button>
             </div>
         </div>
     </div>
@@ -186,36 +186,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="do_upload" class="btn btn--primary">Upload and Attach</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" data-bs-backdrop="static" id="settings_modal" tabindex="-1" aria-labelledby="settings_modal_title" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="settings_modal_title">Edit Assessment</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="field">
-                    <label for="assessment_name">Name <abbr title="required">*</abbr></label>
-                    <input type="text" id="assessment_name" value="<?php echo htmlspecialchars($this->assessment['assessment_name'], ENT_QUOTES, 'UTF-8'); ?>">
-                </div>
-                <div class="field">
-                    <label for="assessment_status">Status</label>
-                    <select id="assessment_status" class="form-select">
-                        <option value="Planned"<?php echo ($this->assessment['assessment_status'] === 'Planned' ? ' selected' : ''); ?>>Planned</option>
-                        <option value="In Progress"<?php echo ($this->assessment['assessment_status'] === 'In Progress' ? ' selected' : ''); ?>>In Progress</option>
-                        <option value="Complete"<?php echo ($this->assessment['assessment_status'] === 'Complete' ? ' selected' : ''); ?>>Complete</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="do_settings_save" class="btn btn--primary">Save Assessment</button>
+                <button type="button" id="do_upload" class="btn btn--primary">Upload</button>
             </div>
         </div>
     </div>
@@ -233,7 +204,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="do_delete" class="btn btn--destructive">Delete Assessment</button>
+                <button type="button" id="do_delete" class="btn btn--destructive">Delete</button>
             </div>
         </div>
     </div>
@@ -256,6 +227,15 @@ $(document).ready(function () {
         'Not Implemented': 'badge--critical',
         'Not Applicable': 'badge--prospect'
     };
+
+    function set_result(item_result) {
+        $('#item_result .segmented__btn').removeClass('is-on').attr('aria-pressed', 'false');
+        $('#item_result .segmented__btn[data-value="' + item_result + '"]').addClass('is-on').attr('aria-pressed', 'true');
+    }
+
+    $('#item_result').on('click', '.segmented__btn', function () {
+        set_result($(this).attr('data-value'));
+    });
 
     function set_loading(target, loading) {
         if (loading) {
@@ -283,8 +263,6 @@ $(document).ready(function () {
         if (n < 1048576) { return Math.round(n / 1024) + ' KB'; }
         return (n / 1048576).toFixed(1) + ' MB';
     }
-
-    /* --------------------------------------------------------------- roll-up */
 
     function rollup() {
 
@@ -317,9 +295,47 @@ $(document).ready(function () {
         $('#rollup').html(html);
         $('#rollup_bar').css('width', pct + '%');
         $('#rollup_label').text(assessed + ' of ' + total + ' items assessed · ' + pct + '%');
+
+        sync_complete(counts['Not Assessed']);
     }
 
-    /* ----------------------------------------------------------- item table */
+    function sync_complete(remaining) {
+
+        if ($('#status_badge').text().trim() === 'Complete') {
+            $('#do_complete').prop('disabled', true).attr('title', 'This assessment is complete');
+            return;
+        }
+
+        $('#do_complete').prop('disabled', remaining > 0).attr('title', remaining > 0
+            ? remaining + ' control' + (remaining === 1 ? '' : 's') + ' still unanswered'
+            : '');
+    }
+
+    function set_status(assessment_status) {
+        $('#status_badge').text(assessment_status)
+            .removeClass('badge--active badge--onboarding badge--prospect')
+            .addClass(RESULT_CLASS[assessment_status] || 'badge--prospect');
+    }
+
+    $('#do_complete').click(function () {
+
+        set_loading('#do_complete', true);
+
+        ApiDataSvc.apiCall('post', 'complete_assessment', { assessment_id: assessment_id }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading('#do_complete', false);
+
+            if (obj.success) {
+                toastr.success(obj.message);
+                set_status(obj.assessment_status);
+                load();
+            } else {
+                toastr.error(obj.message);
+            }
+        });
+    });
 
     function render() {
 
@@ -361,11 +377,6 @@ $(document).ready(function () {
         rollup();
     }
 
-    /**
-     * Match state is recomputed from the row data every pass rather than read back
-     * off the DOM: while the table itself is hidden nothing inside it counts as
-     * visible, so a cleared filter could never restore the group headers.
-     */
     function filter() {
 
         var term = $('#item_search').val().trim().toLowerCase();
@@ -411,7 +422,7 @@ $(document).ready(function () {
     }
 
     function load(keep_open) {
-        $.post('/projects/load_items', { assessment_id: assessment_id }, function (data) {
+        ApiDataSvc.apiCall('post', 'load_items', { assessment_id: assessment_id }, function (data) {
             items = JSON.parse(data);
             render();
             filter();
@@ -429,13 +440,6 @@ $(document).ready(function () {
     $('#item_search').on('input', filter);
     $('#family_filter, #result_filter, #evidence_filter').on('change', filter);
 
-    /* ---------------------------------------------------------- item editing */
-
-    /**
-     * The requirement itself is short and belongs on screen at all times; the
-     * discussion that follows it is the only part long enough to need scrolling.
-     * Where the leading statement just repeats the title, it is not shown twice.
-     */
     function set_control_text(item) {
 
         var text = item.description === '' ? 'No control text was supplied for this item.' : item.description;
@@ -470,7 +474,7 @@ $(document).ready(function () {
         $('#item_family').text(current_item.family === '' ? 'Ungrouped' : current_item.family);
         $('#item_modal_title').text('Assess ' + current_item.control_identifier);
         set_control_text(current_item);
-        $('#item_result').val(current_item.item_result);
+        set_result(current_item.item_result);
         $('#item_notes').val(current_item.notes);
 
         load_item_evidence();
@@ -497,28 +501,26 @@ $(document).ready(function () {
 
         var values = {
             item_id: current_item.id,
-            item_result: $('#item_result').val(),
+            item_result: $('#item_result .segmented__btn.is-on').attr('data-value'),
             notes: $('#item_notes').val().trim()
         };
 
-        $.post('/projects/save_item', values, function (data) {
+        ApiDataSvc.apiCall('post', 'save_item', values, function (data) {
 
             var obj = JSON.parse(data);
 
             set_loading('#do_item_save', false);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            modal('item_modal').hide();
-            toastr.success(obj.message);
-            load();
+                modal('item_modal').hide();
+                set_status(obj.assessment_status);
+                load();
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
-
-    /* ------------------------------------------------------------- evidence */
 
     function load_item_evidence() {
 
@@ -526,7 +528,7 @@ $(document).ready(function () {
             return;
         }
 
-        $.post('/projects/load_item_evidence', { item_id: current_item.id }, function (data) {
+        ApiDataSvc.apiCall('post', 'load_item_evidence', { item_id: current_item.id }, function (data) {
 
             var list = JSON.parse(data);
             var html = '';
@@ -548,35 +550,32 @@ $(document).ready(function () {
 
         var evidence_id = $(this).attr('data-id');
 
-        $.post('/projects/unlink_evidence', { item_id: current_item.id, evidence_id: evidence_id }, function (data) {
+        ApiDataSvc.apiCall('post', 'unlink_evidence', { item_id: current_item.id, evidence_id: evidence_id }, function (data) {
 
             var obj = JSON.parse(data);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            toastr.success(obj.message);
-            load_item_evidence();
-            load(true);
+                toastr.success(obj.message);
+                load_item_evidence();
+                load(true);
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
 
     $('#item_evidence, #vault_list').on('click', '.evidence__open', function (e) {
-
-        e.preventDefault();
-
-        $.post('/clients/evidence_url', { evidence_id: $(this).attr('data-id') }, function (data) {
+        ApiDataSvc.apiCall('post', 'evidence_url', { evidence_id: $(this).attr('data-id') }, function (data) {
 
             var obj = JSON.parse(data);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            window.open(obj.url, '_blank', 'noopener');
+                window.open(obj.url, '_blank', 'noopener');
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
 
@@ -599,8 +598,6 @@ $(document).ready(function () {
         return at === -1 ? 'FILE' : String(name).slice(at + 1).toUpperCase().slice(0, 4);
     }
 
-    // The vault is filtered and sliced in SQL, so the browser only ever holds
-    // one page. Scrolling near the end pulls the next one.
     var PAGE_SIZE = 50;
     var vault = { offset: 0, total: 0, term: '', loading: false, done: false, token: 0,
                   sort: 'date_created', dir: 'desc' };
@@ -624,11 +621,6 @@ $(document).ready(function () {
     }
 
     function load_vault(reset) {
-
-        // A new search must never be dropped because a page fetch is still in
-        // flight - it supersedes it. Only paging defers to a request already
-        // running, and every response carries the token of the request that
-        // asked for it so a stale one cannot overwrite a newer result.
         if (!reset && (vault.loading || vault.done)) {
             return;
         }
@@ -648,7 +640,7 @@ $(document).ready(function () {
             return String($(this).attr('data-id'));
         }).get();
 
-        $.post('/clients/search_evidence', {
+        ApiDataSvc.apiCall('post', 'search_evidence', {
             client_id: client_id,
             search: vault.term,
             limit: PAGE_SIZE,
@@ -657,8 +649,6 @@ $(document).ready(function () {
             dir: vault.dir
         }, function (data) {
 
-            // A superseded response still has to release the in-flight flag,
-            // otherwise paging stays blocked for the rest of the session.
             if (token !== vault.token) {
                 vault.loading = false;
                 return;
@@ -693,8 +683,6 @@ $(document).ready(function () {
         });
     }
 
-    // Sorting is a server concern here: with only one page in the browser at a
-    // time, sorting what is on screen would reorder a slice rather than the vault.
     function mark_sort() {
         $('.pick__sort').removeClass('is-asc is-desc');
         $('.pick__sort[data-sort="' + vault.sort + '"]').addClass(vault.dir === 'asc' ? 'is-asc' : 'is-desc');
@@ -735,23 +723,21 @@ $(document).ready(function () {
 
         set_loading(button, true);
 
-        $.post('/projects/link_evidence', { item_id: current_item.id, evidence_id: $(this).attr('data-id') }, function (data) {
+        ApiDataSvc.apiCall('post', 'link_evidence', { item_id: current_item.id, evidence_id: $(this).attr('data-id') }, function (data) {
 
             var obj = JSON.parse(data);
 
             set_loading(button, false);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            // Attaching is the whole point of this dialog, so finishing it returns
-            // to the control rather than leaving a dialog open that looks unchanged.
-            modal('attach_modal').hide();
-            toastr.success(obj.message);
-            load_item_evidence();
-            load(true);
+                modal('attach_modal').hide();
+                toastr.success(obj.message);
+                load_item_evidence();
+                load(true);
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
 
@@ -794,7 +780,7 @@ $(document).ready(function () {
         set_loading('#do_upload', true);
 
         $.ajax({
-            url: '/clients/upload_evidence',
+            url: '/api/upload_evidence',
             type: 'POST',
             data: form_data,
             processData: false,
@@ -803,28 +789,27 @@ $(document).ready(function () {
 
                 var obj = JSON.parse(data);
 
-                if (!obj.success) {
+                if (obj.success) {
+
+                    ApiDataSvc.apiCall('post', 'link_evidence', { item_id: current_item.id, evidence_id: obj.evidence_id }, function (linked) {
+
+                        var res = JSON.parse(linked);
+
+                        set_loading('#do_upload', false);
+
+                        if (res.success) {
+                            modal('upload_modal').hide();
+                            toastr.success(res.message);
+                            load_item_evidence();
+                            load(true);
+                        } else {
+                            toastr.error(res.message);
+                        }
+                    });
+                } else {
                     set_loading('#do_upload', false);
                     toastr.error(obj.message);
-                    return;
                 }
-
-                $.post('/projects/link_evidence', { item_id: current_item.id, evidence_id: obj.evidence_id }, function (linked) {
-
-                    var res = JSON.parse(linked);
-
-                    set_loading('#do_upload', false);
-
-                    if (!res.success) {
-                        toastr.error(res.message);
-                        return;
-                    }
-
-                    modal('upload_modal').hide();
-                    toastr.success('Evidence uploaded and attached');
-                    load_item_evidence();
-                    load(true);
-                });
             },
             error: function () {
                 set_loading('#do_upload', false);
@@ -833,18 +818,11 @@ $(document).ready(function () {
         });
     });
 
-    /* ------------------------------------------------------ assessment admin */
-
-    $('#do_settings_open').click(function () {
-        modal('settings_modal').show();
-    });
-
     $('#do_settings_save').click(function () {
 
         var values = {
             assessment_id: assessment_id,
             assessment_name: $('#assessment_name').val().trim(),
-            assessment_status: $('#assessment_status').val()
         };
 
         if (values.assessment_name === '') {
@@ -855,18 +833,18 @@ $(document).ready(function () {
 
         set_loading('#do_settings_save', true);
 
-        $.post('/projects/save_assessment', values, function (data) {
+        ApiDataSvc.apiCall('post', 'save_assessment', values, function (data) {
 
             var obj = JSON.parse(data);
 
             set_loading('#do_settings_save', false);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            window.location.reload();
+                window.location.reload();
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
 
@@ -878,18 +856,18 @@ $(document).ready(function () {
 
         set_loading('#do_delete', true);
 
-        $.post('/projects/delete_assessment', { assessment_id: assessment_id }, function (data) {
+        ApiDataSvc.apiCall('post', 'delete_assessment', { assessment_id: assessment_id }, function (data) {
 
             var obj = JSON.parse(data);
 
             set_loading('#do_delete', false);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            window.location.href = '/projects/detail/id/<?php echo (int) $this->assessment['project_id']; ?>';
+                window.location.href = '/projects/detail/id/<?php echo (int) $this->assessment['project_id']; ?>';
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
 

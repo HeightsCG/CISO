@@ -150,7 +150,6 @@
     }
 }
 
-
 *,
 *::before,
 *::after {
@@ -213,7 +212,6 @@ a:hover {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
 }
-
 
 .btn {
     display: inline-flex;
@@ -362,7 +360,6 @@ a:hover {
     }
 }
 
-
 .field {
     margin-bottom: var(--space-4);
 }
@@ -444,7 +441,6 @@ a:hover {
     color: var(--text-muted);
 }
 
-
 #toast-container > div {
     opacity: 1;
     width: 340px;
@@ -515,7 +511,6 @@ a:hover {
     opacity: 0.4;
     height: 2px;
 }
-
 
 .auth {
     display: flex;
@@ -828,7 +823,6 @@ a:hover {
     }
 }
 
-
 .status {
     display: inline-flex;
     align-items: center;
@@ -868,7 +862,6 @@ a:hover {
     background: var(--text-muted);
 }
 
-
 .panel {
     background: var(--surface-app);
     border: 1px solid var(--border);
@@ -892,7 +885,6 @@ a:hover {
 .panel__body {
     padding: var(--space-4);
 }
-
 
 .table-wrap {
     overflow-x: auto;
@@ -944,6 +936,19 @@ table.data tbody tr:hover {
     background: var(--accent-subtle);
 }
 
+table.data tbody td.dt-empty,
+table.data tbody td.dataTables_empty {
+    padding: var(--space-6) var(--space-4);
+    font-weight: var(--fw-regular);
+    color: var(--text-muted);
+    text-align: left;
+}
+
+table.data tbody tr:has(td.dt-empty):hover,
+table.data tbody tr:has(td.dataTables_empty):hover {
+    background: transparent;
+}
+
 table.data tbody tr:hover td:first-child {
     color: var(--accent-hover);
     text-decoration: underline;
@@ -959,7 +964,6 @@ table.data .actions {
     text-align: right;
     white-space: nowrap;
 }
-
 
 .state {
     padding: var(--space-8) var(--space-6);
@@ -982,7 +986,6 @@ table.data .actions {
     color: var(--text-secondary);
 }
 
-
 .visually-hidden {
     position: absolute;
     width: 1px;
@@ -994,7 +997,6 @@ table.data .actions {
     white-space: nowrap;
     border: 0;
 }
-
 
 .shell {
     display: flex;
@@ -1644,7 +1646,6 @@ table.data .actions {
 .form-floating > .form-control:not(:placeholder-shown) ~ label::after {
     background: none;
 }
-
 
 .form-control,
 .form-floating > .form-control,
@@ -2387,7 +2388,7 @@ table.data .actions {
     cursor: not-allowed;
 }
 
-.settings .segmented {
+.segmented {
     display: inline-flex;
     flex: 0 0 auto;
     overflow: hidden;
@@ -2395,7 +2396,7 @@ table.data .actions {
     border-radius: var(--radius);
 }
 
-.settings .segmented__btn {
+.segmented__btn {
     min-width: 52px;
     height: var(--control-height-sm);
     padding: 0 var(--space-3);
@@ -2410,23 +2411,47 @@ table.data .actions {
     transition: background-color var(--transition), color var(--transition);
 }
 
-.settings .segmented__btn:last-child {
+.segmented__btn:last-child {
     border-right: 0;
 }
 
-.settings .segmented__btn:hover:not(.is-on) {
+.segmented__btn:hover:not(.is-on) {
     background: var(--surface-inset);
     color: var(--text-primary);
 }
 
-.settings .segmented__btn.is-on {
+.segmented__btn.is-on {
     color: var(--text-inverse);
     background: var(--accent);
 }
 
-.settings .segmented__btn:focus-visible {
+.segmented__btn:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: -2px;
+}
+
+.segmented--wrap {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+    width: 100%;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+}
+
+.segmented--wrap .segmented__btn {
+    height: var(--control-height);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+}
+
+.segmented--wrap .segmented__btn:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+}
+
+.segmented--wrap .segmented__btn.is-on {
+    border-color: var(--accent);
 }
 
 .savebar {
@@ -2566,7 +2591,7 @@ table.data .actions {
         grid-template-columns: minmax(0, 1fr);
     }
 
-    .settings .segmented {
+    .segmented {
         justify-self: start;
     }
 }
@@ -2839,7 +2864,6 @@ table.data thead th.dt-type-numeric div.dt-column-header {
     flex-direction: row;
 }
 
-
 .page--list .panel {
     border-color: var(--border-strong);
 }
@@ -2878,7 +2902,6 @@ table.data thead th.dt-type-numeric div.dt-column-header {
     color: var(--text-primary);
     word-break: break-word;
 }
-
 
 .page__back {
     display: inline-flex;
@@ -2981,11 +3004,21 @@ table.data thead th.dt-type-numeric div.dt-column-header {
     color: var(--accent);
 }
 
-
 .standard__description {
     font-size: var(--fs-body);
     line-height: var(--lh-normal);
     color: var(--text-secondary);
+}
+
+.controls__scroll {
+    max-height: 520px;
+    overflow-y: auto;
+}
+
+.controls__table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 
 .controls__table tbody tr.controls__family td {
@@ -3157,7 +3190,6 @@ table.data thead th.dt-type-numeric div.dt-column-header {
     width: auto;
 }
 
-
 .notice {
     margin-bottom: var(--space-4);
     padding: var(--space-3) var(--space-4);
@@ -3315,10 +3347,6 @@ table.data tbody tr.item__row {
     border-top: 1px solid var(--border);
 }
 
-/* Two panes side by side: the control text has to stay readable while the
-   assessor fills the form, and neither may push the other out of view. The
-   dialog is capped to the viewport, the body never scrolls, and each pane
-   scrolls on its own. */
 #item_modal .modal-content {
     max-height: calc(100vh - 3.5rem);
 }
@@ -3332,9 +3360,6 @@ table.data tbody tr.item__row {
     overflow: hidden;
 }
 
-/* min-height:0 is what actually lets a grid child scroll - the default
-   min-height:auto refuses to shrink below its content and the pane spills
-   out of the dialog instead. */
 .assess__pane {
     min-width: 0;
     min-height: 0;
@@ -3356,8 +3381,6 @@ table.data tbody tr.item__row {
     padding: var(--space-4) var(--space-5) var(--space-3);
 }
 
-/* Only the discussion scrolls. min-height:0 is again what allows it to shrink
-   below its content instead of pushing the dialog open. */
 .assess__scroll {
     flex: 1 1 auto;
     min-height: 0;
@@ -3441,8 +3464,6 @@ table.data tbody tr.item__row {
     margin-top: var(--space-3);
 }
 
-/* Inside a modal the group rule is the only thing separating the sections, so it
-   needs more room than it does on a record page. */
 .modal-body .record__group + .record__group {
     margin-top: var(--space-5);
     padding-top: var(--space-5);
@@ -3477,10 +3498,6 @@ table.data tbody tr.item__row {
     margin-top: 0;
 }
 
-/* A dialog opened from a dialog gets its own backdrop above the first one, so
-   the dialog underneath dims instead of sitting there at full strength looking
-   like two windows fighting. Bootstrap stacks the elements but leaves every
-   backdrop on the same layer. */
 #attach_modal .input {
     width: 100%;
     margin-bottom: var(--space-3);
@@ -3540,8 +3557,6 @@ table.data tbody tr.item__row {
     white-space: nowrap;
 }
 
-/* A vault can run to thousands of files, so the picker scrolls inside the
-   dialog rather than growing it. */
 .pick__scroll {
     flex: 1 1 auto;
     min-height: 320px;
@@ -3557,8 +3572,6 @@ table.data tbody tr.item__row {
     padding: var(--space-2) var(--space-3);
 }
 
-/* Dense by design: at a few thousand files the row count is what matters, not
-   the breathing room around any one of them. */
 .pick__table tbody td {
     padding: 5px var(--space-3);
     line-height: 1.35;
@@ -3570,8 +3583,6 @@ table.data tbody tr.item__row {
     background: var(--accent-subtle);
 }
 
-/* The file name carries the row; the description trails it in the same line and
-   is clipped rather than wrapping, so every row stays one line tall. */
 .pick__file {
     max-width: 0;
     width: 100%;
@@ -3591,15 +3602,12 @@ table.data tbody tr.item__row {
     text-align: right;
 }
 
-/* table.data left-aligns every header, so the numeric ones need bringing back
-   over their values. */
 .pick__table thead th.pick__num,
 .pick__table thead th.pick__num div.dt-column-header {
     text-align: right;
     justify-content: flex-end;
 }
 
-/* A small count reads better centred under its label than pinned to an edge. */
 .pick__mid {
     width: 1%;
     font-size: var(--fs-meta);
@@ -3624,8 +3632,6 @@ table.data tbody tr.item__row {
     font-size: var(--fs-meta);
     color: var(--text-muted);
 }
-
-
 
 .pick__sort.is-sortable {
     cursor: pointer;

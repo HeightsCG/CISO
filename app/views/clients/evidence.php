@@ -228,7 +228,7 @@ $(document).ready(function () {
     }
 
     function load() {
-        $.post('/clients/load_evidence', { client_id: client_id }, function (data) {
+        ApiDataSvc.apiCall('post', 'load_evidence', { client_id: client_id }, function (data) {
             evidence = JSON.parse(data);
             render();
             filter();
@@ -242,16 +242,16 @@ $(document).ready(function () {
 
         e.preventDefault();
 
-        $.post('/clients/evidence_url', { evidence_id: $(this).attr('data-id') }, function (data) {
+        ApiDataSvc.apiCall('post', 'evidence_url', { evidence_id: $(this).attr('data-id') }, function (data) {
 
             var obj = JSON.parse(data);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            window.open(obj.url, '_blank', 'noopener');
+                window.open(obj.url, '_blank', 'noopener');
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
 
@@ -285,7 +285,7 @@ $(document).ready(function () {
         $('#edit_description').val(current.description);
         $('#edit_links').html('<li class="evidence__none">Loading&hellip;</li>');
 
-        $.post('/clients/load_evidence_links', { evidence_id: current.id }, function (data) {
+        ApiDataSvc.apiCall('post', 'load_evidence_links', { evidence_id: current.id }, function (data) {
             $('#edit_links').html(link_rows(JSON.parse(data)));
         });
 
@@ -310,20 +310,20 @@ $(document).ready(function () {
             description: $('#edit_description').val().trim()
         };
 
-        $.post('/clients/save_evidence', values, function (data) {
+        ApiDataSvc.apiCall('post', 'save_evidence', values, function (data) {
 
             var obj = JSON.parse(data);
 
             set_loading('#do_edit_save', false);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            modal('edit_modal').hide();
-            toastr.success(obj.message);
-            load();
+                modal('edit_modal').hide();
+                toastr.success(obj.message);
+                load();
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
 
@@ -338,9 +338,7 @@ $(document).ready(function () {
         $('#delete_title').text(current.evidence_title);
         $('#delete_links_wrap').attr('hidden', true);
 
-        // The confirm names every control that will lose this evidence, so the
-        // consequence is on screen before the button is pressed.
-        $.post('/clients/load_evidence_links', { evidence_id: current.id }, function (data) {
+        ApiDataSvc.apiCall('post', 'load_evidence_links', { evidence_id: current.id }, function (data) {
 
             var list = JSON.parse(data);
 
@@ -361,20 +359,20 @@ $(document).ready(function () {
 
         set_loading('#do_delete', true);
 
-        $.post('/clients/delete_evidence', { evidence_id: current.id }, function (data) {
+        ApiDataSvc.apiCall('post', 'delete_evidence', { evidence_id: current.id }, function (data) {
 
             var obj = JSON.parse(data);
 
             set_loading('#do_delete', false);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            modal('delete_modal').hide();
-            toastr.success(obj.message);
-            load();
+                modal('delete_modal').hide();
+                toastr.success(obj.message);
+                load();
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
 
@@ -411,7 +409,7 @@ $(document).ready(function () {
         set_loading('#do_upload', true);
 
         $.ajax({
-            url: '/clients/upload_evidence',
+            url: '/api/upload_evidence',
             type: 'POST',
             data: form_data,
             processData: false,
@@ -422,14 +420,13 @@ $(document).ready(function () {
 
                 set_loading('#do_upload', false);
 
-                if (!obj.success) {
+                if (obj.success) {
+                    modal('upload_modal').hide();
+                    toastr.success(obj.message);
+                    load();
+                } else {
                     toastr.error(obj.message);
-                    return;
                 }
-
-                modal('upload_modal').hide();
-                toastr.success(obj.message);
-                load();
             },
             error: function () {
                 set_loading('#do_upload', false);

@@ -116,12 +116,12 @@ $(document).ready(function () {
 
             set_loading('#do_delete', false);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            window.location.href = '/clients';
+                window.location.href = '/clients';
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
 

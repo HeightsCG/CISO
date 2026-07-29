@@ -125,7 +125,7 @@ class UsersModel extends Model {
             'last_name' => $last_name,
             'u_name' => $u_name,
             'user_email' => $user_email,
-            'updated_by' => $user_id,
+            'updated_by' => Session::get('user_id'),
             'date_updated' => date('Y-m-d H:i:s')
         );
         return parent::update('user_accounts', $data, 'user_id = :user_id', $where);
@@ -207,7 +207,8 @@ class UsersModel extends Model {
         $data = array(
             'reset_token'         => hash('sha256', $raw_token),
             'reset_token_expires' => date('Y-m-d H:i:s', strtotime('+1 hour')),
-            'date_updated'        => date('Y-m-d H:i:s')
+            'date_updated'        => date('Y-m-d H:i:s'),
+            'updated_by'          => Session::get('user_id')
         );
         parent::update('user_accounts', $data, 'user_id = :user_id', $where);
         return $raw_token;
@@ -222,25 +223,26 @@ class UsersModel extends Model {
             'reset_pw'            => 0,
             'reset_token'         => null,
             'reset_token_expires' => null,
-            'updated_by'          => $user_id,
+            'updated_by'          => Session::get('user_id'),
             'date_updated'        => date('Y-m-d H:i:s')
         );
         parent::update('user_accounts', $data, 'user_id = :user_id', $where);
     }
 
-    /* ------------------------------------------------------- user administration */
-
-    /** Roles offered when assigning one; org-wide, not per company. */
     public function get_roles()
     {
-        $sql = "SELECT r.id, r.role_name
-                FROM user_roles r
-                WHERE r.deleted = 0
-                ORDER BY r.role_name";
+        $sql = "SELECT 
+                    r.id, 
+                    r.role_name
+                FROM 
+                    user_roles r
+                WHERE 
+                    r.deleted = 0
+                ORDER BY 
+                    r.role_name";
         return parent::select($sql);
     }
 
-    /** A single user, scoped to the caller's org so ids cannot be probed across companies. */
     public function get_company_user($user_id, $company_id)
     {
         $where = array(
@@ -284,12 +286,13 @@ class UsersModel extends Model {
             'u_name' => $u_name,
             'user_email' => $user_email,
             'user_status' => $user_status,
-            'date_updated' => date('Y-m-d H:i:s')
+            'updated_by' => Session::get('user_id'),
+            'date_updated' => date('Y-m-d H:i:s'),
         );
         return parent::update('user_accounts', $data, 'user_id = :user_id and company_id = :company_id', $where);
     }
 
-    public function delete_user($user_id, $company_id, $updated_by)
+    public function delete_user($user_id, $company_id)
     {
         $where = array(
             'user_id' => $user_id,
@@ -298,7 +301,7 @@ class UsersModel extends Model {
         $data = array(
             'deleted' => 1,
             'user_status' => 'Disabled',
-            'updated_by' => $updated_by,
+            'updated_by' => Session::get('user_id'),
             'date_updated' => date('Y-m-d H:i:s')
         );
         return parent::update('user_accounts', $data, 'user_id = :user_id and company_id = :company_id', $where);
@@ -314,12 +317,10 @@ class UsersModel extends Model {
             'u_name' => $u_name,
             'user_email' => $user_email,
             'user_status' => $user_status,
-            // p_word is NOT NULL and no password is collected when an account is
-            // created, so it opens on a random secret nobody holds. The account
-            // cannot be signed into until the holder sets their own through the
-            // password reset flow.
             'p_word' => password_hash(bin2hex(random_bytes(32)), PASSWORD_DEFAULT),
             'reset_pw' => 1,
+            'created_by' => Session::get('user_id'),
+            'updated_by' => Session::get('user_id'),
             'date_created' => date('Y-m-d H:i:s'),
             'date_updated' => date('Y-m-d H:i:s'),
             'deleted' => 0

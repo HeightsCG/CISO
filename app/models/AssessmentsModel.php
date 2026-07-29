@@ -155,7 +155,8 @@ class AssessmentsModel extends Model {
         return $assessment_id;
     }
 
-    public function update_assessment($assessment_id, $company_id, $assessment_name, $assessment_status, $updated_by)
+    /** Status is not editable here — it follows the answers, see sync_assessment_status(). */
+    public function update_assessment($assessment_id, $company_id, $assessment_name, $updated_by)
     {
         $where = array(
             'id' => $assessment_id,
@@ -163,7 +164,6 @@ class AssessmentsModel extends Model {
         );
         $data = array(
             'assessment_name' => $assessment_name,
-            'assessment_status' => $assessment_status,
             'updated_by' => $updated_by,
             'date_updated' => date('Y-m-d H:i:s')
         );
@@ -294,6 +294,73 @@ class AssessmentsModel extends Model {
             'date_updated' => date('Y-m-d H:i:s')
         );
         return parent::update('assessment_items', $data, 'id = :id', $where);
+    }
+
+    /** How many controls are still unanswered — the gate on completing. */
+    public function unassessed_count($assessment_id, $company_id)
+    {
+        $where = array(
+            'assessment_id' => $assessment_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    COUNT(*) AS unassessed
+                FROM
+                    assessment_items ai
+                    JOIN assessments a ON a.id = ai.assessment_id
+                WHERE
+                    ai.assessment_id = :assessment_id
+                    and
+                    a.company_id = :company_id
+                    and
+                    ai.item_result = 'Not Assessed'
+                    and
+                    ai.deleted = 0";
+        $rows = parent::select($sql, $where);
+        return (int) $rows[0]['unassessed'];
+    }
+
+    public function set_assessment_status($assessment_id, $company_id, $assessment_status, $updated_by)
+    {
+        $where = array(
+            'id' => $assessment_id,
+            'company_id' => $company_id
+        );
+        $data = array(
+            'assessment_status' => $assessment_status,
+            'updated_by' => $updated_by,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+        return parent::update('assessments', $data, 'id = :id and company_id = :company_id', $where);
+    }
+
+    /**
+     * Status follows the answers rather than a dropdown: nothing answered is
+     * Planned, anything answered is In Progress. Complete is only ever set by
+     * the explicit action, and is given up again the moment an answer is
+     * withdrawn so the badge cannot claim more than the results support.
+     */
+    public function sync_assessment_status($assessment_id, $company_id, $updated_by)
+    {
+        $assessment = $this->get_assessment($assessment_id, $company_id);
+
+        if (count($assessment) !== 1) {
+            return '';
+        }
+
+        $current = $assessment[0]['assessment_status'];
+        $unassessed = $this->unassessed_count($assessment_id, $company_id);
+        $status = ($unassessed === (int) $assessment[0]['item_count'] ? 'Planned' : 'In Progress');
+
+        if ($current === 'Complete' && $unassessed === 0) {
+            return $current;
+        }
+
+        if ($current !== $status) {
+            $this->set_assessment_status($assessment_id, $company_id, $status, $updated_by);
+        }
+
+        return $status;
     }
 
     /* ------------------------------------------------------- reporting hooks */

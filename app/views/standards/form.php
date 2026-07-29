@@ -84,18 +84,18 @@ $(document).ready(function () {
 
         set_loading('#do_save', true);
 
-        $.post('/standards/save_standard', values, function (data) {
+        ApiDataSvc.apiCall('post', 'save_standard', values, function (data) {
 
             var obj = JSON.parse(data);
 
             set_loading('#do_save', false);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            window.location.href = '/standards/detail/id/' + obj.standard_id;
+                window.location.href = '/standards/detail/id/' + obj.standard_id;
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
 

@@ -14,6 +14,8 @@ class ApiController extends Controller {
     public $companies_model;
     public $clients_model;
     public $projects_model;
+    public $assessments_model;
+    public $evidence_model;
     public $standards_model;
 
     public function __construct(){
@@ -23,6 +25,9 @@ class ApiController extends Controller {
         $this->companies_model = new CompaniesModel();
         $this->clients_model = new ClientsModel();
         $this->projects_model = new ProjectsModel();
+        $this->assessments_model = new AssessmentsModel();
+        $this->standards_model = new StandardsModel();
+        $this->evidence_model = new EvidenceModel();
     }
 
     public function loginAction(){
@@ -891,6 +896,48 @@ class ApiController extends Controller {
 
     /* ------------------------------------------------------------ user admin */
 
+
+
+    public function complete_assessmentAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+        $assessment = $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'));
+
+        if (count($assessment) !== 1) {
+            $response['message'] = 'That assessment could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $unassessed = $this->assessments_model->unassessed_count($assessment_id, Session::get('company_id'));
+
+        if ($unassessed > 0) {
+            $response['message'] = $unassessed . ' ' . ($unassessed === 1 ? 'control is' : 'controls are') . ' still unanswered';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->assessments_model->set_assessment_status($assessment_id, Session::get('company_id'), 'Complete', Session::get('user_id'));
+
+        $assessment = $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'));
+
+        $response['project_status'] = $this->projects_model->sync_project_status(
+            $assessment[0]['project_id'],
+            Session::get('company_id'),
+            Session::get('user_id')
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'Assessment complete';
+        $response['assessment_status'] = 'Complete';
+        echo json_encode($response);
+    }
+
     public function load_project_usersAction(){
 
         $project = $this->projects_model->get_project($this->post['project_id'], Session::get('company_id'));
@@ -1130,7 +1177,7 @@ class ApiController extends Controller {
             'message' => 'Something went wrong'
         );
 
-        $this->user_model->delete_user($this->post['user_id'], Session::get('company_id'), Session::get('user_id'));
+        $this->user_model->delete_user($this->post['user_id'], Session::get('company_id'));
 
         $response['success'] = true;
         $response['message'] = 'User removed';
@@ -1245,6 +1292,1082 @@ class ApiController extends Controller {
         );
 
         return (string) ($map[strtolower($country)] ?? '');
+    }
+
+
+
+    public function save_projectAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+        $client_id = (int) ($this->post['client_id'] ?? 0);
+        $project_name = $this->input('project_name');
+        $description = $this->input('description');
+        $start_date = $this->input('start_date');
+        $end_date = $this->input('end_date');
+
+        if ($project_name === '') {
+            $response['message'] = 'Project name is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        foreach (array('start_date' => $start_date, 'end_date' => $end_date) as $label => $value) {
+            if ($value === '' || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
+                $response['message'] = 'Enter a valid '.str_replace('_', ' ', $label);
+                echo json_encode($response);
+                exit;
+            }
+        }
+
+        if ($end_date < $start_date) {
+            $response['message'] = 'The end date cannot fall before the start date';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($client_id > 0) {
+
+            $client = $this->clients_model->get_client($client_id, Session::get('company_id'));
+
+            if (!is_array($client) || count($client) !== 1) {
+                $response['message'] = 'That client could not be found';
+                echo json_encode($response);
+                exit;
+            }
+        }
+
+        $company_id = Session::get('company_id');
+        $user_id = Session::get('user_id');
+
+        if ($project_id === 0) {
+
+            $new_id = $this->projects_model->add_project(
+                $company_id, $client_id, $project_name, $description,
+                $start_date, $end_date, $user_id
+            );
+
+            $response['success'] = true;
+            $response['message'] = 'Project created';
+            $response['project_id'] = (int) $new_id;
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!$this->owns_project($project_id)) {
+            $response['message'] = 'That project could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->projects_model->update_project(
+            $project_id, $company_id, $client_id, $project_name, $description,
+            $start_date, $end_date, $user_id
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'Project updated';
+        $response['project_id'] = $project_id;
+        echo json_encode($response);
+    }
+
+    public function delete_projectAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+
+        if (!$this->owns_project($project_id)) {
+            $response['message'] = 'That project could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $assessments = $this->assessments_model->load_assessments($project_id, Session::get('company_id'));
+
+        $this->projects_model->delete_project($project_id, Session::get('company_id'), Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'Project deleted'
+            .(count($assessments) > 0
+                ? ', '.count($assessments).' '.(count($assessments) === 1 ? 'assessment' : 'assessments').' removed'
+                : '');
+        echo json_encode($response);
+    }
+
+    public function load_assessmentsAction(){
+
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+
+        if (!$this->owns_project($project_id)) {
+            echo json_encode(array());
+            exit;
+        }
+
+        echo json_encode($this->assessments_model->load_assessments($project_id, Session::get('company_id')));
+    }
+
+    public function load_active_standardsAction(){
+        echo json_encode($this->standards_model->active_standards(Session::get('company_id')));
+    }
+
+    public function create_assessmentAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+        $standard_id = (int) ($this->post['standard_id'] ?? 0);
+        $assessment_name = $this->input('assessment_name');
+
+        if (!$this->owns_project($project_id)) {
+            $response['message'] = 'That project could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($assessment_name === '') {
+            $response['message'] = 'Assessment name is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($standard_id === 0) {
+            $response['message'] = 'Choose a standard to assess against';
+            echo json_encode($response);
+            exit;
+        }
+
+        $assessment_id = $this->assessments_model->create_assessment(
+            $project_id,
+            Session::get('company_id'),
+            $standard_id,
+            $assessment_name,
+            Session::get('user_id')
+        );
+
+        if (empty($assessment_id)) {
+            $response['message'] = 'That standard is not available, or has no controls to assess';
+            echo json_encode($response);
+            exit;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Assessment created';
+        $response['assessment_id'] = (int) $assessment_id;
+        echo json_encode($response);
+    }
+
+    public function save_assessmentAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+        $assessment_name = $this->input('assessment_name');
+
+        if (!$this->owns_assessment($assessment_id)) {
+            $response['message'] = 'That assessment could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($assessment_name === '') {
+            $response['message'] = 'Assessment name is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->assessments_model->update_assessment(
+            $assessment_id,
+            Session::get('company_id'),
+            $assessment_name,
+            Session::get('user_id')
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'Assessment updated';
+        echo json_encode($response);
+    }
+
+    public function delete_assessmentAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+
+        if (!$this->owns_assessment($assessment_id)) {
+            $response['message'] = 'That assessment could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->assessments_model->delete_assessment($assessment_id, Session::get('company_id'), Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'Assessment deleted';
+        echo json_encode($response);
+    }
+
+    public function load_itemsAction(){
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+
+        if (!$this->owns_assessment($assessment_id)) {
+            echo json_encode(array());
+            exit;
+        }
+
+        echo json_encode($this->assessments_model->load_items($assessment_id, Session::get('company_id')));
+    }
+
+    public function save_itemAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $item_id = (int) ($this->post['item_id'] ?? 0);
+        $item_result = $this->input('item_result');
+        $notes = $this->input('notes');
+
+        $allowed = array('Not Assessed', 'Implemented', 'Partially Implemented', 'Not Implemented', 'Not Applicable');
+
+        if (!in_array($item_result, $allowed, true)) {
+            $response['message'] = 'Choose a valid result';
+            echo json_encode($response);
+            exit;
+        }
+
+        $rows = $this->assessments_model->save_item(
+            $item_id,
+            Session::get('company_id'),
+            $item_result,
+            $notes,
+            Session::get('user_id')
+        );
+
+        if ($rows === 0) {
+            $response['message'] = 'That item could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $item = $this->assessments_model->get_item($item_id, Session::get('company_id'));
+        $assessment = $this->assessments_model->get_assessment($item[0]['assessment_id'], Session::get('company_id'));
+
+        $response['assessment_status'] = $this->assessments_model->sync_assessment_status(
+            $item[0]['assessment_id'],
+            Session::get('company_id'),
+            Session::get('user_id')
+        );
+
+        $this->projects_model->sync_project_status(
+            $assessment[0]['project_id'],
+            Session::get('company_id'),
+            Session::get('user_id')
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'Item saved';
+        echo json_encode($response);
+    }
+
+    public function load_item_evidenceAction(){
+
+        $item_id = (int) ($this->post['item_id'] ?? 0);
+        $item = $this->assessments_model->get_item($item_id, Session::get('company_id'));
+
+        if (count($item) !== 1) {
+            echo json_encode(array());
+            exit;
+        }
+
+        echo json_encode($this->evidence_model->load_item_evidence($item_id, Session::get('company_id')));
+    }
+
+    public function link_evidenceAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $item_id = (int) ($this->post['item_id'] ?? 0);
+        $evidence_id = (int) ($this->post['evidence_id'] ?? 0);
+
+        $link_id = $this->evidence_model->link_evidence(
+            $evidence_id,
+            $item_id,
+            Session::get('company_id'),
+            Session::get('user_id')
+        );
+
+        if (empty($link_id)) {
+            $response['message'] = 'That evidence could not be attached to this control';
+            echo json_encode($response);
+            exit;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Evidence attached';
+        echo json_encode($response);
+    }
+
+    public function unlink_evidenceAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $item_id = (int) ($this->post['item_id'] ?? 0);
+        $evidence_id = (int) ($this->post['evidence_id'] ?? 0);
+
+        $rows = $this->evidence_model->unlink_evidence($evidence_id, $item_id, Session::get('company_id'));
+
+        if ($rows === 0) {
+            $response['message'] = 'That attachment could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Evidence detached';
+        echo json_encode($response);
+    }
+
+    public function load_standardsAction() {
+        echo json_encode($this->standards_model->load_standards(Session::get('company_id')));
+    }
+
+    public function save_standardAction() {
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $standard_id = (int) ($this->post['standard_id'] ?? 0);
+        $standard_name = $this->input('standard_name');
+        $short_code = $this->input('short_code');
+        $version = $this->input('version');
+        $description = $this->input('description');
+        $standard_status = $this->input('standard_status');
+
+        if ($standard_name === '') {
+            $response['message'] = 'Standard name is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!in_array($standard_status, array('Active', 'Archived'), true)) {
+            $response['message'] = 'Choose a valid status';
+            echo json_encode($response);
+            exit;
+        }
+
+        $company_id = Session::get('company_id');
+        $user_id = Session::get('user_id');
+
+        if ($standard_id === 0) {
+
+            $new_id = $this->standards_model->add_standard(
+                $company_id,
+                $standard_name,
+                $short_code,
+                $version,
+                $description,
+                $standard_status,
+                $user_id
+            );
+
+            $response['success'] = true;
+            $response['message'] = 'Standard added';
+            $response['standard_id'] = (int) $new_id;
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!$this->owns_standard($standard_id)) {
+            $response['message'] = 'That standard could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->standards_model->update_standard(
+            $standard_id,
+            $company_id,
+            $standard_name,
+            $short_code,
+            $version,
+            $description,
+            $standard_status,
+            $user_id
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'Standard updated';
+        $response['standard_id'] = $standard_id;
+        echo json_encode($response);
+    }
+
+    public function delete_standardAction() {
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $standard_id = (int) ($this->post['standard_id'] ?? 0);
+
+        if (!$this->owns_standard($standard_id)) {
+            $response['message'] = 'That standard could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->standards_model->delete_standard($standard_id, Session::get('company_id'), Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'Standard deleted';
+        echo json_encode($response);
+    }
+
+    public function duplicate_standardAction() {
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $standard_id = (int) ($this->post['standard_id'] ?? 0);
+        $standard_name = $this->input('standard_name');
+        $short_code = $this->input('short_code');
+        $version = $this->input('version');
+
+        if (!$this->owns_standard($standard_id)) {
+            $response['message'] = 'That standard could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($standard_name === '') {
+            $response['message'] = 'Standard name is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        $new_id = $this->standards_model->duplicate_standard(
+            $standard_id,
+            Session::get('company_id'),
+            $standard_name,
+            $short_code,
+            $version,
+            Session::get('user_id')
+        );
+
+        if (empty($new_id)) {
+            $response['message'] = 'That standard could not be duplicated';
+            echo json_encode($response);
+            exit;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Standard duplicated';
+        $response['standard_id'] = (int) $new_id;
+        echo json_encode($response);
+    }
+
+    public function load_controlsAction() {
+
+        $standard_id = (int) ($this->post['standard_id'] ?? 0);
+
+        if (!$this->owns_standard($standard_id)) {
+            echo json_encode(array());
+            exit;
+        }
+
+        echo json_encode($this->standards_model->load_controls($standard_id, Session::get('company_id')));
+    }
+
+    public function save_controlAction() {
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $standard_id = (int) ($this->post['standard_id'] ?? 0);
+        $control_id = (int) ($this->post['control_id'] ?? 0);
+        $control_identifier = $this->input('control_identifier');
+        $control_title = $this->input('control_title');
+        $description = $this->input('description');
+        $family = $this->input('family');
+
+        if (!$this->owns_standard($standard_id)) {
+            $response['message'] = 'That standard could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($control_identifier === '') {
+            $response['message'] = 'Control identifier is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($control_title === '') {
+            $response['message'] = 'Control title is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        $sort_order = 0;
+
+        if ($control_id > 0) {
+
+            $control = $this->standards_model->get_control($control_id, Session::get('company_id'));
+
+            if (!is_array($control) || count($control) !== 1 || (int) $control[0]['standard_id'] !== $standard_id) {
+                $response['message'] = 'That control could not be found';
+                echo json_encode($response);
+                exit;
+            }
+
+            $sort_order = (int) $control[0]['sort_order'];
+        }
+
+        $identifiers = $this->standards_model->control_identifiers($standard_id, $control_id);
+
+        if (isset($identifiers[mb_strtolower($control_identifier)])) {
+            $response['message'] = $control_identifier.' already exists in this standard';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($control_id === 0) {
+
+            $this->standards_model->add_control(
+                $standard_id,
+                $control_identifier,
+                $control_title,
+                $description,
+                $family,
+                $this->standards_model->max_sort_order($standard_id) + 1,
+                Session::get('user_id')
+            );
+
+            $response['success'] = true;
+            $response['message'] = 'Control added';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->standards_model->update_control(
+            $control_id,
+            $standard_id,
+            $control_identifier,
+            $control_title,
+            $description,
+            $family,
+            $sort_order,
+            Session::get('user_id')
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'Control updated';
+        echo json_encode($response);
+    }
+
+    public function delete_controlAction() {
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $control_id = (int) ($this->post['control_id'] ?? 0);
+        $control = $this->standards_model->get_control($control_id, Session::get('company_id'));
+
+        if (!is_array($control) || count($control) !== 1) {
+            $response['message'] = 'That control could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->standards_model->delete_control($control_id, $control[0]['standard_id'], Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'Control deleted';
+        echo json_encode($response);
+    }
+
+    public function import_controlsAction() {
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong',
+            'imported' => 0,
+            'skipped' => 0,
+            'errors' => array()
+        );
+
+        $standard_id = (int) ($this->post['standard_id'] ?? 0);
+
+        if (!$this->owns_standard($standard_id)) {
+            $response['message'] = 'That standard could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!isset($_FILES['csv_file']) || $_FILES['csv_file']['error'] !== UPLOAD_ERR_OK) {
+            $response['message'] = 'Choose a CSV file to import';
+            echo json_encode($response);
+            exit;
+        }
+
+        $tmp_name = $_FILES['csv_file']['tmp_name'];
+
+        if (!is_uploaded_file($tmp_name)) {
+            $response['message'] = 'That upload could not be read';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($_FILES['csv_file']['size'] > 5242880) {
+            $response['message'] = 'The file must be 5MB or smaller';
+            echo json_encode($response);
+            exit;
+        }
+
+        $handle = fopen($tmp_name, 'r');
+
+        if ($handle === false) {
+            $response['message'] = 'That file could not be opened';
+            echo json_encode($response);
+            exit;
+        }
+
+        $existing = $this->standards_model->control_identifiers($standard_id);
+        $controls = array();
+        $errors = array();
+        $seen = array();
+        $skipped = 0;
+        $line = 0;
+
+        while (($row = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
+
+            $line++;
+
+            if (count($row) === 1 && trim((string) $row[0]) === '') {
+                continue;
+            }
+
+            if ($line === 1 && strcasecmp(trim((string) $row[0]), 'identifier') === 0) {
+                continue;
+            }
+
+            if (count($row) < 2) {
+                $errors[] = array(
+                    'row' => $line,
+                    'reason' => 'Expected identifier, title, description, family'
+                );
+                continue;
+            }
+
+            $control_identifier = $this->clean_cell($row[0]);
+            $control_title = $this->clean_cell($row[1]);
+            $description = $this->clean_cell($row[2] ?? '');
+            $family = $this->clean_cell($row[3] ?? '');
+
+            if ($control_identifier === '') {
+                $errors[] = array(
+                    'row' => $line,
+                    'reason' => 'Identifier is required'
+                );
+                continue;
+            }
+
+            if ($control_title === '') {
+                $errors[] = array(
+                    'row' => $line,
+                    'reason' => 'Title is required'
+                );
+                continue;
+            }
+
+            $key = mb_strtolower($control_identifier);
+
+            if (isset($existing[$key]) || isset($seen[$key])) {
+                $skipped++;
+                continue;
+            }
+
+            $seen[$key] = 1;
+
+            $controls[] = array(
+                'control_identifier' => $control_identifier,
+                'control_title' => $control_title,
+                'description' => $description,
+                'family' => $family
+            );
+        }
+
+        fclose($handle);
+
+        // Nothing is written while a single row is still in error, so a rejected
+        // file leaves the standard exactly as it was.
+        if (count($errors) > 0) {
+            $response['message'] = 'Nothing was imported. Fix the rows below and upload the file again.';
+            $response['errors'] = $errors;
+            echo json_encode($response);
+            exit;
+        }
+
+        if (count($controls) === 0 && $skipped === 0) {
+            $response['message'] = 'That file has no rows to import';
+            echo json_encode($response);
+            exit;
+        }
+
+        $imported = 0;
+
+        if (count($controls) > 0) {
+            $imported = $this->standards_model->import_controls($standard_id, $controls, Session::get('user_id'));
+        }
+
+        $response['success'] = true;
+        $response['imported'] = $imported;
+        $response['skipped'] = $skipped;
+        $response['message'] = $imported.' '.($imported === 1 ? 'control' : 'controls').' imported';
+
+        if ($skipped > 0) {
+            $response['message'] .= ', '.$skipped.' skipped as duplicates';
+        }
+
+        echo json_encode($response);
+    }
+
+    public function load_evidenceAction(){
+
+        $client_id = (int) ($this->post['client_id'] ?? 0);
+
+        if (!$this->owns_client($client_id)) {
+            echo json_encode(array());
+            exit;
+        }
+
+        echo json_encode($this->evidence_model->load_evidence($client_id, Session::get('company_id')));
+    }
+
+    public function search_evidenceAction(){
+
+        $client_id = (int) ($this->post['client_id'] ?? 0);
+
+        if (!$this->owns_client($client_id)) {
+            echo json_encode(array('total' => 0, 'rows' => array()));
+            exit;
+        }
+
+        $term = $this->input('search');
+        $limit = (int) ($this->post['limit'] ?? 50);
+        $offset = (int) ($this->post['offset'] ?? 0);
+        $sort = $this->input('sort');
+        $dir = $this->input('dir');
+
+        // The total only changes when the search term does, so it is counted on
+        // the first page and carried by the client for the rest. Re-counting on
+        // every scroll page doubled the work for a number that never moved.
+        $response = array(
+            'rows' => $this->evidence_model->search_evidence($client_id, Session::get('company_id'), $term, $limit, $offset, $sort, $dir)
+        );
+
+        if ($offset === 0) {
+            $response['total'] = $this->evidence_model->count_evidence($client_id, Session::get('company_id'), $term);
+        }
+
+        echo json_encode($response);
+    }
+
+    public function upload_evidenceAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $client_id = (int) ($this->post['client_id'] ?? 0);
+        $evidence_title = $this->input('evidence_title');
+        $description = $this->input('description');
+
+        if (!$this->owns_client($client_id)) {
+            $response['message'] = 'That client could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($evidence_title === '') {
+            $response['message'] = 'Evidence title is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!isset($_FILES['evidence_file']) || $_FILES['evidence_file']['error'] !== UPLOAD_ERR_OK) {
+            $response['message'] = 'Choose a file to upload';
+            echo json_encode($response);
+            exit;
+        }
+
+        $tmp_name = $_FILES['evidence_file']['tmp_name'];
+
+        if (!is_uploaded_file($tmp_name)) {
+            $response['message'] = 'That upload could not be read';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($_FILES['evidence_file']['size'] > self::MAX_UPLOAD_BYTES) {
+            $response['message'] = 'The file must be 25MB or smaller';
+            echo json_encode($response);
+            exit;
+        }
+
+        $original_name = basename((string) $_FILES['evidence_file']['name']);
+        $extension = strtolower((string) pathinfo($original_name, PATHINFO_EXTENSION));
+
+        if ($extension === '' || !in_array($extension, self::ALLOWED_EXTENSIONS, true)) {
+            $response['message'] = 'That file type is not accepted as evidence';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!S3Service::configured()) {
+            $response['message'] = 'File storage is not configured';
+            echo json_encode($response);
+            exit;
+        }
+
+        $content_type = 'application/octet-stream';
+
+        if (function_exists('finfo_open')) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $detected = finfo_file($finfo, $tmp_name);
+            finfo_close($finfo);
+            if (is_string($detected) && $detected !== '') {
+                $content_type = $detected;
+            }
+        }
+
+        // Private, and keyed by company then client so a stray key can never be
+        // read across orgs even if the bucket policy is loosened later.
+        $key = 'evidence/'.Session::get('company_id').'/'.$client_id.'/'
+            .bin2hex(random_bytes(12)).'.'.$extension;
+
+        if (!S3Service::put_private($key, $tmp_name, $content_type)) {
+            $response['message'] = 'That file could not be stored';
+            echo json_encode($response);
+            exit;
+        }
+
+        $evidence_id = $this->evidence_model->add_evidence(
+            Session::get('company_id'),
+            $client_id,
+            $evidence_title,
+            $description,
+            $key,
+            $original_name,
+            (int) $_FILES['evidence_file']['size'],
+            $content_type,
+            Session::get('user_id')
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'Evidence uploaded';
+        $response['evidence_id'] = (int) $evidence_id;
+        echo json_encode($response);
+    }
+
+    public function save_evidenceAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $evidence_id = (int) ($this->post['evidence_id'] ?? 0);
+        $evidence_title = $this->input('evidence_title');
+        $description = $this->input('description');
+
+        $evidence = $this->evidence_model->get_evidence($evidence_id, Session::get('company_id'));
+
+        if (count($evidence) !== 1) {
+            $response['message'] = 'That evidence could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($evidence_title === '') {
+            $response['message'] = 'Evidence title is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->evidence_model->update_evidence(
+            $evidence_id,
+            Session::get('company_id'),
+            $evidence_title,
+            $description,
+            Session::get('user_id')
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'Evidence updated';
+        echo json_encode($response);
+    }
+
+    public function delete_evidenceAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $evidence_id = (int) ($this->post['evidence_id'] ?? 0);
+        $evidence = $this->evidence_model->get_evidence($evidence_id, Session::get('company_id'));
+
+        if (count($evidence) !== 1) {
+            $response['message'] = 'That evidence could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $links = $this->evidence_model->load_evidence_links($evidence_id, Session::get('company_id'));
+
+        $this->evidence_model->delete_evidence($evidence_id, Session::get('company_id'), Session::get('user_id'));
+
+        if ($evidence[0]['file_key'] !== '') {
+            S3Service::delete_key($evidence[0]['file_key']);
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Evidence deleted'
+            .(count($links) > 0 ? ', '.count($links).' '.(count($links) === 1 ? 'attachment' : 'attachments').' removed' : '');
+        $response['unlinked'] = count($links);
+        echo json_encode($response);
+    }
+
+    public function load_evidence_linksAction(){
+
+        $evidence_id = (int) ($this->post['evidence_id'] ?? 0);
+        $evidence = $this->evidence_model->get_evidence($evidence_id, Session::get('company_id'));
+
+        if (count($evidence) !== 1) {
+            echo json_encode(array());
+            exit;
+        }
+
+        echo json_encode($this->evidence_model->load_evidence_links($evidence_id, Session::get('company_id')));
+    }
+
+    public function evidence_urlAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $evidence_id = (int) ($this->post['evidence_id'] ?? 0);
+        $evidence = $this->evidence_model->get_evidence($evidence_id, Session::get('company_id'));
+
+        if (count($evidence) !== 1) {
+            $response['message'] = 'That evidence could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        // Short-lived signed URL: the object itself stays private, so a link that
+        // leaks stops working within minutes.
+        $url = S3Service::presigned_get_url($evidence[0]['file_key'], 300);
+
+        if ($url === '') {
+            $response['message'] = 'That file could not be opened';
+            echo json_encode($response);
+            exit;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'ok';
+        $response['url'] = $url;
+        echo json_encode($response);
+    }
+
+    private function input(string $key): string
+    {
+        if (!isset($this->post[$key])) {
+            return '';
+        }
+
+        return trim(html_entity_decode((string) $this->post[$key], ENT_QUOTES, 'UTF-8'));
+    }
+
+    private function owns_project($project_id): bool
+    {
+        if (empty($project_id)) {
+            return false;
+        }
+
+        $project = $this->projects_model->get_project($project_id, Session::get('company_id'));
+
+        return is_array($project) && count($project) === 1;
+    }
+
+    private function owns_assessment($assessment_id): bool
+    {
+        if (empty($assessment_id)) {
+            return false;
+        }
+
+        $assessment = $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'));
+
+        return is_array($assessment) && count($assessment) === 1;
+    }
+
+    private function owns_standard($standard_id): bool
+    {
+        if (empty($standard_id)) {
+            return false;
+        }
+
+        $standard = $this->standards_model->get_standard($standard_id, Session::get('company_id'));
+
+        return is_array($standard) && count($standard) === 1;
+    }
+
+    private function owns_client($client_id): bool
+    {
+        if (empty($client_id)) {
+            return false;
+        }
+
+        $client = $this->clients_model->get_client($client_id, Session::get('company_id'));
+
+        return is_array($client) && count($client) === 1;
     }
 
 }

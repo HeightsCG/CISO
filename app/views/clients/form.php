@@ -160,12 +160,12 @@ $(document).ready(function () {
 
             set_loading('#do_save', false);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            window.location.href = return_url;
+                window.location.href = return_url;
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
 

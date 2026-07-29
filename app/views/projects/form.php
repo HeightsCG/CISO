@@ -12,16 +12,9 @@
             <div class="record__group">
                 <h2 class="record__group-title">Project</h2>
                 <div class="row mb-4">
-                    <div class="col-md-6 form-group">
+                    <div class="col-md-12 form-group">
                         <label for="project_name">Project Name</label>
                         <input type="text" class="form-control" id="project_name" placeholder="2026 CMMC readiness" value="<?php echo ($this->project === null ? '' : htmlspecialchars($this->project['project_name'], ENT_QUOTES, 'UTF-8')); ?>">
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label for="project_status">Status</label>
-                        <select class="form-control" id="project_status">
-                            <option value="Active"<?php echo ($this->project === null || $this->project['project_status'] === 'Active' ? ' selected' : ''); ?>>Active</option>
-                            <option value="Complete"<?php echo ($this->project !== null && $this->project['project_status'] === 'Complete' ? ' selected' : ''); ?>>Complete</option>
-                        </select>
                     </div>
                 </div>
                 <div class="row mb-4">
@@ -98,8 +91,7 @@ $(document).ready(function () {
             project_name: $('#project_name').val().trim(),
             description: $('#description').val().trim(),
             start_date: $('#start_date').val(),
-            end_date: $('#end_date').val(),
-            project_status: $('#project_status').val()
+            end_date: $('#end_date').val()
         };
 
         var errors = 0;
@@ -133,18 +125,18 @@ $(document).ready(function () {
 
         set_loading('#do_save', true);
 
-        $.post('/projects/save_project', values, function (data) {
+        ApiDataSvc.apiCall('post', 'save_project', values, function (data) {
 
             var obj = JSON.parse(data);
 
             set_loading('#do_save', false);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            window.location.href = '/projects/detail/id/' + obj.project_id;
+                window.location.href = '/projects/detail/id/' + obj.project_id;
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
 

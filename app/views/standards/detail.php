@@ -244,11 +244,6 @@ $(document).ready(function () {
 
     }
 
-    /**
-     * Match state is recomputed from the row text every pass rather than read back
-     * off the DOM: while the table itself is hidden nothing inside it counts as
-     * visible, so a cleared search could never restore the group headers.
-     */
     function filter() {
 
         var term = $('#control_search').val().trim().toLowerCase();
@@ -287,7 +282,7 @@ $(document).ready(function () {
     }
 
     function load() {
-        $.post('/standards/load_controls', { standard_id: standard_id }, function (data) {
+        ApiDataSvc.apiCall('post', 'load_controls', { standard_id: standard_id }, function (data) {
             render(JSON.parse(data));
             filter();
         });
@@ -362,20 +357,20 @@ $(document).ready(function () {
 
         set_loading('#do_control_save', true);
 
-        $.post('/standards/save_control', values, function (data) {
+        ApiDataSvc.apiCall('post', 'save_control', values, function (data) {
 
             var obj = JSON.parse(data);
 
             set_loading('#do_control_save', false);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            modal('control_modal').hide();
-            toastr.success(obj.message);
-            load();
+                modal('control_modal').hide();
+                toastr.success(obj.message);
+                load();
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
 
@@ -383,20 +378,20 @@ $(document).ready(function () {
 
         set_loading('#do_control_delete', true);
 
-        $.post('/standards/delete_control', { control_id: deleting_control_id }, function (data) {
+        ApiDataSvc.apiCall('post', 'delete_control', { control_id: deleting_control_id }, function (data) {
 
             var obj = JSON.parse(data);
 
             set_loading('#do_control_delete', false);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            modal('delete_control_modal').hide();
-            toastr.success(obj.message);
-            load();
+                modal('delete_control_modal').hide();
+                toastr.success(obj.message);
+                load();
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
 
@@ -425,7 +420,7 @@ $(document).ready(function () {
         set_loading('#do_import', true);
 
         $.ajax({
-            url: '/standards/import_controls',
+            url: '/api/import_controls',
             type: 'POST',
             data: form_data,
             processData: false,
@@ -485,18 +480,18 @@ $(document).ready(function () {
 
         set_loading('#do_duplicate', true);
 
-        $.post('/standards/duplicate_standard', values, function (data) {
+        ApiDataSvc.apiCall('post', 'duplicate_standard', values, function (data) {
 
             var obj = JSON.parse(data);
 
             set_loading('#do_duplicate', false);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            window.location.href = '/standards/detail/id/' + obj.standard_id;
+                window.location.href = '/standards/detail/id/' + obj.standard_id;
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
 
@@ -508,18 +503,18 @@ $(document).ready(function () {
 
         set_loading('#do_delete', true);
 
-        $.post('/standards/delete_standard', { standard_id: standard_id }, function (data) {
+        ApiDataSvc.apiCall('post', 'delete_standard', { standard_id: standard_id }, function (data) {
 
             var obj = JSON.parse(data);
 
             set_loading('#do_delete', false);
 
-            if (!obj.success) {
-                toastr.error(obj.message);
-                return;
-            }
+            if (obj.success) {
 
-            window.location.href = '/standards';
+                window.location.href = '/standards';
+            } else {
+                toastr.error(obj.message);
+            }
         });
     });
 
