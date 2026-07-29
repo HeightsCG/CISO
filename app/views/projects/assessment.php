@@ -146,7 +146,7 @@
                                 <th scope="col" class="pick__sort is-sortable" data-sort="file_name">File</th>
                                 <th scope="col" class="pick__num pick__sort is-sortable" data-sort="file_size">Size</th>
                                 <th scope="col" class="pick__num pick__sort is-sortable" data-sort="date_created">Uploaded</th>
-                                <th scope="col" class="pick__num pick__sort is-sortable" data-sort="link_count">Used</th>
+                                <th scope="col" class="pick__mid pick__sort is-sortable" data-sort="link_count">Used</th>
                                 <th scope="col"><span class="visually-hidden">Attach</span></th>
                             </tr>
                         </thead>
@@ -616,7 +616,7 @@ $(document).ready(function () {
             + '</td>'
             + '<td class="pick__num">' + size_label(row.file_size) + '</td>'
             + '<td class="pick__num">' + esc(row.date_created_display) + '</td>'
-            + '<td class="pick__num">' + (used === 0 ? '<span class="pick__zero">0</span>' : used) + '</td>'
+            + '<td class="pick__mid">' + (used === 0 ? '<span class="pick__zero">0</span>' : used) + '</td>'
             + '<td class="pick__act">' + (already
                 ? '<span class="badge badge--active">Attached</span>'
                 : '<button type="button" class="btn btn--secondary btn--sm" data-action="attach" data-id="' + row.id + '">Attach</button>')

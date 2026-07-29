@@ -3571,6 +3571,21 @@ table.data tbody tr.item__row {
     justify-content: flex-end;
 }
 
+/* A small count reads better centred under its label than pinned to an edge. */
+.pick__mid {
+    width: 1%;
+    font-size: var(--fs-meta);
+    color: var(--text-secondary);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.pick__table thead th.pick__mid,
+.pick__table thead th.pick__mid div.dt-column-header {
+    text-align: center;
+    justify-content: center;
+}
+
 .pick__act {
     width: 1%;
     text-align: right;
