@@ -25,6 +25,7 @@
 <script src="https://kit.fontawesome.com/5ec0dddd80.js" crossorigin="anonymous"></script>
 <script src="/js/api.data.js?v=<?php echo (int) @filemtime(Main::app_path().'/public/js/api.data.js'); ?>"></script>
 <script src="/js/address.autocomplete.js?v=<?php echo (int) @filemtime(Main::app_path().'/public/js/address.autocomplete.js'); ?>"></script>
+<script src="/js/site.js?v=<?php echo (int) @filemtime(Main::app_path().'/public/js/site.js'); ?>"></script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>

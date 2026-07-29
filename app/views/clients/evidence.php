@@ -1,5 +1,5 @@
 <div class="page">
-    <a class="page__back" href="/clients/detail/id/<?php echo (int) $this->client['id']; ?>"><i class="fa-regular fa-arrow-left"></i> Back to <?php echo htmlspecialchars($this->client['company_name'], ENT_QUOTES, 'UTF-8'); ?></a>
+    <a class="page__back" href="<?php echo (Main::get_param('from') === 'assessment' && Main::get_param('ref') ? '/projects/assessment/id/'.((int) Main::get_param('ref')) : (Main::get_param('from') === 'project' && Main::get_param('ref') ? '/projects/detail/id/'.((int) Main::get_param('ref')) : '/clients/detail/id/'.((int) $this->client['id']))); ?>"><i class="fa-regular fa-arrow-left"></i> Back to <?php echo (Main::get_param('from') === 'assessment' && Main::get_param('ref') ? 'Assessment' : (Main::get_param('from') === 'project' && Main::get_param('ref') ? 'Project' : htmlspecialchars($this->client['company_name'], ENT_QUOTES, 'UTF-8'))); ?></a>
 
     <div class="page__head">
         <div>
@@ -24,8 +24,7 @@
                         <option value="">All evidence</option>
                         <option value="linked">Linked to controls</option>
                         <option value="unused">Not yet used</option>
-                        <option value="expired">Expired</option>
-                    </select>
+                        </select>
                 </div>
             </div>
         </div>
@@ -37,7 +36,6 @@
                             <th scope="col">Evidence</th>
                             <th scope="col">File</th>
                             <th scope="col">Uploaded</th>
-                            <th scope="col">Valid Until</th>
                             <th scope="col">Used On</th>
                             <th scope="col"><span class="visually-hidden">Actions</span></th>
                         </tr>
@@ -50,7 +48,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="upload_modal" tabindex="-1" aria-labelledby="upload_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="upload_modal" tabindex="-1" aria-labelledby="upload_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -67,15 +65,9 @@
                     <label for="evidence_description">Description</label>
                     <textarea id="evidence_description" rows="3" placeholder="What this shows and where it came from."></textarea>
                 </div>
-                <div class="form-row">
-                    <div class="field">
-                        <label for="evidence_expiry">Valid Until</label>
-                        <input type="date" id="evidence_expiry">
-                    </div>
-                    <div class="field">
-                        <label for="evidence_file">File <abbr title="required">*</abbr></label>
-                        <input type="file" id="evidence_file" class="import__file">
-                    </div>
+                <div class="field">
+                    <label for="evidence_file">File <abbr title="required">*</abbr></label>
+                    <input type="file" id="evidence_file" class="import__file">
                 </div>
             </div>
             <div class="modal-footer">
@@ -86,7 +78,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="edit_modal" tabindex="-1" aria-labelledby="edit_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="edit_modal" tabindex="-1" aria-labelledby="edit_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -102,10 +94,6 @@
                     <label for="edit_description">Description</label>
                     <textarea id="edit_description" rows="3"></textarea>
                 </div>
-                <div class="field">
-                    <label for="edit_expiry">Valid Until</label>
-                    <input type="date" id="edit_expiry">
-                </div>
                 <div class="record__group">
                     <h2 class="record__group-title">Linked Controls</h2>
                     <ul class="evidence__list" id="edit_links"></ul>
@@ -119,7 +107,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="delete_modal" tabindex="-1" aria-labelledby="delete_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="delete_modal" tabindex="-1" aria-labelledby="delete_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -184,23 +172,19 @@ $(document).ready(function () {
 
         var html = '';
 
+
         for (var i = 0; i < evidence.length; i++) {
 
             var e = evidence[i];
             var links = parseInt(e.link_count, 10);
-            var expired = parseInt(e.expired, 10) === 1;
 
             html += '<tr class="evidence__row" data-id="' + e.id + '"'
-                + ' data-usage="' + (links > 0 ? 'linked' : 'unused') + '"'
-                + ' data-expired="' + (expired ? 'expired' : 'current') + '">'
+                + ' data-usage="' + (links > 0 ? 'linked' : 'unused') + '">'
                 + '<td><span class="roster__name">' + esc(e.evidence_title) + '</span>'
                 + (e.description ? '<span class="roster__sub">' + esc(e.description) + '</span>' : '') + '</td>'
                 + '<td><a href="#" class="evidence__open" data-id="' + e.id + '">' + esc(e.file_name) + '</a>'
                 + '<span class="roster__sub">' + size_label(e.file_size) + '</span></td>'
                 + '<td>' + esc(e.date_created_display) + '<span class="roster__sub">' + esc(e.uploaded_by_name || '') + '</span></td>'
-                + '<td>' + (e.expiry_date_display
-                    ? esc(e.expiry_date_display) + (expired ? ' <span class="badge badge--critical">Expired</span>' : '')
-                    : '<span class="roster__none">&mdash;</span>') + '</td>'
                 + '<td>' + (links > 0
                     ? '<span class="badge badge--active">' + links + '</span>'
                     : '<span class="roster__none">Not used</span>') + '</td>'
@@ -224,8 +208,7 @@ $(document).ready(function () {
 
             var row = $(this);
             var hit = (term === '' || row.text().toLowerCase().indexOf(term) !== -1)
-                && (usage === ''
-                    || (usage === 'expired' ? row.attr('data-expired') === 'expired' : row.attr('data-usage') === usage));
+                && (usage === '' || row.attr('data-usage') === usage);
 
             row.toggle(hit);
 
@@ -300,7 +283,6 @@ $(document).ready(function () {
         $('#edit_modal_title').text(current.evidence_title);
         $('#edit_title').val(current.evidence_title).removeClass('is-invalid');
         $('#edit_description').val(current.description);
-        $('#edit_expiry').val(current.expiry_date || '');
         $('#edit_links').html('<li class="evidence__none">Loading&hellip;</li>');
 
         $.post('/clients/load_evidence_links', { evidence_id: current.id }, function (data) {
@@ -325,8 +307,7 @@ $(document).ready(function () {
         var values = {
             evidence_id: current.id,
             evidence_title: title,
-            description: $('#edit_description').val().trim(),
-            expiry_date: $('#edit_expiry').val()
+            description: $('#edit_description').val().trim()
         };
 
         $.post('/clients/save_evidence', values, function (data) {
@@ -398,7 +379,7 @@ $(document).ready(function () {
     });
 
     $('#do_upload_open').click(function () {
-        $('#evidence_title, #evidence_description, #evidence_expiry').val('').removeClass('is-invalid');
+        $('#evidence_title, #evidence_description').val('').removeClass('is-invalid');
         $('#evidence_file').val('');
         modal('upload_modal').show();
     });
@@ -425,7 +406,6 @@ $(document).ready(function () {
         form_data.append('client_id', client_id);
         form_data.append('evidence_title', title);
         form_data.append('description', $('#evidence_description').val().trim());
-        form_data.append('expiry_date', $('#evidence_expiry').val());
         form_data.append('csrf_token', $('meta[name="csrf-token"]').attr('content'));
 
         set_loading('#do_upload', true);

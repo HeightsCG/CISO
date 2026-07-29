@@ -3289,24 +3289,59 @@ table.data tbody tr.item__row {
 
 /* Two panes side by side: the control text has to stay readable while the
    assessor fills the form, and neither may push the other out of view. The
-   modal body itself never scrolls - each pane scrolls on its own. */
+   dialog is capped to the viewport, the body never scrolls, and each pane
+   scrolls on its own. */
+#item_modal .modal-content {
+    max-height: calc(100vh - 3.5rem);
+}
+
 .assess {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 0;
-    max-height: calc(100vh - 220px);
+    min-height: 0;
     padding: 0;
+    overflow: hidden;
 }
 
+/* min-height:0 is what actually lets a grid child scroll - the default
+   min-height:auto refuses to shrink below its content and the pane spills
+   out of the dialog instead. */
 .assess__pane {
     min-width: 0;
+    min-height: 0;
     padding: var(--space-4) var(--space-5);
     overflow-y: auto;
 }
 
 .assess__pane--control {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
     background: var(--surface-sunken);
     border-left: 1px solid var(--border);
+}
+
+.assess__control-head {
+    flex: 0 0 auto;
+    padding: var(--space-4) var(--space-5) var(--space-3);
+}
+
+/* Only the discussion scrolls. min-height:0 is again what allows it to shrink
+   below its content instead of pushing the dialog open. */
+.assess__scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 0 var(--space-5) var(--space-4);
+    overflow-y: auto;
+}
+
+.assess__statement {
+    margin-top: var(--space-2);
+    font-size: var(--fs-body);
+    line-height: var(--lh-normal);
+    color: var(--text-secondary);
 }
 
 .assess__eyebrow {
@@ -3342,7 +3377,6 @@ table.data tbody tr.item__row {
 }
 
 .assess__text {
-    margin-top: var(--space-3);
     font-size: var(--fs-body);
     line-height: var(--lh-normal);
     color: var(--text-secondary);
@@ -3359,7 +3393,6 @@ table.data tbody tr.item__row {
 
     .assess {
         grid-template-columns: minmax(0, 1fr);
-        max-height: calc(100vh - 180px);
         overflow-y: auto;
     }
 
@@ -3389,4 +3422,199 @@ table.data tbody tr.item__row {
 
 .modal-body .record__group-title {
     margin-bottom: var(--space-3);
+}
+
+.assess__subhead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+    font-size: var(--fs-body);
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+}
+
+.assess__subhead .btn {
+    flex: 0 0 auto;
+}
+
+#ev_view_attach .input {
+    width: 100%;
+    margin-bottom: var(--space-3);
+}
+
+#ev_view_attach .evidence__list--pick {
+    max-height: 220px;
+    margin-top: 0;
+}
+
+/* A dialog opened from a dialog gets its own backdrop above the first one, so
+   the dialog underneath dims instead of sitting there at full strength looking
+   like two windows fighting. Bootstrap stacks the elements but leaves every
+   backdrop on the same layer. */
+#attach_modal .input {
+    width: 100%;
+    margin-bottom: var(--space-3);
+}
+
+#attach_modal .evidence__list--pick {
+    max-height: 340px;
+    margin-top: 0;
+}
+
+.assess__subfor {
+    display: block;
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border);
+    min-width: 0;
+    overflow: hidden;
+    font-size: var(--fs-meta);
+    line-height: var(--lh-normal);
+    color: var(--text-muted);
+}
+
+#attach_modal .modal-dialog {
+    height: calc(100vh - 3.5rem);
+}
+
+#attach_modal .modal-content {
+    max-height: 100%;
+}
+
+#attach_modal .modal-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.pick__head {
+    margin-bottom: var(--space-3);
+}
+
+.pick__label {
+    margin-bottom: var(--space-2);
+    font-size: var(--fs-body);
+    color: var(--text-secondary);
+}
+
+.pick__search {
+    display: block;
+    width: 100%;
+}
+
+.pick__count {
+    margin-left: var(--space-1);
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+/* A vault can run to thousands of files, so the picker scrolls inside the
+   dialog rather than growing it. */
+.pick__scroll {
+    flex: 1 1 auto;
+    min-height: 320px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.pick__table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: var(--space-2) var(--space-3);
+}
+
+/* Dense by design: at a few thousand files the row count is what matters, not
+   the breathing room around any one of them. */
+.pick__table tbody td {
+    padding: 5px var(--space-3);
+    line-height: 1.35;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.pick__table tbody tr:hover td {
+    background: var(--accent-subtle);
+}
+
+/* The file name carries the row; the description trails it in the same line and
+   is clipped rather than wrapping, so every row stays one line tall. */
+.pick__file {
+    max-width: 0;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pick__name {
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+}
+
+.pick__num {
+    width: 1%;
+    font-size: var(--fs-meta);
+    color: var(--text-secondary);
+    text-align: right;
+}
+
+/* table.data left-aligns every header, so the numeric ones need bringing back
+   over their values. */
+.pick__table thead th.pick__num,
+.pick__table thead th.pick__num div.dt-column-header {
+    text-align: right;
+    justify-content: flex-end;
+}
+
+.pick__act {
+    width: 1%;
+    text-align: right;
+}
+
+.pick__desc {
+    margin-left: var(--space-2);
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+
+
+.pick__sort.is-sortable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.pick__sort.is-sortable:hover {
+    color: var(--text-on-nav-active);
+    background: var(--surface-nav-hover);
+}
+
+.pick__sort.is-sortable::after {
+    content: "";
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: var(--space-1);
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    opacity: 0;
+}
+
+.pick__sort.is-asc::after {
+    border-bottom: 5px solid currentColor;
+    opacity: 0.85;
+}
+
+.pick__sort.is-desc::after {
+    border-top: 5px solid currentColor;
+    opacity: 0.85;
+}
+
+.pick__zero {
+    color: var(--text-muted);
 }

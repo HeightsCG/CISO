@@ -19,11 +19,8 @@ class EvidenceModel extends Model {
                     e.file_name,
                     e.file_size,
                     e.file_type,
-                    e.expiry_date,
                     e.date_created,
                     DATE_FORMAT(e.date_created, df.sql_format) AS date_created_display,
-                    DATE_FORMAT(e.expiry_date, df.sql_format) AS expiry_date_display,
-                    CASE WHEN e.expiry_date IS NOT NULL and e.expiry_date < CURDATE() THEN 1 ELSE 0 END AS expired,
                     CONCAT(u.first_name, ' ', u.last_name) AS uploaded_by_name,
                     COUNT(el.id) AS link_count
                 FROM
@@ -45,7 +42,6 @@ class EvidenceModel extends Model {
                     e.file_name,
                     e.file_size,
                     e.file_type,
-                    e.expiry_date,
                     e.date_created,
                     df.sql_format,
                     u.first_name,
@@ -54,6 +50,108 @@ class EvidenceModel extends Model {
                     e.date_created DESC,
                     e.id DESC";
         return parent::select($sql, $where);
+    }
+
+    /**
+     * Paged, filtered vault lookup for the evidence picker.
+     *
+     * The vault is per client but can still run to thousands of files, so the
+     * filtering and the slicing both happen in SQL - the browser never receives
+     * more than one page.
+     */
+    public function search_evidence($client_id, $company_id, $term, $limit, $offset, $sort = 'date_created', $dir = 'desc')
+    {
+        $limit = max(1, min(200, (int) $limit));
+        $offset = max(0, (int) $offset);
+
+        // Whitelisted: the sort column and direction are the only parts of this
+        // query built from a string, so they can never come straight from input.
+        $sortable = array(
+            'file_name' => 'e.file_name',
+            'file_size' => 'e.file_size',
+            'date_created' => 'e.date_created',
+            'link_count' => 'link_count'
+        );
+
+        $order = $sortable[$sort] ?? 'e.date_created';
+        $direction = (strtolower($dir) === 'asc') ? 'ASC' : 'DESC';
+
+        $where = array(
+            'client_id' => $client_id,
+            'company_id' => $company_id
+        );
+
+        $filter = '';
+
+        if ($term !== '') {
+            $filter = " and (e.file_name LIKE :term_a or e.evidence_title LIKE :term_b or e.description LIKE :term_c)";
+            $where['term_a'] = '%'.$term.'%';
+            $where['term_b'] = '%'.$term.'%';
+            $where['term_c'] = '%'.$term.'%';
+        }
+
+        // LIMIT and OFFSET are cast to int above; they cannot be bound as
+        // parameters with native prepares on this driver.
+        $sql = "SELECT
+                    e.id,
+                    e.evidence_title,
+                    e.file_name,
+                    e.file_size,
+                    DATE_FORMAT(e.date_created, df.sql_format) AS date_created_display,
+                    COUNT(el.id) AS link_count
+                FROM
+                    evidence e
+                    JOIN companies co ON co.id = e.company_id
+                    JOIN date_formats df ON df.id = co.date_format_id
+                    LEFT JOIN evidence_links el ON el.evidence_id = e.id
+                WHERE
+                    e.client_id = :client_id
+                    and
+                    e.company_id = :company_id
+                    and
+                    e.deleted = 0
+                    ".$filter."
+                GROUP BY
+                    e.id,
+                    e.evidence_title,
+                    e.file_name,
+                    e.file_size,
+                    e.date_created,
+                    df.sql_format
+                ORDER BY
+                    ".$order." ".$direction.",
+                    e.id DESC
+                LIMIT ".$limit." OFFSET ".$offset;
+
+        return parent::select($sql, $where);
+    }
+
+    public function count_evidence($client_id, $company_id, $term)
+    {
+        $where = array(
+            'client_id' => $client_id,
+            'company_id' => $company_id
+        );
+
+        $filter = '';
+
+        if ($term !== '') {
+            $filter = " and (e.file_name LIKE :term_a or e.evidence_title LIKE :term_b or e.description LIKE :term_c)";
+            $where['term_a'] = '%'.$term.'%';
+            $where['term_b'] = '%'.$term.'%';
+            $where['term_c'] = '%'.$term.'%';
+        }
+
+        $sql = "SELECT COUNT(*) AS total
+                FROM evidence e
+                WHERE e.client_id = :client_id
+                    and e.company_id = :company_id
+                    and e.deleted = 0
+                    ".$filter;
+
+        $rows = parent::select($sql, $where);
+
+        return (int) $rows[0]['total'];
     }
 
     public function get_evidence($evidence_id, $company_id)
@@ -65,7 +163,6 @@ class EvidenceModel extends Model {
         $sql = "SELECT
                     e.*,
                     DATE_FORMAT(e.date_created, df.sql_format) AS date_created_display,
-                    DATE_FORMAT(e.expiry_date, df.sql_format) AS expiry_date_display,
                     c.company_name AS client_name,
                     CONCAT(u.first_name, ' ', u.last_name) AS uploaded_by_name
                 FROM
@@ -92,7 +189,6 @@ class EvidenceModel extends Model {
         $file_name,
         $file_size,
         $file_type,
-        $expiry_date,
         $uploaded_by
     )
     {
@@ -105,7 +201,6 @@ class EvidenceModel extends Model {
             'file_name' => $file_name,
             'file_size' => $file_size,
             'file_type' => $file_type,
-            'expiry_date' => ($expiry_date === '' ? null : $expiry_date),
             'uploaded_by' => $uploaded_by,
             'updated_by' => $uploaded_by,
             'date_created' => date('Y-m-d H:i:s'),
@@ -115,7 +210,7 @@ class EvidenceModel extends Model {
         return parent::insert('evidence', $data);
     }
 
-    public function update_evidence($evidence_id, $company_id, $evidence_title, $description, $expiry_date, $updated_by)
+    public function update_evidence($evidence_id, $company_id, $evidence_title, $description, $updated_by)
     {
         $where = array(
             'id' => $evidence_id,
@@ -124,7 +219,6 @@ class EvidenceModel extends Model {
         $data = array(
             'evidence_title' => $evidence_title,
             'description' => $description,
-            'expiry_date' => ($expiry_date === '' ? null : $expiry_date),
             'updated_by' => $updated_by,
             'date_updated' => date('Y-m-d H:i:s')
         );
@@ -169,15 +263,10 @@ class EvidenceModel extends Model {
                     e.id,
                     e.evidence_title,
                     e.file_name,
-                    e.file_size,
-                    e.expiry_date,
-                    DATE_FORMAT(e.expiry_date, df.sql_format) AS expiry_date_display,
-                    CASE WHEN e.expiry_date IS NOT NULL and e.expiry_date < CURDATE() THEN 1 ELSE 0 END AS expired
+                    e.file_size
                 FROM
                     evidence_links el
                     JOIN evidence e ON e.id = el.evidence_id
-                    JOIN companies co ON co.id = e.company_id
-                    JOIN date_formats df ON df.id = co.date_format_id
                     JOIN assessment_items ai ON ai.id = el.assessment_item_id
                     JOIN assessments a ON a.id = ai.assessment_id
                 WHERE

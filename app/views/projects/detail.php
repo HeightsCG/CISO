@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="page__actions">
-            <?php echo ((int) $this->project['client_id'] === 0 ? '' : '<a class="btn btn--secondary" href="/clients/evidence/id/'.((int) $this->project['client_id']).'"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>'); ?>
+            <?php echo ((int) $this->project['client_id'] === 0 ? '' : '<a class="btn btn--secondary" href="/clients/evidence/id/'.((int) $this->project['client_id']).'/from/project/ref/'.((int) $this->project['id']).'"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>'); ?>
             <button type="button" class="btn btn--primary" id="do_assessment_add"><i class="fa-regular fa-plus"></i> New Assessment</button>
         </div>
     </div>
@@ -84,7 +84,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="assessment_modal" tabindex="-1" aria-labelledby="assessment_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="assessment_modal" tabindex="-1" aria-labelledby="assessment_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">

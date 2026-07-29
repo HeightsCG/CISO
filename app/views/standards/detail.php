@@ -46,7 +46,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="control_modal" tabindex="-1" aria-labelledby="control_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="control_modal" tabindex="-1" aria-labelledby="control_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -82,7 +82,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="import_modal" tabindex="-1" aria-labelledby="import_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="import_modal" tabindex="-1" aria-labelledby="import_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -105,7 +105,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="duplicate_modal" tabindex="-1" aria-labelledby="duplicate_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="duplicate_modal" tabindex="-1" aria-labelledby="duplicate_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -137,7 +137,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="delete_control_modal" tabindex="-1" aria-labelledby="delete_control_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="delete_control_modal" tabindex="-1" aria-labelledby="delete_control_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -155,7 +155,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="delete_modal" tabindex="-1" aria-labelledby="delete_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="delete_modal" tabindex="-1" aria-labelledby="delete_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">

@@ -4,6 +4,7 @@ class ClientsController extends Controller {
     public $protected = 1;
     public $json_actions = array(
         'load_evidenceAction',
+        'search_evidenceAction',
         'upload_evidenceAction',
         'save_evidenceAction',
         'delete_evidenceAction',
@@ -116,6 +117,36 @@ class ClientsController extends Controller {
         echo json_encode($this->evidence_model->load_evidence($client_id, Session::get('company_id')));
     }
 
+    /** Paged, filtered vault lookup - the picker never pulls the whole vault. */
+    public function search_evidenceAction(){
+
+        $client_id = (int) ($this->post['client_id'] ?? 0);
+
+        if (!$this->owns_client($client_id)) {
+            echo json_encode(array('total' => 0, 'rows' => array()));
+            exit;
+        }
+
+        $term = $this->input('search');
+        $limit = (int) ($this->post['limit'] ?? 50);
+        $offset = (int) ($this->post['offset'] ?? 0);
+        $sort = $this->input('sort');
+        $dir = $this->input('dir');
+
+        // The total only changes when the search term does, so it is counted on
+        // the first page and carried by the client for the rest. Re-counting on
+        // every scroll page doubled the work for a number that never moved.
+        $response = array(
+            'rows' => $this->evidence_model->search_evidence($client_id, Session::get('company_id'), $term, $limit, $offset, $sort, $dir)
+        );
+
+        if ($offset === 0) {
+            $response['total'] = $this->evidence_model->count_evidence($client_id, Session::get('company_id'), $term);
+        }
+
+        echo json_encode($response);
+    }
+
     public function load_evidence_linksAction(){
 
         $evidence_id = (int) ($this->post['evidence_id'] ?? 0);
@@ -139,7 +170,6 @@ class ClientsController extends Controller {
         $client_id = (int) ($this->post['client_id'] ?? 0);
         $evidence_title = $this->input('evidence_title');
         $description = $this->input('description');
-        $expiry_date = $this->input('expiry_date');
 
         if (!$this->owns_client($client_id)) {
             $response['message'] = 'That client could not be found';
@@ -149,12 +179,6 @@ class ClientsController extends Controller {
 
         if ($evidence_title === '') {
             $response['message'] = 'Evidence title is required';
-            echo json_encode($response);
-            exit;
-        }
-
-        if ($expiry_date !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $expiry_date)) {
-            $response['message'] = 'Enter the validity date as YYYY-MM-DD';
             echo json_encode($response);
             exit;
         }
@@ -225,7 +249,6 @@ class ClientsController extends Controller {
             $original_name,
             (int) $_FILES['evidence_file']['size'],
             $content_type,
-            $expiry_date,
             Session::get('user_id')
         );
 
@@ -245,7 +268,6 @@ class ClientsController extends Controller {
         $evidence_id = (int) ($this->post['evidence_id'] ?? 0);
         $evidence_title = $this->input('evidence_title');
         $description = $this->input('description');
-        $expiry_date = $this->input('expiry_date');
 
         $evidence = $this->evidence_model->get_evidence($evidence_id, Session::get('company_id'));
 
@@ -261,18 +283,11 @@ class ClientsController extends Controller {
             exit;
         }
 
-        if ($expiry_date !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $expiry_date)) {
-            $response['message'] = 'Enter the validity date as YYYY-MM-DD';
-            echo json_encode($response);
-            exit;
-        }
-
         $this->evidence_model->update_evidence(
             $evidence_id,
             Session::get('company_id'),
             $evidence_title,
             $description,
-            $expiry_date,
             Session::get('user_id')
         );
 

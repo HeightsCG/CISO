@@ -9,10 +9,11 @@
                 <span class="client__segment"><?php echo htmlspecialchars($this->assessment['standard_name'], ENT_QUOTES, 'UTF-8'); ?></span>
                 <span class="client__segment"><?php echo htmlspecialchars($this->assessment['short_code'], ENT_QUOTES, 'UTF-8'); ?><?php echo ($this->assessment['version'] === '' ? '' : ' &middot; '.htmlspecialchars($this->assessment['version'], ENT_QUOTES, 'UTF-8')); ?></span>
                 <span class="client__segment"><?php echo (int) $this->assessment['item_count']; ?> items</span>
+                <span class="client__segment"><?php echo ($this->assessment['client_name'] === null ? 'No client &mdash; evidence cannot be attached' : 'Evidence vault: '.htmlspecialchars($this->assessment['client_name'], ENT_QUOTES, 'UTF-8')); ?></span>
             </div>
         </div>
         <div class="page__actions">
-            <?php echo ((int) $this->assessment['client_id'] === 0 ? '' : '<a class="btn btn--secondary" href="/clients/evidence/id/'.((int) $this->assessment['client_id']).'"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>'); ?>
+            <?php echo ((int) $this->assessment['client_id'] === 0 ? '' : '<a class="btn btn--secondary" href="/clients/evidence/id/'.((int) $this->assessment['client_id']).'/from/assessment/ref/'.((int) $this->assessment['id']).'"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>'); ?>
             <button type="button" class="btn btn--secondary" id="do_settings_open"><i class="fa-regular fa-pen"></i> Edit</button>
             <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete</button>
         </div>
@@ -73,7 +74,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="item_modal" tabindex="-1" aria-labelledby="item_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="item_modal" tabindex="-1" aria-labelledby="item_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -106,9 +107,14 @@
                     </div>
                 </div>
                 <div class="assess__pane assess__pane--control">
-                    <p class="assess__eyebrow"><span class="assess__id" id="item_identifier"></span> <span class="assess__sep" aria-hidden="true">&middot;</span> <span class="assess__family" id="item_family"></span></p>
-                    <h3 class="assess__title" id="item_title"></h3>
-                    <p class="assess__text" id="item_description"></p>
+                    <div class="assess__control-head">
+                        <p class="assess__eyebrow"><span class="assess__id" id="item_identifier"></span> <span class="assess__sep" aria-hidden="true">&middot;</span> <span class="assess__family" id="item_family"></span></p>
+                        <h3 class="assess__title" id="item_title"></h3>
+                        <p class="assess__statement" id="item_statement"></p>
+                    </div>
+                    <div class="assess__scroll">
+                        <p class="assess__text" id="item_description"></p>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -119,16 +125,35 @@
     </div>
 </div>
 
-<div class="modal fade" id="attach_modal" tabindex="-1" aria-labelledby="attach_modal_title" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+<div class="modal fade" data-bs-backdrop="static" id="attach_modal" tabindex="-1" aria-labelledby="attach_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="attach_modal_title">Attach from Vault</h2>
+                <h2 class="modal-title" id="attach_modal_title">Attach Evidence</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="search" id="vault_search" class="input" placeholder="Search the client's evidence..." autocomplete="off">
-                <ul class="evidence__list evidence__list--pick" id="vault_list"></ul>
+                <div class="pick__head">
+                    <p class="pick__label">Files in <span id="pick_client"></span>&rsquo;s evidence vault <span class="pick__count" id="pick_count"></span></p>
+                    <div class="pick__search-wrap">
+                        <input type="search" id="vault_search" class="input pick__search" placeholder="Search file name or description..." autocomplete="off" spellcheck="false">
+                    </div>
+                </div>
+                <div class="pick__scroll">
+                    <table class="data pick__table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="pick__sort is-sortable" data-sort="file_name">File</th>
+                                <th scope="col" class="pick__num pick__sort is-sortable" data-sort="file_size">Size</th>
+                                <th scope="col" class="pick__num pick__sort is-sortable" data-sort="date_created">Uploaded</th>
+                                <th scope="col" class="pick__num pick__sort is-sortable" data-sort="link_count">Used</th>
+                                <th scope="col"><span class="visually-hidden">Attach</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="vault_list"></tbody>
+                    </table>
+                    <p class="controls__empty" id="vault_empty" hidden></p>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Done</button>
@@ -137,7 +162,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="upload_modal" tabindex="-1" aria-labelledby="upload_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="upload_modal" tabindex="-1" aria-labelledby="upload_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -154,15 +179,9 @@
                     <label for="evidence_description">Description</label>
                     <textarea id="evidence_description" rows="3" placeholder="What this shows and where it came from."></textarea>
                 </div>
-                <div class="form-row">
-                    <div class="field">
-                        <label for="evidence_expiry">Valid Until</label>
-                        <input type="date" id="evidence_expiry">
-                    </div>
-                    <div class="field">
-                        <label for="evidence_file">File <abbr title="required">*</abbr></label>
-                        <input type="file" id="evidence_file" class="import__file">
-                    </div>
+                <div class="field">
+                    <label for="evidence_file">File <abbr title="required">*</abbr></label>
+                    <input type="file" id="evidence_file" class="import__file">
                 </div>
             </div>
             <div class="modal-footer">
@@ -173,7 +192,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="settings_modal" tabindex="-1" aria-labelledby="settings_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="settings_modal" tabindex="-1" aria-labelledby="settings_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -202,7 +221,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="delete_modal" tabindex="-1" aria-labelledby="delete_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="delete_modal" tabindex="-1" aria-labelledby="delete_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -225,6 +244,7 @@ $(document).ready(function () {
 
     var assessment_id = <?php echo (int) $this->assessment['id']; ?>;
     var client_id = <?php echo (int) $this->assessment['client_id']; ?>;
+    var client_name = "<?php echo ($this->assessment['client_name'] === null ? '' : htmlspecialchars($this->assessment['client_name'], ENT_QUOTES, 'UTF-8')); ?>";
     var items = [];
     var current_item = null;
 
@@ -411,6 +431,27 @@ $(document).ready(function () {
 
     /* ---------------------------------------------------------- item editing */
 
+    /**
+     * The requirement itself is short and belongs on screen at all times; the
+     * discussion that follows it is the only part long enough to need scrolling.
+     * Where the leading statement just repeats the title, it is not shown twice.
+     */
+    function set_control_text(item) {
+
+        var text = item.description === '' ? 'No control text was supplied for this item.' : item.description;
+        var at = text.search(/(^|\n)\s*Discussion:/);
+        var statement = at > 0 ? text.slice(0, at).trim() : '';
+        var body = at > 0 ? text.slice(at).trim() : text;
+
+        if (statement === item.control_title.trim()) {
+            statement = '';
+        }
+
+        $('#item_statement').text(statement).toggle(statement !== '');
+        $('#item_description').text(body);
+        $('.assess__scroll').scrollTop(0);
+    }
+
     function open_item(id) {
 
         for (var i = 0; i < items.length; i++) {
@@ -428,7 +469,7 @@ $(document).ready(function () {
         $('#item_title').text(current_item.control_title);
         $('#item_family').text(current_item.family === '' ? 'Ungrouped' : current_item.family);
         $('#item_modal_title').text('Assess ' + current_item.control_identifier);
-        $('#item_description').text(current_item.description === '' ? 'No control text was supplied for this item.' : current_item.description);
+        set_control_text(current_item);
         $('#item_result').val(current_item.item_result);
         $('#item_notes').val(current_item.notes);
 
@@ -494,8 +535,6 @@ $(document).ready(function () {
                 html += '<li class="evidence__item" data-id="' + list[i].id + '">'
                     + '<div><a href="#" class="evidence__open" data-id="' + list[i].id + '">' + esc(list[i].evidence_title) + '</a>'
                     + '<span class="evidence__meta">' + esc(list[i].file_name) + ' · ' + size_label(list[i].file_size)
-                    + (list[i].expiry_date_display ? ' · valid until ' + esc(list[i].expiry_date_display) : '')
-                    + (parseInt(list[i].expired, 10) === 1 ? ' <span class="badge badge--critical">Expired</span>' : '')
                     + '</span></div>'
                     + '<button type="button" class="btn btn--tertiary btn--sm" data-action="detach" data-id="' + list[i].id + '" aria-label="Detach ' + esc(list[i].evidence_title) + '"><i class="fa-regular fa-link-slash"></i></button>'
                     + '</li>';
@@ -549,41 +588,146 @@ $(document).ready(function () {
         }
 
         $('#vault_search').val('');
-        load_vault();
+        $('#pick_client').text(client_name);
+        mark_sort();
+        load_vault(true);
         modal('attach_modal').show();
     });
 
-    function load_vault() {
+    function extension_of(name) {
+        var at = String(name || '').lastIndexOf('.');
+        return at === -1 ? 'FILE' : String(name).slice(at + 1).toUpperCase().slice(0, 4);
+    }
 
-        $.post('/clients/load_evidence', { client_id: client_id }, function (data) {
+    // The vault is filtered and sliced in SQL, so the browser only ever holds
+    // one page. Scrolling near the end pulls the next one.
+    var PAGE_SIZE = 50;
+    var vault = { offset: 0, total: 0, term: '', loading: false, done: false, token: 0,
+                  sort: 'date_created', dir: 'desc' };
 
-            var list = JSON.parse(data);
-            var term = $('#vault_search').val().trim().toLowerCase();
-            var html = '';
+    function vault_row(row, attached) {
 
-            for (var i = 0; i < list.length; i++) {
+        var used = parseInt(row.link_count, 10);
+        var already = attached.indexOf(String(row.id)) !== -1;
 
-                var hay = (list[i].evidence_title + ' ' + list[i].file_name).toLowerCase();
+        return '<tr class="pick__row">'
+            + '<td class="pick__file"><span class="pick__name">' + esc(row.file_name) + '</span>'
+            + (row.evidence_title ? '<span class="pick__desc">' + esc(row.evidence_title) + '</span>' : '')
+            + '</td>'
+            + '<td class="pick__num">' + size_label(row.file_size) + '</td>'
+            + '<td class="pick__num">' + esc(row.date_created_display) + '</td>'
+            + '<td class="pick__num">' + (used === 0 ? '<span class="pick__zero">0</span>' : used) + '</td>'
+            + '<td class="pick__act">' + (already
+                ? '<span class="badge badge--active">Attached</span>'
+                : '<button type="button" class="btn btn--secondary btn--sm" data-action="attach" data-id="' + row.id + '">Attach</button>')
+            + '</td></tr>';
+    }
 
-                if (term !== '' && hay.indexOf(term) === -1) {
-                    continue;
-                }
+    function load_vault(reset) {
 
-                html += '<li class="evidence__item">'
-                    + '<div><a href="#" class="evidence__open" data-id="' + list[i].id + '">' + esc(list[i].evidence_title) + '</a>'
-                    + '<span class="evidence__meta">' + esc(list[i].file_name) + ' · ' + size_label(list[i].file_size)
-                    + ' · used on ' + list[i].link_count + ' control' + (parseInt(list[i].link_count, 10) === 1 ? '' : 's')
-                    + (parseInt(list[i].expired, 10) === 1 ? ' <span class="badge badge--critical">Expired</span>' : '')
-                    + '</span></div>'
-                    + '<button type="button" class="btn btn--secondary btn--sm" data-action="attach" data-id="' + list[i].id + '">Attach</button>'
-                    + '</li>';
+        // A new search must never be dropped because a page fetch is still in
+        // flight - it supersedes it. Only paging defers to a request already
+        // running, and every response carries the token of the request that
+        // asked for it so a stale one cannot overwrite a newer result.
+        if (!reset && (vault.loading || vault.done)) {
+            return;
+        }
+
+        if (reset) {
+            vault.offset = 0;
+            vault.done = false;
+            $('#vault_list').empty();
+        }
+
+        var token = ++vault.token;
+
+        vault.loading = true;
+        vault.term = $('#vault_search').val().trim();
+
+        var attached = $('#item_evidence .evidence__item').map(function () {
+            return String($(this).attr('data-id'));
+        }).get();
+
+        $.post('/clients/search_evidence', {
+            client_id: client_id,
+            search: vault.term,
+            limit: PAGE_SIZE,
+            offset: vault.offset,
+            sort: vault.sort,
+            dir: vault.dir
+        }, function (data) {
+
+            // A superseded response still has to release the in-flight flag,
+            // otherwise paging stays blocked for the rest of the session.
+            if (token !== vault.token) {
+                vault.loading = false;
+                return;
             }
 
-            $('#vault_list').html(html === '' ? '<li class="evidence__none">Nothing in this client\'s vault matches.</li>' : html);
+            var obj = JSON.parse(data);
+            var html = '';
+
+            for (var i = 0; i < obj.rows.length; i++) {
+                html += vault_row(obj.rows[i], attached);
+            }
+
+            $('#vault_list').append(html);
+
+            if (obj.total !== undefined) {
+                vault.total = parseInt(obj.total, 10);
+            }
+            vault.offset += obj.rows.length;
+            vault.done = obj.rows.length < PAGE_SIZE || vault.offset >= vault.total;
+            vault.loading = false;
+
+            var shown = $('#vault_list tr').length;
+
+            $('#pick_count').text(shown >= vault.total
+                ? vault.total + (vault.total === 1 ? ' file' : ' files')
+                : shown + ' of ' + vault.total);
+
+            $('.pick__table').toggle(shown > 0);
+            $('#vault_empty').prop('hidden', shown > 0).text(vault.term === ''
+                ? esc(client_name) + ' has no evidence yet. Close this and choose Upload New \u2014 the file is saved to this client\'s vault and attached here in one step.'
+                : 'No files match \u201c' + vault.term + '\u201d.');
         });
     }
 
-    $('#vault_search').on('input', load_vault);
+    // Sorting is a server concern here: with only one page in the browser at a
+    // time, sorting what is on screen would reorder a slice rather than the vault.
+    function mark_sort() {
+        $('.pick__sort').removeClass('is-asc is-desc');
+        $('.pick__sort[data-sort="' + vault.sort + '"]').addClass(vault.dir === 'asc' ? 'is-asc' : 'is-desc');
+    }
+
+    $(document).on('click', '#attach_modal .is-sortable', function () {
+
+        var column = $(this).attr('data-sort');
+
+        if (vault.sort === column) {
+            vault.dir = (vault.dir === 'asc') ? 'desc' : 'asc';
+        } else {
+            vault.sort = column;
+            vault.dir = (column === 'file_name') ? 'asc' : 'desc';
+        }
+
+        mark_sort();
+        load_vault(true);
+    });
+
+    var vault_debounce = null;
+
+    $('#vault_search').on('input', function () {
+        window.clearTimeout(vault_debounce);
+        vault_debounce = window.setTimeout(function () { load_vault(true); }, 250);
+    });
+
+    $('.pick__scroll').on('scroll', function () {
+        if (this.scrollTop + this.clientHeight >= this.scrollHeight - 120) {
+            load_vault(false);
+        }
+    });
+
 
     $('#vault_list').on('click', '[data-action="attach"]', function () {
 
@@ -602,6 +746,9 @@ $(document).ready(function () {
                 return;
             }
 
+            // Attaching is the whole point of this dialog, so finishing it returns
+            // to the control rather than leaving a dialog open that looks unchanged.
+            modal('attach_modal').hide();
             toastr.success(obj.message);
             load_item_evidence();
             load(true);
@@ -615,7 +762,7 @@ $(document).ready(function () {
             return;
         }
 
-        $('#evidence_title, #evidence_description, #evidence_expiry').val('').removeClass('is-invalid');
+        $('#evidence_title, #evidence_description').val('').removeClass('is-invalid');
         $('#evidence_file').val('');
         modal('upload_modal').show();
     });
@@ -642,7 +789,6 @@ $(document).ready(function () {
         form_data.append('client_id', client_id);
         form_data.append('evidence_title', title);
         form_data.append('description', $('#evidence_description').val().trim());
-        form_data.append('expiry_date', $('#evidence_expiry').val());
         form_data.append('csrf_token', $('meta[name="csrf-token"]').attr('content'));
 
         set_loading('#do_upload', true);
@@ -668,13 +814,13 @@ $(document).ready(function () {
                     var res = JSON.parse(linked);
 
                     set_loading('#do_upload', false);
-                    modal('upload_modal').hide();
 
                     if (!res.success) {
                         toastr.error(res.message);
                         return;
                     }
 
+                    modal('upload_modal').hide();
                     toastr.success('Evidence uploaded and attached');
                     load_item_evidence();
                     load(true);
