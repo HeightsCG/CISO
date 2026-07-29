@@ -119,12 +119,7 @@ class Main {
     
     public static function get_environment(): string
     {
-        $env = getenv('APPLICATION_ENV');
-        if (is_string($env) && $env !== '') {
-            return $env;
-        }
-        $env = (string) self::config('global', 'env', '');
-        return ($env !== '') ? $env : 'production';
+        return getenv('APPLICATION_ENV');
     }
     
     public static function do_logout(): void
