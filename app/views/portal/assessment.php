@@ -209,6 +209,23 @@ $(document).ready(function () {
         return $('<div>').text(value === null ? '' : value).html();
     }
 
+    /**
+     * The imported control text opens by restating the title, so the modal would
+     * print the same sentence twice. Only a leading match is removed - the rest of
+     * the description is left exactly as supplied.
+     */
+    function description_body(title, description) {
+
+        var body = String(description === null ? '' : description).trim();
+        var lead = String(title === null ? '' : title).trim().replace(/\.$/, '');
+
+        if (lead !== '' && body.indexOf(lead) === 0) {
+            body = body.slice(lead.length).replace(/^[.\s]+/, '');
+        }
+
+        return body;
+    }
+
     function badge_for(result) {
         for (var i = 0; i < RESULTS.length; i++) {
             if (RESULTS[i].name === result) {
@@ -361,7 +378,7 @@ $(document).ready(function () {
         $('#item_identifier').text(current_item.control_identifier);
         $('#item_family').text(current_item.family === '' ? 'Ungrouped' : current_item.family);
         $('#item_title').text(current_item.control_title);
-        $('#item_description').text(current_item.description);
+        $('#item_description').text(description_body(current_item.control_title, current_item.description));
         $('#item_result').text(current_item.item_result)
             .removeClass('badge--active badge--onboarding badge--critical badge--prospect badge--inactive')
             .addClass(badge_for(current_item.item_result));

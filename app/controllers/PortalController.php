@@ -19,7 +19,7 @@ class PortalController extends Controller {
         $client = $this->client();
 
         if ($client === null) {
-            Errors::page_not_found();
+            $this->refuse();
             return;
         }
 
@@ -32,7 +32,7 @@ class PortalController extends Controller {
         $client = $this->client();
 
         if ($client === null) {
-            Errors::page_not_found();
+            $this->refuse();
             return;
         }
 
@@ -53,7 +53,7 @@ class PortalController extends Controller {
         $client = $this->client();
 
         if ($client === null) {
-            Errors::page_not_found();
+            $this->refuse();
             return;
         }
 
@@ -74,7 +74,7 @@ class PortalController extends Controller {
         $client = $this->client();
 
         if ($client === null) {
-            Errors::page_not_found();
+            $this->refuse();
             return;
         }
 
@@ -88,6 +88,21 @@ class PortalController extends Controller {
         $this->view->client = $client;
         $this->view->assessment = $assessment[0];
         $this->view->render();
+    }
+
+    /**
+     * No session means the visitor is simply not signed in, so the layout renders
+     * the login form as it does anywhere else. A session that exists but is not a
+     * client's has genuinely asked for something that is not there.
+     */
+    private function refuse(): void
+    {
+        if (empty(Session::get('user_id'))) {
+            $this->view->render();
+            return;
+        }
+
+        Errors::page_not_found();
     }
 
     /**
