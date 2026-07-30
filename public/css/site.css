@@ -1005,6 +1005,7 @@ table.data .actions {
     background: var(--surface-sunken);
 }
 
+
 .shell__nav {
     display: flex;
     flex-direction: column;
@@ -2724,6 +2725,15 @@ select.input {
     border-color: var(--border);
 }
 
+/* A privilege marker rather than a status, so it takes the accent instead of one
+   of the traffic-light tones. */
+
+.badge--admin {
+    color: var(--accent);
+    background: var(--accent-subtle);
+    border-color: var(--accent-border);
+}
+
 .roster__toolbar {
     flex-wrap: wrap;
     justify-content: flex-start;
@@ -4352,4 +4362,343 @@ table.data--light td.pick__col-attach {
     font-size: var(--fs-body);
     line-height: var(--lh-normal);
     color: var(--text-secondary);
+}
+
+/* A single bar split into result segments, with a legend beneath. Built from the
+   same colour tokens as the result badges so the bar and the badges agree. */
+
+.stack {
+    display: flex;
+    height: 14px;
+    overflow: hidden;
+    background: var(--surface-inset);
+    border-radius: var(--radius);
+}
+
+.stack__seg {
+    height: 100%;
+}
+
+.stack__seg.is-ok {
+    background: var(--ok);
+}
+
+.stack__seg.is-partial {
+    background: var(--high);
+}
+
+.stack__seg.is-gap {
+    background: var(--critical);
+}
+
+.stack__seg.is-na {
+    background: var(--info);
+}
+
+.stack__seg.is-none {
+    background: var(--border-strong);
+}
+
+.stackkey {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin-top: var(--space-3);
+    padding: 0;
+    list-style: none;
+}
+
+.stackkey__item {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    font-size: var(--fs-meta);
+}
+
+.stackkey__n {
+    font-weight: var(--fw-semibold);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+}
+
+.stackkey__label {
+    color: var(--text-secondary);
+}
+
+.stackkey__pct {
+    color: var(--text-muted);
+}
+
+.metric {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3) 0;
+}
+
+.metric + .metric {
+    border-top: 1px solid var(--border);
+}
+
+.metric__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--fs-body);
+}
+
+.metric__sub {
+    display: block;
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+.metric__bar {
+    width: 200px;
+}
+
+.metric__value {
+    width: 120px;
+    text-align: right;
+    font-size: var(--fs-meta);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+}
+
+.metriclist {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* The dashboard is meant to be read without scrolling the page, so each panel
+   keeps its own height and any list longer than it scrolls inside. */
+
+.dashgrid .panel {
+    height: 100%;
+}
+
+.dashgrid .panel__body {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+/* Each list gets a share of whatever height is left after the fixed panels above,
+   so the page fits a short window as well as a tall one without the document
+   itself ever scrolling. */
+
+/* The summary region: the figures a consultant acts on, then the distribution
+   they were drawn from. One panel rather than two, so the top of the page reads
+   as a single header instead of a stack of equal boxes. The 1px grid gap on a
+   bordered background draws the dividers, which keeps them correct when the
+   cells wrap to two columns on a narrow window. */
+
+.kpi {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0;
+    background: var(--border);
+}
+
+.kpi__cell {
+    padding: var(--space-4);
+    background: var(--surface-app);
+}
+
+.kpi__label {
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-medium);
+    color: var(--text-secondary);
+}
+
+.kpi__value {
+    margin: var(--space-1) 0 0;
+    font-size: 28px;
+    font-weight: var(--fw-semibold);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--lh-tight);
+    color: var(--text-primary);
+}
+
+/* An exception only earns colour once it is non-zero, and never carries the
+   meaning on colour alone - the icon and the sub-label say it too. */
+
+.kpi__value.is-gap {
+    color: var(--critical);
+}
+
+.kpi__value.is-due {
+    color: var(--high);
+}
+
+.kpi__value i {
+    margin-right: var(--space-2);
+    font-size: 20px;
+    vertical-align: 1px;
+}
+
+.kpi__sub {
+    margin: var(--space-1) 0 0;
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+.summary .panel__body {
+    border-top: 1px solid var(--border);
+}
+
+.posture__head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    margin-bottom: var(--space-3);
+}
+
+/* Overdue work leads the working area when it exists and is absent when it does
+   not, so the page never holds an empty container waiting for bad news. */
+
+.attention {
+    border-left: 3px solid var(--high);
+}
+
+.attention .panel__title i {
+    margin-right: var(--space-2);
+    color: var(--high);
+}
+
+.attention__body {
+    max-height: 9rem;
+    overflow-y: auto;
+}
+
+/* One line per project keeps three exceptions visible in the band's height
+   instead of one and a half. */
+
+.attention .metric {
+    padding: var(--space-2) 0;
+}
+
+.attention .metric__sub {
+    display: inline;
+    margin-left: var(--space-2);
+}
+
+/* These rows carry a date and a due badge rather than a progress bar, so the
+   grid is named here instead of inheriting the three-column default. */
+
+.attention .metric {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.attention .metric__value {
+    width: auto;
+}
+
+/* A list that ends mid-row reads as broken unless the clip is announced. The two
+   solid gradients scroll with the content and hide the shadows at the ends, so the
+   fade appears only while there is more to reach. */
+
+.dashscroll {
+    max-height: calc(100vh - 28rem);
+    min-height: 5rem;
+    overflow-y: auto;
+    background:
+        linear-gradient(var(--surface-app) 40%, rgba(255, 255, 255, 0)) center top / 100% 1.5rem no-repeat local,
+        linear-gradient(rgba(255, 255, 255, 0), var(--surface-app) 60%) center bottom / 100% 1.5rem no-repeat local,
+        linear-gradient(rgba(16, 27, 43, 0.14), rgba(255, 255, 255, 0)) center top / 100% 0.5rem no-repeat scroll,
+        linear-gradient(rgba(255, 255, 255, 0), rgba(16, 27, 43, 0.14)) center bottom / 100% 0.5rem no-repeat scroll;
+}
+
+/* Three columns leave far less room than a full-width panel, so the bar and the
+   figure give their width back to the label rather than truncating it. */
+
+.dashgrid .metric {
+    gap: var(--space-3);
+    padding: var(--space-2) 0;
+}
+
+.dashgrid .metric__bar {
+    width: 84px;
+}
+
+.dashgrid .metric__value {
+    width: 68px;
+}
+
+.dashgrid .metric__sub {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* A row with nothing to plot gives the width back to its label rather than
+   holding an empty 84px gutter open. */
+
+.dashgrid .metric__bar:empty {
+    width: 0;
+}
+
+/* In a column this narrow the head reads better as two lines - name and status
+   together, then the meta beneath - than as a name line with the badge orphaned
+   below it. */
+
+.dashgrid .proj__head {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.dashgrid .proj__name {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.dashgrid .proj__meta {
+    flex: 1 0 100%;
+    order: 3;
+}
+
+.dashgrid .asmt {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-3);
+}
+
+.dashgrid .asmt__progress {
+    width: 150px;
+}
+
+/* The attention band costs the working row its own height rather than the page's. */
+
+.has-attention .dashscroll {
+    max-height: calc(100vh - 48.5rem);
+}
+
+/* Below the grid breakpoint the panels stack, so a per-panel cap would only
+   push the document down. The lists keep their own scroll and the page keeps
+   its single scroll context. */
+
+@media (max-width: 991.98px) {
+
+    .kpi {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashscroll,
+    .has-attention .dashscroll {
+        max-height: 22rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+
+    .kpi {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.panel__note {
+    margin-left: auto;
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
 }

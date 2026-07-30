@@ -21,6 +21,25 @@ class CompaniesModel extends Model {
         return parent::select($sql);
     }
 
+    /**
+     * Every tenant, for the global admin's company picker. No company_id predicate
+     * is possible here by definition, so this must only ever be reached through a
+     * global admin check.
+     */
+    public function get_companies()
+    {
+        $sql = "SELECT
+                    c.id,
+                    c.company_name
+                FROM
+                    companies c
+                WHERE
+                    c.deleted = 0
+                ORDER BY
+                    c.company_name";
+        return parent::select($sql);
+    }
+
     public function get_company($company_id)
     {
         $where = array(

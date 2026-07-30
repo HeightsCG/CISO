@@ -14,6 +14,7 @@ class ApiController extends Controller {
     public $assessments_model;
     public $evidence_model;
     public $standards_model;
+    public $dashboard_model;
 
     public function __construct(){
         parent::__construct();
@@ -25,6 +26,7 @@ class ApiController extends Controller {
         $this->assessments_model = new AssessmentsModel();
         $this->standards_model = new StandardsModel();
         $this->evidence_model = new EvidenceModel();
+        $this->dashboard_model = new DashboardModel();
     }
 
     public function loginAction(){
@@ -1122,6 +1124,30 @@ class ApiController extends Controller {
         echo json_encode($data);
     }
 
+    /**
+     * Everything the dashboard draws, in one request. Six grouped queries rather
+     * than one per client or per project, so the page cost does not grow with the
+     * size of the organisation.
+     */
+    public function load_dashboardAction(){
+
+        $company_id = Session::get('company_id');
+        $totals = $this->dashboard_model->totals($company_id);
+
+        $response = array(
+            'totals' => (count($totals) === 1 ? $totals[0] : array()),
+            'results' => $this->dashboard_model->result_totals($company_id),
+            'assessment_status' => $this->dashboard_model->assessment_status($company_id),
+            'assessments' => $this->dashboard_model->assessments($company_id),
+            'clients' => $this->dashboard_model->by_client($company_id),
+            'attention' => $this->dashboard_model->attention($company_id),
+            'projects' => $this->projects_model->load_projects($company_id),
+            'progress' => $this->assessments_model->project_progress($company_id)
+        );
+
+        echo json_encode($response);
+    }
+
     public function save_clientAction(){
 
         $response = array(
@@ -1551,6 +1577,312 @@ class ApiController extends Controller {
             exit;
         }
 
+        echo json_encode($response);
+    }
+
+    /**
+     * The global_ actions below are the only ones in the app that read across
+     * tenants. Every one of them opens with this, and it answers rather than
+     * returning a flag so that a missing check reads as a broken feature instead
+     * of an open door.
+     */
+    private function refuse_unless_global_admin(): void
+    {
+        if ((int) Session::get('global_admin') === 1) {
+            return;
+        }
+
+        echo json_encode(array(
+            'success' => false,
+            'message' => 'You do not have access to that'
+        ));
+        exit;
+    }
+
+    public function global_usersAction(){
+
+        $this->refuse_unless_global_admin();
+
+        echo json_encode($this->user_model->get_all_users());
+    }
+
+    public function global_companiesAction(){
+
+        $this->refuse_unless_global_admin();
+
+        echo json_encode($this->companies_model->get_companies());
+    }
+
+    /**
+     * The client list belongs to whichever company the account is being placed in,
+     * not to the admin's own, so it is fetched per company rather than from the
+     * session like load_clients does.
+     */
+    public function global_clientsAction(){
+
+        $this->refuse_unless_global_admin();
+
+        $company_id = (int) ($this->post['company_id'] ?? 0);
+
+        if ($company_id < 1) {
+            echo json_encode(array());
+            exit;
+        }
+
+        echo json_encode($this->clients_model->load_clients($company_id));
+    }
+
+    public function global_save_userAction(){
+
+        $this->refuse_unless_global_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $user_id = (int) ($this->post['user_id'] ?? 0);
+        $toDo = ($user_id > 0 ? 'update' : 'add');
+
+        if ($this->post['first_name'] === '') {
+            $response['message'] = 'First name is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($this->post['last_name'] === '') {
+            $response['message'] = 'Last name is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($this->post['u_name'] === '') {
+            $response['message'] = 'Username is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($this->post['user_email'] === '') {
+            $response['message'] = 'Email is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($this->post['user_status'] === '') {
+            $response['message'] = 'Status is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        /**
+         * On an edit the company comes from the row, never from the form. Moving an
+         * account between tenants would strand its client_id and everything it has
+         * recorded, so the picker is add-only and this ignores it either way.
+         */
+
+        $existing = array();
+
+        if ($toDo === 'update') {
+
+            $rows = $this->user_model->get_any_user($user_id);
+
+            if (!is_array($rows) || count($rows) !== 1) {
+                $response['message'] = 'That user could not be found';
+                echo json_encode($response);
+                exit;
+            }
+
+            $existing = $rows[0];
+            $company_id = (int) $existing['company_id'];
+
+        } else {
+
+            $company_id = (int) ($this->post['company_id'] ?? 0);
+            $company = $this->companies_model->get_company($company_id);
+
+            if (!is_array($company) || count($company) !== 1) {
+                $response['message'] = 'Choose the company this account belongs to';
+                echo json_encode($response);
+                exit;
+            }
+        }
+
+        $check_email = ($toDo === 'add'
+            ? $this->user_model->check_email($this->post['user_email'])
+            : $this->user_model->check_email($this->post['user_email'], $user_id));
+
+        if (count($check_email) > 0) {
+            $response['message'] = 'That email address is already in use';
+            echo json_encode($response);
+            exit;
+        }
+
+        $check_username = ($toDo === 'add'
+            ? $this->user_model->check_username($this->post['u_name'])
+            : $this->user_model->check_username($this->post['u_name'], $user_id));
+
+        if (count($check_username) > 0) {
+            $response['message'] = 'That username is already in use';
+            echo json_encode($response);
+            exit;
+        }
+
+        $user_type = ($this->post['user_type'] === 'portal' ? 'portal' : 'staff');
+        $client_id = ($user_type === 'portal' ? (int) ($this->post['client_id'] ?? 0) : 0);
+        $role_id = ($user_type === 'portal' ? self::CLIENT_ROLE_ID : (int) $this->post['role_id']);
+        $global_admin = ($user_type === 'staff' && (int) ($this->post['global_admin'] ?? 0) === 1 ? 1 : 0);
+
+        if ($user_type === 'portal') {
+
+            $client = $this->clients_model->get_client($client_id, $company_id);
+
+            if (!is_array($client) || count($client) !== 1) {
+                $response['message'] = 'Choose the client this account belongs to';
+                echo json_encode($response);
+                exit;
+            }
+        }
+
+        if ($user_type === 'staff' && $role_id === self::CLIENT_ROLE_ID) {
+            $response['message'] = 'The Client role is only for client portal accounts';
+            echo json_encode($response);
+            exit;
+        }
+
+        /**
+         * An admin cannot lock themselves out of this page or delete their own way
+         * in. Both are checked here as well as hidden in the view.
+         */
+
+        if ($toDo === 'update' && $user_id === (int) Session::get('user_id')) {
+
+            if ($global_admin !== 1) {
+                $response['message'] = 'You cannot remove your own global admin access';
+                echo json_encode($response);
+                exit;
+            }
+
+            if ($this->post['user_status'] !== 'Active') {
+                $response['message'] = 'You cannot disable your own account';
+                echo json_encode($response);
+                exit;
+            }
+        }
+
+        if ($toDo === 'update') {
+
+            $this->user_model->update_user(
+                $user_id,
+                $company_id,
+                $role_id,
+                $this->post['first_name'],
+                $this->post['last_name'],
+                $this->post['u_name'],
+                $this->post['user_email'],
+                $this->post['user_status'],
+                $user_type,
+                $client_id
+            );
+
+            $this->user_model->set_global_admin($user_id, $global_admin);
+
+            $response['success'] = true;
+            $response['message'] = 'User updated';
+            echo json_encode($response);
+            exit;
+        }
+
+        $new_user_id = $this->user_model->add_user(
+            $company_id,
+            $role_id,
+            $this->post['first_name'],
+            $this->post['last_name'],
+            $this->post['u_name'],
+            $this->post['user_email'],
+            $this->post['user_status'],
+            $user_type,
+            $client_id
+        );
+
+        if (empty($new_user_id)) {
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($global_admin === 1) {
+            $this->user_model->set_global_admin($new_user_id, $global_admin);
+        }
+
+        $invited = false;
+
+        if ($this->post['user_status'] === 'Active') {
+            $raw_token = $this->user_model->set_reset_token($new_user_id);
+            $this->notifications_model->send_password_reset($this->input('user_email'), $this->input('first_name'), $raw_token);
+            $invited = true;
+        }
+
+        $response['success'] = true;
+        $response['message'] = ($invited
+            ? 'User added and invited'
+            : 'User added. Set the account to Active to send the invite.');
+        echo json_encode($response);
+    }
+
+    public function global_delete_userAction(){
+
+        $this->refuse_unless_global_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $user_id = (int) ($this->post['user_id'] ?? 0);
+
+        if ($user_id === (int) Session::get('user_id')) {
+            $response['message'] = 'You cannot remove your own account';
+            echo json_encode($response);
+            exit;
+        }
+
+        $rows = $this->user_model->get_any_user($user_id);
+
+        if (!is_array($rows) || count($rows) !== 1) {
+            $response['message'] = 'That user could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->user_model->delete_user($user_id, $rows[0]['company_id']);
+
+        $response['success'] = true;
+        $response['message'] = 'User removed';
+        echo json_encode($response);
+    }
+
+    public function global_reset_passwordAction(){
+
+        $this->refuse_unless_global_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $rows = $this->user_model->get_any_user((int) ($this->post['user_id'] ?? 0));
+
+        if (!is_array($rows) || count($rows) !== 1) {
+            $response['message'] = 'That user could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $user = $rows[0];
+        $raw_token = $this->user_model->set_reset_token($user['user_id']);
+        $this->notifications_model->send_password_reset($user['user_email'], $user['first_name'], $raw_token);
+
+        $response['success'] = true;
+        $response['message'] = 'A reset link has been sent to ' . $user['user_email'];
         echo json_encode($response);
     }
 

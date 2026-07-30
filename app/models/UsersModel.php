@@ -69,6 +69,94 @@ class UsersModel extends Model {
         return parent::select($sql, $where);
     }
 
+    /**
+     * Every account in the system, for the global admin roster. The date format
+     * is joined through each user's own company, so a row reads in the format that
+     * company uses rather than the one the admin signed in under.
+     */
+    public function get_all_users()
+    {
+        $sql = "SELECT
+                    u.user_id,
+                    u.company_id,
+                    u.u_name,
+                    u.user_email,
+                    u.first_name,
+                    u.last_name,
+                    u.user_status,
+                    u.reset_pw,
+                    u.role_id,
+                    u.user_type,
+                    u.client_id,
+                    u.global_admin,
+                    c.company_name,
+                    cl.company_name AS client_name,
+                    u.date_created,
+                    DATE_FORMAT(u.date_created, df.sql_format) AS date_created_display,
+                    r.role_name
+                FROM
+                    user_accounts u
+                    JOIN companies c ON c.id = u.company_id
+                    JOIN date_formats df ON df.id = c.date_format_id
+                    LEFT JOIN user_roles r ON r.id = u.role_id and r.deleted = 0
+                    LEFT JOIN clients cl ON cl.id = u.client_id and cl.deleted = 0
+                WHERE
+                    u.deleted = 0
+                ORDER BY
+                    c.company_name,
+                    u.first_name,
+                    u.last_name";
+        return parent::select($sql);
+    }
+
+    /**
+     * One account by id with no company predicate, for the global admin actions.
+     * Named columns rather than u.*, so the password hash and reset token cannot
+     * reach a caller that echoes the row.
+     */
+    public function get_any_user($user_id)
+    {
+        $where = array(
+            'user_id' => $user_id
+        );
+        $sql = "SELECT
+                    u.user_id,
+                    u.company_id,
+                    u.u_name,
+                    u.user_email,
+                    u.first_name,
+                    u.last_name,
+                    u.user_status,
+                    u.role_id,
+                    u.user_type,
+                    u.client_id,
+                    u.global_admin
+                FROM
+                    user_accounts u
+                WHERE
+                    u.user_id = :user_id
+                    and
+                    u.deleted = 0";
+        return parent::select($sql, $where);
+    }
+
+    /**
+     * Set apart from update_user because that method is shared with the per-company
+     * users page, which must never be able to write this column.
+     */
+    public function set_global_admin($user_id, $global_admin)
+    {
+        $where = array(
+            'user_id' => $user_id
+        );
+        $data = array(
+            'global_admin' => $global_admin,
+            'updated_by' => Session::get('user_id'),
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+        return parent::update('user_accounts', $data, 'user_id = :user_id', $where);
+    }
+
     public function check_email($user_email, $exclude_user_id = 0)
     {
 
