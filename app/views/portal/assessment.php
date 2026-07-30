@@ -10,6 +10,9 @@
                 <span class="client__segment"><?php echo htmlspecialchars($this->assessment['short_code'], ENT_QUOTES, 'UTF-8'); ?><?php echo ($this->assessment['version'] === '' ? '' : ' &middot; '.htmlspecialchars($this->assessment['version'], ENT_QUOTES, 'UTF-8')); ?></span>
             </div>
         </div>
+        <div class="page__actions">
+            <a class="btn btn--secondary" href="/portal/evidence/id/<?php echo (int) $this->assessment['project_id']; ?>"><i class="fa-regular fa-folder-open"></i> Evidence</a>
+        </div>
     </div>
 
     <div class="panel record__panel">
@@ -317,7 +320,7 @@ $(document).ready(function () {
                 html += '<tr class="controls__group"><td colspan="4">' + esc(family === '' ? 'Ungrouped' : family) + '</td></tr>';
             }
 
-            html += '<tr class="item__row">'
+            html += '<tr class="item__row" data-id="' + it.id + '">'
                 + '<td class="controls__id">' + esc(it.control_identifier) + '</td>'
                 + '<td>' + esc(it.control_title) + '</td>'
                 + '<td><span class="badge ' + badge_for(it.item_result) + '">' + esc(it.item_result) + '</span></td>'
@@ -341,16 +344,19 @@ $(document).ready(function () {
     $('#items_body').on('click', '.item__row', function () {
 
         var id = $(this).attr('data-id');
+        var found = null;
 
         for (var i = 0; i < items.length; i++) {
             if (String(items[i].id) === String(id)) {
-                current_item = items[i];
+                found = items[i];
             }
         }
 
-        if (current_item === null) {
+        if (found === null) {
             return;
         }
+
+        current_item = found;
 
         $('#item_identifier').text(current_item.control_identifier);
         $('#item_family').text(current_item.family === '' ? 'Ungrouped' : current_item.family);
