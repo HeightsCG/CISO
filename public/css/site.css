@@ -3691,6 +3691,7 @@ td.controls__actions .btn + .btn {
 }
 
 .progress {
+    display: block;
     height: 6px;
     overflow: hidden;
     background: var(--surface-inset);
@@ -3703,6 +3704,7 @@ td.controls__actions .btn + .btn {
 }
 
 .progress__bar {
+    display: block;
     height: 100%;
     background: var(--accent);
     transition: width 0.2s ease-in-out;
@@ -3854,6 +3856,113 @@ table.data tbody tr.item__row {
 
 .evidence__item + .evidence__item {
     border-top: 1px solid var(--border);
+}
+
+/* The left block carries the name, a progress bar and the meta line, so it takes
+   the width and the badge stays hard right. */
+
+.evidence__item > div:first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.evidence__item .progress {
+    margin: var(--space-2) 0 var(--space-1);
+}
+
+/* A client's projects, each with its assessments beneath. The assessment rows
+   are a grid so name, standard, progress and status line up down the column
+   rather than reading as a run-on sentence. */
+
+.projlist {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.proj + .proj {
+    margin-top: var(--space-5);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border);
+}
+
+.proj__head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+}
+
+.proj__name {
+    font-size: var(--fs-body);
+    font-weight: var(--fw-semibold);
+}
+
+.proj__meta {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+.proj__none {
+    margin-top: var(--space-2);
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+.asmts {
+    margin: var(--space-2) 0 0;
+    padding: 0 0 0 var(--space-4);
+    list-style: none;
+    border-left: 2px solid var(--border);
+}
+
+.asmt {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: var(--space-5);
+    padding: var(--space-2) 0;
+}
+
+.asmt + .asmt {
+    border-top: 1px solid var(--border);
+}
+
+.asmt__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--fs-meta);
+}
+
+.asmt__standard {
+    margin-left: var(--space-2);
+    color: var(--text-muted);
+}
+
+.asmt__progress {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-2);
+    width: 240px;
+}
+
+.asmt__progress .progress {
+    flex: 1 1 auto;
+}
+
+.asmt__count {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-size: var(--fs-meta);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+}
+
+.asmt .badge {
+    justify-self: end;
 }
 
 .evidence__meta {

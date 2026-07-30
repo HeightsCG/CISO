@@ -1092,6 +1092,36 @@ class ApiController extends Controller {
     }
 
 
+    /**
+     * One client's projects for the client record page. Reuses the same scoped
+     * query the portal uses, so staff and the client see the same set.
+     */
+    public function load_client_projectsAction(){
+
+        $client_id = (int) ($this->post['client_id'] ?? 0);
+
+        if (!$this->owns_client($client_id)) {
+            echo json_encode(array());
+            exit;
+        }
+
+        $data = $this->projects_model->client_projects($client_id, Session::get('company_id'));
+        echo json_encode($data);
+    }
+
+    public function load_client_assessmentsAction(){
+
+        $client_id = (int) ($this->post['client_id'] ?? 0);
+
+        if (!$this->owns_client($client_id)) {
+            echo json_encode(array());
+            exit;
+        }
+
+        $data = $this->assessments_model->client_assessments($client_id, Session::get('company_id'));
+        echo json_encode($data);
+    }
+
     public function save_clientAction(){
 
         $response = array(

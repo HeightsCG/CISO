@@ -48,6 +48,50 @@ class AssessmentsModel extends Model {
         return parent::select($sql, $where);
     }
 
+    /**
+     * Every assessment across one client's projects, in a single query so the
+     * client record does not fan out into one request per project.
+     */
+    public function client_assessments($client_id, $company_id)
+    {
+        $where = array(
+            'client_id' => $client_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    a.id,
+                    a.project_id,
+                    a.assessment_name,
+                    a.short_code,
+                    a.version,
+                    a.assessment_status,
+                    COUNT(ai.id) AS item_count,
+                    SUM(CASE WHEN ai.item_result <> 'Not Assessed' THEN 1 ELSE 0 END) AS assessed_count
+                FROM
+                    assessments a
+                    JOIN projects p ON p.id = a.project_id
+                    LEFT JOIN assessment_items ai ON ai.assessment_id = a.id and ai.deleted = 0
+                WHERE
+                    p.client_id = :client_id
+                    and
+                    a.company_id = :company_id
+                    and
+                    a.deleted = 0
+                    and
+                    p.deleted = 0
+                GROUP BY
+                    a.id,
+                    a.project_id,
+                    a.assessment_name,
+                    a.short_code,
+                    a.version,
+                    a.assessment_status
+                ORDER BY
+                    a.date_created DESC,
+                    a.id DESC";
+        return parent::select($sql, $where);
+    }
+
     public function client_assessment($assessment_id, $client_id, $company_id)
     {
         $where = array(
