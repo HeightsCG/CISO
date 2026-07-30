@@ -20,6 +20,7 @@ class EvidenceModel extends Model {
                     e.file_name,
                     e.file_size,
                     e.file_type,
+                    e.evidence_private,
                     e.date_created,
                     DATE_FORMAT(e.date_created, df.sql_format) AS date_created_display,
                     CONCAT(u.first_name, ' ', u.last_name) AS uploaded_by_name,
@@ -44,6 +45,7 @@ class EvidenceModel extends Model {
                     e.file_name,
                     e.file_size,
                     e.file_type,
+                    e.evidence_private,
                     e.date_created,
                     df.sql_format,
                     u.first_name,
@@ -246,6 +248,20 @@ class EvidenceModel extends Model {
      * Removing evidence drops every link with it: a link pointing at a file that no
      * longer exists would show an assessment item as evidenced when it is not.
      */
+    public function set_evidence_private($evidence_id, $company_id, $evidence_private, $updated_by)
+    {
+        $where = array(
+            'id' => $evidence_id,
+            'company_id' => $company_id
+        );
+        $data = array(
+            'evidence_private' => $evidence_private,
+            'updated_by' => $updated_by,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+        return parent::update('evidence', $data, 'id = :id and company_id = :company_id', $where);
+    }
+
     public function delete_evidence($evidence_id, $company_id, $updated_by)
     {
         $where = array(
@@ -430,6 +446,140 @@ class EvidenceModel extends Model {
     /* ------------------------------------------------------------- folders */
 
     /** The whole tree for one project, with a file count against each folder. */
+    /**
+     * Vault folders for the client portal. The file count joins evidence so a
+     * folder holding only private files reads as empty rather than advertising
+     * files the client cannot open.
+     */
+    public function portal_folders($project_id, $client_id, $company_id)
+    {
+        $where = array(
+            'project_id' => $project_id,
+            'client_id' => $client_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    f.id,
+                    f.parent_id,
+                    f.folder_name,
+                    (SELECT COUNT(*)
+                        FROM evidence e
+                        WHERE e.folder_id = f.id
+                        and e.deleted = 0
+                        and e.evidence_private = 0) AS file_count
+                FROM
+                    evidence_folders f
+                    JOIN projects p ON p.id = f.project_id
+                WHERE
+                    f.project_id = :project_id
+                    and
+                    p.client_id = :client_id
+                    and
+                    f.company_id = :company_id
+                    and
+                    f.deleted = 0
+                    and
+                    p.deleted = 0
+                ORDER BY
+                    f.folder_name";
+        return parent::select($sql, $where);
+    }
+
+    /**
+     * Vault files for the client portal. Private files are excluded outright, and
+     * uploaded_by comes back so the view can offer replace and delete only on the
+     * caller's own files - the server re-checks that regardless.
+     */
+    public function portal_evidence($project_id, $client_id, $company_id)
+    {
+        $where = array(
+            'project_id' => $project_id,
+            'client_id' => $client_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    e.id,
+                    e.folder_id,
+                    e.evidence_title,
+                    e.description,
+                    e.file_name,
+                    e.file_size,
+                    e.uploaded_by,
+                    DATE_FORMAT(e.date_created, df.sql_format) AS date_created_display,
+                    CONCAT(u.first_name, ' ', u.last_name) AS uploaded_by_name,
+                    (SELECT COUNT(*)
+                        FROM evidence_links el
+                        WHERE el.evidence_id = e.id) AS link_count
+                FROM
+                    evidence e
+                    JOIN projects p ON p.id = e.project_id
+                    JOIN companies co ON co.id = e.company_id
+                    JOIN date_formats df ON df.id = co.date_format_id
+                    LEFT JOIN user_accounts u ON u.user_id = e.uploaded_by
+                WHERE
+                    e.project_id = :project_id
+                    and
+                    p.client_id = :client_id
+                    and
+                    e.company_id = :company_id
+                    and
+                    e.evidence_private = 0
+                    and
+                    e.deleted = 0
+                    and
+                    p.deleted = 0
+                ORDER BY
+                    e.date_created DESC,
+                    e.id DESC";
+        return parent::select($sql, $where);
+    }
+
+    /** Evidence attached to one control, private files excluded. */
+    public function portal_item_evidence($item_id, $client_id, $company_id)
+    {
+        $where = array(
+            'item_id' => $item_id,
+            'client_id' => $client_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    e.id,
+                    e.evidence_title,
+                    e.file_name,
+                    e.file_size,
+                    e.uploaded_by,
+                    DATE_FORMAT(e.date_created, df.sql_format) AS date_created_display
+                FROM
+                    evidence_links el
+                    JOIN evidence e ON e.id = el.evidence_id
+                    JOIN assessment_items ai ON ai.id = el.assessment_item_id
+                    JOIN assessments a ON a.id = ai.assessment_id
+                    JOIN projects p ON p.id = a.project_id
+                    JOIN companies co ON co.id = e.company_id
+                    JOIN date_formats df ON df.id = co.date_format_id
+                WHERE
+                    el.assessment_item_id = :item_id
+                    and
+                    p.client_id = :client_id
+                    and
+                    e.company_id = :company_id
+                    and
+                    e.project_id = p.id
+                    and
+                    e.evidence_private = 0
+                    and
+                    e.deleted = 0
+                    and
+                    ai.deleted = 0
+                    and
+                    a.deleted = 0
+                    and
+                    p.deleted = 0
+                ORDER BY
+                    e.evidence_title";
+        return parent::select($sql, $where);
+    }
+
     public function load_folders($project_id, $company_id)
     {
         $where = array(

@@ -9,13 +9,6 @@ class StandardsController extends Controller {
         $this->standards_model = new StandardsModel();
     }
 
-    /**
-     * This controller serves pages and JSON from the same class, so the base
-     * $json flag cannot be used: it would answer /standards itself with a 401
-     * body instead of letting layout.php render the login form. Gated once here
-     * for every endpoint rather than repeated in each action.
-     */
-
     public function indexAction() {
         $this->view->render();
     }

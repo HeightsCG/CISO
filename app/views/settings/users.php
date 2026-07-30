@@ -71,8 +71,11 @@
                 </div>
                 <div class="row mb-4">
                     <div class="col-md-6 form-group">
-                        <label for="role_id">Role</label>
-                        <select class="form-control" id="role_id"></select>
+                        <label for="user_type">Account Type</label>
+                        <select class="form-control" id="user_type">
+                            <option value="staff">Staff</option>
+                            <option value="portal">Client Portal</option>
+                        </select>
                     </div>
                     <div class="col-md-6 form-group">
                         <label for="user_status">Status</label>
@@ -80,6 +83,19 @@
                             <option value="Active">Active</option>
                             <option value="Disabled">Disabled</option>
                         </select>
+                    </div>
+                </div>
+                <div class="row mb-4" id="role_row">
+                    <div class="col-md-12 form-group">
+                        <label for="role_id">Role</label>
+                        <select class="form-control" id="role_id"></select>
+                    </div>
+                </div>
+                <div class="row mb-4" id="client_row" hidden>
+                    <div class="col-md-12 form-group">
+                        <label for="client_id">Client <abbr title="required">*</abbr></label>
+                        <select class="form-control" id="client_id"></select>
+                        <p class="import__hint">They will see only this client's projects, assessments and evidence.</p>
                     </div>
                 </div>
             </div>
@@ -232,6 +248,9 @@ $(document).ready(function () {
         $("#u_name").val(data[2]);
         $("#user_email").val(data[3]);
         $("#role_id").val(data[9]);
+        $("#user_type").val(data[10] === 'portal' ? 'portal' : 'staff');
+        $("#client_id").val(data[11]);
+        sync_type();
         $("#user_status").val(data[6]);
         $("#open_reset").show();
         $("#open_delete").toggle(parseInt(data[0], 10) !== current_user_id);
@@ -246,6 +265,9 @@ $(document).ready(function () {
         $("#u_name").val("");
         $("#user_email").val("");
         $("#role_id").prop("selectedIndex", 0);
+        $("#user_type").val("staff");
+        $("#client_id").prop("selectedIndex", 0);
+        sync_type();
         $("#user_status").val("Active");
         $("#open_reset").hide();
         $("#open_delete").hide();
@@ -318,6 +340,8 @@ $(document).ready(function () {
             toDo: (parseInt($("#user_id").val(), 10) > 0 ? "update" : "add"),
             user_id: $("#user_id").val(),
             role_id: $("#role_id").val(),
+            user_type: $("#user_type").val(),
+            client_id: $("#client_id").val(),
             first_name: $("#first_name").val(),
             last_name: $("#last_name").val(),
             u_name: $("#u_name").val(),
@@ -374,6 +398,24 @@ $(document).ready(function () {
         });
     });
 
+    function sync_type() {
+        var portal = $("#user_type").val() === 'portal';
+        $("#client_row").prop("hidden", !portal);
+        $("#role_row").prop("hidden", portal);
+    }
+
+    $("#user_type").on("change", sync_type);
+
+    function load_clients() {
+        ApiDataSvc.apiCall('post', 'load_clients', {}, function (data) {
+            var obj = JSON.parse(data);
+            $("#client_id").empty();
+            for (var i = 0; i < obj.length; i++) {
+                $("#client_id").append($("<option>").attr("value", obj[i].id).text(obj[i].company_name));
+            }
+        });
+    }
+
     function load_roles() {
         ApiDataSvc.apiCall('post', 'load_roles', {}, function (data) {
             var obj = JSON.parse(data);
@@ -394,12 +436,16 @@ $(document).ready(function () {
                     obj[i].first_name + ' ' + obj[i].last_name,
                     obj[i].u_name,
                     obj[i].user_email,
-                    obj[i].role_name,
+                    (obj[i].user_type === 'portal'
+                        ? 'Client' + (obj[i].client_name === null ? '' : ' \u00b7 ' + obj[i].client_name)
+                        : obj[i].role_name),
                     { sort: obj[i].date_created, display: obj[i].date_created_display },
                     obj[i].user_status,
                     obj[i].first_name,
                     obj[i].last_name,
-                    obj[i].role_id
+                    obj[i].role_id,
+                    obj[i].user_type,
+                    obj[i].client_id
                 ]);
             }
             table.draw();
@@ -407,6 +453,7 @@ $(document).ready(function () {
     }
 
     load_roles();
+    load_clients();
     load_users();
 
 });

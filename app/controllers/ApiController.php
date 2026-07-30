@@ -3,20 +3,8 @@ class ApiController extends Controller {
 
     public $protected = 1;
 
-    // Evidence is whatever the assessor was handed: policies, screenshots, config
-    // dumps, signed contracts. Anything executable is refused outright.
-    const MAX_UPLOAD_BYTES = 26214400;
-    const ALLOWED_EXTENSIONS = array(
-        'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'csv', 'rtf', 'odt', 'ods',
-        'png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp', 'tif', 'tiff', 'heic',
-        'zip', 'gz', 'tgz', '7z', 'json', 'xml', 'log', 'msg', 'eml'
-    );
-
-    public $public_actions = array(
-        'loginAction',
-        'forgot_passwordAction',
-        'reset_passwordAction'
-    );
+    /** user_roles.id for Client; a portal account always carries it. */
+    const CLIENT_ROLE_ID = 3;
 
     public $user_model;
     public $notifications_model;
@@ -789,6 +777,320 @@ class ApiController extends Controller {
         echo json_encode($data);
     }
 
+    /**
+     * client_id comes from the session, never from POST: it is the whole of the
+     * caller's entitlement, so accepting it as a parameter would let any signed-in
+     * client name someone else's.
+     */
+    public function portal_projectsAction(){
+
+        if (Session::get('user_type') !== 'portal') {
+            echo json_encode(array());
+            exit;
+        }
+
+        $data = $this->projects_model->client_projects(Session::get('client_id'), Session::get('company_id'));
+        echo json_encode($data);
+    }
+
+    public function portal_assessmentsAction(){
+
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+
+        if (!$this->client_owns_project($project_id)) {
+            echo json_encode(array());
+            exit;
+        }
+
+        $data = $this->assessments_model->load_assessments($project_id, Session::get('company_id'));
+        echo json_encode($data);
+    }
+
+    public function portal_foldersAction(){
+
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+
+        if (!$this->client_owns_project($project_id)) {
+            echo json_encode(array());
+            exit;
+        }
+
+        $data = $this->evidence_model->portal_folders($project_id, Session::get('client_id'), Session::get('company_id'));
+        echo json_encode($data);
+    }
+
+    public function portal_evidenceAction(){
+
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+
+        if (!$this->client_owns_project($project_id)) {
+            echo json_encode(array());
+            exit;
+        }
+
+        $data = $this->evidence_model->portal_evidence($project_id, Session::get('client_id'), Session::get('company_id'));
+        echo json_encode($data);
+    }
+
+    /**
+     * A signed URL for one vault file. The row is re-fetched through the client
+     * scope rather than by id alone, so a guessed id cannot produce a link, and a
+     * file marked private is not reachable at all.
+     */
+    public function portal_evidence_urlAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $evidence = $this->portal_evidence_row((int) ($this->post['evidence_id'] ?? 0));
+
+        if ($evidence === null) {
+            $response['message'] = 'That evidence could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $url = S3Service::presigned_get_url($evidence['file_key'], 300);
+
+        if ($url === '') {
+            $response['message'] = 'That file could not be opened';
+            echo json_encode($response);
+            exit;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'ok';
+        $response['url'] = $url;
+        echo json_encode($response);
+    }
+
+    /**
+     * One vault row the calling client is entitled to see, or null. Reached by id
+     * then re-checked against the client's own project, because evidence carries a
+     * company id but no client id.
+     */
+    private function portal_evidence_row($evidence_id)
+    {
+        if (Session::get('user_type') !== 'portal' || empty($evidence_id)) {
+            return null;
+        }
+
+        $evidence = $this->evidence_model->get_evidence($evidence_id, Session::get('company_id'));
+
+        if (!is_array($evidence) || count($evidence) !== 1) {
+            return null;
+        }
+
+        if ((int) $evidence[0]['evidence_private'] === 1) {
+            return null;
+        }
+
+        if (!$this->client_owns_project($evidence[0]['project_id'])) {
+            return null;
+        }
+
+        return $evidence[0];
+    }
+
+    public function portal_item_evidenceAction(){
+
+        if ($this->portal_item_row((int) ($this->post['item_id'] ?? 0)) === null) {
+            echo json_encode(array());
+            exit;
+        }
+
+        $data = $this->evidence_model->portal_item_evidence(
+            (int) $this->post['item_id'],
+            Session::get('client_id'),
+            Session::get('company_id')
+        );
+
+        echo json_encode($data);
+    }
+
+    public function portal_link_evidenceAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $item = $this->portal_item_row((int) ($this->post['item_id'] ?? 0));
+        $evidence = $this->portal_evidence_row((int) ($this->post['evidence_id'] ?? 0));
+
+        if ($item === null || $evidence === null) {
+            $response['message'] = 'That evidence could not be attached to this control';
+            echo json_encode($response);
+            exit;
+        }
+
+        $link_id = $this->evidence_model->link_evidence(
+            $evidence['id'],
+            $item['id'],
+            Session::get('company_id'),
+            Session::get('user_id')
+        );
+
+        if (empty($link_id)) {
+            $response['message'] = 'That evidence could not be attached to this control';
+            echo json_encode($response);
+            exit;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Evidence attached';
+        echo json_encode($response);
+    }
+
+    public function portal_unlink_evidenceAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $item = $this->portal_item_row((int) ($this->post['item_id'] ?? 0));
+        $evidence = $this->portal_evidence_row((int) ($this->post['evidence_id'] ?? 0));
+
+        if ($item === null || $evidence === null) {
+            $response['message'] = 'That attachment could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $rows = $this->evidence_model->unlink_evidence($evidence['id'], $item['id'], Session::get('company_id'));
+
+        if ($rows === 0) {
+            $response['message'] = 'That attachment could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Evidence detached';
+        echo json_encode($response);
+    }
+
+    /**
+     * A client may withdraw a file they uploaded themselves, and only while no
+     * control has been evidenced with it: delete_evidence purges the link rows, so
+     * removing an attached file would silently unpick an assessor's work.
+     */
+    public function portal_delete_evidenceAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $evidence = $this->portal_evidence_row((int) ($this->post['evidence_id'] ?? 0));
+
+        if ($evidence === null) {
+            $response['message'] = 'That evidence could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ((int) $evidence['uploaded_by'] !== (int) Session::get('user_id')) {
+            $response['message'] = 'You can only remove files you uploaded';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (count($this->evidence_model->load_evidence_links($evidence['id'], Session::get('company_id'))) > 0) {
+            $response['message'] = 'This file is attached to a control. Ask us to remove it.';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->evidence_model->delete_evidence($evidence['id'], Session::get('company_id'), Session::get('user_id'));
+        S3Service::delete_key($evidence['file_key']);
+
+        $response['success'] = true;
+        $response['message'] = 'Evidence removed';
+        echo json_encode($response);
+    }
+
+    /**
+     * One control the calling client is entitled to. get_item already joins up to
+     * projects and returns client_id, so the check needs no extra query - and its
+     * ai.* includes notes, which stays server-side.
+     */
+    private function portal_item_row($item_id)
+    {
+        if (Session::get('user_type') !== 'portal' || empty($item_id)) {
+            return null;
+        }
+
+        $item = $this->assessments_model->get_item($item_id, Session::get('company_id'));
+
+        if (!is_array($item) || count($item) !== 1) {
+            return null;
+        }
+
+        if ((int) $item[0]['client_id'] !== (int) Session::get('client_id')) {
+            return null;
+        }
+
+        return $item[0];
+    }
+
+    /**
+     * The portal's way in to the shared upload. owns_project inside it only proves
+     * the project belongs to this organisation, which every client's project does,
+     * so the narrower client test happens here first.
+     */
+    public function portal_upload_evidenceAction(){
+
+        if (!$this->client_owns_project((int) ($this->post['project_id'] ?? 0))) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'That project could not be found'
+            ));
+            exit;
+        }
+
+        $this->upload_evidenceAction();
+    }
+
+    public function portal_itemsAction(){
+
+        if (Session::get('user_type') !== 'portal') {
+            echo json_encode(array());
+            exit;
+        }
+
+        $data = $this->assessments_model->portal_items(
+            (int) ($this->post['assessment_id'] ?? 0),
+            Session::get('client_id'),
+            Session::get('company_id')
+        );
+
+        echo json_encode($data);
+    }
+
+    /**
+     * Every portal action that names a project id passes through here, so the
+     * entitlement is expressed once. Mirrors owns_project() but on the client
+     * rather than the organisation.
+     */
+    private function client_owns_project($project_id): bool
+    {
+        if (Session::get('user_type') !== 'portal' || empty($project_id)) {
+            return false;
+        }
+
+        $project = $this->projects_model->client_project(
+            $project_id,
+            Session::get('client_id'),
+            Session::get('company_id')
+        );
+
+        return is_array($project) && count($project) === 1;
+    }
+
 
     public function save_clientAction(){
 
@@ -1137,6 +1439,28 @@ class ApiController extends Controller {
             exit;
         }
 
+        /**
+         * A client account is the pairing of user_type, the Client role and a real
+         * client record; the database enforces all three together, so they are
+         * settled here rather than trusted individually from the form.
+         */
+
+        $user_type = ($this->post['user_type'] === 'portal' ? 'portal' : 'staff');
+        $client_id = ($user_type === 'portal' ? (int) ($this->post['client_id'] ?? 0) : 0);
+        $role_id = ($user_type === 'portal' ? self::CLIENT_ROLE_ID : (int) $this->post['role_id']);
+
+        if ($user_type === 'portal' && !$this->owns_client($client_id)) {
+            $response['message'] = 'Choose the client this account belongs to';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($user_type === 'staff' && $role_id === self::CLIENT_ROLE_ID) {
+            $response['message'] = 'The Client role is only for client portal accounts';
+            echo json_encode($response);
+            exit;
+        }
+
         if ($toDo === 'update') {
 
             if (empty($this->post['user_id'])) {
@@ -1148,30 +1472,46 @@ class ApiController extends Controller {
             $this->user_model->update_user(
                 $this->post['user_id'],
                 $company_id,
-                $this->post['role_id'],
+                $role_id,
                 $this->post['first_name'],
                 $this->post['last_name'],
                 $this->post['u_name'],
                 $this->post['user_email'],
-                $this->post['user_status']
+                $this->post['user_status'],
+                $user_type,
+                $client_id
             );
             $response['success'] = true;
             $response['message'] = 'User updated';
             echo json_encode($response);
             exit;
         } else if ($toDo === 'add') {
-            $this->user_model->add_user(
+
+            $user_id = $this->user_model->add_user(
                 Session::get('company_id'),
-                $this->post['role_id'],
+                $role_id,
                 $this->post['first_name'],
                 $this->post['last_name'],
                 $this->post['u_name'],
                 $this->post['user_email'],
-                $this->post['user_status']
+                $this->post['user_status'],
+                $user_type,
+                $client_id
             );
 
+            /**
+             * add_user sets a random password and reset_pw, so the account is
+             * unusable until the invite link is followed. Sent only once the row
+             * exists, and only to an active account.
+             */
+
+            if (!empty($user_id) && $this->post['user_status'] === 'Active') {
+                $raw_token = $this->user_model->set_reset_token($user_id);
+                $this->notifications_model->send_password_reset($this->input('user_email'), $this->input('first_name'), $raw_token);
+            }
+
             $response['success'] = true;
-            $response['message'] = 'User added';
+            $response['message'] = 'User added and invited';
             echo json_encode($response);
             exit;
         }
@@ -2312,7 +2652,14 @@ class ApiController extends Controller {
             exit;
         }
 
-        if ($_FILES['evidence_file']['size'] > self::MAX_UPLOAD_BYTES) {
+        $max_bytes = 26214400;
+        $allowed_extensions = array(
+            'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'csv', 'rtf', 'odt', 'ods',
+            'png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp', 'tif', 'tiff', 'heic',
+            'zip', 'gz', 'tgz', '7z', 'json', 'xml', 'log', 'msg', 'eml'
+        );
+
+        if ($_FILES['evidence_file']['size'] > $max_bytes) {
             $response['message'] = 'The file must be 25MB or smaller';
             echo json_encode($response);
             exit;
@@ -2321,7 +2668,7 @@ class ApiController extends Controller {
         $original_name = basename((string) $_FILES['evidence_file']['name']);
         $extension = strtolower((string) pathinfo($original_name, PATHINFO_EXTENSION));
 
-        if ($extension === '' || !in_array($extension, self::ALLOWED_EXTENSIONS, true)) {
+        if ($extension === '' || !in_array($extension, $allowed_extensions, true)) {
             $response['message'] = 'That file type is not accepted as evidence';
             echo json_encode($response);
             exit;
@@ -2409,6 +2756,35 @@ class ApiController extends Controller {
 
         $response['success'] = true;
         $response['message'] = 'Evidence updated';
+        echo json_encode($response);
+    }
+
+    /**
+     * Marks a vault file as internal. Every portal query filters on this, so it is
+     * the switch that keeps working papers out of the client's view.
+     */
+    public function save_evidence_privateAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $evidence_id = (int) ($this->post['evidence_id'] ?? 0);
+        $evidence = $this->evidence_model->get_evidence($evidence_id, Session::get('company_id'));
+
+        if (count($evidence) !== 1) {
+            $response['message'] = 'That evidence could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $evidence_private = ((int) ($this->post['evidence_private'] ?? 0) === 1 ? 1 : 0);
+
+        $this->evidence_model->set_evidence_private($evidence_id, Session::get('company_id'), $evidence_private, Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = ($evidence_private === 1 ? 'Marked private' : 'Shared with the client');
         echo json_encode($response);
     }
 

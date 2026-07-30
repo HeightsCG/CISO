@@ -38,6 +38,93 @@ class ProjectsModel extends Model {
         return parent::select($sql, $where);
     }
 
+    /**
+     * The client portal's project list. Scoped on client_id as well as company_id:
+     * a client id is only unique within an organisation, so both are required.
+     */
+    public function client_projects($client_id, $company_id)
+    {
+        $where = array(
+            'client_id' => $client_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    p.id,
+                    p.project_name,
+                    p.description,
+                    p.start_date,
+                    p.end_date,
+                    DATE_FORMAT(p.start_date, df.sql_format) AS start_date_display,
+                    DATE_FORMAT(p.end_date, df.sql_format) AS end_date_display,
+                    p.project_status,
+                    (SELECT COUNT(*)
+                        FROM assessments a
+                        WHERE a.project_id = p.id
+                        and a.deleted = 0) AS assessment_count,
+                    (SELECT COUNT(*)
+                        FROM assessment_items ai
+                        JOIN assessments a ON a.id = ai.assessment_id
+                        WHERE a.project_id = p.id
+                        and a.deleted = 0
+                        and ai.deleted = 0) AS item_count,
+                    (SELECT COUNT(*)
+                        FROM assessment_items ai
+                        JOIN assessments a ON a.id = ai.assessment_id
+                        WHERE a.project_id = p.id
+                        and a.deleted = 0
+                        and ai.deleted = 0
+                        and ai.item_result <> 'Not Assessed') AS assessed_count,
+                    (SELECT COUNT(*)
+                        FROM evidence e
+                        WHERE e.project_id = p.id
+                        and e.deleted = 0
+                        and e.evidence_private = 0) AS evidence_count
+                FROM
+                    projects p
+                    JOIN companies co ON co.id = p.company_id
+                    JOIN date_formats df ON df.id = co.date_format_id
+                WHERE
+                    p.client_id = :client_id
+                    and
+                    p.company_id = :company_id
+                    and
+                    p.deleted = 0
+                ORDER BY
+                    p.date_created DESC,
+                    p.id DESC";
+        return parent::select($sql, $where);
+    }
+
+    /** One project, but only if it belongs to the calling client. */
+    public function client_project($project_id, $client_id, $company_id)
+    {
+        $where = array(
+            'id' => $project_id,
+            'client_id' => $client_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    p.id,
+                    p.project_name,
+                    p.description,
+                    DATE_FORMAT(p.start_date, df.sql_format) AS start_date_display,
+                    DATE_FORMAT(p.end_date, df.sql_format) AS end_date_display,
+                    p.project_status
+                FROM
+                    projects p
+                    JOIN companies co ON co.id = p.company_id
+                    JOIN date_formats df ON df.id = co.date_format_id
+                WHERE
+                    p.id = :id
+                    and
+                    p.client_id = :client_id
+                    and
+                    p.company_id = :company_id
+                    and
+                    p.deleted = 0";
+        return parent::select($sql, $where);
+    }
+
     public function get_project($project_id, $company_id)
     {
         $where = array(

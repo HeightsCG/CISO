@@ -39,14 +39,11 @@ class Bootstrap
             return;
         }
 
+        $this->enforce_portal_scope($c, $m);
+
         $co->$m();
     }
 
-    /**
-     * Errors are never rendered to the client. A single PHP notice echoed ahead of
-     * json_encode corrupts the response body and breaks every JSON.parse in
-     * api.data.js, so display is off in all environments and everything is logged.
-     */
     private function configure_errors(): void
     {
         error_reporting(E_ALL);
@@ -62,10 +59,6 @@ class Bootstrap
         });
     }
 
-    /**
-     * Company-wide idle timeout. The limit is written to the session at login so
-     * enforcement costs no query per request; a value of 0 disables it.
-     */
     private function enforce_idle_timeout(): void
     {
         if (empty(Session::get('user_id'))) {
@@ -85,8 +78,6 @@ class Bootstrap
 
             Session::destroy();
 
-            // An API caller must get JSON back. Redirecting here returns a 302 with an
-            // empty body, which every JSON.parse in the browser then chokes on.
             if (strtolower(Main::controller_name()) === 'apicontroller') {
 
                 $response = array(
@@ -114,9 +105,6 @@ class Bootstrap
         }
         ini_set('session.use_strict_mode', '1');
         ini_set('session.cookie_httponly', '1');
-        // Over plain HTTP a secure cookie is discarded by the browser and the session
-        // can never persist, so this tracks the actual request scheme instead of being
-        // hardcoded either way.
         ini_set('session.cookie_secure', $this->is_https() ? '1' : '0');
         ini_set('session.cookie_samesite', 'Lax');
     }
@@ -148,6 +136,48 @@ class Bootstrap
             return false;
         }
         return in_array($method, $controller->csrfExempt, true);
+    }
+
+    /**
+     * A client reaches the portal, their own profile, signing in and out, and any
+     * api action named portal_*. The prefix is the rule, so a portal feature added
+     * later needs no list kept in step with it. Refusals exit, or the action would
+     * still run and append its payload to the error page.
+     */
+    private function enforce_portal_scope(string $controller_name, string $method): void
+    {
+        if (Session::get('user_type') !== 'portal') {
+            return;
+        }
+
+        $name = strtolower($controller_name);
+
+        if (in_array($name, array('portalcontroller', 'profilecontroller', 'accountcontroller', 'logoutcontroller'), true)) {
+            return;
+        }
+
+        if ($name === 'apicontroller' && strpos($method, 'portal_') === 0) {
+            return;
+        }
+
+        /**
+         * change_password cannot take the prefix: force_reset.php posts to it by
+         * that name, and an invited client arrives with reset_pw set, so refusing
+         * it would leave them stuck on the forced change with no way through. It
+         * only ever acts on Session user_id, so it cannot reach another account.
+         */
+
+        if ($name === 'apicontroller' && $method === 'change_passwordAction') {
+            return;
+        }
+
+        if ($name === 'indexcontroller' && !$this->is_post()) {
+            header('Location: /portal');
+            exit;
+        }
+
+        Errors::access_denied();
+        exit;
     }
 
 }

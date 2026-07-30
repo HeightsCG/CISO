@@ -47,6 +47,9 @@ class UsersModel extends Model {
                     u.user_status,
                     u.reset_pw,
                     u.role_id,
+                    u.user_type,
+                    u.client_id,
+                    cl.company_name AS client_name,
                     u.date_created,
                     DATE_FORMAT(u.date_created, df.sql_format) AS date_created_display,
                     r.role_name
@@ -55,6 +58,7 @@ class UsersModel extends Model {
                     JOIN companies c ON c.id = u.company_id
                     JOIN date_formats df ON df.id = c.date_format_id
                     LEFT JOIN user_roles r ON r.id = u.role_id and r.deleted = 0
+                    LEFT JOIN clients cl ON cl.id = u.client_id and cl.deleted = 0
                 WHERE
                     u.company_id = :company_id
                     and
@@ -259,6 +263,8 @@ class UsersModel extends Model {
                     u.last_name,
                     u.user_status,
                     u.reset_pw,
+                    u.user_type,
+                    u.client_id,
                     DATE_FORMAT(u.date_created, df.sql_format) AS date_created_display
                 FROM
                     user_accounts u
@@ -273,7 +279,7 @@ class UsersModel extends Model {
         return parent::select($sql, $where);
     }
 
-    public function update_user($user_id, $company_id, $role_id, $first_name, $last_name, $u_name, $user_email, $user_status)
+    public function update_user($user_id, $company_id, $role_id, $first_name, $last_name, $u_name, $user_email, $user_status, $user_type, $client_id)
     {
         $where = array(
             'user_id' => $user_id,
@@ -281,6 +287,8 @@ class UsersModel extends Model {
         );
         $data = array(
             'role_id' => $role_id,
+            'user_type' => $user_type,
+            'client_id' => $client_id,
             'first_name' => $first_name,
             'last_name' => $last_name,
             'u_name' => $u_name,
@@ -307,11 +315,13 @@ class UsersModel extends Model {
         return parent::update('user_accounts', $data, 'user_id = :user_id and company_id = :company_id', $where);
     }
 
-    public function add_user($company_id, $role_id, $first_name, $last_name, $u_name, $user_email, $user_status)
+    public function add_user($company_id, $role_id, $first_name, $last_name, $u_name, $user_email, $user_status, $user_type, $client_id)
     {
         $data = array(
             'company_id' => $company_id,
             'role_id' => $role_id,
+            'user_type' => $user_type,
+            'client_id' => $client_id,
             'first_name' => $first_name,
             'last_name' => $last_name,
             'u_name' => $u_name,

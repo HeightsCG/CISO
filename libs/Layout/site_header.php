@@ -58,6 +58,12 @@ $(document).ready(function () {
         <nav class="shell__menu" aria-label="Primary">
             <div class="shell__group">
                 <p class="shell__group-label">Menu</p>
+                <?php if (Session::get('user_type') === 'portal') { ?>
+                <a class="shell__link<?php echo $this->controller == 'portal' ? ' is-active' : ''; ?>" href="/portal">
+                    <i class="fa-thin fa-house"></i>
+                    <span>My Projects</span>
+                </a>
+                <?php } else { ?>
                 <a class="shell__link<?php echo $this->controller == 'index' ? ' is-active' : ''; ?>" href="/">
                     <i class="fa-thin fa-house"></i>
                     <span>Dashboard</span>
@@ -75,6 +81,11 @@ $(document).ready(function () {
                     <i class="fa-thin fa-gear"></i>
                     <span>Standards</span>
                 </a>
+                <a class="shell__link<?php echo $this->controller == 'users' ? ' is-active' : ''; ?>" href="/users">
+                    <i class="fa-thin fa-users"></i>
+                    <span>User Accounts</span>
+                </a>
+                <?php } ?>
                 <?php } ?>
             </div>
         </nav>
@@ -93,6 +104,7 @@ $(document).ready(function () {
                     <svg class="shell__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end shell__user-menu">
+                    <?php if (Session::get('user_type') !== 'portal') { ?>
                     <li>
                         <a class="dropdown-item" href="/profile">
                             <i class="fa-thin fa-user"></i>
@@ -112,6 +124,7 @@ $(document).ready(function () {
                         </a>
                     </li>
                     <li><hr class="dropdown-divider"></li>
+                    <?php } ?>
                     <li>
                         <button type="button" class="dropdown-item shell__menu-danger" id="logout">
                             <i class="fa-thin fa-right-from-bracket"></i>

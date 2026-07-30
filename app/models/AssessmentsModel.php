@@ -48,6 +48,83 @@ class AssessmentsModel extends Model {
         return parent::select($sql, $where);
     }
 
+    public function client_assessment($assessment_id, $client_id, $company_id)
+    {
+        $where = array(
+            'id' => $assessment_id,
+            'client_id' => $client_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    a.id,
+                    a.project_id,
+                    a.assessment_name,
+                    a.standard_name,
+                    a.short_code,
+                    a.version,
+                    a.assessment_status,
+                    p.project_name
+                FROM
+                    assessments a
+                    JOIN projects p ON p.id = a.project_id
+                WHERE
+                    a.id = :id
+                    and
+                    p.client_id = :client_id
+                    and
+                    a.company_id = :company_id
+                    and
+                    a.deleted = 0
+                    and
+                    p.deleted = 0";
+        return parent::select($sql, $where);
+    }
+
+    public function portal_items($assessment_id, $client_id, $company_id)
+    {
+        $where = array(
+            'assessment_id' => $assessment_id,
+            'client_id' => $client_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    ai.id,
+                    ai.control_identifier,
+                    ai.parent_identifier,
+                    ai.control_title,
+                    ai.description,
+                    ai.family,
+                    ai.sort_order,
+                    ai.item_result,
+                    (SELECT COUNT(*)
+                        FROM evidence_links el
+                        JOIN evidence e ON e.id = el.evidence_id
+                        WHERE el.assessment_item_id = ai.id
+                        and e.deleted = 0
+                        and e.evidence_private = 0) AS evidence_count
+                FROM
+                    assessment_items ai
+                    JOIN assessments a ON a.id = ai.assessment_id
+                    JOIN projects p ON p.id = a.project_id
+                WHERE
+                    ai.assessment_id = :assessment_id
+                    and
+                    p.client_id = :client_id
+                    and
+                    a.company_id = :company_id
+                    and
+                    ai.deleted = 0
+                    and
+                    a.deleted = 0
+                    and
+                    p.deleted = 0
+                ORDER BY
+                    ai.family,
+                    ai.sort_order,
+                    ai.control_identifier";
+        return parent::select($sql, $where);
+    }
+
     public function get_assessment($assessment_id, $company_id)
     {
         $where = array(
@@ -77,85 +154,130 @@ class AssessmentsModel extends Model {
         return parent::select($sql, $where);
     }
 
-    /**
-     * Creating an assessment copies the standard's controls in rather than
-     * referencing them, so later edits to the library can never rewrite an
-     * assessment that is already under way.
-     */
     public function create_assessment($project_id, $company_id, $standard_id, $assessment_name, $created_by)
     {
-        $standard = parent::select(
-            "SELECT s.id, s.standard_name, s.short_code, s.version
-             FROM standards s
-             WHERE s.id = :id and s.company_id = :company_id and s.standard_status = 'Active' and s.deleted = 0",
-            array('id' => $standard_id, 'company_id' => $company_id)
-        );
+        $standard = $this->assessment_standard($standard_id, $company_id);
 
         if (count($standard) !== 1) {
             return 0;
         }
 
-        $controls = parent::select(
-            "SELECT sc.control_identifier, sc.parent_identifier, sc.control_title, sc.description, sc.family, sc.sort_order
-             FROM standard_controls sc
-             WHERE sc.standard_id = :standard_id and sc.deleted = 0
-             ORDER BY sc.family, sc.sort_order, sc.control_identifier",
-            array('standard_id' => $standard_id)
-        );
+        $controls = $this->assessment_controls($standard_id);
 
         if (count($controls) === 0) {
             return 0;
         }
 
-        $this->db->beginTransaction();
+        $data = array(
+            'company_id' => $company_id,
+            'project_id' => $project_id,
+            'standard_id' => $standard_id,
+            'standard_name' => $standard[0]['standard_name'],
+            'short_code' => $standard[0]['short_code'],
+            'version' => $standard[0]['version'],
+            'assessment_name' => $assessment_name,
+            'assessment_status' => 'Planned',
+            'created_by' => $created_by,
+            'updated_by' => $created_by,
+            'date_created' => date('Y-m-d H:i:s'),
+            'date_updated' => date('Y-m-d H:i:s'),
+            'deleted' => 0
+        );
+        $assessment_id = parent::insert('assessments', $data);
 
-        try {
-
-            $assessment_id = parent::insert('assessments', array(
-                'company_id' => $company_id,
-                'project_id' => $project_id,
-                'standard_id' => $standard_id,
-                'standard_name' => $standard[0]['standard_name'],
-                'short_code' => $standard[0]['short_code'],
-                'version' => $standard[0]['version'],
-                'assessment_name' => $assessment_name,
-                'assessment_status' => 'Planned',
-                'created_by' => $created_by,
-                'updated_by' => $created_by,
-                'date_created' => date('Y-m-d H:i:s'),
-                'date_updated' => date('Y-m-d H:i:s'),
-                'deleted' => 0
-            ));
-
-            foreach ($controls as $control) {
-                parent::insert('assessment_items', array(
-                    'assessment_id' => $assessment_id,
-                    'control_identifier' => $control['control_identifier'],
-                    'parent_identifier' => $control['parent_identifier'],
-                    'control_title' => $control['control_title'],
-                    'description' => $control['description'],
-                    'family' => $control['family'],
-                    'sort_order' => $control['sort_order'],
-                    'item_result' => 'Not Assessed',
-                    'notes' => '',
-                    'updated_by' => 0,
-                    'date_created' => date('Y-m-d H:i:s'),
-                    'date_updated' => date('Y-m-d H:i:s'),
-                    'deleted' => 0
-                ));
-            }
-
-            $this->db->commit();
-
-        } catch (Exception $e) {
-            $this->db->rollBack();
-            throw $e;
+        foreach ($controls as $control) {
+            $this->add_item(
+                $assessment_id,
+                $control['control_identifier'],
+                $control['parent_identifier'],
+                $control['control_title'],
+                $control['description'],
+                $control['family'],
+                $control['sort_order']
+            );
         }
 
         return $assessment_id;
     }
 
-    /** Status is not editable here — it follows the answers, see sync_assessment_status(). */
+    /** The standard an assessment is being cut from, active and in this org only. */
+    public function assessment_standard($standard_id, $company_id)
+    {
+        $where = array(
+            'id' => $standard_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    s.id,
+                    s.standard_name,
+                    s.short_code,
+                    s.version
+                FROM
+                    standards s
+                WHERE
+                    s.id = :id
+                    and
+                    s.company_id = :company_id
+                    and
+                    s.standard_status = 'Active'
+                    and
+                    s.deleted = 0";
+        return parent::select($sql, $where);
+    }
+
+    public function assessment_controls($standard_id)
+    {
+        $where = array(
+            'standard_id' => $standard_id
+        );
+        $sql = "SELECT
+                    sc.control_identifier,
+                    sc.parent_identifier,
+                    sc.control_title,
+                    sc.description,
+                    sc.family,
+                    sc.sort_order
+                FROM
+                    standard_controls sc
+                WHERE
+                    sc.standard_id = :standard_id
+                    and
+                    sc.deleted = 0
+                ORDER BY
+                    sc.family,
+                    sc.sort_order,
+                    sc.control_identifier";
+        return parent::select($sql, $where);
+    }
+
+    public function add_item(
+        $assessment_id,
+        $control_identifier,
+        $parent_identifier,
+        $control_title,
+        $description,
+        $family,
+        $sort_order
+    )
+    {
+        $data = array(
+            'assessment_id' => $assessment_id,
+            'control_identifier' => $control_identifier,
+            'parent_identifier' => $parent_identifier,
+            'control_title' => $control_title,
+            'description' => $description,
+            'family' => $family,
+            'sort_order' => $sort_order,
+            'item_result' => 'Not Assessed',
+            'notes' => '',
+            'updated_by' => 0,
+            'date_created' => date('Y-m-d H:i:s'),
+            'date_updated' => date('Y-m-d H:i:s'),
+            'deleted' => 0
+        );
+        return parent::insert('assessment_items', $data);
+    }
+
     public function update_assessment($assessment_id, $company_id, $assessment_name, $updated_by)
     {
         $where = array(
@@ -185,8 +307,6 @@ class AssessmentsModel extends Model {
 
         if ($rows > 0) {
 
-            // Without this the evidence keeps reporting links to items that no
-            // longer exist, and the vault's usage counts drift upward.
             parent::delete_all(
                 'evidence_links',
                 'assessment_item_id IN (SELECT id FROM assessment_items WHERE assessment_id = :assessment_id)',
@@ -296,7 +416,6 @@ class AssessmentsModel extends Model {
         return parent::update('assessment_items', $data, 'id = :id', $where);
     }
 
-    /** How many controls are still unanswered — the gate on completing. */
     public function unassessed_count($assessment_id, $company_id)
     {
         $where = array(
@@ -334,12 +453,6 @@ class AssessmentsModel extends Model {
         return parent::update('assessments', $data, 'id = :id and company_id = :company_id', $where);
     }
 
-    /**
-     * Status follows the answers rather than a dropdown: nothing answered is
-     * Planned, anything answered is In Progress. Complete is only ever set by
-     * the explicit action, and is given up again the moment an answer is
-     * withdrawn so the badge cannot claim more than the results support.
-     */
     public function sync_assessment_status($assessment_id, $company_id, $updated_by)
     {
         $assessment = $this->get_assessment($assessment_id, $company_id);
@@ -363,9 +476,6 @@ class AssessmentsModel extends Model {
         return $status;
     }
 
-    /* ------------------------------------------------------- reporting hooks */
-
-    /** Result totals for one assessment, for the header and the project roll-up. */
     public function result_totals($assessment_id, $company_id)
     {
         $where = array(
@@ -389,7 +499,6 @@ class AssessmentsModel extends Model {
         return parent::select($sql, $where);
     }
 
-    /** Results broken down by family - the shape a report consumes. */
     public function results_by_family($assessment_id, $company_id)
     {
         $where = array(
@@ -426,44 +535,6 @@ class AssessmentsModel extends Model {
         return parent::select($sql, $where);
     }
 
-    /** Every item with its result, notes and attached evidence - the report body. */
-    public function report_detail($assessment_id, $company_id)
-    {
-        $where = array(
-            'assessment_id' => $assessment_id,
-            'company_id' => $company_id
-        );
-        $sql = "SELECT
-                    ai.control_identifier,
-                    ai.control_title,
-                    ai.family,
-                    ai.sort_order,
-                    ai.item_result,
-                    ai.notes,
-                    e.id AS evidence_id,
-                    e.evidence_title,
-                    e.file_name,
-                    e.expiry_date
-                FROM
-                    assessment_items ai
-                    JOIN assessments a ON a.id = ai.assessment_id
-                    LEFT JOIN evidence_links el ON el.assessment_item_id = ai.id
-                    LEFT JOIN evidence e ON e.id = el.evidence_id and e.deleted = 0
-                WHERE
-                    ai.assessment_id = :assessment_id
-                    and
-                    a.company_id = :company_id
-                    and
-                    ai.deleted = 0
-                ORDER BY
-                    ai.family,
-                    ai.sort_order,
-                    ai.control_identifier,
-                    e.evidence_title";
-        return parent::select($sql, $where);
-    }
-
-    /** Assessment progress for every project in one call, for the projects list. */
     public function project_progress($company_id)
     {
         $where = array(

@@ -404,6 +404,9 @@ $(document).ready(function () {
             html += '<tr class="vault__row" data-id="' + e.id + '">'
                 + '<td class="vault__cell-name"><span class="vault__line">'
                 + '<a href="#" class="vault__title evidence__open" data-id="' + e.id + '" title="' + esc(e.evidence_title) + '">' + esc(e.evidence_title) + '</a>'
+                + (parseInt(e.evidence_private, 10) === 1
+                    ? '<span class="vault__private" title="Not visible in the client portal"><i class="fa-regular fa-lock"></i> Private</span>'
+                    : '')
                 + '<span class="vault__file" title="' + esc(e.file_name) + '">' + esc(e.file_name) + (ext === '' ? '' : ' &middot; ' + esc(ext.toUpperCase())) + '</span>'
                 + '</span></td>'
                 + '<td class="vault__col-size">' + size_label(e.file_size) + '</td>'
@@ -416,6 +419,10 @@ $(document).ready(function () {
                 + '<button type="button" class="btn btn--tertiary btn--sm" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Evidence actions"><i class="fa-regular fa-ellipsis"></i></button>'
                 + '<ul class="dropdown-menu dropdown-menu-end">'
                 + '<li><button type="button" class="dropdown-item" data-action="edit" data-id="' + e.id + '"><i class="fa-regular fa-pencil"></i> Edit</button></li>'
+                + '<li><button type="button" class="dropdown-item" data-action="private" data-id="' + e.id + '" data-private="' + (parseInt(e.evidence_private, 10) === 1 ? 0 : 1) + '">'
+                + (parseInt(e.evidence_private, 10) === 1
+                    ? '<i class="fa-regular fa-eye"></i> Share with client'
+                    : '<i class="fa-regular fa-lock"></i> Mark private') + '</button></li>'
                 + '<li><button type="button" class="dropdown-item dropdown-item--danger" data-action="delete" data-id="' + e.id + '"><i class="fa-regular fa-trash-can"></i> Delete</button></li>'
                 + '</ul></span></td></tr>';
         }
@@ -719,6 +726,30 @@ $(document).ready(function () {
                 modal('move_modal').hide();
                 load();
                 load_folders();
+            } else {
+                toastr.error(obj.message);
+            }
+        });
+    });
+
+    $('#evidence_body').on('click', '[data-action="private"]', function () {
+
+        var button = this;
+
+        set_loading(button, true);
+
+        ApiDataSvc.apiCall('post', 'save_evidence_private', {
+            evidence_id: $(this).attr('data-id'),
+            evidence_private: $(this).attr('data-private')
+        }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading(button, false);
+
+            if (obj.success) {
+                toastr.success(obj.message);
+                load();
             } else {
                 toastr.error(obj.message);
             }
