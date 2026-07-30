@@ -35,7 +35,7 @@ class Bootstrap
         }
 
         if ($this->is_post() && !$this->is_csrf_exempt($co, $m) && !CSRF::validate()) {
-            Errors::bad_request('CSRF validation failed for '.$c.'::'.$m);
+            Errors::bad_request('CSRF validation failed for '.$c.'::'.$m.$this->csrf_failure_context());
             return;
         }
 
@@ -99,6 +99,15 @@ class Bootstrap
 
     private function configure_session(array $config, string $env): void
     {
+        /**
+         * Its own cookie name, because the domain below is the parent and the
+         * default PHPSESSID is shared with every other app on a sibling subdomain.
+         * When one of those writes the cookie, this app is handed a session id it
+         * never issued, use_strict_mode discards it, and the CSRF token minted for
+         * the page that is being submitted no longer exists.
+         */
+        session_name('CISOSESSID');
+
         $domain = $config[$env]['domain'] ?? '';
         if ($domain !== '') {
             ini_set('session.cookie_domain', '.'.$domain);
@@ -128,6 +137,39 @@ class Bootstrap
     {
         return isset($_SERVER['REQUEST_METHOD'])
             && strtoupper((string) $_SERVER['REQUEST_METHOD']) === 'POST';
+    }
+
+    /**
+     * A CSRF failure has two unrelated causes: the session did not survive from
+     * the page that issued the token to the request that spends it, or it did and
+     * the tokens differ. Nothing in the failure itself says which, so the facts
+     * that separate them go in the log line. No token value is ever written.
+     *
+     * cookie_copies counts the raw header rather than $_COOKIE, which collapses
+     * duplicates - two session cookies at different domain scopes is the usual
+     * reason a token issued on one request is unreadable on the next.
+     */
+    private function csrf_failure_context(): string
+    {
+        $token = Session::get(CSRF::SESSION_KEY);
+        $name = session_name();
+
+        if (!empty($_POST[CSRF::FIELD])) {
+            $sent = 'post';
+        } elseif (!empty($_SERVER[CSRF::HEADER])) {
+            $sent = 'header';
+        } else {
+            $sent = 'none';
+        }
+
+        return ' [session_token='.(is_string($token) && $token !== '' ? 'present' : 'missing')
+            .' request_token='.$sent
+            .' cookie='.(isset($_COOKIE[$name]) ? 'sent' : 'absent')
+            .' cookie_copies='.substr_count((string) ($_SERVER['HTTP_COOKIE'] ?? ''), $name.'=')
+            .' session_files='.(is_writable(session_save_path() === '' ? sys_get_temp_dir() : session_save_path()) ? 'writable' : 'unwritable')
+            .' https='.($this->is_https() ? '1' : '0')
+            .' host='.preg_replace('/[^A-Za-z0-9\.\-:]/', '', (string) ($_SERVER['HTTP_HOST'] ?? ''))
+            .']';
     }
 
     private function is_csrf_exempt($controller, string $method): bool
