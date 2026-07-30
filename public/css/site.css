@@ -4208,3 +4208,39 @@ table.data--light td.pick__col-attach {
     width: 56px;
     text-align: right;
 }
+
+.errpage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: var(--space-6);
+    background: var(--surface-sunken);
+}
+
+.errpage__card {
+    width: 100%;
+    max-width: 460px;
+    padding: var(--space-8);
+}
+
+.errpage__logo {
+    height: 28px;
+    margin-bottom: var(--space-6);
+}
+
+.errpage__code {
+    margin-bottom: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+}
+
+.errpage__body {
+    margin: var(--space-3) 0 var(--space-6);
+    font-size: var(--fs-body);
+    line-height: var(--lh-normal);
+    color: var(--text-secondary);
+}

@@ -102,6 +102,13 @@ class PortalController extends Controller {
             return;
         }
 
+        // Staff have no portal of their own, so this is a wrong door rather than
+        // a missing page: send them back to their own home.
+        if (Session::get('user_type') !== 'portal') {
+            header('Location: /');
+            exit;
+        }
+
         Errors::page_not_found();
     }
 
