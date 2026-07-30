@@ -22,7 +22,7 @@
                     <select id="type_filter" class="form-control" aria-label="Filter by account type">
                         <option value="">All types</option>
                         <option value="staff">Staff</option>
-                        <option value="portal">Client portal</option>
+                        <option value="portal">Client</option>
                     </select>
                 </div>
                 <div class="roster__filter">
@@ -66,29 +66,36 @@
             <div class="modal-body">
                 <input type="hidden" id="user_id" value="0">
                 <div class="row mb-4">
-                    <div class="col-md-12 form-group">
-                        <label for="company_id">Company <abbr title="required">*</abbr></label>
+                    <div class="col-md-6 form-group">
+                        <label for="company_id">Company</label>
                         <select class="form-control" id="company_id"></select>
-                        <p class="import__hint" id="company_hint">The account is created inside this company and cannot be moved afterwards.</p>
+                    </div>
+                    <div class="col-md-6 form-group" id="client_row" hidden>
+                        <label for="client_id">Client</label>
+                        <select class="form-control" id="client_id"></select>
+                    </div>
+                    <div class="col-md-6 form-group" id="role_row">
+                        <label for="role_id">Role</label>
+                        <select class="form-control" id="role_id"></select>
                     </div>
                 </div>
                 <div class="row mb-4">
                     <div class="col-md-6 form-group">
-                        <label for="first_name">First Name <abbr title="required">*</abbr></label>
+                        <label for="first_name">First Name</label>
                         <input type="text" class="form-control" id="first_name" placeholder="Jane">
                     </div>
                     <div class="col-md-6 form-group">
-                        <label for="last_name">Last Name <abbr title="required">*</abbr></label>
+                        <label for="last_name">Last Name</label>
                         <input type="text" class="form-control" id="last_name" placeholder="Meier">
                     </div>
                 </div>
                 <div class="row mb-4">
                     <div class="col-md-6 form-group">
-                        <label for="u_name">Username <abbr title="required">*</abbr></label>
+                        <label for="u_name">Username</label>
                         <input type="text" class="form-control" id="u_name" autocapitalize="none" spellcheck="false" placeholder="jmeier">
                     </div>
                     <div class="col-md-6 form-group">
-                        <label for="user_email">Email <abbr title="required">*</abbr></label>
+                        <label for="user_email">Email</label>
                         <input type="email" class="form-control" id="user_email" autocapitalize="none" spellcheck="false" placeholder="jane.meier@example.com">
                     </div>
                 </div>
@@ -108,33 +115,19 @@
                         </select>
                     </div>
                 </div>
-                <div class="row mb-4" id="role_row">
-                    <div class="col-md-12 form-group">
-                        <label for="role_id">Role</label>
-                        <select class="form-control" id="role_id"></select>
-                    </div>
-                </div>
-                <div class="row mb-4" id="client_row" hidden>
-                    <div class="col-md-12 form-group">
-                        <label for="client_id">Client <abbr title="required">*</abbr></label>
-                        <select class="form-control" id="client_id"></select>
-                        <p class="import__hint">They will see only this client's projects, assessments and evidence.</p>
-                    </div>
-                </div>
                 <div class="row mb-4" id="admin_row">
                     <div class="col-md-12 form-group">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="global_admin">
                             <label class="form-check-label" for="global_admin">Global admin</label>
                         </div>
-                        <p class="import__hint">Can see and manage every account in every company, and maintain the standards library.</p>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <span class="me-auto">
-                    <button type="button" id="open_reset" class="btn btn--secondary"><i class="fa-regular fa-key"></i> Password Reset</button>
-                    <button type="button" id="open_delete" class="btn btn--destructive"><i class="fa-regular fa-trash"></i></button>
+                <span class="me-auto modal-footer__aux">
+                    <button type="button" id="open_reset" class="btn btn--secondary"><i class="fa-regular fa-key"></i> Reset</button>
+                    <button type="button" class="btn btn--destructive" id="open_delete"><i class="fa-regular fa-trash"></i> Delete</button>
                 </span>
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal"><i class="fa-regular fa-xmark"></i> Cancel</button>
                 <button type="button" id="save" class="btn btn--primary"><i class="fa-regular fa-floppy-disk"></i> Save</button>
@@ -157,7 +150,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="reset" class="btn btn--primary">Send Reset Link</button>
+                <button type="button" id="reset" class="btn btn--primary">Reset Password</button>
             </div>
         </div>
     </div>
@@ -167,17 +160,17 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="delete_modal_title">Remove User</h2>
+                <h2 class="modal-title" id="delete_modal_title">Delete User</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="delete_user_id" value="0">
-                <p>Remove <strong id="delete_name"></strong> from <strong id="delete_company"></strong>? They lose access immediately.</p>
+                <p>Delete <strong id="delete_name"></strong> from <strong id="delete_company"></strong>? They lose access immediately.</p>
                 <p class="import__hint">Their name stays on anything they have already recorded, so assessment history is not rewritten.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="delete" class="btn btn--destructive">Remove User</button>
+                <button type="button" id="delete" class="btn btn--destructive">Delete User</button>
             </div>
         </div>
     </div>
@@ -286,37 +279,28 @@ $(document).ready(function () {
     });
 
     $('#users_table tbody').on('click', 'tr', function () {
-
         var data = table.row(this).data();
-
-        if (!data) {
-            return;
-        }
-
         $("#user_modal_title").text("Edit User");
         $("#user_id").val(data[0]);
-        $("#company_id").val(data[13]).prop("disabled", true);
-        $("#company_hint").text("An account stays with the company it was created in.");
+        $("#company_id").val(data[13]);
         $("#first_name").val(data[8]);
         $("#last_name").val(data[9]);
         $("#u_name").val(data[3]);
         $("#user_email").val(data[4]);
         $("#role_id").val(data[10]);
-        $("#user_type").val(data[11] === 'portal' ? 'portal' : 'staff');
+        $("#user_type").val(data[11]);
         $("#global_admin").prop("checked", parseInt(data[14], 10) === 1);
         $("#user_status").val(data[7]);
         load_clients(data[13], data[12]);
         sync_type();
         $("#open_reset").show();
-        $("#open_delete").toggle(parseInt(data[0], 10) !== current_user_id);
         $("#user_modal").modal("show");
     });
 
     $("#add").click(function () {
         $("#user_modal_title").text("Add User");
         $("#user_id").val(0);
-        $("#company_id").prop("disabled", false).prop("selectedIndex", 0);
-        $("#company_hint").text("The account is created inside this company and cannot be moved afterwards.");
+        $("#company_id").prop("selectedIndex", 0);
         $("#first_name").val("");
         $("#last_name").val("");
         $("#u_name").val("");
@@ -400,7 +384,9 @@ $(document).ready(function () {
         }
 
         if ($("#user_type").val() === "portal" && ($("#client_id").val() === null || $("#client_id").val() === "")) {
-            toastr.error("Choose the client this account belongs to");
+            toastr.error($("#client_id").prop("disabled")
+                ? "Add a client to " + $("#company_id option:selected").text() + " before giving anyone portal access"
+                : "Choose the client this account belongs to");
             return;
         }
 
@@ -483,9 +469,19 @@ $(document).ready(function () {
         ApiDataSvc.apiCall('post', 'global_clients', { company_id: company_id }, function (data) {
             var obj = JSON.parse(data);
             $("#client_id").empty();
+
+            if (obj.length === 0) {
+                $("#client_id").append($("<option>").attr("value", "").text("No clients in this company yet"));
+                $("#client_id").prop("disabled", true);
+                return;
+            }
+
+            $("#client_id").prop("disabled", false);
+
             for (var i = 0; i < obj.length; i++) {
                 $("#client_id").append($("<option>").attr("value", obj[i].id).text(obj[i].company_name));
             }
+
             if (parseInt(selected_client_id, 10) > 0) {
                 $("#client_id").val(selected_client_id);
             }

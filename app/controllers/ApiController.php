@@ -564,7 +564,6 @@ class ApiController extends Controller {
         $this->companies_model->update_company(
             Session::get('company_id'),
             $this->post['company_name'],
-            $this->post['trading_name'],
             $this->post['address_1'],
             $this->post['address_2'],
             $this->post['city'],
@@ -1674,11 +1673,14 @@ class ApiController extends Controller {
             exit;
         }
 
-        /**
-         * On an edit the company comes from the row, never from the form. Moving an
-         * account between tenants would strand its client_id and everything it has
-         * recorded, so the picker is add-only and this ignores it either way.
-         */
+        $company_id = (int) ($this->post['company_id'] ?? 0);
+        $company = $this->companies_model->get_company($company_id);
+
+        if (!is_array($company) || count($company) !== 1) {
+            $response['message'] = 'Choose the company this account belongs to';
+            echo json_encode($response);
+            exit;
+        }
 
         $existing = array();
 
@@ -1693,18 +1695,6 @@ class ApiController extends Controller {
             }
 
             $existing = $rows[0];
-            $company_id = (int) $existing['company_id'];
-
-        } else {
-
-            $company_id = (int) ($this->post['company_id'] ?? 0);
-            $company = $this->companies_model->get_company($company_id);
-
-            if (!is_array($company) || count($company) !== 1) {
-                $response['message'] = 'Choose the company this account belongs to';
-                echo json_encode($response);
-                exit;
-            }
         }
 
         $check_email = ($toDo === 'add'
@@ -1773,7 +1763,7 @@ class ApiController extends Controller {
 
             $this->user_model->update_user(
                 $user_id,
-                $company_id,
+                (int) $existing['company_id'],
                 $role_id,
                 $this->post['first_name'],
                 $this->post['last_name'],
@@ -1783,6 +1773,10 @@ class ApiController extends Controller {
                 $user_type,
                 $client_id
             );
+
+            if ($company_id !== (int) $existing['company_id']) {
+                $this->user_model->set_company($user_id, $company_id);
+            }
 
             $this->user_model->set_global_admin($user_id, $global_admin);
 
@@ -1856,7 +1850,7 @@ class ApiController extends Controller {
         $this->user_model->delete_user($user_id, $rows[0]['company_id']);
 
         $response['success'] = true;
-        $response['message'] = 'User removed';
+        $response['message'] = 'User deleted';
         echo json_encode($response);
     }
 

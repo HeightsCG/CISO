@@ -3694,6 +3694,23 @@ td.controls__actions .btn + .btn {
     border-color: var(--critical-hover);
 }
 
+/* The solid fill above marks the button that carries out the deletion. A button
+   that only opens the confirmation is not that button, so it keeps the outline
+   style it has in every page head. */
+
+.modal-footer__aux .btn--destructive,
+.modal-footer__aux .btn--destructive:disabled {
+    background: var(--surface-app);
+    border-color: var(--critical-border);
+    color: var(--critical);
+}
+
+.modal-footer__aux .btn--destructive:hover:not(:disabled) {
+    background: var(--critical-bg);
+    border-color: var(--critical);
+    color: var(--critical);
+}
+
 .badge--critical {
     color: var(--critical);
     background: var(--critical-bg);

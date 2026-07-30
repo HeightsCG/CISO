@@ -60,7 +60,6 @@ class CompaniesModel extends Model {
     public function update_company(
         $company_id,
         $company_name,
-        $trading_name,
         $address_1,
         $address_2,
         $city,
@@ -83,7 +82,6 @@ class CompaniesModel extends Model {
         );
         $data = array(
             'company_name' => $company_name,
-            'trading_name' => $trading_name,
             'address_1' => $address_1,
             'address_2' => $address_2,
             'city' => $city,

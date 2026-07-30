@@ -141,6 +141,24 @@ class UsersModel extends Model {
     }
 
     /**
+     * update_user carries company_id in its WHERE rather than its data, so moving
+     * an account to another tenant cannot go through it - the predicate would stop
+     * matching the row it is trying to change.
+     */
+    public function set_company($user_id, $company_id)
+    {
+        $where = array(
+            'user_id' => $user_id
+        );
+        $data = array(
+            'company_id' => $company_id,
+            'updated_by' => Session::get('user_id'),
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+        return parent::update('user_accounts', $data, 'user_id = :user_id', $where);
+    }
+
+    /**
      * Set apart from update_user because that method is shared with the per-company
      * users page, which must never be able to write this column.
      */

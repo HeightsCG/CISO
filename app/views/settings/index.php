@@ -20,17 +20,11 @@
                         <h2 class="card__title">Company Details</h2>
                     </header>
                     <div class="card__body">
-                        <div class="grid grid--2">
+                        <div class="grid">
                             <div class="field">
                                 <div class="form-floating">
                                     <input type="text" id="company_name" class="form-control" placeholder="Company name" required>
                                     <label for="company_name">Company Name <abbr title="required">*</abbr></label>
-                                </div>
-                            </div>
-                            <div class="field">
-                                <div class="form-floating">
-                                    <input type="text" id="trading_name" class="form-control" placeholder="Trading name">
-                                    <label for="trading_name">Trading Name</label>
                                 </div>
                             </div>
                         </div>
@@ -466,7 +460,6 @@ $(document).ready(function () {
     function collect_company() {
         return {
             company_name: $("#company_name").val().trim(),
-            trading_name: $("#trading_name").val().trim(),
             email_domain: $("#email_domain").val().trim().toLowerCase(),
             website: $("#website").val().trim(),
             address_1: $("#address_1").val().trim(),
@@ -631,7 +624,6 @@ $(document).ready(function () {
             $("#timezone").selectpicker("refresh");
 
             $("#company_name").val(company.company_name);
-            $("#trading_name").val(company.trading_name);
             $("#email_domain").val(company.email_domain);
             $("#website").val(company.website);
             $("#address_1").val(company.address_1);
