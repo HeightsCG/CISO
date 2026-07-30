@@ -1505,13 +1505,18 @@ class ApiController extends Controller {
              * exists, and only to an active account.
              */
 
+            $invited = false;
+
             if (!empty($user_id) && $this->post['user_status'] === 'Active') {
                 $raw_token = $this->user_model->set_reset_token($user_id);
                 $this->notifications_model->send_password_reset($this->input('user_email'), $this->input('first_name'), $raw_token);
+                $invited = true;
             }
 
             $response['success'] = true;
-            $response['message'] = 'User added and invited';
+            $response['message'] = ($invited
+                ? 'User added and invited'
+                : 'User added. Set the account to Active to send the invite.');
             echo json_encode($response);
             exit;
         }
