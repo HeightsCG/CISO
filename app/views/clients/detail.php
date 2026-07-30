@@ -26,6 +26,25 @@
                     </dl>
                 </div>
             </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="panel record__panel">
+                <div class="panel__head">
+                    <h2 class="panel__title">Primary Contact</h2>
+                </div>
+                <div class="panel__body">
+                    <dl class="datalist datalist--record">
+                        <dt>Full Name</dt>
+                        <dd><?php echo ($this->client['contact_name'] === '' ? '<span class="roster__none">&mdash;</span>' : htmlspecialchars($this->client['contact_name'], ENT_QUOTES, 'UTF-8')); ?></dd>
+                        <dt>Job Title</dt>
+                        <dd><?php echo ($this->client['contact_title'] === '' ? '<span class="roster__none">&mdash;</span>' : htmlspecialchars($this->client['contact_title'], ENT_QUOTES, 'UTF-8')); ?></dd>
+                        <dt>Email Address</dt>
+                        <dd><?php echo ($this->client['contact_email'] === '' ? '<span class="roster__none">&mdash;</span>' : '<a href="mailto:'.htmlspecialchars($this->client['contact_email'], ENT_QUOTES, 'UTF-8').'">'.htmlspecialchars($this->client['contact_email'], ENT_QUOTES, 'UTF-8').'</a>'); ?></dd>
+                        <dt>Phone</dt>
+                        <dd><?php echo ($this->client['contact_phone'] === '' ? '<span class="roster__none">&mdash;</span>' : htmlspecialchars($this->client['contact_phone'], ENT_QUOTES, 'UTF-8')); ?></dd>
+                    </dl>
+                </div>
+            </div>
             <div class="panel record__panel">
                 <div class="panel__head">
                     <h2 class="panel__title">Address</h2>
@@ -47,26 +66,6 @@
                     </dl>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="panel record__panel">
-                <div class="panel__head">
-                    <h2 class="panel__title">Primary Contact</h2>
-                </div>
-                <div class="panel__body">
-                    <dl class="datalist datalist--record">
-                        <dt>Full Name</dt>
-                        <dd><?php echo ($this->client['contact_name'] === '' ? '<span class="roster__none">&mdash;</span>' : htmlspecialchars($this->client['contact_name'], ENT_QUOTES, 'UTF-8')); ?></dd>
-                        <dt>Job Title</dt>
-                        <dd><?php echo ($this->client['contact_title'] === '' ? '<span class="roster__none">&mdash;</span>' : htmlspecialchars($this->client['contact_title'], ENT_QUOTES, 'UTF-8')); ?></dd>
-                        <dt>Email Address</dt>
-                        <dd><?php echo ($this->client['contact_email'] === '' ? '<span class="roster__none">&mdash;</span>' : '<a href="mailto:'.htmlspecialchars($this->client['contact_email'], ENT_QUOTES, 'UTF-8').'">'.htmlspecialchars($this->client['contact_email'], ENT_QUOTES, 'UTF-8').'</a>'); ?></dd>
-                        <dt>Phone</dt>
-                        <dd><?php echo ($this->client['contact_phone'] === '' ? '<span class="roster__none">&mdash;</span>' : htmlspecialchars($this->client['contact_phone'], ENT_QUOTES, 'UTF-8')); ?></dd>
-                    </dl>
-                </div>
-            </div>
-
         </div>
     </div>
 </div>

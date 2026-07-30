@@ -1,6 +1,9 @@
 <?php
 class NotificationsModel extends Model {
 
+    /** Where all mail is diverted outside production. */
+    const NON_PRODUCTION_INBOX = 'danglauber@gmail.com';
+
     public function __construct(){
         parent::__construct();
     }
@@ -64,7 +67,35 @@ class NotificationsModel extends Model {
             )
         );
 
-        return $notifications = (new Notifications())->send_email($to_array, 0, $subject, $message);
+        return $this->send($to_array, 0, $subject, $message);
+    }
+
+    /**
+     * The single way out. Outside production the recipients are replaced, so a test
+     * invite can never reach a real client's inbox, and the subject carries who it
+     * was meant for because every diverted message otherwise looks identical.
+     */
+    private function send($to_array, $cc_array, $subject, $message)
+    {
+        if (Main::get_environment() !== 'production') {
+
+            $intended = array();
+
+            foreach ($to_array as $recipient) {
+                $intended[] = $recipient['email'];
+            }
+
+            $subject = '['.Main::get_environment().' to '.implode(', ', $intended).'] '.$subject;
+            $cc_array = 0;
+            $to_array = array(
+                array(
+                    'email' => self::NON_PRODUCTION_INBOX,
+                    'name' => Main::site_name()
+                )
+            );
+        }
+
+        return (new Notifications())->send_email($to_array, $cc_array, $subject, $message);
     }
 
 }

@@ -27,7 +27,25 @@ class ClientsModel extends Model {
                     c.date_created,
                     c.date_updated,
                     DATE_FORMAT(c.date_created, df.sql_format) AS date_created_display,
-                    DATE_FORMAT(c.date_updated, df.sql_format) AS date_updated_display
+                    DATE_FORMAT(c.date_updated, df.sql_format) AS date_updated_display,
+                    (SELECT COUNT(*)
+                        FROM projects p
+                        WHERE p.client_id = c.id
+                        and p.company_id = c.company_id
+                        and p.deleted = 0) AS project_count,
+                    (SELECT COUNT(*)
+                        FROM projects p
+                        WHERE p.client_id = c.id
+                        and p.company_id = c.company_id
+                        and p.project_status <> 'Complete'
+                        and p.deleted = 0) AS open_project_count,
+                    (SELECT COUNT(*)
+                        FROM assessments a
+                        JOIN projects p ON p.id = a.project_id
+                        WHERE p.client_id = c.id
+                        and p.company_id = c.company_id
+                        and a.deleted = 0
+                        and p.deleted = 0) AS assessment_count
                 FROM
                     clients c
                     JOIN companies co ON co.id = c.company_id

@@ -17,9 +17,12 @@
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Company</th>
+                            <th scope="col">Projects</th>
+                            <th scope="col">Assessments</th>
                             <th scope="col">City / State</th>
                             <th scope="col">Created</th>
                             <th scope="col">Updated</th>
+                            <th scope="col">Open projects</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -31,6 +34,36 @@
 
 <script>
 $(document).ready(function () {
+
+    function dash(data) {
+        if (!data) {
+            return '<span class="roster__none">&mdash;</span>';
+        }
+        return data;
+    }
+
+    function count_cell(data, type) {
+        if (type !== 'display') {
+            return data;
+        }
+        return data > 0 ? '<span class="chip">' + data + '</span>' : '<span class="chip chip--empty">0</span>';
+    }
+
+    /* Every project counts, whatever its status; how many are still open is the
+       secondary line so a client with finished work does not read as inactive. */
+    function projects_cell(data, type, row) {
+
+        if (type !== 'display') {
+            return data;
+        }
+
+        if (data === 0) {
+            return '<span class="chip chip--empty">0</span>';
+        }
+
+        return '<span class="chip">' + data + '</span>'
+            + '<span class="roster__sub">' + (row[7] > 0 ? row[7] + ' open' : 'all complete') + '</span>';
+    }
 
     var table = $('#clients_table').DataTable({
         dom: "t",
@@ -45,25 +78,32 @@ $(document).ready(function () {
                 visible: false
             },{
                 targets: 1,
-                width: '34%'
+                width: '28%'
             },{
                 targets: 2,
-                width: '26%',
+                width: '14%',
+                render: projects_cell
+            },{
+                targets: 3,
+                width: '12%',
+                render: count_cell
+            },{
+                targets: 4,
+                width: '20%',
                 render: {
-                    display: function (data) {
-                        if (!data) {
-                            return '<span class="roster__none">&mdash;</span>';
-                        }
-                        return data;
-                    }
+                    display: dash
                 }
             },{
-                targets: [3, 4],
-                width: '20%',
+                targets: [5, 6],
+                width: '13%',
                 render: {
                     _: 'sort',
                     display: 'display'
                 }
+            },{
+                targets: 7,
+                visible: false,
+                searchable: false
             }
         ],
         language: {
@@ -94,9 +134,12 @@ $(document).ready(function () {
                 table.row.add([
                     obj[i].id,
                     obj[i].company_name,
+                    parseInt(obj[i].project_count, 10),
+                    parseInt(obj[i].assessment_count, 10),
                     [obj[i].city, obj[i].state].filter(Boolean).join(', '),
                     { sort: obj[i].date_created, display: obj[i].date_created_display },
-                    { sort: obj[i].date_updated, display: obj[i].date_updated_display }
+                    { sort: obj[i].date_updated, display: obj[i].date_updated_display },
+                    parseInt(obj[i].open_project_count, 10)
                 ]);
             }
             table.draw();
