@@ -33,8 +33,8 @@
                         <th scope="col" class="vault__col-size">Size</th>
                         <th scope="col" class="vault__col-date">Uploaded</th>
                         <th scope="col" class="vault__col-links">Controls</th>
-                        <th scope="col">Uploaded by</th>
-                        <th scope="col"><span class="visually-hidden">Actions</span></th>
+                        <th scope="col" class="vault__col-by">Uploaded by</th>
+                        <th scope="col" class="vault__col-actions"><span class="visually-hidden">Actions</span></th>
                     </tr>
                 </thead>
                 <tbody id="evidence_body"></tbody>
@@ -247,8 +247,8 @@ $(document).ready(function () {
                     ? '<span class="chip">' + links + '</span>'
                     : '<span class="chip chip--empty">0</span>') + '</td>'
                 + '<td>' + esc(e.uploaded_by_name === null ? '' : e.uploaded_by_name) + '</td>'
-                + '<td class="controls__actions">' + (parseInt(e.uploaded_by, 10) === my_user_id && links === 0
-                    ? '<button type="button" class="btn btn--tertiary btn--sm" data-action="remove" data-id="' + e.id + '" data-title="' + esc(e.evidence_title) + '"><i class="fa-regular fa-trash-can"></i> Remove</button>'
+                + '<td class="vault__col-actions">' + (parseInt(e.uploaded_by, 10) === my_user_id && links === 0
+                    ? '<button type="button" class="btn btn--tertiary btn--sm" data-action="remove" data-id="' + e.id + '" data-title="' + esc(e.evidence_title) + '" title="Remove" aria-label="Remove ' + esc(e.evidence_title) + '"><i class="fa-regular fa-trash-can"></i></button>'
                     : '') + '</td>'
                 + '</tr>';
         }

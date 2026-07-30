@@ -4188,3 +4188,23 @@ table.data--light td.pick__col-attach {
     border-radius: var(--radius);
     white-space: nowrap;
 }
+
+.pick__search {
+    display: block;
+    width: 100%;
+}
+
+#portal_attach_modal table.data,
+#portal_attach_modal .vault__cell-name {
+    table-layout: auto;
+    max-width: none;
+}
+
+.vault__col-by {
+    width: 140px;
+}
+
+.vault__col-actions {
+    width: 56px;
+    text-align: right;
+}

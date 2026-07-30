@@ -65,11 +65,11 @@
     </div>
 </div>
 
-<div class="modal fade" data-bs-backdrop="static" id="item_modal" tabindex="-1" aria-labelledby="item_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="portal_item_modal" tabindex="-1" aria-labelledby="portal_item_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="item_modal_title">Control</h2>
+                <h2 class="modal-title" id="portal_item_modal_title">Control</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -96,15 +96,15 @@
     </div>
 </div>
 
-<div class="modal fade" data-bs-backdrop="static" id="attach_modal" tabindex="-1" aria-labelledby="attach_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="portal_attach_modal" tabindex="-1" aria-labelledby="portal_attach_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="attach_modal_title">Attach Evidence</h2>
+                <h2 class="modal-title" id="portal_attach_modal_title">Attach Evidence</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="search" id="attach_search" class="input vault__search mb-4" placeholder="Search title or file name..." autocomplete="off" spellcheck="false">
+                <input type="search" id="attach_search" class="input pick__search mb-4" placeholder="Search title or file name..." autocomplete="off" spellcheck="false">
                 <table class="data data--light" id="attach_table">
                     <thead>
                         <tr>
@@ -124,11 +124,11 @@
     </div>
 </div>
 
-<div class="modal fade" data-bs-backdrop="static" id="upload_modal" tabindex="-1" aria-labelledby="upload_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="portal_upload_modal" tabindex="-1" aria-labelledby="portal_upload_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="upload_modal_title">Upload Evidence</h2>
+                <h2 class="modal-title" id="portal_upload_modal_title">Upload Evidence</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -367,7 +367,7 @@ $(document).ready(function () {
             .addClass(badge_for(current_item.item_result));
 
         load_item_evidence();
-        modal('item_modal').show();
+        modal('portal_item_modal').show();
     });
 
     function load_item_evidence() {
@@ -483,7 +483,7 @@ $(document).ready(function () {
         ApiDataSvc.apiCall('post', 'portal_evidence', { project_id: project_id }, function (data) {
             vault = JSON.parse(data);
             render_attach();
-            modal('attach_modal').show();
+            modal('portal_attach_modal').show();
         });
     });
 
@@ -508,7 +508,7 @@ $(document).ready(function () {
                 toastr.success(obj.message);
                 load_item_evidence();
                 load();
-                modal('attach_modal').hide();
+                modal('portal_attach_modal').hide();
             } else {
                 toastr.error(obj.message);
             }
@@ -520,7 +520,7 @@ $(document).ready(function () {
         $('#evidence_description').val('');
         $('#evidence_file').val('').removeClass('is-invalid');
         $('#upload_for').text(current_item.control_identifier);
-        modal('upload_modal').show();
+        modal('portal_upload_modal').show();
     });
 
     $('#do_upload').click(function () {
@@ -577,7 +577,7 @@ $(document).ready(function () {
                     var link_obj = JSON.parse(linked);
 
                     set_loading('#do_upload', false);
-                    modal('upload_modal').hide();
+                    modal('portal_upload_modal').hide();
 
                     if (link_obj.success) {
                         toastr.success('Evidence uploaded and attached');
