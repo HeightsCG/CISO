@@ -14,26 +14,10 @@
 
     <div class="panel record__panel">
         <div class="panel__body">
-            <div class="figure">
-                <div class="headline">
-                    <p class="headline__cap">Assessed</p>
-                    <p class="headline__n" id="headline_n">&mdash;</p>
-                    <div class="progress progress--lg"><div class="progress__bar" id="headline_bar" style="width:0%"></div></div>
-                    <p class="headline__note" id="headline_note">&nbsp;</p>
-                </div>
-                <div class="figure__breakdown">
-                    <table class="data data--light">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="legend__name">Result</th>
-                                <th scope="col"><span class="visually-hidden">Share of controls</span></th>
-                                <th scope="col" class="legend__num">Controls</th>
-                                <th scope="col" class="legend__num">Share</th>
-                            </tr>
-                        </thead>
-                        <tbody id="legend"></tbody>
-                    </table>
-                </div>
+            <div class="rollup" id="rollup"></div>
+            <div class="rollup__progress">
+                <div class="progress progress--lg"><div class="progress__bar" id="rollup_bar" style="width:0%"></div></div>
+                <span class="progress__label" id="rollup_label">&nbsp;</span>
             </div>
         </div>
     </div>
@@ -246,34 +230,26 @@ $(document).ready(function () {
         return counts;
     }
 
-    function render_figure() {
+    function render_rollup() {
 
         var counts = counts_of();
         var total = items.length;
         var assessed = total - counts['Not Assessed'];
-        var pct_assessed = total > 0 ? Math.round(assessed / total * 100) : 0;
-        var legend = '';
+        var pct = total > 0 ? Math.round(assessed / total * 100) : 0;
+        var html = '';
 
         for (var i = 0; i < RESULTS.length; i++) {
-
-            var n = counts[RESULTS[i].name];
-            var pct = total > 0 ? (n / total * 100) : 0;
-
-            legend += '<tr>'
-                + '<td class="legend__name"><span class="rollup__dot ' + RESULTS[i].dot + '"></span> ' + esc(RESULTS[i].name) + '</td>'
-                + '<td class="legend__track"><span class="track">'
-                + '<span class="track__fill ' + RESULTS[i].dot + '" style="width:' + pct.toFixed(2) + '%"></span></span></td>'
-                + '<td class="legend__num">' + n + '</td>'
-                + '<td class="legend__num legend__pct">' + Math.round(pct) + '%</td>'
-                + '</tr>';
+            html += '<span class="rollup__stat">'
+                + '<span class="rollup__dot ' + RESULTS[i].dot + '"></span>'
+                + '<span class="rollup__n">' + counts[RESULTS[i].name] + '</span>'
+                + '<span class="rollup__label">' + esc(RESULTS[i].name) + '</span></span>';
         }
 
-        $('#legend').html(legend);
-        $('#headline_n').text(total === 0 ? '\u2014' : assessed + ' of ' + total);
-        $('#headline_bar').css('width', pct_assessed + '%');
-        $('#headline_note').text(total === 0
+        $('#rollup').html(html);
+        $('#rollup_bar').css('width', pct + '%');
+        $('#rollup_label').text(total === 0
             ? 'No controls in this assessment'
-            : pct_assessed + '% of controls have a result');
+            : assessed + ' of ' + total + ' controls assessed \u00b7 ' + pct + '%');
     }
 
     function render_families() {
@@ -618,7 +594,7 @@ $(document).ready(function () {
         ApiDataSvc.apiCall('post', 'portal_items', { assessment_id: assessment_id }, function (data) {
             items = JSON.parse(data);
             render_families();
-            render_figure();
+            render_rollup();
             render();
         });
     }
