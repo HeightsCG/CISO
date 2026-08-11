@@ -231,7 +231,7 @@ class InvoicesModel extends Model {
         return parent::select($sql, $where);
     }
 
-    public function add_invoice($company_id, $client_id, $project_id, $currency, $invoice_memo, $invoice_footer, $due_days, $created_by)
+    public function add_invoice($company_id, $client_id, $project_id, $currency, $invoice_memo, $invoice_footer, $due_days, $due_date, $created_by)
     {
         $data = array(
             'company_id'     => $company_id,
@@ -241,6 +241,7 @@ class InvoicesModel extends Model {
             'invoice_memo'   => $invoice_memo,
             'invoice_footer' => $invoice_footer,
             'due_days'       => $due_days,
+            'due_date'       => $due_date,
             'invoice_origin' => 'Manual',
             'invoice_status' => 'Draft',
             'created_by'     => $created_by,
@@ -251,7 +252,7 @@ class InvoicesModel extends Model {
         return parent::insert('invoices', $data);
     }
 
-    public function update_invoice($invoice_id, $company_id, $client_id, $project_id, $currency, $invoice_memo, $invoice_footer, $due_days, $updated_by)
+    public function update_invoice($invoice_id, $company_id, $client_id, $project_id, $currency, $invoice_memo, $invoice_footer, $due_days, $due_date, $updated_by)
     {
         $where = array(
             'id'         => $invoice_id,
@@ -264,6 +265,7 @@ class InvoicesModel extends Model {
             'invoice_memo'   => $invoice_memo,
             'invoice_footer' => $invoice_footer,
             'due_days'       => $due_days,
+            'due_date'       => $due_date,
             'updated_by'     => $updated_by,
             'date_updated'   => date('Y-m-d H:i:s')
         );
@@ -492,6 +494,95 @@ class InvoicesModel extends Model {
         }
 
         return parent::update('invoices', $data, 'id = :id', array('id' => $invoice_id));
+    }
+
+    /**
+     * Invoices left mid-send. send_invoice deliberately does not roll these back to
+     * Draft on a timeout, because Stripe may already have finalised and emailed
+     * them - so something has to come along afterwards and find out which happened.
+     * Nothing else resolves this state.
+     */
+    public function stuck_finalizing($company_id, $older_than_seconds)
+    {
+        $where = array(
+            'company_id' => $company_id,
+            'cutoff'     => date('Y-m-d H:i:s', time() - (int) $older_than_seconds)
+        );
+        $sql = "SELECT
+                    id,
+                    client_id,
+                    stripe_invoice_id,
+                    stripe_account_id,
+                    stripe_customer_id,
+                    finalize_state,
+                    date_updated
+                FROM
+                    invoices
+                WHERE
+                    company_id = :company_id
+                    and
+                    invoice_status = 'Finalizing'
+                    and
+                    date_updated < :cutoff
+                    and
+                    deleted = 0
+                ORDER BY
+                    date_updated ASC
+                LIMIT 50";
+        return parent::select($sql, $where);
+    }
+
+    /** Open invoices whose mirror has aged, in case a webhook was never delivered. */
+    public function stale_open($company_id, $older_than_seconds)
+    {
+        $where = array(
+            'company_id' => $company_id,
+            'cutoff'     => date('Y-m-d H:i:s', time() - (int) $older_than_seconds)
+        );
+        $sql = "SELECT
+                    id,
+                    stripe_invoice_id,
+                    stripe_account_id
+                FROM
+                    invoices
+                WHERE
+                    company_id = :company_id
+                    and
+                    invoice_status = 'Open'
+                    and
+                    stripe_invoice_id is not null
+                    and
+                    (stripe_synced_at is null or stripe_synced_at < :cutoff)
+                    and
+                    deleted = 0
+                ORDER BY
+                    stripe_synced_at ASC
+                LIMIT 100";
+        return parent::select($sql, $where);
+    }
+
+    /** Invoices Stripe is still chasing for one client, guarding the client delete. */
+    public function count_open_client_invoices($client_id, $company_id)
+    {
+        $where = array(
+            'client_id'  => $client_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    COUNT(*) AS open_count
+                FROM
+                    invoices
+                WHERE
+                    client_id = :client_id
+                    and
+                    company_id = :company_id
+                    and
+                    invoice_status in ('Finalizing', 'Open')
+                    and
+                    deleted = 0";
+        $rows = parent::select($sql, $where);
+
+        return isset($rows[0]['open_count']) ? (int) $rows[0]['open_count'] : 0;
     }
 
     public function delete_invoice($invoice_id, $company_id, $updated_by)

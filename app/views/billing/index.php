@@ -3,7 +3,10 @@
         <div>
             <h1 class="page__title">Billing</h1>
         </div>
-        <a class="btn btn--primary" href="/billing/form"><i class="fa-regular fa-plus"></i> New Invoice</a>
+        <div class="page__actions">
+            <button type="button" class="btn btn--secondary" id="do_reconcile"><i class="fa-regular fa-rotate"></i> Sync with Stripe</button>
+            <a class="btn btn--primary" href="/billing/form"><i class="fa-regular fa-plus"></i> New Invoice</a>
+        </div>
     </div>
 
     <?php if (($this->company['stripe_connect_status'] ?? 'Not Connected') !== 'Connected') { ?>
@@ -185,6 +188,33 @@ $(document).ready(function () {
 
     $('#status_filter').change(function () {
         table.column(7).search(this.value === '' ? '' : '^' + this.value + '$', true, false).draw();
+    });
+
+    function set_loading(target, loading) {
+        if (loading) {
+            $(target).addClass("is-loading").prop("disabled", true);
+        } else {
+            $(target).removeClass("is-loading").prop("disabled", false);
+        }
+    }
+
+    $('#do_reconcile').click(function () {
+
+        set_loading('#do_reconcile', true);
+
+        ApiDataSvc.apiCall('post', 'billing_reconcile', {}, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading('#do_reconcile', false);
+
+            if (obj.success) {
+                toastr.success(obj.message);
+                load();
+            } else {
+                toastr.error(obj.message);
+            }
+        });
     });
 
     function load(){

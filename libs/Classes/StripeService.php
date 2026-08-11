@@ -560,7 +560,7 @@ class StripeService {
      * what makes Stripe email the client a hosted payment page rather than trying
      * to charge a stored card, which is the whole shape of this feature.
      */
-    public static function create_invoice($account_id, $customer_id, $currency, $memo, $footer, $due_days, $company_id, $invoice_id, $client_id, $project_id): array
+    public static function create_invoice($account_id, $customer_id, $currency, $memo, $footer, $due_days, $due_date, $company_id, $invoice_id, $client_id, $project_id): array
     {
         if (!self::configured() || !self::has_account($account_id, 'invoice create')) {
             return array();
@@ -570,7 +570,6 @@ class StripeService {
             'customer'          => $customer_id,
             'currency'          => strtolower($currency),
             'collection_method' => 'send_invoice',
-            'days_until_due'    => (int) $due_days,
             'auto_advance'      => true,
             'payment_settings'  => array(
                 'payment_method_types' => self::payment_methods_for($currency)
@@ -583,6 +582,17 @@ class StripeService {
                 'local_invoice_id' => (string) $invoice_id
             )
         );
+
+        /**
+         * Stripe takes one or the other, never both. A date the person chose is
+         * preferred over a count of days, because the date is what the client reads
+         * on the invoice and what they are held to.
+         */
+        if ((string) $due_date !== '') {
+            $params['due_date'] = strtotime($due_date.' 23:59:59');
+        } else {
+            $params['days_until_due'] = (int) $due_days;
+        }
 
         if (self::text($memo) !== '') {
             $params['description'] = self::text($memo);
@@ -605,25 +615,41 @@ class StripeService {
     }
 
     /**
-     * One line. Quantity is folded into the amount rather than sent as a Stripe
-     * quantity, so the figure Stripe totals is the exact integer this application
-     * already computed and stored - there is no second rounding to reconcile.
+     * One line on the invoice the client receives.
+     *
+     * quantity_decimal and unit_amount_decimal are used rather than the integer
+     * quantity, because a fractional quantity cannot be expressed as an integer and
+     * folding it into a single amount would print "Qty 1" on the client's invoice
+     * beside a unit price that is really seven and a half units of something else.
+     * The decimal fields let the Qty and Unit price columns state what was actually
+     * agreed.
+     *
+     * unit_amount_decimal is denominated in the currency's minor unit, so a price of
+     * 450.00 is sent as 45000 - the integer this application already stores, with no
+     * conversion. Stripe multiplies out the line total, and apply_stripe_invoice
+     * then takes the totals back from Stripe, so its arithmetic is the one of record
+     * and the mirror cannot drift from the document the client holds.
      */
-    public static function add_invoice_line($account_id, $stripe_invoice_id, $customer_id, $currency, $description, $amount_cents, $company_id, $invoice_id, $item_id): array
+    public static function add_invoice_line($account_id, $stripe_invoice_id, $customer_id, $currency, $description, $quantity_milli, $unit_amount_cents, $amount_cents, $company_id, $invoice_id, $item_id): array
     {
         if (!self::configured() || !self::has_account($account_id, 'invoice line create')) {
             return array();
         }
 
+        $quantity = rtrim(rtrim(number_format($quantity_milli / 1000, 3, '.', ''), '0'), '.');
+
+        $params = array(
+            'customer'            => $customer_id,
+            'invoice'             => $stripe_invoice_id,
+            'currency'            => strtolower($currency),
+            'description'         => self::text($description),
+            'quantity_decimal'    => ($quantity === '' ? '1' : $quantity),
+            'unit_amount_decimal' => (string) ((int) $unit_amount_cents)
+        );
+
         try {
             $item = self::client()->invoiceItems->create(
-                array(
-                    'customer'    => $customer_id,
-                    'invoice'     => $stripe_invoice_id,
-                    'currency'    => strtolower($currency),
-                    'amount'      => (int) $amount_cents,
-                    'description' => self::text($description)
-                ),
+                $params,
                 self::connected($account_id, 'ii-'.self::livemode().'-'.$company_id.'-'.$invoice_id.'-'.$item_id)
             );
             return $item->toArray();
@@ -693,6 +719,52 @@ class StripeService {
             self::fail('invoice void', $e);
             return array();
         }
+    }
+
+    /**
+     * Look for an invoice Stripe created when the local write that would have
+     * recorded its id then failed. Matched on the metadata every created object
+     * carries, which is the only thread back to the local record once the id is
+     * lost - without it such an invoice is unrecoverable except by hand, and Stripe
+     * may already have emailed it to the client.
+     *
+     * Listed rather than searched: Stripe's search index is eventually consistent
+     * by about a minute, which is precisely the window this runs in.
+     */
+    public static function find_orphan_invoice($account_id, $customer_id, $company_id, $invoice_id, $created_after): array
+    {
+        if (!self::configured() || !self::has_account($account_id, 'orphan invoice lookup')) {
+            return array();
+        }
+
+        try {
+
+            $params = array(
+                'limit'   => 100,
+                'created' => array('gte' => (int) $created_after)
+            );
+
+            if ((string) $customer_id !== '') {
+                $params['customer'] = $customer_id;
+            }
+
+            $invoices = self::client()->invoices->all($params, self::connected($account_id));
+
+            foreach ($invoices->data as $invoice) {
+
+                $metadata = $invoice->metadata;
+
+                if ((string) ($metadata['local_invoice_id'] ?? '') === (string) $invoice_id
+                    && (string) ($metadata['company_id'] ?? '') === (string) $company_id) {
+                    return $invoice->toArray();
+                }
+            }
+
+        } catch (\Throwable $e) {
+            self::fail('orphan invoice lookup', $e);
+        }
+
+        return array();
     }
 
     /** A draft that was pushed but never finalized can still be removed outright. */

@@ -4,6 +4,10 @@
     <div class="page__head">
         <div>
             <h1 class="page__title"><?php echo ($this->invoice === null ? 'New Invoice' : 'Edit Draft'); ?></h1>
+            <div class="client__meta">
+                <span class="badge badge--prospect">Draft</span>
+                <span class="client__segment">Nothing is sent until you choose Send on the next screen</span>
+            </div>
         </div>
         <?php if ($this->invoice !== null) { ?>
         <div class="page__actions">
@@ -21,6 +25,7 @@
                     <select class="form-control" id="client_id">
                         <option value="0">Select a client</option>
                     </select>
+                    <p class="billto" id="billto"></p>
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="project_id">Project</label>
@@ -32,15 +37,26 @@
 
             <div class="row mb-4">
                 <div class="col-md-3 form-group">
+                    <label for="due_date">Due Date</label>
+                    <input type="date" class="form-control" id="due_date" value="<?php echo ($this->invoice === null || $this->invoice['due_date'] === null ? '' : htmlspecialchars($this->invoice['due_date'], ENT_QUOTES, 'UTF-8')); ?>">
+                </div>
+                <div class="col-md-3 form-group">
                     <label for="due_days">Payment Terms</label>
                     <div class="input-group">
                         <input type="text" class="form-control" id="due_days" inputmode="numeric" value="<?php echo ($this->invoice === null ? '30' : (int) $this->invoice['due_days']); ?>">
                         <span class="input-group-text">days</span>
                     </div>
                 </div>
-                <div class="col-md-9 form-group">
-                    <label for="invoice_memo">Notes</label>
+                <div class="col-md-6 form-group">
+                    <label for="invoice_memo">Description</label>
                     <input type="text" class="form-control" id="invoice_memo" placeholder="Shown on the invoice" value="<?php echo ($this->invoice === null ? '' : htmlspecialchars($this->invoice['invoice_memo'], ENT_QUOTES, 'UTF-8')); ?>">
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-12 form-group">
+                    <label for="invoice_footer">Footer</label>
+                    <input type="text" class="form-control" id="invoice_footer" placeholder="Printed at the bottom of the invoice" value="<?php echo ($this->invoice === null ? '' : htmlspecialchars($this->invoice['invoice_footer'], ENT_QUOTES, 'UTF-8')); ?>">
                 </div>
             </div>
 
@@ -50,10 +66,10 @@
                     <table class="data lines">
                         <thead>
                             <tr>
-                                <th scope="col">Description</th>
-                                <th scope="col" class="num">Qty</th>
-                                <th scope="col" class="num">Unit Price</th>
-                                <th scope="col" class="num">Amount</th>
+                                <th scope="col" style="width:46%">Description</th>
+                                <th scope="col" class="num" style="width:12%">Qty</th>
+                                <th scope="col" class="num" style="width:18%">Unit Price</th>
+                                <th scope="col" class="num" style="width:18%">Amount</th>
                                 <th scope="col" class="actions"></th>
                             </tr>
                         </thead>
@@ -80,7 +96,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="delete_modal_title">Delete Draft</h2>
+                <h2 class="modal-title" id="delete_modal_title">Delete draft</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -88,7 +104,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="do_delete" class="btn btn--destructive">Delete Draft</button>
+                <button type="button" id="do_delete" class="btn btn--destructive">Delete draft</button>
             </div>
         </div>
     </div>
@@ -102,6 +118,7 @@ $(document).ready(function () {
     var selected_client = <?php echo ($this->invoice === null ? 0 : (int) $this->invoice['client_id']); ?>;
     var selected_project = <?php echo ($this->invoice === null ? 0 : (int) $this->invoice['project_id']); ?>;
     var currency = "<?php echo htmlspecialchars(strtoupper($this->invoice === null ? ($this->company['default_currency'] ?? 'usd') : $this->invoice['currency']), ENT_QUOTES, 'UTF-8'); ?>";
+    var clients = {};
     var next_idx = 0;
 
     function esc(value) {
@@ -177,15 +194,68 @@ $(document).ready(function () {
         var idx = next_idx;
         next_idx++;
         var html = '<tr data-idx="' + idx + '">'
-            + '<td><input type="text" class="form-control" data-field="description" aria-label="Description" value="' + esc(description) + '"></td>'
+            + '<td><input type="text" class="form-control" data-field="description" aria-label="Description" placeholder="Gap assessment" value="' + esc(description) + '"></td>'
             + '<td class="num"><input type="text" class="form-control" data-field="quantity" inputmode="decimal" aria-label="Quantity" value="' + esc(quantity) + '"></td>'
             + '<td class="num"><input type="text" class="form-control" data-field="unit_amount" inputmode="decimal" aria-label="Unit price" value="' + esc(unit_amount) + '"></td>'
-            + '<td class="num" data-cell="amount">&mdash;</td>'
+            + '<td class="num lines__row-amount" data-cell="amount">&mdash;</td>'
             + '<td class="actions"><button type="button" class="btn btn--tertiary btn--sm" data-action="remove_line" aria-label="Remove line"><i class="fa-regular fa-trash"></i></button></td>'
             + '</tr>';
         $('#line_rows').append(html);
         recalculate();
     }
+
+    /**
+     * The address exactly as it will print. Stripe snapshots it onto the invoice at
+     * finalisation and stops updating it, so this is the last point at which a wrong
+     * address can be caught.
+     */
+    function render_billto() {
+
+        var client = clients[$('#client_id').val()];
+
+        if (client === undefined) {
+            $('#billto').html('');
+            return;
+        }
+
+        var name = client.billing_name !== '' ? client.billing_name : client.company_name;
+        var email = client.billing_email !== '' ? client.billing_email : client.contact_email;
+        var html = 'Billed to ' + esc(name);
+
+        if (email !== '') {
+            html += ' at ' + esc(email);
+        } else {
+            html = '<span class="billto__warn">No email on this client, so Stripe has nowhere to send the invoice.</span>';
+        }
+
+        $('#billto').html(html);
+    }
+
+    /** Terms and due date are one fact. Editing either restates the other. */
+    function date_from_terms() {
+        var days = parseInt($('#due_days').val(), 10);
+        if (isNaN(days) || days < 0) {
+            return;
+        }
+        var due = new Date();
+        due.setDate(due.getDate() + days);
+        $('#due_date').val(due.toISOString().slice(0, 10));
+    }
+
+    function terms_from_date() {
+        var value = $('#due_date').val();
+        if (value === '') {
+            return;
+        }
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+        var due = new Date(value + 'T00:00:00');
+        var days = Math.round((due - today) / 86400000);
+        $('#due_days').val(days < 0 ? 0 : days);
+    }
+
+    $('#due_days').on('input', date_from_terms);
+    $('#due_date').on('change', terms_from_date);
 
     $('#line_rows').on('input', 'input', function () {
         $(this).removeClass('is-invalid');
@@ -208,6 +278,7 @@ $(document).ready(function () {
     $('#client_id').change(function () {
         selected_project = 0;
         load_projects($(this).val());
+        render_billto();
     });
 
     function load_projects(client_id) {
@@ -230,12 +301,14 @@ $(document).ready(function () {
         ApiDataSvc.apiCall('post', 'load_clients', {}, function (data) {
             var obj = JSON.parse(data);
             for (var i = 0; i < obj.length; i++) {
+                clients[obj[i].id] = obj[i];
                 $('#client_id').append('<option value="' + obj[i].id + '">' + esc(obj[i].company_name) + '</option>');
             }
             if (selected_client > 0) {
                 $('#client_id').val(selected_client);
                 load_projects(selected_client);
             }
+            render_billto();
         });
     }
 
@@ -301,8 +374,9 @@ $(document).ready(function () {
             client_id: $('#client_id').val(),
             project_id: $('#project_id').val(),
             due_days: $('#due_days').val().trim(),
+            due_date: $('#due_date').val(),
             invoice_memo: $('#invoice_memo').val().trim(),
-            invoice_footer: '',
+            invoice_footer: $('#invoice_footer').val().trim(),
             lines_json: JSON.stringify(lines)
         };
 
@@ -354,6 +428,14 @@ $(document).ready(function () {
     if ($('#line_rows tr').length === 0) {
         add_line('', '1', '');
     }
+
+    <?php if ($this->invoice === null || $this->invoice['due_date'] === null) { ?>
+    date_from_terms();
+    <?php } else { ?>
+    terms_from_date();
+    <?php } ?>
+
+    recalculate();
 
 });
 </script>

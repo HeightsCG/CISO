@@ -15,7 +15,7 @@
             <button type="button" class="btn btn--primary" id="do_send_open"><i class="fa-regular fa-paper-plane"></i> Send Invoice</button>
             <?php } ?>
             <?php if ($this->invoice['hosted_invoice_url'] !== '') { ?>
-            <a class="btn btn--secondary" href="<?php echo htmlspecialchars($this->invoice['invoice_pdf_url'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener noreferrer"><i class="fa-regular fa-file-pdf"></i> View PDF</a>
+            <a class="btn btn--secondary" href="/billing/pdf/id/<?php echo (int) $this->invoice['id']; ?>" target="_blank" rel="noopener noreferrer"><i class="fa-regular fa-file-pdf"></i> View PDF</a>
             <?php } ?>
             <?php if (in_array($this->invoice['invoice_status'], array('Open', 'Uncollectible'), true)) { ?>
             <button type="button" class="btn btn--destructive" id="do_void_open"><i class="fa-regular fa-ban"></i> Void</button>
@@ -29,7 +29,7 @@
         <p class="alert__title">This invoice is still being sent</p>
         <p class="alert__text">Stripe did not confirm the last attempt. It is not retried automatically, because it may already have gone out and a second attempt would bill this client twice. Refresh in a moment to see where it landed.<?php echo ($this->invoice['finalize_error'] === '' ? '' : ' Stripe said: '.htmlspecialchars($this->invoice['finalize_error'], ENT_QUOTES, 'UTF-8')); ?></p>
         <div class="alert__actions">
-            <button type="button" class="btn btn--secondary btn--sm" id="do_refresh">Refresh</button>
+            <button type="button" class="btn btn--secondary btn--sm" id="do_refresh">Check with Stripe</button>
         </div>
     </div>
     <?php } elseif ($this->invoice['finalize_error'] !== '') { ?>
@@ -185,7 +185,22 @@ $(document).ready(function () {
     }
 
     $('#do_refresh').click(function () {
-        window.location.reload();
+
+        set_loading('#do_refresh', true);
+
+        ApiDataSvc.apiCall('post', 'sync_invoice', { invoice_id: invoice_id }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading('#do_refresh', false);
+
+            if (obj.success) {
+                toastr.success(obj.message);
+                window.location.reload();
+            } else {
+                toastr.error(obj.message);
+            }
+        });
     });
 
     $('#do_send_open').click(function () {

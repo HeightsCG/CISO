@@ -1271,6 +1271,21 @@ class ApiController extends Controller {
             'message' => 'Something went wrong'
         );
 
+                /**
+         * A client with money outstanding cannot simply disappear: Stripe would go
+         * on emailing and dunning for an invoice this application could no longer
+         * show as settled.
+         */
+        $outstanding = $this->invoices_model->count_open_client_invoices((int) ($this->post['client_id'] ?? 0), Session::get('company_id'));
+
+        if ($outstanding > 0) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'This client has '.$outstanding.' invoice(s) still awaiting payment. Settle or void them first.'
+            ));
+            return;
+        }
+
         $client_id = (int) ($this->post['client_id'] ?? 0);
         $company_id = Session::get('company_id');
         $client = $this->clients_model->get_client($client_id, $company_id);
@@ -3587,6 +3602,28 @@ class ApiController extends Controller {
             }
         }
 
+        /**
+         * Terms and a due date are two ways of saying the same thing. Either may be
+         * given; an explicit date wins, because it is the one the client reads.
+         */
+        $due_date = $this->input('due_date');
+
+        if ($due_date !== '') {
+
+            $parsed = date_create_from_format('Y-m-d', $due_date);
+
+            if ($parsed === false || $parsed->format('Y-m-d') !== $due_date) {
+                $response['message'] = 'Enter the due date as a real calendar date';
+                echo json_encode($response);
+                return;
+            }
+
+            $due_days = max(0, (int) ceil((strtotime($due_date) - strtotime(date('Y-m-d'))) / 86400));
+
+        } else {
+            $due_date = null;
+        }
+
         if ($due_days < 0 || $due_days > 180) {
             $response['message'] = 'Payment terms must be between 0 and 180 days';
             echo json_encode($response);
@@ -3673,11 +3710,11 @@ class ApiController extends Controller {
                 return;
             }
 
-            $this->invoices_model->update_invoice($invoice_id, $company_id, $client_id, $project_id, $currency, $memo, $footer, $due_days, Session::get('user_id'));
+            $this->invoices_model->update_invoice($invoice_id, $company_id, $client_id, $project_id, $currency, $memo, $footer, $due_days, $due_date, Session::get('user_id'));
 
         } else {
 
-            $invoice_id = (int) $this->invoices_model->add_invoice($company_id, $client_id, $project_id, $currency, $memo, $footer, $due_days, Session::get('user_id'));
+            $invoice_id = (int) $this->invoices_model->add_invoice($company_id, $client_id, $project_id, $currency, $memo, $footer, $due_days, $due_date, Session::get('user_id'));
         }
 
         $this->invoices_model->save_invoice_lines($invoice_id, $clean, Session::get('user_id'));
@@ -3837,6 +3874,7 @@ class ApiController extends Controller {
                     $invoice['invoice_memo'],
                     $invoice['invoice_footer'],
                     $invoice['due_days'],
+                    $invoice['due_date'],
                     $company_id,
                     $invoice_id,
                     $invoice['client_id'],
@@ -3862,7 +3900,9 @@ class ApiController extends Controller {
                     $stripe_invoice_id,
                     $customer_id,
                     $invoice['currency'],
-                    $item['item_description'].' ('.Money::format_quantity($item['quantity_milli']).' x '.Money::format($item['unit_amount_cents'], $invoice['currency']).')',
+                    $item['item_description'],
+                    $item['quantity_milli'],
+                    $item['unit_amount_cents'],
                     $item['amount_cents'],
                     $company_id,
                     $invoice_id,
@@ -3951,6 +3991,149 @@ class ApiController extends Controller {
 
         $response['success'] = true;
         $response['message'] = 'Invoice voided';
+        echo json_encode($response);
+    }
+
+    /**
+     * Resolve one invoice against Stripe. Returns a short description of what
+     * happened, so both the single-invoice button and the sweep can report it.
+     *
+     * The fifteen minute grace before returning a stuck invoice to Draft is
+     * deliberately generous: sending it back sooner risks a second invoice going
+     * to the client, whereas waiting only inconveniences staff.
+     */
+    private function reconcile_invoice(array $invoice, $company_id): string
+    {
+        if ($invoice['stripe_invoice_id'] !== null) {
+
+            $current = StripeService::retrieve_invoice($invoice['stripe_account_id'], $invoice['stripe_invoice_id']);
+
+            if (empty($current)) {
+                return 'unreachable';
+            }
+
+            $this->invoices_model->apply_stripe_invoice($invoice['id'], $current, 0);
+
+            return 'synced';
+        }
+
+        $orphan = StripeService::find_orphan_invoice(
+            $invoice['stripe_account_id'],
+            $invoice['stripe_customer_id'],
+            $company_id,
+            $invoice['id'],
+            strtotime($invoice['date_updated']) - 3600
+        );
+
+        if (!empty($orphan['id'])) {
+
+            $this->invoices_model->set_stripe_invoice(
+                $invoice['id'],
+                $orphan['id'],
+                $invoice['stripe_account_id'],
+                (string) ($orphan['customer'] ?? $invoice['stripe_customer_id']),
+                StripeService::livemode()
+            );
+
+            $this->invoices_model->apply_stripe_invoice($invoice['id'], $orphan, 0);
+
+            return 'adopted';
+        }
+
+        if ((time() - strtotime($invoice['date_updated'])) < 900) {
+            return 'waiting';
+        }
+
+        $this->invoices_model->fail_finalize($invoice['id'], 'Not sent - Stripe never received it', true);
+
+        return 'returned to draft';
+    }
+
+    /** The Refresh button on an invoice that is stuck mid-send. */
+    public function sync_invoiceAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $company_id = Session::get('company_id');
+        $invoice    = $this->invoices_model->get_invoice((int) ($this->post['invoice_id'] ?? 0), $company_id);
+
+        if (!is_array($invoice) || count($invoice) !== 1) {
+            $response['message'] = 'That invoice could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        if ($invoice[0]['stripe_account_id'] === '') {
+            $response['message'] = 'That invoice was never sent to Stripe';
+            echo json_encode($response);
+            return;
+        }
+
+        $outcome = $this->reconcile_invoice($invoice[0], $company_id);
+
+        $messages = array(
+            'synced'           => 'Checked with Stripe and brought up to date',
+            'adopted'          => 'Found it at Stripe - it had been sent after all',
+            'waiting'          => 'Stripe has not confirmed it yet. Try again in a few minutes.',
+            'returned to draft' => 'Stripe never received it, so it is a draft again and safe to send',
+            'unreachable'      => 'Stripe could not be reached: '.StripeService::last_error()
+        );
+
+        $response['success'] = $outcome !== 'unreachable';
+        $response['message'] = $messages[$outcome] ?? $outcome;
+        echo json_encode($response);
+    }
+
+    /**
+     * Sweep every invoice this company has left in an unresolved state. Safe to run
+     * repeatedly - each step is either an idempotent apply or a guarded update.
+     */
+    public function billing_reconcileAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $company_id = Session::get('company_id');
+        $outcomes   = array();
+
+        foreach ($this->invoices_model->stuck_finalizing($company_id, 120) as $invoice) {
+            $outcome = $this->reconcile_invoice($invoice, $company_id);
+            $outcomes[$outcome] = ($outcomes[$outcome] ?? 0) + 1;
+        }
+
+        $refreshed = 0;
+
+        foreach ($this->invoices_model->stale_open($company_id, 21600) as $invoice) {
+
+            $current = StripeService::retrieve_invoice($invoice['stripe_account_id'], $invoice['stripe_invoice_id']);
+
+            if (!empty($current)) {
+                $this->invoices_model->apply_stripe_invoice($invoice['id'], $current, 0);
+                $refreshed++;
+            }
+        }
+
+        $parts = array();
+
+        foreach ($outcomes as $outcome => $count) {
+            $parts[] = $count.' '.$outcome;
+        }
+
+        if ($refreshed > 0) {
+            $parts[] = $refreshed.' refreshed';
+        }
+
+        $response['success'] = true;
+        $response['message'] = count($parts) === 0 ? 'Everything is already up to date' : implode(', ', $parts);
         echo json_encode($response);
     }
 

@@ -142,6 +142,65 @@ class BillingController extends Controller {
         $this->view->render();
     }
 
+    /**
+     * Serve the invoice PDF through this application rather than redirecting to
+     * Stripe's own URL.
+     *
+     * That URL is a capability URL - possession is authorisation - so redirecting
+     * would leave it in the browser history and address bar, where it can be copied
+     * and forwarded to someone with no entitlement at all. Proxying keeps our own
+     * session-protected address as the only one the user ever sees.
+     *
+     * A GET, so it carries no CSRF token and must therefore have no side effects.
+     */
+    public function pdfAction(){
+
+        if (!$this->refuse_unless_company_admin()) {
+            return;
+        }
+
+        $invoice = $this->invoices_model->get_invoice(Main::get_param('id'), Session::get('company_id'));
+
+        if (!is_array($invoice) || count($invoice) !== 1 || $invoice[0]['invoice_pdf_url'] === '') {
+            Errors::page_not_found();
+            return;
+        }
+
+        $this->stream_invoice_pdf($invoice[0]['invoice_pdf_url'], $invoice[0]['invoice_number']);
+    }
+
+    /**
+     * The origin allow-list is not optional. Without it a corrupted or
+     * attacker-influenced URL in that column turns this action into a server-side
+     * request forgery primitive, fetching arbitrary internal addresses with the web
+     * server's network position.
+     */
+    private function stream_invoice_pdf($url, $invoice_number): void
+    {
+        if (!preg_match('#^https://[a-z0-9.\-]+\.stripe\.com/#i', $url)) {
+            error_log('[billing] refused to proxy a PDF from an unexpected origin');
+            Errors::page_not_found();
+            return;
+        }
+
+        $pdf = @file_get_contents($url);
+
+        if ($pdf === false || $pdf === '') {
+            Errors::page_not_found();
+            return;
+        }
+
+        /** The number comes from Stripe and lands in a header, so CR/LF cannot survive. */
+        $filename = preg_replace('/[^A-Za-z0-9\-]/', '', (string) $invoice_number);
+
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: inline; filename="'.($filename === '' ? 'invoice' : $filename).'.pdf"');
+        header('Content-Length: '.strlen($pdf));
+        header('X-Content-Type-Options: nosniff');
+
+        echo $pdf;
+    }
+
     public function invoiceAction(){
 
         if (!$this->refuse_unless_company_admin()) {

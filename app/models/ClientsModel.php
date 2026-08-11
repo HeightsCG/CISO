@@ -18,6 +18,8 @@ class ClientsModel extends Model {
                     c.contact_email,
                     c.contact_phone,
                     c.country,
+                    c.billing_name,
+                    c.billing_email,
                     c.website,
                     c.address_1,
                     c.address_2,
