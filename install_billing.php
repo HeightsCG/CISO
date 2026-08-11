@@ -159,6 +159,9 @@ add_column($pdo, 'companies', 'stripe_payouts_enabled',
 add_column($pdo, 'companies', 'stripe_requirements',
     "`stripe_requirements` text NOT NULL AFTER `stripe_payouts_enabled`");
 
+add_column($pdo, 'companies', 'stripe_disabled_reason',
+    "`stripe_disabled_reason` varchar(200) NOT NULL DEFAULT '' AFTER `stripe_requirements`");
+
 add_column($pdo, 'companies', 'stripe_connected_at',
     "`stripe_connected_at` datetime DEFAULT NULL AFTER `stripe_requirements`");
 
@@ -197,8 +200,16 @@ echo "\nclients\n";
  */
 drop_column($pdo, 'clients', 'billing_currency');
 
+/**
+ * Who the invoice is addressed to, when that is not the compliance contact -
+ * an accounts payable desk rather than a person. Both fall back to the primary
+ * contact when left empty.
+ */
+add_column($pdo, 'clients', 'billing_name',
+    "`billing_name` varchar(200) NOT NULL DEFAULT '' AFTER `country`");
+
 add_column($pdo, 'clients', 'billing_email',
-    "`billing_email` varchar(255) NOT NULL DEFAULT '' AFTER `country`");
+    "`billing_email` varchar(255) NOT NULL DEFAULT '' AFTER `billing_name`");
 
 /**
  * Nullable under a unique key, against the NOT NULL convention everywhere else

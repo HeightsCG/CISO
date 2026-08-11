@@ -9,12 +9,36 @@
                 <span class="client__segment"><?php echo htmlspecialchars($this->invoice['client_name'], ENT_QUOTES, 'UTF-8'); ?></span>
             </div>
         </div>
-        <?php if ($this->invoice['invoice_status'] === 'Draft') { ?>
         <div class="page__actions">
-            <a class="btn btn--primary" href="/billing/form/id/<?php echo (int) $this->invoice['id']; ?>"><i class="fa-regular fa-pen"></i> Edit Draft</a>
+            <?php if ($this->invoice['invoice_status'] === 'Draft') { ?>
+            <a class="btn btn--secondary" href="/billing/form/id/<?php echo (int) $this->invoice['id']; ?>"><i class="fa-regular fa-pen"></i> Edit Draft</a>
+            <button type="button" class="btn btn--primary" id="do_send_open"><i class="fa-regular fa-paper-plane"></i> Send Invoice</button>
+            <?php } ?>
+            <?php if ($this->invoice['hosted_invoice_url'] !== '') { ?>
+            <a class="btn btn--secondary" href="<?php echo htmlspecialchars($this->invoice['invoice_pdf_url'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener noreferrer"><i class="fa-regular fa-file-pdf"></i> View PDF</a>
+            <?php } ?>
+            <?php if (in_array($this->invoice['invoice_status'], array('Open', 'Uncollectible'), true)) { ?>
+            <button type="button" class="btn btn--destructive" id="do_void_open"><i class="fa-regular fa-ban"></i> Void</button>
+            <?php } ?>
         </div>
-        <?php } ?>
     </div>
+
+    <?php if ($this->invoice['invoice_status'] === 'Finalizing') { ?>
+    <div class="alert alert--critical" role="status">
+        <i class="fa-regular fa-triangle-exclamation alert__icon" aria-hidden="true"></i>
+        <p class="alert__title">This invoice is still being sent</p>
+        <p class="alert__text">Stripe did not confirm the last attempt. It is not retried automatically, because it may already have gone out and a second attempt would bill this client twice. Refresh in a moment to see where it landed.<?php echo ($this->invoice['finalize_error'] === '' ? '' : ' Stripe said: '.htmlspecialchars($this->invoice['finalize_error'], ENT_QUOTES, 'UTF-8')); ?></p>
+        <div class="alert__actions">
+            <button type="button" class="btn btn--secondary btn--sm" id="do_refresh">Refresh</button>
+        </div>
+    </div>
+    <?php } elseif ($this->invoice['finalize_error'] !== '') { ?>
+    <div class="alert alert--warn" role="status">
+        <i class="fa-regular fa-triangle-exclamation alert__icon" aria-hidden="true"></i>
+        <p class="alert__title">The last attempt to send did not go through</p>
+        <p class="alert__text"><?php echo htmlspecialchars($this->invoice['finalize_error'], ENT_QUOTES, 'UTF-8'); ?></p>
+    </div>
+    <?php } ?>
 
     <div class="row g-4">
         <div class="col-lg-8">
@@ -104,3 +128,113 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" data-bs-backdrop="static" id="send_modal" tabindex="-1" aria-labelledby="send_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="send_modal_title">Send Invoice</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Send this invoice to <strong><?php echo htmlspecialchars($this->invoice['client_name'], ENT_QUOTES, 'UTF-8'); ?></strong> for <strong><?php echo htmlspecialchars($this->invoice['total_display'], ENT_QUOTES, 'UTF-8'); ?></strong>?</p>
+                <p class="import__hint">Stripe emails the invoice with a payment page and chases it if it goes unpaid. Line items cannot be changed afterwards.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="do_send" class="btn btn--primary">Send Invoice</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop="static" id="void_modal" tabindex="-1" aria-labelledby="void_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="void_modal_title">Void Invoice</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Void this invoice? The client can no longer pay it and Stripe stops chasing it.</p>
+                <p class="import__hint">Voiding is permanent in Stripe. Raise a new invoice if it needs to be reissued.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="do_void" class="btn btn--destructive">Void Invoice</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function () {
+
+    var invoice_id = <?php echo (int) $this->invoice['id']; ?>;
+
+    function set_loading(target, loading) {
+        if (loading) {
+            $(target).addClass("is-loading").prop("disabled", true);
+        } else {
+            $(target).removeClass("is-loading").prop("disabled", false);
+        }
+    }
+
+    function modal(id) {
+        return bootstrap.Modal.getOrCreateInstance(document.getElementById(id));
+    }
+
+    $('#do_refresh').click(function () {
+        window.location.reload();
+    });
+
+    $('#do_send_open').click(function () {
+        modal('send_modal').show();
+    });
+
+    $('#do_void_open').click(function () {
+        modal('void_modal').show();
+    });
+
+    $('#do_send').click(function () {
+
+        set_loading('#do_send', true);
+
+        ApiDataSvc.apiCall('post', 'send_invoice', { invoice_id: invoice_id }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading('#do_send', false);
+
+            if (obj.success) {
+                toastr.success(obj.message);
+                window.location.reload();
+            } else {
+                modal('send_modal').hide();
+                toastr.error(obj.message);
+            }
+        });
+    });
+
+    $('#do_void').click(function () {
+
+        set_loading('#do_void', true);
+
+        ApiDataSvc.apiCall('post', 'void_invoice', { invoice_id: invoice_id }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading('#do_void', false);
+
+            if (obj.success) {
+                toastr.success(obj.message);
+                window.location.reload();
+            } else {
+                modal('void_modal').hide();
+                toastr.error(obj.message);
+            }
+        });
+    });
+
+});
+</script>

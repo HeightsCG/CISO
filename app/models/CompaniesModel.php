@@ -57,6 +57,120 @@ class CompaniesModel extends Model {
         return parent::select($sql, $where);
     }
 
+    /**
+     * Claim the platform customer for this company. The WHERE is conditional on the
+     * column still being empty, so two administrators opening Billing at the same
+     * moment cannot both write one: the loser gets rowCount() 0 and re-reads. The
+     * idempotency key on the Stripe call means that even if both requests reached
+     * Stripe they were handed the same customer.
+     */
+    public function set_platform_customer($company_id, $platform_customer_id, $platform_livemode)
+    {
+        $where = array(
+            'id' => $company_id
+        );
+        $data = array(
+            'platform_customer_id' => $platform_customer_id,
+            'platform_livemode'    => $platform_livemode,
+            'date_updated'         => date('Y-m-d H:i:s')
+        );
+        return parent::update('companies', $data, 'id = :id and platform_customer_id is null', $where);
+    }
+
+    /** As set_platform_customer, for the company's own connected account. */
+    public function set_connect_account($company_id, $stripe_connect_account_id, $stripe_livemode)
+    {
+        $where = array(
+            'id' => $company_id
+        );
+        $data = array(
+            'stripe_connect_account_id' => $stripe_connect_account_id,
+            'stripe_livemode'           => $stripe_livemode,
+            'stripe_connect_status'     => 'Onboarding',
+            'stripe_connected_at'       => date('Y-m-d H:i:s'),
+            'date_updated'              => date('Y-m-d H:i:s')
+        );
+        return parent::update('companies', $data, 'id = :id and stripe_connect_account_id is null', $where);
+    }
+
+    /**
+     * Mirror the capability state Stripe reports. Currency is taken from the
+     * account rather than chosen here: it is what the account actually settles in,
+     * so an invoice raised in it can never be one the account cannot take.
+     */
+    public function set_connect_state($company_id, $connect_status, $charges_enabled, $details_submitted, $payouts_enabled, $requirements, $default_currency)
+    {
+        $where = array(
+            'id' => $company_id
+        );
+        $data = array(
+            'stripe_connect_status'    => $connect_status,
+            'stripe_charges_enabled'   => $charges_enabled,
+            'stripe_details_submitted' => $details_submitted,
+            'stripe_payouts_enabled'   => $payouts_enabled,
+            'stripe_requirements'      => $requirements,
+            'default_currency'         => $default_currency,
+            'stripe_synced_at'         => date('Y-m-d H:i:s'),
+            'date_updated'             => date('Y-m-d H:i:s')
+        );
+        return parent::update('companies', $data, 'id = :id', $where);
+    }
+
+    /** Stripe's own words for why charges are off, when the requirement list alone would not explain it. */
+    public function set_connect_reason($company_id, $stripe_disabled_reason)
+    {
+        return parent::update(
+            'companies',
+            array('stripe_disabled_reason' => $stripe_disabled_reason, 'date_updated' => date('Y-m-d H:i:s')),
+            'id = :id',
+            array('id' => $company_id)
+        );
+    }
+
+    /**
+     * Forget the connection without touching Stripe. A Standard account belongs to
+     * the company, so it is never deleted from here; this only stops the
+     * application acting on it. Invoices keep the account id they were stamped
+     * with, so a reconnection to a different account cannot reinterpret them.
+     */
+    public function clear_connect_account($company_id)
+    {
+        $where = array(
+            'id' => $company_id
+        );
+        $data = array(
+            'stripe_connect_account_id' => null,
+            'stripe_connect_status'     => 'Disconnected',
+            'stripe_charges_enabled'    => 0,
+            'stripe_details_submitted'  => 0,
+            'stripe_payouts_enabled'    => 0,
+            'stripe_requirements'       => '',
+            'date_updated'              => date('Y-m-d H:i:s')
+        );
+        return parent::update('companies', $data, 'id = :id', $where);
+    }
+
+    /** Reached by connected account id alone; safe because the column is unique and Stripe supplies the value. */
+    public function by_connect_account_id($stripe_connect_account_id)
+    {
+        $where = array(
+            'stripe_connect_account_id' => $stripe_connect_account_id
+        );
+        $sql = "SELECT
+                    id,
+                    company_name,
+                    stripe_connect_account_id,
+                    stripe_connect_status,
+                    default_currency
+                FROM
+                    companies
+                WHERE
+                    stripe_connect_account_id = :stripe_connect_account_id
+                    and
+                    deleted = 0";
+        return parent::select($sql, $where);
+    }
+
     public function update_company(
         $company_id,
         $company_name,

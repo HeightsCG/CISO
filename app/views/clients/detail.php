@@ -22,6 +22,31 @@
                     <p class="controls__empty" id="client_projects_empty">Loading projects&hellip;</p>
                 </div>
             </div>
+            <?php if ((int) Session::get('role_id') === 1) { ?>
+            <div class="panel record__panel">
+                <div class="panel__head">
+                    <h2 class="panel__title">Invoices</h2>
+                    <a class="btn btn--secondary btn--sm" href="/billing/form/client/<?php echo (int) $this->client['id']; ?>"><i class="fa-regular fa-plus"></i> New Invoice</a>
+                </div>
+                <div class="panel__body panel__body--flush">
+                    <div class="table-wrap">
+                        <table class="data" id="client_invoices_table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Invoice</th>
+                                    <th scope="col">Created</th>
+                                    <th scope="col">Due</th>
+                                    <th scope="col" class="num">Amount</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="client_invoices_body"></tbody>
+                        </table>
+                    </div>
+                    <p class="controls__empty" id="client_invoices_empty">Loading invoices&hellip;</p>
+                </div>
+            </div>
+            <?php } ?>
         </div>
         <div class="col-lg-4">
             <div class="panel record__panel">
@@ -190,7 +215,57 @@ $(document).ready(function () {
         });
     }
 
+    function invoice_tone(value) {
+        if (value === 'Paid') {
+            return 'badge--active';
+        }
+        if (value === 'Overdue' || value === 'Payment Failed') {
+            return 'badge--critical';
+        }
+        if (value === 'Payment Processing' || value === 'Sending' || value === 'Action Needed') {
+            return 'badge--admin';
+        }
+        if (value === 'Awaiting Payment') {
+            return 'badge--onboarding';
+        }
+        if (value === 'Void' || value === 'Written Off') {
+            return 'badge--inactive';
+        }
+        return 'badge--prospect';
+    }
+
+    function load_client_invoices(){
+
+        if ($('#client_invoices_table').length === 0) {
+            return;
+        }
+
+        ApiDataSvc.apiCall('post', 'load_client_invoices', { client_id: client_id }, function (data) {
+
+            var list = JSON.parse(data);
+            var html = '';
+
+            for (var i = 0; i < list.length; i++) {
+                html += '<tr data-id="' + list[i].id + '" tabindex="0">'
+                    + '<td>' + esc(list[i].invoice_number ? list[i].invoice_number : 'Draft') + '</td>'
+                    + '<td>' + esc(list[i].date_created_display) + '</td>'
+                    + '<td>' + (list[i].due_date === null ? '<span class="roster__none">&mdash;</span>' : esc(list[i].due_date_display)) + '</td>'
+                    + '<td class="num">' + esc(list[i].total_display) + '</td>'
+                    + '<td><span class="badge ' + invoice_tone(list[i].invoice_status_display) + '">' + esc(list[i].invoice_status_display) + '</span></td>'
+                    + '</tr>';
+            }
+
+            $('#client_invoices_body').html(html);
+            $('#client_invoices_empty').prop('hidden', list.length > 0).text('No invoices for this client yet.');
+        });
+    }
+
+    $('#client_invoices_table').on('click', 'tr', function () {
+        window.location.href = '/billing/invoice/id/' + $(this).attr('data-id');
+    });
+
     load_client_projects();
+    load_client_invoices();
 
     var client_id = <?php echo (int) $this->client['id']; ?>;
 

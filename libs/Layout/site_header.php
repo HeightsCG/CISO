@@ -60,9 +60,13 @@ $(document).ready(function () {
             <div class="shell__group">
                 <p class="shell__group-label">Menu</p>
                 <?php if (Session::get('user_type') === 'portal') { ?>
-                <a class="shell__link<?php echo $this->controller == 'portal' ? ' is-active' : ''; ?>" href="/portal">
+                <a class="shell__link<?php echo ($this->controller == 'portal' && $this->method != 'invoices') ? ' is-active' : ''; ?>" href="/portal">
                     <i class="fa-thin fa-house"></i>
                     <span>My Projects</span>
+                </a>
+                <a class="shell__link<?php echo ($this->controller == 'portal' && $this->method == 'invoices') ? ' is-active' : ''; ?>" href="/portal/invoices">
+                    <i class="fa-thin fa-file-invoice-dollar"></i>
+                    <span>Invoices</span>
                 </a>
                 <?php } else { ?>
                 <a class="shell__link<?php echo $this->controller == 'index' ? ' is-active' : ''; ?>" href="/">

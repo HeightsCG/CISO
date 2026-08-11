@@ -6,6 +6,25 @@
         <a class="btn btn--primary" href="/billing/form"><i class="fa-regular fa-plus"></i> New Invoice</a>
     </div>
 
+    <?php if (($this->company['stripe_connect_status'] ?? 'Not Connected') !== 'Connected') { ?>
+    <div class="alert <?php echo (($this->company['stripe_connect_status'] ?? '') === 'Restricted' ? 'alert--critical' : 'alert--warn'); ?>" role="status">
+        <i class="fa-regular fa-triangle-exclamation alert__icon" aria-hidden="true"></i>
+        <?php if (($this->company['stripe_connect_status'] ?? 'Not Connected') === 'Restricted') { ?>
+        <p class="alert__title">Payments are on hold</p>
+        <p class="alert__text">Stripe has paused payments on this account, so invoices cannot be sent. Drafts are unaffected.</p>
+        <?php } elseif (($this->company['stripe_connect_status'] ?? 'Not Connected') === 'Onboarding') { ?>
+        <p class="alert__title">Stripe setup is not finished</p>
+        <p class="alert__text">Build drafts now if you like. Sending needs the setup completed first.</p>
+        <?php } else { ?>
+        <p class="alert__title">No Stripe account is connected</p>
+        <p class="alert__text">Connect one to send invoices and take payment. Drafts can be built in the meantime.</p>
+        <?php } ?>
+        <div class="alert__actions">
+            <a class="btn btn--primary btn--sm" href="/settings#billing"><?php echo (($this->company['stripe_connect_status'] ?? 'Not Connected') === 'Not Connected' ? 'Connect Stripe' : 'Finish Stripe setup'); ?></a>
+        </div>
+    </div>
+    <?php } ?>
+
     <div class="panel">
         <div class="panel__head roster__toolbar">
             <input type="search" id="invoice_search" class="input roster__search" placeholder="Search..." autocomplete="off" spellcheck="false">

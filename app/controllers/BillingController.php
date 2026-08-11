@@ -45,13 +45,66 @@ class BillingController extends Controller {
         return false;
     }
 
+    /**
+     * The company is a customer of this platform as well as a merchant on it, so a
+     * customer record is minted here the first time anyone opens Billing.
+     *
+     * Deliberately not on the login path: a Stripe outage there would delay or
+     * break sign-in for everyone, including portal clients with no billing at all.
+     * Nothing is charged - the record exists so that billing companies later needs
+     * no backfill - so a failure is logged and the page carries on.
+     */
+    private function ensure_platform_customer(array $company): array
+    {
+        if (empty($company) || $company['platform_customer_id'] !== null) {
+            return $company;
+        }
+
+        if (!StripeService::configured()) {
+            return $company;
+        }
+
+        try {
+
+            $customer = StripeService::create_platform_customer(
+                $company['id'],
+                $company['company_name'],
+                Session::get('user_email'),
+                $company['address_1'],
+                $company['address_2'],
+                $company['city'],
+                $company['state'],
+                $company['postal_code'],
+                $company['country']
+            );
+
+            if (empty($customer['id'])) {
+                return $company;
+            }
+
+            $claimed = $this->companies_model->set_platform_customer($company['id'], $customer['id'], StripeService::livemode());
+
+            if ($claimed === 0) {
+                return $this->company();
+            }
+
+            $company['platform_customer_id'] = $customer['id'];
+            $company['platform_livemode'] = StripeService::livemode();
+
+        } catch (\Throwable $e) {
+            error_log('[billing] platform customer could not be established: '.$e->getMessage());
+        }
+
+        return $company;
+    }
+
     public function indexAction(){
 
         if (!$this->refuse_unless_company_admin()) {
             return;
         }
 
-        $this->view->company = $this->company();
+        $this->view->company = $this->ensure_platform_customer($this->company());
         $this->view->render();
     }
 

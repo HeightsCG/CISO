@@ -97,6 +97,7 @@ class ClientsModel extends Model {
         $state,
         $postal_code,
         $country,
+        $billing_name,
         $billing_email,
         $created_by
     )
@@ -115,6 +116,7 @@ class ClientsModel extends Model {
             'state' => $state,
             'postal_code' => $postal_code,
             'country' => $country,
+            'billing_name' => $billing_name,
             'billing_email' => $billing_email,
             'created_by' => $created_by,
             'updated_by' => $created_by,
@@ -140,6 +142,7 @@ class ClientsModel extends Model {
         $state,
         $postal_code,
         $country,
+        $billing_name,
         $billing_email,
         $updated_by
     )
@@ -161,11 +164,31 @@ class ClientsModel extends Model {
             'state' => $state,
             'postal_code' => $postal_code,
             'country' => $country,
+            'billing_name' => $billing_name,
             'billing_email' => $billing_email,
             'updated_by' => $updated_by,
             'date_updated' => date('Y-m-d H:i:s')
         );
         return parent::update('clients', $data, 'id = :id and company_id = :company_id', $where);
+    }
+
+    /**
+     * Claim the Stripe customer for this client, inside its company's connected
+     * account. Conditional on the column still being empty so two staff sending at
+     * the same moment cannot mint two customers for one client.
+     */
+    public function set_stripe_customer($client_id, $company_id, $stripe_customer_id, $stripe_livemode)
+    {
+        $where = array(
+            'id'         => $client_id,
+            'company_id' => $company_id
+        );
+        $data = array(
+            'stripe_customer_id' => $stripe_customer_id,
+            'stripe_livemode'    => $stripe_livemode,
+            'date_updated'       => date('Y-m-d H:i:s')
+        );
+        return parent::update('clients', $data, 'id = :id and company_id = :company_id and stripe_customer_id is null', $where);
     }
 
     public function delete_client($client_id, $company_id, $updated_by)

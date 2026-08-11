@@ -27,6 +27,19 @@ class PortalController extends Controller {
         $this->view->render();
     }
 
+    public function invoicesAction(){
+
+        $client = $this->client();
+
+        if ($client === null) {
+            $this->refuse();
+            return;
+        }
+
+        $this->view->client = $client;
+        $this->view->render();
+    }
+
     public function projectAction(){
 
         $client = $this->client();

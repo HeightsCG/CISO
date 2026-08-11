@@ -347,6 +347,153 @@ class InvoicesModel extends Model {
         return $subtotal;
     }
 
+    /**
+     * Invoices Stripe is still chasing. Disconnecting while these are outstanding
+     * would leave Stripe emailing and dunning for money this application could no
+     * longer see settled.
+     */
+    public function count_open_invoices($company_id)
+    {
+        $where = array(
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    COUNT(*) AS open_count
+                FROM
+                    invoices
+                WHERE
+                    company_id = :company_id
+                    and
+                    invoice_status in ('Finalizing', 'Open')
+                    and
+                    deleted = 0";
+        $rows = parent::select($sql, $where);
+
+        return isset($rows[0]['open_count']) ? (int) $rows[0]['open_count'] : 0;
+    }
+
+    /** Stamp the Stripe draft onto the local row before anything irreversible happens. */
+    public function set_stripe_invoice($invoice_id, $stripe_invoice_id, $stripe_account_id, $stripe_customer_id, $stripe_livemode)
+    {
+        $where = array(
+            'id' => $invoice_id
+        );
+        $data = array(
+            'stripe_invoice_id'  => $stripe_invoice_id,
+            'stripe_account_id'  => $stripe_account_id,
+            'stripe_customer_id' => $stripe_customer_id,
+            'stripe_livemode'    => $stripe_livemode,
+            'date_updated'       => date('Y-m-d H:i:s')
+        );
+        return parent::update('invoices', $data, 'id = :id', $where);
+    }
+
+    /**
+     * Apply a Stripe invoice to the local mirror. The same method serves the send
+     * path, the webhook and the reconciler, so the three cannot drift about what a
+     * Stripe invoice means.
+     *
+     * Every field is written from the snapshot rather than as a delta, which is
+     * what makes applying the same event twice harmless.
+     */
+    public function apply_stripe_invoice($invoice_id, array $stripe, $event_created)
+    {
+        $status_map = array(
+            'draft'         => 'Draft',
+            'open'          => 'Open',
+            'paid'          => 'Paid',
+            'void'          => 'Void',
+            'uncollectible' => 'Uncollectible'
+        );
+
+        $status = $status_map[$stripe['status'] ?? ''] ?? 'Open';
+        $now    = date('Y-m-d H:i:s');
+
+        $data = array(
+            'invoice_status'    => $status,
+            'invoice_number'    => (string) ($stripe['number'] ?? ''),
+            'currency'          => (string) ($stripe['currency'] ?? 'usd'),
+            'subtotal_cents'    => (int) ($stripe['subtotal'] ?? 0),
+            'total_cents'       => (int) ($stripe['total'] ?? 0),
+            'amount_paid_cents' => (int) ($stripe['amount_paid'] ?? 0),
+            'amount_due_cents'  => (int) ($stripe['amount_remaining'] ?? 0),
+            'hosted_invoice_url'=> (string) ($stripe['hosted_invoice_url'] ?? ''),
+            'invoice_pdf_url'   => (string) ($stripe['invoice_pdf'] ?? ''),
+            'finalize_state'    => 'Idle',
+            'finalize_error'    => '',
+            'stripe_synced_at'  => $now,
+            'date_updated'      => $now
+        );
+
+        if ((int) $event_created > 0) {
+            $data['stripe_event_created'] = (int) $event_created;
+        }
+
+        if (!empty($stripe['due_date'])) {
+            $data['due_date'] = date('Y-m-d', (int) $stripe['due_date']);
+        }
+
+        if (!empty($stripe['status_transitions']['finalized_at'])) {
+            $data['finalized_at'] = date('Y-m-d H:i:s', (int) $stripe['status_transitions']['finalized_at']);
+        }
+
+        if (!empty($stripe['status_transitions']['paid_at'])) {
+            $data['paid_at'] = date('Y-m-d H:i:s', (int) $stripe['status_transitions']['paid_at']);
+        }
+
+        if (!empty($stripe['status_transitions']['voided_at'])) {
+            $data['voided_at'] = date('Y-m-d H:i:s', (int) $stripe['status_transitions']['voided_at']);
+        }
+
+        if ($status === 'Paid') {
+            $data['payment_state'] = 'Succeeded';
+        }
+
+        $payment_intent = StripeService::invoice_payment_intent_id($stripe);
+
+        if ($payment_intent !== '') {
+            $data['stripe_payment_intent_id'] = $payment_intent;
+        }
+
+        return parent::update('invoices', $data, 'id = :id', array('id' => $invoice_id));
+    }
+
+    /**
+     * Only a definitive refusal from Stripe may return an invoice to Draft. On a
+     * timeout the row stays in Finalizing, because Stripe may well have created and
+     * emailed the invoice - retrying past the idempotency window would bill the
+     * client twice and set dunning chasing double the money.
+     */
+    public function fail_finalize($invoice_id, $finalize_error, $back_to_draft)
+    {
+        $data = array(
+            'finalize_state' => 'Failed',
+            'finalize_error' => substr((string) $finalize_error, 0, 480),
+            'date_updated'   => date('Y-m-d H:i:s')
+        );
+
+        if ($back_to_draft) {
+            $data['invoice_status'] = 'Draft';
+        }
+
+        return parent::update('invoices', $data, 'id = :id', array('id' => $invoice_id));
+    }
+
+    public function set_payment_state($invoice_id, $payment_state, $payment_error, $event_created)
+    {
+        $data = array(
+            'payment_state'  => $payment_state,
+            'payment_error'  => substr((string) $payment_error, 0, 240),
+            'date_updated'   => date('Y-m-d H:i:s')
+        );
+
+        if ((int) $event_created > 0) {
+            $data['stripe_event_created'] = (int) $event_created;
+        }
+
+        return parent::update('invoices', $data, 'id = :id', array('id' => $invoice_id));
+    }
+
     public function delete_invoice($invoice_id, $company_id, $updated_by)
     {
         $where = array(
@@ -407,6 +554,7 @@ class InvoicesModel extends Model {
                     subscription_id,
                     invoice_status,
                     payment_state,
+                    stripe_account_id,
                     stripe_event_created
                 FROM
                     invoices
@@ -415,6 +563,90 @@ class InvoicesModel extends Model {
                     and
                     deleted = 0";
         return parent::select($sql, $where);
+    }
+
+    /**
+     * Claim an event for processing. The unique key on stripe_event_id is the whole
+     * deduplication mechanism: insert first and let a duplicate-key failure mean
+     * "already seen". A SELECT-then-INSERT would race against Stripe's own retry
+     * and process the same event twice.
+     *
+     * An event whose previous attempt failed is re-claimed rather than refused,
+     * or a handler that errored once would lock itself out of every retry.
+     */
+    public function claim_event($stripe_event_id, $event_type, $event_created, $livemode, $account_id, $object_id): bool
+    {
+        $now = date('Y-m-d H:i:s');
+
+        try {
+
+            parent::insert('stripe_events', array(
+                'stripe_event_id' => $stripe_event_id,
+                'event_type'      => $event_type,
+                'event_created'   => (int) $event_created,
+                'event_status'    => 'Received',
+                'livemode'        => $livemode,
+                'account_id'      => (string) $account_id,
+                'object_id'       => (string) $object_id,
+                'attempts'        => 1,
+                'date_created'    => $now,
+                'date_updated'    => $now
+            ));
+
+            return true;
+
+        } catch (\PDOException $e) {
+
+            if ($e->getCode() !== '23000') {
+                throw $e;
+            }
+
+            $seen = parent::select(
+                "SELECT id, event_status, attempts FROM stripe_events WHERE stripe_event_id = :stripe_event_id",
+                array('stripe_event_id' => $stripe_event_id)
+            );
+
+            if (!isset($seen[0]) || in_array($seen[0]['event_status'], array('Processed', 'Ignored'), true)) {
+                return false;
+            }
+
+            parent::update(
+                'stripe_events',
+                array(
+                    'event_status' => 'Received',
+                    'attempts'     => ((int) $seen[0]['attempts']) + 1,
+                    'date_updated' => $now
+                ),
+                'id = :id',
+                array('id' => $seen[0]['id'])
+            );
+
+            return true;
+        }
+    }
+
+    public function mark_event($stripe_event_id, $event_status, $error_message)
+    {
+        return parent::update(
+            'stripe_events',
+            array(
+                'event_status'  => $event_status,
+                'error_message' => substr((string) $error_message, 0, 480),
+                'date_updated'  => date('Y-m-d H:i:s')
+            ),
+            'stripe_event_id = :stripe_event_id',
+            array('stripe_event_id' => $stripe_event_id)
+        );
+    }
+
+    public function event_attempts($stripe_event_id): int
+    {
+        $rows = parent::select(
+            "SELECT attempts FROM stripe_events WHERE stripe_event_id = :stripe_event_id",
+            array('stripe_event_id' => $stripe_event_id)
+        );
+
+        return isset($rows[0]['attempts']) ? (int) $rows[0]['attempts'] : 0;
     }
 
     /** As by_stripe_invoice_id, for the payment_intent events that carry no invoice reference. */

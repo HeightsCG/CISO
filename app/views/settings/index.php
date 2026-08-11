@@ -11,6 +11,7 @@
             <button class="nav-link submenu__link" id="tab_regional_btn" data-bs-toggle="pill" data-bs-target="#tab_regional" type="button" role="tab" aria-controls="tab_regional" aria-selected="false">Regional Defaults</button>
             <button class="nav-link submenu__link" id="tab_branding_btn" data-bs-toggle="pill" data-bs-target="#tab_branding" type="button" role="tab" aria-controls="tab_branding" aria-selected="false">Branding</button>
             <button class="nav-link submenu__link" id="tab_security_btn" data-bs-toggle="pill" data-bs-target="#tab_security" type="button" role="tab" aria-controls="tab_security" aria-selected="false">Security</button>
+            <button class="nav-link submenu__link" id="tab_billing_btn" data-bs-toggle="pill" data-bs-target="#tab_billing" type="button" role="tab" aria-controls="tab_billing" aria-selected="false">Billing</button>
         </nav>
 
         <div class="tab-content settings-panes">
@@ -299,11 +300,11 @@
                                 <div class="methods" role="group" aria-labelledby="mfa_methods_label">
                                     <label class="method">
                                         <input type="checkbox" id="mfa_authenticator">
-                                        <span>Authenticator app</span>
+                                        <span>Authenticator App</span>
                                     </label>
                                     <label class="method">
                                         <input type="checkbox" id="mfa_email">
-                                        <span>Email code</span>
+                                        <span>Email Code</span>
                                     </label>
                                 </div>
                             </div>
@@ -317,14 +318,53 @@
                 <div class="savebar" id="security_savebar">
                     <span class="savebar__status" id="security_status" aria-live="polite">Loading settings&hellip;</span>
                     <span class="savebar__actions">
-                        <button type="button" id="do_security_save" class="btn btn--primary" disabled>Save changes</button>
+                        <button type="button" id="do_security_save" class="btn btn--primary" disabled>Save  hanges</button>
                     </span>
                 </div>
+            </div>
+            <div class="tab-pane fade" id="tab_billing" role="tabpanel" aria-labelledby="tab_billing_btn">
+                <section class="card">
+                    <header class="card__head">
+                        <h2 class="card__title">Stripe</h2>
+                    </header>
+                    <div class="card__body">
+                        <p class="import__hint" id="connect_intro">Checking your Stripe connection&hellip;</p>
+
+                        <div id="connect_state" hidden>
+                            <div class="alert alert--warn" id="connect_requirements" role="status" hidden>
+                                <span class="alert__count" id="connect_count" aria-hidden="true"></span>
+                                <p class="alert__title" id="connect_requirements_title"></p>
+                                <p class="alert__text" id="connect_requirements_text"></p>
+                                <ul class="alert__tasks" id="connect_requirements_list"></ul>
+                                <div class="alert__actions" id="connect_alert_actions">
+                                    <button type="button" class="btn btn--primary" id="do_connect_finish">Finish Stripe setup</button>
+                                </div>
+                            </div>
+                            <dl class="datalist datalist--record">
+                                <dt>Status</dt>
+                                <dd><span class="badge" id="connect_badge">&mdash;</span></dd>
+                                <dt>Currency</dt>
+                                <dd id="connect_currency">&mdash;</dd>
+                                <dt>Charges</dt>
+                                <dd id="connect_charges">&mdash;</dd>
+                                <dt>Payouts</dt>
+                                <dd id="connect_payouts">&mdash;</dd>
+                            </dl>
+                        </div>
+
+                        <div class="panel__actions">
+                            <button type="button" class="btn btn--destructive" id="do_disconnect" hidden>Disconnect</button>
+                            <button type="button" class="btn btn--secondary" id="do_connect_refresh" hidden>Refresh from Stripe</button>
+                            <a class="btn btn--secondary" href="https://dashboard.stripe.com" target="_blank" rel="noopener noreferrer" id="open_dashboard" hidden>Open Stripe Dashboard</a>
+                            <button type="button" class="btn btn--primary" id="do_connect" hidden>Connect Stripe</button>
+                        </div>
+                    </div>
+                </section>
             </div>
             <div class="savebar" id="savebar">
                 <span class="savebar__status" id="savebar_text" aria-live="polite">Loading settings&hellip;</span>
                 <span class="savebar__actions">
-                    <button type="button" id="do_save" class="btn btn--primary" disabled>Save changes</button>
+                    <button type="button" id="do_save" class="btn btn--primary" disabled>Save Changes</button>
                 </span>
             </div>
         </div>
@@ -652,6 +692,7 @@ $(document).ready(function () {
                 set_policy(policy.seg, parseInt(company[policy.key], 10) === 1);
             });
             set_logo(company.logo_path, company.logo_filename, company.logo_size);
+            render_connect(company);
             update_format_example();
             take_snapshot();
             $("#do_save, #do_security_save").prop("disabled", false);
@@ -668,7 +709,8 @@ $(document).ready(function () {
     });
 
     function sync_savebar_visibility() {
-        $("#savebar").prop("hidden", $(".submenu__link.active").attr("id") === "tab_security_btn");
+        var active = $(".submenu__link.active").attr("id");
+        $("#savebar").prop("hidden", active === "tab_security_btn" || active === "tab_billing_btn");
     }
 
     $('.submenu__link').on("shown.bs.tab", function () {
@@ -908,6 +950,156 @@ $(document).ready(function () {
         });
 
     });
+
+    function esc(value) {
+        return $('<div>').text(value === null ? '' : value).html();
+    }
+
+    function render_connect(company) {
+
+        var status = company.stripe_connect_status;
+        var connected = status === "Connected";
+        var has_account = company.stripe_connect_account_id !== null && company.stripe_connect_account_id !== undefined;
+
+        var tone = "badge--prospect";
+        if (connected) {
+            tone = "badge--active";
+        } else if (status === "Restricted") {
+            tone = "badge--critical";
+        } else if (status === "Onboarding") {
+            tone = "badge--onboarding";
+        }
+
+        $("#connect_badge").attr("class", "badge " + tone).text(status);
+        $("#connect_currency").text((company.default_currency || "usd").toUpperCase());
+        $("#connect_charges").text(parseInt(company.stripe_charges_enabled, 10) === 1 ? "Enabled" : "Not enabled");
+        $("#connect_payouts").text(parseInt(company.stripe_payouts_enabled, 10) === 1 ? "Enabled" : "Not enabled");
+
+        $("#connect_state").prop("hidden", !has_account);
+
+        var tasks = [];
+        var requirements = (company.stripe_requirements || "").split(",");
+
+        for (var i = 0; i < requirements.length; i++) {
+            if (requirements[i].trim() !== "") {
+                tasks.push(requirements[i].trim());
+            }
+        }
+
+        var list = "";
+
+        for (var i = 0; i < tasks.length; i++) {
+            list += "<li>" + esc(tasks[i]) + "</li>";
+        }
+
+        $("#connect_requirements_list").html(list);
+
+        var reason = company.stripe_disabled_reason || "";
+
+        /**
+         * The count leads because it is the only number that matters here: how
+         * much work is left before this account can take money. Stripe's own
+         * reason is quoted when there is one, because a bare "Restricted" with
+         * nothing beside it reads as an unexplained failure.
+         */
+        $("#connect_count").text(tasks.length > 0 ? tasks.length : "");
+
+        if (tasks.length > 0) {
+            $("#connect_requirements_title").text(status === "Restricted"
+                ? "Payments are on hold until Stripe has these"
+                : "Stripe needs these before you can take payment");
+            /**
+             * No subtitle when there is a list: the count, the title and the items
+             * already say everything a sentence would repeat.
+             */
+            $("#connect_requirements_text").text("");
+        } else if (reason !== "") {
+            $("#connect_requirements_title").text("Payments are on hold");
+            $("#connect_requirements_text").text("Stripe reports: " + reason + ". Nothing is needed from you right now.");
+        }
+
+        $("#connect_requirements_text").prop("hidden", $("#connect_requirements_text").text() === "");
+        $("#connect_requirements").prop("hidden", tasks.length === 0 && reason === "");
+        $("#connect_requirements").attr("class", status === "Restricted" ? "alert alert--critical" : "alert alert--warn");
+        $("#connect_alert_actions").prop("hidden", tasks.length === 0);
+
+        $("#do_connect").prop("hidden", has_account).text("Connect Stripe");
+        $("#do_connect_refresh").prop("hidden", !has_account);
+        $("#open_dashboard").prop("hidden", !connected);
+        $("#do_disconnect").prop("hidden", !has_account);
+
+        if (!has_account) {
+            $("#connect_intro").text("Connect a Stripe account to invoice your clients and take payment. The account is yours — CISO.aero never holds your funds.");
+        } else if (connected) {
+            $("#connect_intro").text("Your Stripe account is connected. Invoices you send are created on it, and payments settle to you directly.");
+        } else {
+            $("#connect_intro").text("");
+        }
+
+        $("#connect_intro").prop("hidden", $("#connect_intro").text() === "");
+    }
+
+    $("#do_connect, #do_connect_finish").click(function () {
+
+        var button = "#" + this.id;
+
+        set_loading(button, true);
+
+        ApiDataSvc.apiCall('post', 'stripe_connect_start', {}, function (data) {
+
+            var obj = JSON.parse(data);
+
+            if (obj.success) {
+                window.location.href = obj.url;
+                return;
+            }
+
+            set_loading(button, false);
+            toastr.error(obj.message);
+        });
+    });
+
+    $("#do_connect_refresh").click(function () {
+
+        set_loading("#do_connect_refresh", true);
+
+        ApiDataSvc.apiCall('post', 'stripe_connect_refresh', {}, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading("#do_connect_refresh", false);
+
+            if (obj.success) {
+                toastr.success(obj.message);
+                load_company();
+            } else {
+                toastr.error(obj.message);
+            }
+        });
+    });
+
+    $("#do_disconnect").click(function () {
+
+        set_loading("#do_disconnect", true);
+
+        ApiDataSvc.apiCall('post', 'stripe_disconnect', {}, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading("#do_disconnect", false);
+
+            if (obj.success) {
+                toastr.success(obj.message);
+                load_company();
+            } else {
+                toastr.error(obj.message);
+            }
+        });
+    });
+
+    if (window.location.hash === "#billing") {
+        bootstrap.Tab.getOrCreateInstance(document.getElementById("tab_billing_btn")).show();
+    }
 
     sync_savebar_visibility();
     load_company();

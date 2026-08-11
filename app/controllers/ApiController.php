@@ -1186,6 +1186,7 @@ class ApiController extends Controller {
             return;
         }
 
+        $billing_name  = $this->input('billing_name');
         $billing_email = html_entity_decode((string) ($this->post['billing_email'] ?? ''), ENT_QUOTES, 'UTF-8');
 
         if ($billing_email !== '' && !filter_var($billing_email, FILTER_VALIDATE_EMAIL)) {
@@ -1227,6 +1228,7 @@ class ApiController extends Controller {
                 $this->post['state'],
                 $this->post['postal_code'],
                 $this->post['country'],
+                $billing_name,
                 $billing_email,
                 Session::get('user_id')
             );
@@ -1252,6 +1254,7 @@ class ApiController extends Controller {
             $this->post['state'],
             $this->post['postal_code'],
             $this->post['country'],
+            $billing_name,
             $billing_email,
             Session::get('user_id')
         );
@@ -3324,6 +3327,168 @@ class ApiController extends Controller {
     }
 
     /**
+     * Pull the connected account's current state into the company row. Called
+     * after onboarding returns and whenever the panel is refreshed, so the local
+     * mirror is never the only thing that decides whether sending is allowed.
+     */
+    private function sync_connect_state($company_id, $stripe_connect_account_id): array
+    {
+        $account = StripeService::retrieve_account($stripe_connect_account_id);
+
+        if (empty($account)) {
+            return array();
+        }
+
+        $this->companies_model->set_connect_state(
+            $company_id,
+            StripeService::connect_status($account),
+            empty($account['charges_enabled']) ? 0 : 1,
+            empty($account['details_submitted']) ? 0 : 1,
+            empty($account['payouts_enabled']) ? 0 : 1,
+            StripeService::requirements_summary($account),
+            $account['default_currency'] ?? 'usd'
+        );
+
+        return $account;
+    }
+
+    /**
+     * Begin or resume Stripe onboarding. The account is created on first use and
+     * reused thereafter; the link is minted fresh every time because Stripe's
+     * onboarding links are single use and expire within minutes.
+     */
+    public function stripe_connect_startAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        if (!StripeService::configured()) {
+            $response['message'] = 'Stripe is not configured on this installation';
+            echo json_encode($response);
+            return;
+        }
+
+        $company_id = Session::get('company_id');
+        $company    = $this->companies_model->get_company($company_id);
+
+        if (!is_array($company) || count($company) !== 1) {
+            echo json_encode($response);
+            return;
+        }
+
+        $company    = $company[0];
+        $account_id = $company['stripe_connect_account_id'];
+
+        if ($account_id === null) {
+
+            $account = StripeService::create_connected_account(
+                $company_id,
+                $company['company_name'],
+                Session::get('user_email'),
+                StripeService::country_code($company['country'])
+            );
+
+            if (empty($account['id'])) {
+                $response['message'] = 'Stripe could not create the account: '.StripeService::last_error();
+                echo json_encode($response);
+                return;
+            }
+
+            $claimed = $this->companies_model->set_connect_account($company_id, $account['id'], StripeService::livemode());
+
+            /**
+             * Another administrator won the race and wrote first. Their account is
+             * the one of record; this request adopts it rather than leaving a
+             * second account behind.
+             */
+            if ($claimed === 0) {
+                $company    = $this->companies_model->get_company($company_id)[0];
+                $account_id = $company['stripe_connect_account_id'];
+            } else {
+                $account_id = $account['id'];
+            }
+        }
+
+        $base = Main::get_base_domain();
+        $link = StripeService::create_account_link($account_id, $base.'/settings/stripe_refresh', $base.'/settings/stripe_return');
+
+        if (empty($link['url'])) {
+            $response['message'] = 'Stripe could not start onboarding: '.StripeService::last_error();
+            echo json_encode($response);
+            return;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'ok';
+        $response['url'] = $link['url'];
+        echo json_encode($response);
+    }
+
+    /** Re-read the account from Stripe so the panel reflects reality, not the mirror. */
+    public function stripe_connect_refreshAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $company_id = Session::get('company_id');
+        $company    = $this->companies_model->get_company($company_id);
+
+        if (!is_array($company) || count($company) !== 1 || $company[0]['stripe_connect_account_id'] === null) {
+            $response['message'] = 'No Stripe account is connected yet';
+            echo json_encode($response);
+            return;
+        }
+
+        if (empty($this->sync_connect_state($company_id, $company[0]['stripe_connect_account_id']))) {
+            $response['message'] = 'Stripe could not be reached: '.StripeService::last_error();
+            echo json_encode($response);
+            return;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Stripe account refreshed';
+        echo json_encode($response);
+    }
+
+    /**
+     * Unlink without touching Stripe. A Standard account belongs to the company,
+     * not to this platform, so it is never deleted from here - disconnecting only
+     * stops this application acting on it.
+     */
+    public function stripe_disconnectAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $company_id = Session::get('company_id');
+        $open       = $this->invoices_model->count_open_invoices($company_id);
+
+        if ($open > 0) {
+            $response['message'] = 'There are '.$open.' invoice(s) still awaiting payment. Void or settle them before disconnecting.';
+            echo json_encode($response);
+            return;
+        }
+
+        $this->companies_model->clear_connect_account($company_id);
+
+        $response['success'] = true;
+        $response['message'] = 'Stripe disconnected';
+        echo json_encode($response);
+    }
+
+    /**
      * Billing is gated on global_admin, matching Standards and User Accounts.
      * Unlike the global_ actions this reads nothing across tenants - it is still
      * scoped to the caller's own company - so the gate is about who may bill,
@@ -3523,6 +3688,272 @@ class ApiController extends Controller {
         echo json_encode($response);
     }
 
+    /**
+     * A customer for this client inside its company's connected account, created
+     * on first use. Returns '' when it could not be established, which the caller
+     * turns into a refusal rather than sending an invoice to nobody.
+     */
+    private function connected_customer_for_client(array $client, $account_id): string
+    {
+        if ($client['stripe_customer_id'] !== null && (int) $client['stripe_livemode'] === StripeService::livemode()) {
+            return (string) $client['stripe_customer_id'];
+        }
+
+        $email = $client['billing_email'] !== '' ? $client['billing_email'] : $client['contact_email'];
+        $name  = $client['billing_name'] !== '' ? $client['billing_name'] : $client['company_name'];
+
+        $customer = StripeService::create_customer(
+            $account_id,
+            $client['company_id'],
+            $client['id'],
+            $name,
+            $email,
+            $client['address_1'],
+            $client['address_2'],
+            $client['city'],
+            $client['state'],
+            $client['postal_code'],
+            $client['country']
+        );
+
+        if (empty($customer['id'])) {
+            return '';
+        }
+
+        $claimed = $this->clients_model->set_stripe_customer($client['id'], $client['company_id'], $customer['id'], StripeService::livemode());
+
+        if ($claimed === 0) {
+            $fresh = $this->clients_model->get_client($client['id'], $client['company_id']);
+            return (string) ($fresh[0]['stripe_customer_id'] ?? $customer['id']);
+        }
+
+        return (string) $customer['id'];
+    }
+
+    /**
+     * Push a draft to the company's Stripe account, finalize it and let Stripe send
+     * it. One action rather than three: three buttons would each leave a state the
+     * user cannot see, and the intermediate failures have no distinct remedy.
+     */
+    public function send_invoiceAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $company_id = Session::get('company_id');
+        $invoice_id = (int) ($this->post['invoice_id'] ?? 0);
+
+        $invoice = $this->invoices_model->get_invoice($invoice_id, $company_id);
+
+        if (!is_array($invoice) || count($invoice) !== 1) {
+            $response['message'] = 'That invoice could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        $invoice = $invoice[0];
+
+        if ($invoice['invoice_status'] !== 'Draft') {
+            $response['message'] = 'Only a draft can be sent';
+            echo json_encode($response);
+            return;
+        }
+
+        $company = $this->companies_model->get_company($company_id);
+        $company = (is_array($company) && count($company) === 1) ? $company[0] : array();
+
+        if (empty($company['stripe_connect_account_id']) || $company['stripe_connect_status'] !== 'Connected') {
+            $response['message'] = 'Connect a Stripe account in Settings before sending invoices';
+            echo json_encode($response);
+            return;
+        }
+
+        if ((int) $company['stripe_charges_enabled'] !== 1) {
+            $response['message'] = 'Stripe has not enabled payments on this account yet';
+            echo json_encode($response);
+            return;
+        }
+
+        $items = $this->invoices_model->get_invoice_items($invoice_id);
+
+        if (count($items) === 0 || (int) $invoice['total_cents'] <= 0) {
+            $response['message'] = 'Add at least one line with an amount before sending';
+            echo json_encode($response);
+            return;
+        }
+
+        $client = $this->clients_model->get_client($invoice['client_id'], $company_id);
+
+        if (!is_array($client) || count($client) !== 1) {
+            $response['message'] = 'That client could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        $client = $client[0];
+        $email  = $client['billing_email'] !== '' ? $client['billing_email'] : $client['contact_email'];
+
+        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $response['message'] = 'Add a valid billing or contact email for this client before sending';
+            echo json_encode($response);
+            return;
+        }
+
+        /**
+         * The mutex. Only the request that moves the invoice out of Draft proceeds,
+         * so a double-clicked Send makes exactly one set of Stripe calls.
+         */
+        if ((int) $this->invoices_model->claim_finalize($invoice_id, $company_id, Session::get('user_id')) !== 1) {
+            $response['message'] = 'That invoice is already being sent';
+            echo json_encode($response);
+            return;
+        }
+
+        $account_id = $company['stripe_connect_account_id'];
+
+        try {
+
+            $customer_id = $this->connected_customer_for_client($client, $account_id);
+
+            if ($customer_id === '') {
+                $this->invoices_model->fail_finalize($invoice_id, 'Stripe customer could not be created: '.StripeService::last_error(), true);
+                $response['message'] = 'Stripe could not create the customer: '.StripeService::last_error();
+                echo json_encode($response);
+                return;
+            }
+
+            $stripe_invoice_id = $invoice['stripe_invoice_id'];
+
+            if ($stripe_invoice_id === null) {
+
+                $draft = StripeService::create_invoice(
+                    $account_id,
+                    $customer_id,
+                    $invoice['currency'],
+                    $invoice['invoice_memo'],
+                    $invoice['invoice_footer'],
+                    $invoice['due_days'],
+                    $company_id,
+                    $invoice_id,
+                    $invoice['client_id'],
+                    $invoice['project_id']
+                );
+
+                if (empty($draft['id'])) {
+                    $this->invoices_model->fail_finalize($invoice_id, StripeService::last_error(), true);
+                    $response['message'] = 'Stripe could not create the invoice: '.StripeService::last_error();
+                    echo json_encode($response);
+                    return;
+                }
+
+                $stripe_invoice_id = $draft['id'];
+
+                $this->invoices_model->set_stripe_invoice($invoice_id, $stripe_invoice_id, $account_id, $customer_id, StripeService::livemode());
+            }
+
+            foreach ($items as $item) {
+
+                $line = StripeService::add_invoice_line(
+                    $account_id,
+                    $stripe_invoice_id,
+                    $customer_id,
+                    $invoice['currency'],
+                    $item['item_description'].' ('.Money::format_quantity($item['quantity_milli']).' x '.Money::format($item['unit_amount_cents'], $invoice['currency']).')',
+                    $item['amount_cents'],
+                    $company_id,
+                    $invoice_id,
+                    $item['id']
+                );
+
+                if (empty($line['id'])) {
+                    $this->invoices_model->fail_finalize($invoice_id, 'Line rejected: '.StripeService::last_error(), true);
+                    $response['message'] = 'Stripe rejected a line item: '.StripeService::last_error();
+                    echo json_encode($response);
+                    return;
+                }
+            }
+
+            $finalized = StripeService::finalize_invoice($account_id, $stripe_invoice_id, $company_id, $invoice_id);
+
+            if (empty($finalized['id'])) {
+                /**
+                 * Left in Finalizing on purpose. Stripe may have finalized and
+                 * emailed it, and a retry past the idempotency window would raise a
+                 * second invoice against the same client.
+                 */
+                $this->invoices_model->fail_finalize($invoice_id, StripeService::last_error(), false);
+                $response['message'] = 'We could not confirm this with Stripe. Refresh in a moment before trying again.';
+                echo json_encode($response);
+                return;
+            }
+
+            StripeService::send_invoice($account_id, $stripe_invoice_id);
+
+            $current = StripeService::retrieve_invoice($account_id, $stripe_invoice_id);
+
+            $this->invoices_model->apply_stripe_invoice($invoice_id, empty($current) ? $finalized : $current, 0);
+
+        } catch (\Throwable $e) {
+            $this->invoices_model->fail_finalize($invoice_id, $e->getMessage(), false);
+            error_log('[billing] send failed for invoice '.$invoice_id.': '.$e->getMessage());
+            $response['message'] = 'We could not confirm this with Stripe. Refresh in a moment before trying again.';
+            echo json_encode($response);
+            return;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Invoice sent';
+        $response['invoice_id'] = $invoice_id;
+        echo json_encode($response);
+    }
+
+    /** Voiding is final in Stripe; the local mirror follows the account, not the other way round. */
+    public function void_invoiceAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $company_id = Session::get('company_id');
+        $invoice_id = (int) ($this->post['invoice_id'] ?? 0);
+        $invoice    = $this->invoices_model->get_invoice($invoice_id, $company_id);
+
+        if (!is_array($invoice) || count($invoice) !== 1) {
+            $response['message'] = 'That invoice could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        $invoice = $invoice[0];
+
+        if (!in_array($invoice['invoice_status'], array('Open', 'Uncollectible'), true) || $invoice['stripe_invoice_id'] === null) {
+            $response['message'] = 'Only a sent invoice can be voided';
+            echo json_encode($response);
+            return;
+        }
+
+        $voided = StripeService::void_invoice($invoice['stripe_account_id'], $invoice['stripe_invoice_id'], $company_id, $invoice_id);
+
+        if (empty($voided['id'])) {
+            $response['message'] = 'Stripe could not void that invoice: '.StripeService::last_error();
+            echo json_encode($response);
+            return;
+        }
+
+        $this->invoices_model->apply_stripe_invoice($invoice_id, $voided, 0);
+
+        $response['success'] = true;
+        $response['message'] = 'Invoice voided';
+        echo json_encode($response);
+    }
+
     public function delete_invoiceAction(){
 
         $this->refuse_unless_company_admin();
@@ -3551,6 +3982,97 @@ class ApiController extends Controller {
 
         $response['success'] = true;
         $response['message'] = 'Invoice deleted';
+        echo json_encode($response);
+    }
+
+    /**
+     * One invoice the calling client is entitled to see, or null.
+     *
+     * Mirrors portal_evidence_row: prove the caller is a portal user, fetch the
+     * record scoped to the company, then re-prove it belongs to this client. A
+     * draft is excluded outright - it is staff work in progress that Stripe has
+     * never sent, and may carry an internal memo.
+     */
+    private function portal_invoice_row($invoice_id)
+    {
+        if (Session::get('user_type') !== 'portal' || empty($invoice_id)) {
+            return null;
+        }
+
+        $invoice = $this->invoices_model->get_invoice($invoice_id, Session::get('company_id'));
+
+        if (!is_array($invoice) || count($invoice) !== 1) {
+            return null;
+        }
+
+        if ((int) $invoice[0]['client_id'] !== (int) Session::get('client_id')) {
+            return null;
+        }
+
+        if (in_array($invoice[0]['invoice_status'], array('Draft', 'Finalizing'), true)) {
+            return null;
+        }
+
+        return $invoice[0];
+    }
+
+    /**
+     * client_id comes from the session, never from POST: it is the whole of the
+     * caller's entitlement, so accepting it as a parameter would let any signed-in
+     * client name someone else's.
+     */
+    public function portal_invoicesAction(){
+
+        if (Session::get('user_type') !== 'portal') {
+            echo json_encode(array());
+            exit;
+        }
+
+        echo json_encode($this->invoices_model->portal_invoices(Session::get('client_id'), Session::get('company_id')));
+    }
+
+    /**
+     * The hosted payment page, minted per click rather than carried in the list.
+     * It is a capability URL - possession is authorisation - and Stripe has already
+     * emailed this same link to this same client, so handing it to them after an
+     * entitlement check widens nothing. Keeping it out of the list payload keeps
+     * the blast radius at one invoice rather than all of them.
+     */
+    public function portal_invoice_urlAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'That invoice could not be found'
+        );
+
+        $invoice = $this->portal_invoice_row((int) ($this->post['invoice_id'] ?? 0));
+
+        if ($invoice === null) {
+            echo json_encode($response);
+            exit;
+        }
+
+        $link_type = ($this->post['link_type'] ?? 'pay') === 'pdf' ? 'pdf' : 'pay';
+
+        /**
+         * Re-read from Stripe so a voided invoice cannot still be paid from a stale
+         * local copy. The stored URL is the fallback when Stripe cannot be reached.
+         */
+        $current = StripeService::retrieve_invoice($invoice['stripe_account_id'], $invoice['stripe_invoice_id']);
+
+        $url = $link_type === 'pdf'
+            ? (string) ($current['invoice_pdf'] ?? $invoice['invoice_pdf_url'])
+            : (string) ($current['hosted_invoice_url'] ?? $invoice['hosted_invoice_url']);
+
+        if ($url === '') {
+            $response['message'] = 'That invoice could not be opened';
+            echo json_encode($response);
+            exit;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'ok';
+        $response['url'] = $url;
         echo json_encode($response);
     }
 

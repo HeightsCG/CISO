@@ -79,6 +79,11 @@
                     <h2 class="record__group-title">Billing</h2>
                     <div class="form-row">
                         <div class="field">
+                            <label for="billing_name">Bill To Name</label>
+                            <input type="text" id="billing_name" placeholder="Accounts Payable" value="<?php echo ($this->client === null ? '' : htmlspecialchars($this->client['billing_name'], ENT_QUOTES, 'UTF-8')); ?>">
+                            <p class="field__help">Who the invoice is addressed to. Falls back to the contact name.</p>
+                        </div>
+                        <div class="field">
                             <label for="billing_email">Billing Email</label>
                             <input type="email" id="billing_email" placeholder="accounts@example.com" autocapitalize="none" spellcheck="false" value="<?php echo ($this->client === null ? '' : htmlspecialchars($this->client['billing_email'], ENT_QUOTES, 'UTF-8')); ?>">
                             <p class="field__help">Where invoices are sent. Falls back to the contact email.</p>
@@ -102,7 +107,7 @@ $(document).ready(function () {
     var fields = [
         'company_name', 'website', 'address_1', 'address_2', 'city', 'state',
         'postal_code', 'country', 'contact_name', 'contact_title', 'contact_email', 'contact_phone',
-        'billing_email'
+        'billing_name', 'billing_email'
     ];
 
     AddressAutocomplete.attach({

@@ -4761,3 +4761,171 @@ table.data.lines .num .form-control {
 .lines__total span {
     margin-left: var(--space-2);
 }
+
+/* An alert here is nearly always a list of unfinished work, so it is built as a
+   checklist rather than a paragraph: the count leads, because how much is left is
+   the one fact worth reading at a glance, and the remedy sits inside the block
+   rather than in a footer several hundred pixels away from its reason. */
+
+.alert {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0 var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--text-muted);
+    border-radius: var(--radius);
+    background: var(--surface-app);
+    margin: 0 0 var(--space-5);
+}
+
+.alert__count {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+    align-self: start;
+    min-width: 2ch;
+    font-size: 30px;
+    font-weight: var(--fw-semibold);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+}
+
+.alert__icon {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+    align-self: start;
+    margin-top: 2px;
+    font-size: 16px;
+    color: var(--text-muted);
+}
+
+.alert__title {
+    grid-column: 2;
+    margin: 0;
+    font-size: var(--fs-subsection);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    color: var(--text-primary);
+}
+
+.alert__text {
+    grid-column: 2;
+    margin: var(--space-1) 0 0;
+    max-width: 78ch;
+    font-size: var(--fs-body);
+    line-height: var(--lh-normal);
+    color: var(--text-secondary);
+}
+
+.alert__tasks {
+    grid-column: 2;
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2) var(--space-5);
+}
+
+.alert__tasks li {
+    display: flex;
+    gap: var(--space-2);
+    align-items: baseline;
+    font-size: var(--fs-body);
+    color: var(--text-primary);
+}
+
+/* A hollow marker reads as an unticked box without drawing a checkbox the user
+   cannot tick - the work is done at Stripe, not here. */
+.alert__tasks li::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 6px;
+    height: 6px;
+    margin-top: 1px;
+    border: 1.5px solid currentColor;
+    border-radius: 50%;
+    opacity: 0.55;
+}
+
+.alert__actions {
+    grid-column: 3;
+    grid-row: 1 / span 3;
+    align-self: center;
+    justify-self: end;
+    padding-left: var(--space-5);
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    white-space: nowrap;
+}
+
+.alert--warn {
+    border-color: var(--high-border);
+    border-left-color: var(--high);
+    background: var(--high-bg);
+}
+
+.alert--warn .alert__count,
+.alert--warn .alert__icon {
+    color: var(--high);
+}
+
+.alert--warn .alert__tasks li::before {
+    color: var(--high);
+    opacity: 1;
+}
+
+.alert--critical {
+    border-color: var(--critical-border);
+    border-left-color: var(--critical);
+    background: var(--critical-bg);
+}
+
+.alert--critical .alert__count,
+.alert--critical .alert__icon {
+    color: var(--critical);
+}
+
+.alert--critical .alert__tasks li::before {
+    color: var(--critical);
+    opacity: 1;
+}
+
+.alert--info {
+    border-color: var(--accent-border);
+    border-left-color: var(--accent);
+    background: var(--accent-subtle);
+}
+
+.alert--info .alert__count,
+.alert--info .alert__icon {
+    color: var(--accent);
+}
+
+@media (max-width: 900px) {
+
+    .alert {
+        padding: var(--space-3) var(--space-4);
+        gap: 0 var(--space-3);
+    }
+
+    .alert__tasks {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .alert {
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .alert__actions {
+        grid-column: 2;
+        grid-row: auto;
+        align-self: start;
+        justify-self: start;
+        padding-left: 0;
+        margin-top: var(--space-4);
+    }
+}
