@@ -4719,3 +4719,45 @@ table.data--light td.pick__col-attach {
     font-size: var(--fs-meta);
     color: var(--text-muted);
 }
+
+/* The invoice builder holds live inputs, so the row set is appended to rather
+   than redrawn - a full re-render on each keystroke would take the caret with
+   it. The list scrolls inside its own box so the page itself never does. */
+
+.lines__scroll {
+    max-height: 44vh;
+    overflow-y: auto;
+}
+
+table.data.lines td {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    vertical-align: middle;
+}
+
+table.data.lines .form-control {
+    height: var(--control-height-sm);
+}
+
+table.data.lines .num .form-control {
+    text-align: right;
+}
+
+.lines__foot {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding-top: var(--space-3);
+}
+
+.lines__total {
+    margin: 0 0 0 auto;
+    font-size: var(--fs-subsection);
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+.lines__total span {
+    margin-left: var(--space-2);
+}

@@ -15,6 +15,7 @@ class ApiController extends Controller {
     public $evidence_model;
     public $standards_model;
     public $dashboard_model;
+    public $invoices_model;
 
     public function __construct(){
         parent::__construct();
@@ -27,6 +28,7 @@ class ApiController extends Controller {
         $this->standards_model = new StandardsModel();
         $this->evidence_model = new EvidenceModel();
         $this->dashboard_model = new DashboardModel();
+        $this->invoices_model = new InvoicesModel();
     }
 
     public function loginAction(){
@@ -1171,6 +1173,25 @@ class ApiController extends Controller {
             return;
         }
 
+        $billing_email = html_entity_decode((string) ($this->post['billing_email'] ?? ''), ENT_QUOTES, 'UTF-8');
+
+        if ($billing_email !== '' && !filter_var($billing_email, FILTER_VALIDATE_EMAIL)) {
+            $response['message'] = 'Enter a valid billing email address';
+            echo json_encode($response);
+            return;
+        }
+
+        /**
+         * Held against an allow-list rather than taken as typed: it is copied onto
+         * every invoice for this client and passed to Stripe, which rejects an
+         * unknown code only after the invoice has been built.
+         */
+        $billing_currency = strtolower($this->input('billing_currency'));
+
+        if (!in_array($billing_currency, array('usd', 'eur', 'chf', 'gbp'), true)) {
+            $billing_currency = 'usd';
+        }
+
         $website = html_entity_decode((string) ($this->post['website'] ?? ''), ENT_QUOTES, 'UTF-8');
 
         if ($website !== '' && !filter_var($website, FILTER_VALIDATE_URL)) {
@@ -1204,6 +1225,8 @@ class ApiController extends Controller {
                 $this->post['state'],
                 $this->post['postal_code'],
                 $this->post['country'],
+                $billing_currency,
+                $billing_email,
                 Session::get('user_id')
             );
 
@@ -1228,6 +1251,8 @@ class ApiController extends Controller {
             $this->post['state'],
             $this->post['postal_code'],
             $this->post['country'],
+            $billing_currency,
+            $billing_email,
             Session::get('user_id')
         );
 
@@ -3265,6 +3290,230 @@ class ApiController extends Controller {
         $standard = $this->standards_model->get_standard($standard_id, Session::get('company_id'));
 
         return is_array($standard) && count($standard) === 1;
+    }
+
+    /**
+     * Billing is gated on global_admin, matching Standards and User Accounts.
+     * Unlike the global_ actions this reads nothing across tenants - it is still
+     * scoped to the caller's own company - so the gate is about who may bill,
+     * not about who may see another organisation.
+     */
+    public function load_invoicesAction(){
+
+        $this->refuse_unless_global_admin();
+
+        echo json_encode($this->invoices_model->load_invoices(Session::get('company_id')));
+    }
+
+    public function load_client_invoicesAction(){
+
+        $this->refuse_unless_global_admin();
+
+        $client_id = (int) ($this->post['client_id'] ?? 0);
+
+        if (!$this->owns_client($client_id)) {
+            echo json_encode(array());
+            exit;
+        }
+
+        echo json_encode($this->invoices_model->client_invoices($client_id, Session::get('company_id')));
+    }
+
+    /**
+     * Header and lines together, because the invoice view has no use for one
+     * without the other and two round trips would let them be drawn from
+     * different moments.
+     */
+    public function load_invoiceAction(){
+
+        $this->refuse_unless_global_admin();
+
+        $invoice_id = (int) ($this->post['invoice_id'] ?? 0);
+        $invoice    = $this->invoices_model->get_invoice($invoice_id, Session::get('company_id'));
+
+        if (!is_array($invoice) || count($invoice) !== 1) {
+            echo json_encode(array());
+            exit;
+        }
+
+        echo json_encode(array(
+            'invoice' => $invoice[0],
+            'items'   => $this->invoices_model->get_invoice_items($invoice_id)
+        ));
+    }
+
+    /**
+     * Insert and update in one action, branching on invoice_id, and drafts only -
+     * once Stripe has finalised an invoice its lines are the client's copy and
+     * the record here stops being the thing that decides them.
+     *
+     * Lines arrive as one JSON string rather than a posted array because
+     * clean_post_data() runs htmlentities over scalars but passes arrays through
+     * untouched, which would put two different encodings in the same invoice.
+     */
+    public function save_invoiceAction(){
+
+        $this->refuse_unless_global_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $company_id = Session::get('company_id');
+        $invoice_id = (int) ($this->post['invoice_id'] ?? 0);
+        $client_id  = (int) ($this->post['client_id'] ?? 0);
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+        $due_days   = (int) ($this->post['due_days'] ?? 30);
+
+        if (!$this->owns_client($client_id)) {
+            $response['message'] = 'That client could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        $client = $this->clients_model->get_client($client_id, $company_id);
+
+        if ($project_id > 0) {
+
+            if (!$this->owns_project($project_id)) {
+                $response['message'] = 'That project could not be found';
+                echo json_encode($response);
+                return;
+            }
+
+            $project = $this->projects_model->get_project($project_id, $company_id);
+
+            if ((int) $project[0]['client_id'] !== $client_id) {
+                $response['message'] = 'That project belongs to a different client';
+                echo json_encode($response);
+                return;
+            }
+        }
+
+        if ($due_days < 0 || $due_days > 180) {
+            $response['message'] = 'Payment terms must be between 0 and 180 days';
+            echo json_encode($response);
+            return;
+        }
+
+        $lines = json_decode($this->input('lines_json'), true);
+
+        if (!is_array($lines) || count($lines) === 0) {
+            $response['message'] = 'Add at least one line item';
+            echo json_encode($response);
+            return;
+        }
+
+        if (count($lines) > 100) {
+            $response['message'] = 'An invoice cannot carry more than 100 line items';
+            echo json_encode($response);
+            return;
+        }
+
+        $clean = array();
+
+        foreach ($lines as $index => $line) {
+
+            $description = trim((string) ($line['item_description'] ?? ''));
+
+            if ($description === '' || mb_strlen($description) > 500) {
+                $response['message'] = 'Every line needs a description of 500 characters or less';
+                $response['line'] = $index;
+                echo json_encode($response);
+                return;
+            }
+
+            $quantity = Money::to_quantity_milli($line['quantity'] ?? '');
+
+            if ($quantity === null) {
+                $response['message'] = 'Line '.($index + 1).' has an invalid quantity';
+                $response['line'] = $index;
+                echo json_encode($response);
+                return;
+            }
+
+            $unit_amount = Money::to_cents($line['unit_amount'] ?? '');
+
+            if ($unit_amount === null || $unit_amount < 0) {
+                $response['message'] = 'Line '.($index + 1).' has an invalid unit price';
+                $response['line'] = $index;
+                echo json_encode($response);
+                return;
+            }
+
+            $clean[] = array(
+                'item_description'  => $description,
+                'quantity_milli'    => $quantity,
+                'unit_amount_cents' => $unit_amount,
+                'service_id'        => 0
+            );
+        }
+
+        $currency = $client[0]['billing_currency'];
+        $memo     = $this->input('invoice_memo');
+        $footer   = $this->input('invoice_footer');
+
+        if ($invoice_id > 0) {
+
+            $invoice = $this->invoices_model->get_invoice($invoice_id, $company_id);
+
+            if (!is_array($invoice) || count($invoice) !== 1) {
+                $response['message'] = 'That invoice could not be found';
+                echo json_encode($response);
+                return;
+            }
+
+            if ($invoice[0]['invoice_status'] !== 'Draft') {
+                $response['message'] = 'A sent invoice cannot be edited. Void it and raise a new one.';
+                echo json_encode($response);
+                return;
+            }
+
+            $this->invoices_model->update_invoice($invoice_id, $company_id, $client_id, $project_id, $currency, $memo, $footer, $due_days, Session::get('user_id'));
+
+        } else {
+
+            $invoice_id = (int) $this->invoices_model->add_invoice($company_id, $client_id, $project_id, $currency, $memo, $footer, $due_days, Session::get('user_id'));
+        }
+
+        $this->invoices_model->save_invoice_lines($invoice_id, $clean, Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'Invoice saved';
+        $response['invoice_id'] = $invoice_id;
+        echo json_encode($response);
+    }
+
+    public function delete_invoiceAction(){
+
+        $this->refuse_unless_global_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $invoice_id = (int) ($this->post['invoice_id'] ?? 0);
+        $invoice    = $this->invoices_model->get_invoice($invoice_id, Session::get('company_id'));
+
+        if (!is_array($invoice) || count($invoice) !== 1) {
+            $response['message'] = 'That invoice could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        if ($invoice[0]['invoice_status'] !== 'Draft') {
+            $response['message'] = 'Only a draft can be deleted. Void a sent invoice instead.';
+            echo json_encode($response);
+            return;
+        }
+
+        $this->invoices_model->delete_invoice($invoice_id, Session::get('company_id'), Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'Invoice deleted';
+        echo json_encode($response);
     }
 
     private function owns_client($client_id): bool

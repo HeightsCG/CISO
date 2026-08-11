@@ -78,6 +78,10 @@ $(document).ready(function () {
                     <span>Projects</span>
                 </a>
                 <?php if (Session::get('global_admin') === 1) { ?>
+                <a class="shell__link<?php echo $this->controller == 'billing' ? ' is-active' : ''; ?>" href="/billing">
+                    <i class="fa-thin fa-file-invoice-dollar"></i>
+                    <span>Billing</span>
+                </a>
                 <a class="shell__link<?php echo $this->controller == 'standards' ? ' is-active' : ''; ?>" href="/standards">
                     <i class="fa-thin fa-gear"></i>
                     <span>Standards</span>

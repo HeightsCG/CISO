@@ -1,0 +1,195 @@
+<div class="page page--list">
+    <div class="page__head">
+        <div>
+            <h1 class="page__title">Billing</h1>
+        </div>
+        <a class="btn btn--primary" href="/billing/form"><i class="fa-regular fa-plus"></i> New Invoice</a>
+    </div>
+
+    <div class="panel">
+        <div class="panel__head roster__toolbar">
+            <input type="search" id="invoice_search" class="input roster__search" placeholder="Search..." autocomplete="off" spellcheck="false">
+            <div class="roster__filters">
+                <div class="roster__filter">
+                    <select id="status_filter" class="form-control" aria-label="Filter by status">
+                        <option value="">All invoices</option>
+                        <option value="Draft">Draft</option>
+                        <option value="Awaiting Payment">Awaiting Payment</option>
+                        <option value="Payment Processing">Payment Processing</option>
+                        <option value="Overdue">Overdue</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Void">Void</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="panel__body panel__body--flush">
+            <div class="table-wrap">
+                <table class="data" id="invoices_table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Invoice</th>
+                            <th scope="col">Client</th>
+                            <th scope="col">Project</th>
+                            <th scope="col">Created</th>
+                            <th scope="col">Due</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Origin</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function () {
+
+    function esc(value) {
+        return $('<div>').text(value === null ? '' : value).html();
+    }
+
+    function dash(data) {
+        if (!data) {
+            return '<span class="roster__none">&mdash;</span>';
+        }
+        return data;
+    }
+
+    function reference_cell(data, type, row) {
+        if (type !== 'display') {
+            return data;
+        }
+        var label = data ? esc(data) : 'Draft';
+        if (row[8] === 'Subscription') {
+            return esc(label) + '<span class="roster__sub">Recurring</span>';
+        }
+        return label;
+    }
+
+    function status_badge(data, type) {
+        if (type !== 'display') {
+            return data;
+        }
+        var tone = 'badge--prospect';
+        if (data === 'Paid') {
+            tone = 'badge--active';
+        } else if (data === 'Overdue' || data === 'Payment Failed') {
+            tone = 'badge--critical';
+        } else if (data === 'Payment Processing' || data === 'Sending' || data === 'Action Needed') {
+            tone = 'badge--admin';
+        } else if (data === 'Awaiting Payment') {
+            tone = 'badge--onboarding';
+        } else if (data === 'Void' || data === 'Written Off') {
+            tone = 'badge--inactive';
+        }
+        return '<span class="badge ' + tone + '">' + esc(data) + '</span>';
+    }
+
+    var table = $('#invoices_table').DataTable({
+        dom: "t",
+        paging: false,
+        scrollY: "520px",
+        scrollCollapse: true,
+        deferRender: true,
+        order: [[4, 'desc']],
+        columnDefs: [
+            {
+                targets: 0,
+                visible: false
+            },{
+                targets: 1,
+                width: '14%',
+                render: reference_cell
+            },{
+                targets: 2,
+                width: '22%'
+            },{
+                targets: 3,
+                width: '18%',
+                render: {
+                    display: dash
+                }
+            },{
+                targets: [4, 5],
+                width: '11%',
+                render: {
+                    _: 'sort',
+                    display: 'display'
+                }
+            },{
+                targets: 6,
+                width: '12%',
+                className: 'num',
+                render: {
+                    _: 'sort',
+                    display: 'display'
+                }
+            },{
+                targets: 7,
+                width: '13%',
+                render: status_badge
+            },{
+                targets: 8,
+                visible: false,
+                searchable: false
+            }
+        ],
+        language: {
+            zeroRecords: 'No invoices match your search',
+            emptyTable: 'No invoices yet. Raise your first invoice to start billing.'
+        },
+        createdRow: function (row) {
+            $(row).attr('tabindex', 0);
+        }
+    });
+
+    $('#invoices_table tbody').on('click', 'tr', function () {
+        var data = table.row(this).data();
+        if (!data) {
+            return;
+        }
+        if (data[7] === 'Draft') {
+            window.location.href = '/billing/form/id/' + data[0];
+            return;
+        }
+        window.location.href = '/billing/invoice/id/' + data[0];
+    });
+
+    $('#invoice_search').on('input', function () {
+        table.search(this.value).draw();
+    });
+
+    $('#status_filter').change(function () {
+        table.column(7).search(this.value === '' ? '' : '^' + this.value + '$', true, false).draw();
+    });
+
+    function load(){
+        ApiDataSvc.apiCall('post', 'load_invoices', {}, function (data) {
+            var obj = JSON.parse(data);
+            table.clear();
+            for (var i = 0; i < obj.length; i++) {
+                table.row.add([
+                    obj[i].id,
+                    obj[i].invoice_number,
+                    obj[i].client_name,
+                    obj[i].project_name,
+                    { sort: obj[i].date_created, display: obj[i].date_created_display },
+                    { sort: obj[i].due_date === null ? '' : obj[i].due_date, display: obj[i].due_date === null ? '' : obj[i].due_date_display },
+                    { sort: parseInt(obj[i].total_cents, 10), display: obj[i].total_display },
+                    obj[i].invoice_status_display,
+                    obj[i].invoice_origin
+                ]);
+            }
+            table.draw();
+        });
+    }
+
+    load();
+
+});
+</script>
