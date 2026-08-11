@@ -24,7 +24,7 @@ class CSRF {
     public static function meta(): string
     {
         return '<meta name="csrf-token" content="'
-             . htmlspecialchars(self::token(), ENT_QUOTES, 'UTF-8') . '">';
+             . htmlspecialchars(self::token(), ENT_QUOTES, 'UTF-8') . '">'."\n";
     }
 
     public static function validate(): bool

@@ -1,9 +1,29 @@
 <?php
 class Main {
 
+    /**
+     * The forwarded header is read for the same reason Bootstrap::is_https()
+     * reads it: TLS terminates at the proxy, so neither HTTPS nor SERVER_PORT
+     * says https on the request this app is handed. An absolute URL built
+     * without it goes out as http, and a scraper handed an http image on an
+     * https page either downgrades the card or drops the image.
+     */
     public static function site_protocol(): string
     {
-        return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || (!empty($_SERVER['SERVER_PORT'])) && $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+        if (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off') {
+            return 'https://';
+        }
+
+        if (!empty($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 443) {
+            return 'https://';
+        }
+
+        if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])
+            && strtolower((string) $_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') {
+            return 'https://';
+        }
+
+        return 'http://';
     }
 
     public static function controller_name(): string
@@ -49,6 +69,56 @@ class Main {
     public static function site_name(): string
     {
         return self::config('global', 'site_name');
+    }
+
+    /**
+     * Icons and the link preview, identical on every page. Nothing here varies
+     * by page on purpose: the app is behind auth, so a scraper following any
+     * shared link is answered by the sign-in screen, and a per-page title would
+     * put client and project names into a preview that everyone in the channel
+     * can read. Absolute URLs, because a scraper is given no page to resolve a
+     * relative one against.
+     *
+     * The card is versioned by mtime so replacing the artwork replaces what the
+     * unfurl caches already hold, which key on the image URL and not on its
+     * contents.
+     */
+    public static function head_meta(): string
+    {
+        $base        = self::get_base_domain();
+        $name        = self::site_name();
+        $description = 'Aviation cybersecurity governance, centralized. Manage risk, compliance, evidence, and executive oversight from one secure platform.';
+        $card        = $base.'/images/og-card.png?v='.(int) @filemtime(self::app_path().'/public/images/og-card.png');
+
+        $tags = array(
+            '<link rel="icon" href="/favicon.ico" sizes="any">',
+            '<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">',
+            '<link rel="icon" type="image/png" sizes="512x512" href="/images/icon-512.png">',
+            '<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">',
+            '<meta name="theme-color" content="#101B2B">',
+            '<meta name="description" content="'.self::attr($description).'">',
+            '<meta property="og:type" content="website">',
+            '<meta property="og:site_name" content="'.self::attr($name).'">',
+            '<meta property="og:title" content="'.self::attr($name).'">',
+            '<meta property="og:description" content="'.self::attr($description).'">',
+            '<meta property="og:url" content="'.self::attr($base.'/').'">',
+            '<meta property="og:image" content="'.self::attr($card).'">',
+            '<meta property="og:image:type" content="image/png">',
+            '<meta property="og:image:width" content="1200">',
+            '<meta property="og:image:height" content="630">',
+            '<meta property="og:image:alt" content="'.self::attr($name).'">',
+            '<meta name="twitter:card" content="summary_large_image">',
+            '<meta name="twitter:title" content="'.self::attr($name).'">',
+            '<meta name="twitter:description" content="'.self::attr($description).'">',
+            '<meta name="twitter:image" content="'.self::attr($card).'">'
+        );
+
+        return implode("\n", $tags)."\n";
+    }
+
+    private static function attr(string $value): string
+    {
+        return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
     }
 
     /** Public-facing brand domain for creator profile URLs (distinct from the infra host). */
