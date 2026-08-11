@@ -3573,7 +3573,7 @@ td.controls__actions .btn + .btn {
 }
 
 .controls__empty {
-    padding: var(--space-6) var(--space-4);
+    padding: 1rem;
     font-size: var(--fs-body);
     color: var(--text-muted);
 }
@@ -4724,10 +4724,6 @@ table.data--light td.pick__col-attach {
    than redrawn - a full re-render on each keystroke would take the caret with
    it. The list scrolls inside its own box so the page itself never does. */
 
-.lines__scroll {
-    max-height: 44vh;
-    overflow-y: auto;
-}
 
 table.data.lines td {
     padding-top: 6px;
@@ -4928,4 +4924,299 @@ table.data.lines .num .form-control {
         padding-left: 0;
         margin-top: var(--space-4);
     }
+}
+
+/* ------------------------------------------------------------- invoice form */
+
+/* The form borrows the caption style of the document it produces. A printed
+   invoice sets its field names small, quiet and letterspaced above their values -
+   Invoice number, Date of issue, Bill to - and adopting that here makes composing
+   an invoice look like reading one, rather than like filling in a web form. */
+
+.invoice-form label {
+    display: block;
+    margin: 0 0 var(--space-2);
+    font-size: 11px;
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+/* Sections need names at heading weight. Setting them in the same caption style
+   as the field labels left the whole form one flat grey voice with nothing to
+   navigate by. */
+.invoice-form__heading {
+    margin: 0 0 var(--space-4);
+    font-size: var(--fs-subsection);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    color: var(--text-primary);
+}
+
+.invoice-form__section-head .invoice-form__heading {
+    margin-bottom: 0;
+}
+
+/* One card divided by rules rather than three cards stacked: the sections belong
+   to one document, and three equal borders gave them three equal voices. */
+.invoice-form__section {
+    padding: var(--space-5);
+    border-bottom: 1px solid var(--border);
+}
+
+.invoice-form__section:first-child {
+    background: var(--surface-sunken);
+}
+
+.invoice-form__section:last-child {
+    border-bottom: 0;
+}
+
+.invoice-form__section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
+}
+
+
+
+.invoice-form .form-group {
+    margin-bottom: 0;
+}
+
+.invoice-form .field__help {
+    margin-top: var(--space-2);
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+/* Terms and the date it resolves to are one control, so they sit on one line -
+   stacking them reads as two separate questions about the same thing. */
+.terms {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+}
+
+.terms select {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.terms__date {
+    flex: 0 0 156px;
+}
+
+.invoice-form textarea.form-control {
+    min-height: 62px;
+    resize: vertical;
+}
+
+/* Stacked fields need separating, but a grid column is a sibling too - without
+   excluding columns this pushes every field after the first in a row downward. */
+.invoice-form__section .form-group + .form-group:not([class*="col-"]) {
+    margin-top: var(--space-4);
+}
+
+/* Line items. Figures sit on one right-hand axis in tabular numerals so the
+   column can be totalled by eye, which is the whole point of an invoice table. */
+
+.lines__scroll {
+    max-height: calc(100vh - 42rem);
+    overflow-y: auto;
+}
+
+/* Fixed layout so the columns do not shift between the empty and populated
+   states - the header must sit over the fields it names, whether or not any
+   exist yet. */
+table.data.lines {
+    table-layout: fixed;
+    width: 100%;
+}
+
+/* The header was set in muted grey with no ground, which at 11px reads as
+   absent rather than quiet. It is a header: it needs enough weight to be seen. */
+table.data.lines thead th {
+    padding: var(--space-2) var(--space-3) var(--space-2) var(--space-3);
+    background: var(--surface-sunken);
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-strong);
+    font-size: var(--fs-table-head);
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.06em;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+table.data.lines thead th:first-child {
+    border-top-left-radius: var(--radius);
+    border-bottom-left-radius: 0;
+}
+
+table.data.lines thead th:last-child {
+    border-top-right-radius: var(--radius);
+}
+
+table.data.lines tbody td:first-child {
+    padding-left: var(--space-3);
+}
+
+table.data.lines tbody td {
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+table.data.lines tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+table.data.lines tbody tr:hover {
+    background: transparent;
+}
+
+/* The first cell is the row's link elsewhere in the app; here it holds an input. */
+table.data.lines tbody td:first-child,
+table.data.lines tbody tr:hover td:first-child {
+    color: var(--text-primary);
+    font-weight: var(--fw-regular);
+    text-decoration: none;
+}
+
+table.data.lines .form-control {
+    width: 100%;
+    height: var(--control-height-sm);
+}
+
+table.data.lines .num .form-control {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+table.data.lines td.actions {
+    width: 40px;
+    text-align: right;
+}
+
+.lines__row-amount {
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+}
+
+/* Summary rail. The amount is the figure being watched while the lines are
+   typed, so it carries the weight an invoice gives it; everything below is a
+   quiet reading of the same document. */
+
+
+
+
+
+
+
+.rail__facts {
+    margin: 0;
+    display: block;
+}
+
+.rail__fact + .rail__fact {
+    margin-top: var(--space-4);
+}
+
+.rail__facts dt {
+    font-size: 11px;
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.rail__facts dd {
+    margin: var(--space-1) 0 0;
+    font-size: var(--fs-meta);
+    line-height: 1.55;
+    color: var(--text-secondary);
+}
+
+.rail__strong {
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+}
+
+.rail__quiet {
+    color: var(--text-muted);
+}
+
+.rail__actions {
+    display: flex;
+    gap: var(--space-3);
+}
+
+.rail__actions .btn {
+    flex: 1 1 auto;
+    justify-content: center;
+}
+
+.billto__warn {
+    color: var(--high);
+}
+
+@media (max-width: 900px) {
+
+    .invoice-form__section {
+        padding: var(--space-4);
+    }
+
+    .lines__scroll {
+        max-height: 46vh;
+    }
+}
+
+/* Scoped to this table rather than changing .controls__empty, which is shared by
+   the assessment, evidence and portal lists. */
+#lines_empty {
+    padding: var(--space-5) var(--space-3);
+    text-align: center;
+}
+
+/* A total under a rule at the foot of the column it sums is accounting's own
+   convention, and the rule carries meaning: everything above it adds to this.
+   Keeping the figure on the same right axis as the line amounts is what lets the
+   column be checked by eye. */
+
+table.data.lines tfoot th {
+    padding: var(--space-3) var(--space-3);
+    text-align: right;
+    font-size: var(--fs-body);
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+    border-top: 1px solid var(--border-strong);
+}
+
+table.data.lines tfoot td {
+    padding: var(--space-3) var(--space-3);
+    border-top: 1px solid var(--border-strong);
+    border-bottom: 0;
+}
+
+table.data.lines tfoot td:first-child,
+table.data.lines tfoot td:nth-child(2),
+table.data.lines tfoot td:last-child {
+    border-top: 0;
+}
+
+.lines__total {
+    font-size: var(--fs-section);
+    font-weight: var(--fw-semibold);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+.lines__total span:first-child {
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-medium);
+    color: var(--text-muted);
 }
