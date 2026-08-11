@@ -18,7 +18,6 @@ class ClientsModel extends Model {
                     c.contact_email,
                     c.contact_phone,
                     c.country,
-                    c.billing_currency,
                     c.website,
                     c.address_1,
                     c.address_2,
@@ -98,7 +97,6 @@ class ClientsModel extends Model {
         $state,
         $postal_code,
         $country,
-        $billing_currency,
         $billing_email,
         $created_by
     )
@@ -117,7 +115,6 @@ class ClientsModel extends Model {
             'state' => $state,
             'postal_code' => $postal_code,
             'country' => $country,
-            'billing_currency' => $billing_currency,
             'billing_email' => $billing_email,
             'created_by' => $created_by,
             'updated_by' => $created_by,
@@ -143,7 +140,6 @@ class ClientsModel extends Model {
         $state,
         $postal_code,
         $country,
-        $billing_currency,
         $billing_email,
         $updated_by
     )
@@ -165,7 +161,6 @@ class ClientsModel extends Model {
             'state' => $state,
             'postal_code' => $postal_code,
             'country' => $country,
-            'billing_currency' => $billing_currency,
             'billing_email' => $billing_email,
             'updated_by' => $updated_by,
             'date_updated' => date('Y-m-d H:i:s')

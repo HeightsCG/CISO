@@ -101,7 +101,7 @@ $(document).ready(function () {
     var invoice_id = <?php echo ($this->invoice === null ? 0 : (int) $this->invoice['id']); ?>;
     var selected_client = <?php echo ($this->invoice === null ? 0 : (int) $this->invoice['client_id']); ?>;
     var selected_project = <?php echo ($this->invoice === null ? 0 : (int) $this->invoice['project_id']); ?>;
-    var currency = "<?php echo ($this->invoice === null ? '' : htmlspecialchars(strtoupper($this->invoice['currency']), ENT_QUOTES, 'UTF-8')); ?>";
+    var currency = "<?php echo htmlspecialchars(strtoupper($this->invoice === null ? ($this->company['default_currency'] ?? 'usd') : $this->invoice['currency']), ENT_QUOTES, 'UTF-8'); ?>";
     var next_idx = 0;
 
     function esc(value) {
@@ -208,14 +208,7 @@ $(document).ready(function () {
     $('#client_id').change(function () {
         selected_project = 0;
         load_projects($(this).val());
-        load_currency($(this).val());
     });
-
-    function load_currency(client_id) {
-        var option = $('#client_id').find('option[value="' + client_id + '"]');
-        currency = option.attr('data-currency') === undefined ? '' : option.attr('data-currency').toUpperCase();
-        recalculate();
-    }
 
     function load_projects(client_id) {
         $('#project_id').html('<option value="0">No project</option>');
@@ -237,13 +230,12 @@ $(document).ready(function () {
         ApiDataSvc.apiCall('post', 'load_clients', {}, function (data) {
             var obj = JSON.parse(data);
             for (var i = 0; i < obj.length; i++) {
-                $('#client_id').append('<option value="' + obj[i].id + '" data-currency="' + esc(obj[i].billing_currency) + '">' + esc(obj[i].company_name) + '</option>');
+                $('#client_id').append('<option value="' + obj[i].id + '">' + esc(obj[i].company_name) + '</option>');
             }
             if (selected_client > 0) {
                 $('#client_id').val(selected_client);
                 load_projects(selected_client);
             }
-            load_currency($('#client_id').val());
         });
     }
 

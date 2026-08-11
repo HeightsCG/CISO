@@ -3,20 +3,41 @@ class BillingController extends Controller {
 
     public $protected = 1;
     public $invoices_model;
+    public $companies_model;
 
     public function __construct(){
         parent::__construct();
         $this->invoices_model = new InvoicesModel();
+        $this->companies_model = new CompaniesModel();
     }
 
     /**
+     * The company's own row, which carries both its Stripe connection state and
+     * the currency every invoice it raises is denominated in.
+     */
+    private function company(): array
+    {
+        $company = $this->companies_model->get_company(Session::get('company_id'));
+
+        return (is_array($company) && count($company) === 1) ? $company[0] : array();
+    }
+
+    /** user_roles.id for Admin - the administrator of a single company. */
+    const ADMIN_ROLE_ID = 1;
+
+    /**
+     * Billing belongs to whoever administers the company, not to the cross-tenant
+     * operator: a company runs its own Stripe account and bills its own clients,
+     * and its administrator must be able to do that without being able to read
+     * every other organisation.
+     *
      * Repeated per action rather than hooked once, because there is no
      * controller-level hook to hang it on and the nav check in site_header.php is
      * not the boundary - hiding the link only hides the link.
      */
-    private function refuse_unless_global_admin(): bool
+    private function refuse_unless_company_admin(): bool
     {
-        if ((int) Session::get('global_admin') === 1) {
+        if (Session::get('user_type') === 'staff' && (int) Session::get('role_id') === self::ADMIN_ROLE_ID) {
             return true;
         }
 
@@ -26,10 +47,11 @@ class BillingController extends Controller {
 
     public function indexAction(){
 
-        if (!$this->refuse_unless_global_admin()) {
+        if (!$this->refuse_unless_company_admin()) {
             return;
         }
 
+        $this->view->company = $this->company();
         $this->view->render();
     }
 
@@ -40,7 +62,7 @@ class BillingController extends Controller {
      */
     public function formAction(){
 
-        if (!$this->refuse_unless_global_admin()) {
+        if (!$this->refuse_unless_company_admin()) {
             return;
         }
 
@@ -49,6 +71,7 @@ class BillingController extends Controller {
         if (empty($invoice_id)) {
             $this->view->invoice = null;
             $this->view->items = array();
+            $this->view->company = $this->company();
             $this->view->render();
             return;
         }
@@ -62,12 +85,13 @@ class BillingController extends Controller {
 
         $this->view->invoice = $invoice[0];
         $this->view->items = $this->invoices_model->get_invoice_items($invoice[0]['id']);
+        $this->view->company = $this->company();
         $this->view->render();
     }
 
     public function invoiceAction(){
 
-        if (!$this->refuse_unless_global_admin()) {
+        if (!$this->refuse_unless_company_admin()) {
             return;
         }
 
@@ -80,6 +104,7 @@ class BillingController extends Controller {
 
         $this->view->invoice = $invoice[0];
         $this->view->items = $this->invoices_model->get_invoice_items($invoice[0]['id']);
+        $this->view->company = $this->company();
         $this->view->render();
     }
 

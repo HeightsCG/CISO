@@ -83,6 +83,27 @@ function add_column(PDO $pdo, string $table, string $column, string $definition)
     echo '  ok    '.$table.'.'.$column."\n";
 }
 
+function drop_column(PDO $pdo, string $table, string $column): void
+{
+    $check = $pdo->prepare(
+        "SELECT COUNT(*)
+            FROM information_schema.COLUMNS
+            WHERE table_schema = DATABASE()
+            and table_name = :t
+            and column_name = :c"
+    );
+
+    $check->execute(array('t' => $table, 'c' => $column));
+
+    if ((int) $check->fetchColumn() === 0) {
+        echo '  skip  '.$table.'.'.$column." already absent\n";
+        return;
+    }
+
+    $pdo->exec('ALTER TABLE `'.$table.'` DROP COLUMN `'.$column.'`');
+    echo '  ok    dropped '.$table.'.'.$column."\n";
+}
+
 function add_index(PDO $pdo, string $table, string $index, string $definition): void
 {
     $check = $pdo->prepare(
@@ -104,15 +125,80 @@ function add_index(PDO $pdo, string $table, string $index, string $definition): 
     echo '  ok    '.$table.'.'.$index."\n";
 }
 
+/* ------------------------------------------------------------------ companies */
+
+/**
+ * A company sits on both sides of Stripe and the two must never be conflated:
+ * it is a MERCHANT through a connected account of its own, where it invoices its
+ * clients and receives their money, and it is a CUSTOMER of CISO.aero in the
+ * platform's own account. Hence stripe_connect_account_id (acct_) beside
+ * platform_customer_id (cus_) - and note clients.stripe_customer_id is a third
+ * thing again, a customer living inside a connected account.
+ */
+
+echo "companies\n";
+
+add_column($pdo, 'companies', 'stripe_connect_account_id',
+    "`stripe_connect_account_id` varchar(64) DEFAULT NULL AFTER `country`");
+
+add_column($pdo, 'companies', 'stripe_livemode',
+    "`stripe_livemode` tinyint(1) NOT NULL DEFAULT '0' AFTER `stripe_connect_account_id`");
+
+add_column($pdo, 'companies', 'stripe_connect_status',
+    "`stripe_connect_status` enum('Not Connected','Onboarding','Connected','Restricted','Disconnected') NOT NULL DEFAULT 'Not Connected' AFTER `stripe_livemode`");
+
+add_column($pdo, 'companies', 'stripe_charges_enabled',
+    "`stripe_charges_enabled` tinyint(1) NOT NULL DEFAULT '0' AFTER `stripe_connect_status`");
+
+add_column($pdo, 'companies', 'stripe_details_submitted',
+    "`stripe_details_submitted` tinyint(1) NOT NULL DEFAULT '0' AFTER `stripe_charges_enabled`");
+
+add_column($pdo, 'companies', 'stripe_payouts_enabled',
+    "`stripe_payouts_enabled` tinyint(1) NOT NULL DEFAULT '0' AFTER `stripe_details_submitted`");
+
+add_column($pdo, 'companies', 'stripe_requirements',
+    "`stripe_requirements` text NOT NULL AFTER `stripe_payouts_enabled`");
+
+add_column($pdo, 'companies', 'stripe_connected_at',
+    "`stripe_connected_at` datetime DEFAULT NULL AFTER `stripe_requirements`");
+
+add_column($pdo, 'companies', 'stripe_synced_at',
+    "`stripe_synced_at` datetime DEFAULT NULL AFTER `stripe_connected_at`");
+
+add_column($pdo, 'companies', 'default_currency',
+    "`default_currency` char(3) NOT NULL DEFAULT 'usd' AFTER `stripe_synced_at`");
+
+add_column($pdo, 'companies', 'platform_customer_id',
+    "`platform_customer_id` varchar(64) DEFAULT NULL AFTER `default_currency`");
+
+add_column($pdo, 'companies', 'platform_livemode',
+    "`platform_livemode` tinyint(1) NOT NULL DEFAULT '0' AFTER `platform_customer_id`");
+
+/**
+ * Nullable under a unique key, against the NOT NULL convention everywhere else.
+ * MySQL permits any number of NULLs under a unique index but only one empty
+ * string, and the index is what stops two administrators onboarding at the same
+ * moment from minting two Stripe objects for one company.
+ */
+add_index($pdo, 'companies', 'uq_companies_connect',
+    'UNIQUE KEY `uq_companies_connect` (`stripe_connect_account_id`)');
+
+add_index($pdo, 'companies', 'uq_companies_platform',
+    'UNIQUE KEY `uq_companies_platform` (`platform_customer_id`)');
+
 /* -------------------------------------------------------------------- clients */
 
-echo "clients\n";
+echo "\nclients\n";
 
-add_column($pdo, 'clients', 'billing_currency',
-    "`billing_currency` char(3) NOT NULL DEFAULT 'usd' AFTER `country`");
+/**
+ * Currency belongs to the company, not the client: a connected account settles in
+ * its own currency, so a per-client currency could raise an invoice the account
+ * cannot take payment in.
+ */
+drop_column($pdo, 'clients', 'billing_currency');
 
 add_column($pdo, 'clients', 'billing_email',
-    "`billing_email` varchar(255) NOT NULL DEFAULT '' AFTER `billing_currency`");
+    "`billing_email` varchar(255) NOT NULL DEFAULT '' AFTER `country`");
 
 /**
  * Nullable under a unique key, against the NOT NULL convention everywhere else
@@ -293,5 +379,26 @@ CREATE TABLE IF NOT EXISTS `stripe_events` (
     KEY `idx_stripe_events_state` (`event_status`,`attempts`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ");
+
+/* --------------------------------------------------------- connected-account stamps */
+
+/**
+ * Stamped on the row rather than derived from the company at read time. A company
+ * that disconnects and connects a DIFFERENT Stripe account would otherwise have
+ * its historical invoices silently reinterpreted against the new one, so every
+ * Stripe call about an invoice uses the account id carried by the invoice.
+ */
+
+echo "\nconnected-account stamps\n";
+
+add_column($pdo, 'invoices', 'stripe_account_id',
+    "`stripe_account_id` varchar(64) NOT NULL DEFAULT '' AFTER `stripe_customer_id`");
+
+add_column($pdo, 'subscriptions', 'stripe_account_id',
+    "`stripe_account_id` varchar(64) NOT NULL DEFAULT '' AFTER `stripe_customer_id`");
+
+/** event.account - the connected account a Connect webhook originated from. */
+add_column($pdo, 'stripe_events', 'account_id',
+    "`account_id` varchar(64) NOT NULL DEFAULT '' AFTER `livemode`");
 
 echo "\nDone.\n";

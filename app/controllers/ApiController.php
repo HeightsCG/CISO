@@ -6,6 +6,9 @@ class ApiController extends Controller {
     /** user_roles.id for Client; a portal account always carries it. */
     const CLIENT_ROLE_ID = 3;
 
+    /** user_roles.id for Admin - the administrator of a single company. */
+    const ADMIN_ROLE_ID = 1;
+
     public $user_model;
     public $notifications_model;
     public $companies_model;
@@ -477,6 +480,8 @@ class ApiController extends Controller {
 
     public function get_companyAction(){
 
+        $this->refuse_unless_company_admin();
+
         $response = array(
             'success' => false,
             'message' => 'Something went wrong'
@@ -499,6 +504,8 @@ class ApiController extends Controller {
     }
 
     public function save_companyAction(){
+
+        $this->refuse_unless_company_admin();
 
         $response = array(
             'success' => false,
@@ -590,6 +597,8 @@ class ApiController extends Controller {
 
     public function save_securityAction(){
 
+        $this->refuse_unless_company_admin();
+
         $response = array(
             'success' => false,
             'message' => 'Something went wrong'
@@ -673,6 +682,8 @@ class ApiController extends Controller {
 
     public function save_logoAction(){
 
+        $this->refuse_unless_company_admin();
+
         $response = array(
             'success' => false,
             'message' => 'Something went wrong'
@@ -750,6 +761,8 @@ class ApiController extends Controller {
     }
 
     public function remove_logoAction(){
+
+        $this->refuse_unless_company_admin();
 
         $response = array(
             'success' => false,
@@ -1181,17 +1194,6 @@ class ApiController extends Controller {
             return;
         }
 
-        /**
-         * Held against an allow-list rather than taken as typed: it is copied onto
-         * every invoice for this client and passed to Stripe, which rejects an
-         * unknown code only after the invoice has been built.
-         */
-        $billing_currency = strtolower($this->input('billing_currency'));
-
-        if (!in_array($billing_currency, array('usd', 'eur', 'chf', 'gbp'), true)) {
-            $billing_currency = 'usd';
-        }
-
         $website = html_entity_decode((string) ($this->post['website'] ?? ''), ENT_QUOTES, 'UTF-8');
 
         if ($website !== '' && !filter_var($website, FILTER_VALIDATE_URL)) {
@@ -1225,7 +1227,6 @@ class ApiController extends Controller {
                 $this->post['state'],
                 $this->post['postal_code'],
                 $this->post['country'],
-                $billing_currency,
                 $billing_email,
                 Session::get('user_id')
             );
@@ -1251,7 +1252,6 @@ class ApiController extends Controller {
             $this->post['state'],
             $this->post['postal_code'],
             $this->post['country'],
-            $billing_currency,
             $billing_email,
             Session::get('user_id')
         );
@@ -1451,6 +1451,8 @@ class ApiController extends Controller {
     }
 
     public function load_usersAction(){
+
+        $this->refuse_unless_company_admin();
         echo json_encode($this->user_model->get_users_by_company(Session::get('company_id')));
     }
 
@@ -1459,6 +1461,8 @@ class ApiController extends Controller {
     }
 
     public function save_userAction(){
+
+        $this->refuse_unless_company_admin();
 
         $response = array(
             'success' => false,
@@ -1613,6 +1617,29 @@ class ApiController extends Controller {
     private function refuse_unless_global_admin(): void
     {
         if ((int) Session::get('global_admin') === 1) {
+            return;
+        }
+
+        echo json_encode(array(
+            'success' => false,
+            'message' => 'You do not have access to that'
+        ));
+        exit;
+    }
+
+    /**
+     * Administering one's own organisation - its billing, its settings, its staff
+     * accounts. Deliberately not global_admin: that flag is the cross-tenant
+     * operator, and a company administrator must be able to run their own billing
+     * without the ability to read every other organisation.
+     *
+     * This is the first thing in the application to read role_id, which until now
+     * was a label shown in a dropdown. Answers rather than returning a flag, for
+     * the same reason the global check does.
+     */
+    private function refuse_unless_company_admin(): void
+    {
+        if (Session::get('user_type') === 'staff' && (int) Session::get('role_id') === self::ADMIN_ROLE_ID) {
             return;
         }
 
@@ -1907,6 +1934,8 @@ class ApiController extends Controller {
 
     public function delete_userAction(){
 
+        $this->refuse_unless_company_admin();
+
         $response = array(
             'success' => false,
             'message' => 'Something went wrong'
@@ -1920,6 +1949,8 @@ class ApiController extends Controller {
     }
 
     public function reset_user_passwordAction(){
+
+        $this->refuse_unless_company_admin();
 
         $response = array(
             'success' => false,
@@ -3300,14 +3331,14 @@ class ApiController extends Controller {
      */
     public function load_invoicesAction(){
 
-        $this->refuse_unless_global_admin();
+        $this->refuse_unless_company_admin();
 
         echo json_encode($this->invoices_model->load_invoices(Session::get('company_id')));
     }
 
     public function load_client_invoicesAction(){
 
-        $this->refuse_unless_global_admin();
+        $this->refuse_unless_company_admin();
 
         $client_id = (int) ($this->post['client_id'] ?? 0);
 
@@ -3326,7 +3357,7 @@ class ApiController extends Controller {
      */
     public function load_invoiceAction(){
 
-        $this->refuse_unless_global_admin();
+        $this->refuse_unless_company_admin();
 
         $invoice_id = (int) ($this->post['invoice_id'] ?? 0);
         $invoice    = $this->invoices_model->get_invoice($invoice_id, Session::get('company_id'));
@@ -3353,7 +3384,7 @@ class ApiController extends Controller {
      */
     public function save_invoiceAction(){
 
-        $this->refuse_unless_global_admin();
+        $this->refuse_unless_company_admin();
 
         $response = array(
             'success' => false,
@@ -3450,7 +3481,14 @@ class ApiController extends Controller {
             );
         }
 
-        $currency = $client[0]['billing_currency'];
+        /**
+         * The currency is the company's, not the client's: invoices are raised on
+         * the company's own connected Stripe account, which settles in one
+         * currency, so a per-client choice could produce an invoice that account
+         * cannot take payment in.
+         */
+        $company  = $this->companies_model->get_company($company_id);
+        $currency = (is_array($company) && count($company) === 1) ? $company[0]['default_currency'] : 'usd';
         $memo     = $this->input('invoice_memo');
         $footer   = $this->input('invoice_footer');
 
@@ -3487,7 +3525,7 @@ class ApiController extends Controller {
 
     public function delete_invoiceAction(){
 
-        $this->refuse_unless_global_admin();
+        $this->refuse_unless_company_admin();
 
         $response = array(
             'success' => false,

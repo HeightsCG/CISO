@@ -79,16 +79,6 @@
                     <h2 class="record__group-title">Billing</h2>
                     <div class="form-row">
                         <div class="field">
-                            <label for="billing_currency">Currency</label>
-                            <select id="billing_currency">
-                                <option value="usd"<?php echo ($this->client !== null && $this->client['billing_currency'] === 'usd' ? ' selected' : ''); ?>>USD &mdash; US Dollar</option>
-                                <option value="eur"<?php echo ($this->client !== null && $this->client['billing_currency'] === 'eur' ? ' selected' : ''); ?>>EUR &mdash; Euro</option>
-                                <option value="chf"<?php echo ($this->client !== null && $this->client['billing_currency'] === 'chf' ? ' selected' : ''); ?>>CHF &mdash; Swiss Franc</option>
-                                <option value="gbp"<?php echo ($this->client !== null && $this->client['billing_currency'] === 'gbp' ? ' selected' : ''); ?>>GBP &mdash; Pound Sterling</option>
-                            </select>
-                            <p class="field__help">Every invoice for this client is raised in this currency.</p>
-                        </div>
-                        <div class="field">
                             <label for="billing_email">Billing Email</label>
                             <input type="email" id="billing_email" placeholder="accounts@example.com" autocapitalize="none" spellcheck="false" value="<?php echo ($this->client === null ? '' : htmlspecialchars($this->client['billing_email'], ENT_QUOTES, 'UTF-8')); ?>">
                             <p class="field__help">Where invoices are sent. Falls back to the contact email.</p>
@@ -112,7 +102,7 @@ $(document).ready(function () {
     var fields = [
         'company_name', 'website', 'address_1', 'address_2', 'city', 'state',
         'postal_code', 'country', 'contact_name', 'contact_title', 'contact_email', 'contact_phone',
-        'billing_currency', 'billing_email'
+        'billing_email'
     ];
 
     AddressAutocomplete.attach({

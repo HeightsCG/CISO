@@ -181,7 +181,6 @@ class InvoicesModel extends Model {
                     c.company_name AS client_name,
                     c.contact_email AS client_contact_email,
                     c.billing_email AS client_billing_email,
-                    c.billing_currency AS client_currency,
                     c.stripe_customer_id AS client_stripe_customer_id,
                     c.stripe_livemode AS client_stripe_livemode,
                     p.project_name,
