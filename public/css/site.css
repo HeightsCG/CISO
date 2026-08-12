@@ -5025,20 +5025,6 @@ table.data.lines .num .form-control {
 
 /* Sits between the ledger and the footer message. The table's last row rules it
    off above and .commit rules it off below, so it draws no border of its own. */
-/* Set to the exact span of the line-item fields it describes: indented to the
-   ledger's Description column on the left, stopped at the Amount column's right
-   edge, so it reads as the foot of that block rather than a new topic. */
-.invoice-doc__memo {
-    padding: var(--space-4) 56px var(--space-5) calc(52px + var(--space-3));
-}
-
-.invoice-doc__memo textarea.form-control {
-    min-height: 0;
-    height: 48px;
-    padding-top: var(--space-1);
-    padding-bottom: var(--space-1);
-}
-
 /* -------------------------------------------------------------------- ledger */
 
 .lines__scroll {
@@ -5086,11 +5072,11 @@ table.data.ledger tbody tr:hover td:first-child {
    share of the leftover width, which gave a quantity of "1" the same room as the
    description and stranded the remove control far from the amount it belongs to. */
 table.data.ledger th.idx      { width: 52px; }
-table.data.ledger th.quantity { width: 110px; }
-table.data.ledger th.unit     { width: 150px; }
-table.data.ledger th.discount { width: 168px; }
-table.data.ledger th.discount-amount { width: 150px; }
-table.data.ledger th.amount   { width: 160px; }
+table.data.ledger th.quantity { width: 124px; }
+table.data.ledger th.unit     { width: 164px; }
+table.data.ledger th.discount { width: 184px; }
+table.data.ledger th.discount-amount { width: 132px; }
+table.data.ledger th.amount   { width: 128px; }
 table.data.ledger th.actions  { width: 56px; }
 
 /* The visually-hidden header labels are absolutely positioned; without a local
@@ -5556,14 +5542,8 @@ table.data.ledger [data-action="remove_line"]:focus-visible {
         border-bottom: 0;
     }
 
-    .invoice-doc__memo,
-    .totals,
     .commit {
         padding: var(--space-4);
-    }
-
-    .totals__block {
-        width: 100%;
     }
 
     .commit {

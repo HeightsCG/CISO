@@ -54,7 +54,7 @@
 
         <div class="invoice-doc">
 
-        <div class="table-wrap lines__scroll">
+        <div class="table-wrap lines__scroll mb-3">
             
             <div class="lines__head">
                 <h2 class="lines__title">Line Items</h2>
@@ -88,15 +88,14 @@
             </table>
         </div>
 
-        <div class="invoice-doc__memo">
-            <label for="invoice_memo">Description</label>
-            <textarea class="form-control" id="invoice_memo" rows="2"><?php echo ($this->invoice === null ? '' : htmlspecialchars($this->invoice['invoice_memo'], ENT_QUOTES, 'UTF-8')); ?></textarea>
-        </div>
-
         </div>
 
         <div class="invoice-doc invoice-doc--footer">
-            <div class="commit">
+            <div class="commit mb-3">
+                <div class="form-group commit__field mb-3">
+                    <label for="invoice_memo">Description <span class="label__note">printed above the line items</span></label>
+                    <textarea class="form-control" id="invoice_memo" rows="2" placeholder="Advisory and implementation work for the period."><?php echo ($this->invoice === null ? '' : htmlspecialchars($this->invoice['invoice_memo'], ENT_QUOTES, 'UTF-8')); ?></textarea>
+                </div>
                 <div class="form-group commit__field">
                     <label for="invoice_footer">Footer Message <span class="label__note">printed at the foot of the invoice</span></label>
                     <input type="text" class="form-control" id="invoice_footer" placeholder="Thank you. Payment is accepted by card or bank transfer." value="<?php echo ($this->invoice === null ? '' : htmlspecialchars($this->invoice['invoice_footer'], ENT_QUOTES, 'UTF-8')); ?>">
