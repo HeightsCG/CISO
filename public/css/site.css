@@ -5148,6 +5148,22 @@ table.data.ledger td.num .input-group {
     margin: 0 auto;
 }
 
+/* Quantity and unit amount are set centred. Padding is matched on both sides so
+   the figure sits on the true centre of the control rather than being pushed off
+   it by the right gutter the money columns use. */
+table.data.ledger th.quantity,
+table.data.ledger th.unit {
+    text-align: center;
+    padding-right: var(--space-3);
+}
+
+table.data.ledger td.num [data-field="quantity"],
+table.data.ledger td.num [data-field="unit_amount"] {
+    text-align: center;
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+}
+
 table.data.ledger .input-group .form-control {
     text-align: center;
 }
