@@ -4934,6 +4934,45 @@ table.data.lines .num .form-control {
     min-width: 0;
 }
 
+/* An invoice is one document, and a document occupies its page. The masthead and
+   the footer message are fixed in height, so the ledger takes whatever is left
+   and scrolls within itself - rather than every panel sitting at its natural
+   height and leaving the bottom half of the screen empty. */
+.page--invoice {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - var(--topbar-height) - (2 * var(--space-6)));
+}
+
+.page--invoice .invoice-layout {
+    flex: 1 1 auto;
+    align-items: stretch;
+    min-height: 0;
+}
+
+/* The summary is read at a glance and sized by its content, so it stays at the
+   top of its column while the document beside it stretches. */
+.page--invoice .summary {
+    align-self: start;
+}
+
+.page--invoice .invoice-main {
+    min-height: 0;
+}
+
+.invoice-doc--lines {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.invoice-doc--lines .lines__scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+}
+
 .invoice-doc {
     background: var(--surface-app);
     border: 1px solid var(--border);
@@ -4995,6 +5034,15 @@ table.data.lines .num .form-control {
     grid-template-columns: 1.5fr 1.4fr 1.2fr 1fr 1fr;
 }
 
+/* Five fields on the editor: who, against what, on what terms, how often, and
+   the date that falls out of it. The count is fixed, so the track count is too -
+   a four-column grid wrapped the last cell onto a row of its own. */
+.masthead--form {
+    grid-template-columns: 1.3fr 1.3fr 1fr 1fr 1fr;
+}
+
+
+
 /* A draft's title already reads "Draft Invoice", so the status cell only appears
    once the status is something the heading does not already say. */
 .masthead--has-status {
@@ -5049,6 +5097,13 @@ table.data.ledger tfoot .ledger__foot-total td {
 
 .lines__scroll {
     overflow-x: auto;
+}
+
+/* Nothing on the ledger yet: the invitation sits in the middle of the space the
+   lines will occupy, rather than pinned under the header with the rest blank.
+   Scoped to the empty state, so real rows keep their own height. */
+.lines__scroll:has(.lines__empty) > table.data.ledger {
+    height: 100%;
 }
 
 /* A line is dense, repeated, numeric data, so it is set a step down from body
@@ -5458,6 +5513,13 @@ table.data.ledger tfoot .ledger__foot-total .ledger__amount {
     gap: var(--space-5);
 }
 
+/* On a list page the tabs sit above the panel rather than inside a panel head,
+   so they carry the rule the panel head would otherwise have provided. */
+.subtabs--page {
+    margin-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border);
+}
+
 .subtabs__link {
     padding: var(--space-3) 0;
     border: 0;
@@ -5486,6 +5548,283 @@ table.data.ledger tfoot .ledger__foot-total .ledger__amount {
     align-self: center;
 }
 
+/* ------------------------------------------------------------- schedule */
+
+/* The schedule is a commitment, not a field: it gets a section of its own with
+   the sentence it produces stated back beside the heading, so what was agreed can
+   be read without reassembling it from four controls. */
+
+/* ----------------------------------------------------- billing schedule */
+
+/* A schedule is a promise to bill on particular days, so the dialogue states the
+   terms and then shows the days they produce. The terms are three small controls
+   and take a single row; the dates are a sequence in time and take the width,
+   which is the one thing here that genuinely wants it. */
+
+.sked__body {
+    padding: 0;
+}
+
+.sked__terms {
+    display: grid;
+    grid-template-columns: 190px 190px minmax(0, 1fr);
+    gap: var(--space-5);
+    align-items: start;
+    padding: var(--space-5);
+}
+
+.sked .sked__field label,
+.sked .sked__ends .lbl,
+.sked .sked__ends-field label {
+    display: block;
+    float: none;
+    width: auto;
+    margin: 0 0 var(--space-2);
+    padding: 0;
+    font-size: 11px;
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.sked__every .form-control {
+    flex: 0 0 68px;
+    text-align: center;
+}
+
+.sked__every .form-select {
+    background-color: var(--surface-sunken);
+    color: var(--text-secondary);
+}
+
+.sked .sked__date {
+    width: 100%;
+}
+
+.sked__note {
+    margin: var(--space-2) 0 0;
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+/* The three ways a schedule can end are one choice, so they read as one control
+   rather than as three fields two of which are always dead. */
+.sked__modes {
+    display: flex;
+    width: 100%;
+}
+
+.sked__modes .segmented__btn {
+    flex: 1 1 0;
+    min-width: 0;
+    height: var(--control-height);
+}
+
+/* Only the chosen condition brings a field with it. */
+.sked__ends-field {
+    margin-top: var(--space-4);
+}
+
+.sked__count {
+    max-width: 96px;
+    text-align: center;
+}
+
+/* The consequence of the terms above: the actual days this client is billed,
+   laid along the axis they happen on. */
+.sked__timeline {
+    padding: var(--space-5);
+    background: var(--surface-sunken);
+    border-top: 1px solid var(--border);
+}
+
+.sked__timeline-title {
+    margin: 0 0 var(--space-5);
+    font-size: 11px;
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.sked__stops {
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sked__stop {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    padding-top: 20px;
+    text-align: center;
+    font-size: var(--fs-body);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary);
+}
+
+/* The stop itself. */
+.sked__stop::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    margin-left: -4px;
+    background: var(--surface-sunken);
+    border: 1px solid var(--border-strong);
+    border-radius: 50%;
+}
+
+/* The run of time back to the previous stop. Drawn per stop rather than as one
+   rule behind them all, so it lands exactly between two dots at any count. */
+.sked__stop::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    right: 50%;
+    left: -50%;
+    height: 1px;
+    background: var(--border-strong);
+}
+
+.sked__stop:first-child::before {
+    display: none;
+}
+
+/* The first invoice is the one being committed to now. */
+.sked__stop--first {
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+}
+
+.sked__stop--first::after {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+/* What happens past the dates shown - still on the track, but not a date. It
+   carries more words than a date does, so it is given the room to stay on one
+   line and keep the track level. */
+.sked__stop--tail {
+    flex: 1.5 1 0;
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+.sked__stop--tail::after {
+    display: none;
+}
+
+.sked__stop--tail::before {
+    background: none;
+    border-top: 1px dashed var(--border-strong);
+}
+
+/* Nothing to plot: a schedule that cannot run yet says why, in place of dates. */
+.sked__stop--note {
+    flex: 1 1 100%;
+    padding-top: 0;
+    text-align: left;
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+.sked__stop--note::before,
+.sked__stop--note::after {
+    display: none;
+}
+
+.sked__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+}
+
+/* The sentence is what is being agreed, so it shares the footer with the button
+   that agrees to it rather than sitting up in the body as another field. */
+.sked__sentence {
+    margin: 0;
+    font-size: var(--fs-meta);
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+.sked__actions {
+    display: flex;
+    gap: var(--space-2);
+    flex: 0 0 auto;
+}
+
+@media (max-width: 720px) {
+
+    .sked__terms {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* Too little width for an axis, so the dates become a plain list and the
+       track is dropped rather than drawn vertically for its own sake. */
+    .sked__stops {
+        display: block;
+    }
+
+    .sked__stop {
+        padding: var(--space-2) 0;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .sked__stop:last-child {
+        border-bottom: 0;
+    }
+
+    .sked__stop::before,
+    .sked__stop::after {
+        display: none;
+    }
+
+    .sked__footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .sked__actions {
+        justify-content: flex-end;
+    }
+}
+
+/* Reopens the schedule from the invoice that carries it. */
+.masthead__link {
+    margin-top: var(--space-1);
+    padding: 0;
+    border: 0;
+    background: none;
+    font-family: inherit;
+    font-size: var(--fs-meta);
+    color: var(--accent);
+    cursor: pointer;
+}
+
+.masthead__link:hover {
+    text-decoration: underline;
+}
+
+.field__note {
+    margin: var(--space-2) 0 0;
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+/* Each condition is one line, so the radio, its words and the value it needs sit
+   on a single baseline rather than the value wrapping under its own label.
+   Scoped past .invoice-doc label, which is styled as a small-caps field label and
+   was turning each option into an uppercase block of its own. */
 /* --------------------------------------------------------------- plans */
 
 /* A plan is a choice, not a record, so the plans are set as things to pick

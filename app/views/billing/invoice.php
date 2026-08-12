@@ -69,7 +69,7 @@
                     <span class="lbl">Project</span>
                     <div class="masthead__value"><a href="/projects/detail/id/<?php echo (int) $this->invoice['project_id']; ?>"><?php echo htmlspecialchars($this->invoice['project_name'], ENT_QUOTES, 'UTF-8'); ?></a></div>
                     <?php if ($this->invoice['invoice_origin'] === 'Subscription') { ?>
-                    <div class="masthead__sub">Recurring retainer</div>
+                    <div class="masthead__sub">Subscription</div>
                     <?php } ?>
                 </div>
                 <?php } ?>
@@ -167,17 +167,6 @@
                 </table>
             </div>
         </div>
-
-        <?php if ($this->invoice['invoice_memo'] !== '') { ?>
-        <div class="invoice-doc invoice-doc--footer">
-            <div class="commit">
-                <div class="form-group commit__field">
-                    <span class="lbl">Description <span class="label__note">printed above the line items</span></span>
-                    <p class="commit__text"><?php echo nl2br(htmlspecialchars($this->invoice['invoice_memo'], ENT_QUOTES, 'UTF-8')); ?></p>
-                </div>
-            </div>
-        </div>
-        <?php } ?>
 
         <?php if ($this->invoice['invoice_footer'] !== '') { ?>
         <div class="invoice-doc invoice-doc--footer">

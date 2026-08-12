@@ -1,6 +1,6 @@
 <?php
 /**
- * Retainers a company bills its own clients, mirrored from its connected Stripe
+ * Subscriptions a company bills its own clients, mirrored from its connected Stripe
  * account. The company composes them here; Stripe owns the billing cycle and
  * raises each renewal invoice, which arrives back by webhook.
  *

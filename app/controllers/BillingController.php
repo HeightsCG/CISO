@@ -225,14 +225,14 @@ class BillingController extends Controller {
 
     /* ------------------------------------------------------- subscriptions */
 
+    /**
+     * Subscriptions live on the Billing page beside the invoices they produce,
+     * so this address is kept only so existing links do not break.
+     */
     public function subscriptionsAction(){
 
-        if (!$this->refuse_unless_company_admin()) {
-            return;
-        }
-
-        $this->view->company = $this->company();
-        $this->view->render();
+        header('Location: /billing');
+        exit;
     }
 
     /**

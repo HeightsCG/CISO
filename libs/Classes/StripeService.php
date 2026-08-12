@@ -999,7 +999,7 @@ class StripeService {
      * what makes Stripe email the client a hosted payment page rather than trying
      * to charge a stored card, which is the whole shape of this feature.
      */
-    public static function create_invoice($account_id, $customer_id, $currency, $memo, $footer, $due_days, $due_date, $company_id, $invoice_id, $client_id, $project_id): array
+    public static function create_invoice($account_id, $customer_id, $currency, $footer, $due_days, $due_date, $company_id, $invoice_id, $client_id, $project_id): array
     {
         if (!self::configured() || !self::has_account($account_id, 'invoice create')) {
             return array();
@@ -1031,10 +1031,6 @@ class StripeService {
             $params['due_date'] = strtotime($due_date.' 23:59:59');
         } else {
             $params['days_until_due'] = (int) $due_days;
-        }
-
-        if (self::text($memo) !== '') {
-            $params['description'] = self::text($memo);
         }
 
         if (self::text($footer) !== '') {
@@ -1152,7 +1148,7 @@ class StripeService {
     /* ------------------------------------------- connected: subscriptions */
 
     /**
-     * A product and recurring price on the company's own account, for a retainer
+     * A product and recurring price on the company's own account, for a subscription
      * it bills a client. Minted per subscription rather than shared: two clients
      * on "Managed CISO" at different rates are two prices, and editing a shared
      * one would silently re-rate every subscription attached to it.
@@ -1198,7 +1194,7 @@ class StripeService {
     }
 
     /**
-     * The retainer itself, on the company's account against its own client.
+     * The subscription itself, on the company's account against its own client.
      *
      * collection_method is send_invoice to match how this company already bills:
      * Stripe emails each renewal with a payment page and chases it, rather than

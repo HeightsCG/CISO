@@ -1,10 +1,10 @@
 <div class="page">
 
-    <a class="page__back" href="/billing/subscriptions"><i class="fa-regular fa-arrow-left"></i> Back to Retainers</a>
+    <a class="page__back" href="/billing"><i class="fa-regular fa-arrow-left"></i> Back to Billing</a>
 
     <div class="page__head">
         <div>
-            <h1 class="page__title"><?php echo ($this->subscription === null ? 'New Retainer' : 'Edit Draft'); ?></h1>
+            <h1 class="page__title"><?php echo ($this->subscription === null ? 'New Subscription' : 'Edit Draft'); ?></h1>
         </div>
         <div class="page__actions">
             <span class="badge badge--prospect">Draft</span>
@@ -72,7 +72,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><input type="text" class="form-control form-control-lg" id="subscription_name" aria-label="Description" placeholder="Managed security retainer" value="<?php echo ($this->subscription === null ? '' : htmlspecialchars($this->subscription['subscription_name'], ENT_QUOTES, 'UTF-8')); ?>"></td>
+                            <td><input type="text" class="form-control form-control-lg" id="subscription_name" aria-label="Description" placeholder="Managed security subscription" value="<?php echo ($this->subscription === null ? '' : htmlspecialchars($this->subscription['subscription_name'], ENT_QUOTES, 'UTF-8')); ?>"></td>
                             <td class="num"><input type="text" class="form-control form-control-lg" id="quantity" inputmode="numeric" aria-label="Quantity" value="<?php echo ($this->subscription === null ? '1' : (int) $this->subscription['quantity']); ?>"></td>
                             <td class="num"><input type="text" class="form-control form-control-lg" id="unit_amount" inputmode="decimal" aria-label="Unit amount" value="<?php echo ($this->subscription === null ? '0' : number_format($this->subscription['unit_amount_cents'] / 100, 2, '.', '')); ?>"></td>
                             <td class="num lines__row-amount" id="line_amount">0.00</td>
@@ -89,8 +89,8 @@
                     <p class="commit__text" id="cadence_text">This bills the client automatically until it is cancelled.</p>
                 </div>
                 <div class="commit__actions">
-                    <a class="btn btn--secondary" href="/billing/subscriptions">Cancel</a>
-                    <button type="button" id="do_save" class="btn btn--primary">Save Retainer</button>
+                    <a class="btn btn--secondary" href="/billing">Cancel</a>
+                    <button type="button" id="do_save" class="btn btn--primary">Save</button>
                 </div>
             </div>
         </div>
@@ -107,11 +107,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Delete this draft retainer? This cannot be undone.</p>
+                <p>Delete this draft subscription? This cannot be undone.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="do_delete" class="btn btn--destructive">Delete draft</button>
+                <button type="button" id="do_delete" class="btn btn--destructive">Delete</button>
             </div>
         </div>
     </div>
@@ -197,7 +197,7 @@ $(document).ready(function () {
 
         var cadence = $('#billing_interval option:selected').text().toLowerCase();
 
-        $('#cadence_text').text('The client is invoiced ' + currency + ' ' + money(total) + ' ' + cadence + ', automatically, until this retainer is cancelled.');
+        $('#cadence_text').text('The client is invoiced ' + currency + ' ' + money(total) + ' ' + cadence + ', automatically, until this subscription is cancelled.');
     }
 
     $('#unit_amount').on('input', function () {
@@ -320,7 +320,7 @@ $(document).ready(function () {
             set_loading('#do_delete', false);
 
             if (obj.success) {
-                window.location.href = '/billing/subscriptions';
+                window.location.href = '/billing';
             } else {
                 modal('delete_modal').hide();
                 toastr.error(obj.message);

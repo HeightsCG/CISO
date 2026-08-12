@@ -1,4 +1,4 @@
-<div class="page">
+<div class="page page--invoice">
 
     <a class="page__back" href="/billing"><i class="fa-regular fa-arrow-left"></i> Back to Billing</a>
 
@@ -17,7 +17,7 @@
     <div class="invoice-main">
 
         <div class="invoice-doc invoice-doc--header">
-            <div class="masthead">
+            <div class="masthead masthead--form">
             <div class="masthead__cell">
                 <label for="client_id">Bill to</label>
                 <select class="form-control" id="client_id">
@@ -42,6 +42,15 @@
                     <option value="custom">Choose a date</option>
                 </select>
             </div>
+            <div class="masthead__cell">
+                <label for="repeats">Repeats</label>
+                <select class="form-control" id="repeats">
+                    <option value="0">One-off Invoice</option>
+                    <option value="1">On a Schedule</option>
+                </select>
+                <div class="masthead__sub" id="schedule_summary" hidden></div>
+                <button type="button" class="masthead__link" id="edit_schedule" hidden>Change Schedule</button>
+            </div>
             <div class="masthead__cell masthead__cell--due">
                 <label for="due_date">Due</label>
                 <div class="masthead__value" id="due_display"></div>
@@ -51,16 +60,15 @@
             </div>
         </div>
 
-        <div class="invoice-doc">
+        <div class="invoice-doc invoice-doc--lines">
 
-        <div class="table-wrap lines__scroll mb-3">
-            
             <div class="lines__head">
                 <h2 class="lines__title">Line Items</h2>
                 <button type="button" id="add_line"><i class="fa-regular fa-plus"></i> Add Line</button>
             </div>
 
-            <table class="data ledger">
+            <div class="table-wrap lines__scroll">
+                <table class="data ledger">
                 <thead>
                     <tr>
                         <th scope="col" class="idx"><span class="sr-only">Line</span></th>
@@ -83,18 +91,14 @@
                             </div>
                         </td>
                     </tr>
-                </tbody>
-            </table>
-        </div>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
 
         <div class="invoice-doc invoice-doc--footer">
             <div class="commit mb-3">
-                <div class="form-group commit__field mb-3">
-                    <label for="invoice_memo">Description <span class="label__note">printed above the line items</span></label>
-                    <textarea class="form-control" id="invoice_memo" rows="2" placeholder="Advisory and implementation work for the period."><?php echo ($this->invoice === null ? '' : htmlspecialchars($this->invoice['invoice_memo'], ENT_QUOTES, 'UTF-8')); ?></textarea>
-                </div>
                 <div class="form-group commit__field">
                     <label for="invoice_footer">Footer Message <span class="label__note">printed at the foot of the invoice</span></label>
                     <input type="text" class="form-control" id="invoice_footer" placeholder="Thank you. Payment is accepted by card or bank transfer." value="<?php echo ($this->invoice === null ? '' : htmlspecialchars($this->invoice['invoice_footer'], ENT_QUOTES, 'UTF-8')); ?>">
@@ -126,7 +130,7 @@
             </div>
         </dl>
 
-        <div class="summary__money">
+        <div class="summary__money" id="summary_money" hidden>
             <div class="summary__row" id="subtotal_row" hidden>
                 <span>SubTotal</span>
                 <span id="lines_subtotal">0.00</span>
@@ -184,6 +188,25 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" id="do_delete_line" class="btn btn--destructive">Remove line</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" data-bs-backdrop="static" id="schedule_modal" tabindex="-1" aria-labelledby="schedule_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content sked">
+            <div class="modal-header">
+                <h2 class="modal-title" id="schedule_modal_title">Billing Schedule</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-footer sked__footer">
+                <div class="sked__actions">
+                    <button type="button" class="btn btn--secondary" data-bs-dismiss="modal" id="cancel_schedule">Cancel</button>
+                    <button type="button" id="save_schedule" class="btn btn--primary">Save schedule</button>
+                </div>
             </div>
         </div>
     </div>
@@ -346,11 +369,16 @@ $(document).ready(function () {
             }
         });
 
+        $('#summary_money').prop('hidden', discount === 0);
         $('#subtotal_row').prop('hidden', discount === 0);
         $('#discount_row').prop('hidden', discount === 0);
         $('#lines_subtotal').text(money(subtotal));
         $('#discount_amount').text('-' + money(discount));
         $('#lines_total').text(money(subtotal - discount));
+
+        if (schedule_set) {
+            $('#schedule_summary').text(schedule_sentence());
+        }
 
         render_masthead();
     }
@@ -472,6 +500,266 @@ $(document).ready(function () {
         render_masthead();
     }
 
+
+    /**
+     * A repeating invoice is not a different record, it is this invoice on a
+     * schedule. Everything about that schedule is stated back in a sentence,
+     * because "every 3 months, ending after 12 invoices" is a commitment worth
+     * reading before it is agreed - and the person setting it up is the only one
+     * who can catch it being wrong.
+     */
+    /**
+     * Month arithmetic that does not silently roll over: billing on the 31st in a
+     * 30-day month lands on the 30th, not the 1st of the next. Getting this wrong
+     * moves a client's invoice into the following period.
+     */
+    function add_interval(date, unit, count) {
+
+        var next = new Date(date.getTime());
+
+        if (unit === 'Week') {
+            next.setDate(next.getDate() + (7 * count));
+            return next;
+        }
+
+        var day = next.getDate();
+        var months = unit === 'Year' ? (12 * count) : count;
+        var target = new Date(next.getFullYear(), next.getMonth() + months, 1);
+        var last = new Date(target.getFullYear(), target.getMonth() + 1, 0).getDate();
+
+        target.setDate(Math.min(day, last));
+
+        return target;
+    }
+
+    function schedule_state() {
+
+        var count = parseInt($('#interval_count').val(), 10);
+        var unit = $('#billing_interval').val();
+        var start = $('#start_date').val();
+        var mode = $('#ends_mode .segmented__btn.is-on').attr('data-value');
+
+        return {
+            valid: !isNaN(count) && count >= 1,
+            count: count,
+            unit: unit,
+            noun: { Week: 'week', Month: 'month', Year: 'year' }[unit] || 'month',
+            start: start === '' ? new Date() : new Date(start + 'T00:00:00'),
+            explicit_start: start !== '',
+            mode: mode,
+            after: parseInt($('#ends_after').val(), 10),
+            on: $('#ends_on').val()
+        };
+    }
+
+    function stop(text, modifier) {
+        $('#schedule_dates').append('<li class="sked__stop' + (modifier === '' ? '' : ' sked__stop--' + modifier) + '">' + esc(text) + '</li>');
+    }
+
+    /**
+     * The dates themselves, computed the same way the schedule will run. This is
+     * the part worth reading: "every 3 months from the 31st" is easy to agree to
+     * and hard to picture, and a wrong interval is obvious the moment the second
+     * date is a week away rather than a quarter.
+     *
+     * The tail is a position on the track like any other, so what comes after the
+     * dates shown reads as part of the same sequence.
+     */
+    function render_dates() {
+
+        var state = schedule_state();
+
+        $('#schedule_dates').empty();
+
+        if (!state.valid) {
+            stop('Set how often this bills.', 'note');
+            return;
+        }
+
+        var limit = 5;
+        var ends_on = state.mode === 'On' && state.on !== '' ? new Date(state.on + 'T00:00:00') : null;
+        var total = state.mode === 'After' && !isNaN(state.after) && state.after > 0 ? state.after : null;
+        var when = state.start;
+        var shown = 0;
+
+        while (shown < limit) {
+
+            if (ends_on !== null && when > ends_on) {
+                break;
+            }
+
+            if (total !== null && shown >= total) {
+                break;
+            }
+
+            stop(when.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }), shown === 0 ? 'first' : '');
+
+            when = add_interval(when, state.unit, state.count);
+            shown++;
+        }
+
+        if (shown === 0) {
+            stop('That end date is before the first invoice.', 'note');
+            return;
+        }
+
+        if (total !== null && total > shown) {
+            stop('and ' + (total - shown) + ' more', 'tail');
+            return;
+        }
+
+        if (total === null && ends_on === null) {
+            stop('continuing every ' + (state.count === 1 ? state.noun : state.count + ' ' + state.noun + 's'), 'tail');
+        }
+    }
+
+    function schedule_sentence() {
+
+        var state = schedule_state();
+
+        if (!state.valid) {
+            return 'Set how often this bills.';
+        }
+
+        var every = state.count === 1 ? ('every ' + state.noun) : ('every ' + state.count + ' ' + state.noun + 's');
+        var when = state.explicit_start ? ('from ' + format_date($('#start_date').val())) : 'from today';
+        var ends = 'until cancelled';
+
+        if (state.mode === 'After') {
+            ends = (isNaN(state.after) || state.after < 1) ? 'until a number of invoices is set' : ('for ' + state.after + ' invoice' + (state.after === 1 ? '' : 's'));
+        } else if (state.mode === 'On') {
+            ends = state.on === '' ? 'until an end date is set' : ('until ' + format_date(state.on));
+        }
+
+        return currency + ' ' + $('#lines_total').text() + ' ' + every + ', ' + when + ', ' + ends + '.';
+    }
+
+    function format_date(value) {
+        var parts = value.split('-');
+        return parts[1] + '/' + parts[2] + '/' + parts[0];
+    }
+
+    /* The dates and the sentence describe the same schedule, so they are written
+       together and cannot drift apart. */
+    function render_sentence() {
+        render_dates();
+        $('#schedule_sentence').text(schedule_sentence());
+    }
+
+    function render_repeats() {
+
+        var repeats = $('#repeats').val() === '1' && schedule_set;
+
+        $('#schedule_summary').prop('hidden', !repeats).text(repeats ? schedule_sentence() : '');
+        $('#edit_schedule').prop('hidden', !repeats);
+        $('#do_save').text(repeats ? 'Save Recurring Invoice' : 'Save Invoice');
+    }
+
+    function open_schedule() {
+        render_sentence();
+        modal('schedule_modal').show();
+    }
+
+    /* Choosing a schedule asks for one immediately; there is nothing to configure
+       on a one-off invoice, so the modal never appears for it. */
+    $('#repeats').change(function () {
+
+        if ($(this).val() === '1') {
+            open_schedule();
+            return;
+        }
+
+        schedule_set = false;
+        render_repeats();
+    });
+
+    $('#edit_schedule').click(open_schedule);
+
+    $('#billing_interval').change(render_sentence);
+    /* The condition and the field it needs are one choice, so picking a mode
+       brings its field with it rather than leaving three fields on screen with
+       two of them dead. */
+    $('#ends_mode').on('click', '.segmented__btn', function () {
+
+        $('#ends_mode .segmented__btn').removeClass('is-on').attr('aria-pressed', 'false');
+        $(this).addClass('is-on').attr('aria-pressed', 'true');
+
+        var mode = $(this).attr('data-value');
+
+        $('#ends_after_field').prop('hidden', mode !== 'After');
+        $('#ends_on_field').prop('hidden', mode !== 'On');
+
+        render_sentence();
+    });
+
+    $('#start_date, #ends_on').on('change', render_sentence);
+
+    $('#interval_count, #ends_after').on('input', function () {
+        numeric_only(this, 0);
+        render_sentence();
+    });
+
+    $('#save_schedule').click(function () {
+
+        var count = parseInt($('#interval_count').val(), 10);
+
+        if (isNaN(count) || count < 1) {
+            $('#interval_count').addClass('is-invalid').focus();
+            return;
+        }
+
+        var mode = $('#ends_mode .segmented__btn.is-on').attr('data-value');
+
+        if (mode === 'After' && (isNaN(parseInt($('#ends_after').val(), 10)) || parseInt($('#ends_after').val(), 10) < 1)) {
+            $('#ends_after').addClass('is-invalid').focus();
+            return;
+        }
+
+        if (mode === 'On' && $('#ends_on').val() === '') {
+            $('#ends_on').addClass('is-invalid').focus();
+            return;
+        }
+
+        schedule_set = true;
+        modal('schedule_modal').hide();
+        render_repeats();
+    });
+
+    /**
+     * Backing out without a schedule leaves the invoice one-off, rather than
+     * marked recurring with nothing behind it. Safe to run more than once, so
+     * every way out of the modal can call it without coordinating.
+     */
+    function abandon_schedule() {
+
+        if (!schedule_set) {
+            $('#repeats').val('0');
+        }
+
+        render_repeats();
+    }
+
+    /**
+     * Every exit is bound separately, because none of them can be trusted alone:
+     * Escape never reaches the Cancel button, Bootstrap 5 fires a native event
+     * named literally "hidden.bs.modal" which jQuery reads as a namespace and so
+     * never hears, and a keydown only reaches the modal element while focus is
+     * still inside it. Missing one leaves the field reading "On a Schedule" with
+     * no schedule behind it.
+     */
+    document.getElementById('schedule_modal').addEventListener('hidden.bs.modal', abandon_schedule);
+
+    $('#cancel_schedule, #schedule_modal .btn-close').click(abandon_schedule);
+
+    $(document).on('keydown', function (event) {
+
+        if (event.key !== 'Escape' || !$('#schedule_modal').hasClass('show')) {
+            return;
+        }
+
+        modal('schedule_modal').hide();
+        abandon_schedule();
+    });
 
     $('#due_terms').change(due_from_terms);
     $('#due_date').on('change', render_masthead);
@@ -677,8 +965,14 @@ $(document).ready(function () {
             project_id: $('#project_id').val(),
             due_days: ($('#due_terms').val() === 'custom' ? '' : $('#due_terms').val()),
             due_date: ($('#due_terms').val() === 'custom' ? $('#due_date').val() : ''),
-            invoice_memo: $('#invoice_memo').val().trim(),
             invoice_footer: $('#invoice_footer').val().trim(),
+            repeats: $('#repeats').val(),
+            billing_interval: $('#billing_interval').val(),
+            interval_count: $('#interval_count').val().trim(),
+            start_date: $('#start_date').val(),
+            ends_mode: $('#ends_mode .segmented__btn.is-on').attr('data-value'),
+            ends_after: $('#ends_after').val().trim(),
+            ends_on: $('#ends_on').val(),
             lines_json: JSON.stringify(lines)
         };
 
@@ -734,6 +1028,7 @@ $(document).ready(function () {
     <?php } ?>
     due_from_terms();
 
+    render_repeats();
     recalculate();
 
 });

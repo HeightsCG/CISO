@@ -153,7 +153,7 @@ class StripeController extends Controller {
 
             /**
              * A renewal Stripe raised on its own has no local row yet - there was
-             * never a draft for it - so it is created here from the retainer it
+             * never a draft for it - so it is created here from the subscription it
              * belongs to. This is the moment recurring billing becomes visible in
              * the application at all.
              */
@@ -213,8 +213,8 @@ class StripeController extends Controller {
     }
 
     /**
-     * Create the local row for an invoice a retainer raised. Ownership comes from
-     * the retainer, never from the event: Stripe knows nothing of this
+     * Create the local row for an invoice a subscription raised. Ownership comes from
+     * the subscription, never from the event: Stripe knows nothing of this
      * application's tenancy, so the company and client are the ones already
      * recorded against the subscription.
      */
@@ -254,7 +254,7 @@ class StripeController extends Controller {
     }
 
     /**
-     * Mirror a retainer's own state - cancelled, past due, paused. The billing
+     * Mirror a subscription's own state - cancelled, past due, paused. The billing
      * cycle belongs to Stripe once the subscription exists there, so this row
      * follows rather than leads.
      */
@@ -266,12 +266,12 @@ class StripeController extends Controller {
         if (!is_array($local) || count($local) !== 1) {
 
             if ($this->invoices_model->event_attempts($event['id']) < 5) {
-                $this->invoices_model->mark_event($event['id'], 'Received', 'no local retainer yet');
+                $this->invoices_model->mark_event($event['id'], 'Received', 'no local subscription yet');
                 $this->respond(500, 'unmapped, will retry');
                 return;
             }
 
-            $this->invoices_model->mark_event($event['id'], 'Ignored', 'no local retainer for '.$stripe_subscription_id);
+            $this->invoices_model->mark_event($event['id'], 'Ignored', 'no local subscription for '.$stripe_subscription_id);
             $this->respond(200, 'unmapped');
             return;
         }

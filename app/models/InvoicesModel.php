@@ -247,7 +247,7 @@ class InvoicesModel extends Model {
      * A renewal invoice Stripe raised on its own, mirrored in so it appears in the
      * Billing list beside the ones composed here. It is created already issued -
      * there was never a draft for it - and carries no local line items, because
-     * the lines belong to the retainer rather than to this row.
+     * the lines belong to the subscription rather than to this row.
      *
      * Conditional on the Stripe id being unseen: the unique key would refuse a
      * duplicate anyway, but a webhook delivered twice should be a no-op rather
@@ -274,7 +274,6 @@ class InvoicesModel extends Model {
             'invoice_origin'     => 'Subscription',
             'invoice_status'     => 'Open',
             'currency'           => $currency,
-            'invoice_memo'       => '',
             'hosted_invoice_url' => '',
             'invoice_pdf_url'    => '',
             'stripe_invoice_id'  => $stripe_invoice_id,
@@ -289,14 +288,13 @@ class InvoicesModel extends Model {
         ));
     }
 
-    public function add_invoice($company_id, $client_id, $project_id, $currency, $invoice_memo, $invoice_footer, $due_days, $due_date, $created_by)
+    public function add_invoice($company_id, $client_id, $project_id, $currency, $invoice_footer, $due_days, $due_date, $created_by)
     {
         $data = array(
             'company_id'     => $company_id,
             'client_id'      => $client_id,
             'project_id'     => $project_id,
             'currency'       => $currency,
-            'invoice_memo'   => $invoice_memo,
             'invoice_footer' => $invoice_footer,
             'due_days'       => $due_days,
             'due_date'       => $due_date,
@@ -310,7 +308,7 @@ class InvoicesModel extends Model {
         return parent::insert('invoices', $data);
     }
 
-    public function update_invoice($invoice_id, $company_id, $client_id, $project_id, $currency, $invoice_memo, $invoice_footer, $due_days, $due_date, $updated_by)
+    public function update_invoice($invoice_id, $company_id, $client_id, $project_id, $currency, $invoice_footer, $due_days, $due_date, $updated_by)
     {
         $where = array(
             'id'         => $invoice_id,
@@ -320,7 +318,6 @@ class InvoicesModel extends Model {
             'client_id'      => $client_id,
             'project_id'     => $project_id,
             'currency'       => $currency,
-            'invoice_memo'   => $invoice_memo,
             'invoice_footer' => $invoice_footer,
             'due_days'       => $due_days,
             'due_date'       => $due_date,

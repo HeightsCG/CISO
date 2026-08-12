@@ -4,7 +4,6 @@
             <h1 class="page__title">Billing</h1>
         </div>
         <div class="page__actions">
-            <a class="btn btn--secondary" href="/billing/subscriptions"><i class="fa-regular fa-rotate"></i> Retainers</a>
             <button type="button" class="btn btn--secondary" id="do_reconcile"><i class="fa-regular fa-rotate"></i> Check for updates</button>
             <a class="btn btn--primary" href="/billing/form"><i class="fa-regular fa-plus"></i> New Invoice</a>
         </div>
@@ -34,8 +33,15 @@
             <input type="search" id="invoice_search" class="input roster__search" placeholder="Search..." autocomplete="off" spellcheck="false">
             <div class="roster__filters">
                 <div class="roster__filter">
-                    <select id="status_filter" class="form-control" aria-label="Filter by status">
+                    <select id="origin_filter" class="form-control" aria-label="Filter by kind">
                         <option value="">All invoices</option>
+                        <option value="Manual">One-off</option>
+                        <option value="Subscription">Recurring</option>
+                    </select>
+                </div>
+                <div class="roster__filter">
+                    <select id="status_filter" class="form-control" aria-label="Filter by status">
+                        <option value="">All statuses</option>
                         <option value="Draft">Draft</option>
                         <option value="Awaiting Payment">Awaiting Payment</option>
                         <option value="Payment Processing">Payment Processing</option>
@@ -78,18 +84,31 @@ $(document).ready(function () {
 
     function dash(data) {
         if (!data) {
-            return '<span class="roster__none">&mdash;</span>';
+            return '';
         }
         return data;
     }
 
+    function set_loading(target, loading) {
+        if (loading) {
+            $(target).addClass("is-loading").prop("disabled", true);
+        } else {
+            $(target).removeClass("is-loading").prop("disabled", false);
+        }
+    }
+
+    /**
+     * An invoice either happens once or repeats, so the recurrence is a property
+     * of the invoice rather than a second kind of record kept somewhere else.
+     * A recurring one says so under its number.
+     */
     function reference_cell(data, type, row) {
         if (type !== 'display') {
             return data;
         }
         var label = data ? esc(data) : 'Draft';
         if (row[8] === 'Subscription') {
-            return esc(label) + '<span class="roster__sub">Recurring</span>';
+            return label + '<span class="roster__sub">Recurring</span>';
         }
         return label;
     }
@@ -176,9 +195,6 @@ $(document).ready(function () {
         if (!data) {
             return;
         }
-        /* Every row opens the invoice, drafts included. Going straight to the
-           editor made the detail page unreachable for a draft except by saving
-           one, and the editor is one click away from here anyway. */
         window.location.href = '/billing/invoice/id/' + data[0];
     });
 
@@ -186,23 +202,40 @@ $(document).ready(function () {
         table.search(this.value).draw();
     });
 
+    $('#origin_filter').change(function () {
+        table.column(8).search(this.value === '' ? '' : '^' + this.value + '$', true, false).draw();
+    });
+
     $('#status_filter').change(function () {
         table.column(7).search(this.value === '' ? '' : '^' + this.value + '$', true, false).draw();
     });
 
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
+    function load_invoices() {
+        ApiDataSvc.apiCall('post', 'load_invoices', {}, function (data) {
+            var obj = JSON.parse(data);
+            var rows = [];
+            for (var i = 0; i < obj.length; i++) {
+                rows.push([
+                    obj[i].id,
+                    obj[i].invoice_number,
+                    obj[i].client_name,
+                    obj[i].project_name,
+                    { sort: obj[i].date_created, display: obj[i].date_created_display },
+                    { sort: obj[i].due_date === null ? '' : obj[i].due_date, display: obj[i].due_date_display === null ? '' : obj[i].due_date_display },
+                    { sort: obj[i].total_cents, display: obj[i].total_display },
+                    obj[i].invoice_status_display,
+                    obj[i].invoice_origin
+                ]);
+            }
+            table.clear().rows.add(rows).draw();
+        });
     }
 
     $('#do_reconcile').click(function () {
 
         set_loading('#do_reconcile', true);
 
-        ApiDataSvc.apiCall('post', 'billing_reconcile', {}, function (data) {
+        ApiDataSvc.apiCall('post', 'reconcile_invoices', {}, function (data) {
 
             var obj = JSON.parse(data);
 
@@ -210,35 +243,14 @@ $(document).ready(function () {
 
             if (obj.success) {
                 toastr.success(obj.message);
-                load();
+                load_invoices();
             } else {
                 toastr.error(obj.message);
             }
         });
     });
 
-    function load(){
-        ApiDataSvc.apiCall('post', 'load_invoices', {}, function (data) {
-            var obj = JSON.parse(data);
-            table.clear();
-            for (var i = 0; i < obj.length; i++) {
-                table.row.add([
-                    obj[i].id,
-                    obj[i].invoice_number,
-                    obj[i].client_name,
-                    obj[i].project_name,
-                    { sort: obj[i].date_created, display: obj[i].date_created_display },
-                    { sort: obj[i].due_date === null ? '' : obj[i].due_date, display: obj[i].due_date === null ? '' : obj[i].due_date_display },
-                    { sort: parseInt(obj[i].total_cents, 10), display: obj[i].total_display },
-                    obj[i].invoice_status_display,
-                    obj[i].invoice_origin
-                ]);
-            }
-            table.draw();
-        });
-    }
-
-    load();
+    load_invoices();
 
 });
 </script>
