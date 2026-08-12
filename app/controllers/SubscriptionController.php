@@ -3,58 +3,10 @@ class SubscriptionController extends Controller {
 
     public $protected = 1;
     public $companies_model;
-    public $plans_model;
 
     public function __construct(){
         parent::__construct();
         $this->companies_model = new CompaniesModel();
-        $this->plans_model = new PlansModel();
-    }
-
-    /**
-     * Stripe states what a plan costs; this application states what it includes.
-     * The two are joined on the price id here rather than either side holding
-     * both, so the money can never be described by stale copy and the copy can be
-     * edited without touching what is charged.
-     *
-     * A price with no row here still appears, under the name Stripe holds. A row
-     * archived here is withheld, which is how a plan stops being offered without
-     * deleting the price subscriptions are already running against.
-     */
-    private function describe_plans(array $stripe_plans): array
-    {
-        $copy  = $this->plans_model->load_plans();
-        $plans = array();
-
-        foreach ($stripe_plans as $plan) {
-
-            $row = $copy[$plan['price_id']] ?? array();
-
-            if (($row['plan_status'] ?? 'Active') === 'Archived') {
-                continue;
-            }
-
-            $features = array();
-
-            foreach (preg_split('/\r\n|\r|\n/', (string) ($row['plan_features'] ?? '')) as $feature) {
-                if (trim($feature) !== '') {
-                    $features[] = trim($feature);
-                }
-            }
-
-            $plan['name']        = (trim((string) ($row['plan_name'] ?? '')) !== '') ? $row['plan_name'] : $plan['name'];
-            $plan['description'] = (trim((string) ($row['plan_blurb'] ?? '')) !== '') ? $row['plan_blurb'] : $plan['description'];
-            $plan['features']    = $features;
-            $plan['sort_order']  = (int) ($row['sort_order'] ?? 0);
-
-            $plans[] = $plan;
-        }
-
-        usort($plans, function ($a, $b) {
-            return $a['sort_order'] === $b['sort_order'] ? strcmp($a['name'], $b['name']) : $a['sort_order'] - $b['sort_order'];
-        });
-
-        return $plans;
     }
 
     /** user_roles.id for Admin - the administrator of a single company. */
@@ -89,9 +41,8 @@ class SubscriptionController extends Controller {
      * conditional on the column still being empty and backed by an idempotency
      * key, so two pages racing cannot mint two customers for one company.
      *
-     * A Stripe failure is logged and the page carries on: nothing is charged yet,
-     * and a subscription page that will not load is worse than one that reports
-     * it could not reach Stripe.
+     * A Stripe failure is logged and the page carries on: a subscription page that
+     * will not load is worse than one reporting it could not reach Stripe.
      */
     private function ensure_platform_customer(array $company): array
     {
@@ -150,7 +101,7 @@ class SubscriptionController extends Controller {
         $this->view->configured     = StripeService::configured();
         $this->view->publish_key    = StripeService::publish_key();
         $this->view->subscription   = StripeService::platform_subscription($customer_id);
-        $this->view->plans          = $this->describe_plans(StripeService::platform_plans());
+        $this->view->plans          = Plans::describe(StripeService::platform_plans());
         $this->view->invoices       = StripeService::platform_invoices($customer_id);
         $this->view->payment_method = StripeService::platform_payment_method($customer_id);
         $this->view->cards          = StripeService::platform_payment_methods($customer_id);

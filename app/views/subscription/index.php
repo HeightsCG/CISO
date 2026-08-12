@@ -46,7 +46,6 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
     <?php } ?>
 
     <div class="invoice-main">
-
         <section class="plans">
             <div class="plans__head">
                 <h2 class="plans__title"><?php echo ($has_sub ? 'Change Plan' : 'Choose a Plan'); ?></h2>
