@@ -125,6 +125,18 @@ class ProjectsModel extends Model {
         return parent::select($sql, $where);
     }
 
+    /** How many projects this company already has, for the plan gate. */
+    public function count_projects($company_id)
+    {
+        $where = array(
+            'company_id' => $company_id
+        );
+        $sql = "SELECT COUNT(*) AS total FROM projects WHERE company_id = :company_id and deleted = 0";
+        $rows = parent::select($sql, $where);
+
+        return (int) ($rows[0]['total'] ?? 0);
+    }
+
     public function get_project($project_id, $company_id)
     {
         $where = array(

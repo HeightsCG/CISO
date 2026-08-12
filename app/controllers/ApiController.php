@@ -1162,6 +1162,82 @@ class ApiController extends Controller {
         echo json_encode($response);
     }
 
+    /**
+     * The plan this company is on, read from its subscription in the platform's
+     * own Stripe account. Memoised for the request: the gates below can fire more
+     * than once in a single call and this is a network round trip.
+     *
+     * Two deliberate fallbacks, both open rather than closed:
+     *
+     * A Stripe failure returns '' and every gate passes. Blocking creation across
+     * the product because a payments API is unreachable trades a billing rule for
+     * an outage, which is the wrong way round.
+     *
+     * A company with no subscription also passes. Every tenant predates billing,
+     * so gating them at nothing would lock existing customers out of their own
+     * data the moment this shipped. Restricting unsubscribed companies is a
+     * product decision, not a technical one - it is made by giving them a plan.
+     */
+    private function company_plan_name(): string
+    {
+        static $plan_name = null;
+
+        if ($plan_name !== null) {
+            return $plan_name;
+        }
+
+        $plan_name = '';
+
+        $company = $this->companies_model->get_company(Session::get('company_id'));
+
+        if (!is_array($company) || count($company) !== 1) {
+            return $plan_name;
+        }
+
+        $customer_id = (string) ($company[0]['platform_customer_id'] ?? '');
+
+        if ($customer_id === '') {
+            return $plan_name;
+        }
+
+        $subscription = StripeService::platform_subscription($customer_id);
+        $product      = $subscription['items']['data'][0]['price']['product'] ?? '';
+
+        /* The product comes back as an id unless expanded, so the plan is matched
+           by the name held against that price in the catalogue Stripe returns. */
+        foreach (StripeService::platform_plans() as $plan) {
+            if ($plan['price_id'] === ($subscription['items']['data'][0]['price']['id'] ?? '')) {
+                $plan_name = $plan['name'];
+                break;
+            }
+        }
+
+        return $plan_name;
+    }
+
+    /**
+     * Refuse when the company's plan has no room left. Echoes and exits like the
+     * permission refusals do, so a gate that is forgotten reads as a broken
+     * feature rather than an unenforced limit.
+     */
+    private function refuse_unless_plan_allows(string $limit, int $existing, string $noun): void
+    {
+        $plan_name = $this->company_plan_name();
+
+        if ($plan_name === '' || Plans::allows($plan_name, $limit, $existing)) {
+            return;
+        }
+
+        $cap = Plans::limits($plan_name)[$limit] ?? 0;
+
+        echo json_encode(array(
+            'success' => false,
+            'message' => 'Your plan includes '.$cap.' '.$noun.'. Upgrade to add more.',
+            'plan_limit' => $limit
+        ));
+        exit;
+    }
+
     public function save_clientAction(){
 
         $response = array(
@@ -1171,6 +1247,12 @@ class ApiController extends Controller {
 
         $client_id = (int) ($this->post['client_id'] ?? 0);
         $company_id = Session::get('company_id');
+
+        /* Only on create. Editing the fifth client must stay possible on a plan
+           whose ceiling is five, or the limit would lock the data it allows. */
+        if ($client_id === 0) {
+            $this->refuse_unless_plan_allows('clients', $this->clients_model->count_clients($company_id), 'clients');
+        }
 
         if (empty($this->post['company_name'])) {
             $response['message'] = 'Company name is required';
@@ -2090,6 +2172,10 @@ class ApiController extends Controller {
         $project_id = (int) ($this->post['project_id'] ?? 0);
         $client_id = (int) ($this->post['client_id'] ?? 0);
         $project_name = $this->input('project_name');
+
+        if ($project_id === 0) {
+            $this->refuse_unless_plan_allows('projects', $this->projects_model->count_projects(Session::get('company_id')), 'projects');
+        }
         $description = $this->input('description');
         $start_date = $this->input('start_date');
         $end_date = $this->input('end_date');
@@ -2218,6 +2304,14 @@ class ApiController extends Controller {
             echo json_encode($response);
             exit;
         }
+
+        /* Counted after ownership is proven, so the count can never be taken
+           against a project belonging to another company. */
+        $this->refuse_unless_plan_allows(
+            'assessments_per_project',
+            $this->assessments_model->count_assessments($project_id, Session::get('company_id')),
+            'assessments per project'
+        );
 
         if ($assessment_name === '') {
             $response['message'] = 'Assessment name is required';

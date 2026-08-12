@@ -5,6 +5,23 @@ class AssessmentsModel extends Model {
         parent::__construct();
     }
 
+    /**
+     * How many assessments this project already carries, for the plan gate. The
+     * limit is per project, so it is counted within the project rather than
+     * across the company.
+     */
+    public function count_assessments($project_id, $company_id)
+    {
+        $where = array(
+            'project_id' => $project_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT COUNT(*) AS total FROM assessments WHERE project_id = :project_id and company_id = :company_id and deleted = 0";
+        $rows = parent::select($sql, $where);
+
+        return (int) ($rows[0]['total'] ?? 0);
+    }
+
     public function load_assessments($project_id, $company_id)
     {
         $where = array(
