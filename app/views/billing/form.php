@@ -15,9 +15,10 @@
     </div>
 
     <div class="invoice-layout">
-    <div class="invoice-doc">
+    <div class="invoice-main">
 
-        <div class="masthead">
+        <div class="invoice-doc invoice-doc--header">
+            <div class="masthead">
             <div class="masthead__cell">
                 <label for="client_id">Bill to</label>
                 <select class="form-control" id="client_id">
@@ -47,8 +48,11 @@
                 <div class="masthead__value" id="due_display"></div>
                 <div class="masthead__sub" id="due_sub"></div>
                 <input type="date" class="form-control" id="due_date" hidden value="<?php echo ($this->invoice === null || $this->invoice['due_date'] === null ? '' : htmlspecialchars($this->invoice['due_date'], ENT_QUOTES, 'UTF-8')); ?>">
+                </div>
             </div>
         </div>
+
+        <div class="invoice-doc">
 
         <div class="table-wrap lines__scroll">
             
@@ -89,11 +93,16 @@
             <textarea class="form-control" id="invoice_memo" rows="2"><?php echo ($this->invoice === null ? '' : htmlspecialchars($this->invoice['invoice_memo'], ENT_QUOTES, 'UTF-8')); ?></textarea>
         </div>
 
-        <div class="commit">
-            <div class="form-group commit__field">
-                <label for="invoice_footer">Footer Message <span class="label__note">printed at the foot of the invoice</span></label>
-                <input type="text" class="form-control" id="invoice_footer" placeholder="Thank you. Payment is accepted by card or bank transfer." value="<?php echo ($this->invoice === null ? '' : htmlspecialchars($this->invoice['invoice_footer'], ENT_QUOTES, 'UTF-8')); ?>">
+        </div>
+
+        <div class="invoice-doc invoice-doc--footer">
+            <div class="commit">
+                <div class="form-group commit__field">
+                    <label for="invoice_footer">Footer Message <span class="label__note">printed at the foot of the invoice</span></label>
+                    <input type="text" class="form-control" id="invoice_footer" placeholder="Thank you. Payment is accepted by card or bank transfer." value="<?php echo ($this->invoice === null ? '' : htmlspecialchars($this->invoice['invoice_footer'], ENT_QUOTES, 'UTF-8')); ?>">
+                </div>
             </div>
+
         </div>
 
     </div>

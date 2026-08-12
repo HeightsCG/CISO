@@ -75,6 +75,8 @@
     --radius-lg:            3px;
 
     --shadow-overlay:       0 4px 16px rgba(16, 27, 43, 0.14);
+    --shadow-panel:         0 1px 3px rgba(16, 27, 43, 0.10),
+                            0 6px 20px rgba(16, 27, 43, 0.13);
 
     --control-height:       34px;
     --control-height-sm:    30px;
@@ -4922,10 +4924,34 @@ table.data.lines .num .form-control {
     gap: var(--space-5);
 }
 
+/* Two panels with the page showing between them, rather than one panel divided
+   by a rule. A hairline and a tonal band both sit within a couple of percent of
+   white and read as continuous surface; a real gap does not. */
+.invoice-main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    min-width: 0;
+}
+
 .invoice-doc {
     background: var(--surface-app);
     border: 1px solid var(--border);
     border-radius: var(--radius);
+    box-shadow: var(--shadow-panel);
+}
+
+/* Standing on its own, the footer panel is a panel like the others: the tonal
+   ground and top rule existed only to divide it from the ledger above it. */
+.invoice-doc--footer .commit {
+    background: none;
+    border-top: 0;
+}
+
+/* The header panel is the masthead and nothing else, so the masthead draws no
+   closing rule of its own - the panel's own border already ends it. */
+.invoice-doc--header .masthead {
+    border-bottom: 0;
 }
 
 .invoice-doc label {
@@ -4960,7 +4986,7 @@ table.data.lines .num .form-control {
 .masthead {
     display: grid;
     grid-template-columns: 1.4fr 1.4fr 1fr 1fr;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-strong);
 }
 
 .masthead__cell {
@@ -5029,8 +5055,8 @@ table.data.ledger {
 }
 
 table.data.ledger thead th {
-    padding: var(--space-2) var(--space-3);
-    background: var(--surface-sunken);
+    padding: var(--space-3) var(--space-3);
+    background: var(--surface-app);
     border-bottom: 1px solid var(--border-strong);
     font-size: 11px;
     font-weight: var(--fw-semibold);
@@ -5105,6 +5131,25 @@ table.data.ledger td.num .form-control {
 table.data.ledger th.num,
 table.data.ledger td.lines__row-amount {
     padding-right: var(--space-6);
+}
+
+/* The two discount columns are centred: one holds a control rather than a figure,
+   and the amount beside it reads as that control's answer, so the pair is set
+   apart from the money columns that have to stack on a decimal. */
+table.data.ledger th.discount,
+table.data.ledger th.discount-amount,
+table.data.ledger td[data-cell="discount_amount"] {
+    text-align: center;
+    padding-right: var(--space-3);
+}
+
+table.data.ledger td.num .input-group {
+    max-width: 148px;
+    margin: 0 auto;
+}
+
+table.data.ledger .input-group .form-control {
+    text-align: center;
 }
 
 table.data.ledger th.actions,
@@ -5232,6 +5277,8 @@ table.data.ledger [data-action="remove_line"]:focus-visible {
     justify-content: space-between;
     gap: var(--space-4);
     padding: var(--space-3) var(--space-5);
+    background: var(--surface-sunken);
+    border-bottom: 1px solid var(--border);
 }
 
 .lines__title {
@@ -5296,6 +5343,7 @@ table.data.ledger [data-action="remove_line"]:focus-visible {
     background: var(--surface-app);
     border: 1px solid var(--border);
     border-radius: var(--radius);
+    box-shadow: var(--shadow-panel);
 }
 
 .summary__heading {
