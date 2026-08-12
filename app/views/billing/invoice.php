@@ -64,7 +64,7 @@
                                     <td><?php echo htmlspecialchars($item['item_description'], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td class="num"><?php echo htmlspecialchars(Money::format_quantity($item['quantity_milli']), ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td class="num"><?php echo htmlspecialchars(Money::format($item['unit_amount_cents'], $this->invoice['currency']), ENT_QUOTES, 'UTF-8'); ?></td>
-                                    <td class="num"><?php echo ((int) $item['discount_percent_bp'] === 0 ? '<span class="roster__none">&mdash;</span>' : htmlspecialchars(Money::format_percent($item['discount_percent_bp']).'% · -'.Money::format($item['discount_cents'], $this->invoice['currency']), ENT_QUOTES, 'UTF-8')); ?></td>
+                                    <td class="num"><?php echo ((int) $item['discount_cents'] === 0 ? '<span class="roster__none">&mdash;</span>' : htmlspecialchars(($item['discount_type'] === 'Percent' ? Money::format_percent($item['discount_percent_bp']).'% · ' : '').'-'.Money::format($item['discount_cents'], $this->invoice['currency']), ENT_QUOTES, 'UTF-8')); ?></td>
                                     <td class="num"><?php echo htmlspecialchars(Money::format($item['amount_cents'], $this->invoice['currency']), ENT_QUOTES, 'UTF-8'); ?></td>
                                 </tr>
                                 <?php } ?>

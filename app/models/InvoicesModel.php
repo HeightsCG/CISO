@@ -217,6 +217,7 @@ class InvoicesModel extends Model {
                     item_description,
                     quantity_milli,
                     unit_amount_cents,
+                    discount_type,
                     discount_percent_bp,
                     discount_cents,
                     amount_cents,
@@ -295,9 +296,9 @@ class InvoicesModel extends Model {
 
             $insert = $this->db->prepare(
                 "INSERT INTO invoice_items
-                    (invoice_id, service_id, line_source, item_description, quantity_milli, unit_amount_cents, discount_percent_bp, discount_cents, amount_cents, sort_order, updated_by, date_created, date_updated)
+                    (invoice_id, service_id, line_source, item_description, quantity_milli, unit_amount_cents, discount_type, discount_percent_bp, discount_cents, amount_cents, sort_order, updated_by, date_created, date_updated)
                  VALUES
-                    (:invoice_id, :service_id, :line_source, :item_description, :quantity_milli, :unit_amount_cents, :discount_percent_bp, :discount_cents, :amount_cents, :sort_order, :updated_by, :date_created, :date_updated)"
+                    (:invoice_id, :service_id, :line_source, :item_description, :quantity_milli, :unit_amount_cents, :discount_type, :discount_percent_bp, :discount_cents, :amount_cents, :sort_order, :updated_by, :date_created, :date_updated)"
             );
 
             $subtotal = 0;
@@ -310,7 +311,8 @@ class InvoicesModel extends Model {
                    and the discount are kept beside it so the invoice can show what
                    was taken off rather than only the figure that survived. */
                 $gross         = Money::line_amount($line['quantity_milli'], $line['unit_amount_cents']);
-                $line_discount = Money::discount_cents($gross, 'Percent', $line['discount_percent_bp'] ?? 0, 0);
+                $line_type     = $line['discount_type'] ?? 'None';
+                $line_discount = Money::discount_cents($gross, $line_type, $line['discount_percent_bp'] ?? 0, $line['discount_amount_cents'] ?? 0);
 
                 $subtotal += $gross;
                 $discount += $line_discount;
@@ -322,6 +324,7 @@ class InvoicesModel extends Model {
                     'item_description'    => $line['item_description'],
                     'quantity_milli'      => $line['quantity_milli'],
                     'unit_amount_cents'   => $line['unit_amount_cents'],
+                    'discount_type'       => $line_type,
                     'discount_percent_bp' => (int) ($line['discount_percent_bp'] ?? 0),
                     'discount_cents'      => $line_discount,
                     'amount_cents'        => $gross - $line_discount,

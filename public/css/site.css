@@ -78,6 +78,7 @@
 
     --control-height:       34px;
     --control-height-sm:    30px;
+    --control-height-lg:    39px;
 
     --nav-width:            232px;
     --nav-width-collapsed:  56px;
@@ -4996,9 +4997,10 @@ table.data.lines .num .form-control {
     color: var(--high);
 }
 
+/* Sits between the ledger and the footer message. The table's last row rules it
+   off above and .commit rules it off below, so it draws no border of its own. */
 .invoice-doc__memo {
     padding: var(--space-4) var(--space-5);
-    border-bottom: 1px solid var(--border);
 }
 
 /* -------------------------------------------------------------------- ledger */
@@ -5007,17 +5009,20 @@ table.data.lines .num .form-control {
     overflow-x: auto;
 }
 
+/* A line is dense, repeated, numeric data, so it is set a step down from body
+   copy: more of the invoice fits without the figures losing their alignment. */
 table.data.ledger {
     table-layout: fixed;
     width: 100%;
     border-collapse: collapse;
+    font-size: var(--fs-meta);
 }
 
 table.data.ledger thead th {
     padding: var(--space-2) var(--space-3);
     background: var(--surface-sunken);
     border-bottom: 1px solid var(--border-strong);
-    font-size: var(--fs-table-head);
+    font-size: 11px;
     font-weight: var(--fw-semibold);
     letter-spacing: 0.06em;
     color: var(--text-secondary);
@@ -5027,12 +5032,6 @@ table.data.ledger tbody td {
     padding: 7px var(--space-3);
     border-bottom: 1px solid var(--border);
     vertical-align: middle;
-}
-
-/* The panel's own footer supplies the closing rule, so the last row does not
-   draw a second one a pixel above it. */
-table.data.ledger tbody:last-child tr:last-child td {
-    border-bottom: 0;
 }
 
 table.data.ledger tbody tr:hover {
@@ -5053,9 +5052,10 @@ table.data.ledger tbody tr:hover td:first-child {
 table.data.ledger th.idx      { width: 52px; }
 table.data.ledger th.quantity { width: 110px; }
 table.data.ledger th.unit     { width: 150px; }
-table.data.ledger th.discount { width: 110px; }
+table.data.ledger th.discount { width: 168px; }
+table.data.ledger th.discount-amount { width: 150px; }
 table.data.ledger th.amount   { width: 160px; }
-table.data.ledger th.actions  { width: 48px; }
+table.data.ledger th.actions  { width: 56px; }
 
 /* The visually-hidden header labels are absolutely positioned; without a local
    containing block they resolve against the viewport, land past the right edge
@@ -5077,13 +5077,66 @@ table.data.ledger td.num {
     text-align: right;
 }
 
+table.data.ledger th.actions,
 table.data.ledger td.actions {
-    text-align: right;
+    text-align: center;
+}
+
+/* The control is as tall as the row, so the cell gives it the whole column
+   rather than 12px of padding on each side it would have to overflow. */
+table.data.ledger td.actions {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* One height for every control in a line, whichever Bootstrap size class happens
+   to be on it. Both height and min-height are pinned because the size utilities
+   set min-height, which outranks height and pulled the cells out of line. */
+table.data.ledger .form-control,
+table.data.ledger .form-select {
+    height: var(--control-height-lg);
+    min-height: var(--control-height-lg);
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: var(--fs-meta);
 }
 
 table.data.ledger .form-control {
     width: 100%;
-    height: var(--control-height-sm);
+}
+
+/* Value and unit are one control, joined on a shared border by the input group.
+   The select carries the unit in force and nothing else, so the cell reads as a
+   single field rather than two competing for the same column. */
+table.data.ledger .input-group .form-control {
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+    border-color: var(--border);
+}
+
+table.data.ledger .input-group .form-select {
+    flex: 0 0 76px;
+    padding: 0 20px 0 var(--space-2);
+    background-position: right 6px center;
+    background-color: var(--surface-sunken);
+    border-color: var(--border);
+    font-size: var(--fs-meta);
+    color: var(--text-secondary);
+}
+
+table.data.ledger .input-group .form-select:focus,
+table.data.ledger .input-group .form-control:focus {
+    z-index: 2;
+}
+
+/* With no unit chosen the figure cannot mean anything, so the box is visibly out
+   of play rather than accepting input that would be ignored. */
+table.data.ledger .input-group .form-control:disabled {
+    background: var(--surface-sunken);
+    color: var(--text-muted);
 }
 
 table.data.ledger .num .form-control {
@@ -5110,14 +5163,34 @@ table.data.ledger .lines__row-amount {
     color: var(--text-primary);
 }
 
+/* A square icon control the same height as the inputs it sits beside. At the
+   button's own small size it was 9px shorter than the row and read as a glyph
+   floating between cells rather than a control belonging to the line. */
 table.data.ledger [data-action="remove_line"] {
+    width: var(--control-height-lg);
+    height: var(--control-height-lg);
+    padding: 0;
+    border-radius: var(--radius);
     color: var(--text-muted);
 }
 
+table.data.ledger [data-action="remove_line"] i {
+    font-size: 14px;
+    line-height: 1;
+}
+
+/* The border is already there and transparent, so colouring it on hover moves
+   nothing. Destructive intent is stated on approach, not only on click. */
 table.data.ledger [data-action="remove_line"]:hover,
 table.data.ledger [data-action="remove_line"]:focus-visible {
     color: var(--critical);
     background: var(--critical-bg);
+    border-color: var(--critical-border);
+}
+
+table.data.ledger [data-action="remove_line"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
 }
 
 /* The add control sits above the ledger and stays put when the list is empty, so
@@ -5250,10 +5323,6 @@ table.data.ledger [data-action="remove_line"]:focus-visible {
 .summary__row span:last-child {
     font-variant-numeric: tabular-nums;
     color: var(--text-primary);
-}
-
-.summary__row--credit span:last-child {
-    color: var(--ok);
 }
 
 /* The total closes the stack under a rule, which is accounting's own convention

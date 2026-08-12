@@ -3675,18 +3675,40 @@ class ApiController extends Controller {
                 return;
             }
 
-            /* An empty discount is no discount; anything else has to be a real
-               percentage, because a typo silently read as zero would bill the
-               client the full rate they were told they would not pay. */
-            $discount_raw = trim((string) ($line['discount_percent'] ?? ''));
-            $discount_bp  = 0;
+            /* An empty discount is no discount; anything else has to parse, because
+               a typo silently read as zero would bill the client the full rate they
+               were told they would not pay. */
+            $discount_raw   = trim((string) ($line['discount_value'] ?? ''));
+            $discount_type  = (string) ($line['discount_type'] ?? 'None');
+            $discount_bp    = 0;
+            $discount_fixed = 0;
 
-            if ($discount_raw !== '') {
+            /* Zero in either unit is no discount, so a line left at its default 0
+               is stored as None rather than refused for failing to be a real rate. */
+            if (!in_array($discount_type, array('None', 'Percent', 'Amount'), true) || $discount_raw === '') {
+                $discount_type = 'None';
+            } elseif ((float) str_replace(array(',', ' ', '%', '$'), '', $discount_raw) == 0) {
+                $discount_type = 'None';
+            }
+
+            if ($discount_type === 'Percent') {
 
                 $discount_bp = Money::to_percent_bp($discount_raw);
 
                 if ($discount_bp === null) {
-                    $response['message'] = 'Line '.($index + 1).' has an invalid discount';
+                    $response['message'] = 'Line '.($index + 1).' has an invalid discount percentage';
+                    $response['line'] = $index;
+                    echo json_encode($response);
+                    return;
+                }
+            }
+
+            if ($discount_type === 'Amount') {
+
+                $discount_fixed = Money::to_cents($discount_raw);
+
+                if ($discount_fixed === null || $discount_fixed < 0) {
+                    $response['message'] = 'Line '.($index + 1).' has an invalid discount amount';
                     $response['line'] = $index;
                     echo json_encode($response);
                     return;
@@ -3694,11 +3716,13 @@ class ApiController extends Controller {
             }
 
             $clean[] = array(
-                'item_description'    => $description,
-                'quantity_milli'      => $quantity,
-                'unit_amount_cents'   => $unit_amount,
-                'discount_percent_bp' => $discount_bp,
-                'service_id'          => 0
+                'item_description'      => $description,
+                'quantity_milli'        => $quantity,
+                'unit_amount_cents'     => $unit_amount,
+                'discount_type'         => $discount_type,
+                'discount_percent_bp'   => $discount_bp,
+                'discount_amount_cents' => $discount_fixed,
+                'service_id'            => 0
             );
         }
 
@@ -3928,7 +3952,7 @@ class ApiController extends Controller {
                     $coupon = StripeService::create_invoice_coupon(
                         $account_id,
                         $invoice['currency'],
-                        'Percent',
+                        $item['discount_type'],
                         $item['discount_percent_bp'],
                         $item['discount_cents'],
                         $company_id,
