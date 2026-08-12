@@ -1,23 +1,6 @@
 <?php
-/**
- * What each plan allows, held in the application rather than in Stripe or a
- * table. Stripe stays the authority on what is charged - price, currency and
- * interval - because that is what actually moves money and a second copy could
- * disagree with it. What a plan *permits* is product definition: it changes with
- * a release, belongs in version control, and is read all over the system.
- *
- * Keyed on the product name rather than the price id on purpose. Price ids differ
- * between test and live mode, so a keyed-by-id catalogue would silently describe
- * nothing the moment the production key was swapped in. The name is the one
- * identifier that survives that.
- *
- * The limits are the single source: the sentences printed on a pricing card are
- * generated from the same numbers the system enforces, so the card can never
- * promise a ceiling the application does not apply.
- */
 class Plans {
 
-    /** A limit of null is no limit. */
     private static function catalog(): array
     {
         return array(
@@ -43,7 +26,6 @@ class Plans {
         );
     }
 
-    /** The plan a company is on, by name. Unknown names get the tightest limits. */
     public static function limits(string $plan_name): array
     {
         $catalog = self::catalog();
@@ -55,28 +37,21 @@ class Plans {
         );
     }
 
-    /** Whether one more of something is allowed, given how many exist already. */
     public static function allows(string $plan_name, string $limit, int $existing): bool
     {
         $limits = self::limits($plan_name);
-        $cap    = $limits[$limit] ?? 0;
+
+        if (!array_key_exists($limit, $limits)) {
+            return false;
+        }
+
+        $cap = $limits[$limit];
 
         return $cap === null || $existing < $cap;
     }
 
-    /**
-     * The sentences a pricing card shows, written from the limits themselves so
-     * the two cannot drift. A plan with no ceilings says so once rather than
-     * listing "unlimited" three times.
-     */
     public static function features(string $plan_name): array
     {
-        $limits = self::limits($plan_name);
-
-        if (count(array_filter($limits, function ($cap) { return $cap !== null; })) === 0) {
-            return array('Unlimited access to everything');
-        }
-
         $labels = array(
             'clients'                 => 'client',
             'projects'                => 'project',
@@ -85,22 +60,21 @@ class Plans {
 
         $features = array();
 
-        foreach ($limits as $key => $cap) {
+        foreach (self::limits($plan_name) as $key => $cap) {
 
             if (!isset($labels[$key])) {
                 continue;
             }
 
-            if ($cap === null) {
-                $features[] = 'Unlimited '.$labels[$key].'s';
-                continue;
-            }
-
-            /* "2 assessments per project", not "2 assessment per projects". */
-            $label = $labels[$key];
+            $label  = $labels[$key];
             $plural = strpos($label, ' ') === false
                 ? $label.'s'
                 : preg_replace('/^(\S+)/', '$1s', $label);
+
+            if ($cap === null) {
+                $features[] = 'Unlimited '.$plural;
+                continue;
+            }
 
             $features[] = 'Up to '.$cap.' '.($cap === 1 ? $label : $plural);
         }
@@ -108,11 +82,6 @@ class Plans {
         return $features;
     }
 
-    /**
-     * Merge the catalogue onto the plans Stripe returned, and put them in the
-     * order given here. Anything Stripe offers that is not described sorts last,
-     * since an undescribed plan is usually one nobody has finished setting up.
-     */
     public static function describe(array $stripe_plans): array
     {
         $catalog = self::catalog();
