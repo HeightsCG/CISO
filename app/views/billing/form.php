@@ -69,7 +69,7 @@
                         <th scope="col" class="num quantity">Quantity</th>
                         <th scope="col" class="num unit">Unit Amount</th>
                         <th scope="col" class="num discount">Discount</th>
-                        <th scope="col" class="num discount-amount">Discount Amount</th>
+                        <th scope="col" class="num discount-amount">Discount $</th>
                         <th scope="col" class="num amount">Amount</th>
                         <th scope="col" class="actions"><span class="sr-only">Remove</span></th>
                     </tr>
@@ -483,7 +483,52 @@ $(document).ready(function () {
         recalculate();
     });
 
+    /**
+     * These three fields feed integer money and quantity arithmetic, so anything
+     * that is not a figure is refused at the keystroke rather than caught at save.
+     * A letter typed into a rate would otherwise sit there looking valid until the
+     * invoice refused to save, with the line total silently reading zero meanwhile.
+     *
+     * The caret is put back where the typing left it, less whatever was dropped -
+     * without that, correcting a character mid-number throws the cursor to the end
+     * and the next keystroke lands in the wrong place.
+     */
+    function numeric_only(field, decimals) {
+
+        var value = field.value;
+        var cleaned = value.replace(/[^0-9.]/g, '');
+        var parts = cleaned.split('.');
+
+        if (parts.length > 2) {
+            cleaned = parts.shift() + '.' + parts.join('');
+        }
+
+        var dot = cleaned.indexOf('.');
+
+        if (dot !== -1 && cleaned.length - dot - 1 > decimals) {
+            cleaned = cleaned.slice(0, dot + decimals + 1);
+        }
+
+        if (cleaned === value) {
+            return;
+        }
+
+        var caret = field.selectionStart - (value.length - cleaned.length);
+
+        field.value = cleaned;
+        field.setSelectionRange(caret < 0 ? 0 : caret, caret < 0 ? 0 : caret);
+    }
+
     $('#line_rows').on('input', 'input', function () {
+
+        var field = $(this).attr('data-field');
+
+        if (field === 'quantity') {
+            numeric_only(this, 3);
+        } else if (field === 'unit_amount' || field === 'discount_value') {
+            numeric_only(this, 2);
+        }
+
         $(this).removeClass('is-invalid');
         recalculate();
     });
