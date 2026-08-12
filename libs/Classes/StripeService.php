@@ -44,6 +44,12 @@ class StripeService {
         return self::cfg('stripe_webhook_secret');
     }
 
+    /** Safe to print: this is the key the browser uses to tokenise a card. */
+    public static function publish_key(): string
+    {
+        return self::cfg('stripe_publish_key');
+    }
+
     public static function configured(): bool
     {
         return strpos(self::api_key(), 'sk_') === 0;
@@ -291,6 +297,398 @@ class StripeService {
             return $customer->toArray();
         } catch (\Throwable $e) {
             self::fail('platform customer create', $e);
+            return array();
+        }
+    }
+
+    /**
+     * The company's own subscription to this platform, or an empty array when it
+     * has none. Read live from Stripe rather than mirrored locally: unlike the
+     * invoices a company raises against its clients, nothing here is composed in
+     * this application, so Stripe is the only writer and a local copy could only
+     * ever be stale.
+     */
+    public static function platform_subscription($customer_id): array
+    {
+        if (!self::configured() || (string) $customer_id === '') {
+            return array();
+        }
+
+        try {
+            $list = self::client()->subscriptions->all(array(
+                'customer' => $customer_id,
+                'status'   => 'all',
+                'limit'    => 10,
+                'expand'   => array('data.default_payment_method')
+            ));
+
+            /* Cancelled and incomplete subscriptions stay on the customer forever,
+               so the live one is picked rather than simply the newest. */
+            foreach ($list->data as $subscription) {
+                if (in_array($subscription->status, array('active', 'trialing', 'past_due', 'unpaid', 'paused'), true)) {
+                    return $subscription->toArray();
+                }
+            }
+
+            /* No live subscription means no subscription, even when cancelled ones
+               remain on the customer forever. Returning the newest of those made a
+               plan the company had already left read as its current one. */
+            return array();
+        } catch (\Throwable $e) {
+            self::fail('platform subscription list', $e);
+            return array();
+        }
+    }
+
+    /** What this platform sells: active recurring prices, newest first. */
+    public static function platform_plans(): array
+    {
+        if (!self::configured()) {
+            return array();
+        }
+
+        try {
+            $list = self::client()->prices->all(array(
+                'active'  => true,
+                'type'    => 'recurring',
+                'limit'   => 20,
+                'expand'  => array('data.product')
+            ));
+
+            $plans = array();
+
+            foreach ($list->data as $price) {
+
+                /* A price whose product has been archived is still active itself,
+                   and would otherwise be offered under a blank name. */
+                if (!is_object($price->product) || $price->product->active !== true) {
+                    continue;
+                }
+
+                $plans[] = array(
+                    'price_id'    => $price->id,
+                    'name'        => $price->product->name,
+                    'description' => (string) $price->product->description,
+                    'currency'    => $price->currency,
+                    'unit_amount' => (int) $price->unit_amount,
+                    'interval'    => $price->recurring->interval,
+                    'interval_count' => (int) $price->recurring->interval_count
+                );
+            }
+
+            return $plans;
+        } catch (\Throwable $e) {
+            self::fail('platform plan list', $e);
+            return array();
+        }
+    }
+
+    /** What this platform has billed the company. */
+    public static function platform_invoices($customer_id, $limit = 12): array
+    {
+        if (!self::configured() || (string) $customer_id === '') {
+            return array();
+        }
+
+        try {
+            $list = self::client()->invoices->all(array(
+                'customer' => $customer_id,
+                'limit'    => (int) $limit
+            ));
+
+            $invoices = array();
+
+            foreach ($list->data as $invoice) {
+                $invoices[] = array(
+                    'number'      => (string) $invoice->number,
+                    'status'      => (string) $invoice->status,
+                    'currency'    => (string) $invoice->currency,
+                    'total'       => (int) $invoice->total,
+                    'created'     => (int) $invoice->created,
+                    'hosted_url'  => (string) $invoice->hosted_invoice_url,
+                    'pdf_url'     => (string) $invoice->invoice_pdf
+                );
+            }
+
+            return $invoices;
+        } catch (\Throwable $e) {
+            self::fail('platform invoice list', $e);
+            return array();
+        }
+    }
+
+    /**
+     * Start the company's subscription to this platform.
+     *
+     * default_incomplete is what makes the card step happen in our own page: the
+     * subscription is created unpaid, Stripe mints a payment intent against its
+     * first invoice, and the browser confirms that intent with Elements. The
+     * alternative - letting Stripe charge immediately - has no moment at which a
+     * card can be collected without sending the person to Stripe.
+     *
+     * confirmation_secret rather than latest_invoice.payment_intent: the invoice
+     * stopped carrying a payment intent in API 2025-03-31.basil, and reading the
+     * old field returns null with no error raised anywhere.
+     */
+    public static function create_platform_subscription($customer_id, $price_id, $company_id): array
+    {
+        if (!self::configured() || (string) $customer_id === '' || (string) $price_id === '') {
+            return array();
+        }
+
+        try {
+            $subscription = self::client()->subscriptions->create(array(
+                'customer' => $customer_id,
+                'items'    => array(array('price' => $price_id)),
+                'payment_behavior' => 'default_incomplete',
+                'payment_settings' => array(
+                    'save_default_payment_method' => 'on_subscription'
+                ),
+                'expand'   => array('latest_invoice.confirmation_secret'),
+                'metadata' => array(
+                    'app'        => 'ciso',
+                    'company_id' => (string) $company_id
+                )
+            ));
+            return $subscription->toArray();
+        } catch (\Throwable $e) {
+            self::fail('platform subscription create', $e);
+            return array();
+        }
+    }
+
+    /**
+     * Move an existing subscription onto a different price. The existing item is
+     * replaced rather than a second one added, and Stripe prorates the difference
+     * so the company is neither double-billed nor given the remainder free.
+     */
+    public static function change_platform_subscription($subscription_id, $item_id, $price_id): array
+    {
+        if (!self::configured() || (string) $subscription_id === '' || (string) $item_id === '') {
+            return array();
+        }
+
+        try {
+            $subscription = self::client()->subscriptions->update($subscription_id, array(
+                'items' => array(array(
+                    'id'    => $item_id,
+                    'price' => $price_id
+                )),
+                'proration_behavior' => 'create_prorations',
+                'expand' => array('latest_invoice.confirmation_secret')
+            ));
+            return $subscription->toArray();
+        } catch (\Throwable $e) {
+            self::fail('platform subscription change', $e);
+            return array();
+        }
+    }
+
+    /**
+     * Cancelling at period end rather than immediately: the company has paid for
+     * the period it is in, and taking access away the moment it clicks cancel
+     * would be keeping money for a service withdrawn.
+     */
+    public static function cancel_platform_subscription($subscription_id, $at_period_end = true): array
+    {
+        if (!self::configured() || (string) $subscription_id === '') {
+            return array();
+        }
+
+        try {
+            if ($at_period_end) {
+                $subscription = self::client()->subscriptions->update($subscription_id, array(
+                    'cancel_at_period_end' => true
+                ));
+            } else {
+                $subscription = self::client()->subscriptions->cancel($subscription_id, array());
+            }
+            return $subscription->toArray();
+        } catch (\Throwable $e) {
+            self::fail('platform subscription cancel', $e);
+            return array();
+        }
+    }
+
+    /** Undo a pending cancellation while the period it was set against is still running. */
+    public static function resume_platform_subscription($subscription_id): array
+    {
+        if (!self::configured() || (string) $subscription_id === '') {
+            return array();
+        }
+
+        try {
+            $subscription = self::client()->subscriptions->update($subscription_id, array(
+                'cancel_at_period_end' => false
+            ));
+            return $subscription->toArray();
+        } catch (\Throwable $e) {
+            self::fail('platform subscription resume', $e);
+            return array();
+        }
+    }
+
+    /** Every card on file, reduced to what is safe and useful to print. */
+    public static function platform_payment_methods($customer_id): array
+    {
+        if (!self::configured() || (string) $customer_id === '') {
+            return array();
+        }
+
+        try {
+            $customer = self::client()->customers->retrieve($customer_id, array());
+            $default  = (string) ($customer->invoice_settings->default_payment_method ?? '');
+
+            $list = self::client()->paymentMethods->all(array(
+                'customer' => $customer_id,
+                'type'     => 'card',
+                'limit'    => 10
+            ));
+
+            $methods = array();
+
+            foreach ($list->data as $method) {
+                $methods[] = array(
+                    'id'        => $method->id,
+                    'brand'     => (string) $method->card->brand,
+                    'last4'     => (string) $method->card->last4,
+                    'exp_month' => (int) $method->card->exp_month,
+                    'exp_year'  => (int) $method->card->exp_year,
+                    'default'   => ($method->id === $default)
+                );
+            }
+
+            return $methods;
+        } catch (\Throwable $e) {
+            self::fail('platform payment method list', $e);
+            return array();
+        }
+    }
+
+    /**
+     * A setup intent lets a card be added without charging it. Same Elements
+     * flow as a payment, so the card still never reaches this application.
+     */
+    public static function create_setup_intent($customer_id): array
+    {
+        if (!self::configured() || (string) $customer_id === '') {
+            return array();
+        }
+
+        try {
+            $intent = self::client()->setupIntents->create(array(
+                'customer' => $customer_id,
+                'usage'    => 'off_session'
+            ));
+            return $intent->toArray();
+        } catch (\Throwable $e) {
+            self::fail('setup intent create', $e);
+            return array();
+        }
+    }
+
+    /** The card future invoices are charged against. */
+    public static function set_default_payment_method($customer_id, $payment_method_id): array
+    {
+        if (!self::configured() || (string) $customer_id === '' || (string) $payment_method_id === '') {
+            return array();
+        }
+
+        try {
+            $customer = self::client()->customers->update($customer_id, array(
+                'invoice_settings' => array('default_payment_method' => $payment_method_id)
+            ));
+            return $customer->toArray();
+        } catch (\Throwable $e) {
+            self::fail('default payment method', $e);
+            return array();
+        }
+    }
+
+    /** Detaching leaves the card unusable for future charges but keeps past ones intact. */
+    public static function detach_payment_method($payment_method_id): array
+    {
+        if (!self::configured() || (string) $payment_method_id === '') {
+            return array();
+        }
+
+        try {
+            $method = self::client()->paymentMethods->detach($payment_method_id, array());
+            return $method->toArray();
+        } catch (\Throwable $e) {
+            self::fail('payment method detach', $e);
+            return array();
+        }
+    }
+
+    /**
+     * Money actually taken, as opposed to invoices raised. An invoice can be void
+     * or open and never move a penny, so the two lists answer different questions
+     * and neither substitutes for the other.
+     */
+    public static function platform_transactions($customer_id, $limit = 12): array
+    {
+        if (!self::configured() || (string) $customer_id === '') {
+            return array();
+        }
+
+        try {
+            $list = self::client()->charges->all(array(
+                'customer' => $customer_id,
+                'limit'    => (int) $limit
+            ));
+
+            $transactions = array();
+
+            foreach ($list->data as $charge) {
+
+                $card = $charge->payment_method_details->card ?? null;
+
+                $transactions[] = array(
+                    'created'   => (int) $charge->created,
+                    'amount'    => (int) $charge->amount,
+                    'refunded'  => (int) $charge->amount_refunded,
+                    'currency'  => (string) $charge->currency,
+                    'status'    => (string) $charge->status,
+                    'brand'     => $card === null ? '' : (string) $card->brand,
+                    'last4'     => $card === null ? '' : (string) $card->last4,
+                    'receipt'   => (string) $charge->receipt_url
+                );
+            }
+
+            return $transactions;
+        } catch (\Throwable $e) {
+            self::fail('platform transaction list', $e);
+            return array();
+        }
+    }
+
+    /** The card on file, reduced to what is safe and useful to print. */
+    public static function platform_payment_method($customer_id): array
+    {
+        if (!self::configured() || (string) $customer_id === '') {
+            return array();
+        }
+
+        try {
+            $customer = self::client()->customers->retrieve($customer_id, array(
+                'expand' => array('invoice_settings.default_payment_method')
+            ));
+
+            $method = $customer->invoice_settings->default_payment_method ?? null;
+
+            if ($method === null || $method->type !== 'card') {
+                return array();
+            }
+
+            return array(
+                'brand'     => (string) $method->card->brand,
+                'last4'     => (string) $method->card->last4,
+                'exp_month' => (int) $method->card->exp_month,
+                'exp_year'  => (int) $method->card->exp_year
+            );
+        } catch (\Throwable $e) {
+            self::fail('platform payment method', $e);
             return array();
         }
     }

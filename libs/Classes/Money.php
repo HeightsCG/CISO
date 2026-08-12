@@ -184,6 +184,28 @@ class Money {
         return number_format(((int) $cents) / 100, 2);
     }
 
+    /**
+     * The symbol a price is read with, or the currency code when there is no
+     * unambiguous one. A bare $ is only safe where the currency is already known
+     * to be American; AUD and CAD carry their letter so the two cannot be read as
+     * each other, and anything unmapped keeps its code rather than guessing.
+     */
+    public static function symbol($currency): string
+    {
+        $symbols = array(
+            'usd' => '$',
+            'eur' => "\u{20AC}",
+            'gbp' => "\u{A3}",
+            'jpy' => "\u{A5}",
+            'aud' => 'A$',
+            'cad' => 'C$'
+        );
+
+        $code = strtolower((string) $currency);
+
+        return $symbols[$code] ?? (strtoupper($code).' ');
+    }
+
     /** Display form for a quantity held in thousandths, trimmed of empty decimals. */
     public static function format_quantity($quantity_milli): string
     {

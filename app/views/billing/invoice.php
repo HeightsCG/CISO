@@ -5,7 +5,6 @@
         <div>
             <h1 class="page__title"><?php echo ($this->invoice['invoice_number'] === '' ? 'Draft Invoice' : htmlspecialchars($this->invoice['invoice_number'], ENT_QUOTES, 'UTF-8')); ?></h1>
             <div class="invoice-ident">
-                <span class="badge <?php echo ($this->invoice['invoice_status_display'] === 'Paid' ? 'badge--active' : ($this->invoice['invoice_status_display'] === 'Overdue' || $this->invoice['invoice_status_display'] === 'Payment Failed' ? 'badge--critical' : ($this->invoice['invoice_status_display'] === 'Void' || $this->invoice['invoice_status_display'] === 'Written Off' ? 'badge--inactive' : ($this->invoice['invoice_status_display'] === 'Awaiting Payment' ? 'badge--onboarding' : 'badge--admin')))); ?>"><?php echo htmlspecialchars($this->invoice['invoice_status_display'], ENT_QUOTES, 'UTF-8'); ?></span>
                 <span class="invoice-ident__client"><?php echo htmlspecialchars($this->invoice['client_name'], ENT_QUOTES, 'UTF-8'); ?></span>
             </div>
         </div>
@@ -40,133 +39,156 @@
     </div>
     <?php } ?>
 
-    <div class="invoice-layout">
-        <div class="invoice-main">
+    <div class="invoice-main">
 
-            <div class="invoice-doc">
-                <div class="lines__head">
-                    <h2 class="lines__title">Line Items</h2>
-                    <span class="lines__count"><?php echo count($this->items); ?> <?php echo (count($this->items) === 1 ? 'line' : 'lines'); ?></span>
-                </div>
-                <div class="table-wrap lines__scroll">
-                    <table class="data ledger ledger--static">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="idx"><span class="sr-only">Line</span></th>
-                                <th scope="col">Description</th>
-                                <th scope="col" class="num quantity">Quantity</th>
-                                <th scope="col" class="num unit">Unit Amount</th>
-                                <th scope="col" class="num discount-amount">Discount</th>
-                                <th scope="col" class="num amount">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php $line = 0; foreach ($this->items as $item) { $line++; ?>
-                            <tr>
-                                <td class="idx"><?php echo $line; ?></td>
-                                <td class="ledger__desc"><?php echo htmlspecialchars($item['item_description'], ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td class="num"><?php echo htmlspecialchars(Money::format_quantity($item['quantity_milli']), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td class="num"><?php echo htmlspecialchars(Money::figure($item['unit_amount_cents']), ENT_QUOTES, 'UTF-8'); ?></td>
-                                <td class="num"><?php echo ((int) $item['discount_cents'] === 0 ? '<span class="ledger__none">&mdash;</span>' : htmlspecialchars(($item['discount_type'] === 'Percent' ? Money::format_percent($item['discount_percent_bp']).'% · ' : '').'-'.Money::figure($item['discount_cents']), ENT_QUOTES, 'UTF-8')); ?></td>
-                                <td class="num ledger__amount"><?php echo htmlspecialchars(Money::figure($item['amount_cents']), ENT_QUOTES, 'UTF-8'); ?></td>
-                            </tr>
-                            <?php } ?>
-                            <?php if (count($this->items) === 0) { ?>
-                            <tr>
-                                <td colspan="6">
-                                    <div class="lines__empty">
-                                        <p class="lines__empty-title">No Line Items</p>
-                                        <p class="lines__empty-text">This invoice has no lines on it.</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <?php if ($this->invoice['invoice_memo'] !== '') { ?>
-            <div class="invoice-doc invoice-doc--footer">
-                <div class="commit">
-                    <div class="form-group commit__field">
-                        <span class="lbl">Description <span class="label__note">printed above the line items</span></span>
-                        <p class="commit__text"><?php echo nl2br(htmlspecialchars($this->invoice['invoice_memo'], ENT_QUOTES, 'UTF-8')); ?></p>
+        <div class="invoice-doc invoice-doc--header">
+            <div class="masthead masthead--invoice<?php echo ($this->invoice['invoice_status'] === 'Draft' ? '' : ' masthead--has-status'); ?>">
+                <div class="masthead__cell">
+                    <span class="lbl">Bill to</span>
+                    <div class="masthead__value"><a href="/clients/detail/id/<?php echo (int) $this->invoice['client_id']; ?>"><?php echo htmlspecialchars($this->invoice['client_name'], ENT_QUOTES, 'UTF-8'); ?></a></div>
+                    <div class="masthead__sub">
+                        <?php echo ($this->invoice['client_address_1'] === '' ? '' : htmlspecialchars($this->invoice['client_address_1'], ENT_QUOTES, 'UTF-8').'<br>'); ?>
+                        <?php echo ($this->invoice['client_address_2'] === '' ? '' : htmlspecialchars($this->invoice['client_address_2'], ENT_QUOTES, 'UTF-8').'<br>'); ?>
+                        <?php echo htmlspecialchars(trim(implode(', ', array_filter(array($this->invoice['client_city'], trim($this->invoice['client_state'].' '.$this->invoice['client_postal_code'])))))  , ENT_QUOTES, 'UTF-8'); ?>
+                        <?php echo ($this->invoice['client_country'] === '' ? '' : '<br>'.htmlspecialchars($this->invoice['client_country'], ENT_QUOTES, 'UTF-8')); ?>
                     </div>
                 </div>
-            </div>
-            <?php } ?>
-
-            <?php if ($this->invoice['invoice_footer'] !== '') { ?>
-            <div class="invoice-doc invoice-doc--footer">
-                <div class="commit">
-                    <div class="form-group commit__field">
-                        <span class="lbl">Footer Message <span class="label__note">printed at the foot of the invoice</span></span>
-                        <p class="commit__text"><?php echo htmlspecialchars($this->invoice['invoice_footer'], ENT_QUOTES, 'UTF-8'); ?></p>
+                <div class="masthead__cell">
+                    <span class="lbl">Finance contact</span>
+                    <?php if (trim($this->invoice['client_billing_name']) !== '' || trim($this->invoice['client_contact_name']) !== '') { ?>
+                    <div class="masthead__value"><?php echo (trim($this->invoice['client_billing_name']) !== '' ? htmlspecialchars($this->invoice['client_billing_name'], ENT_QUOTES, 'UTF-8') : htmlspecialchars($this->invoice['client_contact_name'], ENT_QUOTES, 'UTF-8')); ?></div>
+                    <?php } ?>
+                    <div class="masthead__sub">
+                        <?php echo (trim($this->invoice['client_billing_email']) !== '' ? htmlspecialchars($this->invoice['client_billing_email'], ENT_QUOTES, 'UTF-8') : (trim($this->invoice['client_contact_email']) !== '' ? '<a href="mailto:'.htmlspecialchars($this->invoice['client_contact_email'], ENT_QUOTES, 'UTF-8').'">'.htmlspecialchars($this->invoice['client_contact_email'], ENT_QUOTES, 'UTF-8').'</a>' : '<span class="billto__warn">No email on file</span>')); ?>
+                        <?php echo (trim($this->invoice['client_contact_phone']) === '' ? '' : '<br>'.htmlspecialchars($this->invoice['client_contact_phone'], ENT_QUOTES, 'UTF-8')); ?>
                     </div>
                 </div>
-            </div>
-            <?php } ?>
-
-        </div>
-
-        <aside class="summary">
-            <h2 class="summary__heading">Invoice</h2>
-
-            <dl class="summary__facts">
-                <div class="summary__fact">
-                    <dt>Client</dt>
-                    <dd><a href="/clients/detail/id/<?php echo (int) $this->invoice['client_id']; ?>"><?php echo htmlspecialchars($this->invoice['client_name'], ENT_QUOTES, 'UTF-8'); ?></a></dd>
-                </div>
-                <div class="summary__fact">
-                    <dt>Project</dt>
-                    <dd><?php echo ($this->invoice['project_name'] === null ? '<span class="ledger__none">&mdash;</span>' : '<a href="/projects/detail/id/'.((int) $this->invoice['project_id']).'">'.htmlspecialchars($this->invoice['project_name'], ENT_QUOTES, 'UTF-8').'</a>'); ?></dd>
-                </div>
-                <div class="summary__fact">
-                    <dt>Origin</dt>
-                    <dd><?php echo ($this->invoice['invoice_origin'] === 'Subscription' ? 'Recurring retainer' : 'One-off invoice'); ?></dd>
-                </div>
-                <div class="summary__fact">
-                    <dt>Created</dt>
-                    <dd><?php echo htmlspecialchars($this->invoice['date_created_display'], ENT_QUOTES, 'UTF-8'); ?></dd>
-                </div>
-                <div class="summary__fact">
-                    <dt>Issued</dt>
-                    <dd><?php echo ($this->invoice['finalized_at'] === null ? '<span class="ledger__none">&mdash;</span>' : htmlspecialchars($this->invoice['finalized_display'], ENT_QUOTES, 'UTF-8')); ?></dd>
-                </div>
-            </dl>
-
-            <div class="summary__money">
-                <?php if ((int) $this->invoice['discount_cents'] > 0) { ?>
-                <div class="summary__row">
-                    <span>Subtotal</span>
-                    <span><?php echo htmlspecialchars(Money::figure($this->invoice['subtotal_cents']), ENT_QUOTES, 'UTF-8'); ?></span>
-                </div>
-                <div class="summary__row">
-                    <span>Discount</span>
-                    <span>-<?php echo htmlspecialchars(Money::figure($this->invoice['discount_cents']), ENT_QUOTES, 'UTF-8'); ?></span>
+                <?php if ($this->invoice['project_name'] !== null) { ?>
+                <div class="masthead__cell">
+                    <span class="lbl">Project</span>
+                    <div class="masthead__value"><a href="/projects/detail/id/<?php echo (int) $this->invoice['project_id']; ?>"><?php echo htmlspecialchars($this->invoice['project_name'], ENT_QUOTES, 'UTF-8'); ?></a></div>
+                    <?php if ($this->invoice['invoice_origin'] === 'Subscription') { ?>
+                    <div class="masthead__sub">Recurring retainer</div>
+                    <?php } ?>
                 </div>
                 <?php } ?>
-                <div class="summary__row">
-                    <span>Total</span>
-                    <span><?php echo htmlspecialchars(Money::figure($this->invoice['total_cents']), ENT_QUOTES, 'UTF-8'); ?></span>
+                <?php if ($this->invoice['invoice_status'] !== 'Draft') { ?>
+                <div class="masthead__cell">
+                    <span class="lbl">Status</span>
+                    <div class="masthead__value"><span class="badge <?php echo ($this->invoice['invoice_status_display'] === 'Paid' ? 'badge--active' : ($this->invoice['invoice_status_display'] === 'Overdue' || $this->invoice['invoice_status_display'] === 'Payment Failed' ? 'badge--critical' : ($this->invoice['invoice_status_display'] === 'Void' || $this->invoice['invoice_status_display'] === 'Written Off' ? 'badge--inactive' : ($this->invoice['invoice_status_display'] === 'Awaiting Payment' ? 'badge--onboarding' : 'badge--admin')))); ?>"><?php echo htmlspecialchars($this->invoice['invoice_status_display'], ENT_QUOTES, 'UTF-8'); ?></span></div>
                 </div>
-                <div class="summary__row">
-                    <span>Paid</span>
-                    <span><?php echo htmlspecialchars(Money::figure($this->invoice['amount_paid_cents']), ENT_QUOTES, 'UTF-8'); ?></span>
+                <?php } ?>
+                <?php if ($this->invoice['finalized_at'] === null) { ?>
+                <div class="masthead__cell">
+                    <span class="lbl">Created</span>
+                    <div class="masthead__value"><?php echo htmlspecialchars($this->invoice['date_created_display'], ENT_QUOTES, 'UTF-8'); ?></div>
+                </div>
+                <?php } else { ?>
+                <div class="masthead__cell">
+                    <span class="lbl">Issued</span>
+                    <div class="masthead__value"><?php echo htmlspecialchars($this->invoice['finalized_display'], ENT_QUOTES, 'UTF-8'); ?></div>
+                    <div class="masthead__sub">Created <?php echo htmlspecialchars($this->invoice['date_created_display'], ENT_QUOTES, 'UTF-8'); ?></div>
+                </div>
+                <?php } ?>
+                <?php if ($this->invoice['due_date'] !== null) { ?>
+                <div class="masthead__cell masthead__cell--due">
+                    <span class="lbl">Due</span>
+                    <div class="masthead__value"><?php echo htmlspecialchars($this->invoice['due_date_display'], ENT_QUOTES, 'UTF-8'); ?></div>
+                </div>
+                <?php } ?>
+            </div>
+        </div>
+
+        <div class="invoice-doc">
+            <div class="lines__head">
+                <h2 class="lines__title">Line Items</h2>
+            </div>
+            <div class="table-wrap lines__scroll">
+                <table class="data ledger ledger--static">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="idx"><span class="sr-only">Line</span></th>
+                            <th scope="col">Description</th>
+                            <th scope="col" class="num quantity">Quantity</th>
+                            <th scope="col" class="num unit">Unit Amount</th>
+                            <th scope="col" class="num discount-amount">Discount</th>
+                            <th scope="col" class="num subtotal">Discount Amount</th>
+                            <th scope="col" class="num amount">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $line = 0; foreach ($this->items as $item) { $line++; ?>
+                        <tr>
+                            <td class="idx"><?php echo $line; ?></td>
+                            <td class="ledger__desc"><?php echo htmlspecialchars($item['item_description'], ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td class="num"><?php echo htmlspecialchars(Money::format_quantity($item['quantity_milli']), ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td class="num"><?php echo htmlspecialchars(Money::figure($item['unit_amount_cents']), ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td class="num"><?php echo ($item['discount_type'] === 'Percent' ? htmlspecialchars(Money::format_percent($item['discount_percent_bp']).'%', ENT_QUOTES, 'UTF-8') : ($item['discount_type'] === 'Amount' ? htmlspecialchars(strtoupper($this->invoice['currency']).' '.Money::figure($item['discount_cents']), ENT_QUOTES, 'UTF-8') : '')); ?></td>
+                            <td class="num"><?php echo ((int) $item['discount_cents'] === 0 ? '' : htmlspecialchars('-'.Money::figure($item['discount_cents']), ENT_QUOTES, 'UTF-8')); ?></td>
+                            <td class="num ledger__amount"><?php echo htmlspecialchars(Money::figure($item['amount_cents']), ENT_QUOTES, 'UTF-8'); ?></td>
+                        </tr>
+                        <?php } ?>
+                        <?php if (count($this->items) === 0) { ?>
+                        <tr>
+                            <td colspan="7">
+                                <div class="lines__empty">
+                                    <p class="lines__empty-title">No Line Items</p>
+                                    <p class="lines__empty-text">This invoice has no lines on it.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <?php } ?>
+                    </tbody>
+                    <tfoot>
+                        <?php if ((int) $this->invoice['discount_cents'] > 0) { ?>
+                        <tr>
+                            <td colspan="6" class="ledger__foot-label">Subtotal</td>
+                            <td class="num ledger__amount"><?php echo htmlspecialchars(Money::figure($this->invoice['subtotal_cents']), ENT_QUOTES, 'UTF-8'); ?></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="ledger__foot-label">Discount</td>
+                            <td class="num ledger__amount">-<?php echo htmlspecialchars(Money::figure($this->invoice['discount_cents']), ENT_QUOTES, 'UTF-8'); ?></td>
+                        </tr>
+                        <?php } ?>
+                        <tr>
+                            <td colspan="6" class="ledger__foot-label">Total</td>
+                            <td class="num ledger__amount"><?php echo htmlspecialchars(Money::figure($this->invoice['total_cents']), ENT_QUOTES, 'UTF-8'); ?></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="ledger__foot-label">Paid</td>
+                            <td class="num ledger__amount"><?php echo htmlspecialchars(Money::figure($this->invoice['amount_paid_cents']), ENT_QUOTES, 'UTF-8'); ?></td>
+                        </tr>
+                        <tr class="ledger__foot-total">
+                            <td colspan="6" class="ledger__foot-label">Outstanding <?php echo htmlspecialchars(strtoupper($this->invoice['currency']), ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td class="num ledger__amount"><?php echo htmlspecialchars(Money::figure($this->invoice['amount_due_cents']), ENT_QUOTES, 'UTF-8'); ?></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <?php if ($this->invoice['invoice_memo'] !== '') { ?>
+        <div class="invoice-doc invoice-doc--footer">
+            <div class="commit">
+                <div class="form-group commit__field">
+                    <span class="lbl">Description <span class="label__note">printed above the line items</span></span>
+                    <p class="commit__text"><?php echo nl2br(htmlspecialchars($this->invoice['invoice_memo'], ENT_QUOTES, 'UTF-8')); ?></p>
                 </div>
             </div>
+        </div>
+        <?php } ?>
 
-            <div class="summary__total">
-                <span>Outstanding <?php echo htmlspecialchars(strtoupper($this->invoice['currency']), ENT_QUOTES, 'UTF-8'); ?></span>
-                <span><?php echo htmlspecialchars(Money::figure($this->invoice['amount_due_cents']), ENT_QUOTES, 'UTF-8'); ?></span>
+        <?php if ($this->invoice['invoice_footer'] !== '') { ?>
+        <div class="invoice-doc invoice-doc--footer">
+            <div class="commit">
+                <div class="form-group commit__field">
+                    <span class="lbl">Footer Message <span class="label__note">printed at the foot of the invoice</span></span>
+                    <p class="commit__text"><?php echo htmlspecialchars($this->invoice['invoice_footer'], ENT_QUOTES, 'UTF-8'); ?></p>
+                </div>
             </div>
+        </div>
+        <?php } ?>
 
-            <div class="summary__due">
-                <span>Due</span>
-                <span><?php echo ($this->invoice['due_date'] === null ? '<span class="ledger__none">&mdash;</span>' : htmlspecialchars($this->invoice['due_date_display'], ENT_QUOTES, 'UTF-8')); ?></span>
-            </div>
-        </aside>
     </div>
 </div>
 

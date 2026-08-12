@@ -130,6 +130,12 @@ $(document).ready(function () {
                         </a>
                     </li>
                     <li>
+                        <a class="dropdown-item" href="/subscription">
+                            <i class="fa-thin fa-rotate"></i>
+                            <span>Subscription</span>
+                        </a>
+                    </li>
+                    <li>
                         <a class="dropdown-item" href="/settings">
                             <i class="fa-thin fa-gear"></i>
                             <span>Settings</span>

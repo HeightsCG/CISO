@@ -4989,6 +4989,26 @@ table.data.lines .num .form-control {
     border-bottom: 1px solid var(--border-strong);
 }
 
+/* The document header of a sent invoice: who it is for, against what, where it
+   stands, and when it is owed - the facts a reader looks for before the lines. */
+.masthead--invoice {
+    grid-template-columns: 1.5fr 1.4fr 1.2fr 1fr 1fr;
+}
+
+/* A draft's title already reads "Draft Invoice", so the status cell only appears
+   once the status is something the heading does not already say. */
+.masthead--has-status {
+    grid-template-columns: 1.5fr 1.4fr 1.2fr 1fr 1fr 1fr;
+}
+
+/* The foot carries the money now, so the last row is the balance and is given
+   the weight the rail's total used to have. */
+table.data.ledger tfoot .ledger__foot-total td {
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-3);
+    border-top: 1px solid var(--border-strong);
+}
+
 .masthead__cell {
     padding: var(--space-4) var(--space-5);
     border-right: 1px solid var(--border);
@@ -5076,6 +5096,7 @@ table.data.ledger th.quantity { width: 124px; }
 table.data.ledger th.unit     { width: 164px; }
 table.data.ledger th.discount { width: 184px; }
 table.data.ledger th.discount-amount { width: 132px; }
+table.data.ledger th.subtotal { width: 148px; }
 table.data.ledger th.amount   { width: 128px; }
 table.data.ledger th.actions  { width: 56px; }
 
@@ -5291,7 +5312,9 @@ table.data.ledger [data-action="remove_line"]:focus-visible {
     color: var(--text-primary);
 }
 
-.lines__head button {
+/* Direct child only: the tab bar puts its own buttons inside this head, and a
+   bare element selector here was styling them as Add Line controls. */
+.lines__head > button {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
@@ -5307,7 +5330,7 @@ table.data.ledger [data-action="remove_line"]:focus-visible {
     cursor: pointer;
 }
 
-.lines__head button:hover {
+.lines__head > button:hover {
     background: var(--surface-sunken);
     border-color: var(--border-strong);
 }
@@ -5349,10 +5372,15 @@ table.data.ledger [data-action="remove_line"]:focus-visible {
 }
 
 .invoice-ident__client {
-    padding-left: var(--space-3);
-    border-left: 1px solid var(--border);
     font-size: var(--fs-body);
     color: var(--text-secondary);
+}
+
+/* The rule separates siblings rather than belonging to the client name, so
+   removing the badge does not leave a divider hanging with nothing before it. */
+.invoice-ident > * + * {
+    padding-left: var(--space-3);
+    border-left: 1px solid var(--border);
 }
 
 .lines__count {
@@ -5365,6 +5393,290 @@ table.data.ledger [data-action="remove_line"]:focus-visible {
 table.data.ledger--static tbody td {
     padding-top: var(--space-3);
     padding-bottom: var(--space-3);
+}
+
+/* The document's own total, closing the column it sums. No tonal band: the rule
+   carries it, the same way the rail's total does, so the two read as one voice. */
+table.data.ledger tfoot td {
+    padding: var(--space-2) var(--space-3);
+    border-top: 0;
+}
+
+/* Only the first foot row is ruled off, so the stack reads as one block closing
+   the column rather than three separately boxed rows. */
+table.data.ledger tfoot tr:first-child td {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-strong);
+}
+
+table.data.ledger tfoot .ledger__foot-label {
+    text-align: right;
+    font-size: 11px;
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+table.data.ledger tfoot .ledger__amount {
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+}
+
+/* The figure the document exists to state, given the weight the rail gives its
+   own total so the two read as one voice. */
+table.data.ledger tfoot .ledger__foot-total td {
+    padding-bottom: var(--space-3);
+}
+
+table.data.ledger tfoot .ledger__foot-total .ledger__amount {
+    font-size: var(--fs-subsection);
+    font-weight: var(--fw-semibold);
+}
+
+/* A plan's own words, under its name. */
+/* Three records of the same account, so they share one panel and are switched
+   between rather than stacked three deep down the page. */
+.lines__head--tabs {
+    padding-top: 0;
+    padding-bottom: 0;
+    align-items: stretch;
+}
+
+.subtabs {
+    display: flex;
+    gap: var(--space-5);
+}
+
+.subtabs__link {
+    padding: var(--space-3) 0;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
+    font-family: inherit;
+    font-size: var(--fs-body);
+    font-weight: var(--fw-medium);
+    color: var(--text-secondary);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.subtabs__link:hover {
+    color: var(--text-primary);
+}
+
+/* The underline sits on the panel's own bottom rule, so the active tab reads as
+   joined to the content below it rather than as a separate control. */
+.subtabs__link.active {
+    border-bottom-color: var(--accent);
+    color: var(--text-primary);
+}
+
+.lines__head--tabs .btn {
+    align-self: center;
+}
+
+/* --------------------------------------------------------------- plans */
+
+/* A plan is a choice, not a record, so the plans are set as things to pick
+   between rather than rows to read down. A table would rank them by position and
+   make the price a field; side by side they are compared on their own terms. */
+.plans__head {
+    margin-bottom: var(--space-4);
+}
+
+.plans__title {
+    margin: 0;
+    font-size: var(--fs-section);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    color: var(--text-primary);
+}
+
+.plans__lede {
+    margin: var(--space-1) 0 0;
+    max-width: 68ch;
+    font-size: var(--fs-body);
+    color: var(--text-secondary);
+}
+
+.plans__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-5);
+}
+
+.plan {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: var(--space-5);
+    background: var(--surface-app);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-panel);
+}
+
+.plan--current {
+    border-color: var(--ok-border);
+    box-shadow: var(--shadow-panel), inset 0 0 0 1px var(--ok-border);
+}
+
+/* Green reads as "in force" rather than "selected", which is what the flag and
+   the border are both saying. It uses the palette's own green so it matches the
+   Active badge elsewhere instead of introducing a second green. */
+.plan__flag {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-5);
+    font-size: 10.5px;
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ok);
+}
+
+.plan__name {
+    margin: 0;
+    font-size: var(--fs-subsection);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    color: var(--text-primary);
+}
+
+.plan__price {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    margin: var(--space-4) 0 0;
+}
+
+.plan__figure {
+    font-size: 30px;
+    font-weight: var(--fw-semibold);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    letter-spacing: -0.015em;
+    color: var(--text-primary);
+}
+
+.plan__cycle {
+    margin: var(--space-1) 0 0;
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+.plan__desc {
+    margin: var(--space-4) 0 0;
+    font-size: var(--fs-body);
+    line-height: var(--lh-normal);
+    color: var(--text-secondary);
+}
+
+.plan__renews {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-top: var(--space-3);
+}
+
+.plan__renews-label {
+    font-size: 10.5px;
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.plan__renews-date {
+    font-size: var(--fs-body);
+    font-weight: var(--fw-medium);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+}
+
+/* Pushed to the foot so the buttons line up across cards of unequal height. */
+.plan__act {
+    margin-top: auto;
+    padding-top: var(--space-5);
+}
+
+
+
+/* A card is one line of facts and its controls, not a table: three cards do not
+   need column headings to be compared. */
+.cards {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.card-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-5);
+    border-bottom: 1px solid var(--border);
+}
+
+.card-row:last-child {
+    border-bottom: 0;
+}
+
+.card-row__id {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    min-width: 200px;
+}
+
+.card-row__brand {
+    font-size: var(--fs-body);
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+}
+
+.card-row__digits,
+.card-row__exp {
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+.card-row__act {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-left: auto;
+}
+
+.card-row__flag {
+    font-size: 10.5px;
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+/* Stripe frames its own fields in here; it needs room, not styling. */
+.pay__element {
+    margin-top: var(--space-4);
+    min-height: 220px;
+}
+
+.commit--split {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-8);
+}
+
+.plan__note {
+    display: block;
+    margin-top: 2px;
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-regular);
+    color: var(--text-muted);
 }
 
 /* Prominent because it is the thing being billed for, but deliberately not

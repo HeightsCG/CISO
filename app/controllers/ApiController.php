@@ -3372,6 +3372,280 @@ class ApiController extends Controller {
      * reused thereafter; the link is minted fresh every time because Stripe's
      * onboarding links are single use and expire within minutes.
      */
+    /** The company's own row, for the platform-side subscription actions. */
+    private function platform_customer_id(): string
+    {
+        $company = $this->companies_model->get_company(Session::get('company_id'));
+
+        if (!is_array($company) || count($company) !== 1) {
+            return '';
+        }
+
+        return (string) ($company[0]['platform_customer_id'] ?? '');
+    }
+
+    /**
+     * Start a subscription to this platform. The subscription comes back
+     * incomplete with a client secret; the browser confirms the card against it
+     * with Stripe Elements, so no card detail ever reaches this server.
+     */
+    public function subscription_startAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        if (!StripeService::configured()) {
+            $response['message'] = 'Stripe is not configured on this installation';
+            echo json_encode($response);
+            return;
+        }
+
+        $customer_id = $this->platform_customer_id();
+        $price_id    = trim((string) ($this->post['price_id'] ?? ''));
+
+        if ($customer_id === '' || strpos($price_id, 'price_') !== 0) {
+            $response['message'] = 'That plan could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        $subscription = StripeService::create_platform_subscription($customer_id, $price_id, Session::get('company_id'));
+
+        if (empty($subscription['id'])) {
+            $response['message'] = 'Stripe could not start the subscription: '.StripeService::last_error();
+            echo json_encode($response);
+            return;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Subscription started';
+        $response['client_secret'] = $subscription['latest_invoice']['confirmation_secret']['client_secret'] ?? '';
+        echo json_encode($response);
+    }
+
+    /** Move to a different plan. */
+    public function subscription_changeAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $customer_id = $this->platform_customer_id();
+        $price_id    = trim((string) ($this->post['price_id'] ?? ''));
+
+        if ($customer_id === '' || strpos($price_id, 'price_') !== 0) {
+            $response['message'] = 'That plan could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        $current = StripeService::platform_subscription($customer_id);
+
+        if (empty($current['id']) || empty($current['items']['data'][0]['id'])) {
+            $response['message'] = 'There is no subscription to change';
+            echo json_encode($response);
+            return;
+        }
+
+        $changed = StripeService::change_platform_subscription($current['id'], $current['items']['data'][0]['id'], $price_id);
+
+        if (empty($changed['id'])) {
+            $response['message'] = 'Stripe could not change the plan: '.StripeService::last_error();
+            echo json_encode($response);
+            return;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Plan changed';
+        $response['client_secret'] = $changed['latest_invoice']['confirmation_secret']['client_secret'] ?? '';
+        echo json_encode($response);
+    }
+
+    /** Start adding a card. The browser confirms the setup intent with Elements. */
+    public function payment_method_addAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $customer_id = $this->platform_customer_id();
+
+        if ($customer_id === '') {
+            $response['message'] = 'This company has no billing record yet';
+            echo json_encode($response);
+            return;
+        }
+
+        $intent = StripeService::create_setup_intent($customer_id);
+
+        if (empty($intent['client_secret'])) {
+            $response['message'] = 'Stripe could not start the card setup: '.StripeService::last_error();
+            echo json_encode($response);
+            return;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Ready';
+        $response['client_secret'] = $intent['client_secret'];
+        echo json_encode($response);
+    }
+
+    /** Choose which card future invoices are charged against. */
+    public function payment_method_defaultAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $customer_id = $this->platform_customer_id();
+        $method_id   = trim((string) ($this->post['payment_method_id'] ?? ''));
+
+        if ($customer_id === '' || strpos($method_id, 'pm_') !== 0) {
+            $response['message'] = 'That card could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        /* Checked against this customer's own cards before use: a payment method
+           id is guessable enough that it must never be taken on trust from POST. */
+        if (!$this->owns_payment_method($customer_id, $method_id)) {
+            $response['message'] = 'That card could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        $updated = StripeService::set_default_payment_method($customer_id, $method_id);
+
+        if (empty($updated['id'])) {
+            $response['message'] = 'Stripe could not set the default card: '.StripeService::last_error();
+            echo json_encode($response);
+            return;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Default card updated';
+        echo json_encode($response);
+    }
+
+    /** Remove a card from the company's billing record. */
+    public function payment_method_removeAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $customer_id = $this->platform_customer_id();
+        $method_id   = trim((string) ($this->post['payment_method_id'] ?? ''));
+
+        if ($customer_id === '' || strpos($method_id, 'pm_') !== 0 || !$this->owns_payment_method($customer_id, $method_id)) {
+            $response['message'] = 'That card could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        $detached = StripeService::detach_payment_method($method_id);
+
+        if (empty($detached['id'])) {
+            $response['message'] = 'Stripe could not remove the card: '.StripeService::last_error();
+            echo json_encode($response);
+            return;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Card removed';
+        echo json_encode($response);
+    }
+
+    /** Whether a payment method really belongs to this company's customer. */
+    private function owns_payment_method(string $customer_id, string $method_id): bool
+    {
+        foreach (StripeService::platform_payment_methods($customer_id) as $method) {
+            if ($method['id'] === $method_id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /** Stop at the end of the period already paid for. */
+    public function subscription_cancelAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $current = StripeService::platform_subscription($this->platform_customer_id());
+
+        if (empty($current['id'])) {
+            $response['message'] = 'There is no subscription to cancel';
+            echo json_encode($response);
+            return;
+        }
+
+        $cancelled = StripeService::cancel_platform_subscription($current['id'], true);
+
+        if (empty($cancelled['id'])) {
+            $response['message'] = 'Stripe could not cancel the subscription: '.StripeService::last_error();
+            echo json_encode($response);
+            return;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'The subscription will end at the close of this period';
+        echo json_encode($response);
+    }
+
+    /** Undo a pending cancellation. */
+    public function subscription_resumeAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $current = StripeService::platform_subscription($this->platform_customer_id());
+
+        if (empty($current['id'])) {
+            $response['message'] = 'There is no subscription to resume';
+            echo json_encode($response);
+            return;
+        }
+
+        $resumed = StripeService::resume_platform_subscription($current['id']);
+
+        if (empty($resumed['id'])) {
+            $response['message'] = 'Stripe could not resume the subscription: '.StripeService::last_error();
+            echo json_encode($response);
+            return;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'The subscription will continue';
+        echo json_encode($response);
+    }
+
     public function stripe_connect_startAction(){
 
         $this->refuse_unless_company_admin();
