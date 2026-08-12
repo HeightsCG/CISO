@@ -217,6 +217,8 @@ class InvoicesModel extends Model {
                     item_description,
                     quantity_milli,
                     unit_amount_cents,
+                    discount_percent_bp,
+                    discount_cents,
                     amount_cents,
                     sort_order
                 FROM
@@ -293,50 +295,63 @@ class InvoicesModel extends Model {
 
             $insert = $this->db->prepare(
                 "INSERT INTO invoice_items
-                    (invoice_id, service_id, line_source, item_description, quantity_milli, unit_amount_cents, amount_cents, sort_order, updated_by, date_created, date_updated)
+                    (invoice_id, service_id, line_source, item_description, quantity_milli, unit_amount_cents, discount_percent_bp, discount_cents, amount_cents, sort_order, updated_by, date_created, date_updated)
                  VALUES
-                    (:invoice_id, :service_id, :line_source, :item_description, :quantity_milli, :unit_amount_cents, :amount_cents, :sort_order, :updated_by, :date_created, :date_updated)"
+                    (:invoice_id, :service_id, :line_source, :item_description, :quantity_milli, :unit_amount_cents, :discount_percent_bp, :discount_cents, :amount_cents, :sort_order, :updated_by, :date_created, :date_updated)"
             );
 
             $subtotal = 0;
+            $discount = 0;
             $sort     = 0;
 
             foreach ($lines as $line) {
 
-                $amount    = Money::line_amount($line['quantity_milli'], $line['unit_amount_cents']);
-                $subtotal += $amount;
+                /* amount_cents is the net the client pays for the line. The gross
+                   and the discount are kept beside it so the invoice can show what
+                   was taken off rather than only the figure that survived. */
+                $gross         = Money::line_amount($line['quantity_milli'], $line['unit_amount_cents']);
+                $line_discount = Money::discount_cents($gross, 'Percent', $line['discount_percent_bp'] ?? 0, 0);
+
+                $subtotal += $gross;
+                $discount += $line_discount;
 
                 $insert->execute(array(
-                    'invoice_id'        => $invoice_id,
-                    'service_id'        => (int) ($line['service_id'] ?? 0),
-                    'line_source'       => 'Local',
-                    'item_description'  => $line['item_description'],
-                    'quantity_milli'    => $line['quantity_milli'],
-                    'unit_amount_cents' => $line['unit_amount_cents'],
-                    'amount_cents'      => $amount,
-                    'sort_order'        => $sort,
-                    'updated_by'        => $updated_by,
-                    'date_created'      => $now,
-                    'date_updated'      => $now
+                    'invoice_id'          => $invoice_id,
+                    'service_id'          => (int) ($line['service_id'] ?? 0),
+                    'line_source'         => 'Local',
+                    'item_description'    => $line['item_description'],
+                    'quantity_milli'      => $line['quantity_milli'],
+                    'unit_amount_cents'   => $line['unit_amount_cents'],
+                    'discount_percent_bp' => (int) ($line['discount_percent_bp'] ?? 0),
+                    'discount_cents'      => $line_discount,
+                    'amount_cents'        => $gross - $line_discount,
+                    'sort_order'          => $sort,
+                    'updated_by'          => $updated_by,
+                    'date_created'        => $now,
+                    'date_updated'        => $now
                 ));
 
                 $sort++;
             }
 
+            /* The invoice's discount is the sum of what the lines gave away, not a
+               figure of its own, so the two can never disagree. */
             $total = $this->db->prepare(
                 "UPDATE invoices
                     SET subtotal_cents = :subtotal, total_cents = :total, amount_due_cents = :due,
+                        discount_cents = :discount_cents,
                         updated_by = :updated_by, date_updated = :date_updated
                     WHERE id = :invoice_id"
             );
 
             $total->execute(array(
-                'subtotal'     => $subtotal,
-                'total'        => $subtotal,
-                'due'          => $subtotal,
-                'updated_by'   => $updated_by,
-                'date_updated' => $now,
-                'invoice_id'   => $invoice_id
+                'subtotal'       => $subtotal,
+                'total'          => $subtotal - $discount,
+                'due'            => $subtotal - $discount,
+                'discount_cents' => $discount,
+                'updated_by'     => $updated_by,
+                'date_updated'   => $now,
+                'invoice_id'     => $invoice_id
             ));
 
             $this->db->commit();

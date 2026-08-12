@@ -5,136 +5,140 @@
     <div class="page__head">
         <div>
             <h1 class="page__title"><?php echo ($this->invoice === null ? 'New Invoice' : 'Edit Draft'); ?></h1>
-            <div class="client__meta">
-                <span class="client__segment">Nothing is sent until you choose Send on the next screen</span>
-            </div>
         </div>
-        <?php if ($this->invoice !== null) { ?>
         <div class="page__actions">
+            <span class="badge badge--prospect">Draft</span>
+            <?php if ($this->invoice !== null) { ?>
             <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete</button>
+            <?php } ?>
         </div>
-        <?php } ?>
     </div>
 
-    <div class="row g-4 invoice-form">
-        <div class="col-lg-9">
-            <div class="panel">
-                <div class="invoice-form__section">
-                    <div class="invoice-form__section-head">
-                        <h2 class="invoice-form__heading">Invoice details</h2>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 form-group">
-                            <label for="client_id">Bill to</label>
-                            <select class="form-control" id="client_id">
-                                <option value="0">Select a client</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <label for="project_id">Project</label>
-                            <select class="form-control" id="project_id">
-                                <option value="0">No project</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <label for="due_terms">Payment terms</label>
-                            <div class="terms">
-                                <select class="form-control" id="due_terms">
-                                    <option value="0">Due on receipt</option>
-                                    <option value="7">Net 7</option>
-                                    <option value="14">Net 14</option>
-                                    <option value="30" selected>Net 30</option>
-                                    <option value="45">Net 45</option>
-                                    <option value="60">Net 60</option>
-                                    <option value="custom">Choose a date</option>
-                                </select>
-                                <input type="date" class="form-control terms__date" id="due_date" hidden value="<?php echo ($this->invoice === null || $this->invoice['due_date'] === null ? '' : htmlspecialchars($this->invoice['due_date'], ENT_QUOTES, 'UTF-8')); ?>">
+    <div class="invoice-layout">
+    <div class="invoice-doc">
+
+        <div class="masthead">
+            <div class="masthead__cell">
+                <label for="client_id">Bill to</label>
+                <select class="form-control" id="client_id">
+                    <option value="0">Select a client</option>
+                </select>
+            </div>
+            <div class="masthead__cell">
+                <label for="project_id">Project</label>
+                <select class="form-control" id="project_id">
+                    <option value="0">No project</option>
+                </select>
+            </div>
+            <div class="masthead__cell">
+                <label for="due_terms">Payment terms</label>
+                <select class="form-control" id="due_terms">
+                    <option value="0">Due on receipt</option>
+                    <option value="7">Net 7</option>
+                    <option value="14">Net 14</option>
+                    <option value="30" selected>Net 30</option>
+                    <option value="45">Net 45</option>
+                    <option value="60">Net 60</option>
+                    <option value="custom">Choose a date</option>
+                </select>
+            </div>
+            <div class="masthead__cell masthead__cell--due">
+                <label for="due_date">Due</label>
+                <div class="masthead__value" id="due_display"></div>
+                <div class="masthead__sub" id="due_sub"></div>
+                <input type="date" class="form-control" id="due_date" hidden value="<?php echo ($this->invoice === null || $this->invoice['due_date'] === null ? '' : htmlspecialchars($this->invoice['due_date'], ENT_QUOTES, 'UTF-8')); ?>">
+            </div>
+        </div>
+
+        <div class="invoice-doc__memo">
+            <label for="invoice_memo">Description</label>
+            <textarea class="form-control" id="invoice_memo" rows="2"><?php echo ($this->invoice === null ? '' : htmlspecialchars($this->invoice['invoice_memo'], ENT_QUOTES, 'UTF-8')); ?></textarea>
+        </div>
+
+        <div class="table-wrap lines__scroll">
+            
+            <div class="lines__add">
+                <button type="button" id="add_line"><i class="fa-regular fa-plus"></i> Add Line</button>
+            </div>
+
+            <table class="data ledger table">
+                <thead>
+                    <tr>
+                        <th scope="col" class="idx"><span class="sr-only">Line</span></th>
+                        <th scope="col">Description</th>
+                        <th scope="col" class="num quantity text-center">Quantity</th>
+                        <th scope="col" class="num unit text-center">Unit amount</th>
+                        <th scope="col" class="num discount text-center">Discount %</th>
+                        <th scope="col" class="num amount text-center">Amount</th>
+                        <th scope="col" class="actions"><span class="sr-only">Remove</span></th>
+                    </tr>
+                </thead>
+                <tbody id="line_rows"></tbody>
+                <tbody id="lines_empty">
+                    <tr>
+                        <td colspan="7">
+                            <div class="lines__empty">
+                                <p class="lines__empty-title">No Line Items</p>
+                                <p class="lines__empty-text">Add a line for each service you are billing, then set its quantity and unit amount.</p>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-12 form-group">
-                            <label for="invoice_memo">Description</label>
-                            <textarea class="form-control" id="invoice_memo" rows="2"><?php echo ($this->invoice === null ? '' : htmlspecialchars($this->invoice['invoice_memo'], ENT_QUOTES, 'UTF-8')); ?></textarea>
-                        </div>
-                    </div>
-                </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-                <div class="invoice-form__section">
-                    <div class="invoice-form__section-head">
-                        <h2 class="invoice-form__heading">Line Items</h2>
-                        <button type="button" class="btn btn--tertiary btn--sm" id="add_line"><i class="fa-regular fa-plus"></i> Add Line</button>
-                    </div>
-                    <div class="table-wrap lines__scroll" id="lines_table">
-                        <table class="data lines">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Description</th>
-                                    <th scope="col" class="num" style="width:110px">Quantity</th>
-                                    <th scope="col" class="num" style="width:150px">Unit Amount</th>
-                                    <th scope="col" class="num" style="width:150px">Amount</th>
-                                    <th scope="col" class="actions"></th>
-                                </tr>
-                            </thead>
-                            <tbody id="line_rows"></tbody>
-                            <tfoot id="lines_foot" hidden>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <th scope="row">Total</th>
-                                    <td class="num lines__total"><span id="total_currency"></span> <span id="lines_total">0.00</span></td>
-                                    <td></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        <p class="controls__empty" id="lines_empty">Nothing to see here yet</p>
-                    </div>
-                </div>
-
-                <div class="invoice-form__section">
-                    <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label for="invoice_footer">Footer Message</label>
-                            <textarea class="form-control" id="invoice_footer" rows="2"><?php echo ($this->invoice === null ? '' : htmlspecialchars($this->invoice['invoice_footer'], ENT_QUOTES, 'UTF-8')); ?></textarea>
-                        </div>
-                    </div>
-                </div>
-
+        <div class="commit">
+            <div class="form-group commit__field">
+                <label for="invoice_footer">Footer message <span class="label__note">printed at the foot of the invoice</span></label>
+                <input type="text" class="form-control" id="invoice_footer" placeholder="Thank you. Payment is accepted by card or bank transfer." value="<?php echo ($this->invoice === null ? '' : htmlspecialchars($this->invoice['invoice_footer'], ENT_QUOTES, 'UTF-8')); ?>">
             </div>
         </div>
 
-        <div class="col-lg-3">
-            <div class="panel">
-                <div class="invoice-form__section">
-                    <h2 class="invoice-form__heading">Summary</h2>
-                    <dl class="rail__facts">
-                        <div class="rail__fact">
-                            <dt>Status</dt>
-                            <dd><span class="badge badge--prospect">Draft</span></dd>
-                        </div>
-                        <div class="rail__fact" id="rail_client_fact" hidden>
-                            <dt>Bill to</dt>
-                            <dd id="rail_client"></dd>
-                        </div>
-                        <div class="rail__fact" id="rail_project_fact" hidden>
-                            <dt>Project</dt>
-                            <dd id="rail_project"></dd>
-                        </div>
-                        <div class="rail__fact" id="rail_due_fact" hidden>
-                            <dt>Due</dt>
-                            <dd id="rail_due"></dd>
-                        </div>
-                    </dl>
-                </div>
+    </div>
 
-                <div class="invoice-form__section">
-                    <div class="rail__actions">
-                        <a class="btn btn--secondary" href="/billing">Cancel</a>
-                        <button type="button" id="do_save" class="btn btn--primary">Save draft</button>
-                    </div>
-                </div>
+    <aside class="summary">
+        <h2 class="summary__heading">Summary</h2>
+        <dl class="summary__facts">
+            <div class="summary__fact">
+                <dt>Status</dt>
+                <dd><span class="badge badge--prospect">Draft</span></dd>
+            </div>
+            <div class="summary__fact" id="rail_client_fact" hidden>
+                <dt>Bill to</dt>
+                <dd id="rail_client"></dd>
+            </div>
+            <div class="summary__fact" id="rail_project_fact" hidden>
+                <dt>Project</dt>
+                <dd id="rail_project"></dd>
+            </div>
+            <div class="summary__fact" id="rail_due_fact" hidden>
+                <dt>Due</dt>
+                <dd id="rail_due"></dd>
+            </div>
+        </dl>
+
+        <div class="summary__money">
+            <div class="summary__row" id="subtotal_row" hidden>
+                <span>Subtotal</span>
+                <span id="lines_subtotal">0.00</span>
+            </div>
+            <div class="summary__row summary__row--credit" id="discount_row" hidden>
+                <span>Discount</span>
+                <span id="discount_amount">0.00</span>
             </div>
         </div>
+
+        <div class="summary__total">
+            <span>Total <?php echo htmlspecialchars(strtoupper($this->invoice === null ? ($this->company['default_currency'] ?? 'usd') : $this->invoice['currency']), ENT_QUOTES, 'UTF-8'); ?></span>
+            <span id="lines_total">0.00</span>
+        </div>
+
+        <div class="summary__actions">
+            <a class="btn btn--secondary" href="/billing">Cancel</a>
+            <button type="button" id="do_save" class="btn btn--primary">Save Invoice</button>
+        </div>
+    </aside>
+
     </div>
 </div>
 
@@ -216,13 +220,44 @@ $(document).ready(function () {
         return sign + whole.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '.' + rest;
     }
 
-    function row_amount(row) {
-        var quantity = to_quantity($(row).find('[data-field=quantity]').val());
-        var unit = to_cents($(row).find('[data-field=unit_amount]').val());
-        if (quantity === null || unit === null) {
+    /** A percentage as typed into basis points, or null when it is not one. */
+    function to_percent_bp(raw) {
+        var value = String(raw === undefined || raw === null ? '' : raw).replace(/[,\s%]/g, '');
+        if (value === '') {
+            return 0;
+        }
+        var parts = /^(\d{1,3})(?:\.(\d{1,2}))?$/.exec(value);
+        if (parts === null) {
             return null;
         }
-        return Math.round(quantity * unit / 1000);
+        var fraction = parts[2] === undefined ? '00' : (parts[2] + '0').slice(0, 2);
+        var bp = parseInt(parts[1], 10) * 100 + parseInt(fraction, 10);
+        return bp > 10000 ? null : bp;
+    }
+
+    /**
+     * The gross line, its discount, and what is left. The discount is rounded once
+     * here and the net is gross minus that rounded figure, so a line's amount is
+     * always exactly the two numbers above it and cannot drift by a cent.
+     */
+    function row_amount(row) {
+
+        var quantity = to_quantity($(row).find('[data-field=quantity]').val());
+        var unit = to_cents($(row).find('[data-field=unit_amount]').val());
+        var bp = to_percent_bp($(row).find('[data-field=discount_percent]').val());
+
+        if (quantity === null || unit === null || bp === null) {
+            return null;
+        }
+
+        var gross = Math.round(quantity * unit / 1000);
+        var discount = bp === 0 ? 0 : Math.floor((gross * bp + 5000) / 10000);
+
+        if (discount > gross) {
+            discount = gross;
+        }
+
+        return { gross: gross, discount: discount, net: gross - discount };
     }
 
     function recalculate() {
@@ -230,32 +265,39 @@ $(document).ready(function () {
         var rows = $('#line_rows tr').length;
 
         $('#lines_empty').prop('hidden', rows > 0);
-        $('#lines_foot').prop('hidden', rows === 0);
 
-        var total = 0;
-        var priced = 0;
-        $('#line_rows tr').each(function () {
-            var amount = row_amount(this);
-            $(this).find('[data-cell=amount]').text(money(amount === null ? 0 : amount));
-            if (amount !== null) {
-                total += amount;
-                priced++;
+        var subtotal = 0;
+        var discount = 0;
+
+        $('#line_rows tr').each(function (position) {
+            var line = row_amount(this);
+            $(this).find('[data-cell=idx]').text(position + 1);
+            $(this).find('[data-cell=amount]').text(money(line === null ? 0 : line.net));
+            if (line !== null) {
+                subtotal += line.gross;
+                discount += line.discount;
             }
         });
-        $('#total_currency').text(currency);
-        $('#lines_total').text(money(total));
 
-        render_rail();
+        $('#subtotal_row').prop('hidden', discount === 0);
+        $('#discount_row').prop('hidden', discount === 0);
+        $('#lines_subtotal').text(money(subtotal));
+        $('#discount_amount').text('-' + money(discount));
+        $('#lines_total').text(money(subtotal - discount));
+
+        render_masthead();
     }
 
-    function add_line(description, quantity, unit_amount) {
+    function add_line(description, quantity, unit_amount, discount_percent) {
         var idx = next_idx;
         next_idx++;
         var html = '<tr data-idx="' + idx + '">'
+            + '<td class="idx" data-cell="idx"></td>'
             + '<td><input type="text" class="form-control" data-field="description" aria-label="Description" value="' + esc(description) + '"></td>'
-            + '<td class="num"><input type="text" class="form-control" data-field="quantity" inputmode="decimal" aria-label="Quantity" value="' + esc(quantity) + '"></td>'
-            + '<td class="num"><input type="text" class="form-control" data-field="unit_amount" inputmode="decimal" aria-label="Unit price" value="' + esc(unit_amount) + '"></td>'
-            + '<td class="num lines__row-amount" data-cell="amount">0.00</td>'
+            + '<td class="num"><input type="text" class="form-control text-center" data-field="quantity" inputmode="decimal" aria-label="Quantity" value="' + esc(quantity) + '"></td>'
+            + '<td class="num"><input type="text" class="form-control text-center" data-field="unit_amount" inputmode="decimal" aria-label="Unit price" value="' + esc(unit_amount) + '"></td>'
+            + '<td class="num"><input type="text" class="form-control text-center" data-field="discount_percent" inputmode="decimal" aria-label="Discount %" value="' + esc(discount_percent) + '"></td>'
+            + '<td class="num lines__row-amount text-center" data-cell="amount">0.00</td>'
             + '<td class="actions"><button type="button" class="btn btn--tertiary btn--sm" data-action="remove_line" aria-label="Remove line"><i class="fa-regular fa-trash"></i></button></td>'
             + '</tr>';
         $('#line_rows').append(html);
@@ -263,13 +305,14 @@ $(document).ready(function () {
     }
 
     /**
-     * The rail reads the invoice back as it is being written, so the person can see
-     * what the client will get without leaving the form.
+     * The summary reads the invoice back as it is being written, so the person can
+     * see what the client will get without leaving the form. The due cell in the
+     * masthead is written here too, because it is derived from the terms rather
+     * than typed.
      */
-    function render_rail() {
+    function render_masthead() {
 
         var client = clients[$('#client_id').val()];
-        var project = $('#project_id option:selected').text();
         var due = $('#due_date').val();
 
         $('#rail_client_fact').prop('hidden', client === undefined);
@@ -298,22 +341,26 @@ $(document).ready(function () {
         $('#rail_project_fact').prop('hidden', !has_project);
 
         if (has_project) {
-            $('#rail_project').text(project);
+            $('#rail_project').text($('#project_id option:selected').text());
         }
 
         $('#rail_due_fact').prop('hidden', due === '');
+        $('#due_display').text('');
+        $('#due_sub').text('');
 
-        if (due !== '') {
-            var parts = due.split('-');
-            var terms = $('#due_terms').val();
-            var label = esc(parts[1] + '/' + parts[2] + '/' + parts[0]);
-
-            if (terms !== 'custom' && parseInt(terms, 10) > 0) {
-                label += '<br><span class="rail__quiet">' + esc($('#due_terms option:selected').text()) + '</span>';
-            }
-
-            $('#rail_due').html(label);
+        if (due === '') {
+            return;
         }
+
+        var parts = due.split('-');
+        var terms = $('#due_terms').val();
+        var label = parts[1] + '/' + parts[2] + '/' + parts[0];
+        var term_name = terms === 'custom' ? '' : $('#due_terms option:selected').text();
+
+        $('#due_display').text(label);
+        $('#due_sub').text(term_name);
+
+        $('#rail_due').html(esc(label) + (term_name === '' ? '' : '<br><span class="rail__quiet">' + esc(term_name) + '</span>'));
     }
 
 
@@ -329,27 +376,29 @@ $(document).ready(function () {
 
         if (terms === 'custom') {
             $('#due_date').prop('hidden', false);
+            $('#due_display').prop('hidden', true);
             if ($('#due_date').val() === '') {
                 var fallback = new Date();
                 fallback.setDate(fallback.getDate() + 30);
                 $('#due_date').val(fallback.toISOString().slice(0, 10));
             }
-            render_rail();
+            render_masthead();
             return;
         }
 
         $('#due_date').prop('hidden', true);
+        $('#due_display').prop('hidden', false);
 
         var due = new Date();
         due.setDate(due.getDate() + parseInt(terms, 10));
         $('#due_date').val(due.toISOString().slice(0, 10));
-        render_rail();
+        render_masthead();
     }
 
 
     $('#due_terms').change(due_from_terms);
-    $('#due_date').on('change', render_rail);
-    $('#project_id').change(render_rail);
+    $('#due_date').on('change', render_masthead);
+    $('#project_id').change(render_masthead);
 
     $('#line_rows').on('input', 'input', function () {
         $(this).removeClass('is-invalid');
@@ -362,14 +411,14 @@ $(document).ready(function () {
     });
 
     $('#add_line').click(function () {
-        add_line('', '1', '');
+        add_line('', '1', '', '');
         $('#line_rows tr').last().find('[data-field=description]').focus();
     });
 
     $('#client_id').change(function () {
         selected_project = 0;
         load_projects($(this).val());
-        render_rail();
+        render_masthead();
     });
 
     function load_projects(client_id) {
@@ -399,7 +448,7 @@ $(document).ready(function () {
                 $('#client_id').val(selected_client);
                 load_projects(selected_client);
             }
-            render_rail();
+            render_masthead();
         });
     }
 
@@ -442,10 +491,18 @@ $(document).ready(function () {
                 errors++;
             }
 
+            var discount = $(this).find('[data-field=discount_percent]');
+
+            if (to_percent_bp(discount.val()) === null) {
+                discount.addClass('is-invalid');
+                errors++;
+            }
+
             lines.push({
                 item_description: description.val().trim(),
                 quantity: quantity.val().trim(),
-                unit_amount: unit.val().trim()
+                unit_amount: unit.val().trim(),
+                discount_percent: discount.val().trim()
             });
         });
 
@@ -513,7 +570,7 @@ $(document).ready(function () {
     load_clients();
 
     <?php foreach ($this->items as $item) { ?>
-    add_line("<?php echo htmlspecialchars(addslashes($item['item_description']), ENT_QUOTES, 'UTF-8'); ?>", "<?php echo Money::format_quantity($item['quantity_milli']); ?>", "<?php echo number_format($item['unit_amount_cents'] / 100, 2, '.', ''); ?>");
+    add_line("<?php echo htmlspecialchars(addslashes($item['item_description']), ENT_QUOTES, 'UTF-8'); ?>", "<?php echo Money::format_quantity($item['quantity_milli']); ?>", "<?php echo number_format($item['unit_amount_cents'] / 100, 2, '.', ''); ?>", "<?php echo ((int) $item['discount_percent_bp'] === 0 ? '' : Money::format_percent($item['discount_percent_bp'])); ?>");
     <?php } ?>
 
     <?php if ($this->invoice !== null && $this->invoice['due_date'] !== null) { ?>

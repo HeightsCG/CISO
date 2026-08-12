@@ -54,6 +54,7 @@
                                     <th scope="col">Description</th>
                                     <th scope="col" class="num">Qty</th>
                                     <th scope="col" class="num">Unit Price</th>
+                                    <th scope="col" class="num">Discount</th>
                                     <th scope="col" class="num">Amount</th>
                                 </tr>
                             </thead>
@@ -63,6 +64,7 @@
                                     <td><?php echo htmlspecialchars($item['item_description'], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td class="num"><?php echo htmlspecialchars(Money::format_quantity($item['quantity_milli']), ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td class="num"><?php echo htmlspecialchars(Money::format($item['unit_amount_cents'], $this->invoice['currency']), ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td class="num"><?php echo ((int) $item['discount_percent_bp'] === 0 ? '<span class="roster__none">&mdash;</span>' : htmlspecialchars(Money::format_percent($item['discount_percent_bp']).'% · -'.Money::format($item['discount_cents'], $this->invoice['currency']), ENT_QUOTES, 'UTF-8')); ?></td>
                                     <td class="num"><?php echo htmlspecialchars(Money::format($item['amount_cents'], $this->invoice['currency']), ENT_QUOTES, 'UTF-8'); ?></td>
                                 </tr>
                                 <?php } ?>
@@ -94,6 +96,12 @@
                 </div>
                 <div class="panel__body">
                     <dl class="datalist datalist--record">
+                        <?php if ((int) $this->invoice['discount_cents'] > 0) { ?>
+                        <dt>Subtotal</dt>
+                        <dd><?php echo htmlspecialchars(Money::format($this->invoice['subtotal_cents'], $this->invoice['currency']), ENT_QUOTES, 'UTF-8'); ?></dd>
+                        <dt>Discount</dt>
+                        <dd>-<?php echo htmlspecialchars(Money::format($this->invoice['discount_cents'], $this->invoice['currency']), ENT_QUOTES, 'UTF-8'); ?></dd>
+                        <?php } ?>
                         <dt>Total</dt>
                         <dd><?php echo htmlspecialchars($this->invoice['total_display'], ENT_QUOTES, 'UTF-8'); ?></dd>
                         <dt>Paid</dt>

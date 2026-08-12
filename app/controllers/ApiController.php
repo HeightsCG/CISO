@@ -3675,11 +3675,30 @@ class ApiController extends Controller {
                 return;
             }
 
+            /* An empty discount is no discount; anything else has to be a real
+               percentage, because a typo silently read as zero would bill the
+               client the full rate they were told they would not pay. */
+            $discount_raw = trim((string) ($line['discount_percent'] ?? ''));
+            $discount_bp  = 0;
+
+            if ($discount_raw !== '') {
+
+                $discount_bp = Money::to_percent_bp($discount_raw);
+
+                if ($discount_bp === null) {
+                    $response['message'] = 'Line '.($index + 1).' has an invalid discount';
+                    $response['line'] = $index;
+                    echo json_encode($response);
+                    return;
+                }
+            }
+
             $clean[] = array(
-                'item_description'  => $description,
-                'quantity_milli'    => $quantity,
-                'unit_amount_cents' => $unit_amount,
-                'service_id'        => 0
+                'item_description'    => $description,
+                'quantity_milli'      => $quantity,
+                'unit_amount_cents'   => $unit_amount,
+                'discount_percent_bp' => $discount_bp,
+                'service_id'          => 0
             );
         }
 
@@ -3895,6 +3914,37 @@ class ApiController extends Controller {
 
             foreach ($items as $item) {
 
+                /**
+                 * A discounted line reaches Stripe as its gross rate plus a coupon,
+                 * not as a reduced rate, so the client's PDF shows the rate agreed
+                 * and the discount taken off it rather than a price nobody quoted.
+                 * Refusing to continue when the coupon fails is deliberate: pushing
+                 * the line without it would bill the full amount.
+                 */
+                $coupon_id = '';
+
+                if ((int) $item['discount_cents'] > 0) {
+
+                    $coupon = StripeService::create_invoice_coupon(
+                        $account_id,
+                        $invoice['currency'],
+                        'Percent',
+                        $item['discount_percent_bp'],
+                        $item['discount_cents'],
+                        $company_id,
+                        $invoice_id.'-'.$item['id']
+                    );
+
+                    if (empty($coupon['id'])) {
+                        $this->invoices_model->fail_finalize($invoice_id, 'Discount rejected: '.StripeService::last_error(), true);
+                        $response['message'] = 'Stripe rejected a line discount: '.StripeService::last_error();
+                        echo json_encode($response);
+                        return;
+                    }
+
+                    $coupon_id = $coupon['id'];
+                }
+
                 $line = StripeService::add_invoice_line(
                     $account_id,
                     $stripe_invoice_id,
@@ -3904,6 +3954,7 @@ class ApiController extends Controller {
                     $item['quantity_milli'],
                     $item['unit_amount_cents'],
                     $item['amount_cents'],
+                    $coupon_id,
                     $company_id,
                     $invoice_id,
                     $item['id']

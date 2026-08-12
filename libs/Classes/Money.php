@@ -63,6 +63,81 @@ class Money {
         return intdiv($product + 500, 1000);
     }
 
+    /**
+     * A percentage typed by hand into basis points, or null when invalid. Basis
+     * points rather than a float because 12.5% has no exact binary form and the
+     * discount it produces has to reconcile with Stripe's own to the cent.
+     * Capped at 100%: a discount larger than the invoice is not a credit note.
+     */
+    public static function to_percent_bp($raw): ?int
+    {
+        $value = html_entity_decode((string) $raw, ENT_QUOTES, 'UTF-8');
+        $value = str_replace(array(',', ' ', '%'), '', trim($value));
+
+        if ($value === '') {
+            return null;
+        }
+
+        if (!preg_match('/^(\d{1,3})(?:\.(\d{1,2}))?$/', $value, $parts)) {
+            return null;
+        }
+
+        $whole    = (int) $parts[1];
+        $fraction = isset($parts[2]) ? (int) str_pad($parts[2], 2, '0') : 0;
+        $bp       = $whole * 100 + $fraction;
+
+        if ($bp <= 0 || $bp > 10000) {
+            return null;
+        }
+
+        return $bp;
+    }
+
+    /**
+     * The discount resolved to money, rounded once and clamped to the subtotal so
+     * a total can never go negative - Stripe rejects a negative invoice, and a
+     * percentage typed against a subtotal that later shrinks would otherwise
+     * produce one silently.
+     */
+    public static function discount_cents($subtotal_cents, $discount_type, $percent_bp, $amount_cents): int
+    {
+        $subtotal = (int) $subtotal_cents;
+
+        if ($subtotal <= 0) {
+            return 0;
+        }
+
+        if ($discount_type === 'Percent') {
+            $bp = (int) $percent_bp;
+            if ($bp <= 0) {
+                return 0;
+            }
+            $discount = intdiv($subtotal * $bp + 5000, 10000);
+        } elseif ($discount_type === 'Amount') {
+            $discount = (int) $amount_cents;
+        } else {
+            return 0;
+        }
+
+        if ($discount <= 0) {
+            return 0;
+        }
+
+        return $discount > $subtotal ? $subtotal : $discount;
+    }
+
+    /** Display form for a percentage held in basis points, trimmed of empty decimals. */
+    public static function format_percent($percent_bp): string
+    {
+        $percent_bp = (int) $percent_bp;
+
+        if ($percent_bp % 100 === 0) {
+            return (string) intdiv($percent_bp, 100);
+        }
+
+        return rtrim(number_format($percent_bp / 100, 2), '0');
+    }
+
     /** Quantity as typed into minor-of-a-unit thousandths, or null when invalid. */
     public static function to_quantity_milli($raw): ?int
     {

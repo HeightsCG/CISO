@@ -630,7 +630,7 @@ class StripeService {
      * then takes the totals back from Stripe, so its arithmetic is the one of record
      * and the mirror cannot drift from the document the client holds.
      */
-    public static function add_invoice_line($account_id, $stripe_invoice_id, $customer_id, $currency, $description, $quantity_milli, $unit_amount_cents, $amount_cents, $company_id, $invoice_id, $item_id): array
+    public static function add_invoice_line($account_id, $stripe_invoice_id, $customer_id, $currency, $description, $quantity_milli, $unit_amount_cents, $amount_cents, $coupon_id, $company_id, $invoice_id, $item_id): array
     {
         if (!self::configured() || !self::has_account($account_id, 'invoice line create')) {
             return array();
@@ -647,6 +647,12 @@ class StripeService {
             'unit_amount_decimal' => (string) ((int) $unit_amount_cents)
         );
 
+        /* The rate stays gross and the reduction rides as a coupon on the line, so
+           Stripe's own PDF shows both figures the client was quoted. */
+        if ((string) $coupon_id !== '') {
+            $params['discounts'] = array(array('coupon' => $coupon_id));
+        }
+
         try {
             $item = self::client()->invoiceItems->create(
                 $params,
@@ -655,6 +661,51 @@ class StripeService {
             return $item->toArray();
         } catch (\Throwable $e) {
             self::fail('invoice line create', $e);
+            return array();
+        }
+    }
+
+    /**
+     * A discount reaches Stripe as a coupon, because that is the only shape its
+     * invoicing takes one in. It is minted per invoice and marked duration 'once'
+     * rather than reused across invoices: a shared coupon edited later would
+     * restate the discount on every invoice already carrying it, including ones
+     * Stripe has finalized and emailed.
+     *
+     * amount_off is currency-bound, so the invoice's own currency is passed
+     * rather than the account default - the two can differ on a draft raised
+     * before a currency change.
+     */
+    public static function create_invoice_coupon($account_id, $currency, $discount_type, $percent_bp, $discount_cents, $company_id, $invoice_id): array
+    {
+        if (!self::configured() || !self::has_account($account_id, 'coupon create')) {
+            return array();
+        }
+
+        $params = array(
+            'duration' => 'once',
+            'name'     => 'Invoice discount',
+            'metadata' => array(
+                'company_id' => (string) $company_id,
+                'invoice_id' => (string) $invoice_id
+            )
+        );
+
+        if ($discount_type === 'Percent') {
+            $params['percent_off'] = round(((int) $percent_bp) / 100, 2);
+        } else {
+            $params['amount_off'] = (int) $discount_cents;
+            $params['currency']   = strtolower((string) $currency);
+        }
+
+        try {
+            $coupon = self::client()->coupons->create(
+                $params,
+                self::connected($account_id, 'cpn-'.self::livemode().'-'.$company_id.'-'.$invoice_id)
+            );
+            return $coupon->toArray();
+        } catch (\Throwable $e) {
+            self::fail('coupon create', $e);
             return array();
         }
     }
