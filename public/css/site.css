@@ -5596,6 +5596,30 @@ table.data.ledger tfoot .ledger__foot-total .ledger__amount {
     color: var(--text-primary);
 }
 
+/* What the plan includes. The tick is decorative - the list itself already says
+   these are things you get - so it is hidden from assistive technology. */
+.plan__features {
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.plan__features li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    padding: var(--space-1) 0;
+    font-size: var(--fs-body);
+    line-height: var(--lh-normal);
+    color: var(--text-secondary);
+}
+
+.plan__features i {
+    flex: 0 0 auto;
+    font-size: 11px;
+    color: var(--ok);
+}
+
 /* Pushed to the foot so the buttons line up across cards of unequal height. */
 .plan__act {
     margin-top: auto;

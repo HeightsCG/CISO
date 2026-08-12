@@ -365,6 +365,8 @@ class StripeService {
                     continue;
                 }
 
+                /* Only what Stripe is the authority on. The blurb and feature
+                   list are the system's own and are merged in by the caller. */
                 $plans[] = array(
                     'price_id'    => $price->id,
                     'name'        => $price->product->name,

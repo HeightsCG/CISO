@@ -75,6 +75,13 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
                     <?php if ($plan['description'] !== '') { ?>
                     <p class="plan__desc"><?php echo htmlspecialchars($plan['description'], ENT_QUOTES, 'UTF-8'); ?></p>
                     <?php } ?>
+                    <?php if (count($plan['features']) > 0) { ?>
+                    <ul class="plan__features">
+                        <?php foreach ($plan['features'] as $feature) { ?>
+                        <li><i class="fa-regular fa-check" aria-hidden="true"></i><?php echo htmlspecialchars($feature, ENT_QUOTES, 'UTF-8'); ?></li>
+                        <?php } ?>
+                    </ul>
+                    <?php } ?>
                     <div class="plan__act">
                         <?php if ($current && !$ending) { ?>
                         <button type="button" class="btn btn--secondary btn--block btn--destructive" id="do_cancel_open">Cancel Subscription</button>
