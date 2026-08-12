@@ -14,6 +14,7 @@
             <?php } ?>
             <?php if (in_array($this->invoice['invoice_status'], array('Open', 'Uncollectible'), true)) { ?>
             <button type="button" class="btn btn--destructive" id="do_void_open"><i class="fa-regular fa-ban"></i> Void</button>
+            <button type="button" class="btn btn--primary" id="do_send_open"><i class="fa-regular fa-paper-plane"></i> Resend Invoice</button>
             <?php } ?>
             <?php if ($this->invoice['invoice_status'] === 'Draft') { ?>
             <a class="btn btn--secondary" href="/billing/form/id/<?php echo (int) $this->invoice['id']; ?>"><i class="fa-regular fa-pen"></i> Edit Draft</a>
@@ -26,9 +27,9 @@
     <div class="alert alert--critical" role="status">
         <i class="fa-regular fa-triangle-exclamation alert__icon" aria-hidden="true"></i>
         <p class="alert__title">This invoice is still being sent</p>
-        <p class="alert__text">Stripe did not confirm the last attempt. It is not retried automatically, because it may already have gone out and a second attempt would bill this client twice. Refresh in a moment to see where it landed.<?php echo ($this->invoice['finalize_error'] === '' ? '' : ' Stripe said: '.htmlspecialchars($this->invoice['finalize_error'], ENT_QUOTES, 'UTF-8')); ?></p>
+        <p class="alert__text">The last attempt was not confirmed. It is not retried automatically, because it may already have gone out and a second attempt would bill this client twice. Refresh in a moment to see where it landed.<?php echo ($this->invoice['finalize_error'] === '' ? '' : ' The payment provider said: '.htmlspecialchars($this->invoice['finalize_error'], ENT_QUOTES, 'UTF-8')); ?></p>
         <div class="alert__actions">
-            <button type="button" class="btn btn--secondary btn--sm" id="do_refresh">Check with Stripe</button>
+            <button type="button" class="btn btn--secondary btn--sm" id="do_refresh">Check for updates</button>
         </div>
     </div>
     <?php } elseif ($this->invoice['finalize_error'] !== '') { ?>
@@ -196,16 +197,28 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="send_modal_title">Send Invoice</h2>
+                <h2 class="modal-title" id="send_modal_title"><?php echo ($this->invoice['invoice_status'] === 'Draft' ? 'Send Invoice' : 'Resend Invoice'); ?></h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Send this invoice to <strong><?php echo htmlspecialchars($this->invoice['client_name'], ENT_QUOTES, 'UTF-8'); ?></strong> for <strong><?php echo htmlspecialchars($this->invoice['total_display'], ENT_QUOTES, 'UTF-8'); ?></strong>?</p>
-                <p class="import__hint">Stripe emails the invoice with a payment page and chases it if it goes unpaid. Line items cannot be changed afterwards.</p>
+                <p class="send__lede">Send this invoice<?php echo ($this->invoice['invoice_status'] === 'Draft' ? '' : ' again'); ?> for <strong><?php echo htmlspecialchars($this->invoice['total_display'], ENT_QUOTES, 'UTF-8'); ?></strong>?</p>
+                <div class="form-group mb-3">
+                    <label for="recipient_name">Send to</label>
+                    <input type="text" class="form-control" id="recipient_name" autocomplete="off" value="<?php echo htmlspecialchars(($this->invoice['client_billing_name'] !== '' ? $this->invoice['client_billing_name'] : $this->invoice['client_name']), ENT_QUOTES, 'UTF-8'); ?>">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="recipient_email">Email</label>
+                    <input type="email" class="form-control" id="recipient_email" autocomplete="off" value="<?php echo htmlspecialchars(($this->invoice['client_billing_email'] !== '' ? $this->invoice['client_billing_email'] : $this->invoice['client_contact_email']), ENT_QUOTES, 'UTF-8'); ?>">
+                </div>
+                <?php if ($this->invoice['invoice_status'] === 'Draft') { ?>
+                <p class="import__hint">The invoice is emailed with a payment page and chased if it goes unpaid. Changing either also sets how this client's future invoices are addressed. Line items cannot be changed afterwards.</p>
+                <?php } else { ?>
+                <p class="import__hint">The same invoice is emailed again with its payment page. Send it as often as you need. Changing either field also sets how this client's future invoices are addressed.</p>
+                <?php } ?>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="do_send" class="btn btn--primary">Send Invoice</button>
+                <button type="button" id="do_send" class="btn btn--primary"><?php echo ($this->invoice['invoice_status'] === 'Draft' ? 'Send Invoice' : 'Resend Invoice'); ?></button>
             </div>
         </div>
     </div>
@@ -219,8 +232,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Void this invoice? The client can no longer pay it and Stripe stops chasing it.</p>
-                <p class="import__hint">Voiding is permanent in Stripe. Raise a new invoice if it needs to be reissued.</p>
+                <p>Void this invoice? The client can no longer pay it and it stops being chased.</p>
+                <p class="import__hint">Voiding is permanent. Raise a new invoice if it needs to be reissued.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
@@ -234,6 +247,7 @@
 $(document).ready(function () {
 
     var invoice_id = <?php echo (int) $this->invoice['id']; ?>;
+    var is_draft = <?php echo ($this->invoice['invoice_status'] === 'Draft' ? 'true' : 'false'); ?>;
 
     function set_loading(target, loading) {
         if (loading) {
@@ -278,7 +292,7 @@ $(document).ready(function () {
 
         set_loading('#do_send', true);
 
-        ApiDataSvc.apiCall('post', 'send_invoice', { invoice_id: invoice_id }, function (data) {
+        ApiDataSvc.apiCall('post', (is_draft ? 'send_invoice' : 'resend_invoice'), { invoice_id: invoice_id, recipient_name: $('#recipient_name').val().trim(), recipient_email: $('#recipient_email').val().trim() }, function (data) {
 
             var obj = JSON.parse(data);
 

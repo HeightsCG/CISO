@@ -205,6 +205,27 @@ class ClientsModel extends Model {
         return parent::update('clients', $data, 'id = :id and company_id = :company_id and stripe_customer_id is null', $where);
     }
 
+    /**
+     * Remember where invoices for this client go. Written when someone changes
+     * the recipient while sending, so the next invoice defaults to the address
+     * that actually worked rather than the one that did not.
+     */
+    public function set_billing_contact($client_id, $company_id, $billing_name, $billing_email, $updated_by)
+    {
+        $where = array(
+            'id'         => $client_id,
+            'company_id' => $company_id
+        );
+        $data = array(
+            'billing_name'  => $billing_name,
+            'billing_email' => $billing_email,
+            'updated_by'    => $updated_by,
+            'date_updated'  => date('Y-m-d H:i:s')
+        );
+
+        return parent::update('clients', $data, 'id = :id and company_id = :company_id', $where);
+    }
+
     public function delete_client($client_id, $company_id, $updated_by)
     {
         $where = array(

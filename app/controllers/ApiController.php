@@ -3740,6 +3740,141 @@ class ApiController extends Controller {
         echo json_encode($response);
     }
 
+    /**
+     * Email the invoice to whoever the client's billing contact is, with a link to
+     * the hosted payment page. Read back from the row after mirroring so the
+     * number and amounts are the ones actually stored, not the ones we hoped for.
+     *
+     * A failure here is reported but never rolls the invoice back: it is already
+     * finalised and payable, and un-sending it is not possible. Better a raised
+     * invoice nobody emailed - which staff can resend - than a rollback that
+     * raises a second one.
+     */
+    private function email_invoice($invoice_id, $company_id, array $stripe, bool $resent): bool
+    {
+        $invoice = $this->invoices_model->get_invoice($invoice_id, $company_id);
+
+        if (!is_array($invoice) || count($invoice) !== 1) {
+            return false;
+        }
+
+        $invoice = $invoice[0];
+        $pay_url = $invoice['hosted_invoice_url'] !== '' ? $invoice['hosted_invoice_url'] : (string) ($stripe['hosted_invoice_url'] ?? '');
+
+        if ($pay_url === '') {
+            error_log('[billing] invoice '.$invoice_id.' has no payment page to email');
+            return false;
+        }
+
+        $to_email = $invoice['client_billing_email'] !== '' ? $invoice['client_billing_email'] : $invoice['client_contact_email'];
+        $to_name  = $invoice['client_billing_name'] !== '' ? $invoice['client_billing_name'] : $invoice['client_name'];
+
+        if (trim($to_email) === '') {
+            error_log('[billing] invoice '.$invoice_id.' has no address to email');
+            return false;
+        }
+
+        $company = $this->companies_model->get_company($company_id);
+
+        return (bool) $this->notifications_model->send_invoice_email(
+            $to_email,
+            $to_name,
+            (is_array($company) && count($company) === 1) ? $company[0]['company_name'] : Main::site_name(),
+            ($invoice['invoice_number'] === '' ? 'Draft' : $invoice['invoice_number']),
+            $invoice['amount_due_display'],
+            (string) ($invoice['due_date_display'] ?? ''),
+            $pay_url,
+            (string) ($invoice['invoice_pdf_url'] !== '' ? $invoice['invoice_pdf_url'] : ($stripe['invoice_pdf'] ?? '')),
+            $resent
+        );
+    }
+
+    /**
+     * Send an already-issued invoice again. Distinct from send_invoice, which
+     * finalises a draft: that path can only run once, and running it twice would
+     * raise a second invoice against the same client.
+     *
+     * Deliberately unlimited. Chasing an unpaid invoice is ordinary collections
+     * work, and Stripe's send carries no idempotency key precisely so a repeat is
+     * treated as a repeat rather than swallowed.
+     */
+    public function resend_invoiceAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $company_id = Session::get('company_id');
+        $invoice_id = (int) ($this->post['invoice_id'] ?? 0);
+
+        $invoice = $this->invoices_model->get_invoice($invoice_id, $company_id);
+
+        if (!is_array($invoice) || count($invoice) !== 1) {
+            $response['message'] = 'That invoice could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        $invoice = $invoice[0];
+
+        /* Only an issued, unsettled invoice can be chased. A draft has never been
+           sent, and a paid or void one has nothing left to collect. */
+        if (!in_array($invoice['invoice_status'], array('Open', 'Uncollectible'), true) || $invoice['stripe_invoice_id'] === null) {
+            $response['message'] = 'Only an unpaid invoice that has already been issued can be resent';
+            echo json_encode($response);
+            return;
+        }
+
+        $account_id = $invoice['stripe_account_id'];
+
+        if ($account_id === '') {
+            $response['message'] = 'This invoice is not linked to a payment account';
+            echo json_encode($response);
+            return;
+        }
+
+        /* The recipient can be corrected on the way out - a bounced address is the
+           usual reason an invoice needs sending again. */
+        $recipient_email = trim((string) ($this->post['recipient_email'] ?? ''));
+        $recipient_name  = trim((string) ($this->post['recipient_name'] ?? ''));
+
+        if ($recipient_email !== '' && !filter_var($recipient_email, FILTER_VALIDATE_EMAIL)) {
+            $response['message'] = 'That is not a valid email address';
+            echo json_encode($response);
+            return;
+        }
+
+        if (($recipient_email !== '' || $recipient_name !== '') && $invoice['stripe_customer_id'] !== '') {
+
+            if (empty(StripeService::set_customer_contact($account_id, $invoice['stripe_customer_id'], $recipient_name, $recipient_email)['id'])) {
+                $response['message'] = 'The recipient could not be updated: '.StripeService::last_error();
+                echo json_encode($response);
+                return;
+            }
+
+            $this->clients_model->set_billing_contact(
+                $invoice['client_id'],
+                $company_id,
+                ($recipient_name === '' ? $invoice['client_billing_name'] : $recipient_name),
+                ($recipient_email === '' ? $invoice['client_billing_email'] : $recipient_email),
+                Session::get('user_id')
+            );
+        }
+
+        if (!$this->email_invoice($invoice_id, $company_id, array(), true)) {
+            $response['message'] = 'The invoice could not be emailed. Check the address and try again.';
+            echo json_encode($response);
+            return;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Invoice sent again';
+        echo json_encode($response);
+    }
+
     public function stripe_connect_startAction(){
 
         $this->refuse_unless_company_admin();
@@ -4268,10 +4403,51 @@ class ApiController extends Controller {
             $customer_id = $this->connected_customer_for_client($client, $account_id);
 
             if ($customer_id === '') {
-                $this->invoices_model->fail_finalize($invoice_id, 'Stripe customer could not be created: '.StripeService::last_error(), true);
-                $response['message'] = 'Stripe could not create the customer: '.StripeService::last_error();
+                $this->invoices_model->fail_finalize($invoice_id, 'Customer could not be created: '.StripeService::last_error(), true);
+                $response['message'] = 'The client could not be set up for billing: '.StripeService::last_error();
                 echo json_encode($response);
                 return;
+            }
+
+            /**
+             * The recipient can be changed at the moment of sending. The invoice
+             * goes wherever the customer points when it is sent, so this is
+             * pushed before finalisation - afterwards the email has already gone.
+             * It is remembered against the client too, so the next invoice
+             * defaults to the address that was actually used.
+             */
+            $recipient_email = trim((string) ($this->post['recipient_email'] ?? ''));
+            $recipient_name  = trim((string) ($this->post['recipient_name'] ?? ''));
+
+            $current_email = $client['billing_email'] !== '' ? $client['billing_email'] : $client['contact_email'];
+            $current_name  = $client['billing_name'] !== '' ? $client['billing_name'] : $client['company_name'];
+
+            $email_changed = ($recipient_email !== '' && strcasecmp($recipient_email, $current_email) !== 0);
+            $name_changed  = ($recipient_name !== '' && strcmp($recipient_name, $current_name) !== 0);
+
+            if ($email_changed || $name_changed) {
+
+                if ($recipient_email !== '' && !filter_var($recipient_email, FILTER_VALIDATE_EMAIL)) {
+                    $this->invoices_model->fail_finalize($invoice_id, 'Invalid recipient address', true);
+                    $response['message'] = 'That is not a valid email address';
+                    echo json_encode($response);
+                    return;
+                }
+
+                if (empty(StripeService::set_customer_contact($account_id, $customer_id, $recipient_name, $recipient_email)['id'])) {
+                    $this->invoices_model->fail_finalize($invoice_id, 'Recipient could not be updated: '.StripeService::last_error(), true);
+                    $response['message'] = 'The recipient could not be updated: '.StripeService::last_error();
+                    echo json_encode($response);
+                    return;
+                }
+
+                $this->clients_model->set_billing_contact(
+                    $client['id'],
+                    $client['company_id'],
+                    ($recipient_name === '' ? $client['billing_name'] : $recipient_name),
+                    ($recipient_email === '' ? $client['billing_email'] : $recipient_email),
+                    Session::get('user_id')
+                );
             }
 
             $stripe_invoice_id = $invoice['stripe_invoice_id'];
@@ -4374,11 +4550,18 @@ class ApiController extends Controller {
                 return;
             }
 
-            StripeService::send_invoice($account_id, $stripe_invoice_id);
-
+            /**
+             * Deliberately not asking the payment provider to email this. It would
+             * send its own message in its own voice, and the client would get two
+             * for one invoice. Finalising is what mints the payment page and the
+             * PDF; carrying the link to the client is this application's job.
+             */
             $current = StripeService::retrieve_invoice($account_id, $stripe_invoice_id);
+            $mirror  = empty($current) ? $finalized : $current;
 
-            $this->invoices_model->apply_stripe_invoice($invoice_id, empty($current) ? $finalized : $current, 0);
+            $this->invoices_model->apply_stripe_invoice($invoice_id, $mirror, 0);
+
+            $this->email_invoice($invoice_id, $company_id, $mirror, false);
 
         } catch (\Throwable $e) {
             $this->invoices_model->fail_finalize($invoice_id, $e->getMessage(), false);

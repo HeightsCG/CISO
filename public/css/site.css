@@ -5360,6 +5360,16 @@ table.data.ledger [data-action="remove_line"]:focus-visible {
     color: var(--text-muted);
 }
 
+/* The recipient is a field directly below, so the lead confirms the amount only -
+   naming the client here as well said the same thing twice. */
+.send__lede {
+    margin-bottom: var(--space-4);
+}
+
+.send__lede + .form-group + .form-group {
+    margin-top: var(--space-3);
+}
+
 /* --------------------------------------------------------- invoice detail */
 
 /* The identity line under the title: status and client set as one deliberate

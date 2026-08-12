@@ -905,6 +905,45 @@ class StripeService {
      * Not to be confused with the platform customer above, which is the company
      * itself as a customer of CISO.aero, in a different account entirely.
      */
+    /**
+     * Point the customer at a different recipient. The invoice is addressed and
+     * delivered to whatever the customer holds at the moment it is sent, so
+     * changing who it goes to means changing this - there is no per-invoice
+     * override. The name is what prints on the invoice as the bill-to.
+     */
+    public static function set_customer_contact($account_id, $customer_id, $name, $email): array
+    {
+        if (!self::configured() || !self::has_account($account_id, 'customer contact update')) {
+            return array();
+        }
+
+        $params = array();
+
+        if (self::text($name) !== '') {
+            $params['name'] = self::text($name);
+        }
+
+        if (self::text($email) !== '') {
+            $params['email'] = self::text($email);
+        }
+
+        if (count($params) === 0) {
+            return array();
+        }
+
+        try {
+            $customer = self::client()->customers->update(
+                $customer_id,
+                $params,
+                self::connected($account_id)
+            );
+            return $customer->toArray();
+        } catch (\Throwable $e) {
+            self::fail('customer contact update', $e);
+            return array();
+        }
+    }
+
     public static function create_customer($account_id, $company_id, $client_id, $company_name, $email, $address_1, $address_2, $city, $state, $postal_code, $country): array
     {
         if (!self::configured() || !self::has_account($account_id, 'customer create')) {
@@ -1108,6 +1147,171 @@ class StripeService {
             self::fail('coupon create', $e);
             return array();
         }
+    }
+
+    /* ------------------------------------------- connected: subscriptions */
+
+    /**
+     * A product and recurring price on the company's own account, for a retainer
+     * it bills a client. Minted per subscription rather than shared: two clients
+     * on "Managed CISO" at different rates are two prices, and editing a shared
+     * one would silently re-rate every subscription attached to it.
+     *
+     * Stripe has no quarterly interval, so a quarter is three months. Passing
+     * 'quarter' is rejected outright, which is the kind of failure that only
+     * shows up the first time someone sells one.
+     */
+    public static function create_subscription_price($account_id, $currency, $name, $unit_amount_cents, $billing_interval, $company_id, $subscription_id): array
+    {
+        if (!self::configured() || !self::has_account($account_id, 'subscription price create')) {
+            return array();
+        }
+
+        $intervals = array(
+            'Month'   => array('interval' => 'month', 'interval_count' => 1),
+            'Quarter' => array('interval' => 'month', 'interval_count' => 3),
+            'Year'    => array('interval' => 'year',  'interval_count' => 1)
+        );
+
+        $recurring = $intervals[$billing_interval] ?? $intervals['Month'];
+
+        try {
+            $price = self::client()->prices->create(
+                array(
+                    'currency'     => strtolower((string) $currency),
+                    'unit_amount'  => (int) $unit_amount_cents,
+                    'recurring'    => $recurring,
+                    'product_data' => array('name' => self::text($name)),
+                    'metadata'     => array(
+                        'app'             => 'ciso',
+                        'company_id'      => (string) $company_id,
+                        'subscription_id' => (string) $subscription_id
+                    )
+                ),
+                self::connected($account_id, 'subprice-'.self::livemode().'-'.$company_id.'-'.$subscription_id)
+            );
+            return $price->toArray();
+        } catch (\Throwable $e) {
+            self::fail('subscription price create', $e);
+            return array();
+        }
+    }
+
+    /**
+     * The retainer itself, on the company's account against its own client.
+     *
+     * collection_method is send_invoice to match how this company already bills:
+     * Stripe emails each renewal with a payment page and chases it, rather than
+     * charging a card the client has never been asked to authorise.
+     */
+    public static function create_connected_subscription($account_id, $customer_id, $price_id, $quantity, $due_days, $start_date, $company_id, $subscription_id, $client_id, $project_id): array
+    {
+        if (!self::configured() || !self::has_account($account_id, 'subscription create')) {
+            return array();
+        }
+
+        $params = array(
+            'customer'          => $customer_id,
+            'items'             => array(array('price' => $price_id, 'quantity' => max(1, (int) $quantity))),
+            'collection_method' => 'send_invoice',
+            'days_until_due'    => max(0, (int) $due_days),
+            'metadata'          => array(
+                'app'             => 'ciso',
+                'company_id'      => (string) $company_id,
+                'subscription_id' => (string) $subscription_id,
+                'client_id'       => (string) $client_id,
+                'project_id'      => (string) $project_id
+            )
+        );
+
+        /* A start date in the future defers the first invoice to it. Stripe wants
+           a timestamp, and anything already past is simply omitted so the
+           subscription starts now rather than being backdated. */
+        if ($start_date !== null && $start_date !== '') {
+            $starts = strtotime($start_date.' 00:00:00 UTC');
+            if ($starts !== false && $starts > time()) {
+                $params['billing_cycle_anchor'] = $starts;
+                $params['proration_behavior']   = 'none';
+            }
+        }
+
+        try {
+            $subscription = self::client()->subscriptions->create(
+                $params,
+                self::connected($account_id, 'sub-'.self::livemode().'-'.$company_id.'-'.$subscription_id)
+            );
+            return $subscription->toArray();
+        } catch (\Throwable $e) {
+            self::fail('subscription create', $e);
+            return array();
+        }
+    }
+
+    public static function retrieve_connected_subscription($account_id, $stripe_subscription_id): array
+    {
+        if (!self::configured() || !self::has_account($account_id, 'subscription retrieve')) {
+            return array();
+        }
+
+        try {
+            $subscription = self::client()->subscriptions->retrieve(
+                $stripe_subscription_id,
+                array(),
+                self::connected($account_id)
+            );
+            return $subscription->toArray();
+        } catch (\Throwable $e) {
+            self::fail('subscription retrieve', $e);
+            return array();
+        }
+    }
+
+    /**
+     * Ending at the period end rather than immediately, for the same reason the
+     * platform subscription does: the client has paid for the period it is in.
+     */
+    public static function cancel_connected_subscription($account_id, $stripe_subscription_id, $at_period_end = true): array
+    {
+        if (!self::configured() || !self::has_account($account_id, 'subscription cancel')) {
+            return array();
+        }
+
+        try {
+            if ($at_period_end) {
+                $subscription = self::client()->subscriptions->update(
+                    $stripe_subscription_id,
+                    array('cancel_at_period_end' => true),
+                    self::connected($account_id)
+                );
+            } else {
+                $subscription = self::client()->subscriptions->cancel(
+                    $stripe_subscription_id,
+                    array(),
+                    self::connected($account_id)
+                );
+            }
+            return $subscription->toArray();
+        } catch (\Throwable $e) {
+            self::fail('subscription cancel', $e);
+            return array();
+        }
+    }
+
+    /** Stripe's status mapped onto the column's own vocabulary. */
+    public static function subscription_status(string $stripe_status): string
+    {
+        $map = array(
+            'incomplete'         => 'Incomplete',
+            'incomplete_expired' => 'Incomplete Expired',
+            'trialing'           => 'Trialing',
+            'active'             => 'Active',
+            'past_due'           => 'Past Due',
+            'unpaid'             => 'Unpaid',
+            'paused'             => 'Paused',
+            'canceled'           => 'Canceled'
+        );
+
+        return $map[$stripe_status] ?? 'Draft';
     }
 
     /** Finalization is the point at which Stripe takes ownership of the invoice. */

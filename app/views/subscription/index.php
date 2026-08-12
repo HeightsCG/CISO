@@ -24,8 +24,8 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
     <?php if (!$this->configured) { ?>
     <div class="alert alert--warn" role="status">
         <i class="fa-regular fa-triangle-exclamation alert__icon" aria-hidden="true"></i>
-        <p class="alert__title">Stripe is not configured on this installation</p>
-        <p class="alert__text">Subscription details cannot be read until a Stripe key is set.</p>
+        <p class="alert__title">Payments are not configured on this installation</p>
+        <p class="alert__text">Subscription details cannot be read until payments are configured.</p>
     </div>
     <?php } ?>
 
@@ -215,7 +215,7 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
             <div class="modal-body">
                 <p id="pay_summary"></p>
                 <div id="pay_element" class="pay__element"></div>
-                <p class="import__hint">Card details go straight to Stripe and are never sent to this application.</p>
+                <p class="import__hint">Card details go straight to our payment provider and are never sent to this application.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
@@ -234,7 +234,7 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
             </div>
             <div class="modal-body">
                 <div id="card_element" class="pay__element"></div>
-                <p class="import__hint">Card details go straight to Stripe and are never sent to this application.</p>
+                <p class="import__hint">Card details go straight to our payment provider and are never sent to this application.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>

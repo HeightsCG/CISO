@@ -4,11 +4,13 @@ class BillingController extends Controller {
     public $protected = 1;
     public $invoices_model;
     public $companies_model;
+    public $subscriptions_model;
 
     public function __construct(){
         parent::__construct();
         $this->invoices_model = new InvoicesModel();
         $this->companies_model = new CompaniesModel();
+        $this->subscriptions_model = new SubscriptionsModel();
     }
 
     /**
@@ -216,6 +218,69 @@ class BillingController extends Controller {
 
         $this->view->invoice = $invoice[0];
         $this->view->items = $this->invoices_model->get_invoice_items($invoice[0]['id']);
+        $this->view->company = $this->company();
+        $this->view->render();
+    }
+
+
+    /* ------------------------------------------------------- subscriptions */
+
+    public function subscriptionsAction(){
+
+        if (!$this->refuse_unless_company_admin()) {
+            return;
+        }
+
+        $this->view->company = $this->company();
+        $this->view->render();
+    }
+
+    /**
+     * The editor opens on drafts only, for the same reason the invoice editor
+     * does: once Stripe holds the subscription it is billing a live cycle, and an
+     * editor showing its price would imply that price could still be changed.
+     */
+    public function subscriptionformAction(){
+
+        if (!$this->refuse_unless_company_admin()) {
+            return;
+        }
+
+        $subscription_id = Main::get_param('id');
+
+        if (empty($subscription_id)) {
+            $this->view->subscription = null;
+            $this->view->company = $this->company();
+            $this->view->render();
+            return;
+        }
+
+        $subscription = $this->subscriptions_model->get_subscription($subscription_id, Session::get('company_id'));
+
+        if (!is_array($subscription) || count($subscription) !== 1 || $subscription[0]['subscription_status'] !== 'Draft') {
+            Errors::page_not_found();
+            return;
+        }
+
+        $this->view->subscription = $subscription[0];
+        $this->view->company = $this->company();
+        $this->view->render();
+    }
+
+    public function subscriptionAction(){
+
+        if (!$this->refuse_unless_company_admin()) {
+            return;
+        }
+
+        $subscription = $this->subscriptions_model->get_subscription(Main::get_param('id'), Session::get('company_id'));
+
+        if (!is_array($subscription) || count($subscription) !== 1) {
+            Errors::page_not_found();
+            return;
+        }
+
+        $this->view->subscription = $subscription[0];
         $this->view->company = $this->company();
         $this->view->render();
     }
