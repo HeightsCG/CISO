@@ -174,6 +174,16 @@ class Money {
         return strtoupper((string) $currency) . ' ' . number_format(((int) $cents) / 100, 2);
     }
 
+    /**
+     * The bare figure, no currency code. Used inside a table whose currency is
+     * stated once in its total, so a column of amounts stacks on the decimal
+     * instead of carrying the same three letters down every row.
+     */
+    public static function figure($cents): string
+    {
+        return number_format(((int) $cents) / 100, 2);
+    }
+
     /** Display form for a quantity held in thousandths, trimmed of empty decimals. */
     public static function format_quantity($quantity_milli): string
     {

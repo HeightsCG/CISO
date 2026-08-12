@@ -175,10 +175,9 @@ $(document).ready(function () {
         if (!data) {
             return;
         }
-        if (data[7] === 'Draft') {
-            window.location.href = '/billing/form/id/' + data[0];
-            return;
-        }
+        /* Every row opens the invoice, drafts included. Going straight to the
+           editor made the detail page unreachable for a draft except by saving
+           one, and the editor is one click away from here anyway. */
         window.location.href = '/billing/invoice/id/' + data[0];
     });
 

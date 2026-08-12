@@ -7,7 +7,6 @@
             <h1 class="page__title"><?php echo ($this->invoice === null ? 'New Invoice' : 'Edit Draft'); ?></h1>
         </div>
         <div class="page__actions">
-            <span class="badge badge--prospect">Draft</span>
             <?php if ($this->invoice !== null) { ?>
             <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete</button>
             <?php } ?>

@@ -5337,6 +5337,80 @@ table.data.ledger [data-action="remove_line"]:focus-visible {
     color: var(--text-muted);
 }
 
+/* --------------------------------------------------------- invoice detail */
+
+/* The identity line under the title: status and client set as one deliberate
+   pair on a rule, rather than two spans left loose beneath the heading. */
+.invoice-ident {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+}
+
+.invoice-ident__client {
+    padding-left: var(--space-3);
+    border-left: 1px solid var(--border);
+    font-size: var(--fs-body);
+    color: var(--text-secondary);
+}
+
+.lines__count {
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+/* A read-only ledger keeps the form's columns and rhythm, but its rows are text
+   rather than controls, so they are set at the height text wants. */
+table.data.ledger--static tbody td {
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-3);
+}
+
+/* Prominent because it is the thing being billed for, but deliberately not
+   coloured or underlined: it is the subject of the row, not a link. */
+table.data.ledger .ledger__desc,
+table.data.ledger tbody tr:hover .ledger__desc {
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+table.data.ledger .ledger__amount {
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+}
+
+.ledger__none {
+    color: var(--text-muted);
+}
+
+/* The invoice's own text, shown as it will print rather than in a disabled box. */
+.commit__text {
+    margin: 0;
+    max-width: 72ch;
+    font-size: var(--fs-body);
+    line-height: var(--lh-normal);
+    color: var(--text-primary);
+}
+
+/* Due closes the rail under the outstanding balance it applies to. */
+.summary__due {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-top: 1px solid var(--border);
+    font-size: var(--fs-meta);
+    color: var(--text-secondary);
+}
+
+.summary__due span:last-child {
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+}
+
 /* ------------------------------------------------------------------- summary */
 
 .summary {
