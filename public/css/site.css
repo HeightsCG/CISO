@@ -4999,8 +4999,18 @@ table.data.lines .num .form-control {
 
 /* Sits between the ledger and the footer message. The table's last row rules it
    off above and .commit rules it off below, so it draws no border of its own. */
+/* Set to the exact span of the line-item fields it describes: indented to the
+   ledger's Description column on the left, stopped at the Amount column's right
+   edge, so it reads as the foot of that block rather than a new topic. */
 .invoice-doc__memo {
-    padding: var(--space-4) var(--space-5);
+    padding: var(--space-4) 56px var(--space-5) calc(52px + var(--space-3));
+}
+
+.invoice-doc__memo textarea.form-control {
+    min-height: 0;
+    height: 48px;
+    padding-top: var(--space-1);
+    padding-bottom: var(--space-1);
 }
 
 /* -------------------------------------------------------------------- ledger */
@@ -5072,9 +5082,29 @@ table.data.ledger td.idx {
     font-variant-numeric: tabular-nums;
 }
 
+/* Right-set so the decimal points stack down the column. Centred figures of
+   different widths never line up, which is the whole point of a money column. */
 table.data.ledger th.num,
 table.data.ledger td.num {
     text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+table.data.ledger .num .form-control {
+    text-align: right;
+}
+
+/* Digits share one gutter whether they sit inside a control or are printed by the
+   form. The control carries its own padding on top of the cell's, so the printed
+   cells are given the sum - otherwise a typed rate and the total beside it are
+   set eight pixels apart and the column never quite stacks. */
+table.data.ledger td.num .form-control {
+    padding-right: var(--space-3);
+}
+
+table.data.ledger th.num,
+table.data.ledger td.lines__row-amount {
+    padding-right: var(--space-6);
 }
 
 table.data.ledger th.actions,
@@ -5118,7 +5148,7 @@ table.data.ledger .input-group .form-control {
 }
 
 table.data.ledger .input-group .form-select {
-    flex: 0 0 76px;
+    flex: 0 0 70px;
     padding: 0 20px 0 var(--space-2);
     background-position: right 6px center;
     background-color: var(--surface-sunken);
@@ -5193,16 +5223,26 @@ table.data.ledger [data-action="remove_line"]:focus-visible {
     outline-offset: 1px;
 }
 
-/* The add control sits above the ledger and stays put when the list is empty, so
-   there is always exactly one way to start a line. */
-.lines__add {
+/* Names the section and carries the only way to start a line. It draws no rule of
+   its own: the table head sits directly beneath and already rules the block off,
+   and two hairlines eight pixels apart read as a mistake. */
+.lines__head {
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
     padding: var(--space-3) var(--space-5);
-    border-bottom: 1px solid var(--border);
 }
 
-.lines__add button {
+.lines__title {
+    margin: 0;
+    font-size: var(--fs-subsection);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    color: var(--text-primary);
+}
+
+.lines__head button {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
@@ -5218,7 +5258,7 @@ table.data.ledger [data-action="remove_line"]:focus-visible {
     cursor: pointer;
 }
 
-.lines__add button:hover {
+.lines__head button:hover {
     background: var(--surface-sunken);
     border-color: var(--border-strong);
 }
@@ -5276,7 +5316,7 @@ table.data.ledger [data-action="remove_line"]:focus-visible {
 }
 
 .summary__fact + .summary__fact {
-    margin-top: var(--space-4);
+    margin-top: var(--space-3);
 }
 
 .summary__facts dt {
@@ -5370,7 +5410,7 @@ table.data.ledger [data-action="remove_line"]:focus-visible {
    the document: its own tinted band closing the panel, at a measure a sentence
    can actually be read at rather than a stub input floating in white space. */
 .commit {
-    padding: var(--space-5);
+    padding: var(--space-4) var(--space-5);
     background: var(--surface-sunken);
     border-top: 1px solid var(--border);
 }

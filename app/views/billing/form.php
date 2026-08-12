@@ -52,7 +52,8 @@
 
         <div class="table-wrap lines__scroll">
             
-            <div class="lines__add">
+            <div class="lines__head">
+                <h2 class="lines__title">Line Items</h2>
                 <button type="button" id="add_line"><i class="fa-regular fa-plus"></i> Add Line</button>
             </div>
 
@@ -61,11 +62,11 @@
                     <tr>
                         <th scope="col" class="idx"><span class="sr-only">Line</span></th>
                         <th scope="col">Description</th>
-                        <th scope="col" class="num quantity text-center">Quantity</th>
-                        <th scope="col" class="num unit text-center">Unit Amount</th>
-                        <th scope="col" class="num discount text-center">Discount</th>
-                        <th scope="col" class="num discount-amount text-center">Discount Amount</th>
-                        <th scope="col" class="num amount text-center">Amount</th>
+                        <th scope="col" class="num quantity">Quantity</th>
+                        <th scope="col" class="num unit">Unit Amount</th>
+                        <th scope="col" class="num discount">Discount</th>
+                        <th scope="col" class="num discount-amount">Discount Amount</th>
+                        <th scope="col" class="num amount">Amount</th>
                         <th scope="col" class="actions"><span class="sr-only">Remove</span></th>
                     </tr>
                 </thead>
@@ -353,11 +354,11 @@ $(document).ready(function () {
         var html = '<tr data-idx="' + idx + '">'
             + '<td class="idx" data-cell="idx"></td>'
             + '<td><input type="text" class="form-control form-control-lg" data-field="description" aria-label="Description" value="' + esc(description) + '"></td>'
-            + '<td class="num"><input type="text" class="form-control form-control-lg text-center" data-field="quantity" inputmode="decimal" aria-label="Quantity" value="' + esc(quantity) + '"></td>'
-            + '<td class="num"><input type="text" class="form-control form-control-lg text-center" data-field="unit_amount" inputmode="decimal" aria-label="Unit price" value="' + esc(unit_amount) + '"></td>'
+            + '<td class="num"><input type="text" class="form-control form-control-lg" data-field="quantity" inputmode="decimal" aria-label="Quantity" value="' + esc(quantity) + '"></td>'
+            + '<td class="num"><input type="text" class="form-control form-control-lg" data-field="unit_amount" inputmode="decimal" aria-label="Unit price" value="' + esc(unit_amount) + '"></td>'
             + '<td class="num">'
             + '<div class="input-group input-group-lg">'
-            + '<input type="text" class="form-control form-control-lg text-center" data-field="discount_value" inputmode="decimal" aria-label="Discount" value="' + esc(discount_value) + '">'
+            + '<input type="text" class="form-control form-control-lg" data-field="discount_value" inputmode="decimal" aria-label="Discount" value="' + esc(discount_value) + '">'
             + '<select class="form-select form-select-lg" data-field="discount_unit" aria-label="Discount unit">'
             + '<option value="None"' + (discount_type === 'Percent' || discount_type === 'Amount' ? '' : ' selected') + '>None</option>'
             + '<option value="Percent"' + (discount_type === 'Percent' ? ' selected' : '') + '>%</option>'
@@ -365,8 +366,8 @@ $(document).ready(function () {
             + '</select>'
             + '</div>'
             + '</td>'
-            + '<td class="num lines__row-amount text-center" data-cell="discount_amount">0.00</td>'
-            + '<td class="num lines__row-amount text-center" data-cell="amount">0.00</td>'
+            + '<td class="num lines__row-amount" data-cell="discount_amount">0.00</td>'
+            + '<td class="num lines__row-amount" data-cell="amount">0.00</td>'
             + '<td class="actions text-center"><button type="button" class="btn btn--tertiary btn--sm" data-action="remove_line" aria-label="Remove line"><i class="fa-regular fa-trash"></i></button></td>'
             + '</tr>';
         $('#line_rows').append(html);
