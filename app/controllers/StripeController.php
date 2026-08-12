@@ -20,12 +20,14 @@ class StripeController extends Controller {
     public $csrfExempt = array('webhookAction');
 
     public $invoices_model;
+    public $subscriptions_model;
     public $companies_model;
 
     public function __construct(){
         parent::__construct();
         $this->invoices_model = new InvoicesModel();
         $this->companies_model = new CompaniesModel();
+        $this->subscriptions_model = new SubscriptionsModel();
     }
 
     public function webhookAction(){
@@ -123,6 +125,11 @@ class StripeController extends Controller {
             return;
         }
 
+        if (strpos($type, 'customer.subscription.') === 0) {
+            $this->handle_subscription($event, $object, $account_id);
+            return;
+        }
+
         if (strpos($type, 'payment_intent.') === 0) {
             $this->handle_payment_intent($event, $object);
             return;
@@ -141,6 +148,21 @@ class StripeController extends Controller {
     {
         $stripe_invoice_id = (string) ($object['id'] ?? '');
         $local             = $this->invoices_model->by_stripe_invoice_id($stripe_invoice_id);
+
+        if (!is_array($local) || count($local) !== 1) {
+
+            /**
+             * A renewal Stripe raised on its own has no local row yet - there was
+             * never a draft for it - so it is created here from the retainer it
+             * belongs to. This is the moment recurring billing becomes visible in
+             * the application at all.
+             */
+            $created = $this->mirror_subscription_invoice($object, $account_id);
+
+            if ($created > 0) {
+                $local = $this->invoices_model->by_stripe_invoice_id($stripe_invoice_id);
+            }
+        }
 
         if (!is_array($local) || count($local) !== 1) {
 
@@ -185,6 +207,100 @@ class StripeController extends Controller {
         $current = StripeService::retrieve_invoice($account_id === '' ? $local['stripe_account_id'] : $account_id, $stripe_invoice_id);
 
         $this->invoices_model->apply_stripe_invoice($local['id'], empty($current) ? $object : $current, $event['created'] ?? 0);
+
+        $this->invoices_model->mark_event($event['id'], 'Processed', '');
+        $this->respond(200, 'ok');
+    }
+
+    /**
+     * Create the local row for an invoice a retainer raised. Ownership comes from
+     * the retainer, never from the event: Stripe knows nothing of this
+     * application's tenancy, so the company and client are the ones already
+     * recorded against the subscription.
+     */
+    private function mirror_subscription_invoice(array $object, string $account_id): int
+    {
+        $stripe_subscription_id = StripeService::invoice_subscription_id($object);
+
+        if ($stripe_subscription_id === '') {
+            return 0;
+        }
+
+        $subscription = $this->subscriptions_model->by_stripe_subscription_id($stripe_subscription_id);
+
+        if (!is_array($subscription) || count($subscription) !== 1) {
+            return 0;
+        }
+
+        $subscription = $subscription[0];
+
+        if ($account_id !== '' && $subscription['stripe_account_id'] !== '' && $account_id !== $subscription['stripe_account_id']) {
+            return 0;
+        }
+
+        $customer = $object['customer'] ?? '';
+
+        return $this->invoices_model->add_subscription_invoice(
+            $subscription['company_id'],
+            $subscription['client_id'],
+            $subscription['project_id'],
+            $subscription['id'],
+            $subscription['currency'],
+            (string) ($object['id'] ?? ''),
+            $subscription['stripe_account_id'],
+            is_string($customer) ? $customer : '',
+            empty($object['livemode']) ? 0 : 1
+        );
+    }
+
+    /**
+     * Mirror a retainer's own state - cancelled, past due, paused. The billing
+     * cycle belongs to Stripe once the subscription exists there, so this row
+     * follows rather than leads.
+     */
+    private function handle_subscription(array $event, array $object, string $account_id): void
+    {
+        $stripe_subscription_id = (string) ($object['id'] ?? '');
+        $local = $this->subscriptions_model->by_stripe_subscription_id($stripe_subscription_id);
+
+        if (!is_array($local) || count($local) !== 1) {
+
+            if ($this->invoices_model->event_attempts($event['id']) < 5) {
+                $this->invoices_model->mark_event($event['id'], 'Received', 'no local retainer yet');
+                $this->respond(500, 'unmapped, will retry');
+                return;
+            }
+
+            $this->invoices_model->mark_event($event['id'], 'Ignored', 'no local retainer for '.$stripe_subscription_id);
+            $this->respond(200, 'unmapped');
+            return;
+        }
+
+        $local = $local[0];
+
+        if ($account_id !== '' && $local['stripe_account_id'] !== '' && $account_id !== $local['stripe_account_id']) {
+            $this->invoices_model->mark_event($event['id'], 'Ignored', 'account mismatch');
+            $this->respond(200, 'account mismatch');
+            return;
+        }
+
+        if ((int) ($event['created'] ?? 0) < (int) $local['stripe_event_created']) {
+            $this->invoices_model->mark_event($event['id'], 'Ignored', 'older than the last applied event');
+            $this->respond(200, 'stale');
+            return;
+        }
+
+        $current = StripeService::retrieve_connected_subscription(
+            $account_id === '' ? $local['stripe_account_id'] : $account_id,
+            $stripe_subscription_id
+        );
+
+        $this->subscriptions_model->apply_stripe_subscription(
+            $local['id'],
+            empty($current) ? $object : $current,
+            $local['stripe_account_id'],
+            (int) ($object['livemode'] ?? 0)
+        );
 
         $this->invoices_model->mark_event($event['id'], 'Processed', '');
         $this->respond(200, 'ok');

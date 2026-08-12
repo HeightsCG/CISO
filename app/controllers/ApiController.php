@@ -24,6 +24,7 @@ class ApiController extends Controller {
         parent::__construct();
         $this->user_model = new UsersModel();
         $this->notifications_model = new NotificationsModel();
+        $this->subscriptions_model = new SubscriptionsModel();
         $this->companies_model = new CompaniesModel();
         $this->clients_model = new ClientsModel();
         $this->projects_model = new ProjectsModel();
@@ -4012,6 +4013,327 @@ class ApiController extends Controller {
      * scoped to the caller's own company - so the gate is about who may bill,
      * not about who may see another organisation.
      */
+    /* ------------------------------------------------- client subscriptions */
+
+    public function load_subscriptionsAction(){
+
+        $this->refuse_unless_company_admin();
+
+        echo json_encode($this->subscriptions_model->load_subscriptions(Session::get('company_id')));
+    }
+
+    /**
+     * Compose or amend a draft retainer. Only a draft is writable: once Stripe
+     * holds the subscription it is billing a live cycle, and rewriting the row
+     * here would leave the two describing different money.
+     */
+    public function save_subscriptionAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $company_id      = Session::get('company_id');
+        $subscription_id = (int) ($this->post['subscription_id'] ?? 0);
+        $client_id       = (int) ($this->post['client_id'] ?? 0);
+        $project_id      = (int) ($this->post['project_id'] ?? 0);
+        $name            = $this->input('subscription_name');
+
+        if (!$this->owns_client($client_id)) {
+            $response['message'] = 'That client could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        if ($project_id > 0) {
+
+            if (!$this->owns_project($project_id)) {
+                $response['message'] = 'That project could not be found';
+                echo json_encode($response);
+                return;
+            }
+
+            $project = $this->projects_model->get_project($project_id, $company_id);
+
+            if ((int) $project[0]['client_id'] !== $client_id) {
+                $response['message'] = 'That project belongs to a different client';
+                echo json_encode($response);
+                return;
+            }
+        }
+
+        if ($name === '') {
+            $response['message'] = 'Give this retainer a name';
+            echo json_encode($response);
+            return;
+        }
+
+        $unit_amount = Money::to_cents($this->post['unit_amount'] ?? '');
+
+        if ($unit_amount === null || $unit_amount <= 0) {
+            $response['message'] = 'Enter an amount greater than zero';
+            echo json_encode($response);
+            return;
+        }
+
+        $quantity = (int) ($this->post['quantity'] ?? 1);
+
+        if ($quantity < 1) {
+            $response['message'] = 'Quantity must be at least one';
+            echo json_encode($response);
+            return;
+        }
+
+        $interval = (string) ($this->post['billing_interval'] ?? 'Month');
+
+        if (!in_array($interval, array('Month', 'Quarter', 'Year'), true)) {
+            $response['message'] = 'Choose how often this bills';
+            echo json_encode($response);
+            return;
+        }
+
+        $due_days   = (int) ($this->post['due_days'] ?? 30);
+        $start_date = trim((string) ($this->post['start_date'] ?? ''));
+
+        if ($start_date !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $start_date)) {
+            $response['message'] = 'That is not a valid start date';
+            echo json_encode($response);
+            return;
+        }
+
+        /* Currency is the company's, not the client's: the retainer settles into
+           the company's own connected account, which has one currency. */
+        $company  = $this->companies_model->get_company($company_id);
+        $currency = (is_array($company) && count($company) === 1) ? $company[0]['default_currency'] : 'usd';
+
+        if ($subscription_id > 0) {
+
+            $existing = $this->subscriptions_model->get_subscription($subscription_id, $company_id);
+
+            if (!is_array($existing) || count($existing) !== 1) {
+                $response['message'] = 'That retainer could not be found';
+                echo json_encode($response);
+                return;
+            }
+
+            if ($existing[0]['subscription_status'] !== 'Draft') {
+                $response['message'] = 'A live retainer cannot be edited. Cancel it and raise a new one.';
+                echo json_encode($response);
+                return;
+            }
+
+            $this->subscriptions_model->update_subscription($subscription_id, $company_id, $client_id, $project_id, $name, $unit_amount, $quantity, $interval, $due_days, $start_date, Session::get('user_id'));
+
+        } else {
+
+            $subscription_id = (int) $this->subscriptions_model->add_subscription($company_id, $client_id, $project_id, $name, $currency, $unit_amount, $quantity, $interval, $due_days, $start_date, Session::get('user_id'));
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Retainer saved';
+        $response['subscription_id'] = $subscription_id;
+        echo json_encode($response);
+    }
+
+    /**
+     * Hand the retainer to Stripe, which then owns its billing cycle and raises
+     * every renewal invoice.
+     *
+     * The claim comes first for the same reason it does on an invoice: two admins
+     * pressing Activate together would otherwise raise two subscriptions against
+     * one client, and the client would be billed twice a month forever.
+     */
+    public function activate_subscriptionAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $company_id      = Session::get('company_id');
+        $subscription_id = (int) ($this->post['subscription_id'] ?? 0);
+
+        $subscription = $this->subscriptions_model->get_subscription($subscription_id, $company_id);
+
+        if (!is_array($subscription) || count($subscription) !== 1) {
+            $response['message'] = 'That retainer could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        $subscription = $subscription[0];
+
+        if ($subscription['subscription_status'] !== 'Draft') {
+            $response['message'] = 'This retainer is already live';
+            echo json_encode($response);
+            return;
+        }
+
+        $company = $this->companies_model->get_company($company_id);
+        $company = (is_array($company) && count($company) === 1) ? $company[0] : array();
+
+        if (($company['stripe_connect_status'] ?? '') !== 'Connected' || (int) ($company['stripe_charges_enabled'] ?? 0) !== 1) {
+            $response['message'] = 'Connect your payment account before starting a retainer';
+            echo json_encode($response);
+            return;
+        }
+
+        $account_id = (string) $company['stripe_connect_account_id'];
+
+        if ($this->subscriptions_model->claim_provision($subscription_id, $company_id, Session::get('user_id')) !== 1) {
+            $response['message'] = 'This retainer is already being started. Refresh in a moment.';
+            echo json_encode($response);
+            return;
+        }
+
+        try {
+
+            $client = $this->clients_model->get_client($subscription['client_id'], $company_id);
+
+            if (!is_array($client) || count($client) !== 1) {
+                $this->subscriptions_model->fail_provision($subscription_id, 'Client could not be found');
+                $response['message'] = 'That client could not be found';
+                echo json_encode($response);
+                return;
+            }
+
+            $customer_id = $this->connected_customer_for_client($client[0], $account_id);
+
+            if ($customer_id === '') {
+                $this->subscriptions_model->fail_provision($subscription_id, StripeService::last_error());
+                $response['message'] = 'The client could not be set up for billing: '.StripeService::last_error();
+                echo json_encode($response);
+                return;
+            }
+
+            $price = StripeService::create_subscription_price(
+                $account_id,
+                $subscription['currency'],
+                $subscription['subscription_name'],
+                $subscription['unit_amount_cents'],
+                $subscription['billing_interval'],
+                $company_id,
+                $subscription_id
+            );
+
+            if (empty($price['id'])) {
+                $this->subscriptions_model->fail_provision($subscription_id, StripeService::last_error());
+                $response['message'] = 'The price could not be created: '.StripeService::last_error();
+                echo json_encode($response);
+                return;
+            }
+
+            $stripe = StripeService::create_connected_subscription(
+                $account_id,
+                $customer_id,
+                $price['id'],
+                $subscription['quantity'],
+                $subscription['due_days'],
+                $subscription['start_date'],
+                $company_id,
+                $subscription_id,
+                $subscription['client_id'],
+                $subscription['project_id']
+            );
+
+            if (empty($stripe['id'])) {
+                $this->subscriptions_model->fail_provision($subscription_id, StripeService::last_error());
+                $response['message'] = 'The retainer could not be started: '.StripeService::last_error();
+                echo json_encode($response);
+                return;
+            }
+
+            $this->subscriptions_model->apply_stripe_subscription($subscription_id, $stripe, $account_id, StripeService::livemode());
+
+        } catch (\Throwable $e) {
+
+            /* Left Pending rather than rolled back to Draft. Stripe may hold a
+               subscription this call never saw the answer to, and a retry from
+               Draft would bill the client on two schedules. */
+            $this->subscriptions_model->fail_provision($subscription_id, $e->getMessage());
+            error_log('[billing] retainer '.$subscription_id.' could not be started: '.$e->getMessage());
+            $response['message'] = 'We could not confirm this. Refresh in a moment before trying again.';
+            echo json_encode($response);
+            return;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Retainer started';
+        echo json_encode($response);
+    }
+
+    /** Stop a live retainer at the end of the period the client has paid for. */
+    public function cancel_subscriptionAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $company_id      = Session::get('company_id');
+        $subscription_id = (int) ($this->post['subscription_id'] ?? 0);
+
+        $subscription = $this->subscriptions_model->get_subscription($subscription_id, $company_id);
+
+        if (!is_array($subscription) || count($subscription) !== 1) {
+            $response['message'] = 'That retainer could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        $subscription = $subscription[0];
+
+        if ($subscription['stripe_subscription_id'] === null || $subscription['stripe_account_id'] === '') {
+            $response['message'] = 'This retainer has not been started yet';
+            echo json_encode($response);
+            return;
+        }
+
+        $cancelled = StripeService::cancel_connected_subscription($subscription['stripe_account_id'], $subscription['stripe_subscription_id'], true);
+
+        if (empty($cancelled['id'])) {
+            $response['message'] = 'The retainer could not be cancelled: '.StripeService::last_error();
+            echo json_encode($response);
+            return;
+        }
+
+        $this->subscriptions_model->apply_stripe_subscription($subscription_id, $cancelled, $subscription['stripe_account_id'], StripeService::livemode());
+
+        $response['success'] = true;
+        $response['message'] = 'The retainer will end at the close of this period';
+        echo json_encode($response);
+    }
+
+    /** Discard a draft that was never started. */
+    public function delete_subscriptionAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $subscription_id = (int) ($this->post['subscription_id'] ?? 0);
+
+        if ($this->subscriptions_model->delete_subscription($subscription_id, Session::get('company_id'), Session::get('user_id')) !== 1) {
+            $response['message'] = 'Only a draft retainer can be deleted';
+            echo json_encode($response);
+            return;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Draft deleted';
+        echo json_encode($response);
+    }
+
     public function load_invoicesAction(){
 
         $this->refuse_unless_company_admin();

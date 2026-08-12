@@ -243,6 +243,52 @@ class InvoicesModel extends Model {
         return parent::select($sql, $where);
     }
 
+    /**
+     * A renewal invoice Stripe raised on its own, mirrored in so it appears in the
+     * Billing list beside the ones composed here. It is created already issued -
+     * there was never a draft for it - and carries no local line items, because
+     * the lines belong to the retainer rather than to this row.
+     *
+     * Conditional on the Stripe id being unseen: the unique key would refuse a
+     * duplicate anyway, but a webhook delivered twice should be a no-op rather
+     * than a caught exception.
+     */
+    public function add_subscription_invoice($company_id, $client_id, $project_id, $subscription_id, $currency, $stripe_invoice_id, $account_id, $customer_id, $livemode)
+    {
+        $existing = parent::select(
+            "SELECT id FROM invoices WHERE stripe_invoice_id = :stripe_invoice_id",
+            array('stripe_invoice_id' => $stripe_invoice_id)
+        );
+
+        if (is_array($existing) && count($existing) === 1) {
+            return (int) $existing[0]['id'];
+        }
+
+        $now = date('Y-m-d H:i:s');
+
+        return (int) parent::insert('invoices', array(
+            'company_id'         => $company_id,
+            'client_id'          => $client_id,
+            'project_id'         => $project_id,
+            'subscription_id'    => $subscription_id,
+            'invoice_origin'     => 'Subscription',
+            'invoice_status'     => 'Open',
+            'currency'           => $currency,
+            'invoice_memo'       => '',
+            'hosted_invoice_url' => '',
+            'invoice_pdf_url'    => '',
+            'stripe_invoice_id'  => $stripe_invoice_id,
+            'stripe_account_id'  => $account_id,
+            'stripe_customer_id' => $customer_id,
+            'stripe_livemode'    => $livemode,
+            'created_by'         => 0,
+            'updated_by'         => 0,
+            'date_created'       => $now,
+            'date_updated'       => $now,
+            'deleted'            => 0
+        ));
+    }
+
     public function add_invoice($company_id, $client_id, $project_id, $currency, $invoice_memo, $invoice_footer, $due_days, $due_date, $created_by)
     {
         $data = array(

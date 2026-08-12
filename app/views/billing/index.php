@@ -4,6 +4,7 @@
             <h1 class="page__title">Billing</h1>
         </div>
         <div class="page__actions">
+            <a class="btn btn--secondary" href="/billing/subscriptions"><i class="fa-regular fa-rotate"></i> Retainers</a>
             <button type="button" class="btn btn--secondary" id="do_reconcile"><i class="fa-regular fa-rotate"></i> Check for updates</button>
             <a class="btn btn--primary" href="/billing/form"><i class="fa-regular fa-plus"></i> New Invoice</a>
         </div>
