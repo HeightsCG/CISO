@@ -563,6 +563,90 @@ class StripeService {
         }
     }
 
+    public static function retrieve_price($price_id): array
+    {
+        if (!self::configured() || (string) $price_id === '') {
+            return array();
+        }
+
+        try {
+            return self::client()->prices->retrieve($price_id, array())->toArray();
+        } catch (\Throwable $e) {
+            self::fail('price retrieve', $e);
+            return array();
+        }
+    }
+
+    /**
+     * Move to a cheaper plan when the period already paid for ends.
+     *
+     * A downgrade is never prorated, because this platform issues no credit: the
+     * company has bought the current period at the current rate, so it keeps that
+     * plan until the period runs out and the cheaper one starts after it. Applying
+     * it immediately would be keeping money for a service withdrawn, which is the
+     * same reason cancellation waits for the period end.
+     */
+    public static function schedule_plan_downgrade($subscription_id, $price_id): array
+    {
+        if (!self::configured() || (string) $subscription_id === '' || (string) $price_id === '') {
+            return array();
+        }
+
+        try {
+            $subscription = self::client()->subscriptions->retrieve($subscription_id, array());
+
+            /* A subscription carries at most one schedule, so a second downgrade
+               edits the one already attached rather than failing to create it. */
+            $schedule_id = is_string($subscription->schedule) ? $subscription->schedule : ($subscription->schedule->id ?? '');
+
+            if ($schedule_id === '') {
+                $schedule = self::client()->subscriptionSchedules->create(array(
+                    'from_subscription' => $subscription_id
+                ));
+                $schedule_id = $schedule->id;
+            } else {
+                $schedule = self::client()->subscriptionSchedules->retrieve($schedule_id, array());
+            }
+
+            $phase = $schedule->phases[0] ?? null;
+
+            if ($phase === null) {
+                self::$last_error = 'That subscription has no billing period to schedule against';
+                return array();
+            }
+
+            $items = array();
+
+            foreach ($phase->items as $item) {
+                $items[] = array(
+                    'price'    => is_string($item->price) ? $item->price : ($item->price->id ?? ''),
+                    'quantity' => (int) ($item->quantity ?? 1)
+                );
+            }
+
+            $updated = self::client()->subscriptionSchedules->update($schedule_id, array(
+                'end_behavior' => 'release',
+                'phases'       => array(
+                    array(
+                        'items'      => $items,
+                        'start_date' => $phase->start_date,
+                        'end_date'   => $phase->end_date,
+                        'proration_behavior' => 'none'
+                    ),
+                    array(
+                        'items'      => array(array('price' => $price_id, 'quantity' => 1)),
+                        'proration_behavior' => 'none'
+                    )
+                )
+            ));
+
+            return $updated->toArray();
+        } catch (\Throwable $e) {
+            self::fail('plan downgrade schedule', $e);
+            return array();
+        }
+    }
+
     /**
      * Cancelling at period end rather than immediately: the company has paid for
      * the period it is in, and taking access away the moment it clicks cancel

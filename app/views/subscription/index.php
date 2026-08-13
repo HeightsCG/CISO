@@ -379,15 +379,18 @@ $(document).ready(function () {
 
             pending_change = { price_id: button.data('price'), name: button.data('name'), proration_date: obj.proration_date };
 
-            if (obj.is_credit) {
-                $('#proration_summary').text('Switching to ' + button.data('name') + ' credits ' + obj.credit_display + ' to this account.');
-                $('#proration_hint').text('The credit is applied against the next invoice. Nothing is charged today.');
+            if (obj.is_downgrade) {
+                $('#proration_summary').text(button.data('name') + ' starts on ' + obj.starts_on + '.');
+                $('#proration_hint').text('The current plan continues until then, because this period is already paid for. It is not refunded or credited.');
+                $('#do_change_plan').text('Schedule Change');
             } else if (obj.amount_due > 0) {
                 $('#proration_summary').text('Switching to ' + button.data('name') + ' charges ' + obj.due_display + ' today.');
                 $('#proration_hint').text('This covers the rest of the current period at the new rate. The card on file is charged straight away.');
+                $('#do_change_plan').text('Confirm Change');
             } else {
                 $('#proration_summary').text('Switch to ' + button.data('name') + '?');
                 $('#proration_hint').text('Nothing is charged today. The new rate applies from the next invoice.');
+                $('#do_change_plan').text('Confirm Change');
             }
 
             modal('proration_modal').show();

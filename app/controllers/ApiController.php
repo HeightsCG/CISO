@@ -3621,6 +3621,32 @@ class ApiController extends Controller {
             return;
         }
 
+        /**
+         * Direction decides everything, because this platform issues no credit.
+         * Moving up is charged for the rest of the period straight away; moving
+         * down waits for the period already paid for to end.
+         */
+        $new_price = StripeService::retrieve_price($price_id);
+        $now_price = (int) ($current['items']['data'][0]['price']['unit_amount'] ?? 0);
+
+        if (empty($new_price['id'])) {
+            $response['message'] = 'That plan could not be priced: '.StripeService::last_error();
+            echo json_encode($response);
+            return;
+        }
+
+        if ((int) $new_price['unit_amount'] < $now_price) {
+
+            $ends = (int) ($current['items']['data'][0]['current_period_end'] ?? 0);
+
+            $response['success']      = true;
+            $response['message']      = 'Priced';
+            $response['is_downgrade'] = true;
+            $response['starts_on']    = $ends > 0 ? date('n/j/Y', $ends) : '';
+            echo json_encode($response);
+            return;
+        }
+
         $proration_date = time();
 
         $preview = StripeService::preview_plan_change(
@@ -3637,16 +3663,14 @@ class ApiController extends Controller {
             return;
         }
 
-        $due   = (int) ($preview['amount_due'] ?? 0);
-        $total = (int) ($preview['total'] ?? 0);
+        $due = (int) ($preview['amount_due'] ?? 0);
 
         $response['success']        = true;
         $response['message']        = 'Priced';
+        $response['is_downgrade']   = false;
         $response['proration_date'] = $proration_date;
         $response['amount_due']     = $due;
         $response['due_display']    = Money::format($due, $preview['currency']);
-        $response['credit_display'] = Money::format(abs($total), $preview['currency']);
-        $response['is_credit']      = ($due === 0 && $total < 0);
         echo json_encode($response);
     }
 
@@ -3673,6 +3697,37 @@ class ApiController extends Controller {
 
         if (empty($current['id']) || empty($current['items']['data'][0]['id'])) {
             $response['message'] = 'There is no subscription to change';
+            echo json_encode($response);
+            return;
+        }
+
+        /* Down is scheduled, up is charged - the same rule the preview quoted. */
+        $new_price = StripeService::retrieve_price($price_id);
+        $now_price = (int) ($current['items']['data'][0]['price']['unit_amount'] ?? 0);
+
+        if (empty($new_price['id'])) {
+            $response['message'] = 'That plan could not be priced: '.StripeService::last_error();
+            echo json_encode($response);
+            return;
+        }
+
+        if ((int) $new_price['unit_amount'] < $now_price) {
+
+            $scheduled = StripeService::schedule_plan_downgrade($current['id'], $price_id);
+
+            if (empty($scheduled['id'])) {
+                $response['message'] = 'The plan change could not be scheduled: '.StripeService::last_error();
+                echo json_encode($response);
+                return;
+            }
+
+            $ends = (int) ($current['items']['data'][0]['current_period_end'] ?? 0);
+
+            $response['success'] = true;
+            $response['message'] = $ends > 0
+                ? 'Plan changes on '.date('n/j/Y', $ends)
+                : 'Plan changes at the end of this period';
+            $response['client_secret'] = '';
             echo json_encode($response);
             return;
         }
