@@ -42,6 +42,20 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
         <i class="fa-regular fa-triangle-exclamation alert__icon" aria-hidden="true"></i>
         <p class="alert__title">This subscription ends on <?php echo htmlspecialchars(date('m/d/Y', (int) ($item['current_period_end'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></p>
         <p class="alert__text">Access continues until then. Resume any time before that date to keep it running.</p>
+        <div class="alert__actions">
+            <button type="button" class="btn btn--destructive btn--sm" id="do_end_now_open">End Now</button>
+        </div>
+    </div>
+    <?php } ?>
+
+    <?php if (!empty($this->scheduled['price_id'])) { ?>
+    <div class="alert alert--warn" role="status">
+        <i class="fa-regular fa-triangle-exclamation alert__icon" aria-hidden="true"></i>
+        <p class="alert__title">This subscription changes plan on <?php echo htmlspecialchars(date('m/d/Y', (int) $this->scheduled['starts_at']), ENT_QUOTES, 'UTF-8'); ?></p>
+        <p class="alert__text">The current plan runs until then, because this period is already paid for.</p>
+        <div class="alert__actions">
+            <button type="button" class="btn btn--primary btn--sm" id="do_switch_now_open">Switch Now</button>
+        </div>
     </div>
     <?php } ?>
 
@@ -61,7 +75,7 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
             <?php } else { ?>
             <div class="plans__grid">
                 <?php foreach ($this->plans as $plan) { ?>
-                <?php $current = ($plan['price_id'] === ($price['id'] ?? '')); ?>
+                <?php $current = ($plan['is_free'] ? !$has_sub : ($plan['price_id'] === ($price['id'] ?? ''))); ?>
                 <article class="plan<?php echo ($current ? ' plan--current' : ''); ?>">
                     <?php if ($current) { ?>
                     <span class="plan__flag">Current Plan</span>
@@ -70,7 +84,7 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
                     <p class="plan__price">
                         <span class="plan__figure"><?php echo htmlspecialchars(Money::symbol($plan['currency']).Money::figure($plan['unit_amount']), ENT_QUOTES, 'UTF-8'); ?></span>
                     </p>
-                    <p class="plan__cycle"><?php echo htmlspecialchars(($plan['interval_count'] > 1 ? 'every '.$plan['interval_count'].' '.$plan['interval'].'s' : 'per '.$plan['interval']), ENT_QUOTES, 'UTF-8'); ?></p>
+                    <p class="plan__cycle"><?php echo htmlspecialchars(($plan['is_free'] ? 'no subscription' : ($plan['interval_count'] > 1 ? 'every '.$plan['interval_count'].' '.$plan['interval'].'s' : 'per '.$plan['interval'])), ENT_QUOTES, 'UTF-8'); ?></p>
                     <?php if ($plan['description'] !== '') { ?>
                     <p class="plan__desc"><?php echo htmlspecialchars($plan['description'], ENT_QUOTES, 'UTF-8'); ?></p>
                     <?php } ?>
@@ -82,10 +96,15 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
                     </ul>
                     <?php } ?>
                     <div class="plan__act">
-                        <?php if ($current && !$ending) { ?>
-                        <button type="button" class="btn btn--secondary btn--block btn--destructive" id="do_cancel_open">Cancel Subscription</button>
-                        <?php } elseif ($current) { ?>
+                        <?php if ($current && $ending) { ?>
                         <button type="button" class="btn btn--secondary btn--block" id="do_resume_card">Resume Subscription</button>
+                        <?php } elseif ($current) { ?>
+                        <?php } elseif ($plan['is_free'] && $ending) { ?>
+                        <p class="plan__pending">Starts <?php echo htmlspecialchars(date('m/d/Y', (int) ($item['current_period_end'] ?? 0)), ENT_QUOTES, 'UTF-8'); ?></p>
+                        <?php } elseif (!empty($this->scheduled['price_id']) && $plan['price_id'] === $this->scheduled['price_id']) { ?>
+                        <p class="plan__pending">Starts <?php echo htmlspecialchars(date('m/d/Y', (int) $this->scheduled['starts_at']), ENT_QUOTES, 'UTF-8'); ?></p>
+                        <?php } elseif ($plan['is_free']) { ?>
+                        <button type="button" class="btn btn--secondary btn--block" id="do_cancel_open">Move to Free</button>
                         <?php } else { ?>
                         <button type="button" class="btn btn--primary btn--block" data-action="choose_plan" data-price="<?php echo htmlspecialchars($plan['price_id'], ENT_QUOTES, 'UTF-8'); ?>" data-name="<?php echo htmlspecialchars($plan['name'], ENT_QUOTES, 'UTF-8'); ?>"><?php echo ($has_sub ? 'Switch to this Plan' : 'Subscribe'); ?></button>
                         <?php } ?>
@@ -248,16 +267,16 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="cancel_modal_title">Cancel Subscription</h2>
+                <h2 class="modal-title" id="cancel_modal_title">Move to Free</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>Stop this subscription from renewing?</p>
-                <p class="import__hint">Access continues to the end of the period already paid for. It can be resumed at any point before then.</p>
+                <p class="import__hint">The current plan continues to the end of the period already paid for, which is not refunded or credited. The free account then applies: 1 client, 1 project, 1 assessment, and no billing. It can be resumed at any point before then.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Keep Subscription</button>
-                <button type="button" id="do_cancel" class="btn btn--destructive">Cancel Subscription</button>
+                <button type="button" id="do_cancel" class="btn btn--destructive">Move to Free</button>
             </div>
         </div>
     </div>
@@ -277,6 +296,44 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" id="do_change_plan" class="btn btn--primary">Confirm Change</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop="static" id="end_now_modal" tabindex="-1" aria-labelledby="end_now_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="end_now_modal_title">End Now</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>End this subscription immediately rather than at the close of the period?</p>
+                <p class="import__hint">The free account applies straight away: 1 client, 1 project, 1 assessment, and no billing. The rest of the period already paid for is forfeited - it is not refunded or credited.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Keep Until Period Ends</button>
+                <button type="button" id="do_end_now" class="btn btn--destructive">End Now</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop="static" id="switch_now_modal" tabindex="-1" aria-labelledby="switch_now_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="switch_now_modal_title">Switch Now</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Move to the new plan immediately rather than at the close of the period?</p>
+                <p class="import__hint">The new rate and its limits apply straight away. The rest of the period already paid for is forfeited - it is not refunded or credited.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Wait Until Period Ends</button>
+                <button type="button" id="do_switch_now" class="btn btn--destructive">Switch Now</button>
             </div>
         </div>
     </div>
@@ -551,6 +608,56 @@ $(document).ready(function () {
             } else {
                 toastr.error(obj.message);
             }
+        });
+    });
+
+    $('#do_end_now_open').click(function () {
+        modal('end_now_modal').show();
+    });
+
+    $('#do_switch_now_open').click(function () {
+        modal('switch_now_modal').show();
+    });
+
+    $('#do_end_now').click(function () {
+
+        set_loading('#do_end_now', true);
+
+        ApiDataSvc.apiCall('post', 'subscription_cancel', { immediate: 1 }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading('#do_end_now', false);
+
+            if (!obj.success) {
+                modal('end_now_modal').hide();
+                toastr.error(obj.message);
+                return;
+            }
+
+            toastr.success(obj.message);
+            window.location.reload();
+        });
+    });
+
+    $('#do_switch_now').click(function () {
+
+        set_loading('#do_switch_now', true);
+
+        ApiDataSvc.apiCall('post', 'subscription_switch_now', {}, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading('#do_switch_now', false);
+
+            if (!obj.success) {
+                modal('switch_now_modal').hide();
+                toastr.error(obj.message);
+                return;
+            }
+
+            toastr.success(obj.message);
+            window.location.reload();
         });
     });
 

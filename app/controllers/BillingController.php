@@ -48,6 +48,61 @@ class BillingController extends Controller {
     }
 
     /**
+     * Refuse the whole section when the plan does not include invoicing.
+     *
+     * Free accounts do the compliance work; billing is what the subscription
+     * buys. Checked per action for the same reason the admin check is: hiding the
+     * nav link only hides the link.
+     */
+    private function refuse_unless_plan_allows_billing(): bool
+    {
+        if ($this->billing_included($this->company())) {
+            return true;
+        }
+
+        Errors::access_denied();
+        return false;
+    }
+
+    /**
+     * An unreachable payment service means the plan is unknown, not free, so it
+     * passes. Treating an outage as a free account would shut a paying customer
+     * out of its own invoicing until the service came back.
+     */
+    private function billing_included(array $company): bool
+    {
+        $plan_name = $this->plan_name($company);
+
+        return $plan_name === '' || Plans::allows_billing($plan_name);
+    }
+
+    /** The plan this company is on, or '' when that could not be established. */
+    private function plan_name(array $company): string
+    {
+        $customer_id = (string) ($company['platform_customer_id'] ?? '');
+
+        if ($customer_id === '') {
+            return Plans::FREE;
+        }
+
+        $lookup = StripeService::subscription_lookup($customer_id);
+
+        if (empty($lookup['subscription']['id'])) {
+            return $lookup['reachable'] ? Plans::FREE : '';
+        }
+
+        $price_id = $lookup['subscription']['items']['data'][0]['price']['id'] ?? '';
+
+        foreach (StripeService::platform_plans() as $plan) {
+            if ($plan['price_id'] === $price_id) {
+                return $plan['name'];
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * The company is a customer of this platform as well as a merchant on it, so a
      * customer record is minted here the first time anyone opens Billing.
      *
@@ -106,7 +161,19 @@ class BillingController extends Controller {
             return;
         }
 
-        $this->view->company = $this->ensure_platform_customer($this->company());
+        $company = $this->company();
+
+        /* A free account is shown what billing does rather than a locked door -
+           this page is where the case for subscribing is made. Every action
+           behind it still refuses, so the offer is not a way in. */
+        $this->view->billing_allowed = $this->billing_included($company);
+
+        if (!$this->view->billing_allowed) {
+            $this->view->render();
+            return;
+        }
+
+        $this->view->company = $this->ensure_platform_customer($company);
         $this->view->render();
     }
 
@@ -117,7 +184,7 @@ class BillingController extends Controller {
      */
     public function formAction(){
 
-        if (!$this->refuse_unless_company_admin()) {
+        if (!$this->refuse_unless_company_admin() || !$this->refuse_unless_plan_allows_billing()) {
             return;
         }
 
@@ -157,7 +224,7 @@ class BillingController extends Controller {
      */
     public function pdfAction(){
 
-        if (!$this->refuse_unless_company_admin()) {
+        if (!$this->refuse_unless_company_admin() || !$this->refuse_unless_plan_allows_billing()) {
             return;
         }
 
@@ -205,7 +272,7 @@ class BillingController extends Controller {
 
     public function invoiceAction(){
 
-        if (!$this->refuse_unless_company_admin()) {
+        if (!$this->refuse_unless_company_admin() || !$this->refuse_unless_plan_allows_billing()) {
             return;
         }
 
@@ -242,7 +309,7 @@ class BillingController extends Controller {
      */
     public function subscriptionformAction(){
 
-        if (!$this->refuse_unless_company_admin()) {
+        if (!$this->refuse_unless_company_admin() || !$this->refuse_unless_plan_allows_billing()) {
             return;
         }
 
@@ -269,7 +336,7 @@ class BillingController extends Controller {
 
     public function subscriptionAction(){
 
-        if (!$this->refuse_unless_company_admin()) {
+        if (!$this->refuse_unless_company_admin() || !$this->refuse_unless_plan_allows_billing()) {
             return;
         }
 

@@ -1179,6 +1179,15 @@ class ApiController extends Controller {
      * data the moment this shipped. Restricting unsubscribed companies is a
      * product decision, not a technical one - it is made by giving them a plan.
      */
+    /**
+     * The plan this company is on.
+     *
+     * Returns Plans::FREE when it has never subscribed - a free account is a plan
+     * with its own limits, not an absence of one. Returns '' only when the answer
+     * could not be established, which is an outage rather than a fact about the
+     * company, and callers let that pass rather than dropping a paying customer
+     * to the free tier because the payment service was briefly unreachable.
+     */
     private function company_plan_name(): string
     {
         static $plan_name = null;
@@ -1197,23 +1206,55 @@ class ApiController extends Controller {
 
         $customer_id = (string) ($company[0]['platform_customer_id'] ?? '');
 
+        /* No billing record at all is a company that has never subscribed. */
         if ($customer_id === '') {
+            $plan_name = Plans::FREE;
             return $plan_name;
         }
 
-        $subscription = StripeService::platform_subscription($customer_id);
-        $product      = $subscription['items']['data'][0]['price']['product'] ?? '';
+        $lookup = StripeService::subscription_lookup($customer_id);
+
+        if (!$lookup['reachable']) {
+            return $plan_name;
+        }
+
+        if (empty($lookup['subscription']['id'])) {
+            $plan_name = Plans::FREE;
+            return $plan_name;
+        }
+
+        $price_id = $lookup['subscription']['items']['data'][0]['price']['id'] ?? '';
 
         /* The product comes back as an id unless expanded, so the plan is matched
            by the name held against that price in the catalogue Stripe returns. */
         foreach (StripeService::platform_plans() as $plan) {
-            if ($plan['price_id'] === ($subscription['items']['data'][0]['price']['id'] ?? '')) {
+            if ($plan['price_id'] === $price_id) {
                 $plan_name = $plan['name'];
                 break;
             }
         }
 
         return $plan_name;
+    }
+
+    /**
+     * Refuse when this company's plan does not include invoicing at all. Free
+     * accounts do the compliance work; billing is what the subscription buys.
+     */
+    private function refuse_unless_plan_allows_billing(): void
+    {
+        $plan_name = $this->company_plan_name();
+
+        if ($plan_name === '' || Plans::allows_billing($plan_name)) {
+            return;
+        }
+
+        echo json_encode(array(
+            'success'    => false,
+            'message'    => 'Billing is not included on the free account. Subscribe to raise invoices.',
+            'plan_limit' => 'billing'
+        ));
+        exit;
     }
 
     /**
@@ -1232,8 +1273,10 @@ class ApiController extends Controller {
         $cap = Plans::limits($plan_name)[$limit] ?? 0;
 
         echo json_encode(array(
-            'success' => false,
-            'message' => 'Your plan includes '.$cap.' '.$noun.'. Upgrade to add more.',
+            'success'    => false,
+            'message'    => ($plan_name === Plans::FREE)
+                ? 'The free account includes '.$cap.' '.($cap === 1 ? rtrim($noun, 's') : $noun).'. Subscribe to add more.'
+                : 'Your plan includes '.$cap.' '.$noun.'. Upgrade to add more.',
             'plan_limit' => $limit
         ));
         exit;
@@ -3550,6 +3593,8 @@ class ApiController extends Controller {
         }
 
         $response['success'] = true;
+        Plans::forget();
+
         $response['message'] = 'Subscription started';
         $response['client_secret'] = $this->payment_secret_if_due($subscription);
         echo json_encode($response);
@@ -3674,6 +3719,52 @@ class ApiController extends Controller {
         echo json_encode($response);
     }
 
+    /**
+     * Bring a scheduled plan change forward to now.
+     *
+     * The remainder of the period already paid for is forfeited rather than
+     * refunded or credited, which is what the person agreed to when choosing it.
+     */
+    public function subscription_switch_nowAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $current = StripeService::platform_subscription($this->platform_customer_id());
+
+        if (empty($current['id'])) {
+            $response['message'] = 'There is no subscription to change';
+            echo json_encode($response);
+            return;
+        }
+
+        $scheduled = StripeService::scheduled_plan($current);
+
+        if (empty($scheduled['price_id'])) {
+            $response['message'] = 'There is no scheduled change to bring forward';
+            echo json_encode($response);
+            return;
+        }
+
+        $applied = StripeService::apply_scheduled_plan_now($current['id'], $scheduled['schedule_id'], $scheduled['price_id']);
+
+        if (empty($applied['id'])) {
+            $response['message'] = 'The plan could not be switched: '.StripeService::last_error();
+            echo json_encode($response);
+            return;
+        }
+
+        Plans::forget();
+
+        $response['success'] = true;
+        $response['message'] = 'Plan switched';
+        echo json_encode($response);
+    }
+
     /** Move to a different plan. */
     public function subscription_changeAction(){
 
@@ -3723,6 +3814,8 @@ class ApiController extends Controller {
 
             $ends = (int) ($current['items']['data'][0]['current_period_end'] ?? 0);
 
+            Plans::forget();
+
             $response['success'] = true;
             $response['message'] = $ends > 0
                 ? 'Plan changes on '.date('n/j/Y', $ends)
@@ -3744,6 +3837,8 @@ class ApiController extends Controller {
             echo json_encode($response);
             return;
         }
+
+        Plans::forget();
 
         $response['success'] = true;
         $response['message'] = 'Plan changed';
@@ -3885,7 +3980,11 @@ class ApiController extends Controller {
             return;
         }
 
-        $cancelled = StripeService::cancel_platform_subscription($current['id'], true);
+        /* Ending now forfeits the rest of the period, which is not refunded or
+           credited - the person is told that before choosing it. */
+        $now = !empty($this->post['immediate']);
+
+        $cancelled = StripeService::cancel_platform_subscription($current['id'], !$now);
 
         if (empty($cancelled['id'])) {
             $response['message'] = 'The subscription could not be cancelled: '.StripeService::last_error();
@@ -3893,8 +3992,12 @@ class ApiController extends Controller {
             return;
         }
 
+        Plans::forget();
+
         $response['success'] = true;
-        $response['message'] = 'The subscription will end at the close of this period';
+        $response['message'] = $now
+            ? 'The subscription has ended'
+            : 'The subscription will end at the close of this period';
         echo json_encode($response);
     }
 
@@ -3923,6 +4026,8 @@ class ApiController extends Controller {
             echo json_encode($response);
             return;
         }
+
+        Plans::forget();
 
         $response['success'] = true;
         $response['message'] = 'The subscription will continue';
@@ -3990,6 +4095,7 @@ class ApiController extends Controller {
     public function resend_invoiceAction(){
 
         $this->refuse_unless_company_admin();
+        $this->refuse_unless_plan_allows_billing();
 
         $response = array(
             'success' => false,
@@ -4206,6 +4312,7 @@ class ApiController extends Controller {
     public function load_subscriptionsAction(){
 
         $this->refuse_unless_company_admin();
+        $this->refuse_unless_plan_allows_billing();
 
         echo json_encode($this->subscriptions_model->load_subscriptions(Session::get('company_id')));
     }
@@ -4218,6 +4325,7 @@ class ApiController extends Controller {
     public function save_subscriptionAction(){
 
         $this->refuse_unless_company_admin();
+        $this->refuse_unless_plan_allows_billing();
 
         $response = array(
             'success' => false,
@@ -4337,6 +4445,7 @@ class ApiController extends Controller {
     public function activate_subscriptionAction(){
 
         $this->refuse_unless_company_admin();
+        $this->refuse_unless_plan_allows_billing();
 
         $response = array(
             'success' => false,
@@ -4459,6 +4568,7 @@ class ApiController extends Controller {
     public function cancel_subscriptionAction(){
 
         $this->refuse_unless_company_admin();
+        $this->refuse_unless_plan_allows_billing();
 
         $response = array(
             'success' => false,
@@ -4503,6 +4613,7 @@ class ApiController extends Controller {
     public function delete_subscriptionAction(){
 
         $this->refuse_unless_company_admin();
+        $this->refuse_unless_plan_allows_billing();
 
         $response = array(
             'success' => false,
@@ -4525,6 +4636,7 @@ class ApiController extends Controller {
     public function load_invoicesAction(){
 
         $this->refuse_unless_company_admin();
+        $this->refuse_unless_plan_allows_billing();
 
         echo json_encode($this->invoices_model->load_invoices(Session::get('company_id')));
     }
@@ -4532,6 +4644,7 @@ class ApiController extends Controller {
     public function load_client_invoicesAction(){
 
         $this->refuse_unless_company_admin();
+        $this->refuse_unless_plan_allows_billing();
 
         $client_id = (int) ($this->post['client_id'] ?? 0);
 
@@ -4551,6 +4664,7 @@ class ApiController extends Controller {
     public function load_invoiceAction(){
 
         $this->refuse_unless_company_admin();
+        $this->refuse_unless_plan_allows_billing();
 
         $invoice_id = (int) ($this->post['invoice_id'] ?? 0);
         $invoice    = $this->invoices_model->get_invoice($invoice_id, Session::get('company_id'));
@@ -4578,6 +4692,7 @@ class ApiController extends Controller {
     public function save_invoiceAction(){
 
         $this->refuse_unless_company_admin();
+        $this->refuse_unless_plan_allows_billing();
 
         $response = array(
             'success' => false,
@@ -4830,6 +4945,7 @@ class ApiController extends Controller {
     public function send_invoiceAction(){
 
         $this->refuse_unless_company_admin();
+        $this->refuse_unless_plan_allows_billing();
 
         $response = array(
             'success' => false,
@@ -5089,6 +5205,7 @@ class ApiController extends Controller {
     public function void_invoiceAction(){
 
         $this->refuse_unless_company_admin();
+        $this->refuse_unless_plan_allows_billing();
 
         $response = array(
             'success' => false,
@@ -5230,6 +5347,7 @@ class ApiController extends Controller {
     public function billing_reconcileAction(){
 
         $this->refuse_unless_company_admin();
+        $this->refuse_unless_plan_allows_billing();
 
         $response = array(
             'success' => false,
@@ -5274,6 +5392,7 @@ class ApiController extends Controller {
     public function delete_invoiceAction(){
 
         $this->refuse_unless_company_admin();
+        $this->refuse_unless_plan_allows_billing();
 
         $response = array(
             'success' => false,

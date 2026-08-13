@@ -102,6 +102,7 @@ class SubscriptionController extends Controller {
         $this->view->publish_key    = StripeService::publish_key();
         $this->view->subscription   = StripeService::platform_subscription($customer_id);
         $this->view->plans          = Plans::describe(StripeService::platform_plans());
+        $this->view->scheduled      = StripeService::scheduled_plan($this->view->subscription);
         $this->view->invoices       = StripeService::platform_invoices($customer_id);
         $this->view->payment_method = StripeService::platform_payment_method($customer_id);
         $this->view->cards          = StripeService::platform_payment_methods($customer_id);

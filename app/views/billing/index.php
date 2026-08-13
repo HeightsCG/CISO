@@ -1,3 +1,57 @@
+<?php if (!$this->billing_allowed) { ?>
+<div class="page">
+    <div class="page__head">
+        <div>
+            <h1 class="page__title">Billing</h1>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel__body">
+            <div class="upsell">
+                <div class="upsell__copy">
+                    <h2 class="upsell__title">Invoice your clients from the work you already track</h2>
+                    <p class="upsell__lede">Billing turns an engagement into an invoice without rekeying any of it. It is included on every paid plan.</p>
+
+                    <ul class="upsell__points">
+                        <li>Raise invoices against a client and project, priced by line with per-line discounts</li>
+                        <li>Take payment by card or bank transfer, straight into your own account</li>
+                        <li>Bill once or on a schedule, with renewals raised for you</li>
+                        <li>Clients see and settle what they owe where they already sign in</li>
+                    </ul>
+
+                    <div class="upsell__actions">
+                        <a class="btn btn--primary" href="/subscription">See Plans</a>
+                    </div>
+                </div>
+
+                <div class="upsell__art" aria-hidden="true">
+                    <div class="specimen">
+                        <div class="specimen__head">
+                            <span class="specimen__word">Invoice</span>
+                            <span class="specimen__bar specimen__bar--no"></span>
+                        </div>
+                        <div class="specimen__meta">
+                            <span class="specimen__bar"></span>
+                            <span class="specimen__bar specimen__bar--short"></span>
+                        </div>
+                        <ul class="specimen__lines">
+                            <li><span class="specimen__bar"></span><span class="specimen__bar specimen__bar--amt"></span></li>
+                            <li><span class="specimen__bar specimen__bar--short"></span><span class="specimen__bar specimen__bar--amt"></span></li>
+                            <li><span class="specimen__bar"></span><span class="specimen__bar specimen__bar--amt"></span></li>
+                        </ul>
+                        <div class="specimen__total">
+                            <span class="specimen__word">Total</span>
+                            <span class="specimen__bar specimen__bar--amt"></span>
+                        </div>
+                        <div class="specimen__pay">Pay Invoice</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php } else { ?>
 <div class="page page--list">
     <div class="page__head">
         <div>
@@ -75,6 +129,9 @@
     </div>
 </div>
 
+<?php } ?>
+
+<?php if ($this->billing_allowed) { ?>
 <script>
 $(document).ready(function () {
 
@@ -235,7 +292,7 @@ $(document).ready(function () {
 
         set_loading('#do_reconcile', true);
 
-        ApiDataSvc.apiCall('post', 'reconcile_invoices', {}, function (data) {
+        ApiDataSvc.apiCall('post', 'billing_reconcile', {}, function (data) {
 
             var obj = JSON.parse(data);
 
@@ -254,3 +311,4 @@ $(document).ready(function () {
 
 });
 </script>
+<?php } ?>

@@ -341,6 +341,40 @@ class StripeService {
     }
 
     /**
+     * The live subscription, and whether the question could be asked at all.
+     *
+     * platform_subscription() answers array() both for a company with no
+     * subscription and for a company we could not reach, which are opposite
+     * facts: the first belongs on the free tier's limits, the second is an outage
+     * and must not take a paying customer's plan away from them.
+     */
+    public static function subscription_lookup($customer_id): array
+    {
+        if (!self::configured() || (string) $customer_id === '') {
+            return array('reachable' => true, 'subscription' => array());
+        }
+
+        try {
+            $list = self::client()->subscriptions->all(array(
+                'customer' => $customer_id,
+                'status'   => 'all',
+                'limit'    => 10
+            ));
+
+            foreach ($list->data as $subscription) {
+                if (in_array($subscription->status, array('active', 'trialing', 'past_due', 'unpaid', 'paused'), true)) {
+                    return array('reachable' => true, 'subscription' => $subscription->toArray());
+                }
+            }
+
+            return array('reachable' => true, 'subscription' => array());
+        } catch (\Throwable $e) {
+            self::fail('subscription lookup', $e);
+            return array('reachable' => false, 'subscription' => array());
+        }
+    }
+
+    /**
      * A subscription that was started but never paid for.
      *
      * These are invisible to platform_subscription(), which reports only live
@@ -643,6 +677,85 @@ class StripeService {
             return $updated->toArray();
         } catch (\Throwable $e) {
             self::fail('plan downgrade schedule', $e);
+            return array();
+        }
+    }
+
+    /**
+     * A plan change that is waiting for the current period to end.
+     *
+     * Returns the price it moves to and the date it starts, so the page can
+     * offer to bring it forward rather than leaving the person to wait.
+     */
+    public static function scheduled_plan($subscription): array
+    {
+        $schedule = $subscription['schedule'] ?? null;
+        $schedule_id = is_string($schedule) ? $schedule : ($schedule['id'] ?? '');
+
+        if (!self::configured() || $schedule_id === '') {
+            return array();
+        }
+
+        try {
+            $schedule = self::client()->subscriptionSchedules->retrieve($schedule_id, array())->toArray();
+
+            /* The phase after the one running now is the change that is waiting. */
+            $upcoming = $schedule['phases'][1] ?? array();
+            $price    = $upcoming['items'][0]['price'] ?? '';
+
+            if ($price === '') {
+                return array();
+            }
+
+            return array(
+                'schedule_id' => $schedule_id,
+                'price_id'    => is_string($price) ? $price : ($price['id'] ?? ''),
+                'starts_at'   => (int) ($upcoming['start_date'] ?? 0)
+            );
+        } catch (\Throwable $e) {
+            self::fail('scheduled plan lookup', $e);
+            return array();
+        }
+    }
+
+    /**
+     * Bring a scheduled plan change forward to now.
+     *
+     * Never prorated: the period already paid for is not refunded or credited, so
+     * moving early simply starts the new rate and forfeits the remainder. The
+     * schedule is released first, or it would reapply the change at the date it
+     * was originally set for.
+     */
+    public static function apply_scheduled_plan_now($subscription_id, $schedule_id, $price_id): array
+    {
+        if (!self::configured() || (string) $subscription_id === '' || (string) $price_id === '') {
+            return array();
+        }
+
+        try {
+            if ((string) $schedule_id !== '') {
+                self::client()->subscriptionSchedules->release($schedule_id, array());
+            }
+
+            $subscription = self::client()->subscriptions->retrieve($subscription_id, array());
+            $item_id      = $subscription->items->data[0]->id ?? '';
+
+            if ($item_id === '') {
+                self::$last_error = 'That subscription has no item to change';
+                return array();
+            }
+
+            $updated = self::client()->subscriptions->update($subscription_id, array(
+                'items' => array(array(
+                    'id'    => $item_id,
+                    'price' => $price_id
+                )),
+                'proration_behavior' => 'none'
+            ));
+
+            return $updated->toArray();
+        } catch (\Throwable $e) {
+            self::fail('apply scheduled plan', $e);
             return array();
         }
     }

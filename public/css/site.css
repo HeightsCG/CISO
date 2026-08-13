@@ -5600,6 +5600,213 @@ table.data.ledger tfoot .ledger__foot-total .ledger__amount {
     }
 }
 
+/* A plan that is coming but not yet in force states when, in place of the
+   button that would choose it. */
+.plan__pending {
+    margin: 0;
+    padding: var(--space-2) 0;
+    text-align: center;
+    font-size: var(--fs-meta);
+    color: var(--text-secondary);
+}
+
+/* ------------------------------------------------------- billing upsell */
+
+/* What a free account sees in place of the invoice list: a statement of what the
+   section does, not a locked door. */
+
+.upsell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-4) 0;
+}
+
+.upsell__copy {
+    max-width: 62ch;
+}
+
+.upsell__title {
+    margin: 0;
+    font-size: var(--fs-section);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    color: var(--text-primary);
+}
+
+.upsell__lede {
+    margin: var(--space-3) 0 0;
+    font-size: var(--fs-body);
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+.upsell__points {
+    margin: var(--space-5) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.upsell__points li {
+    position: relative;
+    padding: 0 0 0 var(--space-5);
+    font-size: var(--fs-body);
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+.upsell__points li + li {
+    margin-top: var(--space-3);
+}
+
+/* A rule of the accent, once per line, rather than a tick that would read as
+   something already done. */
+.upsell__points li::before {
+    content: "";
+    position: absolute;
+    top: 0.55em;
+    left: 0;
+    width: 12px;
+    height: 1px;
+    background: var(--accent);
+}
+
+.upsell__actions {
+    margin-top: var(--space-6);
+}
+
+.upsell__note {
+    margin: var(--space-5) 0 0;
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+/* The thing being described, drawn rather than illustrated: an invoice reduced
+   to its shape. The words on it are structural and true - Invoice, Total, Pay
+   Invoice - and everything that would be data is a bar, so nothing here is a
+   figure this company has not earned. */
+.upsell__art {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.specimen {
+    width: 100%;
+    max-width: 280px;
+    padding: var(--space-5);
+    background: var(--surface-app);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-panel);
+}
+
+.specimen__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border-strong);
+}
+
+.specimen__word {
+    font-size: 11px;
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.specimen__bar {
+    display: block;
+    height: 6px;
+    flex: 1 1 auto;
+    background: var(--surface-inset);
+    border-radius: 1px;
+}
+
+.specimen__bar--no {
+    flex: 0 0 64px;
+}
+
+.specimen__bar--short {
+    flex: 0 0 40%;
+}
+
+.specimen__bar--amt {
+    flex: 0 0 48px;
+    background: var(--border-strong);
+}
+
+.specimen__meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-4) 0;
+}
+
+.specimen__meta .specimen__bar {
+    flex: 0 0 6px;
+    width: 70%;
+}
+
+.specimen__meta .specimen__bar--short {
+    width: 45%;
+}
+
+.specimen__lines {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--border);
+}
+
+.specimen__lines li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.specimen__total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-3) 0 var(--space-5);
+}
+
+.specimen__total .specimen__bar--amt {
+    height: 8px;
+    background: var(--text-primary);
+}
+
+/* The payoff: the button the client presses. */
+.specimen__pay {
+    padding: var(--space-3);
+    text-align: center;
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-medium);
+    color: var(--text-inverse);
+    background: var(--accent);
+    border-radius: var(--radius);
+}
+
+@media (max-width: 900px) {
+
+    .upsell {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-6);
+    }
+
+    .upsell__art {
+        justify-content: flex-start;
+    }
+}
+
 .masthead__link {
     margin-top: var(--space-1);
     padding: 0;
