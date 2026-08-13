@@ -117,6 +117,32 @@ class Plans {
         Session::set('plan_name_at', 0);
     }
 
+    /**
+     * How much room the signed-in company has left against one limit.
+     *
+     * Pages ask this to decide whether the control that creates another one is
+     * offered. It is not the boundary - the API refuses independently - but a
+     * button that cannot work should say so before it is pressed.
+     */
+    public static function room(string $limit, int $existing): array
+    {
+        $plan_name = self::current();
+
+        /* Unknown means unreachable, and an outage must not take the control
+           away from a company that pays for it. */
+        if ($plan_name === '') {
+            return array('allowed' => true, 'cap' => null, 'plan' => '');
+        }
+
+        $cap = self::limits($plan_name)[$limit] ?? 0;
+
+        return array(
+            'allowed' => self::allows($plan_name, $limit, $existing),
+            'cap'     => $cap,
+            'plan'    => $plan_name
+        );
+    }
+
     /** Whether this plan may raise invoices at all. */
     public static function allows_billing(string $plan_name): bool
     {

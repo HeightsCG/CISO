@@ -13,6 +13,7 @@ class ClientsController extends Controller {
     }
 
     public function indexAction(){
+        $this->view->room = Plans::room('clients', $this->clients_model->count_clients(Session::get('company_id')));
         $this->view->render();
     }
 
@@ -34,6 +35,14 @@ class ClientsController extends Controller {
         $client_id = Main::get_param('id');
 
         if (empty($client_id)) {
+
+            $room = Plans::room('clients', $this->clients_model->count_clients(Session::get('company_id')));
+
+            if (!$room['allowed']) {
+                Errors::access_denied();
+                return;
+            }
+
             $this->view->client = null;
             $this->view->render();
             return;

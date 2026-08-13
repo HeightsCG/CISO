@@ -13,7 +13,14 @@
         <div class="page__actions">
             <a class="btn btn--secondary" href="/projects/evidence/id/<?php echo (int) $this->project['id']; ?>"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>
             <a class="btn btn--secondary" href="/projects/form/id/<?php echo (int) $this->project['id']; ?>"><i class="fa-regular fa-pen"></i> Edit</a>
+            <?php if ($this->room['allowed']) { ?>
             <button type="button" class="btn btn--primary" id="do_assessment_add"><i class="fa-regular fa-plus"></i> Assessment</button>
+            <?php } else { ?>
+            <span class="limit">
+                <span class="limit__text"><?php echo htmlspecialchars($this->room['plan'].' includes '.$this->room['cap'].' '.($this->room['cap'] === 1 ? 'assessment' : 'assessments').' per project', ENT_QUOTES, 'UTF-8'); ?></span>
+                <a class="btn btn--primary" href="/subscription">Upgrade</a>
+            </span>
+            <?php } ?>
             <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i></button>
         </div>
     </div>

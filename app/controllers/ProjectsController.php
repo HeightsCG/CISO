@@ -21,6 +21,7 @@ class ProjectsController extends Controller {
     }
 
     public function indexAction() {
+        $this->view->room = Plans::room('projects', $this->projects_model->count_projects(Session::get('company_id')));
         $this->view->render();
     }
 
@@ -34,6 +35,10 @@ class ProjectsController extends Controller {
         }
 
         $this->view->project = $project[0];
+        $this->view->room = Plans::room(
+            'assessments_per_project',
+            $this->assessments_model->count_assessments($project[0]['id'], Session::get('company_id'))
+        );
         $this->view->render();
     }
 
@@ -42,6 +47,14 @@ class ProjectsController extends Controller {
         $project_id = Main::get_param('id');
 
         if (empty($project_id)) {
+
+            $room = Plans::room('projects', $this->projects_model->count_projects(Session::get('company_id')));
+
+            if (!$room['allowed']) {
+                Errors::access_denied();
+                return;
+            }
+
             $this->view->project = null;
             $this->view->render();
             return;

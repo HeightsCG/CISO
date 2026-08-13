@@ -3,7 +3,16 @@
         <div>
             <h1 class="page__title">Projects</h1>
         </div>
-        <a class="btn btn--primary" href="/projects/form"><i class="fa-regular fa-plus"></i> Add Project</a>
+        <div class="page__actions">
+            <?php if ($this->room['allowed']) { ?>
+            <a class="btn btn--primary" href="/projects/form"><i class="fa-regular fa-plus"></i> Add Project</a>
+            <?php } else { ?>
+            <span class="limit">
+                <span class="limit__text"><?php echo htmlspecialchars($this->room['plan'].' includes '.$this->room['cap'].' '.($this->room['cap'] === 1 ? rtrim('projects', 's') : 'projects'), ENT_QUOTES, 'UTF-8'); ?></span>
+                <a class="btn btn--primary" href="/subscription">Upgrade</a>
+            </span>
+            <?php } ?>
+        </div>
     </div>
 
     <div class="panel">

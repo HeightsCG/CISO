@@ -5610,6 +5610,20 @@ table.data.ledger tfoot .ledger__foot-total .ledger__amount {
     color: var(--text-secondary);
 }
 
+/* A limit reached, stated where the control that reached it would be. The way
+   past it sits alongside, so the page says what is in the way and what moves it
+   rather than simply withholding the button. */
+.limit {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.limit__text {
+    font-size: var(--fs-meta);
+    color: var(--text-secondary);
+}
+
 /* ------------------------------------------------------- billing upsell */
 
 /* What a free account sees in place of the invoice list: a statement of what the
