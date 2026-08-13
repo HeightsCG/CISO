@@ -70,6 +70,24 @@ class UsersModel extends Model {
     }
 
     /**
+     * Staff accounts this company has, for the plan limit. Portal users belong to
+     * a client rather than to the company's own seat count, so they are not
+     * counted here.
+     */
+    public function count_users($company_id)
+    {
+        $where = array(
+            'company_id' => $company_id
+        );
+        $sql = "SELECT COUNT(*) AS total
+                FROM user_accounts
+                WHERE company_id = :company_id and user_type = 'staff' and deleted = 0";
+        $rows = parent::select($sql, $where);
+
+        return (int) ($rows[0]['total'] ?? 0);
+    }
+
+    /**
      * Every account in the system, for the global admin roster. The date format
      * is joined through each user's own company, so a row reads in the format that
      * company uses rather than the one the admin signed in under.

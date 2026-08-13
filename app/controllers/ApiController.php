@@ -1621,6 +1621,13 @@ class ApiController extends Controller {
             exit;
         }
 
+        /* Only on create. Editing an account must stay possible on a plan whose
+           seat count is already full, or the limit would lock the people it
+           allows out of their own details. */
+        if ($toDo === 'add') {
+            $this->refuse_unless_plan_allows('users', $this->user_model->count_users(Session::get('company_id')), 'users');
+        }
+
         if ($this->post['first_name'] === '') {
             $response['message'] = 'First name is required';
             echo json_encode($response);

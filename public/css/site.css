@@ -5610,6 +5610,68 @@ table.data.ledger tfoot .ledger__foot-total .ledger__amount {
     color: var(--text-secondary);
 }
 
+/* The seats a paid plan opens: the person who is here, and the colleagues who
+   are not yet. Empty avatars rather than invented names, so nothing on it
+   pretends to be a real account. */
+.roster-art {
+    width: 100%;
+    max-width: 280px;
+    padding: var(--space-4) var(--space-5);
+    background: var(--surface-app);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-panel);
+}
+
+.roster-art__row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+}
+
+.roster-art__row + .roster-art__row {
+    border-top: 1px solid var(--border);
+}
+
+.roster-art__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 28px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--text-inverse);
+    font-size: 11px;
+    font-weight: var(--fw-semibold);
+}
+
+/* A seat waiting to be filled, drawn as an outline rather than a face. */
+.roster-art__avatar--empty {
+    background: none;
+    border: 1px dashed var(--border-strong);
+}
+
+.roster-art__word {
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+}
+
+.roster-art__bar {
+    display: block;
+    flex: 1 1 auto;
+    height: 6px;
+    background: var(--surface-inset);
+    border-radius: 1px;
+}
+
+.roster-art__bar--short {
+    flex: 0 0 55%;
+}
+
 /* A limit reached, stated where the control that reached it would be. The way
    past it sits alongside, so the page says what is in the way and what moves it
    rather than simply withholding the button. */

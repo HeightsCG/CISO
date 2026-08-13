@@ -85,6 +85,9 @@ class SettingsController extends Controller {
             return;
         }
 
+        /* A free account has one seat, so there is no roster to manage - the page
+           states what more seats are for instead of listing a single row. */
+        $this->view->users_allowed = Plans::room('users', 1)['allowed'];
         $this->view->render();
     }
 

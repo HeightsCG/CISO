@@ -1,3 +1,55 @@
+<?php if (!$this->users_allowed) { ?>
+<div class="page">
+    <div class="page__head">
+        <div>
+            <h1 class="page__title">Users</h1>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel__body">
+            <div class="upsell">
+                <div class="upsell__copy">
+                    <h2 class="upsell__title">Bring your team into the work</h2>
+                    <p class="upsell__lede">The free account is a single seat. Every paid plan adds as many colleagues as you need, each with their own sign-in.</p>
+
+                    <ul class="upsell__points">
+                        <li>Give each person their own account rather than sharing one</li>
+                        <li>Set who administers the company and who works in it</li>
+                        <li>See who created and last changed every record</li>
+                        <li>Disable an account the day someone leaves, without losing their history</li>
+                    </ul>
+
+                    <div class="upsell__actions">
+                        <a class="btn btn--primary" href="/subscription">See Plans</a>
+                    </div>
+                </div>
+
+                <div class="upsell__art" aria-hidden="true">
+                    <div class="roster-art">
+                        <div class="roster-art__row roster-art__row--you">
+                            <span class="roster-art__avatar"><?php echo htmlspecialchars(strtoupper(substr(Session::get('first_name'), 0, 1).substr(Session::get('last_name'), 0, 1)), ENT_QUOTES, 'UTF-8'); ?></span>
+                            <span class="roster-art__word">You</span>
+                        </div>
+                        <div class="roster-art__row">
+                            <span class="roster-art__avatar roster-art__avatar--empty"></span>
+                            <span class="roster-art__bar"></span>
+                        </div>
+                        <div class="roster-art__row">
+                            <span class="roster-art__avatar roster-art__avatar--empty"></span>
+                            <span class="roster-art__bar roster-art__bar--short"></span>
+                        </div>
+                        <div class="roster-art__row">
+                            <span class="roster-art__avatar roster-art__avatar--empty"></span>
+                            <span class="roster-art__bar"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php } else { ?>
 <div class="page page--list">
     <div class="page__head">
         <div>
@@ -150,6 +202,8 @@
         </div>
     </div>
 </div>
+
+<?php } ?>
 
 <script>
 $(document).ready(function () {
