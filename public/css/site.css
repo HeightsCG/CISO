@@ -1595,7 +1595,10 @@ table.data .actions {
     box-shadow: none;
 }
 
-.form-control:focus {
+/* Selects were left on the framework's own focus ring, which is a different blue
+   from this palette's - so they share the control focus state. */
+.form-control:focus,
+.form-select:focus {
     color: var(--text-primary);
     background: var(--surface-app);
     border-color: var(--accent);
@@ -4214,8 +4217,6 @@ table.data tbody tr.item__row {
     white-space: nowrap;
 }
 
-/* The picker opens over the assess modal, so the two are given the same height
-   rather than one poking out from behind the other. */
 #item_modal .modal-dialog,
 #attach_modal .modal-dialog {
     height: calc(100vh - 3.5rem);
@@ -4993,7 +4994,10 @@ table.data.lines .num .form-control {
     border-bottom: 0;
 }
 
-.invoice-doc label {
+/* .lbl marks a label for something that is not a form control - a value being
+   shown, or a group of buttons - so it carries the same eyebrow as a real one. */
+.invoice-doc label,
+.invoice-doc .lbl {
     display: block;
     margin: 0 0 var(--space-2);
     font-size: 11px;
@@ -5415,20 +5419,14 @@ table.data.ledger [data-action="remove_line"]:focus-visible {
     color: var(--text-muted);
 }
 
-/* The recipient is a field directly below, so the lead confirms the amount only -
-   naming the client here as well said the same thing twice. */
 .send__lede {
     margin-bottom: var(--space-4);
 }
 
-.send__lede + .form-group + .form-group {
+.send__lede {
     margin-top: var(--space-3);
 }
 
-/* --------------------------------------------------------- invoice detail */
-
-/* The identity line under the title: status and client set as one deliberate
-   pair on a rule, rather than two spans left loose beneath the heading. */
 .invoice-ident {
     display: flex;
     align-items: center;
@@ -5548,258 +5546,60 @@ table.data.ledger tfoot .ledger__foot-total .ledger__amount {
     align-self: center;
 }
 
-/* ------------------------------------------------------------- schedule */
-
-/* The schedule is a commitment, not a field: it gets a section of its own with
-   the sentence it produces stated back beside the heading, so what was agreed can
-   be read without reassembling it from four controls. */
-
-/* ----------------------------------------------------- billing schedule */
-
-/* A schedule is a promise to bill on particular days, so the dialogue states the
-   terms and then shows the days they produce. The terms are three small controls
-   and take a single row; the dates are a sequence in time and take the width,
-   which is the one thing here that genuinely wants it. */
-
-.sked__body {
-    padding: 0;
-}
-
-.sked__terms {
-    display: grid;
-    grid-template-columns: 190px 190px minmax(0, 1fr);
-    gap: var(--space-5);
-    align-items: start;
-    padding: var(--space-5);
-}
-
-.sked .sked__field label,
-.sked .sked__ends .lbl,
-.sked .sked__ends-field label {
-    display: block;
-    float: none;
-    width: auto;
-    margin: 0 0 var(--space-2);
-    padding: 0;
-    font-size: 11px;
-    font-weight: var(--fw-semibold);
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    color: var(--text-secondary);
-}
-
-.sked__every .form-control {
-    flex: 0 0 68px;
-    text-align: center;
-}
-
-.sked__every .form-select {
-    background-color: var(--surface-sunken);
-    color: var(--text-secondary);
-}
-
-.sked .sked__date {
-    width: 100%;
-}
-
-.sked__note {
-    margin: var(--space-2) 0 0;
-    font-size: var(--fs-meta);
-    color: var(--text-muted);
-}
-
-/* The three ways a schedule can end are one choice, so they read as one control
-   rather than as three fields two of which are always dead. */
-.sked__modes {
+.masthead__segmented {
     display: flex;
     width: 100%;
 }
 
-.sked__modes .segmented__btn {
+.masthead__segmented .segmented__btn {
     flex: 1 1 0;
     min-width: 0;
     height: var(--control-height);
 }
 
-/* Only the chosen condition brings a field with it. */
-.sked__ends-field {
-    margin-top: var(--space-4);
-}
-
-.sked__count {
-    max-width: 96px;
-    text-align: center;
-}
-
-/* The consequence of the terms above: the actual days this client is billed,
-   laid along the axis they happen on. */
-.sked__timeline {
-    padding: var(--space-5);
-    background: var(--surface-sunken);
-    border-top: 1px solid var(--border);
-}
-
-.sked__timeline-title {
-    margin: 0 0 var(--space-5);
-    font-size: 11px;
-    font-weight: var(--fw-semibold);
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    color: var(--text-secondary);
-}
-
-.sked__stops {
-    display: flex;
+#schedule_modal .modal-header {
     align-items: flex-start;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+    gap: var(--space-4);
+    padding: var(--space-5) var(--space-5) var(--space-4);
+    border-bottom: 0;
 }
 
-.sked__stop {
-    position: relative;
-    flex: 1 1 0;
-    min-width: 0;
-    padding-top: 20px;
-    text-align: center;
-    font-size: var(--fs-body);
-    font-variant-numeric: tabular-nums;
-    color: var(--text-secondary);
+#schedule_modal .modal-body {
+    padding: 0 var(--space-5);
 }
 
-/* The stop itself. */
-.sked__stop::after {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 50%;
-    width: 7px;
-    height: 7px;
-    margin-left: -4px;
-    background: var(--surface-sunken);
-    border: 1px solid var(--border-strong);
-    border-radius: 50%;
-}
-
-/* The run of time back to the previous stop. Drawn per stop rather than as one
-   rule behind them all, so it lands exactly between two dots at any count. */
-.sked__stop::before {
-    content: "";
-    position: absolute;
-    top: 5px;
-    right: 50%;
-    left: -50%;
-    height: 1px;
-    background: var(--border-strong);
-}
-
-.sked__stop:first-child::before {
+#schedule_modal [hidden] {
     display: none;
 }
 
-/* The first invoice is the one being committed to now. */
-.sked__stop--first {
-    font-weight: var(--fw-semibold);
+#schedule_summary_text {
+    margin: var(--space-2) 0 0;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border);
+    line-height: 1.55;
     color: var(--text-primary);
 }
 
-.sked__stop--first::after {
-    background: var(--accent);
-    border-color: var(--accent);
-}
-
-/* What happens past the dates shown - still on the track, but not a date. It
-   carries more words than a date does, so it is given the room to stay on one
-   line and keep the track level. */
-.sked__stop--tail {
-    flex: 1.5 1 0;
-    font-size: var(--fs-meta);
-    color: var(--text-muted);
-}
-
-.sked__stop--tail::after {
-    display: none;
-}
-
-.sked__stop--tail::before {
-    background: none;
-    border-top: 1px dashed var(--border-strong);
-}
-
-/* Nothing to plot: a schedule that cannot run yet says why, in place of dates. */
-.sked__stop--note {
-    flex: 1 1 100%;
-    padding-top: 0;
-    text-align: left;
-    font-size: var(--fs-meta);
-    color: var(--text-muted);
-}
-
-.sked__stop--note::before,
-.sked__stop--note::after {
-    display: none;
-}
-
-.sked__footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-5);
-}
-
-/* The sentence is what is being agreed, so it shares the footer with the button
-   that agrees to it rather than sitting up in the body as another field. */
-.sked__sentence {
-    margin: 0;
-    font-size: var(--fs-meta);
-    line-height: 1.5;
-    color: var(--text-secondary);
-}
-
-.sked__actions {
-    display: flex;
+#schedule_modal .modal-footer {
+    justify-content: flex-end;
     gap: var(--space-2);
-    flex: 0 0 auto;
+    padding: var(--space-5);
+    border-top: 0;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 620px) {
 
-    .sked__terms {
-        grid-template-columns: minmax(0, 1fr);
+    #schedule_modal .modal-dialog {
+        max-width: none;
+        margin: var(--space-4);
     }
 
-    /* Too little width for an axis, so the dates become a plain list and the
-       track is dropped rather than drawn vertically for its own sake. */
-    .sked__stops {
-        display: block;
-    }
-
-    .sked__stop {
-        padding: var(--space-2) 0;
-        text-align: left;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .sked__stop:last-child {
-        border-bottom: 0;
-    }
-
-    .sked__stop::before,
-    .sked__stop::after {
-        display: none;
-    }
-
-    .sked__footer {
-        flex-direction: column;
+    #schedule_modal .modal-footer {
+        flex-direction: column-reverse;
         align-items: stretch;
     }
-
-    .sked__actions {
-        justify-content: flex-end;
-    }
 }
 
-/* Reopens the schedule from the invoice that carries it. */
 .masthead__link {
     margin-top: var(--space-1);
     padding: 0;
@@ -5821,15 +5621,6 @@ table.data.ledger tfoot .ledger__foot-total .ledger__amount {
     color: var(--text-muted);
 }
 
-/* Each condition is one line, so the radio, its words and the value it needs sit
-   on a single baseline rather than the value wrapping under its own label.
-   Scoped past .invoice-doc label, which is styled as a small-caps field label and
-   was turning each option into an uppercase block of its own. */
-/* --------------------------------------------------------------- plans */
-
-/* A plan is a choice, not a record, so the plans are set as things to pick
-   between rather than rows to read down. A table would rank them by position and
-   make the price a field; side by side they are compared on their own terms. */
 .plans__head {
     margin-bottom: var(--space-4);
 }
@@ -5871,9 +5662,6 @@ table.data.ledger tfoot .ledger__foot-total .ledger__amount {
     box-shadow: var(--shadow-panel), inset 0 0 0 1px var(--ok-border);
 }
 
-/* Green reads as "in force" rather than "selected", which is what the flag and
-   the border are both saying. It uses the palette's own green so it matches the
-   Active badge elsewhere instead of introducing a second green. */
 .plan__flag {
     position: absolute;
     top: var(--space-4);
@@ -5945,8 +5733,6 @@ table.data.ledger tfoot .ledger__foot-total .ledger__amount {
     color: var(--text-primary);
 }
 
-/* What the plan includes. The tick is decorative - the list itself already says
-   these are things you get - so it is hidden from assistive technology. */
 .plan__features {
     margin: var(--space-4) 0 0;
     padding: 0;
@@ -5969,16 +5755,11 @@ table.data.ledger tfoot .ledger__foot-total .ledger__amount {
     color: var(--ok);
 }
 
-/* Pushed to the foot so the buttons line up across cards of unequal height. */
 .plan__act {
     margin-top: auto;
     padding-top: var(--space-5);
 }
 
-
-
-/* A card is one line of facts and its controls, not a table: three cards do not
-   need column headings to be compared. */
 .cards {
     margin: 0;
     padding: 0;
@@ -6031,7 +5812,6 @@ table.data.ledger tfoot .ledger__foot-total .ledger__amount {
     color: var(--accent);
 }
 
-/* Stripe frames its own fields in here; it needs room, not styling. */
 .pay__element {
     margin-top: var(--space-4);
     min-height: 220px;
@@ -6052,8 +5832,6 @@ table.data.ledger tfoot .ledger__foot-total .ledger__amount {
     color: var(--text-muted);
 }
 
-/* Prominent because it is the thing being billed for, but deliberately not
-   coloured or underlined: it is the subject of the row, not a link. */
 table.data.ledger .ledger__desc,
 table.data.ledger tbody tr:hover .ledger__desc {
     font-weight: var(--fw-medium);
@@ -6070,7 +5848,6 @@ table.data.ledger .ledger__amount {
     color: var(--text-muted);
 }
 
-/* The invoice's own text, shown as it will print rather than in a disabled box. */
 .commit__text {
     margin: 0;
     max-width: 72ch;
@@ -6079,7 +5856,6 @@ table.data.ledger .ledger__amount {
     color: var(--text-primary);
 }
 
-/* Due closes the rail under the outstanding balance it applies to. */
 .summary__due {
     display: flex;
     align-items: baseline;
@@ -6095,8 +5871,6 @@ table.data.ledger .ledger__amount {
     font-variant-numeric: tabular-nums;
     color: var(--text-primary);
 }
-
-/* ------------------------------------------------------------------- summary */
 
 .summary {
     position: sticky;
@@ -6152,8 +5926,6 @@ table.data.ledger .ledger__amount {
     color: var(--text-muted);
 }
 
-/* The money sits together at the foot of the panel, and the discount control is
-   in the stack it changes rather than somewhere the effect cannot be seen. */
 .summary__money {
     padding: var(--space-3) var(--space-4) var(--space-4);
     border-top: 1px solid var(--border);
@@ -6174,8 +5946,6 @@ table.data.ledger .ledger__amount {
     color: var(--text-primary);
 }
 
-/* The total closes the stack under a rule, which is accounting's own convention
-   and carries the weight without enlarging the figure or tinting a band. */
 .summary__total {
     display: flex;
     align-items: baseline;
@@ -6213,11 +5983,6 @@ table.data.ledger .ledger__amount {
     justify-content: center;
 }
 
-/* -------------------------------------------------------------------- commit */
-
-/* This is the note printed under the client's copy, so it is set as the foot of
-   the document: its own tinted band closing the panel, at a measure a sentence
-   can actually be read at rather than a stub input floating in white space. */
 .commit {
     padding: var(--space-4) var(--space-5);
     background: var(--surface-sunken);

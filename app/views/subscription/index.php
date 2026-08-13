@@ -338,7 +338,10 @@ $(document).ready(function () {
 
             set_loading('#do_pay', false);
 
-            if (result.error) {
+            /* An intent that has already succeeded is a payment that went
+               through, not one that failed - Stripe refuses the second confirm
+               and its message reads as a decline. */
+            if (result.error && result.error.code !== 'payment_intent_unexpected_state') {
                 toastr.error(result.error.message);
                 return;
             }

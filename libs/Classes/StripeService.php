@@ -464,21 +464,68 @@ class StripeService {
      * replaced rather than a second one added, and Stripe prorates the difference
      * so the company is neither double-billed nor given the remainder free.
      */
-    public static function change_platform_subscription($subscription_id, $item_id, $price_id): array
+    /**
+     * What a plan change would cost, before anything is changed.
+     *
+     * The proration date is chosen here and handed back so the caller can pass
+     * the same instant to the update. Without it the change is prorated from
+     * whenever the person happened to press confirm, which is not the moment
+     * they were quoted, and they would be billed an amount they never saw.
+     */
+    public static function preview_plan_change($customer_id, $subscription_id, $item_id, $price_id, $proration_date): array
     {
         if (!self::configured() || (string) $subscription_id === '' || (string) $item_id === '') {
             return array();
         }
 
         try {
-            $subscription = self::client()->subscriptions->update($subscription_id, array(
-                'items' => array(array(
-                    'id'    => $item_id,
-                    'price' => $price_id
-                )),
-                'proration_behavior' => 'create_prorations',
-                'expand' => array('latest_invoice.confirmation_secret')
+            $invoice = self::client()->invoices->createPreview(array(
+                'customer'             => $customer_id,
+                'subscription'         => $subscription_id,
+                'subscription_details' => array(
+                    'items' => array(array(
+                        'id'    => $item_id,
+                        'price' => $price_id
+                    )),
+                    'proration_behavior' => 'always_invoice',
+                    'proration_date'     => (int) $proration_date
+                )
             ));
+            return $invoice->toArray();
+        } catch (\Throwable $e) {
+            self::fail('plan change preview', $e);
+            return array();
+        }
+    }
+
+    /**
+     * always_invoice rather than create_prorations: the person has just been
+     * shown what this costs and agreed to it, so it is billed now at that figure
+     * rather than appearing unannounced on the next invoice.
+     */
+    public static function change_platform_subscription($subscription_id, $item_id, $price_id, $proration_date = 0): array
+    {
+        if (!self::configured() || (string) $subscription_id === '' || (string) $item_id === '') {
+            return array();
+        }
+
+        $params = array(
+            'items' => array(array(
+                'id'    => $item_id,
+                'price' => $price_id
+            )),
+            'proration_behavior' => 'always_invoice',
+            'expand'             => array('latest_invoice.confirmation_secret')
+        );
+
+        /* The same instant the quote was calculated at, so the amount charged is
+           the amount agreed to. */
+        if ((int) $proration_date > 0) {
+            $params['proration_date'] = (int) $proration_date;
+        }
+
+        try {
+            $subscription = self::client()->subscriptions->update($subscription_id, $params);
             return $subscription->toArray();
         } catch (\Throwable $e) {
             self::fail('platform subscription change', $e);

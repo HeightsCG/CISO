@@ -3518,8 +3518,34 @@ class ApiController extends Controller {
 
         $response['success'] = true;
         $response['message'] = 'Subscription started';
-        $response['client_secret'] = $subscription['latest_invoice']['confirmation_secret']['client_secret'] ?? '';
+        $response['client_secret'] = $this->payment_secret_if_due($subscription);
         echo json_encode($response);
+    }
+
+    /**
+     * The client secret is handed to the browser only when a payment genuinely
+     * needs confirming.
+     *
+     * A plan change with prorations raises no new invoice - the proration is
+     * carried to the next one - so latest_invoice is the previous, already-paid
+     * invoice. Returning its secret makes the browser confirm a PaymentIntent
+     * that has already succeeded, which Stripe refuses with
+     * payment_intent_unexpected_state and the person reads as a failed payment
+     * on a plan change that in fact went through.
+     */
+    private function payment_secret_if_due(array $subscription): string
+    {
+        $invoice = $subscription['latest_invoice'] ?? array();
+
+        if (($invoice['status'] ?? '') === 'paid' || (int) ($invoice['amount_due'] ?? 0) <= 0) {
+            return '';
+        }
+
+        if (!in_array($subscription['status'] ?? '', array('incomplete', 'past_due', 'unpaid'), true)) {
+            return '';
+        }
+
+        return (string) ($invoice['confirmation_secret']['client_secret'] ?? '');
     }
 
     /** Move to a different plan. */
@@ -3559,7 +3585,7 @@ class ApiController extends Controller {
 
         $response['success'] = true;
         $response['message'] = 'Plan changed';
-        $response['client_secret'] = $changed['latest_invoice']['confirmation_secret']['client_secret'] ?? '';
+        $response['client_secret'] = $this->payment_secret_if_due($changed);
         echo json_encode($response);
     }
 
