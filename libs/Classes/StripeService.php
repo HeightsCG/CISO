@@ -340,6 +340,36 @@ class StripeService {
         }
     }
 
+    /**
+     * A subscription that was started but never paid for.
+     *
+     * These are invisible to platform_subscription(), which reports only live
+     * ones - correctly, because an unpaid subscription is not a plan the company
+     * is on. But the caller starting a subscription has to know about it, or a
+     * second attempt raises a second subscription and leaves the first behind to
+     * expire on its own.
+     */
+    public static function incomplete_platform_subscription($customer_id): array
+    {
+        if (!self::configured() || (string) $customer_id === '') {
+            return array();
+        }
+
+        try {
+            $list = self::client()->subscriptions->all(array(
+                'customer' => $customer_id,
+                'status'   => 'incomplete',
+                'limit'    => 10,
+                'expand'   => array('data.latest_invoice.confirmation_secret')
+            ));
+
+            return empty($list->data) ? array() : $list->data[0]->toArray();
+        } catch (\Throwable $e) {
+            self::fail('pending subscription list', $e);
+            return array();
+        }
+    }
+
     /** What this platform sells: active recurring prices, newest first. */
     public static function platform_plans(): array
     {

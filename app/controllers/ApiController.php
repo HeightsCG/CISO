@@ -3494,7 +3494,7 @@ class ApiController extends Controller {
         );
 
         if (!StripeService::configured()) {
-            $response['message'] = 'Stripe is not configured on this installation';
+            $response['message'] = 'Payments are not configured on this installation';
             echo json_encode($response);
             return;
         }
@@ -3508,10 +3508,43 @@ class ApiController extends Controller {
             return;
         }
 
+        /**
+         * A subscription that exists already must never be duplicated. Two clicks
+         * two seconds apart used to raise two subscriptions, each with its own
+         * unpaid invoice, because nothing here looked before creating.
+         */
+        $live = StripeService::platform_subscription($customer_id);
+
+        if (!empty($live['id'])) {
+            $response['message'] = 'This company already has a subscription. Change the plan instead.';
+            echo json_encode($response);
+            return;
+        }
+
+        /* One that was started but never paid for is resumed rather than replaced,
+           so the person carries on with the payment they already began. */
+        $pending = StripeService::incomplete_platform_subscription($customer_id);
+
+        if (!empty($pending['id'])) {
+
+            if (($pending['items']['data'][0]['price']['id'] ?? '') === $price_id) {
+
+                $response['success'] = true;
+                $response['message'] = 'Subscription started';
+                $response['client_secret'] = $pending['latest_invoice']['confirmation_secret']['client_secret'] ?? '';
+                echo json_encode($response);
+                return;
+            }
+
+            /* A different plan was chosen, so the abandoned one is cleared rather
+               than left to expire alongside the new one. */
+            StripeService::cancel_platform_subscription($pending['id'], false);
+        }
+
         $subscription = StripeService::create_platform_subscription($customer_id, $price_id, Session::get('company_id'));
 
         if (empty($subscription['id'])) {
-            $response['message'] = 'Stripe could not start the subscription: '.StripeService::last_error();
+            $response['message'] = 'The subscription could not be started: '.StripeService::last_error();
             echo json_encode($response);
             return;
         }
@@ -3548,6 +3581,75 @@ class ApiController extends Controller {
         return (string) ($invoice['confirmation_secret']['client_secret'] ?? '');
     }
 
+    /**
+     * What a plan change costs, before it happens.
+     *
+     * The proration date is fixed here and returned, so the change can be applied
+     * at the same instant it was quoted at. Without that the person agrees to one
+     * figure and is billed another, because proration is measured from whenever
+     * the request happens to arrive.
+     */
+    public function subscription_previewAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $customer_id = $this->platform_customer_id();
+        $price_id    = trim((string) ($this->post['price_id'] ?? ''));
+
+        if ($customer_id === '' || strpos($price_id, 'price_') !== 0) {
+            $response['message'] = 'That plan could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        $current = StripeService::platform_subscription($customer_id);
+
+        if (empty($current['id']) || empty($current['items']['data'][0]['id'])) {
+            $response['message'] = 'There is no subscription to change';
+            echo json_encode($response);
+            return;
+        }
+
+        if (($current['items']['data'][0]['price']['id'] ?? '') === $price_id) {
+            $response['message'] = 'This company is already on that plan';
+            echo json_encode($response);
+            return;
+        }
+
+        $proration_date = time();
+
+        $preview = StripeService::preview_plan_change(
+            $customer_id,
+            $current['id'],
+            $current['items']['data'][0]['id'],
+            $price_id,
+            $proration_date
+        );
+
+        if (empty($preview['currency'])) {
+            $response['message'] = 'The change could not be priced: '.StripeService::last_error();
+            echo json_encode($response);
+            return;
+        }
+
+        $due   = (int) ($preview['amount_due'] ?? 0);
+        $total = (int) ($preview['total'] ?? 0);
+
+        $response['success']        = true;
+        $response['message']        = 'Priced';
+        $response['proration_date'] = $proration_date;
+        $response['amount_due']     = $due;
+        $response['due_display']    = Money::format($due, $preview['currency']);
+        $response['credit_display'] = Money::format(abs($total), $preview['currency']);
+        $response['is_credit']      = ($due === 0 && $total < 0);
+        echo json_encode($response);
+    }
+
     /** Move to a different plan. */
     public function subscription_changeAction(){
 
@@ -3575,10 +3677,15 @@ class ApiController extends Controller {
             return;
         }
 
-        $changed = StripeService::change_platform_subscription($current['id'], $current['items']['data'][0]['id'], $price_id);
+        $changed = StripeService::change_platform_subscription(
+            $current['id'],
+            $current['items']['data'][0]['id'],
+            $price_id,
+            (int) ($this->post['proration_date'] ?? 0)
+        );
 
         if (empty($changed['id'])) {
-            $response['message'] = 'Stripe could not change the plan: '.StripeService::last_error();
+            $response['message'] = 'The plan could not be changed: '.StripeService::last_error();
             echo json_encode($response);
             return;
         }
@@ -3610,7 +3717,7 @@ class ApiController extends Controller {
         $intent = StripeService::create_setup_intent($customer_id);
 
         if (empty($intent['client_secret'])) {
-            $response['message'] = 'Stripe could not start the card setup: '.StripeService::last_error();
+            $response['message'] = 'The card setup could not be started: '.StripeService::last_error();
             echo json_encode($response);
             return;
         }
@@ -3651,7 +3758,7 @@ class ApiController extends Controller {
         $updated = StripeService::set_default_payment_method($customer_id, $method_id);
 
         if (empty($updated['id'])) {
-            $response['message'] = 'Stripe could not set the default card: '.StripeService::last_error();
+            $response['message'] = 'The default card could not be set: '.StripeService::last_error();
             echo json_encode($response);
             return;
         }
@@ -3683,7 +3790,7 @@ class ApiController extends Controller {
         $detached = StripeService::detach_payment_method($method_id);
 
         if (empty($detached['id'])) {
-            $response['message'] = 'Stripe could not remove the card: '.StripeService::last_error();
+            $response['message'] = 'The card could not be removed: '.StripeService::last_error();
             echo json_encode($response);
             return;
         }
@@ -3726,7 +3833,7 @@ class ApiController extends Controller {
         $cancelled = StripeService::cancel_platform_subscription($current['id'], true);
 
         if (empty($cancelled['id'])) {
-            $response['message'] = 'Stripe could not cancel the subscription: '.StripeService::last_error();
+            $response['message'] = 'The subscription could not be cancelled: '.StripeService::last_error();
             echo json_encode($response);
             return;
         }
@@ -3757,7 +3864,7 @@ class ApiController extends Controller {
         $resumed = StripeService::resume_platform_subscription($current['id']);
 
         if (empty($resumed['id'])) {
-            $response['message'] = 'Stripe could not resume the subscription: '.StripeService::last_error();
+            $response['message'] = 'The subscription could not be resumed: '.StripeService::last_error();
             echo json_encode($response);
             return;
         }
@@ -3912,7 +4019,7 @@ class ApiController extends Controller {
         );
 
         if (!StripeService::configured()) {
-            $response['message'] = 'Stripe is not configured on this installation';
+            $response['message'] = 'Payments are not configured on this installation';
             echo json_encode($response);
             return;
         }
@@ -3938,7 +4045,7 @@ class ApiController extends Controller {
             );
 
             if (empty($account['id'])) {
-                $response['message'] = 'Stripe could not create the account: '.StripeService::last_error();
+                $response['message'] = 'The payment account could not be created: '.StripeService::last_error();
                 echo json_encode($response);
                 return;
             }
@@ -3962,7 +4069,7 @@ class ApiController extends Controller {
         $link = StripeService::create_account_link($account_id, $base.'/settings/stripe_refresh', $base.'/settings/stripe_return');
 
         if (empty($link['url'])) {
-            $response['message'] = 'Stripe could not start onboarding: '.StripeService::last_error();
+            $response['message'] = 'Payment setup could not be started: '.StripeService::last_error();
             echo json_encode($response);
             return;
         }
@@ -3987,19 +4094,19 @@ class ApiController extends Controller {
         $company    = $this->companies_model->get_company($company_id);
 
         if (!is_array($company) || count($company) !== 1 || $company[0]['stripe_connect_account_id'] === null) {
-            $response['message'] = 'No Stripe account is connected yet';
+            $response['message'] = 'No payment account is connected yet';
             echo json_encode($response);
             return;
         }
 
         if (empty($this->sync_connect_state($company_id, $company[0]['stripe_connect_account_id']))) {
-            $response['message'] = 'Stripe could not be reached: '.StripeService::last_error();
+            $response['message'] = 'The payment service could not be reached: '.StripeService::last_error();
             echo json_encode($response);
             return;
         }
 
         $response['success'] = true;
-        $response['message'] = 'Stripe account refreshed';
+        $response['message'] = 'Payment account refreshed';
         echo json_encode($response);
     }
 
@@ -4029,7 +4136,7 @@ class ApiController extends Controller {
         $this->companies_model->clear_connect_account($company_id);
 
         $response['success'] = true;
-        $response['message'] = 'Stripe disconnected';
+        $response['message'] = 'Payment account disconnected';
         echo json_encode($response);
     }
 
@@ -4697,13 +4804,13 @@ class ApiController extends Controller {
         $company = (is_array($company) && count($company) === 1) ? $company[0] : array();
 
         if (empty($company['stripe_connect_account_id']) || $company['stripe_connect_status'] !== 'Connected') {
-            $response['message'] = 'Connect a Stripe account in Settings before sending invoices';
+            $response['message'] = 'Connect a payment account in Settings before sending invoices';
             echo json_encode($response);
             return;
         }
 
         if ((int) $company['stripe_charges_enabled'] !== 1) {
-            $response['message'] = 'Stripe has not enabled payments on this account yet';
+            $response['message'] = 'Payments are not enabled on this account yet';
             echo json_encode($response);
             return;
         }
@@ -4816,7 +4923,7 @@ class ApiController extends Controller {
 
                 if (empty($draft['id'])) {
                     $this->invoices_model->fail_finalize($invoice_id, StripeService::last_error(), true);
-                    $response['message'] = 'Stripe could not create the invoice: '.StripeService::last_error();
+                    $response['message'] = 'The invoice could not be created: '.StripeService::last_error();
                     echo json_encode($response);
                     return;
                 }
@@ -4851,7 +4958,7 @@ class ApiController extends Controller {
 
                     if (empty($coupon['id'])) {
                         $this->invoices_model->fail_finalize($invoice_id, 'Discount rejected: '.StripeService::last_error(), true);
-                        $response['message'] = 'Stripe rejected a line discount: '.StripeService::last_error();
+                        $response['message'] = 'A line discount was rejected: '.StripeService::last_error();
                         echo json_encode($response);
                         return;
                     }
@@ -4876,7 +4983,7 @@ class ApiController extends Controller {
 
                 if (empty($line['id'])) {
                     $this->invoices_model->fail_finalize($invoice_id, 'Line rejected: '.StripeService::last_error(), true);
-                    $response['message'] = 'Stripe rejected a line item: '.StripeService::last_error();
+                    $response['message'] = 'A line item was rejected: '.StripeService::last_error();
                     echo json_encode($response);
                     return;
                 }
@@ -4891,7 +4998,7 @@ class ApiController extends Controller {
                  * second invoice against the same client.
                  */
                 $this->invoices_model->fail_finalize($invoice_id, StripeService::last_error(), false);
-                $response['message'] = 'We could not confirm this with Stripe. Refresh in a moment before trying again.';
+                $response['message'] = 'This could not be confirmed with the payment service. Refresh in a moment before trying again.';
                 echo json_encode($response);
                 return;
             }
@@ -4912,7 +5019,7 @@ class ApiController extends Controller {
         } catch (\Throwable $e) {
             $this->invoices_model->fail_finalize($invoice_id, $e->getMessage(), false);
             error_log('[billing] send failed for invoice '.$invoice_id.': '.$e->getMessage());
-            $response['message'] = 'We could not confirm this with Stripe. Refresh in a moment before trying again.';
+            $response['message'] = 'This could not be confirmed with the payment service. Refresh in a moment before trying again.';
             echo json_encode($response);
             return;
         }
@@ -4954,7 +5061,7 @@ class ApiController extends Controller {
         $voided = StripeService::void_invoice($invoice['stripe_account_id'], $invoice['stripe_invoice_id'], $company_id, $invoice_id);
 
         if (empty($voided['id'])) {
-            $response['message'] = 'Stripe could not void that invoice: '.StripeService::last_error();
+            $response['message'] = 'That invoice could not be voided: '.StripeService::last_error();
             echo json_encode($response);
             return;
         }
@@ -5041,7 +5148,7 @@ class ApiController extends Controller {
         }
 
         if ($invoice[0]['stripe_account_id'] === '') {
-            $response['message'] = 'That invoice was never sent to Stripe';
+            $response['message'] = 'That invoice was never sent for payment';
             echo json_encode($response);
             return;
         }
@@ -5053,7 +5160,7 @@ class ApiController extends Controller {
             'adopted'          => 'Found it at Stripe - it had been sent after all',
             'waiting'          => 'Stripe has not confirmed it yet. Try again in a few minutes.',
             'returned to draft' => 'Stripe never received it, so it is a draft again and safe to send',
-            'unreachable'      => 'Stripe could not be reached: '.StripeService::last_error()
+            'unreachable'      => 'The payment service could not be reached: '.StripeService::last_error()
         );
 
         $response['success'] = $outcome !== 'unreachable';

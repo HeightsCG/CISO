@@ -263,6 +263,25 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
     </div>
 </div>
 
+<div class="modal fade" data-bs-backdrop="static" id="proration_modal" tabindex="-1" aria-labelledby="proration_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="proration_modal_title">Change Plan</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="proration_summary"></p>
+                <p class="import__hint" id="proration_hint"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="do_change_plan" class="btn btn--primary">Confirm Change</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://js.stripe.com/v3/"></script>
 <script>
 $(document).ready(function () {
@@ -283,6 +302,13 @@ $(document).ready(function () {
         return bootstrap.Modal.getOrCreateInstance(document.getElementById(id));
     }
 
+    /* Every plan button is held, not just the one pressed: disabling only the
+       pressed button let a second click on another plan raise a second
+       subscription two seconds behind the first. */
+    function hold_plans(holding) {
+        $('[data-action=choose_plan]').prop('disabled', holding);
+    }
+
     function open_payment(client_secret, plan_name) {
 
         $('#pay_element').empty();
@@ -299,23 +325,96 @@ $(document).ready(function () {
         modal('pay_modal').show();
     }
 
+    var pending_change = null;
+
+    /**
+     * Starting a subscription goes straight through. Changing one is priced
+     * first and agreed to, because a change part-way through a period is
+     * prorated and the person should see that figure before it is charged.
+     */
     $('[data-action=choose_plan]').click(function () {
 
         var button = $(this);
-        var action = has_subscription ? 'subscription_change' : 'subscription_start';
 
         set_loading(button, true);
+        hold_plans(true);
 
-        ApiDataSvc.apiCall('post', action, { price_id: button.data('price') }, function (data) {
+        if (!has_subscription) {
+
+            ApiDataSvc.apiCall('post', 'subscription_start', { price_id: button.data('price') }, function (data) {
+
+                var obj = JSON.parse(data);
+
+                set_loading(button, false);
+                hold_plans(false);
+
+                if (!obj.success) {
+                    toastr.error(obj.message);
+                    return;
+                }
+
+                if (!obj.client_secret) {
+                    toastr.success(obj.message);
+                    window.location.reload();
+                    return;
+                }
+
+                open_payment(obj.client_secret, button.data('name'));
+            });
+
+            return;
+        }
+
+        ApiDataSvc.apiCall('post', 'subscription_preview', { price_id: button.data('price') }, function (data) {
 
             var obj = JSON.parse(data);
 
             set_loading(button, false);
+            hold_plans(false);
 
             if (!obj.success) {
                 toastr.error(obj.message);
                 return;
             }
+
+            pending_change = { price_id: button.data('price'), name: button.data('name'), proration_date: obj.proration_date };
+
+            if (obj.is_credit) {
+                $('#proration_summary').text('Switching to ' + button.data('name') + ' credits ' + obj.credit_display + ' to this account.');
+                $('#proration_hint').text('The credit is applied against the next invoice. Nothing is charged today.');
+            } else if (obj.amount_due > 0) {
+                $('#proration_summary').text('Switching to ' + button.data('name') + ' charges ' + obj.due_display + ' today.');
+                $('#proration_hint').text('This covers the rest of the current period at the new rate. The card on file is charged straight away.');
+            } else {
+                $('#proration_summary').text('Switch to ' + button.data('name') + '?');
+                $('#proration_hint').text('Nothing is charged today. The new rate applies from the next invoice.');
+            }
+
+            modal('proration_modal').show();
+        });
+    });
+
+    $('#do_change_plan').click(function () {
+
+        if (pending_change === null) {
+            return;
+        }
+
+        set_loading('#do_change_plan', true);
+
+        ApiDataSvc.apiCall('post', 'subscription_change', { price_id: pending_change.price_id, proration_date: pending_change.proration_date }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading('#do_change_plan', false);
+
+            if (!obj.success) {
+                modal('proration_modal').hide();
+                toastr.error(obj.message);
+                return;
+            }
+
+            modal('proration_modal').hide();
 
             if (!obj.client_secret) {
                 toastr.success(obj.message);
@@ -323,7 +422,7 @@ $(document).ready(function () {
                 return;
             }
 
-            open_payment(obj.client_secret, button.data('name'));
+            open_payment(obj.client_secret, pending_change.name);
         });
     });
 
