@@ -4492,10 +4492,50 @@ table.data--light td.pick__col-attach {
 }
 
 /* The dashboard is meant to be read without scrolling the page, so each panel
-   keeps its own height and any list longer than it scrolls inside. */
+   keeps its own height and any list longer than it scrolls inside.
+   The page is a column that fills the window and the grid takes whatever is left
+   after the fixed panels above it - measured rather than guessed, because the
+   attention panel comes and goes and any fixed subtraction is wrong half the
+   time. */
+
+/* height rather than min-height: a floor lets the panels push the document past
+   the window, which is the one thing this page is not meant to do. Given a fixed
+   height the lists shrink and scroll inside themselves instead. */
+#dash {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--topbar-height) - (2 * var(--space-6)));
+}
+
+#dash .dashgrid {
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+/* The grid column is a flex column that may shrink, and the panel fills it. As a
+   block with height:100% against an auto-height column the percentage resolved
+   to nothing, so the panel took its content height and pushed the document past
+   the window. height:100% rather than stretch alone, because .row wraps and a
+   wrapped flex line takes the height of its tallest item regardless of how far
+   the row itself has shrunk. */
+.dashgrid > [class*="col-"] {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
 
 .dashgrid .panel {
-    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+/* Panel heads differ in height - one carries a filter, one has no note - so they
+   are levelled, or the three lists start at three different places. */
+.dashgrid .panel__head {
+    min-height: 60px;
 }
 
 .dashgrid .panel__body {
@@ -4504,9 +4544,7 @@ table.data--light td.pick__col-attach {
     min-height: 0;
 }
 
-/* Each list gets a share of whatever height is left after the fixed panels above,
-   so the page fits a short window as well as a tall one without the document
-   itself ever scrolling. */
+/* Each list takes whatever is left inside its own panel. */
 
 /* The summary region: the figures a consultant acts on, then the distribution
    they were drawn from. One panel rather than two, so the top of the page reads
@@ -4621,7 +4659,7 @@ table.data--light td.pick__col-attach {
    fade appears only while there is more to reach. */
 
 .dashscroll {
-    max-height: calc(100vh - 28rem);
+    flex: 1 1 auto;
     min-height: 5rem;
     overflow-y: auto;
     background:
@@ -4687,12 +4725,6 @@ table.data--light td.pick__col-attach {
     width: 150px;
 }
 
-/* The attention band costs the working row its own height rather than the page's. */
-
-.has-attention .dashscroll {
-    max-height: calc(100vh - 48.5rem);
-}
-
 /* Below the grid breakpoint the panels stack, so a per-panel cap would only
    push the document down. The lists keep their own scroll and the page keeps
    its single scroll context. */
@@ -4703,8 +4735,18 @@ table.data--light td.pick__col-attach {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .dashscroll,
-    .has-attention .dashscroll {
+    /* Stacked, so the page scrolls as one and the panels stop competing for a
+       height there is no longer a single row of. */
+    #dash {
+        height: auto;
+    }
+
+    #dash .dashgrid {
+        flex: 0 1 auto;
+    }
+
+    .dashscroll {
+        flex: 0 1 auto;
         max-height: 22rem;
     }
 }
