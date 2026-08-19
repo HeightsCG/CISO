@@ -1,5 +1,27 @@
 "use strict";
 
+function esc(value) {
+    return $('<div>').text(value === null || value === undefined ? '' : value).html()
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function text_cell(data, type) {
+    return type === 'display' ? esc(data) : data;
+}
+
+function modal(id) {
+    return bootstrap.Modal.getOrCreateInstance(document.getElementById(id));
+}
+
+function set_loading(target, loading) {
+    if (loading) {
+        $(target).addClass("is-loading").prop("disabled", true);
+    } else {
+        $(target).removeClass("is-loading").prop("disabled", false);
+    }
+}
+
 /**
  * Stacked dialog layering.
  *

@@ -351,10 +351,55 @@ class UsersModel extends Model {
             'reset_pw'            => 0,
             'reset_token'         => null,
             'reset_token_expires' => null,
+            'password_changed_at' => date('Y-m-d H:i:s'),
             'updated_by'          => Session::get('user_id'),
             'date_updated'        => date('Y-m-d H:i:s')
         );
         parent::update('user_accounts', $data, 'user_id = :user_id', $where);
+    }
+
+    /**
+     * Record the outcome of a failed sign-in for the account-lockout policy.
+     * $locked_until is a datetime string once the attempt count has crossed the
+     * company's threshold, or null while it is still below it. No updated_by is
+     * written because there is no authenticated user during a failed sign-in.
+     */
+    public function set_login_failure($user_id, $failed_login_count, $locked_until)
+    {
+        $where = array(
+            'user_id' => $user_id
+        );
+        $data = array(
+            'failed_login_count' => (int) $failed_login_count,
+            'last_failed_login'  => date('Y-m-d H:i:s'),
+            'locked_until'       => $locked_until
+        );
+        return parent::update('user_accounts', $data, 'user_id = :user_id', $where);
+    }
+
+    /** Clear the lockout counters after a successful sign-in. */
+    public function clear_login_failures($user_id)
+    {
+        $where = array(
+            'user_id' => $user_id
+        );
+        $data = array(
+            'failed_login_count' => 0,
+            'locked_until'       => null
+        );
+        return parent::update('user_accounts', $data, 'user_id = :user_id', $where);
+    }
+
+    /** Force this account through the reset screen on its next request. */
+    public function flag_password_reset($user_id)
+    {
+        $where = array(
+            'user_id' => $user_id
+        );
+        $data = array(
+            'reset_pw' => 1
+        );
+        return parent::update('user_accounts', $data, 'user_id = :user_id', $where);
     }
 
     public function get_roles()

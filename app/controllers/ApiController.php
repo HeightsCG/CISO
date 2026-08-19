@@ -2,6 +2,12 @@
 class ApiController extends Controller {
 
     public $protected = 1;
+    public $json = 1;
+    public $public_actions = array(
+        'loginAction',
+        'forgot_passwordAction',
+        'reset_passwordAction'
+    );
 
     /** user_roles.id for Client; a portal account always carries it. */
     const CLIENT_ROLE_ID = 3;
@@ -64,10 +70,44 @@ class ApiController extends Controller {
 
         $user = $rows[0];
 
-        if (!password_verify($this->post['p_word'], $user['p_word'])) {
-            $response['message'] = 'Username or password is incorrect';
+        $company_rows = $this->companies_model->get_company($user['company_id']);
+        $company = (is_array($company_rows) && count($company_rows) === 1) ? $company_rows[0] : array();
+
+        $lockout_enabled  = (int) ($company['account_lockout_enabled'] ?? 0) === 1;
+        $lockout_attempts = max(1, (int) ($company['lockout_attempts'] ?? 5));
+        $lockout_minutes  = max(1, (int) ($company['lockout_minutes'] ?? 15));
+
+        /* A live lock refuses the attempt before the password is even checked,
+           so a locked account cannot be probed while it is locked. */
+        if ($lockout_enabled
+            && !empty($user['locked_until'])
+            && strtotime((string) $user['locked_until']) > time()) {
+            $response['message'] = 'Too many failed attempts. Try again in a few minutes.';
             echo json_encode($response);
             exit;
+        }
+
+        if (!password_verify($this->post['p_word'], $user['p_word'])) {
+
+            if ($lockout_enabled) {
+                $count = (int) ($user['failed_login_count'] ?? 0) + 1;
+                if ($count >= $lockout_attempts) {
+                    $this->user_model->set_login_failure($user['user_id'], 0, date('Y-m-d H:i:s', time() + $lockout_minutes * 60));
+                    $response['message'] = 'Too many failed attempts. Your account is locked for '.$lockout_minutes.' minutes.';
+                } else {
+                    $this->user_model->set_login_failure($user['user_id'], $count, null);
+                    $response['message'] = 'Username or password is incorrect';
+                }
+            } else {
+                $response['message'] = 'Username or password is incorrect';
+            }
+
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($lockout_enabled) {
+            $this->user_model->clear_login_failures($user['user_id']);
         }
 
         $user_status = $user['user_status'];
@@ -78,10 +118,31 @@ class ApiController extends Controller {
             exit;
         }
 
+        /* An expired password does not block the sign-in; it forces the reset
+           screen on the way in, through the same reset_pw gate a new account
+           uses. The baseline falls back to account creation for any row that
+           predates password-age tracking. */
+        $expiry_enabled = (int) ($company['password_expiry_enabled'] ?? 0) === 1;
+        $expiry_days    = max(1, (int) ($company['password_expiry_days'] ?? 90));
+
+        if ($expiry_enabled) {
+            $changed_at = !empty($user['password_changed_at'])
+                ? strtotime((string) $user['password_changed_at'])
+                : strtotime((string) ($user['date_created'] ?? ''));
+            if ($changed_at > 0 && (time() - $changed_at) > $expiry_days * 86400) {
+                $this->user_model->flag_password_reset($user['user_id']);
+                $user['reset_pw'] = 1;
+            }
+        }
+
         $non_session_fields = array(
             'p_word',
             'reset_token',
-            'reset_token_expires'
+            'reset_token_expires',
+            'failed_login_count',
+            'last_failed_login',
+            'locked_until',
+            'password_changed_at'
         );
 
         foreach ($user as $key => $value) {
@@ -92,11 +153,7 @@ class ApiController extends Controller {
 
         session_regenerate_id(true);
 
-        $company = $this->companies_model->get_company($user['company_id']);
-
-        if (is_array($company) && count($company) === 1) {
-            Session::set('session_timeout_minutes', (int) $company[0]['session_timeout_minutes']);
-        }
+        Session::set('session_timeout_minutes', (int) ($company['session_timeout_minutes'] ?? 0));
 
         Session::set('last_activity', time());
 
@@ -128,8 +185,19 @@ class ApiController extends Controller {
 
         if (is_array($rows) && count($rows) === 1) {
             $user = $rows[0];
-            $raw_token = $this->user_model->set_reset_token($user['user_id']);
-            $this->notifications_model->send_password_reset($user['user_email'], $user['first_name'], $raw_token);
+
+            /* Throttle resends so a known address cannot be mail-bombed and the
+               mail quota burned: a token lasts an hour, so one issued in the
+               last five minutes leaves reset_token_expires above now + 55m and
+               the resend is skipped. The response is identical either way, so
+               nothing here reveals whether the address exists. */
+            $issued_recently = !empty($user['reset_token_expires'])
+                && strtotime((string) $user['reset_token_expires']) > time() + 3300;
+
+            if (!$issued_recently) {
+                $raw_token = $this->user_model->set_reset_token($user['user_id']);
+                $this->notifications_model->send_password_reset($user['user_email'], $user['first_name'], $raw_token);
+            }
         }
 
         $response['success'] = true;
@@ -1232,6 +1300,14 @@ class ApiController extends Controller {
                 $plan_name = $plan['name'];
                 break;
             }
+        }
+
+        /* Reachable, with a live subscription whose price is not in the catalogue
+           (archived, internal, or otherwise off-catalogue): that is a fact about
+           the company, not an outage, so it fails closed to the free tier rather
+           than staying '' and reading as "limits unknown, allow everything". */
+        if ($plan_name === '') {
+            $plan_name = Plans::FREE;
         }
 
         return $plan_name;
@@ -3530,6 +3606,29 @@ class ApiController extends Controller {
     }
 
     /**
+     * A price the browser sends is honoured only when it is one this platform
+     * actually sells. Without this an admin could subscribe to any archived or
+     * internal price in the Stripe account; company_plan_name() would then fail
+     * to recognise it and the plan gates would read the account as unlimited.
+     * The catalogue is fetched live, so a Stripe outage fails the write rather
+     * than accepting an unverifiable price.
+     */
+    private function is_platform_price(string $price_id): bool
+    {
+        if ($price_id === '') {
+            return false;
+        }
+
+        foreach (StripeService::platform_plans() as $plan) {
+            if (($plan['price_id'] ?? '') === $price_id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Start a subscription to this platform. The subscription comes back
      * incomplete with a client secret; the browser confirms the card against it
      * with Stripe Elements, so no card detail ever reaches this server.
@@ -3552,7 +3651,7 @@ class ApiController extends Controller {
         $customer_id = $this->platform_customer_id();
         $price_id    = trim((string) ($this->post['price_id'] ?? ''));
 
-        if ($customer_id === '' || strpos($price_id, 'price_') !== 0) {
+        if ($customer_id === '' || !$this->is_platform_price($price_id)) {
             $response['message'] = 'That plan could not be found';
             echo json_encode($response);
             return;
@@ -3653,7 +3752,7 @@ class ApiController extends Controller {
         $customer_id = $this->platform_customer_id();
         $price_id    = trim((string) ($this->post['price_id'] ?? ''));
 
-        if ($customer_id === '' || strpos($price_id, 'price_') !== 0) {
+        if ($customer_id === '' || !$this->is_platform_price($price_id)) {
             $response['message'] = 'That plan could not be found';
             echo json_encode($response);
             return;
@@ -3785,7 +3884,7 @@ class ApiController extends Controller {
         $customer_id = $this->platform_customer_id();
         $price_id    = trim((string) ($this->post['price_id'] ?? ''));
 
-        if ($customer_id === '' || strpos($price_id, 'price_') !== 0) {
+        if ($customer_id === '' || !$this->is_platform_price($price_id)) {
             $response['message'] = 'That plan could not be found';
             echo json_encode($response);
             return;
@@ -3832,11 +3931,22 @@ class ApiController extends Controller {
             return;
         }
 
+        /* The preview fixes a proration_date so the change is applied at the
+           instant it was priced. It is honoured only when it is genuinely
+           recent: a value pushed toward the period end would make Stripe prorate
+           the upgrade to almost nothing, so anything outside a short window is
+           discarded and the change is re-prorated honestly at now. */
+        $proration_date = (int) ($this->post['proration_date'] ?? 0);
+
+        if (abs(time() - $proration_date) > 120) {
+            $proration_date = time();
+        }
+
         $changed = StripeService::change_platform_subscription(
             $current['id'],
             $current['items']['data'][0]['id'],
             $price_id,
-            (int) ($this->post['proration_date'] ?? 0)
+            $proration_date
         );
 
         if (empty($changed['id'])) {

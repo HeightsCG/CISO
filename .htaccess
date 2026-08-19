@@ -9,3 +9,13 @@ RewriteRule ^(.+)$ /index.php?url=$1 [QSA,L]
 Options -Indexes
 
 Header always append X-Frame-Options SAMEORIGIN
+
+# The document root is meant to be public/. This is defence in depth for a
+# misconfigured vhost that serves the repository root directly: the config,
+# dependency manifests, importer and source tree must never be downloadable.
+<FilesMatch "\.(ini|lock|json|xlsx|sql|sh|md|log)$">
+    Require all denied
+</FilesMatch>
+
+RedirectMatch 403 ^/(app|libs|vendor|sql)(/.*)?$
+RedirectMatch 403 ^/import_standards\.php$
