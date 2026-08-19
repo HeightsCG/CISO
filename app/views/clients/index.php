@@ -48,7 +48,7 @@ $(document).ready(function () {
         if (!data) {
             return '<span class="roster__none">&mdash;</span>';
         }
-        return data;
+        return esc(data);
     }
 
     function count_cell(data, type) {
@@ -87,7 +87,8 @@ $(document).ready(function () {
                 visible: false
             },{
                 targets: 1,
-                width: '28%'
+                width: '28%',
+                render: text_cell
             },{
                 targets: 2,
                 width: '14%',

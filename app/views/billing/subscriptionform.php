@@ -126,22 +126,6 @@ $(document).ready(function () {
     var selected_project = <?php echo ($this->subscription === null ? 0 : (int) $this->subscription['project_id']); ?>;
     var currency = "<?php echo htmlspecialchars(strtoupper($this->subscription === null ? ($this->company['default_currency'] ?? 'usd') : $this->subscription['currency']), ENT_QUOTES, 'UTF-8'); ?>";
 
-    function esc(value) {
-        return $('<div>').text(value === null ? '' : value).html();
-    }
-
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
-
-    function modal(id) {
-        return bootstrap.Modal.getOrCreateInstance(document.getElementById(id));
-    }
-
     function to_cents(raw) {
         var value = String(raw === undefined || raw === null ? '' : raw).replace(/[,\s$]/g, '');
         var parts = /^(\d{1,9})(?:\.(\d{1,2}))?$/.exec(value);

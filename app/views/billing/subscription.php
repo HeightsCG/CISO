@@ -165,18 +165,6 @@ $(document).ready(function () {
 
     var subscription_id = <?php echo (int) $this->subscription['id']; ?>;
 
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
-
-    function modal(id) {
-        return bootstrap.Modal.getOrCreateInstance(document.getElementById(id));
-    }
-
     $('#do_activate_open').click(function () {
         modal('activate_modal').show();
     });

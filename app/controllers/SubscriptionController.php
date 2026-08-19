@@ -1,6 +1,8 @@
 <?php
 class SubscriptionController extends Controller {
 
+    use CompanyAdminGate;
+
     public $protected = 1;
     public $companies_model;
 
@@ -17,22 +19,6 @@ class SubscriptionController extends Controller {
         $company = $this->companies_model->get_company(Session::get('company_id'));
 
         return (is_array($company) && count($company) === 1) ? $company[0] : array();
-    }
-
-    /**
-     * This is what the company pays CISO.aero, so it belongs to whoever
-     * administers the company. Repeated per action rather than hooked once, for
-     * the same reason it is in BillingController: there is no controller-level
-     * hook, and hiding the menu item only hides the menu item.
-     */
-    private function refuse_unless_company_admin(): bool
-    {
-        if (Session::get('user_type') === 'staff' && (int) Session::get('role_id') === self::ADMIN_ROLE_ID) {
-            return true;
-        }
-
-        Errors::access_denied();
-        return false;
     }
 
     /**

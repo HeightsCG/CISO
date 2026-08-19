@@ -196,16 +196,20 @@ $(document).ready(function () {
                 visible: false
             },{
                 targets: 1,
-                width: '18%'
+                width: '18%',
+                render: text_cell
             },{
                 targets: 2,
-                width: '18%'
+                width: '18%',
+                render: text_cell
             },{
                 targets: 3,
-                width: '12%'
+                width: '12%',
+                render: text_cell
             },{
                 targets: 4,
-                width: '20%'
+                width: '20%',
+                render: text_cell
             },{
                 targets: 5,
                 width: '16%',
@@ -245,14 +249,6 @@ $(document).ready(function () {
             $(row).attr('tabindex', 0);
         }
     });
-
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
 
     $('#user_search').on('input', function () {
         table.search(this.value).draw();
@@ -526,8 +522,8 @@ $(document).ready(function () {
                     obj[i].u_name,
                     obj[i].user_email,
                     (obj[i].user_type === 'portal'
-                        ? 'Client' + (obj[i].client_name === null ? '' : ' · ' + obj[i].client_name)
-                        : obj[i].role_name + (parseInt(obj[i].global_admin, 10) === 1
+                        ? 'Client' + (obj[i].client_name === null ? '' : ' · ' + esc(obj[i].client_name))
+                        : esc(obj[i].role_name) + (parseInt(obj[i].global_admin, 10) === 1
                             ? ' <span class="badge badge--admin">Global</span>'
                             : '')),
                     { sort: obj[i].date_created, display: obj[i].date_created_display },

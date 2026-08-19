@@ -219,22 +219,6 @@ $(document).ready(function () {
     var IMAGE_TYPES = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp', 'tif', 'tiff', 'heic'];
     var ARCHIVE_TYPES = ['zip', 'gz', 'tgz', '7z'];
 
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
-
-    function esc(value) {
-        return $('<div>').text(value === null ? '' : value).html();
-    }
-
-    function modal(id) {
-        return bootstrap.Modal.getOrCreateInstance(document.getElementById(id));
-    }
-
     function size_label(bytes) {
         var n = parseInt(bytes, 10) || 0;
         if (n < 1024) { return n + ' B'; }

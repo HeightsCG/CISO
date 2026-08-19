@@ -225,12 +225,15 @@ $(document).ready(function () {
             },{
                 targets: 1,
                 width: '22%',
+                render: text_cell
             },{
                 targets: 2,
-                width: '16%'
+                width: '16%',
+                render: text_cell
             },{
                 targets: 3,
-                width: '26%'
+                width: '26%',
+                render: text_cell
             },{
                 targets: 4,
                 width: '14%',
@@ -239,7 +242,7 @@ $(document).ready(function () {
                         if (!data) {
                             return '<span class="roster__none">&mdash;</span>';
                         }
-                        return data;
+                        return esc(data);
                     }
                 }
             },{
@@ -270,14 +273,6 @@ $(document).ready(function () {
             $(row).attr('tabindex', 0);
         }
     });
-
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
 
     $('#user_search').on('input', function () {
         table.search(this.value).draw();

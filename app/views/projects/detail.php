@@ -129,22 +129,6 @@ $(document).ready(function () {
 
     var project_id = <?php echo (int) $this->project['id']; ?>;
 
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
-
-    function esc(value) {
-        return $('<div>').text(value === null ? '' : value).html();
-    }
-
-    function modal(id) {
-        return bootstrap.Modal.getOrCreateInstance(document.getElementById(id));
-    }
-
     function status_badge(value) {
         if (value === 'Complete') {
             return '<span class="badge badge--active">Complete</span>';

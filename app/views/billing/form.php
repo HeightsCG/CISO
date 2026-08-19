@@ -299,22 +299,6 @@ $(document).ready(function () {
     var next_idx = 0;
     var line_to_remove = null;
 
-    function esc(value) {
-        return $('<div>').text(value === null ? '' : value).html();
-    }
-
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
-
-    function modal(id) {
-        return bootstrap.Modal.getOrCreateInstance(document.getElementById(id));
-    }
-
     function to_cents(raw) {
         var value = String(raw === undefined || raw === null ? '' : raw).replace(/[,\s$]/g, '');
         var parts = /^(-?)(\d{1,9})(?:\.(\d{1,2}))?$/.exec(value);

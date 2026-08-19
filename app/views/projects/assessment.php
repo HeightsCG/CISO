@@ -255,22 +255,6 @@ $(document).ready(function () {
         set_result($(this).attr('data-value'));
     });
 
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
-
-    function esc(value) {
-        return $('<div>').text(value === null ? '' : value).html();
-    }
-
-    function modal(id) {
-        return bootstrap.Modal.getOrCreateInstance(document.getElementById(id));
-    }
-
     function result_badge(value) {
         return '<span class="badge ' + (RESULT_CLASS[value] || 'badge--inactive') + '">' + esc(value) + '</span>';
     }

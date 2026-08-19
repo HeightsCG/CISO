@@ -376,14 +376,6 @@ $(document).ready(function () {
 
     var snapshot = null;
 
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
-
     $(document).ajaxComplete(function () {
         if (snapshot !== null) {
             set_loading("#do_save", false);
@@ -950,10 +942,6 @@ $(document).ready(function () {
         });
 
     });
-
-    function esc(value) {
-        return $('<div>').text(value === null ? '' : value).html();
-    }
 
     function render_connect(company) {
 

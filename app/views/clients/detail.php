@@ -116,10 +116,6 @@ $(document).ready(function () {
 
     var client_id = <?php echo (int) $this->client['id']; ?>;
 
-    function esc(value) {
-        return $('<div>').text(value === null ? '' : value).html();
-    }
-
     function size_of(done, total) {
         return total > 0 ? Math.round(done / total * 100) : 0;
     }
@@ -268,14 +264,6 @@ $(document).ready(function () {
     load_client_invoices();
 
     var client_id = <?php echo (int) $this->client['id']; ?>;
-
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
 
     $('#do_delete_open').click(function () {
         bootstrap.Modal.getOrCreateInstance(document.getElementById('delete_modal')).show();

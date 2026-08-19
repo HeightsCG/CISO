@@ -347,18 +347,6 @@ $(document).ready(function () {
     var has_subscription = <?php echo ($has_sub ? 'true' : 'false'); ?>;
     var elements = null;
 
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
-
-    function modal(id) {
-        return bootstrap.Modal.getOrCreateInstance(document.getElementById(id));
-    }
-
     /* Every plan button is held, not just the one pressed: disabling only the
        pressed button let a second click on another plan raise a second
        subscription two seconds behind the first. */

@@ -46,7 +46,7 @@ $(document).ready(function () {
         if (!data) {
             return '<span class="roster__none">&mdash;</span>';
         }
-        return data;
+        return esc(data);
     }
 
     var table = $('#projects_table').DataTable({
@@ -62,7 +62,8 @@ $(document).ready(function () {
                 visible: false
             },{
                 targets: 1,
-                width: '32%'
+                width: '32%',
+                render: text_cell
             },{
                 targets: 2,
                 width: '26%',

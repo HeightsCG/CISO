@@ -53,18 +53,6 @@ $(document).ready(function () {
     var project_id = <?php echo ($this->project === null ? 0 : (int) $this->project['id']); ?>;
     var current_client_id = <?php echo ($this->project === null ? 0 : (int) $this->project['client_id']); ?>;
 
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
-
-    function esc(value) {
-        return $('<div>').text(value === null ? '' : value).html();
-    }
-
     function load_clients() {
         $.post('/api/load_clients', {}, function (data) {
 

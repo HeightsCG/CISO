@@ -96,10 +96,6 @@ $(document).ready(function () {
     var data = {};
     var progress = {};
 
-    function esc(value) {
-        return $('<div>').text(value === null ? '' : value).html();
-    }
-
     function pct_of(done, total) {
         return total > 0 ? Math.round(done / total * 100) : 0;
     }

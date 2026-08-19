@@ -51,15 +51,7 @@ $(document).ready(function () {
         if (!data) {
             return '<span class="roster__none">&mdash;</span>';
         }
-        return data;
-    }
-
-    function esc(value) {
-        return $('<div>').text(value === null ? '' : value).html();
-    }
-
-    function text_cell(data, type) {
-        return type === 'display' ? esc(data) : data;
+        return esc(data);
     }
 
     function progress_cell(data, type, row) {

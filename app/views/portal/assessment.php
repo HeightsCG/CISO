@@ -169,18 +169,6 @@ $(document).ready(function () {
     var vault = [];
     var current_item = null;
 
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
-
-    function modal(id) {
-        return bootstrap.Modal.getOrCreateInstance(document.getElementById(id));
-    }
-
     function size_label(bytes) {
 
         var n = parseInt(bytes, 10);
@@ -204,10 +192,6 @@ $(document).ready(function () {
         { name: 'Not Applicable', dot: 'is-na', badge: 'badge--prospect' },
         { name: 'Not Assessed', dot: 'is-none', badge: 'badge--inactive' }
     ];
-
-    function esc(value) {
-        return $('<div>').text(value === null ? '' : value).html();
-    }
 
     /**
      * The imported control text opens by restating the title, so the modal would

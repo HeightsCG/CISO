@@ -57,14 +57,6 @@ $(document).ready(function () {
 
     var project_id = <?php echo (int) $this->project['id']; ?>;
 
-    function esc(value) {
-        return $('<div>').text(value === null ? '' : value).html();
-    }
-
-    function text_cell(data, type) {
-        return type === 'display' ? esc(data) : data;
-    }
-
     function progress_cell(data, type, row) {
 
         if (type !== 'display') {

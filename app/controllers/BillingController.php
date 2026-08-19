@@ -1,6 +1,8 @@
 <?php
 class BillingController extends Controller {
 
+    use CompanyAdminGate;
+
     public $protected = 1;
     public $invoices_model;
     public $companies_model;
@@ -26,26 +28,6 @@ class BillingController extends Controller {
 
     /** user_roles.id for Admin - the administrator of a single company. */
     const ADMIN_ROLE_ID = 1;
-
-    /**
-     * Billing belongs to whoever administers the company, not to the cross-tenant
-     * operator: a company runs its own Stripe account and bills its own clients,
-     * and its administrator must be able to do that without being able to read
-     * every other organisation.
-     *
-     * Repeated per action rather than hooked once, because there is no
-     * controller-level hook to hang it on and the nav check in site_header.php is
-     * not the boundary - hiding the link only hides the link.
-     */
-    private function refuse_unless_company_admin(): bool
-    {
-        if (Session::get('user_type') === 'staff' && (int) Session::get('role_id') === self::ADMIN_ROLE_ID) {
-            return true;
-        }
-
-        Errors::access_denied();
-        return false;
-    }
 
     /**
      * Refuse the whole section when the plan does not include invoicing.

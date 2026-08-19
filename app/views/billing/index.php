@@ -135,23 +135,11 @@
 <script>
 $(document).ready(function () {
 
-    function esc(value) {
-        return $('<div>').text(value === null ? '' : value).html();
-    }
-
     function dash(data) {
         if (!data) {
             return '';
         }
-        return data;
-    }
-
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
+        return esc(data);
     }
 
     /**
@@ -206,7 +194,8 @@ $(document).ready(function () {
                 render: reference_cell
             },{
                 targets: 2,
-                width: '22%'
+                width: '22%',
+                render: text_cell
             },{
                 targets: 3,
                 width: '18%',

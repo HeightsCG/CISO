@@ -108,18 +108,6 @@ $(document).ready(function () {
     var evidence = [];
     var selected_folder = 0;
 
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
-
-    function esc(value) {
-        return $('<div>').text(value === null ? '' : value).html();
-    }
-
     function size_label(bytes) {
 
         var n = parseInt(bytes, 10);
@@ -320,10 +308,6 @@ $(document).ready(function () {
             }
         });
     });
-
-    function modal(id) {
-        return bootstrap.Modal.getOrCreateInstance(document.getElementById(id));
-    }
 
     $('#do_upload_open').click(function () {
         $('#evidence_title').val('').removeClass('is-invalid');

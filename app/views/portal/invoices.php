@@ -37,23 +37,11 @@
 <script>
 $(document).ready(function () {
 
-    function esc(value) {
-        return $('<div>').text(value === null ? '' : value).html();
-    }
-
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
-
     function dash(data) {
         if (!data) {
             return '<span class="roster__none">&mdash;</span>';
         }
-        return data;
+        return esc(data);
     }
 
     function status_badge(data, type) {

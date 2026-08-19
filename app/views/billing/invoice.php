@@ -238,18 +238,6 @@ $(document).ready(function () {
     var invoice_id = <?php echo (int) $this->invoice['id']; ?>;
     var is_draft = <?php echo ($this->invoice['invoice_status'] === 'Draft' ? 'true' : 'false'); ?>;
 
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
-
-    function modal(id) {
-        return bootstrap.Modal.getOrCreateInstance(document.getElementById(id));
-    }
-
     $('#do_refresh').click(function () {
 
         set_loading('#do_refresh', true);

@@ -55,14 +55,6 @@ $(document).ready(function () {
 
     var standard_id = <?php echo ($this->standard === null ? 0 : (int) $this->standard['id']); ?>;
 
-    function set_loading(target, loading) {
-        if (loading) {
-            $(target).addClass("is-loading").prop("disabled", true);
-        } else {
-            $(target).removeClass("is-loading").prop("disabled", false);
-        }
-    }
-
     $('#do_save').click(function () {
 
         $('.field input, .field textarea').removeClass('is-invalid');

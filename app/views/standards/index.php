@@ -46,7 +46,7 @@ $(document).ready(function () {
         if (!data) {
             return '<span class="roster__none">&mdash;</span>';
         }
-        return data;
+        return esc(data);
     }
 
     function badge(data) {
@@ -69,7 +69,8 @@ $(document).ready(function () {
                 visible: false
             },{
                 targets: 1,
-                width: '38%'
+                width: '38%',
+                render: text_cell
             },{
                 targets: 2,
                 width: '18%',
