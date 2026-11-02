@@ -399,9 +399,9 @@ $(function () {
 
             run_step(card, steps, index + 1, outcomes);
 
-        }, function () {
+        }, function (xhr) {
             outcomes[step.tool_use_id].succeeded = false;
-            outcomes[step.tool_use_id].outcome.push("The request did not reach the server");
+            outcomes[step.tool_use_id].outcome.push(xhr && xhr.status ? "The server returned an error (HTTP " + xhr.status + ")" : "The server could not be reached");
             run_step(card, steps, index + 1, outcomes);
         });
     }

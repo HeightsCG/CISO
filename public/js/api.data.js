@@ -42,6 +42,10 @@ function apiCall(type, endpoint, body, success, callFail) {
         if (status === 'abort') {
             return;
         }
+        if (answered_with_json(xhr) && typeof success === 'function') {
+            success(xhr.responseText);
+            return;
+        }
         if (typeof callFail === 'function') {
             callFail(xhr, status);
             return;
@@ -51,4 +55,13 @@ function apiCall(type, endpoint, body, success, callFail) {
     });
 
     return request;
+}
+
+function answered_with_json(xhr) {
+    try {
+        var body = JSON.parse(xhr.responseText);
+        return body !== null && typeof body === 'object' && 'success' in body;
+    } catch (e) {
+        return false;
+    }
 }

@@ -57,6 +57,21 @@ class Bootstrap
             if (!headers_sent()) {
                 http_response_code(500);
             }
+
+            /* API callers read JSON, so a crash answers in the same shape as a
+               refusal and the screen can show a message instead of failing
+               silently. The details stay in the log. */
+            if (strtolower(Main::controller_name()) === 'apicontroller') {
+                if (!headers_sent()) {
+                    header('Content-Type: application/json');
+                }
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => 'Something went wrong on the server, so that was not saved. The error has been logged.'
+                ));
+                return;
+            }
+
             echo 'An unexpected error occurred.';
         });
     }
