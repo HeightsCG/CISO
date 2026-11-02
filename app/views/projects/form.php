@@ -34,6 +34,12 @@
                 </div>
                 <div class="row mb-4">
                     <div class="col-md-12 form-group">
+                        <label for="standard_ids">Frameworks</label>
+                        <select id="standard_ids" class="selectpicker" multiple data-live-search="true" data-size="10" data-width="100%" title="Choose the frameworks this project covers"></select>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-12 form-group">
                         <label for="description">Description</label>
                         <textarea class="form-control" id="description" rows="4" placeholder="What this engagement covers."><?php echo ($this->project === null ? '' : htmlspecialchars($this->project['description'], ENT_QUOTES, 'UTF-8')); ?></textarea>
                     </div>
@@ -52,9 +58,26 @@ $(document).ready(function () {
 
     var project_id = <?php echo ($this->project === null ? 0 : (int) $this->project['id']); ?>;
     var current_client_id = <?php echo ($this->project === null ? 0 : (int) $this->project['client_id']); ?>;
+    var current_standard_ids = <?php echo json_encode($this->standard_ids); ?>;
+
+    function load_standards() {
+        ApiDataSvc.apiCall('post', 'load_active_standards', {}, function (data) {
+
+            var list = JSON.parse(data);
+            var options = '';
+
+            for (var i = 0; i < list.length; i++) {
+                options += '<option value="' + list[i].id + '"'
+                    + (current_standard_ids.indexOf(parseInt(list[i].id, 10)) !== -1 ? ' selected' : '') + '>'
+                    + esc(standard_display(list[i].standard_name, list[i].version)) + '</option>';
+            }
+
+            $('#standard_ids').html(options).selectpicker('refresh');
+        });
+    }
 
     function load_clients() {
-        $.post('/api/load_clients', {}, function (data) {
+        ApiDataSvc.apiCall('post', 'load_clients', {}, function (data) {
 
             var list = JSON.parse(data);
             var options = '<option value="0">No client</option>';
@@ -79,7 +102,9 @@ $(document).ready(function () {
             project_name: $('#project_name').val().trim(),
             description: $('#description').val().trim(),
             start_date: $('#start_date').val(),
-            end_date: $('#end_date').val()
+            end_date: $('#end_date').val(),
+            standard_ids: $('#standard_ids').val() || [],
+            standards_sent: '1'
         };
 
         var errors = 0;
@@ -129,6 +154,7 @@ $(document).ready(function () {
     });
 
     load_clients();
+    load_standards();
 
 });
 </script>

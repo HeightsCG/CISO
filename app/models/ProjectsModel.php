@@ -472,4 +472,49 @@ class ProjectsModel extends Model {
         return parent::update('project_users', $data, 'id = :id and company_id = :company_id', $where);
     }
 
+    /** The standards (frameworks) a project covers, with their framework keys and names. */
+    public function project_standards($project_id, $company_id)
+    {
+        $where = array(
+            'project_id' => $project_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    s.id AS standard_id,
+                    s.framework_key,
+                    s.standard_name,
+                    s.version
+                FROM
+                    project_standards ps
+                    JOIN projects p ON p.id = ps.project_id and p.deleted = 0
+                    JOIN standards s ON s.id = ps.standard_id and s.deleted = 0
+                WHERE
+                    ps.project_id = :project_id
+                    and
+                    p.company_id = :company_id
+                ORDER BY
+                    s.standard_name,
+                    s.version";
+        return parent::select($sql, $where);
+    }
+
+    /** Replaces a project's frameworks. $standard_ids must already be checked as this company's active standards. */
+    public function set_project_standards($project_id, array $standard_ids, $user_id)
+    {
+        $where = array(
+            'project_id' => $project_id
+        );
+        parent::delete_all('project_standards', 'project_id = :project_id', $where);
+
+        foreach ($standard_ids as $standard_id) {
+            $data = array(
+                'project_id' => $project_id,
+                'standard_id' => $standard_id,
+                'created_by' => $user_id,
+                'date_created' => date('Y-m-d H:i:s')
+            );
+            parent::insert('project_standards', $data);
+        }
+    }
+
 }

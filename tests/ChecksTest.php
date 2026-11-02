@@ -14,7 +14,11 @@ $assessment = function (array $fields = array()) {
         'baseline_assessment_id' => 0,
         'no_baseline' => 0,
         'client_name' => 'Geneva Ground Services',
-        'scope_categories' => ''
+        'scope_categories' => '',
+        'standard_id' => 132,
+        'standard_name' => 'CMMC Level 2',
+        'version' => '32 CFR Part 170',
+        'framework_key' => 'cmmc-l2'
     ), $fields);
 };
 
@@ -88,9 +92,52 @@ return array(
         $issues = AssessmentChecks::run(null, $assessment(array(
             'posture_text' => 'Geneva Ground Services has has a recieved policy set, and MFA is enforced for every organisation user.'
         )), array('project_name' => 'Part-IS Implementation'), array(), null);
-        Assert::same(array('repeated_word', 'spelling'), $codes($issues), 'warnings');
+        Assert::same(array('project_frameworks_missing', 'repeated_word', 'spelling'), $codes($issues), 'warnings');
         Assert::same(array(), $codes($issues, 'block'), 'nothing blocks');
-        Assert::true(strpos($issues[1]['message'], 'recieved') !== false, 'flags the misspelling');
+        Assert::true(strpos($issues[2]['message'], 'recieved') !== false, 'flags the misspelling');
+    },
+
+    'a project covering EASA Part-IS warns on a CMMC assessment whatever it is called' => function () use ($assessment, $codes) {
+        $project = array(
+            'project_name' => '2026 Readiness',
+            'frameworks' => array(
+                array(
+                    'standard_id' => 139,
+                    'framework_key' => 'easa-part-is-i',
+                    'standard_name' => 'EASA Part-IS',
+                    'version' => 'EU 2023/203'
+                )
+            )
+        );
+        $issues = AssessmentChecks::run(FrameworkLibrary::get('cmmc-l2'), $assessment(), $project, array(), null);
+        Assert::same(array('framework_mismatch'), $codes($issues, 'warn'), 'warnings');
+        Assert::true(strpos($issues[0]['message'], 'This project covers EASA Part-IS (EU 2023/203), but this assessment uses CMMC Level 2 (32 CFR Part 170)') === 0, $issues[0]['message']);
+    },
+
+    'no warning when the project covers the assessed framework, even if its name mentions another' => function () use ($assessment, $codes) {
+        $project = array(
+            'project_name' => 'Part-IS and CMMC programme',
+            'frameworks' => array(
+                array(
+                    'standard_id' => 139,
+                    'framework_key' => 'easa-part-is-i',
+                    'standard_name' => 'EASA Part-IS',
+                    'version' => 'EU 2023/203'
+                ),
+                array(
+                    'standard_id' => 132,
+                    'framework_key' => 'cmmc-l2',
+                    'standard_name' => 'CMMC Level 2',
+                    'version' => '32 CFR Part 170'
+                )
+            )
+        );
+        Assert::same(array(), $codes(AssessmentChecks::run(FrameworkLibrary::get('cmmc-l2'), $assessment(), $project, array(), null)), 'no issues');
+    },
+
+    'a project with no frameworks chosen falls back to its name and asks for them' => function () use ($assessment, $codes) {
+        $issues = AssessmentChecks::run(FrameworkLibrary::get('cmmc-l2'), $assessment(), array('project_name' => 'Part-IS Implementation'), array(), null);
+        Assert::same(array('framework_mismatch', 'project_frameworks_missing'), $codes($issues), 'warnings');
     },
 
     'an excluded control without a justification blocks' => function () use ($assessment, $control, $codes) {

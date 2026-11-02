@@ -1569,6 +1569,7 @@ class ApiController extends Controller {
         $definition = FrameworkLibrary::get((string) $assessment['framework_key']);
         $controls = $this->assessments_model->load_controls((int) $assessment['id'], Session::get('company_id'));
         $project = $this->projects_model->get_project($assessment['project_id'], Session::get('company_id'))[0];
+        $project['frameworks'] = $this->projects_model->project_standards($assessment['project_id'], Session::get('company_id'));
         $score = $definition === null ? null : AssessmentScore::score($definition, $assessment, $controls);
 
         return array(
@@ -2398,6 +2399,22 @@ class ApiController extends Controller {
 
         $company_id = Session::get('company_id');
         $user_id = Session::get('user_id');
+        $active = array_map('intval', array_column($this->standards_model->active_standards($company_id), 'id'));
+        $standard_ids = array();
+
+        foreach ((array) ($this->post['standard_ids'] ?? array()) as $standard_id) {
+            $standard_id = (int) $standard_id;
+
+            if (!in_array($standard_id, $active, true)) {
+                $response['message'] = 'One of the chosen frameworks is not available';
+                echo json_encode($response);
+                exit;
+            }
+
+            $standard_ids[$standard_id] = $standard_id;
+        }
+
+        $standards_sent = ($this->post['standards_sent'] ?? '') === '1';
 
         if ($project_id === 0) {
 
@@ -2405,6 +2422,10 @@ class ApiController extends Controller {
                 $company_id, $client_id, $project_name, $description,
                 $start_date, $end_date, $user_id
             );
+
+            if ($standards_sent) {
+                $this->projects_model->set_project_standards((int) $new_id, array_values($standard_ids), $user_id);
+            }
 
             $response['success'] = true;
             $response['message'] = 'Project created';
@@ -2423,6 +2444,10 @@ class ApiController extends Controller {
             $project_id, $company_id, $client_id, $project_name, $description,
             $start_date, $end_date, $user_id
         );
+
+        if ($standards_sent) {
+            $this->projects_model->set_project_standards($project_id, array_values($standard_ids), $user_id);
+        }
 
         $response['success'] = true;
         $response['message'] = 'Project updated';

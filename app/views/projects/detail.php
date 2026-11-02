@@ -200,6 +200,8 @@ $(document).ready(function () {
         window.location.href = '/projects/assessment/id/' + $(this).attr('data-id');
     });
 
+    var project_standard_ids = <?php echo json_encode($this->standard_ids); ?>;
+
     $('#do_assessment_add').click(function () {
 
         $('#assessment_name').val('').removeClass('is-invalid').removeData('default_name');
@@ -207,13 +209,27 @@ $(document).ready(function () {
         ApiDataSvc.apiCall('post', 'load_active_standards', {}, function (data) {
 
             var list = JSON.parse(data);
-            var options = '<option value="0">Choose a standard&hellip;</option>';
+            var mine = '';
+            var others = '';
 
             for (var i = 0; i < list.length; i++) {
-                options += '<option value="' + list[i].id + '">' + esc(standard_display(list[i].standard_name, list[i].version)) + '</option>';
+                var option = '<option value="' + list[i].id + '">' + esc(standard_display(list[i].standard_name, list[i].version)) + '</option>';
+
+                if (project_standard_ids.indexOf(parseInt(list[i].id, 10)) !== -1) {
+                    mine += option;
+                } else {
+                    others += option;
+                }
             }
 
+            var options = '<option value="0">Choose a standard&hellip;</option>'
+                + (mine === '' ? others : '<optgroup label="This project&rsquo;s frameworks">' + mine + '</optgroup><optgroup label="Other standards">' + others + '</optgroup>');
+
             $('#standard_id').html(options);
+
+            if (project_standard_ids.length === 1 && $('#standard_id option[value="' + project_standard_ids[0] + '"]').length) {
+                $('#standard_id').val(String(project_standard_ids[0])).trigger('change');
+            }
             modal('assessment_modal').show();
         });
     });

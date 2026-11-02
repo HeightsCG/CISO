@@ -89,6 +89,8 @@ class AssessmentChecks {
             $issues[] = self::issue('block', 'final_needs_baseline', 'A Final assessment needs a Baseline to compare against, or the "no baseline" box ticked in Details.', array());
         }
 
+        $issues = array_merge($issues, self::project_framework_checks($definition, $assessment, $project));
+
         if ($definition !== null) {
             $issues = array_merge($issues, self::framework_checks($definition, $assessment, $project, $score));
         }
@@ -106,11 +108,6 @@ class AssessmentChecks {
     private static function framework_checks(array $definition, array $assessment, array $project, ?array $score): array
     {
         $issues = array();
-        $mismatch = self::mismatch($definition, $project['project_name'].' '.($project['description'] ?? ''));
-
-        if ($mismatch !== null) {
-            $issues[] = self::issue('warn', 'framework_mismatch', $mismatch, array());
-        }
 
         foreach ($score['gates'] ?? array() as $gate) {
             if ($gate['assessed'] && !$gate['met']) {
@@ -121,6 +118,49 @@ class AssessmentChecks {
         if (($score['model'] ?? '') === 'maturity' && ((int) ($assessment['tier_governance'] ?? 0) === 0 || (int) ($assessment['tier_management'] ?? 0) === 0)) {
             $issues[] = self::issue('warn', 'tiers_not_set', 'The current Tiers for governance and management are not set in Details.', array());
         }
+
+        return $issues;
+    }
+
+    /**
+     * The assessment's framework must be one the project covers. When the
+     * project has no frameworks chosen yet, fall back to the frameworks its
+     * name or description mentions, and say the project needs them set.
+     */
+    private static function project_framework_checks(?array $definition, array $assessment, array $project): array
+    {
+        $issues = array();
+        $frameworks = $project['frameworks'] ?? array();
+        $assessed = FrameworkLibrary::display_name((string) $assessment['standard_name'], (string) $assessment['version']);
+
+        if (count($frameworks) > 0) {
+            $ids = array_map('intval', array_column($frameworks, 'standard_id'));
+            $keys = array_filter(array_column($frameworks, 'framework_key'));
+            $covered = in_array((int) $assessment['standard_id'], $ids, true)
+                || ((string) $assessment['framework_key'] !== '' && in_array($assessment['framework_key'], $keys, true));
+
+            if (!$covered) {
+                $names = array();
+
+                foreach ($frameworks as $framework) {
+                    $names[] = FrameworkLibrary::display_name($framework['standard_name'], $framework['version']);
+                }
+
+                $issues[] = self::issue('warn', 'framework_mismatch', 'This project covers '.self::join($names).', but this assessment uses '.$assessed.'. Check the right framework was chosen, or add it to the project.', array());
+            }
+
+            return $issues;
+        }
+
+        if ($definition !== null) {
+            $mismatch = self::mismatch($definition, $project['project_name'].' '.($project['description'] ?? ''));
+
+            if ($mismatch !== null) {
+                $issues[] = self::issue('warn', 'framework_mismatch', $mismatch, array());
+            }
+        }
+
+        $issues[] = self::issue('warn', 'project_frameworks_missing', 'The project has no frameworks chosen. Choose them on the project\'s Edit page so a wrong framework is always caught.', array());
 
         return $issues;
     }
