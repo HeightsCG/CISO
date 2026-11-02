@@ -16,6 +16,9 @@
             <button type="button" class="btn btn--destructive" id="do_void_open"><i class="fa-regular fa-ban"></i> Void</button>
             <button type="button" class="btn btn--primary" id="do_send_open"><i class="fa-regular fa-paper-plane"></i> Resend Invoice</button>
             <?php } ?>
+            <?php if (in_array($this->invoice['invoice_status'], array('Draft', 'Void'), true)) { ?>
+            <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete</button>
+            <?php } ?>
             <?php if ($this->invoice['invoice_status'] === 'Draft') { ?>
             <a class="btn btn--secondary" href="/billing/form/id/<?php echo (int) $this->invoice['id']; ?>"><i class="fa-regular fa-pen"></i> Edit Draft</a>
             <button type="button" class="btn btn--primary" id="do_send_open"><i class="fa-regular fa-paper-plane"></i> Send Invoice</button>
@@ -92,7 +95,7 @@
                 </div>
                 <?php } ?>
                 <?php if ($this->invoice['due_date'] !== null) { ?>
-                <div class="masthead__cell masthead__cell--due">
+                <div class="masthead__cell">
                     <span class="lbl">Due</span>
                     <div class="masthead__value"><?php echo htmlspecialchars($this->invoice['due_date_display'], ENT_QUOTES, 'UTF-8'); ?></div>
                 </div>
@@ -144,7 +147,7 @@
                         <?php if ((int) $this->invoice['discount_cents'] > 0) { ?>
                         <tr>
                             <td colspan="6" class="ledger__foot-label">Subtotal</td>
-                            <td class="num ledger__amount"><?php echo htmlspecialchars(Money::figure($this->invoice['subtotal_cents']), ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td class="num ledger__amount"><?php echo htmlspecialchars(Money::figure($this->invoice['total_cents'] + $this->invoice['discount_cents']), ENT_QUOTES, 'UTF-8'); ?></td>
                         </tr>
                         <tr>
                             <td colspan="6" class="ledger__foot-label">Discount</td>
@@ -161,7 +164,7 @@
                         </tr>
                         <tr class="ledger__foot-total">
                             <td colspan="6" class="ledger__foot-label">Outstanding <?php echo htmlspecialchars(strtoupper($this->invoice['currency']), ENT_QUOTES, 'UTF-8'); ?></td>
-                            <td class="num ledger__amount"><?php echo htmlspecialchars(Money::figure($this->invoice['amount_due_cents']), ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td class="num ledger__amount"><?php echo htmlspecialchars(Money::figure($this->invoice['invoice_status'] === 'Void' ? 0 : $this->invoice['amount_due_cents']), ENT_QUOTES, 'UTF-8'); ?></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -232,6 +235,29 @@
     </div>
 </div>
 
+<?php if (in_array($this->invoice['invoice_status'], array('Draft', 'Void'), true)) { ?>
+<div class="modal fade" data-bs-backdrop="static" id="delete_modal" tabindex="-1" aria-labelledby="delete_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="delete_modal_title"><?php echo ($this->invoice['invoice_status'] === 'Draft' ? 'Delete Draft' : 'Delete Voided Invoice'); ?></h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><?php echo ($this->invoice['invoice_status'] === 'Draft' ? 'Delete this draft invoice? This cannot be undone.' : 'Delete this voided invoice? It is removed from your billing list. This cannot be undone.'); ?></p>
+                <?php if ($this->invoice['invoice_status'] === 'Void') { ?>
+                <p class="import__hint">Stripe keeps its own record of the voided invoice.</p>
+                <?php } ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="do_delete" class="btn btn--destructive">Delete Invoice</button>
+            </div>
+        </div>
+    </div>
+</div>
+<?php } ?>
+
 <script>
 $(document).ready(function () {
 
@@ -263,6 +289,29 @@ $(document).ready(function () {
 
     $('#do_void_open').click(function () {
         modal('void_modal').show();
+    });
+
+    $('#do_delete_open').click(function () {
+        modal('delete_modal').show();
+    });
+
+    $('#do_delete').click(function () {
+
+        set_loading('#do_delete', true);
+
+        ApiDataSvc.apiCall('post', 'delete_invoice', { invoice_id: invoice_id }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading('#do_delete', false);
+
+            if (obj.success) {
+                window.location.href = '/billing';
+            } else {
+                modal('delete_modal').hide();
+                toastr.error(obj.message);
+            }
+        });
     });
 
     $('#do_send').click(function () {

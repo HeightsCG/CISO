@@ -10,10 +10,11 @@
             <?php if ($this->invoice !== null) { ?>
             <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete</button>
             <?php } ?>
+            <a class="btn btn--secondary" href="<?php echo ($this->invoice === null ? '/billing' : '/billing/invoice/id/'.((int) $this->invoice['id'])); ?>">Cancel</a>
+            <button type="button" id="do_save" class="btn btn--primary">Save Invoice</button>
         </div>
     </div>
 
-    <div class="invoice-layout">
     <div class="invoice-main">
 
         <div class="invoice-doc invoice-doc--header">
@@ -31,7 +32,7 @@
                 </select>
             </div>
             <div class="masthead__cell">
-                <label for="due_terms">Payment terms</label>
+                <label for="due_terms">Terms</label>
                 <select class="form-control" id="due_terms">
                     <option value="0">Due on receipt</option>
                     <option value="7">Net 7</option>
@@ -39,23 +40,21 @@
                     <option value="30" selected>Net 30</option>
                     <option value="45">Net 45</option>
                     <option value="60">Net 60</option>
-                    <option value="custom">Choose a date</option>
+                    <option value="custom">Custom date</option>
                 </select>
             </div>
             <div class="masthead__cell">
-                <span class="lbl" id="repeats_label">Repeats</span>
-                <div class="segmented masthead__segmented" id="repeats" role="group" aria-labelledby="repeats_label">
-                    <button type="button" class="segmented__btn is-on" data-value="0" aria-pressed="true">One-off</button>
-                    <button type="button" class="segmented__btn" data-value="1" aria-pressed="false">Recurring</button>
-                </div>
+                <label for="repeats">Repeats</label>
+                <select class="form-control" id="repeats">
+                    <option value="0" selected>One-off</option>
+                    <option value="1">Recurring</option>
+                </select>
                 <div class="masthead__sub" id="schedule_summary" hidden></div>
                 <button type="button" class="masthead__link" id="edit_schedule" hidden>Change Schedule</button>
             </div>
-            <div class="masthead__cell masthead__cell--due">
-                <label for="due_date">Due</label>
-                <div class="masthead__value" id="due_display"></div>
-                <div class="masthead__sub" id="due_sub"></div>
-                <input type="date" class="form-control" id="due_date" hidden value="<?php echo ($this->invoice === null || $this->invoice['due_date'] === null ? '' : htmlspecialchars($this->invoice['due_date'], ENT_QUOTES, 'UTF-8')); ?>">
+            <div class="masthead__cell">
+                <label for="due_date">Due Date</label>
+                <input type="date" class="form-control" id="due_date" value="<?php echo ($this->invoice === null || $this->invoice['due_date'] === null ? '' : htmlspecialchars($this->invoice['due_date'], ENT_QUOTES, 'UTF-8')); ?>">
                 </div>
             </div>
         </div>
@@ -82,6 +81,23 @@
                     </tr>
                 </thead>
                 <tbody id="line_rows"></tbody>
+                <tfoot id="lines_totals" hidden>
+                    <tr id="subtotal_row" hidden>
+                        <td colspan="6" class="ledger__foot-label">Subtotal</td>
+                        <td class="num ledger__amount" id="lines_subtotal">0.00</td>
+                        <td></td>
+                    </tr>
+                    <tr id="discount_row" hidden>
+                        <td colspan="6" class="ledger__foot-label">Discount</td>
+                        <td class="num ledger__amount" id="discount_amount">0.00</td>
+                        <td></td>
+                    </tr>
+                    <tr class="ledger__foot-total">
+                        <td colspan="6" class="ledger__foot-label">Total <?php echo htmlspecialchars(strtoupper($this->invoice === null ? ($this->company['default_currency'] ?? 'usd') : $this->invoice['currency']), ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td class="num ledger__amount" id="lines_total">0.00</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
                 <tbody id="lines_empty">
                     <tr>
                         <td colspan="8">
@@ -106,51 +122,6 @@
             </div>
 
         </div>
-
-    </div>
-
-    <aside class="summary">
-        <h2 class="summary__heading">Summary</h2>
-        <dl class="summary__facts">
-            <div class="summary__fact">
-                <dt>Status</dt>
-                <dd><span class="badge badge--prospect">Draft</span></dd>
-            </div>
-            <div class="summary__fact" id="rail_client_fact" hidden>
-                <dt>Bill To</dt>
-                <dd id="rail_client"></dd>
-            </div>
-            <div class="summary__fact" id="rail_project_fact" hidden>
-                <dt>Project Name</dt>
-                <dd id="rail_project"></dd>
-            </div>
-            <div class="summary__fact" id="rail_due_fact" hidden>
-                <dt>Due Date</dt>
-                <dd id="rail_due"></dd>
-            </div>
-        </dl>
-
-        <div class="summary__money" id="summary_money" hidden>
-            <div class="summary__row" id="subtotal_row" hidden>
-                <span>SubTotal</span>
-                <span id="lines_subtotal">0.00</span>
-            </div>
-            <div class="summary__row summary__row--credit" id="discount_row" hidden>
-                <span>Discount Amount</span>
-                <span id="discount_amount">0.00</span>
-            </div>
-        </div>
-
-        <div class="summary__total">
-            <span>Total <?php echo htmlspecialchars(strtoupper($this->invoice === null ? ($this->company['default_currency'] ?? 'usd') : $this->invoice['currency']), ENT_QUOTES, 'UTF-8'); ?></span>
-            <span id="lines_total">0.00</span>
-        </div>
-
-        <div class="summary__actions">
-            <a class="btn btn--secondary" href="/billing">Cancel</a>
-            <button type="button" id="do_save" class="btn btn--primary">Save Invoice</button>
-        </div>
-    </aside>
 
     </div>
 </div>
@@ -295,7 +266,6 @@ $(document).ready(function () {
     var invoice_total = 0;
     var saved = { count: '1', unit: 'Month', start: "<?php echo date('Y-m-d'); ?>", mode: 'Never', after: '12', on: '' };
     var schedule_set = false;
-    var clients = {};
     var next_idx = 0;
     var line_to_remove = null;
 
@@ -396,6 +366,7 @@ $(document).ready(function () {
         var rows = $('#line_rows tr').length;
 
         $('#lines_empty').prop('hidden', rows > 0);
+        $('#lines_totals').prop('hidden', rows === 0);
 
         var subtotal = 0;
         var discount = 0;
@@ -429,7 +400,6 @@ $(document).ready(function () {
             }
         });
 
-        $('#summary_money').prop('hidden', discount === 0);
         $('#subtotal_row').prop('hidden', discount === 0);
         $('#discount_row').prop('hidden', discount === 0);
         $('#lines_subtotal').text(money(subtotal));
@@ -441,8 +411,6 @@ $(document).ready(function () {
         if (schedule_set) {
             $('#schedule_summary').text(schedule_short());
         }
-
-        render_masthead();
     }
 
     function add_line(description, quantity, unit_amount, discount_value, discount_type) {
@@ -471,84 +439,48 @@ $(document).ready(function () {
         recalculate();
     }
 
-    /**
-     * The summary reads the invoice back as it is being written, so the person can
-     * see what the client will get without leaving the form. The due cell in the
-     * masthead is written here too, because it is derived from the terms rather
-     * than typed.
-     */
-    function render_masthead() {
-
-        var client = clients[$('#client_id').val()];
-        var due = $('#due_date').val();
-
-        $('#rail_client_fact').prop('hidden', client === undefined);
-
-        if (client !== undefined) {
-            var name = client.billing_name !== '' ? client.billing_name : client.company_name;
-            var email = client.billing_email !== '' ? client.billing_email : client.contact_email;
-            var html = '<span class="rail__strong">' + esc(name) + '</span>';
-            var city = [client.city, client.state].filter(function (p) { return p !== ''; }).join(', ');
-            var region = [city, client.postal_code].filter(function (p) { return p !== ''; }).join(' ');
-            [client.address_1, region, client.country].forEach(function (line) {
-                if (line !== '' && line !== undefined) {
-                    html += '<br>' + esc(line);
-                }
-            });
-            if (email !== '') {
-                html += '<br>' + esc(email);
-            } else {
-                html += '<br><span class="billto__warn">No email on file</span>';
-            }
-            $('#rail_client').html(html);
-        }
-
-        var has_project = parseInt($('#project_id').val(), 10) !== 0;
-
-        $('#rail_project_fact').prop('hidden', !has_project);
-
-        if (has_project) {
-            $('#rail_project').text($('#project_id option:selected').text());
-        }
-
-        $('#rail_due_fact').prop('hidden', due === '');
-        $('#due_display').text('');
-        $('#due_sub').text('');
-
-        if (due === '') {
-            return;
-        }
-
-        var parts = due.split('-');
-        var terms = $('#due_terms').val();
-        var label = parts[1] + '/' + parts[2] + '/' + parts[0];
-        var term_name = terms === 'custom' ? '' : $('#due_terms option:selected').text();
-
-        $('#due_display').text(label);
-        $('#due_sub').text(term_name);
-
-        $('#rail_due').html(esc(label) + (term_name === '' ? '' : '<br><span class="rail__quiet">' + esc(term_name) + '</span>'));
+    function iso_date(date) {
+        return date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
     }
 
     function due_from_terms() {
+
         var terms = $('#due_terms').val();
+
         if (terms === 'custom') {
-            $('#due_date').prop('hidden', false);
-            $('#due_display').prop('hidden', true);
             if ($('#due_date').val() === '') {
                 var fallback = new Date();
                 fallback.setDate(fallback.getDate() + 30);
-                $('#due_date').val(fallback.toISOString().slice(0, 10));
+                $('#due_date').val(iso_date(fallback));
             }
-            render_masthead();
             return;
         }
-        $('#due_date').prop('hidden', true);
-        $('#due_display').prop('hidden', false);
+
         var due = new Date();
         due.setDate(due.getDate() + parseInt(terms, 10));
-        $('#due_date').val(due.toISOString().slice(0, 10));
-        render_masthead();
+        $('#due_date').val(iso_date(due)).removeClass('is-invalid');
+    }
+
+    function terms_from_due() {
+
+        var due = $('#due_date').val();
+        var matched = 'custom';
+
+        $('#due_terms option').each(function () {
+            if (this.value === 'custom') {
+                return;
+            }
+
+            var date = new Date();
+            date.setDate(date.getDate() + parseInt(this.value, 10));
+
+            if (iso_date(date) === due) {
+                matched = this.value;
+            }
+        });
+
+        $('#due_terms').val(matched);
+        $('#due_date').removeClass('is-invalid');
     }
 
     function add_interval(date, unit, count) {
@@ -686,7 +618,7 @@ $(document).ready(function () {
 
     function render_repeats() {
 
-        var repeats = $('#repeats .segmented__btn.is-on').attr('data-value') === '1' && schedule_set;
+        var repeats = $('#repeats').val() === '1' && schedule_set;
 
         $('#schedule_summary').prop('hidden', !repeats).text(repeats ? schedule_short() : '');
         $('#edit_schedule').prop('hidden', !repeats);
@@ -728,21 +660,26 @@ $(document).ready(function () {
         $('#ends_on_row').prop('hidden', mode !== 'On');
     }
 
-    $('#repeats').on('click', '.segmented__btn', function () {
+    $('#repeats').change(function () {
 
-        if ($(this).attr('data-value') === '1') {
+        if ($(this).val() === '1') {
             open_schedule();
             return;
         }
 
         schedule_set = false;
-        set_repeats('0');
         render_repeats();
     });
 
+    $('#schedule_modal').on('hidden.bs.modal', function () {
+        if (!schedule_set) {
+            set_repeats('0');
+            render_repeats();
+        }
+    });
+
     function set_repeats(value) {
-        $('#repeats .segmented__btn').removeClass('is-on').attr('aria-pressed', 'false');
-        $('#repeats .segmented__btn[data-value="' + value + '"]').addClass('is-on').attr('aria-pressed', 'true');
+        $('#repeats').val(value);
     }
 
     $('#edit_schedule').click(open_schedule);
@@ -815,8 +752,7 @@ $(document).ready(function () {
     });
 
     $('#due_terms').change(due_from_terms);
-    $('#due_date').on('change', render_masthead);
-    $('#project_id').change(render_masthead);
+    $('#due_date').on('change', terms_from_due);
 
     $('#line_rows').on('change', 'select', function () {
         recalculate();
@@ -892,7 +828,6 @@ $(document).ready(function () {
     $('#client_id').change(function () {
         selected_project = 0;
         load_projects($(this).val());
-        render_masthead();
     });
 
     function load_projects(client_id) {
@@ -915,14 +850,12 @@ $(document).ready(function () {
         ApiDataSvc.apiCall('post', 'load_clients', {}, function (data) {
             var obj = JSON.parse(data);
             for (var i = 0; i < obj.length; i++) {
-                clients[obj[i].id] = obj[i];
                 $('#client_id').append('<option value="' + obj[i].id + '">' + esc(obj[i].company_name) + '</option>');
             }
             if (selected_client > 0) {
                 $('#client_id').val(selected_client);
                 load_projects(selected_client);
             }
-            render_masthead();
         });
     }
 
@@ -1004,7 +937,7 @@ $(document).ready(function () {
             due_days: ($('#due_terms').val() === 'custom' ? '' : $('#due_terms').val()),
             due_date: ($('#due_terms').val() === 'custom' ? $('#due_date').val() : ''),
             invoice_footer: $('#invoice_footer').val().trim(),
-            repeats: $('#repeats .segmented__btn.is-on').attr('data-value'),
+            repeats: $('#repeats').val(),
             billing_interval: $('#billing_interval').val(),
             interval_count: $('#interval_count').val().trim(),
             start_date: $('#start_date').val(),

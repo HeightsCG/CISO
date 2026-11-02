@@ -371,6 +371,13 @@ class StripeService {
             }
 
             return array('reachable' => true, 'subscription' => array());
+        } catch (\Stripe\Exception\InvalidRequestException $e) {
+            self::fail('subscription lookup', $e);
+
+            /* Stripe answered and refused, e.g. the customer no longer exists or
+               belongs to the other mode. That is a fact, not an outage, so the
+               company falls to the free tier instead of having no limits. */
+            return array('reachable' => true, 'subscription' => array());
         } catch (\Throwable $e) {
             self::fail('subscription lookup', $e);
             return array('reachable' => false, 'subscription' => array());
@@ -1280,7 +1287,7 @@ class StripeService {
      * what makes Stripe email the client a hosted payment page rather than trying
      * to charge a stored card, which is the whole shape of this feature.
      */
-    public static function create_invoice($account_id, $customer_id, $currency, $footer, $due_days, $due_date, $company_id, $invoice_id, $client_id, $project_id): array
+    public static function create_invoice($account_id, $customer_id, $currency, $footer, $due_days, $due_date, $company_id, $invoice_id, $client_id, $project_id, $replaces = ''): array
     {
         if (!self::configured() || !self::has_account($account_id, 'invoice create')) {
             return array();
@@ -1290,7 +1297,7 @@ class StripeService {
             'customer'          => $customer_id,
             'currency'          => strtolower($currency),
             'collection_method' => 'send_invoice',
-            'auto_advance'      => true,
+            'auto_advance'      => false,
             'payment_settings'  => array(
                 'payment_method_types' => self::payment_methods_for($currency)
             ),
@@ -1321,7 +1328,7 @@ class StripeService {
         try {
             $invoice = self::client()->invoices->create(
                 $params,
-                self::connected($account_id, 'inv-'.self::livemode().'-'.$company_id.'-'.$invoice_id)
+                self::connected($account_id, 'inv-'.self::livemode().'-'.$company_id.'-'.$invoice_id.((string) $replaces === '' ? '' : '-'.$replaces))
             );
             return $invoice->toArray();
         } catch (\Throwable $e) {
@@ -1372,7 +1379,7 @@ class StripeService {
         try {
             $item = self::client()->invoiceItems->create(
                 $params,
-                self::connected($account_id, 'ii-'.self::livemode().'-'.$company_id.'-'.$invoice_id.'-'.$item_id)
+                self::connected($account_id, 'ii-'.self::livemode().'-'.$company_id.'-'.$stripe_invoice_id.'-'.$item_id)
             );
             return $item->toArray();
         } catch (\Throwable $e) {
@@ -1465,7 +1472,7 @@ class StripeService {
                         'subscription_id' => (string) $subscription_id
                     )
                 ),
-                self::connected($account_id, 'subprice-'.self::livemode().'-'.$company_id.'-'.$subscription_id)
+                self::connected($account_id, 'subprice-'.self::livemode().'-'.$company_id.'-'.$subscription_id.'-'.substr(md5(strtolower((string) $currency).'|'.(int) $unit_amount_cents.'|'.$billing_interval.'|'.self::text($name)), 0, 12))
             );
             return $price->toArray();
         } catch (\Throwable $e) {
@@ -1515,12 +1522,53 @@ class StripeService {
         try {
             $subscription = self::client()->subscriptions->create(
                 $params,
-                self::connected($account_id, 'sub-'.self::livemode().'-'.$company_id.'-'.$subscription_id)
+                self::connected($account_id, 'sub-'.self::livemode().'-'.$company_id.'-'.$subscription_id.'-'.substr(md5(json_encode($params)), 0, 12))
             );
             return $subscription->toArray();
         } catch (\Throwable $e) {
             self::fail('subscription create', $e);
             return array();
+        }
+    }
+
+    /**
+     * A subscription an earlier attempt may have created without this
+     * application hearing back, found by the local id stamped in its metadata.
+     * Returns array() when there is none, or null when Stripe could not be asked,
+     * which the caller must treat as "unknown" rather than "none".
+     */
+    public static function find_connected_subscription($account_id, $customer_id, $subscription_id): ?array
+    {
+        if (!self::configured() || !self::has_account($account_id, 'subscription find') || (string) $customer_id === '') {
+            return null;
+        }
+
+        try {
+            $list = self::client()->subscriptions->all(
+                array(
+                    'customer' => $customer_id,
+                    'status'   => 'all',
+                    'limit'    => 100
+                ),
+                self::connected($account_id)
+            );
+
+            foreach ($list->data as $subscription) {
+                if (($subscription->metadata['app'] ?? '') !== 'ciso' || (string) ($subscription->metadata['subscription_id'] ?? '') !== (string) $subscription_id) {
+                    continue;
+                }
+
+                if (in_array($subscription->status, array('canceled', 'incomplete_expired'), true)) {
+                    continue;
+                }
+
+                return $subscription->toArray();
+            }
+
+            return array();
+        } catch (\Throwable $e) {
+            self::fail('subscription find', $e);
+            return null;
         }
     }
 
@@ -1601,8 +1649,11 @@ class StripeService {
         try {
             $invoice = self::client()->invoices->finalizeInvoice(
                 $stripe_invoice_id,
-                array('expand' => array('payments')),
-                self::connected($account_id, 'fin-'.self::livemode().'-'.$company_id.'-'.$invoice_id)
+                array(
+                    'auto_advance' => true,
+                    'expand'       => array('payments')
+                ),
+                self::connected($account_id, 'fin-'.self::livemode().'-'.$company_id.'-'.$stripe_invoice_id)
             );
             return $invoice->toArray();
         } catch (\Throwable $e) {
@@ -1709,6 +1760,13 @@ class StripeService {
         try {
             self::client()->invoices->delete($stripe_invoice_id, array(), self::connected($account_id));
             return true;
+        } catch (\Stripe\Exception\InvalidRequestException $e) {
+            if ($e->getStripeCode() === 'resource_missing') {
+                return true;
+            }
+
+            self::fail('invoice delete', $e);
+            return false;
         } catch (\Throwable $e) {
             self::fail('invoice delete', $e);
             return false;

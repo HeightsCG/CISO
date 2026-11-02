@@ -13,6 +13,36 @@
  */
 class Money {
 
+    /** Currencies whose minor unit is not a hundredth. Amounts here are stored in hundredths, so these cannot be billed correctly. */
+    const NOT_HUNDREDTHS = array(
+        'bif',
+        'clp',
+        'djf',
+        'gnf',
+        'jpy',
+        'kmf',
+        'krw',
+        'mga',
+        'pyg',
+        'rwf',
+        'ugx',
+        'vnd',
+        'vuv',
+        'xaf',
+        'xof',
+        'xpf',
+        'bhd',
+        'jod',
+        'kwd',
+        'omr',
+        'tnd'
+    );
+
+    public static function supported_currency($currency): bool
+    {
+        return !in_array(strtolower((string) $currency), self::NOT_HUNDREDTHS, true);
+    }
+
     /**
      * Parse a typed amount into minor units, or null when it is not a valid
      * amount. Deliberately not (int) round($value * 100): 1.005 has no exact

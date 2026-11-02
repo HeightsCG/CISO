@@ -4960,12 +4960,6 @@ table.data.lines .num .form-control {
 /* The document and its summary are two panels rather than one stretched surface,
    so the summary is sized by its own content and sticks instead of standing tall
    and half empty beside a long ledger. */
-.invoice-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 280px;
-    align-items: start;
-    gap: var(--space-5);
-}
 
 /* Two panels with the page showing between them, rather than one panel divided
    by a rule. A hairline and a tonal band both sit within a couple of percent of
@@ -4987,19 +4981,13 @@ table.data.lines .num .form-control {
     min-height: calc(100vh - var(--topbar-height) - (2 * var(--space-6)));
 }
 
-.page--invoice .invoice-layout {
-    flex: 1 1 auto;
-    align-items: stretch;
-    min-height: 0;
-}
+
 
 /* The summary is read at a glance and sized by its content, so it stays at the
    top of its column while the document beside it stretches. */
-.page--invoice .summary {
-    align-self: start;
-}
 
 .page--invoice .invoice-main {
+    flex: 1 1 auto;
     min-height: 0;
 }
 
@@ -5076,24 +5064,37 @@ table.data.lines .num .form-control {
 
 /* The document header of a sent invoice: who it is for, against what, where it
    stands, and when it is owed - the facts a reader looks for before the lines. */
+/* Project, status and due date only appear when they apply, so the cell count
+   varies. Flex shares the width among whatever cells are there, rather than a
+   fixed track count leaving an empty box at the end. */
 .masthead--invoice {
-    grid-template-columns: 1.5fr 1.4fr 1.2fr 1fr 1fr;
+    display: flex;
+}
+
+.masthead--invoice > .masthead__cell {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.masthead--invoice > .masthead__cell:nth-child(-n+2) {
+    flex-grow: 1.45;
 }
 
 /* Five fields on the editor: who, against what, on what terms, how often, and
    the date that falls out of it. The count is fixed, so the track count is too -
    a four-column grid wrapped the last cell onto a row of its own. */
 .masthead--form {
-    grid-template-columns: 1.3fr 1.3fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.masthead--form label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 
 
-/* A draft's title already reads "Draft Invoice", so the status cell only appears
-   once the status is something the heading does not already say. */
-.masthead--has-status {
-    grid-template-columns: 1.5fr 1.4fr 1.2fr 1fr 1fr 1fr;
-}
 
 /* The foot carries the money now, so the last row is the balance and is given
    the weight the rail's total used to have. */
@@ -5114,9 +5115,6 @@ table.data.ledger tfoot .ledger__foot-total td {
 
 /* The due date is derived rather than typed, so it sits on a tinted ground and
    reads as a result instead of one more empty box waiting for input. */
-.masthead__cell--due {
-    background: var(--surface-sunken);
-}
 
 .masthead__value {
     font-size: var(--fs-subsection);
@@ -5148,7 +5146,7 @@ table.data.ledger tfoot .ledger__foot-total td {
 /* Nothing on the ledger yet: the invitation sits in the middle of the space the
    lines will occupy, rather than pinned under the header with the rest blank.
    Scoped to the empty state, so real rows keep their own height. */
-.lines__scroll:has(.lines__empty) > table.data.ledger {
+.lines__scroll:has(#lines_empty:not([hidden])) > table.data.ledger {
     height: 100%;
 }
 
@@ -5157,6 +5155,7 @@ table.data.ledger tfoot .ledger__foot-total td {
 table.data.ledger {
     table-layout: fixed;
     width: 100%;
+    min-width: 900px;
     border-collapse: collapse;
     font-size: var(--fs-meta);
 }
@@ -5192,14 +5191,14 @@ table.data.ledger tbody tr:hover td:first-child {
 /* Sized explicitly: under table-layout: fixed an unsized column takes an equal
    share of the leftover width, which gave a quantity of "1" the same room as the
    description and stranded the remove control far from the amount it belongs to. */
-table.data.ledger th.idx      { width: 52px; }
-table.data.ledger th.quantity { width: 124px; }
-table.data.ledger th.unit     { width: 164px; }
-table.data.ledger th.discount { width: 184px; }
-table.data.ledger th.discount-amount { width: 132px; }
-table.data.ledger th.subtotal { width: 148px; }
-table.data.ledger th.amount   { width: 128px; }
-table.data.ledger th.actions  { width: 56px; }
+table.data.ledger th.idx      { width: 44px; }
+table.data.ledger th.quantity { width: 96px; }
+table.data.ledger th.unit     { width: 132px; }
+table.data.ledger th.discount { width: 168px; }
+table.data.ledger th.discount-amount { width: 108px; }
+table.data.ledger th.subtotal { width: 132px; }
+table.data.ledger th.amount   { width: 112px; }
+table.data.ledger th.actions  { width: 48px; }
 
 /* The visually-hidden header labels are absolutely positioned; without a local
    containing block they resolve against the viewport, land past the right edge
@@ -5593,11 +5592,7 @@ table.data.ledger tfoot .ledger__foot-total .ledger__amount {
     width: 100%;
 }
 
-.masthead__segmented .segmented__btn {
-    flex: 1 1 0;
-    min-width: 0;
-    height: var(--control-height);
-}
+
 
 #schedule_modal .modal-header {
     align-items: flex-start;
@@ -6181,21 +6176,9 @@ table.data.ledger .ledger__amount {
     color: var(--text-primary);
 }
 
-.summary__due {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-3);
-    padding: var(--space-3) var(--space-4);
-    border-top: 1px solid var(--border);
-    font-size: var(--fs-meta);
-    color: var(--text-secondary);
-}
 
-.summary__due span:last-child {
-    font-variant-numeric: tabular-nums;
-    color: var(--text-primary);
-}
+
+
 
 .summary {
     position: sticky;
@@ -6206,107 +6189,35 @@ table.data.ledger .ledger__amount {
     box-shadow: var(--shadow-panel);
 }
 
-.summary__heading {
-    margin: 0;
-    padding: var(--space-3) var(--space-4);
-    background: var(--surface-sunken);
-    border-bottom: 1px solid var(--border);
-    font-size: var(--fs-table-head);
-    font-weight: var(--fw-semibold);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-secondary);
-}
 
-.summary__facts {
-    margin: 0;
-    padding: var(--space-4);
-}
 
-.summary__fact + .summary__fact {
-    margin-top: var(--space-3);
-}
 
-.summary__facts dt {
-    font-size: 11px;
-    font-weight: var(--fw-semibold);
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-}
 
-.summary__facts dd {
-    margin: var(--space-1) 0 0;
-    font-size: var(--fs-meta);
-    line-height: 1.55;
-    color: var(--text-secondary);
-}
 
-.rail__strong {
-    font-weight: var(--fw-semibold);
-    color: var(--text-primary);
-}
 
-.rail__quiet {
-    color: var(--text-muted);
-}
 
-.summary__money {
-    padding: var(--space-3) var(--space-4) var(--space-4);
-    border-top: 1px solid var(--border);
-}
 
-.summary__row {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-3);
-    padding: var(--space-1) 0;
-    font-size: var(--fs-meta);
-    color: var(--text-secondary);
-}
 
-.summary__row span:last-child {
-    font-variant-numeric: tabular-nums;
-    color: var(--text-primary);
-}
 
-.summary__total {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-3);
-    padding: var(--space-3) var(--space-4);
-    border-top: 2px solid var(--text-primary);
-}
 
-.summary__total span:first-child {
-    font-size: 11px;
-    font-weight: var(--fw-semibold);
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    color: var(--text-secondary);
-}
 
-.summary__total span:last-child {
-    font-size: 20px;
-    font-weight: var(--fw-semibold);
-    font-variant-numeric: tabular-nums;
-    line-height: var(--lh-tight);
-    color: var(--text-primary);
-}
 
-.summary__actions {
-    display: flex;
-    gap: var(--space-2);
-    padding: var(--space-4);
-    border-top: 1px solid var(--border);
-}
 
-.summary__actions .btn {
-    flex: 1 1 auto;
-    justify-content: center;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .commit {
     padding: var(--space-4) var(--space-5);
@@ -6334,33 +6245,18 @@ table.data.ledger .ledger__amount {
 
     /* Below the split the summary stops being a column and sits under the
        document as a panel of its own, still read before committing. */
-    .invoice-layout {
-        grid-template-columns: minmax(0, 1fr);
-    }
 
     .summary {
         position: static;
     }
 
-    .summary__facts {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--space-4) var(--space-8);
-    }
 
-    .summary__fact + .summary__fact {
-        margin-top: 0;
-    }
 
-    .summary__money {
-        max-width: 320px;
-        margin-left: auto;
-    }
 
-    .summary__total {
-        justify-content: flex-end;
-        gap: var(--space-5);
-    }
+
+
+
+
 
     .masthead {
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);

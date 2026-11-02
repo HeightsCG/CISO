@@ -1,6 +1,6 @@
 {
     "key": "easa-part-is-d",
-    "name": "EASA Part-IS",
+    "name": "EASA Part-IS.D.OR",
     "version": "EU 2022/1645",
     "full_name": "EASA Part-IS.D.OR: Information security organisation requirements (Annex to Commission Delegated Regulation (EU) 2022/1645) for Part-21 design and production organisations, aerodrome operators and apron management service providers, and, from 27 March 2031, certain ground handling organisations",
     "issuing_body": "European Commission; European Union Aviation Safety Agency (EASA)",
@@ -339,7 +339,7 @@
             "definition": "Apron management services, regulated with aerodromes under Part-ADR.OR."
         }
     ],
-    "display_name": "EASA Part-IS (EU 2022/1645)",
+    "display_name": "EASA Part-IS.D.OR (EU 2022/1645)",
     "counts": {
         "families": 4,
         "controls": 14,

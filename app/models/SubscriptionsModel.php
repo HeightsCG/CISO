@@ -68,7 +68,7 @@ class SubscriptionsModel extends Model {
                     subscriptions s
                     JOIN companies co ON co.id = s.company_id
                     JOIN date_formats df ON df.id = co.date_format_id
-                    JOIN clients c ON c.id = s.client_id and c.deleted = 0
+                    JOIN clients c ON c.id = s.client_id
                     LEFT JOIN projects p ON p.id = s.project_id and p.deleted = 0
                 WHERE
                     s.company_id = :company_id
@@ -104,7 +104,7 @@ class SubscriptionsModel extends Model {
                     subscriptions s
                     JOIN companies co ON co.id = s.company_id
                     JOIN date_formats df ON df.id = co.date_format_id
-                    JOIN clients c ON c.id = s.client_id and c.deleted = 0
+                    JOIN clients c ON c.id = s.client_id
                     LEFT JOIN projects p ON p.id = s.project_id and p.deleted = 0
                 WHERE
                     s.id = :id
@@ -165,7 +165,7 @@ class SubscriptionsModel extends Model {
             'date_updated'      => date('Y-m-d H:i:s')
         );
 
-        return parent::update('subscriptions', $data, "id = :id and company_id = :company_id and subscription_status = 'Draft'", $where);
+        return parent::update('subscriptions', $data, "id = :id and company_id = :company_id and subscription_status = 'Draft' and provision_state <> 'Pending'", $where);
     }
 
     /**
@@ -259,6 +259,27 @@ class SubscriptionsModel extends Model {
     }
 
     /** Subscriptions for this client that Stripe may still be billing. */
+    /** Subscriptions Stripe may still be billing, guarding the payment account disconnect. */
+    public function count_live_subscriptions($company_id)
+    {
+        $where = array(
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    COUNT(*) AS live_count
+                FROM
+                    subscriptions
+                WHERE
+                    company_id = :company_id
+                    and
+                    (subscription_status not in ('Draft', 'Canceled', 'Incomplete Expired') or provision_state in ('Pending', 'Failed'))
+                    and
+                    deleted = 0";
+        $rows = parent::select($sql, $where);
+
+        return isset($rows[0]['live_count']) ? (int) $rows[0]['live_count'] : 0;
+    }
+
     public function count_live_client_subscriptions($client_id, $company_id)
     {
         $where = array(
@@ -274,7 +295,7 @@ class SubscriptionsModel extends Model {
                     and
                     company_id = :company_id
                     and
-                    subscription_status not in ('Draft', 'Canceled', 'Incomplete Expired')
+                    (subscription_status not in ('Draft', 'Canceled', 'Incomplete Expired') or provision_state in ('Pending', 'Failed'))
                     and
                     deleted = 0";
         $rows = parent::select($sql, $where);
@@ -294,7 +315,7 @@ class SubscriptionsModel extends Model {
             'date_updated' => date('Y-m-d H:i:s')
         );
 
-        return parent::update('subscriptions', $data, "id = :id and company_id = :company_id and subscription_status = 'Draft'", $where);
+        return parent::update('subscriptions', $data, "id = :id and company_id = :company_id and subscription_status = 'Draft' and provision_state <> 'Pending'", $where);
     }
 
 }

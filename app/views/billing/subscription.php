@@ -74,12 +74,12 @@ $ending   = ((int) $this->subscription['cancel_at_period_end'] === 1);
                     <div class="masthead__sub">Net <?php echo (int) $this->subscription['due_days']; ?></div>
                 </div>
                 <?php if ($this->subscription['current_period_end'] !== null) { ?>
-                <div class="masthead__cell masthead__cell--due">
+                <div class="masthead__cell">
                     <span class="lbl"><?php echo ($ending ? 'Ends' : 'Renews'); ?></span>
                     <div class="masthead__value"><?php echo htmlspecialchars($this->subscription['renews_display'], ENT_QUOTES, 'UTF-8'); ?></div>
                 </div>
                 <?php } elseif ($this->subscription['start_date'] !== null) { ?>
-                <div class="masthead__cell masthead__cell--due">
+                <div class="masthead__cell">
                     <span class="lbl">Starts</span>
                     <div class="masthead__value"><?php echo htmlspecialchars($this->subscription['start_date_display'], ENT_QUOTES, 'UTF-8'); ?></div>
                 </div>

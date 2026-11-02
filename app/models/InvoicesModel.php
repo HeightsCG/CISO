@@ -73,7 +73,7 @@ class InvoicesModel extends Model {
                     invoices i
                     JOIN companies co ON co.id = i.company_id
                     JOIN date_formats df ON df.id = co.date_format_id
-                    JOIN clients c ON c.id = i.client_id and c.deleted = 0
+                    JOIN clients c ON c.id = i.client_id
                     LEFT JOIN projects p ON p.id = i.project_id and p.deleted = 0
                 WHERE
                     i.company_id = :company_id
@@ -202,7 +202,7 @@ class InvoicesModel extends Model {
                     invoices i
                     JOIN companies co ON co.id = i.company_id
                     JOIN date_formats df ON df.id = co.date_format_id
-                    JOIN clients c ON c.id = i.client_id and c.deleted = 0
+                    JOIN clients c ON c.id = i.client_id
                     LEFT JOIN projects p ON p.id = i.project_id and p.deleted = 0
                 WHERE
                     i.id = :id
@@ -324,7 +324,7 @@ class InvoicesModel extends Model {
             'updated_by'     => $updated_by,
             'date_updated'   => date('Y-m-d H:i:s')
         );
-        return parent::update('invoices', $data, 'id = :id and company_id = :company_id', $where);
+        return parent::update('invoices', $data, "id = :id and company_id = :company_id and invoice_status = 'Draft'", $where);
     }
 
     /**
@@ -342,6 +342,16 @@ class InvoicesModel extends Model {
         $this->db->beginTransaction();
 
         try {
+
+            /* Locks the row so a Send that starts now waits for these lines, and
+               refuses once the invoice has left Draft. */
+            $lock = $this->db->prepare("SELECT id FROM invoices WHERE id = :invoice_id and invoice_status = 'Draft' and deleted = 0 FOR UPDATE");
+            $lock->execute(array('invoice_id' => $invoice_id));
+
+            if ($lock->fetch() === false) {
+                $this->db->rollBack();
+                return false;
+            }
 
             $clear = $this->db->prepare("UPDATE invoice_items SET deleted = 1, date_updated = :date_updated WHERE invoice_id = :invoice_id and deleted = 0");
             $clear->execute(array('date_updated' => $now, 'invoice_id' => $invoice_id));
@@ -436,7 +446,7 @@ class InvoicesModel extends Model {
                 WHERE
                     company_id = :company_id
                     and
-                    invoice_status in ('Finalizing', 'Open')
+                    invoice_status in ('Finalizing', 'Open', 'Uncollectible')
                     and
                     deleted = 0";
         $rows = parent::select($sql, $where);
@@ -481,14 +491,24 @@ class InvoicesModel extends Model {
         $status = $status_map[$stripe['status'] ?? ''] ?? 'Open';
         $now    = date('Y-m-d H:i:s');
 
+        /* Stripe's subtotal already has line discounts taken off, so the gross is
+           rebuilt from the total and the discounts it reports. That keeps
+           subtotal minus discount equal to the total on the invoice page. */
+        $discount = 0;
+
+        foreach ($stripe['total_discount_amounts'] ?? array() as $amount) {
+            $discount += (int) ($amount['amount'] ?? 0);
+        }
+
         $data = array(
             'invoice_status'    => $status,
             'invoice_number'    => (string) ($stripe['number'] ?? ''),
             'currency'          => (string) ($stripe['currency'] ?? 'usd'),
-            'subtotal_cents'    => (int) ($stripe['subtotal'] ?? 0),
+            'subtotal_cents'    => (int) ($stripe['total'] ?? 0) + $discount,
+            'discount_cents'    => $discount,
             'total_cents'       => (int) ($stripe['total'] ?? 0),
             'amount_paid_cents' => (int) ($stripe['amount_paid'] ?? 0),
-            'amount_due_cents'  => (int) ($stripe['amount_remaining'] ?? 0),
+            'amount_due_cents'  => ($status === 'Void' ? 0 : (int) ($stripe['amount_remaining'] ?? 0)),
             'hosted_invoice_url'=> (string) ($stripe['hosted_invoice_url'] ?? ''),
             'invoice_pdf_url'   => (string) ($stripe['invoice_pdf'] ?? ''),
             'finalize_state'    => 'Idle',
@@ -527,6 +547,12 @@ class InvoicesModel extends Model {
             $data['stripe_payment_intent_id'] = $payment_intent;
         }
 
+        /* A draft snapshot arriving while a send is underway must not hand the
+           invoice back to Draft, which would unlock edits and a second send. */
+        if ($status === 'Draft') {
+            return parent::update('invoices', $data, "id = :id and invoice_status <> 'Finalizing'", array('id' => $invoice_id));
+        }
+
         return parent::update('invoices', $data, 'id = :id', array('id' => $invoice_id));
     }
 
@@ -551,7 +577,7 @@ class InvoicesModel extends Model {
         return parent::update('invoices', $data, 'id = :id', array('id' => $invoice_id));
     }
 
-    public function set_payment_state($invoice_id, $payment_state, $payment_error, $event_created)
+    public function set_payment_state($invoice_id, $payment_state, $payment_error)
     {
         $data = array(
             'payment_state'  => $payment_state,
@@ -559,8 +585,10 @@ class InvoicesModel extends Model {
             'date_updated'   => date('Y-m-d H:i:s')
         );
 
-        if ((int) $event_created > 0) {
-            $data['stripe_event_created'] = (int) $event_created;
+        /* Payment events arrive in any order. Once the money has landed, a late
+           processing or failed event must not take that back. */
+        if ($payment_state !== 'Succeeded') {
+            return parent::update('invoices', $data, "id = :id and payment_state <> 'Succeeded' and invoice_status <> 'Paid'", array('id' => $invoice_id));
         }
 
         return parent::update('invoices', $data, 'id = :id', array('id' => $invoice_id));
@@ -647,7 +675,7 @@ class InvoicesModel extends Model {
                     and
                     company_id = :company_id
                     and
-                    invoice_status in ('Finalizing', 'Open')
+                    invoice_status in ('Finalizing', 'Open', 'Uncollectible')
                     and
                     deleted = 0";
         $rows = parent::select($sql, $where);
@@ -666,7 +694,7 @@ class InvoicesModel extends Model {
             'updated_by'   => $updated_by,
             'date_updated' => date('Y-m-d H:i:s')
         );
-        return parent::update('invoices', $data, 'id = :id and company_id = :company_id', $where);
+        return parent::update('invoices', $data, "id = :id and company_id = :company_id and invoice_status in ('Draft', 'Void') and finalize_state <> 'Pending'", $where);
     }
 
     /**

@@ -83,7 +83,9 @@ class UsersModel extends Model {
                     user_type = 'staff' 
                     and 
                     deleted = 0";
-        return count(parent::select($sql, $where));
+        $rows = parent::select($sql, $where);
+
+        return (int) ($rows[0]['total'] ?? 0);
     }
 
     public function get_all_users()

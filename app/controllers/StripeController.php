@@ -197,14 +197,14 @@ class StripeController extends Controller {
             return;
         }
 
-        /** Stripe does not order events; an older snapshot must not overwrite a newer one. */
-        if ((int) ($event['created'] ?? 0) < (int) $local['stripe_event_created']) {
+        $current = StripeService::retrieve_invoice($account_id === '' ? $local['stripe_account_id'] : $account_id, $stripe_invoice_id);
+
+        /** A live read is current whatever order events arrive in. Only the event's own snapshot can be stale. */
+        if (empty($current) && (int) ($event['created'] ?? 0) < (int) $local['stripe_event_created']) {
             $this->invoices_model->mark_event($event['id'], 'Ignored', 'older than the last applied event');
             $this->respond(200, 'stale');
             return;
         }
-
-        $current = StripeService::retrieve_invoice($account_id === '' ? $local['stripe_account_id'] : $account_id, $stripe_invoice_id);
 
         $this->invoices_model->apply_stripe_invoice($local['id'], empty($current) ? $object : $current, $event['created'] ?? 0);
 
@@ -340,7 +340,7 @@ class StripeController extends Controller {
 
         $error = (string) ($object['last_payment_error']['message'] ?? '');
 
-        $this->invoices_model->set_payment_state($local[0]['id'], $state, $error, $event['created'] ?? 0);
+        $this->invoices_model->set_payment_state($local[0]['id'], $state, $error);
         $this->invoices_model->mark_event($event['id'], 'Processed', '');
         $this->respond(200, 'ok');
     }

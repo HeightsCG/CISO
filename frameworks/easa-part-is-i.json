@@ -1,6 +1,6 @@
 {
     "key": "easa-part-is-i",
-    "name": "EASA Part-IS",
+    "name": "EASA Part-IS.I.OR",
     "version": "EU 2023/203",
     "full_name": "EASA Part-IS.I.OR: Information security organisation requirements (Annex II to Commission Implementing Regulation (EU) 2023/203) for Part-145 maintenance organisations, CAMOs, air operators, ATOs, aircrew aero-medical centres, FSTD operators, ATCO training organisations and aero-medical centres, ATM/ANS providers, U-space and single common information service providers, and ATM/ANS design and production organisations",
     "issuing_body": "European Commission; European Union Aviation Safety Agency (EASA)",
@@ -333,7 +333,7 @@
             "definition": "Air traffic management and air navigation services."
         }
     ],
-    "display_name": "EASA Part-IS (EU 2023/203)",
+    "display_name": "EASA Part-IS.I.OR (EU 2023/203)",
     "counts": {
         "families": 4,
         "controls": 14,

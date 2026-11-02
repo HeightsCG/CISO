@@ -4673,10 +4673,12 @@ class ApiController extends Controller {
 
         $company = $this->companies_model->get_company($company_id);
 
+        /* Names are stored entity-encoded; the email escapes them itself, so they
+           are decoded here or the client reads O&#039;Neil. */
         return (bool) $this->notifications_model->send_invoice_email(
             $to_email,
-            $to_name,
-            (is_array($company) && count($company) === 1) ? $company[0]['company_name'] : Main::site_name(),
+            html_entity_decode((string) $to_name, ENT_QUOTES, 'UTF-8'),
+            html_entity_decode((string) ((is_array($company) && count($company) === 1) ? $company[0]['company_name'] : Main::site_name()), ENT_QUOTES, 'UTF-8'),
             ($invoice['invoice_number'] === '' ? 'Draft' : $invoice['invoice_number']),
             $invoice['amount_due_display'],
             (string) ($invoice['due_date_display'] ?? ''),
@@ -4897,6 +4899,14 @@ class ApiController extends Controller {
             return;
         }
 
+        $live = $this->subscriptions_model->count_live_subscriptions($company_id);
+
+        if ($live > 0) {
+            $response['message'] = 'There are '.$live.' client subscription(s) that Stripe may still be billing. Cancel them, and let them end, before disconnecting.';
+            echo json_encode($response);
+            return;
+        }
+
         $this->companies_model->clear_connect_account($company_id);
 
         $response['success'] = true;
@@ -5008,6 +5018,12 @@ class ApiController extends Controller {
         $company  = $this->companies_model->get_company($company_id);
         $currency = (is_array($company) && count($company) === 1) ? $company[0]['default_currency'] : 'usd';
 
+        if (!Money::supported_currency($currency)) {
+            $response['message'] = 'Billing in '.strtoupper($currency).' is not supported yet, because its amounts are not counted in hundredths. Contact support before billing in this currency.';
+            echo json_encode($response);
+            return;
+        }
+
         if ($subscription_id > 0) {
 
             $existing = $this->subscriptions_model->get_subscription($subscription_id, $company_id);
@@ -5111,6 +5127,25 @@ class ApiController extends Controller {
                 return;
             }
 
+            /* An earlier attempt may have created the subscription without hearing
+               back. Adopt it rather than raise a second one. */
+            $earlier = StripeService::find_connected_subscription($account_id, $customer_id, $subscription_id);
+
+            if ($earlier === null) {
+                $this->subscriptions_model->fail_provision($subscription_id, 'Could not check for an earlier attempt: '.StripeService::last_error());
+                $response['message'] = 'We could not check Stripe for an earlier attempt, so nothing was started. Try again in a moment.';
+                echo json_encode($response);
+                return;
+            }
+
+            if (!empty($earlier['id'])) {
+                $this->subscriptions_model->apply_stripe_subscription($subscription_id, $earlier, $account_id, StripeService::livemode());
+                $response['success'] = true;
+                $response['message'] = 'Subscription started';
+                echo json_encode($response);
+                return;
+            }
+
             $price = StripeService::create_subscription_price(
                 $account_id,
                 $subscription['currency'],
@@ -5142,8 +5177,17 @@ class ApiController extends Controller {
             );
 
             if (empty($stripe['id'])) {
-                $this->subscriptions_model->fail_provision($subscription_id, StripeService::last_error());
-                $response['message'] = 'The subscription could not be started: '.StripeService::last_error();
+                $error   = StripeService::last_error();
+                $created = StripeService::find_connected_subscription($account_id, $customer_id, $subscription_id);
+
+                if (!empty($created['id'])) {
+                    $stripe = $created;
+                }
+            }
+
+            if (empty($stripe['id'])) {
+                $this->subscriptions_model->fail_provision($subscription_id, $error);
+                $response['message'] = 'The subscription could not be started: '.$error;
                 echo json_encode($response);
                 return;
             }
@@ -5152,9 +5196,9 @@ class ApiController extends Controller {
 
         } catch (\Throwable $e) {
 
-            /* Left Pending rather than rolled back to Draft. Stripe may hold a
-               subscription this call never saw the answer to, and a retry from
-               Draft would bill the client on two schedules. */
+            /* Stripe may hold a subscription this call never saw the answer to.
+               A retry looks for it by its metadata before creating anything, so
+               the client is never billed on two schedules. */
             $this->subscriptions_model->fail_provision($subscription_id, $e->getMessage());
             error_log('[billing] subscription '.$subscription_id.' could not be started: '.$e->getMessage());
             $response['message'] = 'We could not confirm this. Refresh in a moment before trying again.';
@@ -5224,6 +5268,27 @@ class ApiController extends Controller {
         );
 
         $subscription_id = (int) ($this->post['subscription_id'] ?? 0);
+        $existing        = $this->subscriptions_model->get_subscription($subscription_id, Session::get('company_id'));
+
+        /* A draft whose start failed may still exist in Stripe if the failure was a
+           lost answer. Deleting it here would leave Stripe billing with nothing
+           in the app to cancel it from. */
+        if (is_array($existing) && count($existing) === 1 && $existing[0]['provision_state'] === 'Failed') {
+
+            $company = $this->companies_model->get_company(Session::get('company_id'));
+            $client  = $this->clients_model->get_client($existing[0]['client_id'], Session::get('company_id'));
+            $found   = null;
+
+            if (is_array($company) && count($company) === 1 && is_array($client) && count($client) === 1) {
+                $found = StripeService::find_connected_subscription($company[0]['stripe_connect_account_id'], (string) $client[0]['stripe_customer_id'], $subscription_id);
+            }
+
+            if ((string) ($client[0]['stripe_customer_id'] ?? '') !== '' && ($found === null || !empty($found['id']))) {
+                $response['message'] = 'An earlier attempt to start this subscription may have reached Stripe. Press Start Subscription again to pick it up, then cancel it if it is not wanted.';
+                echo json_encode($response);
+                return;
+            }
+        }
 
         if ($this->subscriptions_model->delete_subscription($subscription_id, Session::get('company_id'), Session::get('user_id')) !== 1) {
             $response['message'] = 'Only a draft subscription can be deleted';
@@ -5467,6 +5532,12 @@ class ApiController extends Controller {
         $currency = (is_array($company) && count($company) === 1) ? $company[0]['default_currency'] : 'usd';
         $footer   = $this->input('invoice_footer');
 
+        if (!Money::supported_currency($currency)) {
+            $response['message'] = 'Billing in '.strtoupper($currency).' is not supported yet, because its amounts are not counted in hundredths. Contact support before billing in this currency.';
+            echo json_encode($response);
+            return;
+        }
+
         if ($invoice_id > 0) {
 
             $invoice = $this->invoices_model->get_invoice($invoice_id, $company_id);
@@ -5490,7 +5561,11 @@ class ApiController extends Controller {
             $invoice_id = (int) $this->invoices_model->add_invoice($company_id, $client_id, $project_id, $currency, $footer, $due_days, $due_date, Session::get('user_id'));
         }
 
-        $this->invoices_model->save_invoice_lines($invoice_id, $clean, Session::get('user_id'));
+        if ($this->invoices_model->save_invoice_lines($invoice_id, $clean, Session::get('user_id')) === false) {
+            $response['message'] = 'This invoice is being sent or was sent, so it can no longer be edited. Reload the page to see it.';
+            echo json_encode($response);
+            return;
+        }
 
         $response['success'] = true;
         $response['message'] = 'Invoice saved';
@@ -5626,6 +5701,9 @@ class ApiController extends Controller {
 
         $account_id = $company['stripe_connect_account_id'];
 
+        /* Read again now the invoice is locked, so the lines billed are the ones saved last. */
+        $items = $this->invoices_model->get_invoice_items($invoice_id);
+
         try {
 
             $customer_id = $this->connected_customer_for_client($client, $account_id);
@@ -5679,6 +5757,26 @@ class ApiController extends Controller {
             }
 
             $stripe_invoice_id = $invoice['stripe_invoice_id'];
+            $create_key        = '';
+
+            /**
+             * A Stripe draft left by an earlier attempt that failed before
+             * finalising may hold some of the lines, and none of the edits made
+             * since. It is removed and the invoice is rebuilt from the saved
+             * draft, so a retry never bills a line twice.
+             */
+            if ($stripe_invoice_id !== null && $stripe_invoice_id !== '') {
+
+                if (!StripeService::delete_draft_invoice($invoice['stripe_account_id'] !== '' ? $invoice['stripe_account_id'] : $account_id, $stripe_invoice_id)) {
+                    $this->invoices_model->fail_finalize($invoice_id, 'The earlier draft could not be removed: '.StripeService::last_error(), true);
+                    $response['message'] = 'The earlier attempt could not be cleared from Stripe: '.StripeService::last_error();
+                    echo json_encode($response);
+                    return;
+                }
+
+                $create_key        = $stripe_invoice_id;
+                $stripe_invoice_id = null;
+            }
 
             if ($stripe_invoice_id === null) {
 
@@ -5692,7 +5790,8 @@ class ApiController extends Controller {
                     $company_id,
                     $invoice_id,
                     $invoice['client_id'],
-                    $invoice['project_id']
+                    $invoice['project_id'],
+                    $create_key
                 );
 
                 if (empty($draft['id'])) {
@@ -6011,13 +6110,27 @@ class ApiController extends Controller {
             return;
         }
 
-        if ($invoice[0]['invoice_status'] !== 'Draft') {
-            $response['message'] = 'Only a draft can be deleted. Void a sent invoice instead.';
+        if (!in_array($invoice[0]['invoice_status'], array('Draft', 'Void'), true)) {
+            $response['message'] = 'Only a draft or a voided invoice can be deleted. Void a sent invoice first.';
             echo json_encode($response);
             return;
         }
 
-        $this->invoices_model->delete_invoice($invoice_id, Session::get('company_id'), Session::get('user_id'));
+        if ($invoice[0]['invoice_status'] === 'Draft' && (string) $invoice[0]['stripe_invoice_id'] !== '') {
+            if (!StripeService::delete_draft_invoice($invoice[0]['stripe_account_id'], $invoice[0]['stripe_invoice_id'])) {
+                $response['message'] = 'The draft could not be removed from Stripe, so it was not deleted. Try again in a moment.';
+                echo json_encode($response);
+                return;
+            }
+        }
+
+        $deleted = $this->invoices_model->delete_invoice($invoice_id, Session::get('company_id'), Session::get('user_id'));
+
+        if ((int) $deleted !== 1) {
+            $response['message'] = 'This invoice changed while you were deleting it. Reload the page and try again.';
+            echo json_encode($response);
+            return;
+        }
 
         $response['success'] = true;
         $response['message'] = 'Invoice deleted';

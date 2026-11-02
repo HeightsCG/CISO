@@ -49,7 +49,7 @@
                         <option value="60">Net 60</option>
                     </select>
                 </div>
-                <div class="masthead__cell masthead__cell--due">
+                <div class="masthead__cell">
                     <label for="start_date">Starts</label>
                     <input type="date" class="form-control" id="start_date" value="<?php echo ($this->subscription === null || $this->subscription['start_date'] === null ? '' : htmlspecialchars($this->subscription['start_date'], ENT_QUOTES, 'UTF-8')); ?>">
                 </div>
