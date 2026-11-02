@@ -3326,6 +3326,29 @@ class ApiController extends Controller {
             exit;
         }
 
+        $this->store_evidence_file(
+            $project_id,
+            $folder_id,
+            $evidence_title,
+            $description,
+            $tmp_name,
+            basename((string) $_FILES['evidence_file']['name']),
+            (int) $_FILES['evidence_file']['size']
+        );
+    }
+
+    /**
+     * The checks and storage every new evidence file goes through, whether it
+     * was uploaded on the vault screen or filed from the assistant. Echoes the
+     * response and exits like the actions it serves.
+     */
+    private function store_evidence_file($project_id, $folder_id, $evidence_title, $description, $tmp_name, $original_name, $file_size){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
         $max_bytes = 26214400;
         $allowed_extensions = array(
             'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'csv', 'rtf', 'odt', 'ods',
@@ -3333,13 +3356,12 @@ class ApiController extends Controller {
             'zip', 'gz', 'tgz', '7z', 'json', 'xml', 'log', 'msg', 'eml'
         );
 
-        if ($_FILES['evidence_file']['size'] > $max_bytes) {
+        if ($file_size > $max_bytes) {
             $response['message'] = 'The file must be 25MB or smaller';
             echo json_encode($response);
             exit;
         }
 
-        $original_name = basename((string) $_FILES['evidence_file']['name']);
         $extension = strtolower((string) pathinfo($original_name, PATHINFO_EXTENSION));
 
         if ($extension === '' || !in_array($extension, $allowed_extensions, true)) {
@@ -3384,7 +3406,7 @@ class ApiController extends Controller {
             $description,
             $key,
             $original_name,
-            (int) $_FILES['evidence_file']['size'],
+            $file_size,
             $content_type,
             Session::get('user_id')
         );
@@ -5695,7 +5717,7 @@ class ApiController extends Controller {
 
         $this->refuse_unless_ai_configured();
 
-        set_time_limit(300);
+        set_time_limit(600);
 
         $attachment_ids = array_filter(array_map('intval', explode(',', (string) ($this->post['attachment_ids'] ?? ''))));
 
@@ -5715,15 +5737,15 @@ class ApiController extends Controller {
 
         $this->refuse_unless_ai_configured();
 
-        set_time_limit(300);
+        set_time_limit(600);
+
+        $outcomes = json_decode($this->input('outcomes_json'), true);
 
         $assistant = new AiAssistant();
         $response = $assistant->resolve(
             (int) ($this->post['conversation_id'] ?? 0),
-            $this->input('tool_use_id'),
             ($this->post['confirmed'] ?? '') === '1',
-            ($this->post['succeeded'] ?? '') === '1',
-            mb_substr($this->input('outcome'), 0, 500)
+            is_array($outcomes) ? $outcomes : array()
         );
 
         echo json_encode($response);
@@ -5785,6 +5807,115 @@ class ApiController extends Controller {
             $response['message'] = 'That file could not be attached';
         }
 
+        echo json_encode($response);
+        exit;
+    }
+
+    /**
+     * File a chat attachment or a generated report into a project's evidence
+     * vault. Called by the browser once the person confirms, so the same project
+     * and folder checks as the vault upload apply, and the portal is held to its
+     * own client's projects.
+     */
+    public function ai_file_evidenceAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+        $folder_id = (int) ($this->post['folder_id'] ?? 0);
+        $evidence_title = $this->input('evidence_title');
+        $description = $this->input('description');
+
+        $allowed = Session::get('user_type') === 'portal'
+            ? $this->client_owns_project($project_id)
+            : $this->owns_project($project_id);
+
+        if (!$allowed) {
+            $response['message'] = 'That project could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($evidence_title === '') {
+            $response['message'] = 'Evidence title is required';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($folder_id > 0) {
+
+            $folder = $this->evidence_model->get_folder($folder_id, Session::get('company_id'));
+
+            if (count($folder) !== 1 || (int) $folder[0]['project_id'] !== $project_id) {
+                $response['message'] = 'That folder could not be found';
+                echo json_encode($response);
+                exit;
+            }
+        }
+
+        $ai_model = new AiModel();
+        $file = $ai_model->get_attachment((int) ($this->post['attachment_id'] ?? 0), Session::get('user_id'), Session::get('company_id'));
+
+        if (count($file) !== 1 || empty($file[0]['file_key'])) {
+            $response['message'] = 'That file could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $tmp_name = tempnam(sys_get_temp_dir(), 'aiev');
+
+        if (!S3Service::get_private_to_file($file[0]['file_key'], $tmp_name)) {
+            @unlink($tmp_name);
+            $response['message'] = 'That file could not be read';
+            echo json_encode($response);
+            exit;
+        }
+
+        register_shutdown_function(function () use ($tmp_name) {
+            @unlink($tmp_name);
+        });
+
+        $this->store_evidence_file(
+            $project_id,
+            $folder_id,
+            $evidence_title,
+            $description,
+            $tmp_name,
+            $file[0]['file_name'],
+            (int) filesize($tmp_name)
+        );
+    }
+
+    public function ai_file_urlAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $ai_model = new AiModel();
+        $file = $ai_model->get_attachment((int) ($this->post['attachment_id'] ?? 0), Session::get('user_id'), Session::get('company_id'));
+
+        if (count($file) !== 1 || empty($file[0]['file_key'])) {
+            $response['message'] = 'That file could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $url = S3Service::presigned_get_url($file[0]['file_key'], 300, $file[0]['file_name']);
+
+        if ($url === '') {
+            $response['message'] = 'That file could not be opened';
+            echo json_encode($response);
+            exit;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'ok';
+        $response['url'] = $url;
         echo json_encode($response);
         exit;
     }

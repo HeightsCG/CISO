@@ -137,6 +137,25 @@ class S3Service {
         return true;
     }
 
+    /** Read a private object into a local file. The caller checks entitlement first. */
+    public static function get_private_to_file($key, $dest_path): bool
+    {
+        if (!self::configured() || (string) $key === '') {
+            return false;
+        }
+        try {
+            self::client()->getObject(array(
+                'Bucket' => self::bucket(),
+                'Key'    => $key,
+                'SaveAs' => $dest_path,
+            ));
+        } catch (\Throwable $e) {
+            error_log('[s3] private read failed: ' . $e->getMessage());
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Mint a short-lived presigned GET URL for a private object. $ttl is seconds
      * (default 10 min). Returns '' if S3 isn't configured or $key is empty. The

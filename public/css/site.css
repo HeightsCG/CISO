@@ -6607,7 +6607,48 @@ table.data.ledger .ledger__amount {
     overflow-wrap: anywhere;
 }
 
+.assist__card-section + .assist__card-section {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--moderate-border);
+}
+
 .assist__card-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.assist__card-progress {
+    font-size: var(--fs-meta);
+    color: var(--text-muted);
+}
+
+.assist__file {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    background: var(--surface-sunken);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+}
+
+.assist__file-icon {
+    color: var(--accent);
+}
+
+.assist__file-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: var(--fs-body);
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+}
+
+.assist__file-bar {
     display: flex;
     gap: var(--space-2);
 }

@@ -8,15 +8,49 @@ $(function () {
 
     var ACTION_ENDPOINTS = [
         "save_client",
+        "delete_client",
         "save_project",
+        "delete_project",
+        "save_project_user",
+        "delete_project_user",
         "create_assessment",
-        "save_item",
+        "save_assessment",
+        "delete_assessment",
         "complete_assessment",
+        "save_item",
         "link_evidence",
         "unlink_evidence",
+        "ai_file_evidence",
         "save_folder",
+        "delete_folder",
+        "move_evidence",
+        "save_evidence",
+        "save_evidence_private",
+        "delete_evidence",
+        "save_standard",
+        "duplicate_standard",
+        "delete_standard",
+        "save_control",
+        "delete_control",
+        "save_profile",
+        "save_user",
+        "delete_user",
+        "reset_user_password",
+        "save_company",
+        "save_security",
+        "remove_logo",
+        "save_invoice",
+        "send_invoice",
+        "resend_invoice",
+        "void_invoice",
+        "delete_invoice",
+        "save_subscription",
+        "activate_subscription",
+        "cancel_subscription",
+        "delete_subscription",
         "portal_link_evidence",
-        "portal_unlink_evidence"
+        "portal_unlink_evidence",
+        "portal_delete_evidence"
     ];
 
     var conversation_id = parseInt(window.localStorage.getItem("assist_conversation") || "0", 10);
@@ -51,13 +85,13 @@ $(function () {
     });
 
     $("#assist_send").click(function(){
-        send();
+        send($("#assist_input").val().trim());
     });
 
     $("#assist_input").keydown(function(e){
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
-            send();
+            send($("#assist_input").val().trim());
         }
     });
 
@@ -82,11 +116,19 @@ $(function () {
     });
 
     $("#assist_messages").on("click", "[data-confirm]", function(){
-        confirm_action($(this).closest(".assist__card"));
+        confirm_batch($(this).closest(".assist__card"));
     });
 
     $("#assist_messages").on("click", "[data-decline]", function(){
-        decline_action($(this).closest(".assist__card"));
+        decline_batch($(this).closest(".assist__card"));
+    });
+
+    $("#assist_messages").on("click", "[data-download]", function(){
+        download($(this), parseInt($(this).attr("data-download"), 10));
+    });
+
+    $("#assist_messages").on("click", "[data-vault]", function(){
+        send('Save "' + $(this).attr("data-vault") + '" to the evidence vault.');
     });
 
     if ($("#shell").hasClass("has-assist")) {
@@ -165,12 +207,14 @@ $(function () {
         });
     }
 
-    function send() {
-
-        var text = $("#assist_input").val().trim();
+    function send(text) {
 
         if (text === "" && attachments.length === 0) {
             $("#assist_input").focus();
+            return;
+        }
+
+        if ($("#assist_send").hasClass("is-loading")) {
             return;
         }
 
@@ -191,6 +235,7 @@ $(function () {
             })
         });
 
+        $("#assist_messages .assist__card").remove();
         $("#assist_input").val("");
         attachments = [];
         render_files();
@@ -260,53 +305,129 @@ $(function () {
         });
     }
 
-    function confirm_action(card) {
+    function download(button, attachment_id) {
 
-        var action = card.data("action");
-        var button = card.find("[data-confirm]");
-
-        if (ACTION_ENDPOINTS.indexOf(action.endpoint) === -1) {
-            toastr.error("That change cannot be made from here");
-            return;
-        }
+        var obj = {
+            attachment_id: attachment_id
+        };
 
         set_loading(button, true);
-        card.find("[data-decline]").prop("disabled", true);
 
-        var obj = $.extend({}, action.params);
+        ApiDataSvc.apiCall('post', 'ai_file_url', obj, function (data) {
 
-        ApiDataSvc.apiCall('post', action.endpoint, obj, function (data) {
+            var obj = JSON.parse(data);
 
-            var result = JSON.parse(data);
+            set_loading(button, false);
 
-            resolve(card, {
-                conversation_id: conversation_id,
-                tool_use_id: action.tool_use_id,
-                confirmed: "1",
-                succeeded: result.success ? "1" : "0",
-                outcome: result.message || ""
-            });
+            if (obj.success) {
+                window.location.href = obj.url;
+            } else {
+                toastr.error(obj.message);
+            }
 
         }, function () {
             set_loading(button, false);
-            card.find("[data-decline]").prop("disabled", false);
-            toastr.error("The change could not be made. Try again.");
+            toastr.error("That file could not be opened");
         });
     }
 
-    function decline_action(card) {
+    function confirm_batch(card) {
 
-        var action = card.data("action");
+        var actions = card.data("actions");
+        var steps = [];
+        var outcomes = {};
+
+        actions.forEach(function (action) {
+            outcomes[action.tool_use_id] = {
+                succeeded: true,
+                outcome: []
+            };
+            action.calls.forEach(function (call) {
+                steps.push({
+                    tool_use_id: action.tool_use_id,
+                    endpoint: call.endpoint,
+                    params: call.params
+                });
+            });
+        });
+
+        for (var i = 0; i < steps.length; i++) {
+            if (ACTION_ENDPOINTS.indexOf(steps[i].endpoint) === -1) {
+                toastr.error("That change cannot be made from here");
+                return;
+            }
+        }
+
+        set_loading(card.find("[data-confirm]"), true);
+        card.find("[data-decline]").prop("disabled", true);
+
+        run_step(card, steps, 0, outcomes);
+    }
+
+    function run_step(card, steps, index, outcomes) {
+
+        if (index >= steps.length) {
+            finish_batch(card, outcomes);
+            return;
+        }
+
+        var step = steps[index];
+        var obj = $.extend({}, step.params);
+
+        card.find(".assist__card-progress").text("Step " + (index + 1) + " of " + steps.length);
+
+        ApiDataSvc.apiCall('post', step.endpoint, obj, function (data) {
+
+            var result;
+
+            try {
+                result = JSON.parse(data);
+            } catch (e) {
+                result = {
+                    success: false,
+                    message: "The application gave an unexpected answer"
+                };
+            }
+
+            if (!result.success) {
+                outcomes[step.tool_use_id].succeeded = false;
+            }
+
+            if (result.message && outcomes[step.tool_use_id].outcome.indexOf(result.message) === -1) {
+                outcomes[step.tool_use_id].outcome.push(result.message);
+            }
+
+            run_step(card, steps, index + 1, outcomes);
+
+        }, function () {
+            outcomes[step.tool_use_id].succeeded = false;
+            outcomes[step.tool_use_id].outcome.push("The request did not reach the server");
+            run_step(card, steps, index + 1, outcomes);
+        });
+    }
+
+    function finish_batch(card, outcomes) {
+
+        Object.keys(outcomes).forEach(function (key) {
+            outcomes[key].outcome = outcomes[key].outcome.join(" ");
+        });
+
+        resolve(card, {
+            conversation_id: conversation_id,
+            confirmed: "1",
+            outcomes_json: JSON.stringify(outcomes)
+        });
+    }
+
+    function decline_batch(card) {
 
         set_loading(card.find("[data-decline]"), true);
         card.find("[data-confirm]").prop("disabled", true);
 
         resolve(card, {
             conversation_id: conversation_id,
-            tool_use_id: action.tool_use_id,
             confirmed: "0",
-            succeeded: "0",
-            outcome: ""
+            outcomes_json: "{}"
         });
     }
 
@@ -342,9 +463,9 @@ $(function () {
             add_item(item);
         });
 
-        obj.actions.forEach(function (action) {
-            add_card(action);
-        });
+        if (obj.actions.length > 0) {
+            add_card(obj.actions);
+        }
 
         scroll_down();
     }
@@ -353,23 +474,29 @@ $(function () {
 
         $("#assist_empty").prop("hidden", true);
 
-        var node = $("<div>").addClass("assist__msg assist__msg--" + item.role);
+        var node;
 
-        if (item.attachments && item.attachments.length > 0) {
-            var files = $("<div>").addClass("assist__msg-files");
-            item.attachments.forEach(function (name) {
-                files.append($("<span>").addClass("assist__chip").text(name));
-            });
-            node.append(files);
+        if (item.role === "file") {
+            node = file_item(item);
+        } else {
+            node = $("<div>").addClass("assist__msg assist__msg--" + item.role);
+
+            if (item.attachments && item.attachments.length > 0) {
+                var files = $("<div>").addClass("assist__msg-files");
+                item.attachments.forEach(function (name) {
+                    files.append($("<span>").addClass("assist__chip").text(name));
+                });
+                node.append(files);
+            }
+
+            if (item.text !== "") {
+                node.append($("<div>").addClass("assist__text").html(format(item.text)));
+            }
         }
 
-        if (item.text !== "") {
-            node.append($("<div>").addClass("assist__text").html(format(item.text)));
-        }
-
-        $("#assist_working").before(node);
-
-        if ($("#assist_working").length === 0) {
+        if ($("#assist_working").length > 0) {
+            $("#assist_working").before(node);
+        } else {
             $("#assist_messages").append(node);
         }
 
@@ -378,33 +505,56 @@ $(function () {
         return node;
     }
 
-    function add_card(action) {
+    function file_item(item) {
+
+        var node = $("<div>").addClass("assist__file");
+
+        node.append($("<span>").addClass("assist__file-icon").html('<i class="fa-regular fa-file-lines"></i>'));
+        node.append($("<span>").addClass("assist__file-name").text(item.text));
+
+        var bar = $("<span>").addClass("assist__file-bar");
+        bar.append($("<button>").attr("type", "button").addClass("btn btn--tertiary btn--sm").attr("data-download", item.attachment_id).text("Download"));
+        bar.append($("<button>").attr("type", "button").addClass("btn btn--tertiary btn--sm").attr("data-vault", item.text).text("Save to vault"));
+        node.append(bar);
+
+        return node;
+    }
+
+    function add_card(actions) {
 
         var card = $("<div>").addClass("assist__card");
-        var list = $("<dl>").addClass("assist__fields");
 
-        card.data("action", action);
-        card.append($("<p>").addClass("assist__card-title").text(action.summary));
+        card.data("actions", actions);
 
-        action.fields.forEach(function (field) {
-            if (field.value !== "") {
-                list.append($("<dt>").text(field.label));
-                list.append($("<dd>").text(field.value));
-            }
+        actions.forEach(function (action) {
+
+            var section = $("<div>").addClass("assist__card-section");
+            var list = $("<dl>").addClass("assist__fields");
+
+            section.append($("<p>").addClass("assist__card-title").text(action.summary));
+
+            action.fields.forEach(function (field) {
+                if (field.value !== "") {
+                    list.append($("<dt>").text(field.label));
+                    list.append($("<dd>").text(field.value));
+                }
+            });
+
+            section.append(list);
+            card.append(section);
         });
 
-        card.append(list);
-
         var bar = $("<div>").addClass("assist__card-bar");
-        bar.append($("<button>").attr("type", "button").addClass("btn btn--primary btn--sm").attr("data-confirm", "1").text("Confirm"));
+        bar.append($("<button>").attr("type", "button").addClass("btn btn--primary btn--sm").attr("data-confirm", "1").text(actions.length > 1 ? "Confirm all" : "Confirm"));
         bar.append($("<button>").attr("type", "button").addClass("btn btn--tertiary btn--sm").attr("data-decline", "1").text("Decline"));
+        bar.append($("<span>").addClass("assist__card-progress"));
         card.append(bar);
 
         $("#assist_messages").append(card);
     }
 
     function format(text) {
-        return esc(text).replace(/(^|[\s(])(\/(?:clients|projects|standards|portal)(?:\/[a-z_]+)?(?:\/id\/\d+)?)(?=$|[\s).,;:])/g, function (match, lead, path) {
+        return esc(text).replace(/(^|[\s(])(\/(?:clients|projects|standards|portal|billing|settings)(?:\/[a-z_]+)?(?:\/id\/\d+)?)(?=$|[\s).,;:])/g, function (match, lead, path) {
             return lead + '<a href="' + path + '">' + path + '</a>';
         });
     }
