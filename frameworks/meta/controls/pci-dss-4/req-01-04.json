@@ -1,0 +1,327 @@
+{
+    "1.1.1": {
+        "title": "Network security policies maintained and known",
+        "description": "The organization keeps written policies and operating procedures for its firewalls and other NSCs, keeps them current, and makes sure the people who rely on them actually use them. Without this, network protections depend on memory and drift over time.",
+        "guidance": "Request the network security policy and procedure documents and confirm they carry a recent review date. Interview network staff to confirm they know where the documents live and follow them day to day."
+    },
+    "1.1.2": {
+        "title": "Network security duties assigned and understood",
+        "description": "Someone is named as responsible for each network security activity, and those people know and accept what is expected of them. Clear ownership stops tasks from falling between teams.",
+        "guidance": "Look for a RACI chart, job descriptions or a responsibility matrix covering Requirement 1 tasks. Interview the named owners to confirm they understand their duties."
+    },
+    "1.2.1": {
+        "title": "NSC configuration standards defined and applied",
+        "description": "There are written standards for how NSC rulesets must be built, and every NSC is configured and kept in line with them. Consistent standards make misconfigured or overly open rules far less likely.",
+        "guidance": "Review the NSC configuration standards, then compare a sample of live firewall, router and cloud security group configurations against them. Confirm the standards have been reviewed and kept up to date."
+    },
+    "1.2.2": {
+        "title": "Network changes go through change control",
+        "description": "Any change to network connections or NSC settings is requested, approved, tested where needed and recorded through the organization's formal change process. This prevents unreviewed changes from quietly opening paths into the CDE.",
+        "guidance": "Pick a sample of recent firewall or network changes and trace each to an approved change ticket with documented testing and sign-off. Confirm that what was approved matches what was implemented."
+    },
+    "1.2.3": {
+        "title": "Network diagram kept current",
+        "description": "An up-to-date diagram shows how the CDE connects to every other network, including wireless segments. Knowing exactly where connections exist is the starting point for protecting them.",
+        "guidance": "Obtain the network diagram, check its revision date, and walk through it with network staff. Spot check a few connections against actual configurations to confirm the diagram reflects reality."
+    },
+    "1.2.4": {
+        "title": "Cardholder data flow diagram kept current",
+        "description": "A diagram traces where account data travels across systems and networks, and it is refreshed whenever the environment changes. This makes it possible to see every place that card data must be protected.",
+        "guidance": "Review the data flow diagram and compare it with interviews and observed payment flows. Confirm it is updated after significant changes and covers all channels that handle account data."
+    },
+    "1.2.5": {
+        "title": "Allowed ports, protocols and services approved",
+        "description": "Every port, protocol and service permitted through the network is listed, has a business reason, and has been formally approved. Anything not on the list should not be allowed.",
+        "guidance": "Request the approved list of ports, protocols and services with business justifications and approver names. Compare it with a sample of NSC rulesets to confirm nothing extra is permitted."
+    },
+    "1.2.6": {
+        "title": "Risky services protected by extra controls",
+        "description": "Where the organization has decided to keep a service or protocol that is known to be insecure, it puts specific safeguards in place to reduce the risk. Leaving weak protocols unguarded invites easy compromise.",
+        "guidance": "Identify any insecure services from the approved list, then check the documented compensating safeguards and verify them in configuration. Interview staff about how those protections are maintained."
+    },
+    "1.2.7": {
+        "title": "NSC rules reviewed at least every six months",
+        "description": "Firewall and other NSC configurations are reviewed at least twice a year to confirm every rule is still needed and correct. Regular review removes stale or overly broad rules before they become a problem.",
+        "guidance": "Ask for records of the last two NSC rule reviews, including who performed them and what was changed or removed. Confirm the reviews were no more than six months apart."
+    },
+    "1.2.8": {
+        "title": "NSC configuration files secured and in sync",
+        "description": "Stored NSC configuration files are protected from unauthorized access and match what is actually running, so a device restart or restore does not load outdated or insecure rules.",
+        "guidance": "Check access permissions on stored configuration and backup files. Compare a sample of saved configurations with the running configurations to confirm they match."
+    },
+    "1.3.1": {
+        "title": "Inbound traffic to the CDE limited",
+        "description": "Traffic coming into the CDE is restricted to what is strictly needed, and all other inbound traffic is explicitly denied. This shrinks the ways an attacker could reach card data.",
+        "guidance": "Review NSC rules governing traffic into the CDE and confirm each allowed flow has a business reason. Verify a deny-all rule or equivalent default blocks everything else."
+    },
+    "1.3.2": {
+        "title": "Outbound traffic from the CDE limited",
+        "description": "Traffic leaving the CDE is limited to what the business requires, with all other outbound connections blocked. This makes it harder for stolen data to be sent out or for malware to call home.",
+        "guidance": "Examine egress rules for the CDE and confirm each permitted destination is justified. Check that a default deny applies to all other outbound traffic."
+    },
+    "1.3.3": {
+        "title": "Wireless networks separated from the CDE",
+        "description": "NSCs sit between any wireless network and the CDE, so wireless traffic is blocked by default and only authorized, necessary traffic reaches card data systems. Wireless networks are easy targets and must not offer a shortcut in.",
+        "guidance": "Use the network diagram to locate all wireless networks and inspect the NSCs separating them from the CDE. Confirm a default deny applies and any allowed traffic is approved."
+    },
+    "1.4.1": {
+        "title": "NSCs between trusted and untrusted networks",
+        "description": "Firewalls or equivalent controls are placed at every boundary between internal networks and untrusted ones such as the internet. These boundaries are the first line of defense against outside attackers.",
+        "guidance": "Compare the network diagram with deployed devices to confirm an NSC exists at each connection to an untrusted network. Review the configurations of those devices."
+    },
+    "1.4.2": {
+        "title": "Untrusted inbound traffic tightly restricted",
+        "description": "Traffic from untrusted networks into trusted ones is only allowed when it reaches public-facing services on approved ports, or when it is a reply to a connection started from inside. Everything else is blocked.",
+        "guidance": "Review internet-facing NSC rules to confirm inbound access is limited to approved public services and stateful return traffic. Look for any rule that allows broad inbound access."
+    },
+    "1.4.3": {
+        "title": "Spoofed traffic blocked at the perimeter",
+        "description": "Perimeter controls detect and drop traffic pretending to come from an internal address, so attackers cannot disguise malicious packets as trusted traffic.",
+        "guidance": "Inspect perimeter device configurations for anti-spoofing settings, such as filtering of internal or private source addresses arriving from outside."
+    },
+    "1.4.4": {
+        "title": "Card data stores not reachable from untrusted networks",
+        "description": "Systems that hold cardholder data cannot be reached directly from the internet or other untrusted networks. Keeping storage behind internal layers adds a barrier attackers must cross.",
+        "guidance": "Identify systems storing cardholder data from the data flow diagram and confirm by configuration review that no direct path exists to them from untrusted networks."
+    },
+    "1.4.5": {
+        "title": "Internal IP addresses and routes kept private",
+        "description": "Internal IP addresses and routing details are only revealed to parties who are authorized to know them. Hiding this information makes it harder for attackers to map the network.",
+        "guidance": "Check for techniques such as NAT, proxies or filtered route advertisements. Review how internal addressing information is shared externally and confirm it is limited to authorized parties."
+    },
+    "1.5.1": {
+        "title": "Dual-connected devices protected",
+        "description": "Laptops and other devices, including employee-owned ones, that join the CDE and also go online through untrusted networks have security controls active so they cannot carry threats inside. Users cannot switch those controls off unless specifically approved for a limited time.",
+        "guidance": "Review the policy for such devices and inspect a sample to confirm personal firewalls or equivalent controls are running and locked against user changes. Check records of any approved temporary exceptions."
+    },
+    "2.1.1": {
+        "title": "Secure configuration policies maintained and known",
+        "description": "Written policies and procedures cover how systems are securely configured, are kept up to date, and are known and used by the staff who apply them. This keeps hardening consistent across the environment.",
+        "guidance": "Request the configuration policy and procedure documents and confirm a recent review date. Interview administrators to confirm they know and follow the documents."
+    },
+    "2.1.2": {
+        "title": "Secure configuration duties assigned and understood",
+        "description": "Responsibility for each secure configuration activity is assigned to named people who understand their role. Clear ownership makes sure hardening tasks actually get done.",
+        "guidance": "Look for a responsibility matrix or job descriptions covering Requirement 2 tasks, and interview the assigned personnel to confirm awareness."
+    },
+    "2.2.1": {
+        "title": "Hardening standards cover all system types",
+        "description": "The organization keeps configuration standards for every type of system component, based on recognized hardening guidance, that address known weaknesses. The standards are refreshed as new vulnerabilities appear and are applied whenever new systems are built.",
+        "guidance": "Review the configuration standards and confirm they reference industry hardening sources such as CIS Benchmarks. Check that they cover all component types in scope and are applied to a sample of newly deployed systems."
+    },
+    "2.2.2": {
+        "title": "Vendor default accounts disabled or changed",
+        "description": "Built-in vendor accounts are either removed or disabled, or their default passwords are changed before use. Default credentials are widely published and are one of the easiest ways in.",
+        "guidance": "Inspect a sample of systems, applications and devices for active vendor default accounts and attempt or review evidence of changed passwords. Interview staff about the process used during deployment."
+    },
+    "2.2.3": {
+        "title": "Separate functions with different security needs",
+        "description": "Functions that need different levels of protection are kept apart, for example on separate servers or virtual machines, or are all secured to the highest level required. This stops a weaker function from exposing a more sensitive one.",
+        "guidance": "Review a sample of system components to see what functions each one runs. Where mixed functions share a system, confirm they are all secured to the strictest standard needed."
+    },
+    "2.2.4": {
+        "title": "Unnecessary services and functions removed",
+        "description": "Only the services, protocols, software and features a system genuinely needs are enabled; everything else is removed or turned off. Fewer running components means fewer ways to attack.",
+        "guidance": "Compare enabled services and installed software on a sample of systems against the configuration standards. Ask for justification of anything that appears unnecessary."
+    },
+    "2.2.5": {
+        "title": "Insecure services justified and protected",
+        "description": "If any insecure protocol or service is kept running, the business reason is documented and extra protections are applied to reduce the risk it creates.",
+        "guidance": "Identify insecure services on sampled systems, review the documented justification, and verify the additional safeguards are configured."
+    },
+    "2.2.6": {
+        "title": "Security settings configured to prevent misuse",
+        "description": "Security parameters on each system are set to stop misuse, following the organization's configuration standards. Poorly tuned settings can undo otherwise good hardening.",
+        "guidance": "Inspect security parameters on a sample of operating systems, databases and applications and compare them with the documented standards. Interview administrators on how settings are maintained."
+    },
+    "2.2.7": {
+        "title": "Admin access over the network encrypted",
+        "description": "All administrative access that does not happen at the physical console is protected with strong cryptography, so admin credentials and commands cannot be intercepted.",
+        "guidance": "Observe administrators connecting remotely and check that protocols such as SSH or TLS are used. Review configurations to confirm cleartext admin protocols such as Telnet are disabled."
+    },
+    "2.3.1": {
+        "title": "Wireless defaults changed before use",
+        "description": "Wireless networks that connect to the CDE or carry account data have all vendor defaults changed when installed or confirmed secure, including encryption keys, admin passwords, SNMP strings and similar settings. Factory wireless settings are well known to attackers.",
+        "guidance": "Review wireless setup procedures and inspect access point configurations for default SSIDs, passwords, SNMP community strings and keys. Interview staff responsible for wireless deployment."
+    },
+    "2.3.2": {
+        "title": "Wireless keys rotated after staff leave or compromise",
+        "description": "Encryption keys for in-scope wireless networks are replaced when someone who knew them leaves, and whenever a key may have been exposed. Old keys in former employees' hands are a lasting risk.",
+        "guidance": "Review the key change procedure and compare records of wireless key changes with staff departure records and any suspected compromise events."
+    },
+    "3.1.1": {
+        "title": "Data protection policies maintained and known",
+        "description": "Policies and procedures for protecting stored account data are written down, kept current, and known and used by relevant staff. Clear direction keeps data handling consistent.",
+        "guidance": "Request the stored data protection policies and procedures, confirm a recent review date, and interview staff to confirm they follow them."
+    },
+    "3.1.2": {
+        "title": "Data protection duties assigned and understood",
+        "description": "Named people are responsible for each activity involved in protecting stored account data, and they understand those responsibilities.",
+        "guidance": "Look for documented assignments covering Requirement 3 tasks, and interview the responsible personnel."
+    },
+    "3.2.1": {
+        "title": "Card data retention kept to a minimum",
+        "description": "Account data is kept only as long as there is a legal, regulatory or business need, under defined retention rules, and is securely deleted afterward. This includes any sensitive authentication data held before a transaction is authorized. Less stored data means less to lose.",
+        "guidance": "Review the retention and disposal policy and confirm it defines what is kept, why and for how long. Sample data stores to verify data older than the defined period has been removed, and check records of the periodic disposal process."
+    },
+    "3.3.1": {
+        "title": "No SAD kept after authorization",
+        "description": "Sensitive authentication data is never retained once a transaction has been authorized, even if it was encrypted. If this data is stolen it can be used to create counterfeit cards or fraudulent transactions.",
+        "guidance": "Review data flows and inspect databases, logs, files and debug output on a sample of systems for SAD. Interview staff about how SAD is purged after authorization."
+    },
+    "3.3.1.1": {
+        "title": "Full magnetic stripe data not retained",
+        "description": "The complete contents of any card track, whether from the magnetic stripe or the chip equivalent, are not stored after a transaction is authorized.",
+        "guidance": "Search sampled data sources such as transaction logs, history files and database schemas for full track data, and confirm none is present after authorization."
+    },
+    "3.3.1.2": {
+        "title": "Card verification codes not retained",
+        "description": "The three or four digit security code printed on the card is not stored once the transaction is authorized.",
+        "guidance": "Inspect sampled data stores, logs and input forms for stored card verification codes, and confirm they are discarded after authorization."
+    },
+    "3.3.1.3": {
+        "title": "PINs and PIN blocks not retained",
+        "description": "The cardholder's PIN and any encrypted PIN block are not stored after authorization.",
+        "guidance": "Examine sampled data stores and logs for PIN or PIN block values, and confirm none remain after authorization."
+    },
+    "3.3.2": {
+        "title": "Pre-authorization SAD encrypted",
+        "description": "If sensitive authentication data must be held electronically before a transaction is authorized, it is protected with strong cryptography while it is stored.",
+        "guidance": "Identify where SAD is held before authorization and review the encryption method and configuration protecting it."
+    },
+    "3.3.3": {
+        "title": "Issuer SAD storage justified and secured",
+        "description": "Card issuers, and companies supporting issuing services, store sensitive authentication data only where there is a documented, legitimate issuing need, and protect it with strong cryptography.",
+        "guidance": "Review the documented business justification for SAD storage and examine where and how it is stored, including the encryption in use."
+    },
+    "3.4.1": {
+        "title": "PAN masked on screen by default",
+        "description": "When a PAN is displayed, it is masked so that no more than the first six and last four digits show, and only people with a documented business need can see more. Masking limits exposure to anyone looking at screens, reports or receipts.",
+        "guidance": "Review the list of roles allowed to see more of the PAN, then observe displays, reports and receipts for both privileged and standard users to confirm masking works as documented."
+    },
+    "3.4.2": {
+        "title": "Remote access blocks copying of PAN",
+        "description": "When people use remote-access tools, they are technically prevented from copying or moving PAN to other locations unless they are explicitly authorized with a documented business need. This keeps card data from leaking onto unmanaged machines.",
+        "guidance": "Review remote-access tool configurations for controls such as disabled clipboard, file transfer and local drive mapping. Check the list of users approved for exceptions and their justification."
+    },
+    "3.5.1": {
+        "title": "Stored PAN rendered unreadable",
+        "description": "Wherever PAN is stored, including backups and logs, it is made unreadable using an accepted method such as strong one-way hashing of the full PAN, truncation, index tokens, or strong encryption with managed keys. This protects the data even if storage is breached.",
+        "guidance": "Review documentation of the method used, then inspect sampled data repositories, removable media and audit logs to confirm PAN is not stored in readable form."
+    },
+    "3.5.1.1": {
+        "title": "PAN hashes use keyed cryptography",
+        "description": "When hashing is used to protect PAN, the hash must be a keyed cryptographic hash of the full PAN, with the keys managed properly. Plain unkeyed hashes of card numbers can be reversed by trying every possible value.",
+        "guidance": "Review the hashing design and configuration to confirm a keyed algorithm such as HMAC is used, and check that associated keys follow the key management procedures."
+    },
+    "3.5.1.2": {
+        "title": "Disk encryption limited to removable media",
+        "description": "Disk or partition-level encryption is only accepted as the way of protecting PAN on removable media. On other systems, PAN must also be protected by another method that meets the core requirement for making it unreadable.",
+        "guidance": "Identify where disk-level encryption is relied on. For non-removable storage, confirm an additional method such as field encryption, truncation or tokens protects the PAN."
+    },
+    "3.5.1.3": {
+        "title": "Disk encryption access managed independently",
+        "description": "Where disk-level encryption protects PAN, logical access to it is controlled separately from the operating system login, and decryption keys are not tied to user accounts. Otherwise anyone who logs in would see the data in the clear.",
+        "guidance": "Examine the disk encryption configuration and authentication process to confirm it uses its own access mechanism. Check where decryption keys are stored and that they are not linked to user accounts."
+    },
+    "3.6.1": {
+        "title": "Procedures protect encryption keys from misuse",
+        "description": "Documented procedures protect the keys that secure stored account data against disclosure and misuse. They cover limiting access to the fewest custodians, making key-encrypting keys at least as strong as the keys they protect, keeping key types apart, and storing keys securely in the fewest places.",
+        "guidance": "Review key management procedures for coverage of these protections. Interview key custodians and inspect key storage to confirm the procedures are followed."
+    },
+    "3.6.1.1": {
+        "title": "Cryptographic architecture documented",
+        "description": "Service providers keep a current description of their cryptographic architecture, covering algorithms, protocols, key strengths, cryptoperiods, how each key is used, and the HSMs or secure devices involved. This helps them avoid reusing production keys in test and lets them react quickly when an algorithm is weakened.",
+        "guidance": "Request the cryptographic architecture document and check it lists algorithms, key strengths, expiry dates, key usage, and an inventory of HSMs or secure cryptographic devices. Interview staff to confirm it reflects the current environment."
+    },
+    "3.6.1.2": {
+        "title": "Secret and private keys stored securely",
+        "description": "Secret and private keys that protect stored account data are only kept in approved forms: encrypted under a key-encrypting key, inside a secure cryptographic device such as an HSM, or as split components or key shares.",
+        "guidance": "Review key storage documentation and inspect where keys are held to confirm they exist only in one of the approved protected forms, never as a single cleartext key."
+    },
+    "3.6.1.3": {
+        "title": "Cleartext key component access tightly limited",
+        "description": "Access to any key components in cleartext form is restricted to as few custodians as practical. Fewer people with access means less chance of a key being misused.",
+        "guidance": "Review the list of custodians with access to cleartext key components and compare it with access controls and logs. Confirm each person has a defined need."
+    },
+    "3.6.1.4": {
+        "title": "Keys held in as few places as possible",
+        "description": "Cryptographic keys are stored in the smallest number of locations needed. Every extra copy is another place an attacker could find a key.",
+        "guidance": "Review key inventory and storage locations and interview custodians to confirm keys are not duplicated beyond what operations require."
+    },
+    "3.7.1": {
+        "title": "Strong key generation procedures",
+        "description": "Procedures ensure that keys protecting stored account data are generated in a way that makes them strong and unpredictable.",
+        "guidance": "Review key generation procedures and observe or examine evidence of how keys are created, such as the use of an approved random number generator or HSM."
+    },
+    "3.7.2": {
+        "title": "Secure key distribution procedures",
+        "description": "Procedures ensure that keys are delivered only to authorized recipients and are protected throughout the distribution process.",
+        "guidance": "Review key distribution procedures and examine records of recent key transfers to confirm protected methods and authorized recipients."
+    },
+    "3.7.3": {
+        "title": "Secure key storage procedures",
+        "description": "Procedures define how keys protecting stored account data are kept safe while at rest, so they cannot be read or tampered with.",
+        "guidance": "Review key storage procedures and inspect key storage mechanisms to confirm keys are protected as described."
+    },
+    "3.7.4": {
+        "title": "Keys changed at the end of their cryptoperiod",
+        "description": "Keys are replaced when their defined lifetime ends, based on the cryptoperiod set by the organization in line with industry guidance. Limiting how long a key is used reduces the damage if it is ever exposed.",
+        "guidance": "Review defined cryptoperiods for each key type and check key change records to confirm keys were rotated on schedule."
+    },
+    "3.7.5": {
+        "title": "Weak or compromised keys retired",
+        "description": "Keys are retired, replaced or destroyed when they reach the end of their life, when their integrity is in doubt, when a custodian with knowledge of a cleartext component leaves, or when compromise is suspected. Retired keys kept for archive are never used for live encryption.",
+        "guidance": "Review procedures for key retirement and replacement and examine records of retired keys. Confirm any archived keys are used only for decryption or verification."
+    },
+    "3.7.6": {
+        "title": "Split knowledge for manual key handling",
+        "description": "When keys are managed manually in cleartext, no single person can know or control the whole key; at least two people each hold separate parts. This prevents one individual from misusing a key on their own.",
+        "guidance": "Review manual key management procedures and observe or interview custodians to confirm key components are held by different people and that two people are needed for each operation."
+    },
+    "3.7.7": {
+        "title": "Unauthorized key substitution prevented",
+        "description": "Procedures and controls stop anyone from swapping in an unauthorized key in place of a legitimate one.",
+        "guidance": "Review procedures and system controls that authenticate keys before use, and interview custodians about how substitution is detected and prevented."
+    },
+    "3.7.8": {
+        "title": "Key custodians formally accept their duties",
+        "description": "Each key custodian signs off, on paper or electronically, confirming they know and accept what their key management role requires.",
+        "guidance": "Request signed or electronic acknowledgment forms for all current key custodians and compare them with the custodian list."
+    },
+    "3.7.9": {
+        "title": "Key handling guidance shared with customers",
+        "description": "Service providers that share keys with customers for sending or storing account data give those customers documented guidance on securely transmitting, storing and updating the keys.",
+        "guidance": "Review the documentation the service provider supplies to customers and confirm it covers secure transmission, storage and update of shared keys."
+    },
+    "4.1.1": {
+        "title": "Transmission security policies maintained and known",
+        "description": "Policies and procedures for protecting card data in transit are documented, kept current, and known and used by relevant staff.",
+        "guidance": "Request the transmission security policies and procedures, check their review date, and interview staff to confirm they follow them."
+    },
+    "4.1.2": {
+        "title": "Transmission security duties assigned and understood",
+        "description": "Named people are responsible for each activity in protecting card data during transmission, and they understand those responsibilities.",
+        "guidance": "Look for documented assignments covering Requirement 4 tasks, and interview the responsible personnel."
+    },
+    "4.2.1": {
+        "title": "Strong encryption for PAN over public networks",
+        "description": "PAN sent over open, public networks such as the internet is protected with strong cryptography and secure protocols, using only trusted, valid certificates that have not expired or been revoked. Insecure protocol versions and weak settings are not allowed, and encryption strength matches the method used.",
+        "guidance": "Review transmission configurations, such as TLS settings on web servers and APIs, to confirm modern protocol versions and strong cipher suites. Check that certificates are valid, unexpired and issued by trusted authorities, and observe sample transmissions where practical."
+    },
+    "4.2.1.1": {
+        "title": "Inventory of trusted keys and certificates",
+        "description": "The organization keeps an up-to-date list of the keys and certificates it trusts for protecting PAN in transit. Tracking them prevents surprise expirations and helps spot rogue or outdated certificates.",
+        "guidance": "Request the key and certificate inventory and compare a sample of certificates in use against it. Confirm the inventory records details such as owner and expiry date and is kept current."
+    },
+    "4.2.1.2": {
+        "title": "Wireless links carrying PAN use strong encryption",
+        "description": "Wireless networks that carry PAN or connect to the CDE use industry best practices for authentication and encryption, so card data cannot be intercepted over the air.",
+        "guidance": "Inspect wireless network configurations for modern authentication and encryption settings, such as WPA3 or WPA2-Enterprise, and confirm deprecated options are disabled."
+    },
+    "4.2.2": {
+        "title": "PAN protected in end-user messaging",
+        "description": "Whenever PAN is sent through end-user messaging such as email, chat or text messages, it is protected with strong cryptography. These channels are easy to intercept and are not secure on their own.",
+        "guidance": "Review policies on sending PAN through messaging tools and examine the configuration of any tools used for it to confirm encryption is applied. Interview staff about how they handle requests to send card numbers."
+    }
+}

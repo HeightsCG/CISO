@@ -1,0 +1,143 @@
+{
+    "key": "pci-dss-4",
+    "name": "PCI DSS",
+    "version": "4.0.1",
+    "full_name": "Payment Card Industry Data Security Standard (PCI DSS) v4.0.1",
+    "issuing_body": "PCI Security Standards Council",
+    "standard_codes": [
+        "PCI-DSS"
+    ],
+    "content_licence": "ids_titles_only",
+    "notice": "PCI DSS requirement numbers and principal requirement names are used for identification only. Requirement text is licensed by the PCI Security Standards Council; descriptions and guidance are written by HCG.",
+    "sources": [
+        {
+            "id": "pcidss",
+            "title": "Payment Card Industry Data Security Standard: Requirements and Testing Procedures",
+            "version": "v4.0.1 (June 2024)",
+            "publisher": "PCI Security Standards Council",
+            "url": "https://www.pcisecuritystandards.org/document_library/?category=pcidss",
+            "licensed_copy": "frameworks/sources/pci/PCI-DSS-v4_0_1.pdf (kept locally, not committed)",
+            "sha256_local": "5e6b9093b84007b973097d20126a3768ea2f0a1d4200255c849b0fb3bf04ebc7"
+        },
+        {
+            "id": "pciids",
+            "title": "PCI DSS v4.0.1 requirement list derived from HCG's licensed copy (IDs, principal requirement names, flags)",
+            "version": "v4.0.1 (June 2024)",
+            "publisher": "HCG",
+            "file": "pci/pci-dss-4.0.1-ids.json",
+            "sha256": "ff99028c970c046756abb2aaf652e67fc10519c5e020d7619d7c4506d04d5fa2"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG plain-language descriptions and assessment guidance",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "pciids"
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "principal requirement",
+        "families": "principal requirements",
+        "objective": "testing procedure",
+        "objectives": "testing procedures",
+        "plan": "remediation plan",
+        "plan_short": "remediation plan",
+        "score": "requirements in place"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "In Place"
+        },
+        {
+            "key": "not_met",
+            "label": "Not in Place"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Share of applicable requirements in place. PCI DSS has no partial score: compliance needs every applicable requirement in place."
+    },
+    "rules": [
+        {
+            "id": "future_dated_mandatory",
+            "type": "effective_date",
+            "date": "2025-03-31",
+            "summary": "Requirements that were best practices until 31 March 2025 are now mandatory and are assessed like every other requirement.",
+            "source": "pcidss",
+            "cite": "PCI DSS v4.0.1, applicability notes",
+            "quote": "This requirement is a best practice until 31 March 2025, after which it will be required and must be fully considered during a PCI DSS assessment."
+        },
+        {
+            "id": "all_in_place",
+            "type": "pass",
+            "metric": "all_met",
+            "summary": "An entity is compliant only when every applicable requirement is in place (using the defined or customized approach, or a documented compensating control).",
+            "source": "hcg",
+            "cite": "HCG reading of the PCI DSS assessment approach"
+        },
+        {
+            "id": "service_provider_only",
+            "type": "applicability",
+            "summary": "Requirements marked for service providers apply only to the service-provider part of an entity's business; merchants may treat them as best practice.",
+            "source": "pcidss",
+            "cite": "PCI DSS v4.0.1, section 4",
+            "quote": "Requirements identified with “Additional requirement for service providers only” are also recommended as best"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan"
+    ],
+    "glossary": [
+        {
+            "term": "PCI DSS",
+            "definition": "Payment Card Industry Data Security Standard: the security rules for any business that stores, processes or transmits payment card data."
+        },
+        {
+            "term": "CDE",
+            "definition": "Cardholder data environment: the people, processes and systems that handle card data, and anything connected to them."
+        },
+        {
+            "term": "PAN",
+            "definition": "Primary account number: the long number on a payment card."
+        },
+        {
+            "term": "SAD",
+            "definition": "Sensitive authentication data, such as the full magnetic-stripe data, card verification code and PINs, which must never be kept after authorization."
+        },
+        {
+            "term": "TPSP",
+            "definition": "Third-party service provider: an outside company that handles card data or can affect its security on the entity's behalf."
+        },
+        {
+            "term": "NSC",
+            "definition": "Network security control, such as a firewall or other device or service that controls traffic between networks."
+        },
+        {
+            "term": "MFA",
+            "definition": "Multi-factor authentication: signing in with two or more independent factors."
+        },
+        {
+            "term": "QSA",
+            "definition": "Qualified Security Assessor: an assessor certified by the PCI Security Standards Council."
+        },
+        {
+            "term": "ROC",
+            "definition": "Report on Compliance: the formal assessment report a QSA completes."
+        },
+        {
+            "term": "SAQ",
+            "definition": "Self-Assessment Questionnaire: the self-assessment form for smaller merchants and service providers."
+        }
+    ]
+}

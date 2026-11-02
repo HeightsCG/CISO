@@ -1,0 +1,292 @@
+{
+  "11.1.1": {
+    "title": "Security testing policies and procedures",
+    "description": "The organization keeps written policies and procedures for its security testing program, makes sure they are current and actually followed, and shares them with everyone involved. Clear direction keeps scans, tests and monitoring consistent from one cycle to the next.",
+    "guidance": "Review the testing policies and procedures, checking dates and version history for recent updates. Interview staff who run scans and tests to confirm they know where the documents live and work according to them."
+  },
+  "11.1.2": {
+    "title": "Security testing roles assigned",
+    "description": "Each security testing duty has a named owner, and those owners know and accept what they are responsible for. Without clear ownership, scans and tests tend to be skipped or left half done.",
+    "guidance": "Look for a RACI chart, job descriptions or a responsibility matrix covering testing activities. Interview the named people to confirm they understand and carry out their duties."
+  },
+  "11.2.1": {
+    "title": "Quarterly rogue wireless detection",
+    "description": "At least every three months the organization searches for wireless access points, identifies which are approved and which are not, and deals with anything unauthorized. A rogue access point can quietly give an attacker a path into the CDE, even where the company runs no Wi-Fi of its own.",
+    "guidance": "Obtain the last four quarters of wireless scan reports or wireless IDS output and confirm every location was covered. Check that unknown devices were investigated and that alerts from any automated monitoring reach staff who respond."
+  },
+  "11.2.2": {
+    "title": "Inventory of approved wireless access points",
+    "description": "The organization keeps a list of the wireless access points it has approved, along with the business reason for each one. This list is the baseline used to spot rogue devices during wireless scans.",
+    "guidance": "Review the wireless inventory and confirm each entry carries a documented business justification. Compare it against recent wireless scan results to check that it reflects what is actually deployed."
+  },
+  "11.3.1": {
+    "title": "Quarterly internal vulnerability scans",
+    "description": "Systems inside the network are scanned for weaknesses at least every three months, critical and high findings are fixed, and rescans prove the fixes worked. Scanning tools are kept current and run by qualified people who are independent of the systems being scanned.",
+    "guidance": "Collect internal scan reports for the last twelve months showing four quarterly cycles, plus rescan reports that clear the serious findings. Confirm the scanner signatures were updated and interview the person running scans about their skills and independence."
+  },
+  "11.3.1.1": {
+    "title": "Lower-risk vulnerabilities managed by risk analysis",
+    "description": "Weaknesses rated below high or critical are still addressed, on a timeline the organization sets through its own targeted risk analysis. Lower-severity issues can be chained together, so they cannot be ignored indefinitely.",
+    "guidance": "Review the targeted risk analysis that sets remediation timelines for lower-rated findings. Sample scan results to confirm those findings were fixed within the stated timelines and that rescans confirmed the fixes."
+  },
+  "11.3.1.2": {
+    "title": "Authenticated internal vulnerability scanning",
+    "description": "Internal scans log in to the systems they assess so they can see missing patches and settings that an outside view would miss. Scan accounts need enough privilege to do this and must be protected like any other powerful account, and systems that cannot accept credentialed scans must be listed.",
+    "guidance": "Inspect scanner configuration to confirm credentials are used and review scan output for evidence of successful logins. Check how scan credentials are protected under the privileged access rules and review the documented list of systems that cannot support authenticated scanning."
+  },
+  "11.3.1.3": {
+    "title": "Internal scans after significant changes",
+    "description": "Whenever a significant change is made to the environment, an internal scan is run afterward and any serious findings are fixed and rescanned. Changes often introduce new weaknesses that would otherwise go unnoticed until the next quarterly cycle.",
+    "guidance": "Pull a sample of significant changes from the change records and match each to an internal scan performed after it. Confirm high and critical findings from those scans were resolved and verified by a rescan."
+  },
+  "11.3.2": {
+    "title": "Quarterly external ASV scans",
+    "description": "Internet-facing systems are scanned each quarter by an outside firm on the PCI SSC list of Approved Scanning Vendors, and the results must meet ASV passing criteria, with rescans as needed until they do. This shows the outside of the network does not expose easy targets.",
+    "guidance": "Obtain ASV scan reports covering four consecutive quarters, each with a passing result. Confirm the scans came from a currently listed ASV and that failed scans were followed by successful rescans."
+  },
+  "11.3.2.1": {
+    "title": "External scans after significant changes",
+    "description": "After any significant change, internet-facing systems are scanned again and any qualifying findings are fixed and rescanned. These scans can be run by qualified internal staff and do not have to come from an ASV.",
+    "guidance": "Sample significant changes from change records and match each to an external scan run afterward. Check that serious findings were fixed and rescanned, and that the person running the scan was qualified and independent."
+  },
+  "11.4.1": {
+    "title": "Documented penetration testing methodology",
+    "description": "The organization defines and follows a written approach to penetration testing that uses an industry-recognized method, covers the whole CDE perimeter and critical systems, tests from both inside and outside, and includes application and network layers. A defined method makes results repeatable and comparable year over year.",
+    "guidance": "Review the methodology document and confirm it covers scope, segmentation checks, application and network layers, review of past threats, and how findings and remediation are handled. Confirm test results are kept for at least twelve months and interview staff about how the method is applied."
+  },
+  "11.4.2": {
+    "title": "Annual internal penetration testing",
+    "description": "A qualified, independent tester attacks the internal network at least once a year and after any significant change, following the defined methodology. This shows how far an attacker who gets inside could move.",
+    "guidance": "Obtain internal penetration test reports from the last twelve months and for significant changes in that period. Confirm the tester's qualifications and organizational independence, and check that the scope matched the methodology."
+  },
+  "11.4.3": {
+    "title": "Annual external penetration testing",
+    "description": "A qualified, independent tester attacks the organization's internet-facing systems at least once a year and after significant changes, following the defined methodology. This reveals what an outside attacker could exploit.",
+    "guidance": "Review external penetration test reports covering the past year and any significant changes. Verify who performed the tests, their credentials and independence, and that the scope followed the methodology."
+  },
+  "11.4.4": {
+    "title": "Penetration test findings fixed and retested",
+    "description": "Weaknesses that a penetration test proves exploitable are fixed according to the organization's risk rating, and the test is repeated to confirm each fix. A report is only useful if the holes it finds are closed.",
+    "guidance": "Compare penetration test findings against remediation tickets or a tracking log. Look for retest evidence showing each exploitable issue was resolved."
+  },
+  "11.4.5": {
+    "title": "Annual segmentation testing",
+    "description": "If the organization uses segmentation to keep other networks out of PCI DSS scope, it tests those controls at least yearly and after changes to them, proving that out-of-scope systems really cannot reach the CDE. Failed segmentation silently expands scope and risk.",
+    "guidance": "Obtain segmentation test results for the past twelve months and after any segmentation changes. Confirm every segmentation method in use was tested, the tester was qualified and independent, and any gaps found were corrected."
+  },
+  "11.4.6": {
+    "title": "Six-monthly segmentation testing for service providers",
+    "description": "This applies to service providers: if they rely on segmentation to limit scope, they must test those controls at least every six months and after changes to them. Service providers hold data for many customers, so they verify isolation more often.",
+    "guidance": "Collect segmentation test reports showing at least two tests in the past year, plus tests after segmentation changes. Confirm all segmentation methods were covered and that the tester was qualified and independent."
+  },
+  "11.4.7": {
+    "title": "Multi-tenant providers support customer pen tests",
+    "description": "This applies to multi-tenant service providers: they must make it possible for their customers to perform external penetration testing of their own environments. Customers cannot meet their testing obligations if the hosting provider blocks them.",
+    "guidance": "Review the provider's documented process for customers to request and carry out external penetration tests. Check customer contracts, policy pages or support records showing that requests are accepted and coordinated."
+  },
+  "11.5.1": {
+    "title": "Intrusion detection and prevention for the CDE",
+    "description": "Intrusion detection or prevention tools watch traffic at the CDE perimeter and at critical points inside it, alert staff to suspected attacks, and are kept up to date. They give early warning so an attack can be stopped before data is taken.",
+    "guidance": "Review network diagrams and IDS or IPS configuration to confirm sensors cover the CDE edge and critical internal points. Check that alerts reach responders and that engines, baselines and signatures are current."
+  },
+  "11.5.1.1": {
+    "title": "Detect covert malware channels at service providers",
+    "description": "This applies to service providers: their intrusion detection must be able to spot and alert on hidden communication channels used by malware, such as covert command and control traffic or data exfiltration. These channels are designed to blend in with normal traffic, so they need specific detection.",
+    "guidance": "Review IDS or IPS settings and documented detection rules aimed at covert channels. Interview staff about how such alerts are generated and handled, and look at sample alerts or response records."
+  },
+  "11.5.2": {
+    "title": "Weekly file change detection",
+    "description": "A change detection tool, such as file integrity monitoring, watches critical files and alerts staff to unauthorized edits, additions or deletions, comparing them at least weekly. Unexpected changes to key files can signal that a system has been compromised.",
+    "guidance": "Review the change detection tool's configuration and the list of monitored files. Confirm comparisons run at least weekly and examine sample alerts showing they reached staff and were investigated."
+  },
+  "11.6.1": {
+    "title": "Payment page tamper detection",
+    "description": "The organization uses a mechanism that detects unauthorized changes to the HTTP headers and script content of payment pages as a customer's browser receives them, and alerts staff when something changes. This defends against skimming attacks that inject malicious script into checkout pages.",
+    "guidance": "Review the configuration of the tamper detection tool and confirm it covers every payment page, examining both headers and scripts as delivered to the browser. Check that it runs at least weekly or at the frequency set by a targeted risk analysis, and review sample alerts and responses."
+  },
+  "12.1.1": {
+    "title": "Information security policy established and shared",
+    "description": "The organization has an overall information security policy that is written down, published, kept up to date and given to all staff and relevant vendors and business partners. It sets the tone and direction for every other security activity.",
+    "guidance": "Review the information security policy and evidence of how it is published and distributed. Interview staff and check vendor communications to confirm the policy reached the people it applies to."
+  },
+  "12.1.2": {
+    "title": "Security policy reviewed yearly",
+    "description": "Leadership revisits the information security policy at least once a year and revises it when business goals or the risk environment change. A stale policy stops matching how the business actually operates.",
+    "guidance": "Check the policy's review history, approval records or meeting minutes for a review in the past twelve months. Confirm that changes in the environment during that time were reflected in updates."
+  },
+  "12.1.3": {
+    "title": "Security roles defined and acknowledged",
+    "description": "The security policy spells out what each role in the organization is responsible for when it comes to security, and all staff know and accept their part. Everyone handling payment data should understand what is expected of them.",
+    "guidance": "Review the policy for defined security responsibilities by role. Interview a sample of staff and review signed acknowledgments to confirm awareness."
+  },
+  "12.1.4": {
+    "title": "Executive assigns a security leader",
+    "description": "Executive leadership formally gives responsibility for information security to a CISO or another knowledgeable member of the leadership team. Having a named, senior owner ensures security has authority and visibility.",
+    "guidance": "Look for a board resolution, executive memo or the policy itself naming the person in charge of information security. Confirm the assignment came from executive management and that the person holds a senior role."
+  },
+  "12.2.1": {
+    "title": "Acceptable use rules for end-user technology",
+    "description": "The organization has rules for how staff may use end-user technology such as laptops, phones, removable media, email and internet access. The rules require approval from authorized parties, define permitted uses and list the hardware and software the company allows.",
+    "guidance": "Review the acceptable use policy and confirm it covers approval, permitted business uses and an approved products list. Interview staff to check that the rules are understood and followed."
+  },
+  "12.3.1": {
+    "title": "Targeted risk analysis for flexible frequencies",
+    "description": "Where PCI DSS lets the organization choose how often to do something, a written risk analysis supports that choice by naming the assets and threats involved and explaining the frequency chosen. Each analysis is revisited at least every twelve months to confirm it still holds.",
+    "guidance": "Collect the targeted risk analyses for every requirement that allows a flexible frequency. Confirm each identifies protected assets, threats, likelihood and impact factors, is approved by management and has been reviewed within the past year."
+  },
+  "12.3.2": {
+    "title": "Risk analysis for each customized control",
+    "description": "When the organization meets a requirement through the customized approach, it performs and documents a targeted risk analysis for that control, gets it approved by senior management and refreshes it at least yearly. This shows the custom control manages risk as well as the standard one would.",
+    "guidance": "Review the risk analysis for every customized control and check it follows the required format and content. Confirm senior management approval and an annual review."
+  },
+  "12.3.3": {
+    "title": "Annual cryptography inventory review",
+    "description": "The organization keeps a record of the cipher suites and protocols it uses, where and why, and reviews it at least once a year. It watches for weakening algorithms and has a plan to respond if one becomes unsafe.",
+    "guidance": "Review the inventory of cipher suites and protocols, including purpose and location of use. Look for evidence of an annual review that considers industry trends and a documented plan for handling cryptographic weaknesses."
+  },
+  "12.3.4": {
+    "title": "Annual hardware and software lifecycle review",
+    "description": "At least once a year the organization reviews the hardware and software it relies on to confirm vendors still support them with security fixes and to plan for anything nearing end of life. Unsupported technology stops receiving patches and becomes a growing risk.",
+    "guidance": "Review the documented annual technology review and check it covers vendor support status, end of life announcements and planned replacements. Confirm senior management has seen and approved any remediation plans."
+  },
+  "12.4.1": {
+    "title": "Executive ownership of PCI DSS compliance",
+    "description": "This applies to service providers: executive management must take charge of protecting cardholder data and running the PCI DSS compliance program. That includes establishing accountability, a compliance charter and regular reporting to leadership.",
+    "guidance": "Look for documents naming executive accountability, a compliance program charter and evidence of reporting to executives or the board. Interview executives to confirm their involvement."
+  },
+  "12.4.2": {
+    "title": "Quarterly checks that security tasks are done",
+    "description": "This applies to service providers: at least every three months, someone other than the person doing the work confirms that key security tasks are being carried out as required. These include log reviews, firewall rule reviews, configuration standards, alert response, change management and security awareness.",
+    "guidance": "Review policies describing the quarterly checks and sample the records of those checks. Confirm each covered the expected task areas and was performed by someone independent of the work."
+  },
+  "12.4.2.1": {
+    "title": "Quarterly review results documented",
+    "description": "This applies to service providers: the quarterly checks on security tasks must be recorded, including what was found and what was done about it, and signed off by those responsible for the compliance program. A written record proves the checks happened and drives follow-up.",
+    "guidance": "Examine the documentation from recent quarterly reviews for results, corrective actions and sign-off by the PCI DSS compliance program owners."
+  },
+  "12.5.1": {
+    "title": "Inventory of in-scope system components",
+    "description": "The organization keeps a current list of every system component within PCI DSS scope, with a description of what each one does. You cannot protect systems you do not know you have.",
+    "guidance": "Review the inventory for completeness and function descriptions. Compare it against network diagrams, discovery scan output or a sample of observed systems to check it is current."
+  },
+  "12.5.2": {
+    "title": "Annual scope confirmation",
+    "description": "At least once a year and after significant changes, the organization works out and records exactly what is in PCI DSS scope, including data flows, locations of card data, connected systems and segmentation. An accurate scope ensures nothing that touches card data is left unprotected.",
+    "guidance": "Review the most recent scoping documentation and confirm it covers data flows, storage locations, connected third parties and segmentation controls. Check that it was refreshed within the past year and after any significant change."
+  },
+  "12.5.2.1": {
+    "title": "Six-monthly scope confirmation for service providers",
+    "description": "This applies to service providers: they must confirm and document their PCI DSS scope at least every six months and after significant changes. Service provider environments tend to change quickly, so scope is checked more often.",
+    "guidance": "Collect scoping records showing at least two confirmations in the past year plus any after significant changes. Confirm each covered all the elements required in a full scope review."
+  },
+  "12.5.3": {
+    "title": "Scope review after organizational change",
+    "description": "This applies to service providers: when the company's structure changes in a major way, such as a merger or reorganization, it reviews the effect on PCI DSS scope and how controls apply, and reports the results to executive management. Business changes can move systems and responsibilities without anyone noticing.",
+    "guidance": "Review policies requiring a scope review after organizational change and examine records from recent changes. Confirm the results were communicated to executives."
+  },
+  "12.6.1": {
+    "title": "Formal security awareness program",
+    "description": "The organization runs a structured program to make all staff aware of its security policy and procedures and their own role in protecting card data. People are often the first line of defense and the most common target.",
+    "guidance": "Review the security awareness program documents, including content, audience and delivery method. Confirm it reaches all personnel."
+  },
+  "12.6.2": {
+    "title": "Awareness program reviewed yearly",
+    "description": "Once a year or more often, the organization revisits its awareness content and refreshes it to cover new threats and weaknesses that could affect the CDE. Training content goes stale quickly as attacker tactics change.",
+    "guidance": "Look for evidence of an annual review of the awareness content, such as revision history or meeting notes. Check that recent threats were added to the material."
+  },
+  "12.6.3": {
+    "title": "Awareness training at hire and yearly",
+    "description": "Staff receive security awareness training when they join and at least once a year after that, using several methods of communication, and they sign off, on paper or electronically, that the security policy has been read and understood. Repetition keeps security front of mind.",
+    "guidance": "Sample personnel records and confirm training completion at hire and in the past twelve months. Review acknowledgment records showing staff confirmed they read and understood the policy."
+  },
+  "12.6.3.1": {
+    "title": "Training covers phishing and social engineering",
+    "description": "Awareness training teaches staff to recognize and report phishing and related social engineering attacks. These tricks are among the most common ways attackers get a foothold.",
+    "guidance": "Review the training content for phishing and social engineering topics and a clear reporting process. Interview staff to confirm they know how to spot and report suspicious messages."
+  },
+  "12.6.3.2": {
+    "title": "Training covers acceptable technology use",
+    "description": "Awareness training explains the rules for using end-user technology, as set out in the acceptable use policy. Staff need to know what is and is not permitted on company devices and services.",
+    "guidance": "Review training materials for coverage of the acceptable use policy. Confirm staff completion records include this content."
+  },
+  "12.7.1": {
+    "title": "Background screening before access",
+    "description": "Candidates for roles with CDE access go through background checks before hiring, as far as local laws allow, to reduce the risk of insider threats. The checks used depend on the role and local legal limits.",
+    "guidance": "Interview HR about the screening process and review the screening policy. Sample recent hires with CDE access and confirm screening was completed before they started."
+  },
+  "12.8.1": {
+    "title": "List of third-party service providers",
+    "description": "The organization keeps a list of every TPSP that receives account data from it or whose services could put that data at risk, along with a description of each service. Knowing which vendors touch card data is the starting point for managing them.",
+    "guidance": "Review the TPSP list and confirm it includes a description of services for each provider. Cross-check against contracts, accounts payable or data flow diagrams for missing vendors."
+  },
+  "12.8.2": {
+    "title": "Written security agreements with TPSPs",
+    "description": "Each TPSP that handles account data or could affect its security signs a written agreement accepting responsibility for protecting the data it holds or processes and for any impact it could have on the CDE. Contracts make security obligations enforceable.",
+    "guidance": "Sample TPSP contracts and confirm each includes written acknowledgment of the provider's security responsibilities. Check that agreements are current and cover the services described in the TPSP list."
+  },
+  "12.8.3": {
+    "title": "Due diligence before engaging TPSPs",
+    "description": "Before signing up a new TPSP, the organization follows a set process to vet the provider's security. This helps avoid bringing in a vendor that would weaken the protection of card data.",
+    "guidance": "Review the documented vendor due diligence procedure. Sample recently engaged TPSPs and look for completed assessments, questionnaires or compliance evidence gathered before the contract started."
+  },
+  "12.8.4": {
+    "title": "Annual TPSP compliance monitoring",
+    "description": "The organization checks the PCI DSS compliance status of its TPSPs at least once a year. A vendor's status can lapse, so ongoing checks are needed after the contract is signed.",
+    "guidance": "Review the TPSP monitoring program and sample providers for evidence collected in the past year, such as an AOC or other compliance documentation."
+  },
+  "12.8.5": {
+    "title": "Responsibility split with each TPSP",
+    "description": "For each TPSP, the organization records which PCI DSS requirements the provider handles, which it handles itself and which are shared. A clear division prevents controls from falling through the cracks.",
+    "guidance": "Look for a responsibility matrix or similar document for each TPSP. Interview staff to confirm the division is understood and matches what the provider has agreed to."
+  },
+  "12.9.1": {
+    "title": "Service providers accept security duties in writing",
+    "description": "This applies to service providers: they must confirm to their customers in writing that they are responsible for protecting the account data they hold or process for those customers, and for anything they do that could affect customer CDE security. This gives customers the assurance they need for their own compliance.",
+    "guidance": "Review the provider's policies and a sample of customer contracts or templates for written acknowledgment of security responsibilities."
+  },
+  "12.9.2": {
+    "title": "Service providers support customer compliance",
+    "description": "This applies to service providers: when customers ask, they must supply information about their PCI DSS compliance status and which requirements they manage, so customers can carry out their own vendor monitoring. Transparency lets both sides see where responsibility lies.",
+    "guidance": "Review the provider's process for responding to customer compliance requests. Look at examples such as AOCs shared, responsibility matrices and responses to customer questionnaires."
+  },
+  "12.10.1": {
+    "title": "Incident response plan in place",
+    "description": "The organization has a written incident response plan ready to use the moment a suspected or confirmed breach occurs. It covers roles, contacts, notification duties, containment and recovery steps, data backup, legal requirements and how to report to the card brands.",
+    "guidance": "Review the incident response plan for roles, communication and notification procedures, specific response steps, business recovery, backup processes, legal requirements and card brand reporting. Interview responders to confirm they know the plan."
+  },
+  "12.10.2": {
+    "title": "Incident response plan tested yearly",
+    "description": "The incident response plan is reviewed and its content updated at least once a year, and every element of it is tested in that time. A plan that has never been exercised often fails when it is needed.",
+    "guidance": "Look for records of an annual plan review and test, such as tabletop exercise reports or simulation results. Confirm all plan elements were covered and that resulting changes were made."
+  },
+  "12.10.3": {
+    "title": "Round-the-clock incident responders",
+    "description": "Specific people are assigned to respond to suspected security incidents and are reachable at any hour, every day of the year. Attacks do not respect business hours, so delays in response increase damage.",
+    "guidance": "Review on-call schedules, contact lists and escalation procedures. Interview responders and test contact details to confirm coverage at all times."
+  },
+  "12.10.4": {
+    "title": "Incident responders trained",
+    "description": "People responsible for responding to security incidents receive appropriate and regular training for their role. Skilled responders contain incidents faster and preserve evidence properly.",
+    "guidance": "Review training records for incident response staff and the content of their training. Interview responders about their training and readiness."
+  },
+  "12.10.4.1": {
+    "title": "Risk-based frequency for responder training",
+    "description": "The organization decides how often incident response staff are trained through a targeted risk analysis. This keeps training frequent enough for the threats the organization actually faces.",
+    "guidance": "Review the targeted risk analysis that sets responder training frequency. Confirm training records show the chosen frequency has been met."
+  },
+  "12.10.5": {
+    "title": "Security alerts feed incident response",
+    "description": "The incident response plan covers how to monitor and react to alerts from security systems, including intrusion detection, change detection, payment page tamper detection and detection of failed critical security controls. Alerts are only useful if they trigger a defined response.",
+    "guidance": "Review the plan for procedures covering each of the security monitoring alert sources. Sample recent alerts and trace them through to the response records."
+  },
+  "12.10.6": {
+    "title": "Incident plan improved from lessons learned",
+    "description": "The incident response plan is updated based on lessons learned from real incidents and on changes in the industry. Each incident is a chance to make the next response better.",
+    "guidance": "Review post-incident reviews and plan change history to confirm lessons learned led to updates. Interview responders about how improvements are captured."
+  },
+  "12.10.7": {
+    "title": "Response to unexpected stored PAN",
+    "description": "The organization has procedures that kick in when PAN turns up somewhere it should not be stored. These cover securely deleting it or moving it to the CDE, finding out whether SAD was stored with it, tracing how it got there and fixing the cause.",
+    "guidance": "Review the incident response procedures for discovering PAN in unexpected places. Interview staff and look at any past discovery records to confirm the steps were followed."
+  }
+}

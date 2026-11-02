@@ -1,0 +1,272 @@
+{
+    "9.1.1": {
+        "title": "Physical security policies documented and in use",
+        "description": "The organization keeps written policies and procedures for physically protecting cardholder data, keeps them current, and makes sure the people affected know about them. Clear, shared rules are the foundation for every other physical safeguard.",
+        "guidance": "Review the physical security policy set and its last review date. Ask staff who handle facilities and media to explain where the procedures live and how they follow them."
+    },
+    "9.1.2": {
+        "title": "Physical security roles assigned and understood",
+        "description": "Someone is named as responsible for each physical security activity, and those people know what is expected of them. Without clear ownership, physical controls tend to drift or get skipped.",
+        "guidance": "Look for a RACI chart, job descriptions or a responsibility matrix covering physical security tasks. Interview the named owners to confirm they understand their duties."
+    },
+    "9.2.1": {
+        "title": "Facility entry controls restrict CDE access",
+        "description": "Doors and other entry points to locations housing systems in the CDE use controls such as badge readers or locks so that only approved people get in. This stops outsiders from simply walking up to equipment that processes card data.",
+        "guidance": "Walk the facility and observe how each entrance to rooms holding CDE systems is secured. Interview facilities staff about how entry is granted and revoked."
+    },
+    "9.2.1.1": {
+        "title": "Sensitive area entry monitored by camera or badge logs",
+        "description": "Entry into sensitive areas is tracked person by person using video, access control logs, or both, the monitoring is protected from tampering, and the records are kept at least three months. This lets the organization find out who was in a room when something went wrong.",
+        "guidance": "Inspect camera placement and badge reader coverage at sensitive area entrances. Confirm the recording or log system is protected from disabling and pull a sample of records to verify at least 90 days are available."
+    },
+    "9.2.2": {
+        "title": "Public network jacks restricted",
+        "description": "Network ports in places visitors can reach, such as lobbies or meeting rooms, are disabled or otherwise prevented from connecting to internal networks unless someone is authorized to use them. An open wall jack can give a stranger a direct path inside.",
+        "guidance": "Visit public and visitor areas and test or inspect network jacks. Review switch configurations or NAC settings showing those ports are disabled or limited to an isolated guest network."
+    },
+    "9.2.3": {
+        "title": "Wireless gear and network hardware physically secured",
+        "description": "Wireless access points, gateways, handheld devices, network and communication hardware, and telecom lines are kept where unauthorized people cannot reach them. Physical access to this equipment can let an attacker tap or reroute traffic.",
+        "guidance": "Observe where access points, switches, routers and telecom lines are located and how they are locked or mounted. Interview network staff about how this equipment is protected."
+    },
+    "9.2.4": {
+        "title": "Consoles in sensitive areas locked when unattended",
+        "description": "Admin consoles and terminals located in sensitive areas are locked so nobody can use them while they are left alone. An unlocked console is an easy way in for anyone passing by.",
+        "guidance": "Observe an unattended console in a sensitive area, or watch an administrator step away, and confirm the session locks. Check screen lock and timeout settings."
+    },
+    "9.3.1": {
+        "title": "Process for granting staff physical access",
+        "description": "There is a defined way to identify staff, approve their physical access, change it when roles change, and remove it when they leave, including returning or disabling badges. People should be easy to recognize and their access should match their current job.",
+        "guidance": "Review the documented procedure for issuing, changing and revoking staff badges. Observe how employees are visibly identified and check that changes to the badge system are limited to authorized administrators."
+    },
+    "9.3.1.1": {
+        "title": "Sensitive area access tied to job role",
+        "description": "Staff get into sensitive areas only when their job requires it, and that access ends right away when they leave or no longer need it, with keys and badges collected or disabled. This limits who can get close to critical systems.",
+        "guidance": "Compare the badge system's access list for sensitive areas against current staff roles. For a sample of recently departed employees, confirm their badges were deactivated and keys or cards returned."
+    },
+    "9.3.2": {
+        "title": "Visitor approval, escort and badge process",
+        "description": "Visitors to the CDE are approved before entry, escorted at all times, given a badge that looks different from employee badges and expires, and are clearly identifiable. This keeps guests from wandering into places they should not be.",
+        "guidance": "Review the visitor procedure, then observe a visitor arriving and moving through the facility. Inspect sample visitor badges to confirm they are visually distinct and have an expiration."
+    },
+    "9.3.3": {
+        "title": "Visitor badges returned or deactivated on exit",
+        "description": "When visitors leave or their badge expires, the badge is collected or switched off. A badge that keeps working after the visit can be reused by the wrong person.",
+        "guidance": "Observe visitors leaving and check that badges are handed back or disabled. Review the badge system for expired visitor credentials that remain active."
+    },
+    "9.3.4": {
+        "title": "Visitor log kept for at least three months",
+        "description": "A log records each visitor's name, the organization they represent, the date and time, and the staff member who authorized them, and it is kept for at least three months unless the law says otherwise. This gives an audit trail of everyone who came onsite.",
+        "guidance": "Inspect the paper or electronic visitor log for the required fields. Confirm entries go back at least 90 days and ask where older logs are stored."
+    },
+    "9.4.1": {
+        "title": "Media with cardholder data physically secured",
+        "description": "All media containing cardholder data, such as drives, tapes, backups or printouts, is kept physically secure. Loose media is one of the easiest ways for card data to walk out the door.",
+        "guidance": "Review procedures for protecting media and inspect storage rooms, safes or locked cabinets. Ask staff where media with card data is kept day to day."
+    },
+    "9.4.1.1": {
+        "title": "Offline backups stored in a secure location",
+        "description": "Backup media holding cardholder data that is kept offline is stored somewhere secure. Backups contain large volumes of data, so losing one can be as damaging as a system breach.",
+        "guidance": "Review the backup storage procedure and visit or obtain evidence about the storage site. Check logs or records showing backups are kept in the approved secure location."
+    },
+    "9.4.1.2": {
+        "title": "Offline backup site security reviewed yearly",
+        "description": "The security of each location holding offline backups with cardholder data is checked at least once a year. Conditions at a storage site can change, so periodic checks confirm it is still adequate.",
+        "guidance": "Ask for the most recent annual review of each backup storage location. Confirm the review covered physical security and that any issues found were addressed."
+    },
+    "9.4.2": {
+        "title": "Media classified by data sensitivity",
+        "description": "Every piece of media with cardholder data is labeled or categorized based on how sensitive its contents are. Classification tells people how carefully each item must be handled.",
+        "guidance": "Review the media classification scheme. Sample media logs or physical items to confirm each one has been assigned a classification."
+    },
+    "9.4.3": {
+        "title": "Offsite media shipments tracked and secured",
+        "description": "Any card data media shipped offsite is logged, sent by a secure courier or other trackable method, and its movement is recorded. This ensures nothing gets lost or diverted in transit.",
+        "guidance": "Review procedures for sending media offsite. Examine tracking logs and courier receipts for a sample of shipments to confirm each was logged and sent by a secure, trackable method."
+    },
+    "9.4.4": {
+        "title": "Management approval for media leaving the site",
+        "description": "Management signs off on all media with cardholder data before it leaves the facility, including media sent to individuals. This puts a deliberate checkpoint on data leaving the organization's control.",
+        "guidance": "Review the approval procedure. Pull a sample of offsite media log entries and confirm each one shows approval from an appropriate manager."
+    },
+    "9.4.5": {
+        "title": "Electronic media inventory logs maintained",
+        "description": "The organization keeps inventory logs of all electronic media that holds cardholder data. Knowing exactly what media exists is the only way to notice when something goes missing.",
+        "guidance": "Review the policy requiring an electronic media inventory, then inspect the current inventory logs for completeness."
+    },
+    "9.4.5.1": {
+        "title": "Electronic media inventory checked yearly",
+        "description": "The electronic media inventory is checked against what is actually on hand at least once a year. Regular reconciliation catches lost or stolen media.",
+        "guidance": "Ask for evidence of the most recent annual inventory reconciliation, such as a signed checklist or report. Confirm discrepancies were investigated."
+    },
+    "9.4.6": {
+        "title": "Paper records with card data destroyed securely",
+        "description": "Printed materials with cardholder data are shredded, pulped or burned once no longer needed, so the data cannot be pieced back together, and paper waiting for destruction is kept in locked containers. Discarded paperwork is a common source of card data leaks.",
+        "guidance": "Review the destruction policy and observe how paper is disposed of. Inspect the bins used for paper awaiting destruction to confirm they are locked, and review shredding vendor certificates if used."
+    },
+    "9.4.7": {
+        "title": "Electronic media destroyed or wiped when retired",
+        "description": "Electronic media holding cardholder data is physically destroyed or the data is made unrecoverable once it is no longer needed. Simply deleting files often leaves data that can be recovered.",
+        "guidance": "Review the media disposal policy and observe or obtain records of a disposal event. Look for certificates of destruction or secure wipe reports for a sample of retired media."
+    },
+    "9.5.1": {
+        "title": "Card-reading POI devices protected from tampering",
+        "description": "Devices that read cards by direct contact, such as payment terminals, are protected against tampering and unauthorized replacement. Criminals swap or alter terminals to skim card data at the point of sale.",
+        "guidance": "Review policies covering POI device protection, including inventory, inspection and staff training. Confirm the related sub-requirements are in place and followed."
+    },
+    "9.5.1.1": {
+        "title": "Up-to-date POI device list maintained",
+        "description": "The organization keeps a current list of its POI devices, including make and model, where each is located, and its serial number or other unique identifier. An accurate list makes it possible to spot a missing or substituted device.",
+        "guidance": "Examine the device list for the required details. Compare a sample of devices in the field against the list to confirm locations and serial numbers match."
+    },
+    "9.5.1.2": {
+        "title": "POI devices inspected for tampering or substitution",
+        "description": "Staff regularly inspect POI device surfaces for signs of tampering, such as added skimmers, and check that devices have not been swapped for fakes. Routine inspection catches skimming before many cards are compromised.",
+        "guidance": "Review the inspection procedure and the records of completed inspections. Interview staff who perform inspections and ask them to show what they look for."
+    },
+    "9.5.1.2.1": {
+        "title": "POI inspection frequency set by risk analysis",
+        "description": "How often POI devices are inspected is decided through the organization's targeted risk analysis. This ties inspection effort to the actual risk at each location.",
+        "guidance": "Obtain the targeted risk analysis that sets the inspection interval. Compare inspection records against that interval to confirm they happen as often as the analysis requires."
+    },
+    "9.5.1.3": {
+        "title": "Staff trained to spot POI device tampering",
+        "description": "People working around POI devices are trained to recognize tampering attempts, verify the identity of anyone claiming to be a repair technician, report suspicious behavior, and never install or replace devices without authorization. Frontline staff are the first line of defense against skimming schemes.",
+        "guidance": "Review training content and attendance records for staff in POI locations. Interview a sample of cashiers or store staff about what they would do if a technician arrived unannounced."
+    },
+    "10.1.1": {
+        "title": "Logging and monitoring policies documented and in use",
+        "description": "The organization keeps written policies and procedures for logging and monitoring, keeps them current, and makes sure the people affected know about them. Consistent logging depends on clear, shared expectations.",
+        "guidance": "Review the logging and monitoring policies and their last review date. Ask staff responsible for logs to explain where the procedures are and how they apply them."
+    },
+    "10.1.2": {
+        "title": "Logging and monitoring roles assigned and understood",
+        "description": "Responsibility for each logging and monitoring activity is assigned to specific people, and they understand what they need to do. Clear ownership keeps log review and alert handling from falling through the cracks.",
+        "guidance": "Look for a responsibility matrix or job descriptions covering logging tasks. Interview the assigned staff to confirm they know their duties."
+    },
+    "10.2.1": {
+        "title": "Audit logging enabled on all in-scope systems",
+        "description": "Audit logs are turned on and running for every system component and for cardholder data. Without logs, there is no record to investigate when something suspicious happens.",
+        "guidance": "Interview system administrators and inspect logging settings on a sample of system components. Confirm logs are actively being generated and collected."
+    },
+    "10.2.1.1": {
+        "title": "Logs record user access to cardholder data",
+        "description": "Audit logs record every time an individual user accesses cardholder data. This shows exactly who viewed or used card data and when.",
+        "guidance": "Inspect logging configuration for applications and databases that hold cardholder data. Review sample log entries showing individual user access events."
+    },
+    "10.2.1.2": {
+        "title": "Logs record administrator actions",
+        "description": "Every action performed by anyone with administrative or root privileges, including application and system admin accounts, is logged. Powerful accounts can do the most harm, so their activity must be traceable.",
+        "guidance": "Review logging settings for privileged accounts and sample log data showing administrative commands and changes attributed to individual admins."
+    },
+    "10.2.1.3": {
+        "title": "Logs record access to the audit logs themselves",
+        "description": "Any access to audit log files is itself logged. Attackers often try to view or erase logs to cover their tracks, so this activity needs a record too.",
+        "guidance": "Examine log configurations and sample data to confirm that reads and other access to audit logs generate their own entries."
+    },
+    "10.2.1.4": {
+        "title": "Logs record failed login attempts",
+        "description": "Every unsuccessful attempt to sign in or otherwise gain logical access must be written to the audit log. Repeated failures are often the first visible sign of password guessing or a compromised account.",
+        "guidance": "Review log settings on a sample of in-scope systems and confirm rejected sign-ins appear in the log output. Trigger a deliberate failed login during the assessment and find the matching entry."
+    },
+    "10.2.1.5": {
+        "title": "Logs record account and credential changes",
+        "description": "Logs capture every change to user identities and credentials, such as new accounts, privilege increases, and changes to or removal of accounts with admin access. Tampering with accounts is a common way attackers keep or expand their foothold.",
+        "guidance": "Review identity system and OS logging configurations. Look at sample log entries for account creation, privilege elevation and admin account changes."
+    },
+    "10.2.1.6": {
+        "title": "Logs record starting, stopping or pausing logging",
+        "description": "Logs capture when new audit logs are initialized and when existing logging is started, stopped or paused. Turning off logging is a classic step before malicious activity, so it must leave a trace.",
+        "guidance": "Inspect logging configurations and look for sample entries showing log service starts, stops or pauses."
+    },
+    "10.2.1.7": {
+        "title": "Logs record creation and deletion of system objects",
+        "description": "Logs capture when system-level objects, such as services, scheduled tasks or database objects, are created or deleted. Malware and attackers often add or remove these objects to take control of a system.",
+        "guidance": "Review audit policy settings for object creation and deletion events. Check sample log data for those events on a selection of systems."
+    },
+    "10.2.2": {
+        "title": "Log entries include required detail fields",
+        "description": "Each logged event records who did it, what kind of event it was, when it happened, whether it succeeded, where it came from, and which data, component or resource was affected. Complete entries make it possible to reconstruct what happened during an incident.",
+        "guidance": "Pull sample log entries for each event type covered under 10.2.1 and confirm they show user ID, event type, timestamp, outcome, origin and the affected resource."
+    },
+    "10.3.1": {
+        "title": "Read access to logs limited by job need",
+        "description": "Only people whose jobs require it can view audit log files. Logs can contain sensitive details, and limiting who sees them reduces misuse.",
+        "guidance": "Review permissions on log files and the log management platform. Interview administrators about how log access is granted and compare the access list to job roles."
+    },
+    "10.3.2": {
+        "title": "Audit logs protected from changes",
+        "description": "Audit log files are protected so that no one can alter them. Logs are only useful as evidence if they can be trusted to be accurate.",
+        "guidance": "Examine system settings and permissions on log files and the central log store. Confirm that ordinary users and administrators cannot edit existing entries."
+    },
+    "10.3.3": {
+        "title": "Logs backed up promptly to a central server",
+        "description": "Audit logs, including those from internet-facing systems, are quickly copied to a secure central log server or other media that is hard to alter. Moving logs off the original system keeps them safe if that system is compromised.",
+        "guidance": "Review log forwarding or backup configurations for a sample of systems, including external-facing ones. Confirm logs arrive promptly at a protected central repository."
+    },
+    "10.3.4": {
+        "title": "File integrity monitoring on audit logs",
+        "description": "File integrity monitoring or similar change-detection tools watch audit logs so that any change to existing log data raises an alert. This exposes attempts to edit or erase evidence.",
+        "guidance": "Inspect FIM or change-detection settings to confirm audit log files are covered. Review sample alerts or test results showing that changes to logs trigger notification."
+    },
+    "10.4.1": {
+        "title": "Security and CDE logs reviewed daily",
+        "description": "At least once a day, the organization reviews security event logs, logs from systems that handle card data or could weaken its protection, and logs from critical systems and security tools such as firewalls, IDS/IPS and authentication servers. Daily review shortens the time an attacker can go unnoticed.",
+        "guidance": "Review the log review procedure and evidence of daily reviews, such as SIEM dashboards, tickets or sign-offs. Interview the reviewers about what they look at and how they escalate findings."
+    },
+    "10.4.1.1": {
+        "title": "Automated tools used for log review",
+        "description": "The organization uses automated tools, such as a SIEM, to carry out the daily log reviews. Log volumes are too large for reliable manual review alone.",
+        "guidance": "Examine the log review tooling and interview staff to confirm automated mechanisms analyze logs and generate alerts for review."
+    },
+    "10.4.2": {
+        "title": "Logs from other systems reviewed periodically",
+        "description": "Logs from all system components not covered by the daily review requirement are still reviewed on a regular basis. Lower-risk systems can still show early signs of compromise.",
+        "guidance": "Review the procedure defining periodic reviews for remaining systems. Examine records of completed reviews and interview the people who perform them."
+    },
+    "10.4.2.1": {
+        "title": "Periodic log review frequency set by risk analysis",
+        "description": "How often logs from the remaining system components are reviewed is decided through the organization's targeted risk analysis. This matches review effort to the risk each system presents.",
+        "guidance": "Obtain the targeted risk analysis that sets the review interval and compare it against records of completed reviews."
+    },
+    "10.4.3": {
+        "title": "Log review findings investigated and resolved",
+        "description": "Exceptions and unusual events found during log reviews are investigated and dealt with. Spotting a problem has no value unless someone follows up on it.",
+        "guidance": "Review the procedure for handling log review findings. Sample recent alerts or exceptions and trace them through to investigation notes and resolution."
+    },
+    "10.5.1": {
+        "title": "Audit logs retained for 12 months",
+        "description": "Audit log history is kept for at least a year, and the latest 90 days can be searched without delay. Breaches are often discovered long after they begin, so older logs are needed to understand them.",
+        "guidance": "Review the log retention policy and log platform settings. Confirm that logs from 12 months ago can be retrieved and that the last 90 days can be searched right away."
+    },
+    "10.6.1": {
+        "title": "System clocks synchronized using time sync technology",
+        "description": "System clocks are kept in sync using a time synchronization technology such as NTP. Consistent time across systems is needed to line up events from different logs during an investigation.",
+        "guidance": "Inspect time configuration on a sample of systems to confirm a synchronization service is enabled and pointed at approved time sources."
+    },
+    "10.6.2": {
+        "title": "Time sources configured correctly and consistently",
+        "description": "Systems get time only from designated central time servers, which in turn take it from trusted external sources, and the internal servers stay aligned with each other. Time is recorded in a consistent way, such as UTC. A well-designed time hierarchy keeps timestamps accurate and comparable.",
+        "guidance": "Review time server configurations to confirm which systems receive external time and that other systems only sync with the designated internal servers. Check that time is kept in a consistent format across systems."
+    },
+    "10.6.3": {
+        "title": "Time settings and data protected",
+        "description": "Time synchronization settings and time data are protected so that only authorized staff can change them, and any change to clock settings on critical systems leaves a monitored log entry. Altered clocks can be used to confuse or hide activity in logs.",
+        "guidance": "Review who has permission to change time settings and confirm it is limited. Check that changes to time configuration on critical systems generate log entries that are monitored."
+    },
+    "10.7.1": {
+        "title": "Security control failures detected and alerted promptly",
+        "description": "Service providers must detect, alert on and quickly address failures of their critical security controls, such as firewalls, IDS/IPS, FIM, anti-malware, access controls and audit logging. A silently failed control leaves systems exposed without anyone knowing.",
+        "guidance": "Review documented processes for detecting and responding to control failures. Observe the alerting mechanism and sample alerts to confirm failures of each critical control type would be caught and acted on."
+    },
+    "10.7.2": {
+        "title": "Critical security control failures detected and alerted",
+        "description": "All organizations detect, alert on and quickly address failures of critical security controls, including network security controls, IDS/IPS, change detection, anti-malware, access controls, audit logging, segmentation controls, log review mechanisms and automated security testing tools. Catching a broken control fast limits the window of exposure.",
+        "guidance": "Review the documented process for monitoring critical controls. Observe how alerts are generated and handled, and sample past alerts showing failures were noticed and addressed."
+    },
+    "10.7.3": {
+        "title": "Security control failures responded to promptly",
+        "description": "When a critical security control fails, the organization restores it, finds and documents the cause and how long it lasted, checks for any security issues that arose, decides on further action, and puts measures in place to stop it happening again, with monitoring resumed. A structured response turns each failure into a lesson rather than a repeat.",
+        "guidance": "Review the response procedure and a sample of records for past control failures. Confirm each record shows restoration, root cause, duration, a risk assessment and corrective actions."
+    }
+}

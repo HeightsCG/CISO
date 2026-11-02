@@ -1,0 +1,367 @@
+{
+    "5.1.1": {
+        "title": "Malware protection policies documented and in use",
+        "description": "The organization keeps written security policies and operating procedures for defending against malicious software, keeps them current, and makes sure the people who rely on them know them. Clear, shared rules mean malware defenses are run the same way every time.",
+        "guidance": "Review the malware protection policies and procedures for currency and approval. Interview staff with anti-malware duties to confirm they know where the documents live and follow them day to day."
+    },
+    "5.1.2": {
+        "title": "Malware protection roles assigned and understood",
+        "description": "Each task in the malware protection program has a named owner, and those owners know what they are accountable for. Without clear ownership, updates, alerts and exceptions can fall through the cracks.",
+        "guidance": "Look for a RACI chart, job descriptions or similar records that assign anti-malware duties. Interview the people named to confirm they understand and accept their responsibilities."
+    },
+    "5.2.1": {
+        "title": "Anti-malware installed on in-scope systems",
+        "description": "Every in-scope system runs an anti-malware tool, unless a documented assessment shows that type of system is not exposed to malware. Unprotected machines give attackers an easy foothold in the environment.",
+        "guidance": "Compare the system inventory against the anti-malware console to confirm coverage. For any system without protection, ask for the written assessment that justifies the exclusion."
+    },
+    "5.2.2": {
+        "title": "Anti-malware handles all known malware types",
+        "description": "The chosen anti-malware tooling can find known kinds of malicious software and then remove it, block it, or isolate it. A tool that only alerts without stopping the threat leaves systems exposed.",
+        "guidance": "Review vendor documentation and the product configuration to see which malware categories are covered. Confirm that removal, blocking or quarantine actions are enabled, not just detection."
+    },
+    "5.2.3": {
+        "title": "Low-risk systems reviewed for malware exposure",
+        "description": "Systems excluded from anti-malware because they are considered low risk are listed and reassessed on a regular schedule. Threats change over time, so a platform that was once safe may later need protection.",
+        "guidance": "Request the list of excluded system types and the most recent periodic evaluations. Check that each review considered current threats and reached a documented conclusion."
+    },
+    "5.2.3.1": {
+        "title": "Review frequency for low-risk systems set by risk",
+        "description": "How often the organization reassesses systems excluded from anti-malware is decided through a targeted risk analysis. Setting the interval based on actual risk keeps the review cadence defensible.",
+        "guidance": "Obtain the targeted risk analysis that sets the review interval. Confirm the reviews of excluded systems are happening at the frequency it specifies."
+    },
+    "5.3.1": {
+        "title": "Anti-malware signatures and engines kept current",
+        "description": "Anti-malware software and its detection definitions update automatically so they recognize the latest threats. Outdated definitions miss new malware that attackers are actively using.",
+        "guidance": "Inspect the anti-malware console settings to confirm automatic updates are on. Sample endpoints and servers to verify their definition versions are recent."
+    },
+    "5.3.2": {
+        "title": "Ongoing malware scanning or behavior analysis",
+        "description": "Anti-malware either runs scheduled and real-time scans, or watches system behavior continuously to spot threats. One of these approaches must be active so malware is caught soon after it arrives.",
+        "guidance": "Review the anti-malware policy configuration for scan schedules, on-access scanning or behavioral monitoring. Check logs from sampled systems to confirm scans or monitoring are actually running."
+    },
+    "5.3.2.1": {
+        "title": "Malware scan schedule set by risk analysis",
+        "description": "Where the organization relies on periodic malware scans, it decides how often to run them through a targeted risk analysis. This links scanning frequency to the real level of exposure.",
+        "guidance": "Obtain the targeted risk analysis that sets the scan interval. Compare it with scan configurations and logs to confirm scans run as often as the analysis requires."
+    },
+    "5.3.3": {
+        "title": "Removable media scanned for malware",
+        "description": "USB drives and other removable media are scanned automatically when plugged in, or are monitored continuously while connected. Portable storage is a common way for malware to bypass network defenses.",
+        "guidance": "Review anti-malware settings for removable media scanning or behavioral monitoring. Test on a sample system, or review logs, to confirm the scan triggers when media is inserted."
+    },
+    "5.3.4": {
+        "title": "Anti-malware logs enabled and retained",
+        "description": "Anti-malware tools produce audit logs, and those logs are kept in line with the organization's log retention rules. These records help investigators trace how an infection started and spread.",
+        "guidance": "Inspect anti-malware configuration to confirm logging is on and forwarded to central storage. Check that retained logs go back as far as the retention policy requires."
+    },
+    "5.3.5": {
+        "title": "Users cannot disable anti-malware",
+        "description": "Ordinary users are prevented from turning off or changing anti-malware protection. Any temporary exception requires management approval for a specific case and a limited time.",
+        "guidance": "Review endpoint policy settings that lock the agent against user changes. Try to disable it on a sample machine and review records of any approved temporary exceptions."
+    },
+    "5.4.1": {
+        "title": "Anti-phishing protection in place",
+        "description": "The organization uses technical controls, such as email filtering and link scanning, to detect phishing messages and protect staff from them. Phishing is one of the most common ways attackers steal credentials.",
+        "guidance": "Review email security gateway and anti-phishing tool configurations, for example DMARC, SPF, DKIM and link or attachment scanning. Ask for reports that show phishing messages being caught."
+    },
+    "6.1.1": {
+        "title": "Secure development policies documented and in use",
+        "description": "Written policies and procedures cover how systems and software are built and maintained securely. They are kept up to date and known by the teams who need them, so secure practices are applied consistently.",
+        "guidance": "Review the secure development and maintenance policies for currency and approval. Interview developers and system administrators to confirm they know and follow them."
+    },
+    "6.1.2": {
+        "title": "Secure development roles assigned and understood",
+        "description": "Responsibilities for secure system and software work are assigned to specific people, who know what they own. Clear accountability keeps security tasks from being skipped during busy delivery cycles.",
+        "guidance": "Look for documented assignments such as a RACI matrix or role descriptions. Interview the assigned staff to confirm they understand their duties."
+    },
+    "6.2.1": {
+        "title": "Custom software built using secure practices",
+        "description": "Software the organization writes itself, or has written for it, follows recognized secure coding practices and builds in security across every stage of development. Security designed in from the start costs less than fixing flaws later.",
+        "guidance": "Review the software development lifecycle documentation and the industry standards it references. Check a sample of projects for evidence that security activities happened at each phase."
+    },
+    "6.2.2": {
+        "title": "Annual secure coding training for developers",
+        "description": "Staff who build custom software receive secure coding training at least once a year, covering the languages and tools they use and how to spot common vulnerabilities. Trained developers write fewer exploitable flaws.",
+        "guidance": "Obtain training records for the development team and confirm each person completed training in the last twelve months. Review course content to see it fits the team's technology stack."
+    },
+    "6.2.3": {
+        "title": "Code reviewed before release to production",
+        "description": "Custom code is checked for security problems before it goes live, either by people or by automated tools. Reviews confirm secure practices were followed and catch flaws before customers or attackers find them.",
+        "guidance": "Review the code review procedure and sample recent releases for evidence of completed reviews, such as pull request approvals or scan reports. Confirm issues found were fixed before deployment."
+    },
+    "6.2.3.1": {
+        "title": "Manual code reviews are independent and approved",
+        "description": "When code is reviewed by hand, the reviewer is someone other than the author and knows secure coding. Management approves the results before release, which keeps reviews objective.",
+        "guidance": "Sample manual code reviews and check that the reviewer was not the author and has relevant expertise. Look for documented management sign-off before each change was released."
+    },
+    "6.2.4": {
+        "title": "Development defends against common attack types",
+        "description": "Developers use proven coding techniques to stop well-known attacks, including injection, unsafe data handling, broken access control and cross-site scripting. These flaws are among the most frequently exploited in payment applications.",
+        "guidance": "Review coding standards for the techniques used against each common attack category. Interview developers and look at code samples or test results showing those techniques in use."
+    },
+    "6.3.1": {
+        "title": "Vulnerabilities tracked and risk-ranked",
+        "description": "The organization watches trusted sources for newly discovered security vulnerabilities, rates each one by risk, and applies this to both commercial and custom software. Knowing which flaws matter most drives timely fixes.",
+        "guidance": "Review the vulnerability management procedure and the sources it monitors. Sample recent vulnerabilities to confirm they were assessed and assigned a risk rating."
+    },
+    "6.3.2": {
+        "title": "Inventory of custom software and components",
+        "description": "The organization keeps a list of its custom software and the third-party libraries and components built into it. A complete inventory makes it possible to react quickly when a component is found to be vulnerable.",
+        "guidance": "Obtain the software inventory or software bill of materials. Compare it against a sample of applications to confirm third-party components are listed accurately."
+    },
+    "6.3.3": {
+        "title": "Security patches applied on time",
+        "description": "Security patches are installed to fix known vulnerabilities, with critical patches applied within one month of release and others on a schedule set by the organization. Unpatched systems are a leading cause of breaches.",
+        "guidance": "Compare patch release dates with installation dates on a sample of systems. Review the patching policy and any records of exceptions or delays."
+    },
+    "6.4.1": {
+        "title": "Public web apps protected from attack",
+        "description": "Internet-facing web applications are protected either through regular vulnerability assessments, at least yearly and after changes, or through an automated attack-blocking solution. These applications face constant attack from the open internet.",
+        "guidance": "Review results from application security assessments, with dates, and confirm findings were fixed. Where an automated solution is used, inspect its configuration and confirm it is active."
+    },
+    "6.4.2": {
+        "title": "Automated protection for public web apps",
+        "description": "Internet-facing web applications sit behind an automated tool, such as a web application firewall, that continuously detects and blocks web attacks. Alerts from the tool are sent to staff who can respond.",
+        "guidance": "Inspect the web application firewall or similar tool configuration to confirm it is in blocking mode, kept current and generating audit logs. Verify alerts are investigated."
+    },
+    "6.4.3": {
+        "title": "Payment page scripts authorized and controlled",
+        "description": "Every script that runs in a customer's browser on a payment page is approved, checked for integrity, and listed with a reason it is needed. Rogue scripts are a common way attackers skim card data from checkout pages.",
+        "guidance": "Obtain the inventory of payment page scripts with business justifications. Review the integrity checks in use, such as content security policy or subresource integrity, and confirm approvals for each script."
+    },
+    "6.5.1": {
+        "title": "Production changes follow change control",
+        "description": "Changes to live systems go through a defined change process that records the reason, security impact, approval, testing and a back-out plan. Uncontrolled changes can open security gaps or break protections.",
+        "guidance": "Review the change management procedure. Sample recent production changes and confirm each has a documented reason, impact assessment, approval, test results and rollback plan."
+    },
+    "6.5.2": {
+        "title": "PCI controls confirmed after major changes",
+        "description": "After a significant change, the organization checks that all relevant PCI DSS controls are in place on new or modified systems and that documentation is updated. Big changes often introduce systems that miss required protections.",
+        "guidance": "Ask for a list of recent significant changes and the post-change verification records. Confirm that inventories, diagrams and other documents were updated to reflect each change."
+    },
+    "6.5.3": {
+        "title": "Test environments kept separate from production",
+        "description": "Development and test environments are kept apart from production and access controls enforce that separation. Less secure test systems should not offer a path into live systems.",
+        "guidance": "Review network diagrams and segmentation or access control settings between environments. Interview staff and observe how separation between pre-production and production is enforced."
+    },
+    "6.5.4": {
+        "title": "Separation of duties between test and production",
+        "description": "Duties for production and pre-production work are split so that only reviewed and approved changes reach live systems. This stops any one person from pushing unauthorized code into production.",
+        "guidance": "Review role assignments and deployment permissions. Interview staff and check pipeline settings to confirm developers cannot deploy unreviewed changes to production on their own."
+    },
+    "6.5.5": {
+        "title": "No live PANs in test environments",
+        "description": "Real primary account numbers are not used for development or testing unless the environment is fully in scope and protected like production. Test systems usually have weaker controls, so live card data there is easy to steal.",
+        "guidance": "Interview developers and testers about test data sources. Sample test databases or files to confirm they contain dummy or tokenized numbers rather than live PANs."
+    },
+    "6.5.6": {
+        "title": "Test data and accounts removed before go-live",
+        "description": "Test data and test accounts are deleted from systems before they move into production use. Leftover test accounts and data can give attackers an easy way in.",
+        "guidance": "Review the release checklist or procedure for removal of test artifacts. Sample production systems and applications to confirm no test accounts or test data remain."
+    },
+    "7.1.1": {
+        "title": "Access control policies documented and in use",
+        "description": "Written policies and procedures govern how access to systems and cardholder data is restricted. They are kept current and known by the people who apply them, so access decisions stay consistent.",
+        "guidance": "Review the access control policies and procedures for currency and approval. Interview staff who grant or manage access to confirm they know and follow them."
+    },
+    "7.1.2": {
+        "title": "Access control roles assigned and understood",
+        "description": "Responsibilities for restricting and managing access have named owners who understand their role. Clear ownership keeps access reviews and approvals from being overlooked.",
+        "guidance": "Look for documented assignments of access management duties. Interview the people assigned to confirm they understand what they are responsible for."
+    },
+    "7.2.1": {
+        "title": "Access control model defined",
+        "description": "The organization has a defined model for granting access that reflects business and access needs, covers all system components and data, and gives each job function only the minimum privileges required. A clear model is the foundation for least privilege.",
+        "guidance": "Review the documented access control model, such as role definitions and the privilege matrix. Confirm it covers all in-scope components and ties privileges to job functions."
+    },
+    "7.2.2": {
+        "title": "Access granted by job role and least privilege",
+        "description": "Users, including privileged users, receive access based on their job classification and only the least privileges they need to do their work. Excess access increases the damage from a compromised or careless account.",
+        "guidance": "Sample user accounts and compare their access with their job roles and the access control model. Interview managers about how access needs are decided."
+    },
+    "7.2.3": {
+        "title": "Access privileges approved by authorized staff",
+        "description": "Any privileges granted to users require approval from people authorized to give it. Approval ensures access is deliberate and justified rather than handed out informally.",
+        "guidance": "Sample user access grants and check for documented approval from an authorized person. Compare the approver list against policy."
+    },
+    "7.2.4": {
+        "title": "User access reviewed every six months",
+        "description": "All user accounts and their privileges, including third-party and vendor accounts, are reviewed at least every six months to confirm they are still needed and correct. Problems found are fixed and management signs off on the review.",
+        "guidance": "Obtain the last two access review records. Confirm they covered all user and third-party accounts, that issues were remediated, and that management acknowledged the results."
+    },
+    "7.2.5": {
+        "title": "System and application accounts use least privilege",
+        "description": "Accounts used by systems and applications are given only the privileges they need to function, and only the specific systems or processes that depend on them may use them. Overpowered service accounts are a prime target for attackers.",
+        "guidance": "Review a sample of system and application accounts and their assigned privileges. Interview administrators about how required privileges were determined and limited."
+    },
+    "7.2.5.1": {
+        "title": "System and application account access reviewed",
+        "description": "Access held by system and application accounts is reviewed on a schedule set by targeted risk analysis. Issues are fixed and management confirms the access is still appropriate.",
+        "guidance": "Obtain the targeted risk analysis that sets the review interval and the most recent review records. Confirm reviews occurred on schedule, issues were addressed and management signed off."
+    },
+    "7.2.6": {
+        "title": "Direct queries of cardholder data restricted",
+        "description": "Users can reach stored cardholder data only through applications or controlled interfaces, and only administrators can query the underlying data stores directly. This limits who can pull bulk card data.",
+        "guidance": "Review database and data store permissions to identify who can run direct queries. Confirm ordinary users access stored cardholder data only through applications with defined roles."
+    },
+    "7.3.1": {
+        "title": "Access control systems enforce need to know",
+        "description": "Technical access control systems are in place on all system components to limit access based on each user's need to know. Policy alone is not enough; systems must enforce it.",
+        "guidance": "Review access control system settings, such as directory services and application role settings. Confirm all in-scope components are covered and that restrictions match need to know."
+    },
+    "7.3.2": {
+        "title": "Access systems enforce role-based privileges",
+        "description": "Access control systems are configured to apply the privileges defined for each person, application or system according to their job function. This keeps actual access aligned with what was approved.",
+        "guidance": "Inspect access control system configuration and compare assigned permissions for sampled accounts against role definitions. Confirm the system enforces those permissions."
+    },
+    "7.3.3": {
+        "title": "Access control defaults to deny",
+        "description": "Access control systems block everything by default and only allow what has been explicitly granted. This prevents new users or resources from gaining unintended access.",
+        "guidance": "Review access control system settings to confirm the default setting is deny. Test or observe that an account without assigned privileges cannot reach protected resources."
+    },
+    "8.1.1": {
+        "title": "Identity and authentication policies in use",
+        "description": "Written policies and procedures govern how users are identified and how they prove who they are. They are kept current and known by the people who rely on them, so authentication is handled the same way everywhere.",
+        "guidance": "Review the identification and authentication policies and procedures for currency and approval. Interview staff responsible for identity management to confirm they know and follow them."
+    },
+    "8.1.2": {
+        "title": "Identity management roles assigned and understood",
+        "description": "Responsibilities for user identification and authentication have named owners who know their duties. This keeps account management and authentication controls from being neglected.",
+        "guidance": "Look for documented assignment of identity and authentication responsibilities. Interview the people named to confirm they understand their duties."
+    },
+    "8.2.1": {
+        "title": "Unique ID for every user",
+        "description": "Each user gets their own individual ID before they can use system components or reach cardholder data. Unique IDs make every action traceable to a single person.",
+        "guidance": "Review user account lists from sampled systems for duplicate or generic IDs. Interview administrators about how IDs are issued and check audit logs to confirm actions are tied to individuals."
+    },
+    "8.2.2": {
+        "title": "Shared and generic accounts tightly limited",
+        "description": "Shared, group or generic accounts are used only when truly necessary, for a limited time and with documented justification and management approval. Even then, each user's identity must be confirmed before access so actions remain traceable.",
+        "guidance": "Identify any shared or generic accounts on sampled systems and request their business justification and approval. Check how individual users are verified before using them."
+    },
+    "8.2.3": {
+        "title": "Unique credentials for each customer environment",
+        "description": "This applies to service providers: staff who remotely access customer premises use different authentication credentials for each customer. A single compromised credential should not unlock many customers at once.",
+        "guidance": "Interview service provider staff and review remote access procedures. Sample customer environments to confirm credentials are distinct for each customer."
+    },
+    "8.2.4": {
+        "title": "User ID changes properly authorized",
+        "description": "Creating, removing and changing user IDs, credentials and related identity records is authorized and carried out only with appropriate approval. This prevents unauthorized accounts and privilege creep.",
+        "guidance": "Sample recent account creations, changes and deletions and match each to an approved request. Confirm the changes made match what was approved."
+    },
+    "8.2.5": {
+        "title": "Access removed promptly at termination",
+        "description": "When a user leaves the organization, their access is revoked right away. Former staff with live accounts are a significant insider and account takeover risk.",
+        "guidance": "Obtain a list of recent leavers from HR and compare it with active accounts across sampled systems. Confirm access was removed promptly and physical tokens were collected."
+    },
+    "8.2.6": {
+        "title": "Inactive accounts disabled within 90 days",
+        "description": "User accounts that have not been used for 90 days are removed or disabled. Dormant accounts often go unnoticed and are attractive to attackers.",
+        "guidance": "Review account lists with last login dates on sampled systems. Confirm no account has sat unused for more than 90 days while still enabled."
+    },
+    "8.2.7": {
+        "title": "Third-party remote access controlled",
+        "description": "Accounts that vendors and other third parties use to access, support or maintain systems remotely are enabled only when needed and switched off otherwise. Their use is monitored for unexpected activity.",
+        "guidance": "Review vendor remote access procedures and account status on sampled systems. Check logs showing when vendor accounts were enabled, used and disabled, and how activity is monitored."
+    },
+    "8.2.8": {
+        "title": "Idle sessions lock after 15 minutes",
+        "description": "Sessions left idle for more than 15 minutes require the user to authenticate again before continuing. This stops someone from using an unattended, logged-in workstation.",
+        "guidance": "Inspect system and application settings for session timeout or screen lock values. Test on a sample system that a session locks after 15 minutes of inactivity."
+    },
+    "8.3.1": {
+        "title": "Users authenticate with at least one factor",
+        "description": "Every user and administrator must prove who they are with something they know, have or are, such as a password, token or biometric. This confirms that the person using an ID is its rightful owner.",
+        "guidance": "Review authentication settings on sampled systems and observe a user signing in. Confirm each account requires at least one valid authentication factor."
+    },
+    "8.3.2": {
+        "title": "Credentials protected with strong cryptography",
+        "description": "Passwords and other authentication factors are made unreadable with strong cryptography when sent over networks and when stored. Stolen readable credentials give attackers direct access.",
+        "guidance": "Review vendor documentation and system configuration for how credentials are hashed and encrypted. Inspect credential stores and capture sample traffic to confirm nothing is in clear text."
+    },
+    "8.3.3": {
+        "title": "Identity verified before credential changes",
+        "description": "Before a password is reset or an authentication factor is changed, the user's identity is confirmed. Social engineering of help desks is a common way attackers take over accounts.",
+        "guidance": "Review help desk procedures for password resets and factor changes. Observe or interview staff to confirm they verify identity before acting on a request."
+    },
+    "8.3.4": {
+        "title": "Account lockout after failed login attempts",
+        "description": "An account locks after no more than 10 failed login attempts and stays locked for at least 30 minutes or until an administrator confirms the user's identity. This slows down password guessing attacks.",
+        "guidance": "Inspect lockout settings on sampled systems for threshold and duration. Test, where possible, that repeated wrong passwords trigger a lockout."
+    },
+    "8.3.5": {
+        "title": "Initial and reset passwords unique and temporary",
+        "description": "Passwords set for a new account or after a reset are unique to each user and must be changed at first login. Predictable or reused starter passwords are easy for attackers to guess.",
+        "guidance": "Review password setting procedures and system settings that force a change at first use. Observe or test a reset to confirm the temporary password is unique and must be changed."
+    },
+    "8.3.6": {
+        "title": "Minimum password length and complexity",
+        "description": "Passwords used as an authentication factor are at least 12 characters long, or 8 if a system cannot support 12, and include both letters and numbers. Longer, mixed passwords are much harder to crack.",
+        "guidance": "Inspect password policy settings on sampled systems and applications. Confirm length and character requirements meet the minimum, and document any systems limited to 8 characters."
+    },
+    "8.3.7": {
+        "title": "Recent passwords cannot be reused",
+        "description": "Users may not set a new password that matches any of their previous four. Blocking reuse stops users from cycling back to an old, possibly compromised password.",
+        "guidance": "Inspect password history settings on sampled systems. Test, where possible, that a recently used password is rejected."
+    },
+    "8.3.8": {
+        "title": "Authentication guidance shared with users",
+        "description": "Users receive clear guidance on choosing strong authentication factors, keeping them safe, not reusing old passwords, and changing them if they suspect compromise. Informed users protect their credentials better.",
+        "guidance": "Review the authentication policies and guidance materials given to users. Interview a sample of users to confirm they received and understand the guidance."
+    },
+    "8.3.9": {
+        "title": "Password-only access changed or monitored",
+        "description": "Where a password is the only factor for user access, it must be changed at least every 90 days, or the system must assess account security dynamically and grant access based on that assessment. This limits how long a stolen password stays useful.",
+        "guidance": "Identify systems where passwords are the only factor. Inspect expiry settings or the dynamic risk analysis configuration to confirm one of the two approaches is enforced."
+    },
+    "8.3.10": {
+        "title": "Password guidance for service provider customers",
+        "description": "This applies to service providers: where customers sign in with only a password, the provider gives customers guidance on changing passwords regularly and on what to do if a password may be compromised.",
+        "guidance": "Review customer-facing documentation, such as help pages or onboarding material. Confirm it explains periodic password changes and steps to take after a suspected compromise."
+    },
+    "8.3.10.1": {
+        "title": "Customer password-only access changed or monitored",
+        "description": "This applies to service providers: where customer accounts use a password as the only factor, those passwords must be changed at least every 90 days, or account security must be assessed dynamically to decide access. This limits exposure from stolen customer credentials.",
+        "guidance": "Inspect system settings for customer password expiry or dynamic risk analysis. Confirm one approach is enforced for all customer accounts that rely on passwords alone."
+    },
+    "8.3.11": {
+        "title": "Physical and logical tokens assigned to individuals",
+        "description": "Authentication factors such as hardware tokens, smart cards or certificates are issued to one user and never shared. Controls ensure only that user can use the factor.",
+        "guidance": "Review the token issuance procedures and assignment records. Interview users and observe how tokens are used to confirm they are not shared."
+    },
+    "8.4.1": {
+        "title": "MFA for administrative access into the CDE",
+        "description": "Administrators who access the CDE over a network, rather than at the console, must use MFA. Admin accounts are high-value targets, and a second factor stops attacks that rely on a stolen password.",
+        "guidance": "Inspect network and system authentication settings for non-console admin access. Observe an administrator connecting to confirm MFA is required."
+    },
+    "8.4.2": {
+        "title": "MFA for all access into the CDE",
+        "description": "Every user who accesses the CDE must use MFA, with narrow exceptions such as application accounts and phishing-resistant authentication. This blocks attackers who have obtained only one factor.",
+        "guidance": "Review authentication configuration for all paths into the CDE. Observe users connecting and confirm MFA is required for each type of access."
+    },
+    "8.4.3": {
+        "title": "MFA for remote access to the network",
+        "description": "All remote network access from outside the organization that could reach the CDE requires MFA, for staff, administrators and third parties alike. Remote access is a favorite entry point for attackers.",
+        "guidance": "Review VPN, remote desktop and other remote access configurations. Observe staff and third parties connecting remotely to confirm MFA is enforced."
+    },
+    "8.5.1": {
+        "title": "MFA systems configured to resist misuse",
+        "description": "MFA systems resist replay attacks, cannot be bypassed without documented management approval, use at least two different kinds of factors, and grant access only after every factor succeeds. Weak MFA setups give a false sense of security.",
+        "guidance": "Review vendor documentation and MFA system configuration. Interview administrators about any bypass options and observe logins to confirm all factors are checked before access."
+    },
+    "8.6.1": {
+        "title": "Interactive use of system accounts controlled",
+        "description": "If a system or application account can be used to log in interactively, that use is limited to exceptional cases, approved by management for a limited time, tied to a confirmed individual, and traceable to that person.",
+        "guidance": "Identify system and application accounts that allow interactive login. Review approvals, time limits and logs that link each use to a specific individual."
+    },
+    "8.6.2": {
+        "title": "No hardcoded passwords for system accounts",
+        "description": "Passwords and passphrases for system and application accounts that can log in interactively are not written into scripts, configuration files or source code. Hardcoded secrets are easily discovered and rarely changed.",
+        "guidance": "Interview developers and review a sample of scripts, configuration files and code repositories for embedded credentials. Look for use of a secrets vault or similar tool."
+    },
+    "8.6.3": {
+        "title": "System account passwords protected and rotated",
+        "description": "Passwords for system and application accounts are protected from misuse, changed on a schedule set by targeted risk analysis, and changed whenever compromise is suspected. They are also complex enough for how often they are changed.",
+        "guidance": "Obtain the targeted risk analysis that sets rotation frequency and complexity. Review password vault or rotation records to confirm passwords are changed on schedule."
+    }
+}
