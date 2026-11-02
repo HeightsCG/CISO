@@ -50,7 +50,14 @@ $(function () {
         "delete_subscription",
         "portal_link_evidence",
         "portal_unlink_evidence",
-        "portal_delete_evidence"
+        "portal_delete_evidence",
+        "report_create",
+        "report_save_details",
+        "report_save_row",
+        "report_delete_row",
+        "report_save_csf",
+        "report_issue",
+        "report_finalise"
     ];
 
     var conversation_id = parseInt(window.localStorage.getItem("assist_conversation") || "0", 10);
@@ -134,6 +141,13 @@ $(function () {
     if ($("#shell").hasClass("has-assist")) {
         load();
     }
+
+    window.assist_ask = function (text) {
+        if (!$("#shell").hasClass("has-assist")) {
+            set_open(true);
+        }
+        send(text);
+    };
 
     function set_open(open) {
 
@@ -408,9 +422,16 @@ $(function () {
 
     function finish_batch(card, outcomes) {
 
+        var changed = false;
+
         Object.keys(outcomes).forEach(function (key) {
             outcomes[key].outcome = outcomes[key].outcome.join(" ");
+            changed = changed || outcomes[key].succeeded;
         });
+
+        if (changed) {
+            $(document).trigger("assist:changed");
+        }
 
         resolve(card, {
             conversation_id: conversation_id,

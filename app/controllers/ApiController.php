@@ -26,6 +26,7 @@ class ApiController extends Controller {
     public $dashboard_model;
     public $invoices_model;
     public $subscriptions_model;
+    public $reports_model;
 
     public function __construct(){
         parent::__construct();
@@ -40,6 +41,7 @@ class ApiController extends Controller {
         $this->evidence_model = new EvidenceModel();
         $this->dashboard_model = new DashboardModel();
         $this->invoices_model = new InvoicesModel();
+        $this->reports_model = new ReportsModel();
     }
 
     public function loginAction(){
@@ -5693,6 +5695,506 @@ class ApiController extends Controller {
         }
 
         return $rows[0];
+    }
+
+    /* --------------------------------------------------------------- reports */
+
+    public function report_loadAction(){
+
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+
+        if (!$this->owns_project($project_id)) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'That project could not be found'
+            ));
+            exit;
+        }
+
+        $rows = $this->reports_model->get_report_by_project($project_id, Session::get('company_id'));
+
+        $response = array(
+            'success' => true,
+            'message' => 'ok',
+            'report' => count($rows) === 1 ? (new ReportBuilder())->assemble($rows[0]) : null
+        );
+
+        echo json_encode($response);
+        exit;
+    }
+
+    public function report_createAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+
+        if (!$this->owns_project($project_id)) {
+            $response['message'] = 'That project could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $rows = $this->reports_model->get_report_by_project($project_id, Session::get('company_id'));
+
+        $response['success'] = true;
+        $response['message'] = count($rows) === 1 ? 'This project already has a report' : 'Report started';
+        $response['report_id'] = count($rows) === 1 ? (int) $rows[0]['id'] : (new ReportBuilder())->create($project_id);
+        echo json_encode($response);
+        exit;
+    }
+
+    public function report_save_detailsAction(){
+
+        $report = $this->owned_report();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $builder = new ReportBuilder();
+        $checked = $builder->clean(ReportBuilder::DETAIL_FIELDS, $this->merged_details($report), (int) $report['id']);
+
+        if (isset($checked['error'])) {
+            $response['message'] = $checked['error'];
+            $response['field'] = $checked['field'];
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->reports_model->update_report_details((int) $report['id'], ...array_merge(array_values($checked['values']), array(
+            Session::get('user_id')
+        )));
+
+        $response['success'] = true;
+        $response['message'] = 'Report saved';
+        echo json_encode($response);
+        exit;
+    }
+
+    public function report_save_rowAction(){
+
+        $report = $this->owned_report();
+        $section = (string) ($this->post['section'] ?? '');
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        if (!isset(ReportBuilder::SECTIONS[$section])) {
+            $response['message'] = 'That part of the report could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $row_id = (int) ($this->post['id'] ?? 0);
+        $posted = $this->post;
+
+        /* A risk can name its finding by reference, so the assistant can link a
+           risk to a finding created earlier in the same batch. */
+        if ($section === 'risk' && empty($posted['finding_id']) && !empty($posted['link_finding_ref'])) {
+            foreach ($this->reports_model->load_findings((int) $report['id']) as $finding) {
+                if (strcasecmp($finding['finding_ref'], $this->input('link_finding_ref')) === 0) {
+                    $posted['finding_id'] = (string) $finding['id'];
+                }
+            }
+        }
+
+        if ($row_id > 0) {
+            $current = $this->reports_model->{'get_'.$section}($row_id, (int) $report['id']);
+            if (count($current) === 1) {
+                foreach (array_keys(ReportBuilder::SECTIONS[$section]) as $field) {
+                    if (!array_key_exists($field, $posted)) {
+                        $posted[$field] = (string) ($current[0][$field] ?? '');
+                    }
+                }
+            }
+        }
+
+        $result = (new ReportBuilder())->save_row($section, (int) $report['id'], $row_id, $posted);
+
+        if (isset($result['error'])) {
+            $response['message'] = $result['error'];
+            $response['field'] = $result['field'] ?? '';
+            echo json_encode($response);
+            exit;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Saved';
+        $response['id'] = $result['id'];
+        echo json_encode($response);
+        exit;
+    }
+
+    public function report_delete_rowAction(){
+
+        $report = $this->owned_report();
+        $section = (string) ($this->post['section'] ?? '');
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        if (!isset(ReportBuilder::SECTIONS[$section])) {
+            $response['message'] = 'That part of the report could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($this->reports_model->delete_section_row($section, (int) ($this->post['id'] ?? 0), (int) $report['id']) !== 1) {
+            $response['message'] = 'That entry could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Removed';
+        echo json_encode($response);
+        exit;
+    }
+
+    public function report_save_csfAction(){
+
+        $report = $this->owned_report();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $function = (string) ($this->post['csf_function'] ?? '');
+        $current = (int) ($this->post['current_tier'] ?? 0);
+        $target = (int) ($this->post['target_tier'] ?? 0);
+
+        if (!in_array($function, ReportBuilder::CSF_FUNCTIONS, true)) {
+            $response['message'] = 'Choose a CSF function';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($current < 0 || $current > 4 || $target < 0 || $target > 4) {
+            $response['message'] = 'Tiers run from 1 to 4';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->reports_model->save_csf(
+            (int) $report['id'],
+            $function,
+            $current === 0 ? null : $current,
+            $target === 0 ? null : $target,
+            mb_substr($this->input('main_gaps'), 0, 1000)
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'Saved';
+        echo json_encode($response);
+        exit;
+    }
+
+    /**
+     * Send the draft findings to the client for their responses. The version in
+     * force is recorded in document control; the client's portal users can then
+     * see and answer the findings.
+     */
+    public function report_issueAction(){
+
+        $report = $this->owned_report();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        if ($report['report_stage'] !== 'Draft') {
+            $response['message'] = 'Only a draft can be issued for response';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (count($this->reports_model->load_findings((int) $report['id'])) === 0) {
+            $response['message'] = 'Add at least one finding before issuing the report';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->record_version($report, $report['report_version'], 'Draft findings issued to management for response');
+        $this->reports_model->set_stage((int) $report['id'], 'Issued for response', $report['report_version'], Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'Issued to the client for response';
+        echo json_encode($response);
+        exit;
+    }
+
+    public function report_finaliseAction(){
+
+        $report = $this->owned_report();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        if ($report['report_stage'] === 'Final') {
+            $response['message'] = 'This report is already final';
+            echo json_encode($response);
+            exit;
+        }
+
+        $parts = explode('.', $report['report_version']);
+        $version = (int) $parts[0] < 1 ? '1.0' : ((int) $parts[0]).'.'.((int) ($parts[1] ?? 0) + 1);
+
+        $this->record_version($report, $version, 'Final report after quality review');
+        $this->reports_model->set_stage((int) $report['id'], 'Final', $version, Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'Report finalised as version '.$version;
+        echo json_encode($response);
+        exit;
+    }
+
+    /** Reopen for changes. The next version number is reserved for the revision. */
+    public function report_reopenAction(){
+
+        $report = $this->owned_report();
+
+        $parts = explode('.', $report['report_version']);
+        $version = ((int) $parts[0]).'.'.((int) ($parts[1] ?? 0) + 1);
+
+        $this->reports_model->set_stage((int) $report['id'], 'Draft', $version, Session::get('user_id'));
+
+        $response = array(
+            'success' => true,
+            'message' => 'Back in draft as version '.$version
+        );
+
+        echo json_encode($response);
+        exit;
+    }
+
+    public function report_downloadAction(){
+
+        $report = $this->owned_report();
+        $this->send_report_file($report, (string) ($this->post['format'] ?? 'pdf'));
+    }
+
+    public function report_save_to_vaultAction(){
+
+        $report = $this->owned_report();
+        $format = ($this->post['format'] ?? 'pdf') === 'docx' ? 'docx' : 'pdf';
+        $assembled = (new ReportBuilder())->assemble($report);
+        $file = ReportRenderer::render($assembled, $format);
+
+        $tmp_name = tempnam(sys_get_temp_dir(), 'rpt');
+        file_put_contents($tmp_name, $file['bytes']);
+
+        register_shutdown_function(function () use ($tmp_name) {
+            @unlink($tmp_name);
+        });
+
+        $this->store_evidence_file(
+            (int) $report['project_id'],
+            0,
+            ReportBuilder::plain($report['report_title']).' v'.$report['report_version'],
+            'Generated from the report builder on '.date('j F Y'),
+            $tmp_name,
+            $file['file_name'],
+            strlen($file['bytes'])
+        );
+    }
+
+    public function portal_report_loadAction(){
+
+        $project_id = (int) ($this->post['project_id'] ?? 0);
+        $report = $this->portal_report($project_id);
+
+        if ($report === null) {
+            echo json_encode(array(
+                'success' => true,
+                'message' => 'ok',
+                'report' => null
+            ));
+            exit;
+        }
+
+        $assembled = (new ReportBuilder())->assemble($report);
+
+        $response = array(
+            'success' => true,
+            'message' => 'ok',
+            'report' => array(
+                'report_title' => ReportBuilder::plain($report['report_title']),
+                'report_stage' => $report['report_stage'],
+                'report_version' => $report['report_version'],
+                'can_respond' => $report['report_stage'] === 'Issued for response',
+                'domains' => array_map(function ($domain) {
+                    return array(
+                        'id' => (int) $domain['id'],
+                        'domain_name' => $domain['domain_name']
+                    );
+                }, $assembled['domains']),
+                'findings' => $assembled['findings_ranked']
+            )
+        );
+
+        echo json_encode($response);
+        exit;
+    }
+
+    public function portal_report_respondAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $finding_id = (int) ($this->post['finding_id'] ?? 0);
+        $report = $this->portal_report((int) ($this->post['project_id'] ?? 0));
+
+        if ($report === null || $report['report_stage'] !== 'Issued for response') {
+            $response['message'] = 'This report is not open for responses';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (count($this->reports_model->get_finding($finding_id, (int) $report['id'])) !== 1) {
+            $response['message'] = 'That finding could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $status = $this->input('response_status');
+        $target_date = $this->input('target_date');
+
+        if (!in_array($status, array_slice(ReportBuilder::RESPONSES, 1), true)) {
+            $response['message'] = 'Choose Agreed, Partially agreed or Not agreed';
+            $response['field'] = 'response_status';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($target_date !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $target_date)) {
+            $response['message'] = 'Enter a valid target date';
+            $response['field'] = 'target_date';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->reports_model->respond_to_finding(
+            $finding_id,
+            (int) $report['id'],
+            $status,
+            mb_substr($this->input('management_response'), 0, 20000),
+            mb_substr($this->input('response_owner'), 0, 255),
+            $target_date === '' ? null : $target_date,
+            Session::get('user_id')
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'Response saved';
+        echo json_encode($response);
+        exit;
+    }
+
+    public function portal_report_downloadAction(){
+
+        $report = $this->portal_report((int) ($this->post['project_id'] ?? 0));
+
+        if ($report === null || $report['report_stage'] !== 'Final') {
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'The final report is not available yet'
+            ));
+            exit;
+        }
+
+        $this->send_report_file($report, 'pdf');
+    }
+
+    /** The calling client's report for one of their projects, once it has been issued. */
+    private function portal_report($project_id)
+    {
+        if (!$this->client_owns_project($project_id)) {
+            return null;
+        }
+
+        $rows = $this->reports_model->get_report_by_project($project_id, Session::get('company_id'));
+
+        if (count($rows) !== 1 || $rows[0]['report_stage'] === 'Draft') {
+            return null;
+        }
+
+        return $rows[0];
+    }
+
+    private function owned_report(): array
+    {
+        $rows = $this->reports_model->get_report((int) ($this->post['report_id'] ?? 0), Session::get('company_id'));
+
+        if (Session::get('user_type') !== 'staff' || count($rows) !== 1) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'That report could not be found'
+            ));
+            exit;
+        }
+
+        return $rows[0];
+    }
+
+    /** Detail fields not posted keep their stored values, so a partial save never blanks the rest. */
+    private function merged_details(array $report): array
+    {
+        $posted = array();
+
+        foreach (array_keys(ReportBuilder::DETAIL_FIELDS) as $field) {
+            $posted[$field] = array_key_exists($field, $this->post) ? $this->post[$field] : (string) ($report[$field] ?? '');
+        }
+
+        return $posted;
+    }
+
+    private function record_version(array $report, string $label, string $note): void
+    {
+        $this->reports_model->add_version(
+            (int) $report['id'],
+            $label,
+            date('Y-m-d'),
+            $note,
+            trim(Session::get('first_name').' '.Session::get('last_name')),
+            $this->reports_model->next_sort_order('version', (int) $report['id'])
+        );
+    }
+
+    private function send_report_file(array $report, string $format): void
+    {
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $file = ReportRenderer::render((new ReportBuilder())->assemble($report), $format === 'docx' ? 'docx' : 'pdf');
+        $key = 'reports/'.Session::get('company_id').'/'.(int) $report['id'].'/'.bin2hex(random_bytes(8)).'.'.$file['extension'];
+
+        if (!S3Service::put_private_bytes($key, $file['bytes'], $file['content_type'])) {
+            $response['message'] = 'The report could not be stored for download';
+            echo json_encode($response);
+            exit;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'ok';
+        $response['url'] = S3Service::presigned_get_url($key, 300, $file['file_name']);
+        echo json_encode($response);
+        exit;
     }
 
     /* ------------------------------------------------------------ assistant */

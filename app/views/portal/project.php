@@ -12,6 +12,9 @@
         </div>
         <div class="page__actions">
             <a class="btn btn--secondary" href="/portal/evidence/id/<?php echo (int) $this->project['id']; ?>"><i class="fa-regular fa-folder-open"></i> Evidence</a>
+            <?php if ($this->report_stage !== '') { ?>
+            <a class="btn btn--primary" href="/portal/report/id/<?php echo (int) $this->project['id']; ?>"><i class="fa-regular fa-file-chart-column"></i> Report</a>
+            <?php } ?>
         </div>
     </div>
 

@@ -12,6 +12,7 @@
         </div>
         <div class="page__actions">
             <a class="btn btn--secondary" href="/projects/evidence/id/<?php echo (int) $this->project['id']; ?>"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>
+            <a class="btn btn--secondary" href="/projects/report/id/<?php echo (int) $this->project['id']; ?>"><i class="fa-regular fa-file-chart-column"></i> Report</a>
             <a class="btn btn--secondary" href="/projects/form/id/<?php echo (int) $this->project['id']; ?>"><i class="fa-regular fa-pen"></i> Edit</a>
             <?php if ($this->room['allowed']) { ?>
             <button type="button" class="btn btn--primary" id="do_assessment_add"><i class="fa-regular fa-plus"></i> Assessment</button>

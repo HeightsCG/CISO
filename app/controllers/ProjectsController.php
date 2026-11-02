@@ -97,6 +97,19 @@ class ProjectsController extends Controller {
         $this->view->render();
     }
 
+    public function reportAction() {
+
+        $project = $this->projects_model->get_project(Main::get_param('id'), Session::get('company_id'));
+
+        if (!is_array($project) || count($project) !== 1) {
+            Errors::page_not_found();
+            return;
+        }
+
+        $this->view->project = $project[0];
+        $this->view->render();
+    }
+
 
 
 

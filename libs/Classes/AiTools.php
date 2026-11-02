@@ -69,6 +69,7 @@ class AiTools {
     private $dashboard_model;
     private $companies_model;
     private $users_model;
+    private $reports_model;
 
     public function __construct($conversation_id)
     {
@@ -84,6 +85,7 @@ class AiTools {
         $this->dashboard_model = new DashboardModel();
         $this->companies_model = new CompaniesModel();
         $this->users_model = new UsersModel();
+        $this->reports_model = new ReportsModel();
     }
 
     public function is_portal(): bool
@@ -293,6 +295,11 @@ class AiTools {
                 'standard_id'
             )),
             'list_project_candidates' => $tool('staff', false, 'Staff who can be added to a project team.', array(
+                'project_id' => $id('Project id')
+            ), array(
+                'project_id'
+            )),
+            'get_report' => $tool('staff', false, 'The client deliverable report for a project, with every section: details and narrative, domains, findings with scores and ratings, risks, threats, systems inventory, CSF profile, scan summary, cross-references, people and versions. Returns report null when none has been started.', array(
                 'project_id' => $id('Project id')
             ), array(
                 'project_id'
@@ -516,6 +523,94 @@ class AiTools {
                 'u_name' => $text('Username'),
                 'user_email' => $text('Email')
             ), array()),
+
+            'start_report' => $tool('staff', true, 'Start the client deliverable report for a project. It begins with the standard domains, common threats, assessment team and methodology wording.', array(
+                'project_id' => $id('Project id')
+            ), array(
+                'project_id'
+            )),
+            'save_report_details' => $tool('staff', true, 'Change a report\'s details and narrative. Give only the fields to change. Narrative fields are plain text; blank lines separate paragraphs and lines starting with "- " become bullet lists.', array(
+                'project_id' => $id('Project id'),
+                'report_title' => $text('Title, e.g. Cybersecurity Risk Assessment'),
+                'report_date' => $text('Report date, YYYY-MM-DD'),
+                'period_start' => $text('Fieldwork start, YYYY-MM-DD'),
+                'period_end' => $text('Fieldwork end, YYYY-MM-DD'),
+                'regulatory_reference' => $text('Regulation the assessment addresses, e.g. NYDFS 23 NYCRR Part 500, Sections 500.1(p) and 500.9'),
+                'purpose_text' => $text('Executive summary: purpose'),
+                'conclusion_text' => $text('Executive summary: overall conclusion'),
+                'background_text' => $text('Background on the client'),
+                'scope_text' => $text('Scope'),
+                'out_of_scope_text' => $text('What was out of scope'),
+                'approach_text' => $text('Approach and fieldwork performed'),
+                'methodology_text' => $text('Rating methodology'),
+                'limitations_text' => $text('Limitations and responsibilities'),
+                'review_text' => $text('Ongoing review'),
+                'scan_text' => $text('Introduction to the vulnerability scan appendix'),
+                'signoff_name' => $text('Name of the client signer for the acknowledgment'),
+                'signoff_title' => $text('Title of the client signer')
+            ), array(
+                'project_id'
+            )),
+            'save_report_rows' => $tool('staff', true, 'Add or change rows in one section of a project\'s report, many at once. Give id only to change an existing row; omitted fields keep their values. Fields by section - domain: domain_name, areas_reviewed, csf_refs, domain_rating (Satisfactory, Satisfactory with exceptions, Needs improvement, Unsatisfactory), domain_summary. finding: domain_id, finding_ref (leave blank to number automatically), finding_title, observation, risk_text, recommendation, likelihood (1-5), impact (1-5), csf_refs, response_status (Pending, Agreed, Partially agreed, Not agreed), management_response, response_owner, target_date (YYYY-MM-DD). risk: domain_id, finding_id or link_finding_ref (e.g. F-03), risk_ref, risk_text, threat_refs (e.g. T1, T2), likelihood, impact, treatment. threat: threat_ref, threat_name, threat_description, parties_affected. asset: asset_name, asset_kind, asset_owner, data_held, sensitivity (High, Medium, Low). scan_row: scan_rating (Critical, High, Medium, Low), issue_count, scan_summary, disposition. xref: xref_section, requirement, where_addressed. version: version_label, version_date, version_note, version_author. person: person_kind (distribution or team), person_name, person_title, organisation, responsibility.', array(
+                'project_id' => $id('Project id'),
+                'section' => $choice(array_keys(ReportBuilder::SECTIONS), 'Report section'),
+                'rows' => array(
+                    'type' => 'array',
+                    'description' => 'Rows to add or change, as objects of the section\'s fields',
+                    'items' => array(
+                        'type' => 'object'
+                    )
+                )
+            ), array(
+                'project_id',
+                'section',
+                'rows'
+            )),
+            'delete_report_rows' => $tool('staff', true, 'Remove rows from one section of a project\'s report.', array(
+                'project_id' => $id('Project id'),
+                'section' => $choice(array_keys(ReportBuilder::SECTIONS), 'Report section'),
+                'ids' => array(
+                    'type' => 'array',
+                    'items' => array(
+                        'type' => 'integer'
+                    )
+                )
+            ), array(
+                'project_id',
+                'section',
+                'ids'
+            )),
+            'save_csf_profile' => $tool('staff', true, 'Set the NIST CSF 2.0 current and target tiers (1 Partial, 2 Risk Informed, 3 Repeatable, 4 Adaptive) and main gaps for one or more functions in a project\'s report.', array(
+                'project_id' => $id('Project id'),
+                'functions' => array(
+                    'type' => 'array',
+                    'items' => array(
+                        'type' => 'object',
+                        'properties' => array(
+                            'csf_function' => $choice(ReportBuilder::CSF_FUNCTIONS, 'Function'),
+                            'current_tier' => $id('Current tier 1-4'),
+                            'target_tier' => $id('Target tier 1-4'),
+                            'main_gaps' => $text('Main gaps, citing finding references')
+                        ),
+                        'required' => array(
+                            'csf_function'
+                        )
+                    )
+                )
+            ), array(
+                'project_id',
+                'functions'
+            )),
+            'issue_report' => $tool('staff', true, 'Issue a draft report to the client so their portal users can respond to the findings.', array(
+                'project_id' => $id('Project id')
+            ), array(
+                'project_id'
+            )),
+            'finalise_report' => $tool('staff', true, 'Make the report final. The client can then download the PDF from the portal.', array(
+                'project_id' => $id('Project id')
+            ), array(
+                'project_id'
+            )),
 
             'save_user' => $tool('admin', true, 'Add a user (omit user_id; they are emailed an invite) or change one (give user_id and only the fields to change). Portal users belong to a client.', array(
                 'user_id' => $id('User id when changing'),
@@ -752,6 +847,27 @@ class AiTools {
                 return null;
             }
             return self::rows($this->projects_model->available_users($project_id, $company_id));
+        }
+
+        if ($name === 'get_report') {
+            $project_id = (int) ($input['project_id'] ?? 0);
+            if (count($this->projects_model->get_project($project_id, $company_id)) !== 1) {
+                return null;
+            }
+            $report = $this->first($this->reports_model->get_report_by_project($project_id, $company_id));
+            if ($report === null) {
+                return array(
+                    'report' => null,
+                    'note' => 'No report has been started for this project. Use start_report.'
+                );
+            }
+            $assembled = (new ReportBuilder())->assemble($report);
+            unset($assembled['company'], $assembled['project'], $assembled['client'], $assembled['findings_ranked'], $assembled['risks_ranked'], $assembled['unassigned_findings']);
+            foreach ($assembled['domains'] as $index => $domain) {
+                $assembled['domains'][$index]['finding_refs'] = array_column($domain['findings'], 'finding_ref');
+                unset($assembled['domains'][$index]['findings']);
+            }
+            return $assembled;
         }
 
         if (!$this->is_admin()) {
@@ -1631,6 +1747,313 @@ class AiTools {
         return self::proposal('Update your profile', 'save_profile', $params, $this->changed_fields($labels, $input, $params, false));
     }
 
+    /** The report for a project in this company, or null. */
+    private function project_report(array $input)
+    {
+        $project = $this->first($this->projects_model->get_project((int) ($input['project_id'] ?? 0), Session::get('company_id')));
+
+        if ($project === null) {
+            return null;
+        }
+
+        $report = $this->first($this->reports_model->get_report_by_project((int) $project['id'], Session::get('company_id')));
+
+        if ($report !== null) {
+            $report['project_name'] = self::plain($project['project_name']);
+        }
+
+        return $report;
+    }
+
+    private function propose_start_report(array $input): array
+    {
+        $project = $this->first($this->projects_model->get_project((int) ($input['project_id'] ?? 0), Session::get('company_id')));
+
+        if ($project === null) {
+            return self::fail('That project was not found.');
+        }
+
+        if ($this->project_report($input) !== null) {
+            return self::fail('This project already has a report. Use get_report.');
+        }
+
+        return self::proposal('Start the report for "'.self::plain($project['project_name']).'"', 'report_create', array(
+            'project_id' => (int) $project['id']
+        ), array(
+            'Project' => self::plain($project['project_name'])
+        ));
+    }
+
+    private function propose_save_report_details(array $input): array
+    {
+        $report = $this->project_report($input);
+
+        if ($report === null) {
+            return self::fail('That project has no report yet. Use start_report first.');
+        }
+
+        $params = array(
+            'report_id' => (int) $report['id']
+        );
+        $fields = array();
+
+        foreach (array_keys(ReportBuilder::DETAIL_FIELDS) as $key) {
+            if (array_key_exists($key, $input)) {
+                $params[$key] = trim((string) $input[$key]);
+                $fields[ucfirst(str_replace('_', ' ', preg_replace('/_text$/', '', $key)))] = mb_strimwidth($params[$key], 0, 400, '...');
+            }
+        }
+
+        if (count($fields) === 0) {
+            return self::fail('Give at least one report field to change.');
+        }
+
+        return self::batch('Update the report for "'.$report['project_name'].'"', array(
+            array(
+                'endpoint' => 'report_save_details',
+                'params' => $params
+            )
+        ), $fields);
+    }
+
+    private function propose_save_report_rows(array $input): array
+    {
+        $report = $this->project_report($input);
+        $section = (string) ($input['section'] ?? '');
+        $rows = is_array($input['rows'] ?? null) ? $input['rows'] : array();
+
+        if ($report === null) {
+            return self::fail('That project has no report yet. Use start_report first.');
+        }
+
+        if (!isset(ReportBuilder::SECTIONS[$section])) {
+            return self::fail('section must be one of: '.implode(', ', array_keys(ReportBuilder::SECTIONS)));
+        }
+
+        if (count($rows) === 0 || count($rows) > 200) {
+            return self::fail('Give between 1 and 200 rows.');
+        }
+
+        $allowed = array_keys(ReportBuilder::SECTIONS[$section]);
+
+        if ($section === 'risk') {
+            $allowed[] = 'link_finding_ref';
+        }
+
+        $calls = array();
+        $fields = array();
+
+        foreach ($rows as $row) {
+
+            if (!is_array($row)) {
+                return self::fail('Each row must be an object of fields.');
+            }
+
+            $row_id = (int) ($row['id'] ?? 0);
+
+            if ($row_id > 0 && count($this->reports_model->{'get_'.$section}($row_id, (int) $report['id'])) !== 1) {
+                return self::fail('Row '.$row_id.' is not in this report\'s '.$section.' section.');
+            }
+
+            $params = array(
+                'report_id' => (int) $report['id'],
+                'section' => $section,
+                'id' => $row_id
+            );
+
+            foreach ($row as $key => $value) {
+                if (in_array($key, $allowed, true)) {
+                    $params[$key] = is_bool($value) ? ($value ? '1' : '0') : trim((string) $value);
+                }
+            }
+
+            $calls[] = array(
+                'endpoint' => 'report_save_row',
+                'params' => $params
+            );
+
+            $fields[] = array(
+                'label' => ($row_id > 0 ? 'Change ' : 'Add ').self::row_label($section, $params),
+                'value' => self::row_summary($section, $params)
+            );
+        }
+
+        return array(
+            'summary' => 'Save '.count($calls).' '.str_replace('_', ' ', $section).(count($calls) === 1 ? '' : 's').' in the report for "'.$report['project_name'].'"',
+            'calls' => $calls,
+            'fields' => $fields
+        );
+    }
+
+    private static function row_label(string $section, array $params): string
+    {
+        $keys = array(
+            'finding' => 'finding_ref',
+            'risk' => 'risk_ref',
+            'threat' => 'threat_ref',
+            'domain' => 'domain_name',
+            'asset' => 'asset_name',
+            'scan_row' => 'scan_rating',
+            'xref' => 'xref_section',
+            'version' => 'version_label',
+            'person' => 'person_name'
+        );
+
+        $label = (string) ($params[$keys[$section]] ?? '');
+
+        return $label !== '' ? $label : str_replace('_', ' ', $section);
+    }
+
+    private static function row_summary(string $section, array $params): string
+    {
+        $keys = array(
+            'finding' => 'finding_title',
+            'risk' => 'risk_text',
+            'threat' => 'threat_name',
+            'domain' => 'domain_rating',
+            'asset' => 'data_held',
+            'scan_row' => 'scan_summary',
+            'xref' => 'requirement',
+            'version' => 'version_note',
+            'person' => 'person_title'
+        );
+
+        $text = (string) ($params[$keys[$section]] ?? '');
+
+        if (isset($params['likelihood'], $params['impact'])) {
+            $score = (int) $params['likelihood'] * (int) $params['impact'];
+            $text .= ($text === '' ? '' : ' - ').ReportBuilder::rating($score).' ('.$score.')';
+        }
+
+        return mb_strimwidth($text, 0, 300, '...');
+    }
+
+    private function propose_delete_report_rows(array $input): array
+    {
+        $report = $this->project_report($input);
+        $section = (string) ($input['section'] ?? '');
+        $ids = is_array($input['ids'] ?? null) ? $input['ids'] : array();
+
+        if ($report === null || !isset(ReportBuilder::SECTIONS[$section]) || count($ids) === 0) {
+            return self::fail('Give a project with a report, a section and the ids to remove.');
+        }
+
+        $calls = array();
+        $fields = array();
+
+        foreach ($ids as $id) {
+            $row = $this->first($this->reports_model->{'get_'.$section}((int) $id, (int) $report['id']));
+            if ($row === null) {
+                return self::fail('Row '.(int) $id.' is not in this report\'s '.$section.' section.');
+            }
+            $calls[] = array(
+                'endpoint' => 'report_delete_row',
+                'params' => array(
+                    'report_id' => (int) $report['id'],
+                    'section' => $section,
+                    'id' => (int) $id
+                )
+            );
+            $fields[] = array(
+                'label' => 'Remove '.self::row_label($section, $row),
+                'value' => self::row_summary($section, $row)
+            );
+        }
+
+        return array(
+            'summary' => 'Remove '.count($calls).' '.str_replace('_', ' ', $section).(count($calls) === 1 ? '' : 's').' from the report',
+            'calls' => $calls,
+            'fields' => $fields
+        );
+    }
+
+    private function propose_save_csf_profile(array $input): array
+    {
+        $report = $this->project_report($input);
+        $rows = is_array($input['functions'] ?? null) ? $input['functions'] : array();
+
+        if ($report === null) {
+            return self::fail('That project has no report yet. Use start_report first.');
+        }
+
+        $current = array();
+
+        foreach ($this->reports_model->load_csf((int) $report['id']) as $row) {
+            $current[$row['csf_function']] = $row;
+        }
+
+        $calls = array();
+        $fields = array();
+
+        foreach ($rows as $row) {
+
+            $function = (string) ($row['csf_function'] ?? '');
+
+            if (!in_array($function, ReportBuilder::CSF_FUNCTIONS, true)) {
+                return self::fail('csf_function must be one of: '.implode(', ', ReportBuilder::CSF_FUNCTIONS));
+            }
+
+            $params = array(
+                'report_id' => (int) $report['id'],
+                'csf_function' => $function,
+                'current_tier' => (int) ($row['current_tier'] ?? ($current[$function]['current_tier'] ?? 0)),
+                'target_tier' => (int) ($row['target_tier'] ?? ($current[$function]['target_tier'] ?? 0)),
+                'main_gaps' => (string) ($row['main_gaps'] ?? ($current[$function]['main_gaps'] ?? ''))
+            );
+
+            $calls[] = array(
+                'endpoint' => 'report_save_csf',
+                'params' => $params
+            );
+
+            $fields[] = array(
+                'label' => $function,
+                'value' => 'Tier '.$params['current_tier'].' now, '.$params['target_tier'].' target'.($params['main_gaps'] !== '' ? ' - '.$params['main_gaps'] : '')
+            );
+        }
+
+        if (count($calls) === 0) {
+            return self::fail('Give at least one CSF function.');
+        }
+
+        return array(
+            'summary' => 'Set the NIST CSF 2.0 profile in the report for "'.$report['project_name'].'"',
+            'calls' => $calls,
+            'fields' => $fields
+        );
+    }
+
+    private function propose_issue_report(array $input): array
+    {
+        $report = $this->project_report($input);
+
+        if ($report === null) {
+            return self::fail('That project has no report yet.');
+        }
+
+        return self::proposal('Issue the report for "'.$report['project_name'].'" to the client for response', 'report_issue', array(
+            'report_id' => (int) $report['id']
+        ), array(
+            'Version' => $report['report_version'],
+            'Effect' => 'The client\'s portal users can see and respond to the findings'
+        ));
+    }
+
+    private function propose_finalise_report(array $input): array
+    {
+        $report = $this->project_report($input);
+
+        if ($report === null) {
+            return self::fail('That project has no report yet.');
+        }
+
+        return self::proposal('Finalise the report for "'.$report['project_name'].'"', 'report_finalise', array(
+            'report_id' => (int) $report['id']
+        ), array(
+            'Effect' => 'Becomes the final version; the client can download the PDF'
+        ));
+    }
+
     private function propose_save_user(array $input): array
     {
         $labels = array(
@@ -1683,7 +2106,7 @@ class AiTools {
 
         $summary = $user_id > 0
             ? 'Update user '.self::plain($current['first_name'].' '.$current['last_name'])
-            : 'Add user '.$params['first_name'].' '.$params['last_name'].' and email an invite';
+            : 'Add user '.$params['first_name'].' '.$params['last_name'].($params['user_status'] === 'Active' ? ' and email an invite' : '');
 
         return self::proposal($summary, 'save_user', $params, $fields);
     }
