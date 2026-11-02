@@ -1,0 +1,165 @@
+{
+    "key": "tsa-aviation-cyber",
+    "name": "TSA Aviation Cybersecurity",
+    "version": "HCG control set 2026",
+    "full_name": "TSA Aviation Cybersecurity: HCG control set based on public TSA outcomes for airport and aircraft operators",
+    "issuing_body": "Heights Consulting Group, from public announcements of the Transportation Security Administration",
+    "standard_codes": [
+        "TSA-AVIATION-CYBER"
+    ],
+    "content_licence": "hcg_authored",
+    "notice": "HCG control set based on public TSA outcomes",
+    "sources": [
+        {
+            "id": "tsa2023",
+            "title": "TSA Issues New Cybersecurity Requirements for Airport and Aircraft Operators (press release)",
+            "version": "7 March 2023",
+            "publisher": "Transportation Security Administration",
+            "url": "https://www.tsa.gov/news/press/releases/2023/03/07/tsa-issues-new-cybersecurity-requirements-airport-and-aircraft",
+            "file": "tsa/tsa-2023-03-07-aviation-cyber-amendment.html",
+            "sha256": "9993fe3d1077f639f36e720f2883fe09d445ccf15482ead8d3cae72e33cd5793",
+            "date": "2023-03-07"
+        },
+        {
+            "id": "tsa2021",
+            "title": "DHS Announces New Cybersecurity Requirements for Surface Transportation Owners and Operators (press release)",
+            "version": "2 December 2021",
+            "publisher": "Transportation Security Administration",
+            "url": "https://www.tsa.gov/news/press/releases/2021/12/02/dhs-announces-new-cybersecurity-requirements-surface-transportation",
+            "file": "tsa/tsa-2021-12-02-cyber-requirements.html",
+            "sha256": "a8bf23b87193397bdbb71a0a6fba0f570156092f0fa8f2ef150d22b69210fb45",
+            "date": "2021-12-02"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG TSA aviation cybersecurity control set: descriptions, guidance and test points",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "tsa2023",
+        "objectives": "hcg",
+        "guidance": "hcg"
+    },
+    "terminology": {
+        "control": "control",
+        "controls": "controls",
+        "family": "control area",
+        "families": "control areas",
+        "objective": "test point",
+        "objectives": "test points",
+        "plan": "Cybersecurity Remediation Plan",
+        "plan_short": "Remediation Plan",
+        "score": "Compliance percentage"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "In place"
+        },
+        {
+            "key": "partial",
+            "label": "Partially in place"
+        },
+        {
+            "key": "not_met",
+            "label": "Not in place"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable controls assessed as in place. This is an HCG readiness measure, not a TSA determination of compliance; the client's TSA-approved security program and its SSI requirements govern."
+    },
+    "rules": [
+        {
+            "id": "applicability",
+            "type": "applicability",
+            "summary": "The 2023 emergency amendment applies to certain TSA-regulated airport and aircraft operators through their security programs; confirm the client holds such a program before using this control set as a compliance gap assessment.",
+            "source": "tsa2023",
+            "cite": "TSA press release, 7 March 2023",
+            "quote": "issued a new cybersecurity amendment on an emergency basis to the security programs of certain TSA-regulated airport and aircraft operators"
+        },
+        {
+            "id": "implementation_plan",
+            "type": "plan_handling",
+            "summary": "Covered operators must have a TSA-approved implementation plan describing their cybersecurity measures (TSA-CIP-01).",
+            "source": "tsa2023",
+            "cite": "TSA press release, 7 March 2023",
+            "quote": "The new emergency amendment requires that impacted TSA-regulated entities develop an approved implementation plan"
+        },
+        {
+            "id": "effectiveness_assessment",
+            "type": "validity",
+            "summary": "Covered operators must proactively assess whether their measures are effective (TSA-CAP-01). The required cadence is set in the SSI amendment and is not stated publicly.",
+            "source": "tsa2023",
+            "cite": "TSA press release, 7 March 2023",
+            "quote": "They must also proactively assess the effectiveness of these measures"
+        },
+        {
+            "id": "aviation_reporting_and_coordinator",
+            "type": "applicability",
+            "summary": "Airport and airline operators must designate a cybersecurity coordinator and report cybersecurity incidents to CISA (TSA-GOV-01, TSA-INC-02).",
+            "source": "tsa2021",
+            "cite": "TSA press release, 2 December 2021",
+            "quote": "TSA recently updated its aviation security programs to require that airport and airline operators implement the first two provisions above."
+        },
+        {
+            "id": "incident_reporting_deadline",
+            "type": "deadline",
+            "hours": 24,
+            "from": "Identification of a cybersecurity incident",
+            "summary": "Cybersecurity incidents must be reported to CISA within 24 hours (TSA-INC-02).",
+            "source": "tsa2021",
+            "cite": "TSA press release, 2 December 2021",
+            "quote": "report cybersecurity incidents to CISA within 24 hours"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan"
+    ],
+    "consequences": [],
+    "fields": [
+        {
+            "key": "ssi_reviewed",
+            "label": "Client SSI requirements reviewed separately",
+            "type": "boolean_with_note"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "TSA",
+            "definition": "Transportation Security Administration, the Department of Homeland Security agency that regulates airport and aircraft operator security programs."
+        },
+        {
+            "term": "SSI",
+            "definition": "Sensitive Security Information: security information TSA restricts from public release. The detailed cybersecurity requirements in airport and aircraft operator security program amendments are SSI and are not reproduced in this control set."
+        },
+        {
+            "term": "CISA",
+            "definition": "Cybersecurity and Infrastructure Security Agency, the federal agency that receives cybersecurity incident reports."
+        },
+        {
+            "term": "IT",
+            "definition": "Information technology: business systems such as email, finance and passenger-facing applications."
+        },
+        {
+            "term": "OT",
+            "definition": "Operational technology: systems that monitor or control physical operations, such as baggage handling, fuel, airfield lighting and building controls."
+        },
+        {
+            "term": "CIP",
+            "definition": "Cybersecurity Implementation Plan: in this control set, the TSA-approved implementation plan that describes the operator's cybersecurity measures."
+        },
+        {
+            "term": "CAP",
+            "definition": "Cybersecurity Assessment Plan: in this control set, the operator's plan for proactively assessing whether its cybersecurity measures are effective."
+        }
+    ]
+}

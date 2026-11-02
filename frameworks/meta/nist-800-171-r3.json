@@ -1,0 +1,144 @@
+{
+    "key": "nist-800-171-r3",
+    "name": "NIST SP 800-171",
+    "version": "Rev 3",
+    "full_name": "NIST Special Publication 800-171 Revision 3, Protecting Controlled Unclassified Information in Nonfederal Systems and Organizations",
+    "issuing_body": "National Institute of Standards and Technology (NIST)",
+    "standard_codes": [
+        "NIST-800-171"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "oscal",
+            "title": "NIST SP 800-171 Rev 3 OSCAL catalog (requirements, discussion and SP 800-171A Rev 3 determination statements)",
+            "version": "OSCAL catalog 1.1.0 (22 October 2026) of Rev 3",
+            "publisher": "NIST",
+            "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/5006f18c8047643eaa70e35dd0d20a58bcc41856/nist.gov/SP800-171/rev3/json/NIST_SP800-171_rev3_catalog.json",
+            "file": "nist-800-171r3/NIST_SP800-171_rev3_catalog.json",
+            "sha256": "fd68bad4c1fee98dd1b2511884b585fb1f14265d4c5693d0492a25dd66e73dde"
+        },
+        {
+            "id": "sp800171r3",
+            "title": "NIST SP 800-171 Rev 3, Protecting Controlled Unclassified Information in Nonfederal Systems and Organizations",
+            "version": "Rev 3 (May 2024)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-171r3.pdf",
+            "file": "nist-800-171r3/sp800-171r3.pdf",
+            "sha256": "3e4631df8b5d61f40a6e542b52779ef30ddbbfff31e09214fa94ad6e6f5e6d08"
+        },
+        {
+            "id": "sp800171ar3",
+            "title": "NIST SP 800-171A Rev 3, Assessing Security Requirements for Controlled Unclassified Information",
+            "version": "Rev 3 (May 2024)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-171Ar3.pdf",
+            "file": "nist-800-171r3/sp800-171a-r3.pdf",
+            "sha256": "946d963707cdaba19901c49d5c89517adb00844fe5d101e9dac7febc68e34cfa"
+        }
+    ],
+    "source_of": {
+        "controls": "oscal",
+        "objectives": "oscal",
+        "guidance": "oscal"
+    },
+    "terminology": {
+        "control": "security requirement",
+        "controls": "security requirements",
+        "family": "family",
+        "families": "families",
+        "objective": "determination statement",
+        "objectives": "determination statements",
+        "plan": "Plan of Action and Milestones",
+        "plan_short": "POA&M",
+        "score": "requirements satisfied"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Satisfied"
+        },
+        {
+            "key": "not_met",
+            "label": "Other than satisfied"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of the 97 security requirements found satisfied. NIST defines no point system for Rev 3; findings are satisfied or other than satisfied."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "Each determination statement is found satisfied or other than satisfied; a requirement is satisfied only when all of its determination statements are.",
+            "source": "sp800171ar3",
+            "cite": "NIST SP 800-171A Rev 3, Appendix C.3",
+            "quote": "Each determination statement contained within an assessment procedure executed by an assessor produces one of the following findings: • Satisfied or • Other than satisfied."
+        },
+        {
+            "id": "enduring_exceptions",
+            "type": "applicability",
+            "summary": "Where a system cannot apply a requirement (for example specialised equipment), the enduring exception is described in the system security plan (03.15.02).",
+            "source": "sp800171r3",
+            "cite": "NIST SP 800-171 Rev 3, section 3",
+            "quote": "the system security plan — as reflected in requirement 03.15.02 — is used to describe any enduring exceptions to the security requirements."
+        },
+        {
+            "id": "plan_of_action",
+            "type": "plan_handling",
+            "summary": "Individual, isolated or temporary deficiencies are tracked in a plan of action and milestones (03.12.02).",
+            "source": "sp800171r3",
+            "cite": "NIST SP 800-171 Rev 3, section 3",
+            "quote": "Individual, isolated, or temporary deficiencies are managed though plans of action and milestones, as reflected in requirement 03.12.02."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "governing_document"
+    ],
+    "governing_document": {
+        "key": "ssp",
+        "title": "System Security Plan",
+        "short": "SSP",
+        "required_by": "03.15.02",
+        "sections": [
+            "Constituent system components",
+            "Information types processed, stored and transmitted",
+            "Threats of concern to the organization",
+            "Operational environment, dependencies and connections",
+            "Overview of the security requirements",
+            "Safeguards in place or planned",
+            "System roles and responsibilities",
+            "Other information needed to protect CUI"
+        ]
+    },
+    "glossary": [
+        {
+            "term": "CUI",
+            "definition": "Controlled Unclassified Information: government information that is not classified but must still be protected."
+        },
+        {
+            "term": "NIST",
+            "definition": "National Institute of Standards and Technology, the U.S. agency that publishes the 800-171 requirements."
+        },
+        {
+            "term": "ODP",
+            "definition": "Organization-defined parameter: a value, such as a time period or frequency, that the organization sets for a requirement."
+        },
+        {
+            "term": "POA&M",
+            "definition": "Plan of Action and Milestones: the documented plan for closing requirements that are not yet met."
+        },
+        {
+            "term": "SSP",
+            "definition": "System Security Plan: the document that describes the system in scope and how each requirement is implemented."
+        },
+        {
+            "term": "OSCAL",
+            "definition": "Open Security Controls Assessment Language, NIST's machine-readable format for control catalogs."
+        }
+    ]
+}

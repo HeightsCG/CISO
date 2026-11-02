@@ -1,0 +1,1051 @@
+{
+    "key": "cmmc-l3",
+    "name": "CMMC Level 3",
+    "version": "32 CFR Part 170",
+    "full_name": "Cybersecurity Maturity Model Certification (CMMC) Level 3",
+    "issuing_body": "U.S. Department of Defense",
+    "standard_codes": [
+        "CMMC-L3"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "cfr170",
+            "title": "32 CFR Part 170, Cybersecurity Maturity Model Certification (CMMC) Program",
+            "version": "eCFR as of 1 January 2025",
+            "publisher": "eCFR, Office of the Federal Register",
+            "url": "https://www.ecfr.gov/api/versioner/v1/full/2025-01-01/title-32.xml?part=170",
+            "file": "cmmc/32-cfr-170.xml",
+            "sha256": "3dc8b9bebbe56753206429657cbac24ff32bfd64c75356ba276af38a1032b628"
+        },
+        {
+            "id": "sp800172",
+            "title": "NIST SP 800-172, Enhanced Security Requirements for Protecting Controlled Unclassified Information: A Supplement to NIST Special Publication 800-171",
+            "version": "February 2021",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-172.pdf",
+            "file": "nist-800-172/sp800-172.pdf",
+            "sha256": "3847d851bdd52eb8824fbf57c4d2294099fa68e4b9a505401ba3f0f48fec721b"
+        },
+        {
+            "id": "sp800172a",
+            "title": "NIST SP 800-172A, Assessing Enhanced Security Requirements for Controlled Unclassified Information",
+            "version": "March 2022",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-172A.pdf",
+            "file": "nist-800-172/sp800-172a.pdf",
+            "sha256": "2fdde6c8726831a2aa4d550fb4cda052c3408a4ddd0b06baf19c701b7cc8f9ac"
+        },
+        {
+            "id": "sp800171r2",
+            "title": "NIST SP 800-171 Rev 2, Protecting Controlled Unclassified Information in Nonfederal Systems and Organizations",
+            "version": "Rev 2 (February 2020, updated January 2021)",
+            "publisher": "NIST",
+            "url": "https://csrc.nist.gov/pubs/sp/800/171/r2/upd1/final",
+            "file": "cmmc/sp800-171r2.xlsx",
+            "sha256": "bc8f3f1ab3213e9252d65809afb84509e83e3c88dc5f2b8439ee5fbdb1f04fd2"
+        }
+    ],
+    "source_of": {
+        "controls": "cfr170",
+        "objectives": "sp800172a",
+        "weights": "cfr170"
+    },
+    "terminology": {
+        "control": "security requirement",
+        "controls": "security requirements",
+        "family": "domain",
+        "families": "domains",
+        "objective": "assessment objective",
+        "objectives": "assessment objectives",
+        "plan": "Plan of Action and Milestones",
+        "plan_short": "POA&M",
+        "score": "Level 3 score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "MET"
+        },
+        {
+            "key": "not_met",
+            "label": "NOT MET"
+        },
+        {
+            "key": "na",
+            "label": "N/A"
+        }
+    ],
+    "scoring": {
+        "model": "points",
+        "maximum": 24,
+        "floor": 0,
+        "summary": "Every requirement is worth 1 point. The score is the number of the 24 requirements assessed as MET."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is MET only when every applicable assessment objective is satisfied.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.24(b)(2)",
+            "quote": "Not Met. One or more applicable objectives for the security requirement is not satisfied."
+        },
+        {
+            "id": "na_counts_as_met",
+            "type": "na_handling",
+            "counts_as": "met",
+            "summary": "An objective assessed N/A counts as MET.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.24(b)(3)",
+            "quote": "an assessment objective assessed as N/A is equivalent to the same assessment objective being assessed as MET"
+        },
+        {
+            "id": "one_point_each",
+            "type": "scoring",
+            "summary": "Each Level 3 requirement is worth 1 point; the score is the number MET (maximum 24).",
+            "source": "cfr170",
+            "cite": "32 CFR 170.24(c)(3)",
+            "quote": "All CMMC Level 3 security requirements use a value of one (1) point for each security requirement."
+        },
+        {
+            "id": "level2_prerequisite",
+            "type": "gate",
+            "requires": {
+                "framework": "cmmc-l2",
+                "status": "Final Level 2 (C3PAO)"
+            },
+            "summary": "Final Level 2 (C3PAO) status for the same assessment scope is required before a Level 3 assessment can start.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(a)",
+            "quote": "A CMMC Status of Final Level 2 (C3PAO) for information systems within the Level 3 CMMC Assessment Scope is a prerequisite to undergo a Level 3 certification assessment."
+        },
+        {
+            "id": "level2_maximum_score",
+            "type": "gate",
+            "requires": {
+                "framework": "cmmc-l2",
+                "score": 110
+            },
+            "summary": "The Level 2 assessment must have the maximum score (every Level 2 requirement MET) before Level 3 can be initiated.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.24(c)(3)",
+            "quote": "A maximum score on the Level 2 certification assessment is required to be eligible to initiate a Level 3 certification assessment."
+        },
+        {
+            "id": "periodically",
+            "type": "applicability",
+            "max_interval_years": 1,
+            "summary": "Where an assessment objective uses an organization-defined or periodic interval, the interval may be no longer than one year.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.14(d)",
+            "quote": "As used in many requirements within CMMC, the interval length is organization-defined to provided contractor flexibility, with an interval length of no more than one year."
+        },
+        {
+            "id": "conditional_threshold",
+            "type": "threshold",
+            "metric": "score_ratio",
+            "operator": ">=",
+            "value": 0.8,
+            "outcome": "Conditional Level 3 (DIBCAC)",
+            "summary": "Conditional status needs at least 80% of the requirements MET (20 of 24), with no excluded requirement on the POA&M.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.21(a)(3)(i)",
+            "quote": "The assessment score divided by the total number of CMMC Level 3 security requirements is greater than or equal to 0.8"
+        },
+        {
+            "id": "poam_eligibility",
+            "type": "deferral",
+            "excluded": [
+                "IR.L3-3.6.1e",
+                "IR.L3-3.6.2e",
+                "RA.L3-3.11.1e",
+                "RA.L3-3.11.6e",
+                "RA.L3-3.11.7e",
+                "RA.L3-3.11.4e",
+                "SI.L3-3.14.3e"
+            ],
+            "summary": "Seven requirements can never go on a POA&M and must be MET at assessment; any other NOT MET requirement may be deferred.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.21(a)(3)(ii)",
+            "quote": "The POA&M does not include any of following security requirements:"
+        },
+        {
+            "id": "poam_closeout",
+            "type": "deadline",
+            "days": 180,
+            "from": "Conditional status date",
+            "summary": "Every POA&M item must be closed and confirmed by a DCMA DIBCAC closeout assessment within 180 days, or Conditional status expires.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.21(b)",
+            "quote": "The closing of a POA&M must be confirmed by a POA&M closeout assessment within 180-days of the Conditional CMMC Status Date"
+        },
+        {
+            "id": "final_status",
+            "type": "pass",
+            "metric": "all_met",
+            "outcome": "Final Level 3 (DIBCAC)",
+            "summary": "Final status requires all 24 requirements to be MET, at assessment or after POA&M closeout.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(a)(1)",
+            "quote": "The OSC must complete and achieve a MET result for all security requirements specified in table 1 to § 170.14(c)(4) to achieve the CMMC Status of Level 3 (DIBCAC)."
+        },
+        {
+            "id": "reassessment",
+            "type": "validity",
+            "years": 3,
+            "summary": "The Level 3 assessment must be repeated every three years.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(a)(1)",
+            "quote": "the Level 3 certification assessment must be performed every three years for all information systems within the Level 3 CMMC Assessment Scope"
+        },
+        {
+            "id": "level2_reassessment",
+            "type": "validity",
+            "years": 3,
+            "summary": "A Level 2 (C3PAO) assessment must also be repeated every three years to keep Level 3 status.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(a)(1)",
+            "quote": "a Level 2 (C3PAO) certification assessment must also be conducted every three years to maintain CMMC Level 3 (DIBCAC) status"
+        },
+        {
+            "id": "annual_affirmation",
+            "type": "affirmation",
+            "summary": "The Affirming Official must affirm Level 3 after each assessment and POA&M closeout and every year, and must also affirm Level 2 (C3PAO) every year.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.22(b)(4)",
+            "quote": "OSCs must annually affirm their CMMC Status of Level 2 (C3PAO) in addition to their CMMC Status of Level 3 (DIBCAC) to maintain eligibility for contracts requiring compliance with Level 3."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary",
+        "governing_document"
+    ],
+    "consequences": [
+        {
+            "summary": "Contracts that require CMMC Level 3 cannot be awarded until Conditional or Final Level 3 status is achieved and affirmed in SPRS.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(b)",
+            "quote": "Prior to award of any contract or subcontract with requirement for CMMC Status of Level 3 (DIBCAC), the following two requirements must be met"
+        },
+        {
+            "summary": "If Conditional status expires during a contract, standard contractual remedies apply and the company cannot win further awards that need Level 3.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(a)(1)(ii)(B)",
+            "quote": "the OSC will be ineligible for additional awards with a requirement for the CMMC Status of Level 3 (DIBCAC) for the information system within the CMMC Assessment Scope until such time as a new CMMC Status is achieved"
+        }
+    ],
+    "governing_document": {
+        "key": "ssp",
+        "title": "System Security Plan",
+        "short": "SSP",
+        "required_by": "RA.L3-3.11.4e",
+        "sections": [
+            "System identification and Level 3 assessment scope",
+            "System environment and boundaries",
+            "Interconnections and external services",
+            "Roles and responsibilities",
+            "Requirement implementation statements",
+            "Security solutions selected, rationale and risk determination",
+            "Plans of action",
+            "Approval and review history"
+        ]
+    },
+    "glossary": [
+        {
+            "term": "CMMC",
+            "definition": "Cybersecurity Maturity Model Certification, the Department of Defense program that verifies contractors protect federal contract and controlled information."
+        },
+        {
+            "term": "CUI",
+            "definition": "Controlled Unclassified Information: government information that is not classified but must still be protected."
+        },
+        {
+            "term": "DIBCAC",
+            "definition": "Defense Industrial Base Cybersecurity Assessment Center, the DCMA team that performs Level 3 assessments."
+        },
+        {
+            "term": "DCMA",
+            "definition": "Defense Contract Management Agency."
+        },
+        {
+            "term": "C3PAO",
+            "definition": "CMMC Third-Party Assessment Organization, an authorized body that performs Level 2 certification assessments."
+        },
+        {
+            "term": "ODP",
+            "definition": "Organization-defined parameter: a value in a requirement, such as a frequency; for Level 3 the DoD has set these values."
+        },
+        {
+            "term": "POA&M",
+            "definition": "Plan of Action and Milestones: the documented plan for closing requirements that are not yet met."
+        },
+        {
+            "term": "SSP",
+            "definition": "System Security Plan: the document that describes the system in scope and how each requirement is implemented."
+        },
+        {
+            "term": "SPRS",
+            "definition": "Supplier Performance Risk System, where contractors record assessment results and affirmations."
+        },
+        {
+            "term": "APT",
+            "definition": "Advanced persistent threat: a well-resourced adversary that pursues long-term access to a target."
+        }
+    ],
+    "display_name": "CMMC Level 3 (32 CFR Part 170)",
+    "counts": {
+        "families": 10,
+        "controls": 24,
+        "objectives": 80
+    },
+    "families": [
+        {
+            "number": "3.1",
+            "code": "AC",
+            "name": "Access Control",
+            "controls": [
+                {
+                    "id": "AC.L3-3.1.2e",
+                    "number": "3.1.2e",
+                    "text": "Restrict access to systems and system components to only those information resources that are owned, provisioned, or issued by the organization.",
+                    "weight": 1,
+                    "dod_parameters": [],
+                    "objectives": [
+                        {
+                            "id": "3.1.2e[a]",
+                            "text": "Information resources that are owned, provisioned, or issued by the organization are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.1.2e[b]",
+                            "text": "Access to systems and system components is restricted to only those information resources that are owned, provisioned, or issued by the organization.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                },
+                {
+                    "id": "AC.L3-3.1.3e",
+                    "number": "3.1.3e",
+                    "text": "Employ secure information transfer solutions to control information flows between security domains on connected systems.",
+                    "weight": 1,
+                    "dod_parameters": [
+                        "secure information transfer solutions"
+                    ],
+                    "objectives": [
+                        {
+                            "id": "3.1.3e[a]",
+                            "text": "Information flows between security domains on connected systems are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.1.3e[b]",
+                            "text": "<3.1.3e_ODP[1]: solutions> are employed to control information flows between security domains on connected systems.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                }
+            ]
+        },
+        {
+            "number": "3.2",
+            "code": "AT",
+            "name": "Awareness and Training",
+            "controls": [
+                {
+                    "id": "AT.L3-3.2.1e",
+                    "number": "3.2.1e",
+                    "text": "Provide awareness training upon initial hire, following a significant cyber event, and at least annually, focused on recognizing and responding to threats from social engineering, advanced persistent threat actors, breaches, and suspicious behaviors; update the training at least annually or when there are significant changes to the threat.",
+                    "weight": 1,
+                    "dod_parameters": [
+                        "upon initial hire, following a significant cyber event, and at least annually,",
+                        "at least annually"
+                    ],
+                    "objectives": [
+                        {
+                            "id": "3.2.1e[a]",
+                            "text": "Threats from social engineering, advanced persistent threat actors, breaches, and suspicious behaviors are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.2.1e[b]",
+                            "text": "Awareness training focused on recognizing and responding to threats from social engineering, advanced persistent threat actors, breaches, and suspicious behaviors is provided <3.2.1e_ODP[1]: frequency>.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.2.1e[c]",
+                            "text": "Significant changes to the threats from social engineering, advanced persistent threat actors, breaches, and suspicious behaviors are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.2.1e[d]",
+                            "text": "Awareness training is updated <3.2.1e_ODP[2]: frequency> or when there are significant changes to the threat.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                },
+                {
+                    "id": "AT.L3-3.2.2e",
+                    "number": "3.2.2e",
+                    "text": "Include practical exercises in awareness training for all users, tailored by roles, to include general users, users with specialized roles, and privileged users, that are aligned with current threat scenarios and provide feedback to individuals involved in the training and their supervisors.",
+                    "weight": 1,
+                    "dod_parameters": [
+                        "all users, tailored by roles, to include general users, users with specialized roles, and privileged users,"
+                    ],
+                    "objectives": [
+                        {
+                            "id": "3.2.2e[a]",
+                            "text": "Practical exercises are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.2.2e[b]",
+                            "text": "Current threat scenarios are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.2.2e[c]",
+                            "text": "Individuals involved in training and their supervisors are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.2.2e[d]",
+                            "text": "Practical exercises that are aligned with current threat scenarios are included in awareness training for <3.2.2e_ODP[1]: roles>.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.2.2e[e]",
+                            "text": "Feedback is provided to individuals involved in the training and their supervisors.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                }
+            ]
+        },
+        {
+            "number": "3.4",
+            "code": "CM",
+            "name": "Configuration Management",
+            "controls": [
+                {
+                    "id": "CM.L3-3.4.1e",
+                    "number": "3.4.1e",
+                    "text": "Establish and maintain an authoritative source and repository to provide a trusted source and accountability for approved and implemented system components.",
+                    "weight": 1,
+                    "dod_parameters": [],
+                    "objectives": [
+                        {
+                            "id": "3.4.1e[a]",
+                            "text": "Approved system components are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.4.1e[b]",
+                            "text": "Implemented system components are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.4.1e[c]",
+                            "text": "An authoritative source and repository are established to provide a trusted source and accountability for approved and implemented system components.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.4.1e[d]",
+                            "text": "An authoritative source and repository are maintained to provide a trusted source and accountability for approved and implemented system components.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                },
+                {
+                    "id": "CM.L3-3.4.2e",
+                    "number": "3.4.2e",
+                    "text": "Employ automated mechanisms to detect misconfigured or unauthorized system components; after detection, remove the components or place the components in a quarantine or remediation network to facilitate patching, re-configuration, or other mitigations.",
+                    "weight": 1,
+                    "dod_parameters": [
+                        "remove the components or place the components in a quarantine or remediation network"
+                    ],
+                    "objectives": [
+                        {
+                            "id": "3.4.2e[a]",
+                            "text": "Automated mechanisms to detect misconfigured or unauthorized system components are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.4.2e[b]",
+                            "text": "Automated mechanisms are employed to detect misconfigured or unauthorized system components.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.4.2e[c]",
+                            "text": "Misconfigured or unauthorized system components are detected.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.4.2e[d]",
+                            "text": "After detection, system components are <3.4.2.e_ODP[1]: removed and/or placed in a quarantine or remediation network> to facilitate patching, re-configuration, or other mitigations.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                },
+                {
+                    "id": "CM.L3-3.4.3e",
+                    "number": "3.4.3e",
+                    "text": "Employ automated discovery and management tools to maintain an up-to-date, complete, accurate, and readily available inventory of system components.",
+                    "weight": 1,
+                    "dod_parameters": [],
+                    "objectives": [
+                        {
+                            "id": "3.4.3e[a]",
+                            "text": "Automated discovery and management tools for the inventory of system components are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.4.3e[b]",
+                            "text": "An up-to-date, complete, accurate, and readily available inventory of system components exists.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.4.3e[c]",
+                            "text": "Automated discovery and management tools are employed to maintain an up-to-date, complete, accurate, and readily available inventory of system components.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                }
+            ]
+        },
+        {
+            "number": "3.5",
+            "code": "IA",
+            "name": "Identification and Authentication",
+            "controls": [
+                {
+                    "id": "IA.L3-3.5.1e",
+                    "number": "3.5.1e",
+                    "text": "Identify and authenticate systems and system components, where possible, before establishing a network connection using bidirectional authentication that is cryptographically based and replay resistant.",
+                    "weight": 1,
+                    "dod_parameters": [
+                        "systems and system components, where possible,"
+                    ],
+                    "objectives": [
+                        {
+                            "id": "3.5.1e[a]",
+                            "text": "Bidirectional authentication that is cryptographically-based is implemented.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.5.1e[b]",
+                            "text": "Bidirectional authentication that is replay-resistant is implemented.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.5.1e[c]",
+                            "text": "<3.5.1e_ODP[1]: systems and system components> are identified and authenticated before establishing a network connection using bidirectional authentication that is cryptographically-based and replay-resistant.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                },
+                {
+                    "id": "IA.L3-3.5.3e",
+                    "number": "3.5.3e",
+                    "text": "Employ automated or manual/procedural mechanisms to prohibit system components from connecting to organizational systems unless the components are known, authenticated, in a properly configured state, or in a trust profile.",
+                    "weight": 1,
+                    "dod_parameters": [],
+                    "objectives": [
+                        {
+                            "id": "3.5.3e[a]",
+                            "text": "System components that are known, authenticated, in a properly configured state, or in a trust profile are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.5.3e[b]",
+                            "text": "Automated or manual/procedural mechanisms to prohibit system components from connecting to organizational systems are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.5.3e[c]",
+                            "text": "Automated or manual/procedural mechanisms are employed to prohibit system components from connecting to organizational systems unless the components are known, authenticated, in a properly configured state, or in a trust profile.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                }
+            ]
+        },
+        {
+            "number": "3.6",
+            "code": "IR",
+            "name": "Incident Response",
+            "controls": [
+                {
+                    "id": "IR.L3-3.6.1e",
+                    "number": "3.6.1e",
+                    "text": "Establish and maintain a security operations center capability that operates 24/7, with allowance for remote/on-call staff.",
+                    "weight": 1,
+                    "dod_parameters": [
+                        "24/7, with allowance for remote/on-call staff."
+                    ],
+                    "objectives": [
+                        {
+                            "id": "3.6.1e[a]",
+                            "text": "A security operations center capability is established.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.6.1e[b]",
+                            "text": "The security operations center capability operates <3.6.1e_ODP[1]: time period>.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.6.1e[c]",
+                            "text": "The security operations center capability is maintained.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                },
+                {
+                    "id": "IR.L3-3.6.2e",
+                    "number": "3.6.2e",
+                    "text": "Establish and maintain a cyber-incident response team that can be deployed by the organization within 24 hours.",
+                    "weight": 1,
+                    "dod_parameters": [
+                        "24 hours."
+                    ],
+                    "objectives": [
+                        {
+                            "id": "3.6.2e[a]",
+                            "text": "A cyber incident response team is established.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.6.2e[b]",
+                            "text": "The cyber incident response team can be deployed by the organization within <3.6.2e_ODP[1]: time period>.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.6.2e[c]",
+                            "text": "The cyber incident response team is maintained.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                }
+            ]
+        },
+        {
+            "number": "3.9",
+            "code": "PS",
+            "name": "Personnel Security",
+            "controls": [
+                {
+                    "id": "PS.L3-3.9.2e",
+                    "number": "3.9.2e",
+                    "text": "Ensure that organizational systems are protected if adverse information develops or is obtained about individuals with access to CUI.",
+                    "weight": 1,
+                    "dod_parameters": [],
+                    "objectives": [
+                        {
+                            "id": "3.9.2e[a]",
+                            "text": "Individuals with access to CUI are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.9.2e[b]",
+                            "text": "Adverse information about individuals with access to CUI is defined.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.9.2e[c]",
+                            "text": "Organizational systems to which individuals have access are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.9.2e[d]",
+                            "text": "Mechanisms are in place to protect organizational systems if adverse information develops or is obtained about individuals with access to CUI.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                }
+            ]
+        },
+        {
+            "number": "3.11",
+            "code": "RA",
+            "name": "Risk Assessment",
+            "controls": [
+                {
+                    "id": "RA.L3-3.11.1e",
+                    "number": "3.11.1e",
+                    "text": "Employ threat intelligence, at a minimum from open or commercial sources, and any DoD-provided sources, as part of a risk assessment to guide and inform the development of organizational systems, security architectures, selection of security solutions, monitoring, threat hunting, and response and recovery activities.",
+                    "weight": 1,
+                    "dod_parameters": [
+                        "threat intelligence, at a minimum from open or commercial sources, and any DoD-provided sources,"
+                    ],
+                    "objectives": [
+                        {
+                            "id": "3.11.1e[a]",
+                            "text": "A risk assessment methodology is identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.1e[b]",
+                            "text": "<3.11.1e_ODP[1]: sources of threat intelligence> are employed as part of a risk assessment to guide and inform the development of organizational systems and security architectures.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.1e[c]",
+                            "text": "<3.11.1e_ODP[1]: sources of threat intelligence> are employed as part of a risk assessment to guide and inform the selection of security solutions.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.1e[d]",
+                            "text": "<3.11.1e_ODP[1]: sources of threat intelligence> are employed as part of a risk assessment to guide and inform system monitoring activities.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.1e[e]",
+                            "text": "<3.11.1e_ODP[1]: sources of threat intelligence> are employed as part of a risk assessment to guide and inform threat hunting activities.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.1e[f]",
+                            "text": "<3.11.1e_ODP[1]: sources of threat intelligence> are employed as part of a risk assessment to guide and inform response and recovery activities.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                },
+                {
+                    "id": "RA.L3-3.11.2e",
+                    "number": "3.11.2e",
+                    "text": "Conduct cyber threat hunting activities on an on-going aperiodic basis or when indications warrant, to search for indicators of compromise in organizational systems and detect, track, and disrupt threats that evade existing controls.",
+                    "weight": 1,
+                    "dod_parameters": [
+                        "on an on-going aperiodic basis or when indications warrant,",
+                        "organizational systems"
+                    ],
+                    "objectives": [
+                        {
+                            "id": "3.11.2e[a]",
+                            "text": "Indicators of compromise are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.2e[b]",
+                            "text": "Cyber threat hunting activities are conducted <3.11.2e_ODP[2] frequency and/or 3.11.2e_ODP[3] event> to search for indicators of compromise in <3.11.2e_ODP[4]: systems>.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.2e[c]",
+                            "text": "Cyber threat hunting activities are conducted <3.11.2e_ODP[2] frequency and/or 3.11.2e_ODP[3] event> to detect, track, and disrupt threats that evade existing controls.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                },
+                {
+                    "id": "RA.L3-3.11.3e",
+                    "number": "3.11.3e",
+                    "text": "Employ advanced automation and analytics capabilities in support of analysts to predict and identify risks to organizations, systems, and system components.",
+                    "weight": 1,
+                    "dod_parameters": [],
+                    "objectives": [
+                        {
+                            "id": "3.11.3e[a]",
+                            "text": "Advanced automation and analytics capabilities to predict and identify risks to organizations, systems, and system components are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.3e[b]",
+                            "text": "Analysts to predict and identify risks to organizations, systems, and system components are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.3e[c]",
+                            "text": "Advanced automation and analytics capabilities are employed in support of analysts to predict and identify risks to organizations, systems, and system components.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                },
+                {
+                    "id": "RA.L3-3.11.4e",
+                    "number": "3.11.4e",
+                    "text": "Document or reference in the system security plan the security solution selected, the rationale for the security solution, and the risk determination.",
+                    "weight": 1,
+                    "dod_parameters": [],
+                    "objectives": [
+                        {
+                            "id": "3.11.4e[a]",
+                            "text": "The system security plan documents or references the security solution selected.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.4e[b]",
+                            "text": "The system security plan documents or references the rationale for the security solution.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.4e[c]",
+                            "text": "The system security plan documents or references the risk determination.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                },
+                {
+                    "id": "RA.L3-3.11.5e",
+                    "number": "3.11.5e",
+                    "text": "Assess the effectiveness of security solutions at least annually or upon receipt of relevant cyber threat information, or in response to a relevant cyber incident, to address anticipated risk to organizational systems and the organization based on current and accumulated threat intelligence.",
+                    "weight": 1,
+                    "dod_parameters": [
+                        "at least annually or upon receipt of relevant cyber threat information, or in response to a relevant cyber incident,"
+                    ],
+                    "objectives": [
+                        {
+                            "id": "3.11.5e[a]",
+                            "text": "Security solutions are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.5e[b]",
+                            "text": "Current and accumulated threat intelligence is identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.5e[c]",
+                            "text": "Anticipated risk to organizational systems and the organization based on current and accumulated threat intelligence is identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.5e[d]",
+                            "text": "The effectiveness of security solutions is assessed <3.11.5e_ODP[1]: frequency> to address anticipated risk to organizational systems and the organization based on current and accumulated threat intelligence.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                },
+                {
+                    "id": "RA.L3-3.11.6e",
+                    "number": "3.11.6e",
+                    "text": "Assess, respond to, and monitor supply chain risks associated with organizational systems and system components.",
+                    "weight": 1,
+                    "dod_parameters": [],
+                    "objectives": [
+                        {
+                            "id": "3.11.6e[a]",
+                            "text": "Supply chain risks associated with organizational systems and system components are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.6e[b]",
+                            "text": "Supply chain risks associated with organizational systems and system components are assessed.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.6e[c]",
+                            "text": "Supply chain risks associated with organizational systems and system components are responded to.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.6e[d]",
+                            "text": "Supply chain risks associated with organizational systems and system components are monitored.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                },
+                {
+                    "id": "RA.L3-3.11.7e",
+                    "number": "3.11.7e",
+                    "text": "Develop a plan for managing supply chain risks associated with organizational systems and system components; update the plan at least annually, and upon receipt of relevant cyber threat information, or in response to a relevant cyber incident.",
+                    "weight": 1,
+                    "dod_parameters": [
+                        "at least annually, and upon receipt of relevant cyber threat information, or in response to a relevant cyber incident."
+                    ],
+                    "objectives": [
+                        {
+                            "id": "3.11.7e[a]",
+                            "text": "Supply chain risks associated with organizational systems and system components are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.7e[b]",
+                            "text": "Organizational systems and system components to include in a supply chain risk management plan are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.7e[c]",
+                            "text": "A plan for managing supply chain risks associated with organizational systems and system components is developed.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.11.7e[d]",
+                            "text": "The plan for managing supply chain risks is updated <3.11.7e_ODP[1]: frequency>.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                }
+            ]
+        },
+        {
+            "number": "3.12",
+            "code": "CA",
+            "name": "Security Assessment",
+            "controls": [
+                {
+                    "id": "CA.L3-3.12.1e",
+                    "number": "3.12.1e",
+                    "text": "Conduct penetration testing at least annually or when significant security changes are made to the system, leveraging automated scanning tools and ad hoc tests using subject matter experts.",
+                    "weight": 1,
+                    "dod_parameters": [
+                        "at least annually or when significant security changes are made to the system,"
+                    ],
+                    "objectives": [
+                        {
+                            "id": "3.12.1e[a]",
+                            "text": "Automated scanning tools are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.12.1e[b]",
+                            "text": "Ad hoc tests using subject matter experts are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.12.1e[c]",
+                            "text": "Penetration testing is conducted <3.12.1e_ODP[1]: frequency> leveraging automated scanning tools and ad hoc tests using subject matter experts.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                }
+            ]
+        },
+        {
+            "number": "3.13",
+            "code": "SC",
+            "name": "System and Communications Protection",
+            "controls": [
+                {
+                    "id": "SC.L3-3.13.4e",
+                    "number": "3.13.4e",
+                    "text": "Employ physical isolation techniques or logical isolation techniques or both in organizational systems and system components.",
+                    "weight": 1,
+                    "dod_parameters": [
+                        "physical isolation techniques or logical isolation techniques or both"
+                    ],
+                    "objectives": [
+                        {
+                            "id": "3.13.4e[a]",
+                            "text": "<3.13.4e_ODP[2]: physical isolation techniques and/or 3.13.4e_ODP[3] logical isolation techniques> are employed in organizational systems and system components.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                }
+            ]
+        },
+        {
+            "number": "3.14",
+            "code": "SI",
+            "name": "System and Information Integrity",
+            "controls": [
+                {
+                    "id": "SI.L3-3.14.1e",
+                    "number": "3.14.1e",
+                    "text": "Verify the integrity of security critical and essential software using root of trust mechanisms or cryptographic signatures.",
+                    "weight": 1,
+                    "dod_parameters": [
+                        "security critical and essential software"
+                    ],
+                    "objectives": [
+                        {
+                            "id": "3.14.1e[a]",
+                            "text": "Root of trust mechanisms or cryptographic signatures are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.14.1e[b]",
+                            "text": "The integrity of <3.14.1e_ODP[1]: security critical or essential software> is verified using root of trust mechanisms or cryptographic signatures.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                },
+                {
+                    "id": "SI.L3-3.14.3e",
+                    "number": "3.14.3e",
+                    "text": "Ensure that specialized assets including IoT, IIoT, OT, GFE, Restricted Information Systems, and test equipment are included in the scope of the specified enhanced security requirements or are segregated in purpose-specific networks.",
+                    "weight": 1,
+                    "dod_parameters": [
+                        "specialized assets including IoT, IIoT, OT, GFE, Restricted Information Systems, and test equipment"
+                    ],
+                    "objectives": [
+                        {
+                            "id": "3.14.3e[a]",
+                            "text": "<3.14.3e_ODP[1]: systems and system components> are included in the scope of the specified enhanced security requirements.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.14.3e[b]",
+                            "text": "Systems and system components that are not included in <3.14.3e_ODP[1]: systems and system components> are segregated in purpose-specific networks.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                },
+                {
+                    "id": "SI.L3-3.14.6e",
+                    "number": "3.14.6e",
+                    "text": "Use threat indicator information and effective mitigations obtained from, at a minimum, open or commercial sources, and any DoD-provided sources, to guide and inform intrusion detection and threat hunting.",
+                    "weight": 1,
+                    "dod_parameters": [
+                        "at a minimum, open or commercial sources, and any DoD-provided sources,"
+                    ],
+                    "objectives": [
+                        {
+                            "id": "3.14.6e[a]",
+                            "text": "Threat indicator information is identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.14.6e[b]",
+                            "text": "Effective mitigations are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.14.6e[c]",
+                            "text": "Intrusion detection approaches are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.14.6e[d]",
+                            "text": "Threat hunting activities are identified.",
+                            "source": "sp800172a"
+                        },
+                        {
+                            "id": "3.14.6e[e]",
+                            "text": "Threat indicator information and effective mitigations obtained from <3.14.6e_ODP[1]: external organizations> are used to guide and inform intrusion detection and threat hunting.",
+                            "source": "sp800172a"
+                        }
+                    ],
+                    "source": "cfr170"
+                }
+            ]
+        }
+    ]
+}

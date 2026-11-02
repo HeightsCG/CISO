@@ -1,0 +1,299 @@
+{
+    "key": "cmmc-l3",
+    "name": "CMMC Level 3",
+    "version": "32 CFR Part 170",
+    "full_name": "Cybersecurity Maturity Model Certification (CMMC) Level 3",
+    "issuing_body": "U.S. Department of Defense",
+    "standard_codes": [
+        "CMMC-L3"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "cfr170",
+            "title": "32 CFR Part 170, Cybersecurity Maturity Model Certification (CMMC) Program",
+            "version": "eCFR as of 1 January 2025",
+            "publisher": "eCFR, Office of the Federal Register",
+            "url": "https://www.ecfr.gov/api/versioner/v1/full/2025-01-01/title-32.xml?part=170",
+            "file": "cmmc/32-cfr-170.xml",
+            "sha256": "3dc8b9bebbe56753206429657cbac24ff32bfd64c75356ba276af38a1032b628"
+        },
+        {
+            "id": "sp800172",
+            "title": "NIST SP 800-172, Enhanced Security Requirements for Protecting Controlled Unclassified Information: A Supplement to NIST Special Publication 800-171",
+            "version": "February 2021",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-172.pdf",
+            "file": "nist-800-172/sp800-172.pdf",
+            "sha256": "3847d851bdd52eb8824fbf57c4d2294099fa68e4b9a505401ba3f0f48fec721b"
+        },
+        {
+            "id": "sp800172a",
+            "title": "NIST SP 800-172A, Assessing Enhanced Security Requirements for Controlled Unclassified Information",
+            "version": "March 2022",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-172A.pdf",
+            "file": "nist-800-172/sp800-172a.pdf",
+            "sha256": "2fdde6c8726831a2aa4d550fb4cda052c3408a4ddd0b06baf19c701b7cc8f9ac"
+        },
+        {
+            "id": "sp800171r2",
+            "title": "NIST SP 800-171 Rev 2, Protecting Controlled Unclassified Information in Nonfederal Systems and Organizations",
+            "version": "Rev 2 (February 2020, updated January 2021)",
+            "publisher": "NIST",
+            "url": "https://csrc.nist.gov/pubs/sp/800/171/r2/upd1/final",
+            "file": "cmmc/sp800-171r2.xlsx",
+            "sha256": "bc8f3f1ab3213e9252d65809afb84509e83e3c88dc5f2b8439ee5fbdb1f04fd2"
+        }
+    ],
+    "source_of": {
+        "controls": "cfr170",
+        "objectives": "sp800172a",
+        "weights": "cfr170"
+    },
+    "terminology": {
+        "control": "security requirement",
+        "controls": "security requirements",
+        "family": "domain",
+        "families": "domains",
+        "objective": "assessment objective",
+        "objectives": "assessment objectives",
+        "plan": "Plan of Action and Milestones",
+        "plan_short": "POA&M",
+        "score": "Level 3 score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "MET"
+        },
+        {
+            "key": "not_met",
+            "label": "NOT MET"
+        },
+        {
+            "key": "na",
+            "label": "N/A"
+        }
+    ],
+    "scoring": {
+        "model": "points",
+        "maximum": 24,
+        "floor": 0,
+        "summary": "Every requirement is worth 1 point. The score is the number of the 24 requirements assessed as MET."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is MET only when every applicable assessment objective is satisfied.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.24(b)(2)",
+            "quote": "Not Met. One or more applicable objectives for the security requirement is not satisfied."
+        },
+        {
+            "id": "na_counts_as_met",
+            "type": "na_handling",
+            "counts_as": "met",
+            "summary": "An objective assessed N/A counts as MET.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.24(b)(3)",
+            "quote": "an assessment objective assessed as N/A is equivalent to the same assessment objective being assessed as MET"
+        },
+        {
+            "id": "one_point_each",
+            "type": "scoring",
+            "summary": "Each Level 3 requirement is worth 1 point; the score is the number MET (maximum 24).",
+            "source": "cfr170",
+            "cite": "32 CFR 170.24(c)(3)",
+            "quote": "All CMMC Level 3 security requirements use a value of one (1) point for each security requirement."
+        },
+        {
+            "id": "level2_prerequisite",
+            "type": "gate",
+            "requires": {
+                "framework": "cmmc-l2",
+                "status": "Final Level 2 (C3PAO)"
+            },
+            "summary": "Final Level 2 (C3PAO) status for the same assessment scope is required before a Level 3 assessment can start.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(a)",
+            "quote": "A CMMC Status of Final Level 2 (C3PAO) for information systems within the Level 3 CMMC Assessment Scope is a prerequisite to undergo a Level 3 certification assessment."
+        },
+        {
+            "id": "level2_maximum_score",
+            "type": "gate",
+            "requires": {
+                "framework": "cmmc-l2",
+                "score": 110
+            },
+            "summary": "The Level 2 assessment must have the maximum score (every Level 2 requirement MET) before Level 3 can be initiated.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.24(c)(3)",
+            "quote": "A maximum score on the Level 2 certification assessment is required to be eligible to initiate a Level 3 certification assessment."
+        },
+        {
+            "id": "periodically",
+            "type": "applicability",
+            "max_interval_years": 1,
+            "summary": "Where an assessment objective uses an organization-defined or periodic interval, the interval may be no longer than one year.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.14(d)",
+            "quote": "As used in many requirements within CMMC, the interval length is organization-defined to provided contractor flexibility, with an interval length of no more than one year."
+        },
+        {
+            "id": "conditional_threshold",
+            "type": "threshold",
+            "metric": "score_ratio",
+            "operator": ">=",
+            "value": 0.8,
+            "outcome": "Conditional Level 3 (DIBCAC)",
+            "summary": "Conditional status needs at least 80% of the requirements MET (20 of 24), with no excluded requirement on the POA&M.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.21(a)(3)(i)",
+            "quote": "The assessment score divided by the total number of CMMC Level 3 security requirements is greater than or equal to 0.8"
+        },
+        {
+            "id": "poam_eligibility",
+            "type": "deferral",
+            "excluded": [
+                "IR.L3-3.6.1e",
+                "IR.L3-3.6.2e",
+                "RA.L3-3.11.1e",
+                "RA.L3-3.11.6e",
+                "RA.L3-3.11.7e",
+                "RA.L3-3.11.4e",
+                "SI.L3-3.14.3e"
+            ],
+            "summary": "Seven requirements can never go on a POA&M and must be MET at assessment; any other NOT MET requirement may be deferred.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.21(a)(3)(ii)",
+            "quote": "The POA&M does not include any of following security requirements:"
+        },
+        {
+            "id": "poam_closeout",
+            "type": "deadline",
+            "days": 180,
+            "from": "Conditional status date",
+            "summary": "Every POA&M item must be closed and confirmed by a DCMA DIBCAC closeout assessment within 180 days, or Conditional status expires.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.21(b)",
+            "quote": "The closing of a POA&M must be confirmed by a POA&M closeout assessment within 180-days of the Conditional CMMC Status Date"
+        },
+        {
+            "id": "final_status",
+            "type": "pass",
+            "metric": "all_met",
+            "outcome": "Final Level 3 (DIBCAC)",
+            "summary": "Final status requires all 24 requirements to be MET, at assessment or after POA&M closeout.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(a)(1)",
+            "quote": "The OSC must complete and achieve a MET result for all security requirements specified in table 1 to § 170.14(c)(4) to achieve the CMMC Status of Level 3 (DIBCAC)."
+        },
+        {
+            "id": "reassessment",
+            "type": "validity",
+            "years": 3,
+            "summary": "The Level 3 assessment must be repeated every three years.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(a)(1)",
+            "quote": "the Level 3 certification assessment must be performed every three years for all information systems within the Level 3 CMMC Assessment Scope"
+        },
+        {
+            "id": "level2_reassessment",
+            "type": "validity",
+            "years": 3,
+            "summary": "A Level 2 (C3PAO) assessment must also be repeated every three years to keep Level 3 status.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(a)(1)",
+            "quote": "a Level 2 (C3PAO) certification assessment must also be conducted every three years to maintain CMMC Level 3 (DIBCAC) status"
+        },
+        {
+            "id": "annual_affirmation",
+            "type": "affirmation",
+            "summary": "The Affirming Official must affirm Level 3 after each assessment and POA&M closeout and every year, and must also affirm Level 2 (C3PAO) every year.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.22(b)(4)",
+            "quote": "OSCs must annually affirm their CMMC Status of Level 2 (C3PAO) in addition to their CMMC Status of Level 3 (DIBCAC) to maintain eligibility for contracts requiring compliance with Level 3."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary",
+        "governing_document"
+    ],
+    "consequences": [
+        {
+            "summary": "Contracts that require CMMC Level 3 cannot be awarded until Conditional or Final Level 3 status is achieved and affirmed in SPRS.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(b)",
+            "quote": "Prior to award of any contract or subcontract with requirement for CMMC Status of Level 3 (DIBCAC), the following two requirements must be met"
+        },
+        {
+            "summary": "If Conditional status expires during a contract, standard contractual remedies apply and the company cannot win further awards that need Level 3.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(a)(1)(ii)(B)",
+            "quote": "the OSC will be ineligible for additional awards with a requirement for the CMMC Status of Level 3 (DIBCAC) for the information system within the CMMC Assessment Scope until such time as a new CMMC Status is achieved"
+        }
+    ],
+    "governing_document": {
+        "key": "ssp",
+        "title": "System Security Plan",
+        "short": "SSP",
+        "required_by": "RA.L3-3.11.4e",
+        "sections": [
+            "System identification and Level 3 assessment scope",
+            "System environment and boundaries",
+            "Interconnections and external services",
+            "Roles and responsibilities",
+            "Requirement implementation statements",
+            "Security solutions selected, rationale and risk determination",
+            "Plans of action",
+            "Approval and review history"
+        ]
+    },
+    "glossary": [
+        {
+            "term": "CMMC",
+            "definition": "Cybersecurity Maturity Model Certification, the Department of Defense program that verifies contractors protect federal contract and controlled information."
+        },
+        {
+            "term": "CUI",
+            "definition": "Controlled Unclassified Information: government information that is not classified but must still be protected."
+        },
+        {
+            "term": "DIBCAC",
+            "definition": "Defense Industrial Base Cybersecurity Assessment Center, the DCMA team that performs Level 3 assessments."
+        },
+        {
+            "term": "DCMA",
+            "definition": "Defense Contract Management Agency."
+        },
+        {
+            "term": "C3PAO",
+            "definition": "CMMC Third-Party Assessment Organization, an authorized body that performs Level 2 certification assessments."
+        },
+        {
+            "term": "ODP",
+            "definition": "Organization-defined parameter: a value in a requirement, such as a frequency; for Level 3 the DoD has set these values."
+        },
+        {
+            "term": "POA&M",
+            "definition": "Plan of Action and Milestones: the documented plan for closing requirements that are not yet met."
+        },
+        {
+            "term": "SSP",
+            "definition": "System Security Plan: the document that describes the system in scope and how each requirement is implemented."
+        },
+        {
+            "term": "SPRS",
+            "definition": "Supplier Performance Risk System, where contractors record assessment results and affirmations."
+        },
+        {
+            "term": "APT",
+            "definition": "Advanced persistent threat: a well-resourced adversary that pursues long-term access to a target."
+        }
+    ]
+}

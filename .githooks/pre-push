@@ -1,0 +1,6 @@
+#!/bin/sh
+# Blocks a push when the framework reference tests or other tests fail.
+php tests/run.php || {
+    echo "Push stopped: tests failed. Fix them, or push with --no-verify if you must."
+    exit 1
+}

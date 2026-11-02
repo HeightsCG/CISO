@@ -1,0 +1,213 @@
+{
+    "key": "nist-800-171-r2",
+    "name": "NIST SP 800-171",
+    "version": "Rev 2",
+    "full_name": "NIST Special Publication 800-171 Revision 2, Protecting Controlled Unclassified Information in Nonfederal Systems and Organizations",
+    "issuing_body": "National Institute of Standards and Technology (NIST)",
+    "standard_codes": [
+        "NIST-800-171-R2"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "sp800171r2",
+            "title": "NIST SP 800-171 Rev 2, Protecting Controlled Unclassified Information in Nonfederal Systems and Organizations",
+            "version": "Rev 2 (February 2020, updated January 2021)",
+            "publisher": "NIST",
+            "url": "https://csrc.nist.gov/pubs/sp/800/171/r2/upd1/final",
+            "file": "cmmc/sp800-171r2.xlsx",
+            "sha256": "bc8f3f1ab3213e9252d65809afb84509e83e3c88dc5f2b8439ee5fbdb1f04fd2"
+        },
+        {
+            "id": "sp800171a",
+            "title": "NIST SP 800-171A, Assessing Security Requirements for Controlled Unclassified Information (June 2018)",
+            "version": "June 2018",
+            "publisher": "NIST",
+            "url": "https://doi.org/10.6028/NIST.SP.800-171A",
+            "file": "cmmc/sp800-171a-2018.pdf",
+            "sha256": "21bf3acc43f4284f723639b82eb71e3ce597fa3610f7e9dcf5e8484e22bc0f71"
+        },
+        {
+            "id": "dodam",
+            "title": "NIST SP 800-171 DoD Assessment Methodology, Version 1.2.1 (June 24, 2020)",
+            "version": "Version 1.2.1 (June 24, 2020)",
+            "publisher": "U.S. Department of Defense",
+            "url": "https://www.acq.osd.mil/asda/dpc/cp/cyber/docs/safeguarding/NIST-SP-800-171-Assessment-Methodology-Version-1.2.1-6.24.2020.pdf",
+            "file": "cmmc/dod-assessment-methodology-1.2.1.pdf",
+            "sha256": "dd88416ca43f34e817c05b9cb416ffce47f615765a9fd0e1cdc52b9f2de60835"
+        },
+        {
+            "id": "cfr170",
+            "title": "32 CFR Part 170, Cybersecurity Maturity Model Certification (CMMC) Program",
+            "version": "eCFR as of 1 January 2025",
+            "publisher": "eCFR, Office of the Federal Register",
+            "url": "https://www.ecfr.gov/api/versioner/v1/full/2025-01-01/title-32.xml?part=170",
+            "file": "cmmc/32-cfr-170.xml",
+            "sha256": "3dc8b9bebbe56753206429657cbac24ff32bfd64c75356ba276af38a1032b628"
+        }
+    ],
+    "source_of": {
+        "controls": "sp800171r2",
+        "objectives": "sp800171a",
+        "weights": "dodam"
+    },
+    "terminology": {
+        "control": "security requirement",
+        "controls": "security requirements",
+        "family": "family",
+        "families": "families",
+        "objective": "assessment objective",
+        "objectives": "assessment objectives",
+        "plan": "Plan of Action",
+        "plan_short": "POA&M",
+        "score": "SPRS score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "points",
+        "maximum": 110,
+        "floor": -203,
+        "summary": "Start at 110 and subtract each unimplemented requirement's point value (DoD Assessment Methodology). The score can be negative."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is implemented only when every assessment objective is satisfied.",
+            "source": "sp800171a",
+            "cite": "NIST SP 800-171A, section 2.1",
+            "quote": "Determine if:"
+        },
+        {
+            "id": "negative_score",
+            "type": "scoring",
+            "summary": "The score of 110 is reduced by each requirement not implemented and may be negative.",
+            "source": "dodam",
+            "cite": "DoD Assessment Methodology 1.2.1, section 5",
+            "quote": "The score of 110 is reduced by each requirement not implemented, which may result in a negative score."
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "controls": {
+                "3.5.3": {
+                    "partial_label": "MFA implemented for remote and privileged users only",
+                    "partial": 3,
+                    "none": 5
+                },
+                "3.13.11": {
+                    "partial_label": "Encryption employed but not FIPS-validated",
+                    "partial": 3,
+                    "none": 5
+                }
+            },
+            "summary": "3.5.3 and 3.13.11 subtract 3 points when partially implemented and 5 when not implemented.",
+            "source": "dodam",
+            "cite": "DoD Assessment Methodology 1.2.1, Annex A",
+            "quote": "If encryption is employed, but is not FIPS validated, 3 points are subtracted from the score of 110."
+        },
+        {
+            "id": "ssp_required",
+            "type": "gate",
+            "control": "3.12.4",
+            "summary": "A system security plan must exist; it carries no point value, and without it the assessment cannot be completed.",
+            "source": "dodam",
+            "cite": "DoD Assessment Methodology 1.2.1, section 5(g)",
+            "quote": "The contractor must have a system security plan (Basic Security Requirement 3.12.4) in place"
+        },
+        {
+            "id": "plan_not_substitute",
+            "type": "plan_handling",
+            "summary": "A requirement with a plan of action is still scored as not implemented.",
+            "source": "dodam",
+            "cite": "DoD Assessment Methodology 1.2.1, section 5",
+            "quote": "Security requirements not implemented, whether a plan of action is in place or not, will be assessed as 'not implemented."
+        },
+        {
+            "id": "reassessment",
+            "type": "validity",
+            "years": 3,
+            "summary": "Assessments are expected every three years unless risk or change drives a different frequency.",
+            "source": "dodam",
+            "cite": "DoD Assessment Methodology 1.2.1, section 3",
+            "quote": "is anticipated to be once every three years unless other factors"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary",
+        "governing_document"
+    ],
+    "consequences": [
+        {
+            "summary": "Contractors handling CUI under DFARS 252.204-7012 must post a current score to SPRS; a low or missing score can affect contract eligibility.",
+            "source": "dodam",
+            "cite": "DoD Assessment Methodology 1.2.1, section 3",
+            "quote": "Date a score of 110 is expected to be achieved"
+        }
+    ],
+    "governing_document": {
+        "key": "ssp",
+        "title": "System Security Plan",
+        "short": "SSP",
+        "required_by": "3.12.4",
+        "sections": [
+            "System identification and scope",
+            "System environment and boundaries",
+            "Interconnections and external services",
+            "Roles and responsibilities",
+            "Requirement implementation statements",
+            "Plans of action",
+            "Approval and review history"
+        ]
+    },
+    "glossary": [
+        {
+            "term": "CUI",
+            "definition": "Controlled Unclassified Information: government information that is not classified but must still be protected."
+        },
+        {
+            "term": "FCI",
+            "definition": "Federal Contract Information: information provided by or generated for the government under a contract and not intended for public release."
+        },
+        {
+            "term": "SPRS",
+            "definition": "Supplier Performance Risk System, where contractors record assessment scores and affirmations."
+        },
+        {
+            "term": "POA&M",
+            "definition": "Plan of Action and Milestones: the documented plan for closing requirements that are not yet met."
+        },
+        {
+            "term": "SSP",
+            "definition": "System Security Plan: the document that describes the system in scope and how each requirement is implemented."
+        },
+        {
+            "term": "FIPS",
+            "definition": "Federal Information Processing Standards; FIPS 140 validation confirms a cryptographic module has been independently tested."
+        },
+        {
+            "term": "MFA",
+            "definition": "Multi-factor authentication: signing in with two or more independent factors."
+        },
+        {
+            "term": "NIST",
+            "definition": "National Institute of Standards and Technology, the U.S. agency that publishes the 800-171 requirements."
+        }
+    ]
+}

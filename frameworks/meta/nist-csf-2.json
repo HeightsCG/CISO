@@ -1,0 +1,185 @@
+{
+    "key": "nist-csf-2",
+    "name": "NIST CSF",
+    "version": "2.0",
+    "full_name": "The NIST Cybersecurity Framework (CSF) 2.0",
+    "issuing_body": "National Institute of Standards and Technology (NIST)",
+    "standard_codes": [
+        "NIST-CSF"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "csf2core",
+            "title": "NIST Cybersecurity Framework 2.0 Core, CSF 2.0 Reference Tool (CPRT) export",
+            "version": "2.0 (February 2024)",
+            "publisher": "NIST",
+            "url": "https://csrc.nist.gov/extensions/nudp/services/json/nudp/framework/version/CSF_2_0_0/export/excel",
+            "file": "csf/cprt-csf-2.0.xlsx",
+            "sha256": "c0e389481c138346a6fcef68464d38f26ecb981e50de5aa45b6e1d85a938e09b"
+        },
+        {
+            "id": "cswp29",
+            "title": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+            "version": "2.0 (February 26, 2024)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf",
+            "file": "csf/NIST.CSWP.29.pdf",
+            "sha256": "3c31f46fee98cac0c4323453e5109291a213b4de7fef8c058af9bf67f717433c"
+        }
+    ],
+    "source_of": {
+        "controls": "csf2core",
+        "guidance": "csf2core"
+    },
+    "terminology": {
+        "control": "subcategory",
+        "controls": "subcategories",
+        "family": "category",
+        "families": "categories",
+        "objective": "implementation example",
+        "objectives": "implementation examples",
+        "plan": "action plan",
+        "plan_short": "action plan",
+        "score": "CSF Tier"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Achieved"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Achieved"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Achieved"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "maturity",
+        "levels": [
+            {
+                "level": 1,
+                "key": "partial",
+                "label": "Partial",
+                "source": "cswp29",
+                "cite": "NIST CSWP 29, Appendix B, Table 2",
+                "quote": "Application of the organizational cybersecurity risk strategy is managed in an ad hoc manner."
+            },
+            {
+                "level": 2,
+                "key": "risk_informed",
+                "label": "Risk Informed",
+                "source": "cswp29",
+                "cite": "NIST CSWP 29, Appendix B, Table 2",
+                "quote": "The prioritization of cybersecurity activities and protection needs is directly informed by organizational risk objectives, the threat environment, or business/mission requirements."
+            },
+            {
+                "level": 3,
+                "key": "repeatable",
+                "label": "Repeatable",
+                "source": "cswp29",
+                "cite": "NIST CSWP 29, Appendix B, Table 2",
+                "quote": "The organization's risk management practices are formally approved and expressed as policy."
+            },
+            {
+                "level": 4,
+                "key": "adaptive",
+                "label": "Adaptive",
+                "source": "cswp29",
+                "cite": "NIST CSWP 29, Appendix B, Table 2",
+                "quote": "There is an organization-wide approach to managing cybersecurity risks that uses risk-informed policies, processes, and procedures to address potential cybersecurity events."
+            }
+        ],
+        "summary": "Each subcategory is rated for the extent it is achieved (the Current Profile). Overall rigor is characterized by CSF Tier 1 (Partial) to 4 (Adaptive), separately for governance (GOVERN) and management (IDENTIFY, PROTECT, DETECT, RESPOND, RECOVER). Tiers are a characterization, not a computed score."
+    },
+    "rules": [
+        {
+            "id": "tier_scale",
+            "type": "scoring",
+            "summary": "There are four Tiers: Partial (1), Risk Informed (2), Repeatable (3) and Adaptive (4).",
+            "source": "cswp29",
+            "cite": "NIST CSWP 29, Appendix C (CSF Tier)",
+            "quote": "There are four Tiers: Partial (Tier 1), Risk Informed (Tier 2), Repeatable (Tier 3), and Adaptive (Tier 4)."
+        },
+        {
+            "id": "tier_by_practice_area",
+            "type": "rollup",
+            "summary": "A Tier is set for cybersecurity risk governance (the GOVERN function) and for cybersecurity risk management (the other five functions).",
+            "source": "cswp29",
+            "cite": "NIST CSWP 29, Appendix B",
+            "quote": "The Tiers characterize the rigor of an organization's cybersecurity risk governance practices (GOVERN) and cybersecurity risk management practices (IDENTIFY, PROTECT, DETECT, RESPOND, and RECOVER)."
+        },
+        {
+            "id": "tiers_optional",
+            "type": "applicability",
+            "summary": "Using Tiers is the organization's choice; they inform the Current and Target Profiles.",
+            "source": "cswp29",
+            "cite": "NIST CSWP 29, section 3.2",
+            "quote": "An organization can choose to use the Tiers to inform its Current and Target Profiles."
+        },
+        {
+            "id": "extent_achieved",
+            "type": "partial_credit",
+            "summary": "The Current Profile records how, or to what extent, each outcome is achieved, so an outcome can be partially achieved.",
+            "source": "cswp29",
+            "cite": "NIST CSWP 29, section 3.1",
+            "quote": "A Current Profile specifies the Core outcomes that an organization is currently achieving (or attempting to achieve) and characterizes how or to what extent each outcome is being achieved."
+        },
+        {
+            "id": "gap_action_plan",
+            "type": "plan_handling",
+            "summary": "Gaps between the Current and Target Profiles are analyzed and addressed in a prioritized action plan.",
+            "source": "cswp29",
+            "cite": "NIST CSWP 29, section 3.1, step 4",
+            "quote": "Conduct a gap analysis to identify and analyze the differences between the Current and Target Profiles, and develop a prioritized action plan (e.g., risk register, risk detail report, Plan of Action and Milestones [POA&M]) to address those gaps."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary",
+        "governing_document"
+    ],
+    "governing_document": {
+        "key": "organizational_profile",
+        "title": "CSF Organizational Profile",
+        "short": "Profile",
+        "sections": [
+            "Scope",
+            "Current Profile",
+            "Target Profile",
+            "Gap analysis",
+            "Action plan"
+        ]
+    },
+    "glossary": [
+        {
+            "term": "CSF",
+            "definition": "The NIST Cybersecurity Framework, a set of cybersecurity outcomes arranged by Function, Category and Subcategory."
+        },
+        {
+            "term": "Tier",
+            "definition": "A characterization of how rigorous an organization's cybersecurity risk governance and management practices are, from Tier 1 (Partial) to Tier 4 (Adaptive)."
+        },
+        {
+            "term": "Current Profile",
+            "definition": "The CSF outcomes an organization is achieving today, and to what extent."
+        },
+        {
+            "term": "Target Profile",
+            "definition": "The CSF outcomes an organization has chosen and prioritized to achieve."
+        },
+        {
+            "term": "NIST",
+            "definition": "National Institute of Standards and Technology, the U.S. agency that publishes the CSF."
+        }
+    ]
+}

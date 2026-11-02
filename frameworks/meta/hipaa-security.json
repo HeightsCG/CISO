@@ -1,0 +1,137 @@
+{
+    "key": "hipaa-security",
+    "name": "HIPAA Security Rule",
+    "version": "45 CFR 164 Subpart C",
+    "full_name": "HIPAA Security Rule: Security Standards for the Protection of Electronic Protected Health Information (45 CFR Part 164, Subpart C)",
+    "issuing_body": "U.S. Department of Health and Human Services (HHS)",
+    "standard_codes": [
+        "HIPAA-SEC"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "cfr164c",
+            "title": "45 CFR Part 164, Subpart C, Security Standards for the Protection of Electronic Protected Health Information",
+            "version": "eCFR as of 29 October 2026",
+            "publisher": "eCFR, Office of the Federal Register",
+            "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-10-29/title-45.xml?part=164&subpart=C",
+            "file": "hipaa/45-cfr-164-subpart-c.xml",
+            "date": "2026-10-29",
+            "sha256": "de60dfe5fd8c031ca9ba8189b20dadc8540eaac84f78c367c1355fb24540595c"
+        }
+    ],
+    "source_of": {
+        "controls": "cfr164c",
+        "objectives": "cfr164c"
+    },
+    "control_flags": {
+        "requirement_type": "standard or implementation_specification.",
+        "implementation": "Implementation specifications only: required or addressable, exactly as the parenthetical after the specification's title in the rule text (164.306(d)(1)). Specifications listed under the heading \"Implementation specifications (Required)\" in 164.314 inherit that status.",
+        "parent": "Implementation specifications only: the standard they implement.",
+        "objectives": "The unlabelled sub-paragraphs a standard or specification lists (for example the three provisions a business associate contract must contain). Implementation specifications are controls in their own right, not objectives, because each is assessed and documented separately."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "safeguard category",
+        "families": "safeguard categories",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable standards and implementation specifications that are implemented. An addressable specification counts as implemented when it is implemented, or when the decision not to implement it is documented and an equivalent alternative measure is in place where reasonable and appropriate. The Security Rule itself defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "standards_mandatory",
+            "type": "applicability",
+            "applies_to": "standard",
+            "summary": "Every standard in 164.308 to 164.316 applies to all electronic protected health information.",
+            "source": "cfr164c",
+            "cite": "45 CFR 164.306(c)",
+            "quote": "A covered entity or business associate must comply with the applicable standards as provided in this section and in §§ 164.308, 164.310, 164.312, 164.314 and 164.316 with respect to all electronic protected health information."
+        },
+        {
+            "id": "required_specifications",
+            "type": "applicability",
+            "applies_to": "required",
+            "summary": "A required implementation specification must be implemented.",
+            "source": "cfr164c",
+            "cite": "45 CFR 164.306(d)(2)",
+            "quote": "When a standard adopted in § 164.308, § 164.310, § 164.312, § 164.314, or § 164.316 includes required implementation specifications, a covered entity or business associate must implement the implementation specifications."
+        },
+        {
+            "id": "addressable_specifications",
+            "type": "applicability",
+            "applies_to": "addressable",
+            "summary": "Addressable does not mean optional. The entity must assess whether each addressable specification is reasonable and appropriate; if it is, implement it; if not, document why and implement an equivalent alternative measure if reasonable and appropriate. An undocumented decision not to implement is a gap.",
+            "source": "cfr164c",
+            "cite": "45 CFR 164.306(d)(3)",
+            "quote": "includes addressable implementation specifications, a covered entity or business associate must— (i) Assess whether each implementation specification is a reasonable and appropriate safeguard in its environment, when analyzed with reference to the likely contribution to protecting electronic protected health information; and (ii) As applicable to the covered entity or business associate— (A) Implement the implementation specification if reasonable and appropriate; or (B) If implementing the implementation specification is not reasonable and appropriate—"
+        },
+        {
+            "id": "flexibility_of_approach",
+            "type": "applicability",
+            "summary": "Security measures are chosen taking account of the entity's size, complexity and capabilities, its technical infrastructure, the cost of measures, and the probability and criticality of risks.",
+            "source": "cfr164c",
+            "cite": "45 CFR 164.306(b)(2)",
+            "quote": "In deciding which security measures to use, a covered entity or business associate must take into account the following factors:"
+        },
+        {
+            "id": "documentation_retention",
+            "type": "deadline",
+            "years": 6,
+            "from": "creation, or the date last in effect, whichever is later",
+            "summary": "Security Rule documentation must be kept for six years from creation or from when it was last in effect, whichever is later.",
+            "source": "cfr164c",
+            "cite": "45 CFR 164.316(b)(2)(i)",
+            "quote": "Retain the documentation required by paragraph (b)(1) of this section for 6 years from the date of its creation or the date when it last was in effect, whichever is later."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "HIPAA",
+            "definition": "Health Insurance Portability and Accountability Act of 1996, whose Security Rule sets safeguards for electronic protected health information."
+        },
+        {
+            "term": "ePHI",
+            "definition": "Electronic protected health information: individually identifiable health information that is created, received, maintained or transmitted electronically."
+        },
+        {
+            "term": "HHS",
+            "definition": "U.S. Department of Health and Human Services, which issues and enforces the HIPAA rules through its Office for Civil Rights (OCR)."
+        },
+        {
+            "term": "Business associate",
+            "definition": "A person or organization that creates, receives, maintains or transmits protected health information on behalf of a covered entity."
+        }
+    ]
+}

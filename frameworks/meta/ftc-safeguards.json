@@ -1,0 +1,182 @@
+{
+    "key": "ftc-safeguards",
+    "name": "FTC Safeguards Rule",
+    "version": "16 CFR Part 314",
+    "full_name": "FTC Standards for Safeguarding Customer Information (Safeguards Rule), 16 CFR Part 314",
+    "issuing_body": "U.S. Federal Trade Commission (FTC)",
+    "standard_codes": [
+        "FTC-SAFEGUARDS"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "cfr314",
+            "title": "16 CFR Part 314, Standards for Safeguarding Customer Information",
+            "version": "eCFR as of 19 October 2026",
+            "publisher": "eCFR, Office of the Federal Register",
+            "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-10-19/title-16.xml?part=314",
+            "file": "ftc/16-cfr-314.xml",
+            "date": "2026-10-19",
+            "sha256": "3ba7ecc3463953a1db1ccf38f4b0ade4182e36c7e24e111eb8869910e271d41a"
+        }
+    ],
+    "source_of": {
+        "controls": "cfr314",
+        "objectives": "cfr314"
+    },
+    "control_flags": {
+        "small_institution_exempt": "True for elements that 16 CFR 314.6 lifts in full for financial institutions maintaining customer information on fewer than 5,000 consumers (314.4(h) and (i)). The partial exemptions, 314.4(b)(1) and (d)(2), are objectives and are listed in the small_institution_exemption rule.",
+        "objectives": "The numbered paragraphs of each element; roman-numeral items are folded into the paragraph they belong to."
+    },
+    "terminology": {
+        "control": "element",
+        "controls": "elements",
+        "family": "section",
+        "families": "sections",
+        "objective": "requirement",
+        "objectives": "requirements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable elements of 16 CFR 314.4 that are implemented. Elements and requirements lifted by the small-institution exception in 314.6 are not applicable to qualifying institutions. The rule itself defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "program_elements",
+            "type": "rollup",
+            "summary": "The information security program must include every element of 314.4; an element is implemented only when each of its applicable requirements is.",
+            "source": "cfr314",
+            "cite": "16 CFR 314.3(a)",
+            "quote": "The information security program shall include the elements set forth in § 314.4"
+        },
+        {
+            "id": "small_institution_exemption",
+            "type": "applicability",
+            "metric": "consumers",
+            "operator": "<",
+            "value": 5000,
+            "exempt": [
+                "314.4(b)(1)",
+                "314.4(d)(2)",
+                "314.4(h)",
+                "314.4(i)"
+            ],
+            "summary": "A financial institution that maintains customer information on fewer than 5,000 consumers need not have a written risk assessment, continuous monitoring or annual penetration testing and six-monthly vulnerability assessments, a written incident response plan, or the annual written report to the board.",
+            "source": "cfr314",
+            "cite": "16 CFR 314.6",
+            "quote": "Section 314.4(b)(1), (d)(2), (h), and (i) do not apply to financial institutions that maintain customer information concerning fewer than five thousand consumers."
+        },
+        {
+            "id": "ftc_notification",
+            "type": "deadline",
+            "days": 30,
+            "from": "discovery of a notification event",
+            "threshold_consumers": 500,
+            "control": "314.4(j)",
+            "summary": "A notification event involving the information of at least 500 consumers must be reported to the FTC as soon as possible and no later than 30 days after discovery.",
+            "source": "cfr314",
+            "cite": "16 CFR 314.4(j)(1)",
+            "quote": "if the notification event involves the information of at least 500 consumers, you must notify the Federal Trade Commission as soon as possible, and no later than 30 days after discovery of the event."
+        },
+        {
+            "id": "notification_effective",
+            "type": "effective_date",
+            "control": "314.4(j)",
+            "date": "2024-05-13",
+            "summary": "The FTC notification requirement applies from 13 May 2024.",
+            "source": "cfr314",
+            "cite": "16 CFR 314.5",
+            "quote": "Section 314.4(j) is effective as of May 13, 2024."
+        },
+        {
+            "id": "board_report",
+            "type": "deadline",
+            "interval": "annual",
+            "control": "314.4(i)",
+            "summary": "The Qualified Individual must report in writing to the board (or a senior officer if there is no board) regularly and at least once a year.",
+            "source": "cfr314",
+            "cite": "16 CFR 314.4(i)",
+            "quote": "Require your Qualified Individual to report in writing, regularly and at least annually, to your board of directors or equivalent governing body."
+        },
+        {
+            "id": "penetration_testing",
+            "type": "deadline",
+            "interval": "annual",
+            "control": "314.4(d)",
+            "summary": "Without effective continuous monitoring, penetration testing is required every year.",
+            "source": "cfr314",
+            "cite": "16 CFR 314.4(d)(2)(i)",
+            "quote": "Annual penetration testing of your information systems determined each given year based on relevant identified risks in accordance with the risk assessment"
+        },
+        {
+            "id": "vulnerability_assessment",
+            "type": "deadline",
+            "months": 6,
+            "control": "314.4(d)",
+            "summary": "Without effective continuous monitoring, vulnerability assessments are required at least every six months and after material changes.",
+            "source": "cfr314",
+            "cite": "16 CFR 314.4(d)(2)(ii)",
+            "quote": "based on the risk assessment, at least every six months; and whenever there are material changes to your operations or business arrangements"
+        },
+        {
+            "id": "disposal",
+            "type": "deadline",
+            "years": 2,
+            "from": "last date the information is used to provide a product or service to the customer",
+            "control": "314.4(c)",
+            "summary": "Customer information must be securely disposed of no later than two years after it was last used for the customer, unless an exception applies.",
+            "source": "cfr314",
+            "cite": "16 CFR 314.4(c)(6)(i)",
+            "quote": "no later than two years after the last date the information is used in connection with the provision of a product or service to the customer to which it relates"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "FTC",
+            "definition": "Federal Trade Commission, which enforces the Safeguards Rule for financial institutions under its jurisdiction."
+        },
+        {
+            "term": "GLBA",
+            "definition": "Gramm-Leach-Bliley Act; sections 501 and 505(b)(2) are implemented by the Safeguards Rule."
+        },
+        {
+            "term": "Qualified Individual",
+            "definition": "The person designated under 314.4(a) to oversee, implement and enforce the information security program."
+        },
+        {
+            "term": "Notification event",
+            "definition": "Acquisition of unencrypted customer information without the authorization of the individual to whom it pertains (16 CFR 314.2)."
+        },
+        {
+            "term": "MFA",
+            "definition": "Multi-factor authentication: verification of at least two of knowledge, possession and inherence factors."
+        }
+    ]
+}

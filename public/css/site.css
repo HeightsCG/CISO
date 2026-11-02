@@ -6722,76 +6722,11 @@ table.data.ledger .ledger__amount {
     }
 }
 
-.report__layout {
-    display: grid;
-    grid-template-columns: 240px minmax(0, 1fr);
-    gap: var(--space-4);
-    height: calc(100vh - 210px);
-    min-height: 420px;
-}
-
-.report__nav,
-.report__editor {
+.report__card-head {
     display: flex;
-    flex-direction: column;
-    min-height: 0;
-    margin: 0;
-}
-
-.report__nav-list {
-    flex: 1 1 auto;
-    min-height: 0;
-    padding: var(--space-2) 0;
-    overflow-y: auto;
-}
-
-.report__nav-item {
-    display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: var(--space-2);
-    width: 100%;
-    padding: 8px var(--space-4);
-    font-family: inherit;
-    font-size: var(--fs-body);
-    color: var(--text-primary);
-    text-align: left;
-    background: none;
-    border: 0;
-    border-left: 2px solid transparent;
-    cursor: pointer;
-}
-
-.report__nav-item:hover {
-    background: var(--surface-sunken);
-}
-
-.report__nav-item.is-active {
-    font-weight: var(--fw-semibold);
-    background: var(--accent-subtle);
-    border-left-color: var(--accent);
-}
-
-.report__nav-count {
-    font-size: var(--fs-meta);
-    color: var(--text-muted);
-}
-
-.report__editor-actions {
-    display: flex;
-    gap: var(--space-2);
-    margin-left: auto;
-}
-
-.report__editor-body {
-    flex: 1 1 auto;
-    min-height: 0;
-    padding: var(--space-4);
-    overflow-y: auto;
-}
-
-.report__editor-body textarea.form-control {
-    resize: vertical;
+    gap: var(--space-4);
 }
 
 .report__table tbody tr {
@@ -6807,17 +6742,6 @@ table.data.ledger .ledger__amount {
     color: var(--text-muted);
 }
 
-.findings__list {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-}
-
-.finding-card {
-    padding: var(--space-4);
-    border-bottom: 1px solid var(--border);
-}
-
 .finding-card__head {
     display: flex;
     align-items: baseline;
@@ -6826,10 +6750,8 @@ table.data.ledger .ledger__amount {
     margin-bottom: var(--space-2);
 }
 
-.finding-card__title {
-    margin: 0;
-    font-size: var(--fs-subsection);
-    font-weight: var(--fw-semibold);
+.finding-card__label {
+    margin: var(--space-3) 0 var(--space-1);
 }
 
 .finding-card__text {
@@ -6837,27 +6759,3 @@ table.data.ledger .ledger__amount {
     white-space: pre-wrap;
 }
 
-.finding-card__label {
-    margin: var(--space-2) 0 2px;
-    font-size: var(--fs-meta);
-    font-weight: var(--fw-semibold);
-    color: var(--text-secondary);
-}
-
-@media (max-width: 900px) {
-
-    .report__layout {
-        grid-template-columns: 1fr;
-        height: auto;
-    }
-
-    .report__nav-list {
-        max-height: 220px;
-    }
-}
-
-.report__layout--single {
-    display: flex;
-    flex-direction: column;
-    grid-template-columns: none;
-}

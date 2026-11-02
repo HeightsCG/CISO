@@ -1,0 +1,292 @@
+SLOVENSKI STANDARD
+SIST EN ISO/IEC 27001:2023
+01-november-2023
+SIST EN ISO/IEC 27001:2017
+Nadomešča:
+Informacijska varnost, kibernetska varnost in varovanje zasebnosti - Sistemi
+upravljanja informacijske varnosti - Zahteve (ISO/IEC 27001:2022)
+Information security, cybersecurity and privacy protection - Information security
+management systems - Requirements (ISO/IEC 27001:2022)
+Informationssicherheit, Cybersicherheit und Datenschutz -
+Informationssicherheitsmanagementsysteme - Anforderungen (ISO/IEC 27001:2022)
+Sécurité de l'information, cybersécurité et protection de la vie privée - Systèmes de
+management de la sécurité de l'information - Exigences (ISO/IEC 27001:2022)
+Ta slovenski standard je istoveten z: EN ISO/IEC 27001:2023
+03.100.70 Sistemi vodenja Management systems
+35.030 Informacijska varnost IT Security
+ICS:
+SIST EN ISO/IEC 27001:2023 en,fr,de
+2003-01.Slovenski inštitut za standardizacijo. Razmnoževanje celote ali delov tega standarda ni dovoljeno.
+iTeh Standards
+(https://standards.iteh.ai)
+Document Preview
+SIST EN ISO/IEC 27001:2023
+https://standards.iteh.ai/catalog/standards/sist/b69db6f5-8395-4833-8853-ce91cd0c17ef/sist-en-iso-iec-27001-2023SIST EN ISO/IEC 27001:2023
+iTeh Standards
+(https://standards.iteh.ai)
+Document Preview
+SIST EN ISO/IEC 27001:2023
+https://standards.iteh.ai/catalog/standards/sist/b69db6f5-8395-4833-8853-ce91cd0c17ef/sist-en-iso-iec-27001-2023EUROPEAN STANDARD
+NORMEEUROPÉENNE
+EUROPÄISCHENORM
+ENISO/IEC27001
+July 2023
+ICS 03.100.70; 35.030 Supersedes EN ISO/IEC 27001:2017
+English version
+Information security, cybersecurity and privacy protection
+- Information security management systems -
+Requirements (ISO/IEC 27001:2022)
+Sécurité de l'information, cybersécurité et protection
+de la vie privée - Systèmes de management de la
+sécurité de l'information - Exigences (ISO/IEC
+27001:2022)
+Informationssicherheit, Cybersicherheit und
+Datenschutz -
+Informationssicherheitsmanagementsysteme -
+Anforderungen (ISO/IEC 27001:2022)
+This European Standard was approved by CEN on 23 July 2023.
+CEN and CENELEC members are bound to comply with the CEN/CENELEC Internal Regulations which stipulate the conditions for
+giving this European Standard the status of a national standard without any alteration. Up-to-date lists and bibliographical
+references concerning such national standards may be obtained on application to the CEN-CENELEC Management Centre or to
+any CEN and CENELEC member.
+This European Standard exists in three official versions (English, French, German). A version in any other language made by
+translation under the responsibility of a CEN and CENELEC member into its own language and notified to the CEN-CENELEC
+Management Centre has the same status as the official versions.
+CEN and CENELEC members are the national standards bodies and national electrotechnical committees of Austria, Belgium,
+Bulgaria, Croatia, Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Ireland, Italy,
+Latvia, Lithuania, Luxembourg, Malta, Netherlands, Norway, Poland, Portugal, Republic of North Macedonia, Romania, Serbia,
+Slovakia, Slovenia, Spain, Sweden, Switzerland, Türkiye and United Kingdom.
+CEN-CENELEC Management Centre:
+Rue de la Science 23, B-1040 Brussels
+© 2023 CEN/CENELEC All rights of exploitation in any form and by any means
+reserved worldwide for CEN national Members and for
+CENELEC Members.
+Ref. No. EN ISO/IEC 27001:2023 E
+SIST EN ISO/IEC 27001:2023
+iTeh Standards
+(https://standards.iteh.ai)
+Document Preview
+SIST EN ISO/IEC 27001:2023
+https://standards.iteh.ai/catalog/standards/sist/b69db6f5-8395-4833-8853-ce91cd0c17ef/sist-en-iso-iec-27001-2023EN ISO/IEC 27001:2023 (E)
+2
+Contents Page
+European foreword.......................................................................................................................................................3
+SIST EN ISO/IEC 27001:2023
+iTeh Standards
+(https://standards.iteh.ai)
+Document Preview
+SIST EN ISO/IEC 27001:2023
+https://standards.iteh.ai/catalog/standards/sist/b69db6f5-8395-4833-8853-ce91cd0c17ef/sist-en-iso-iec-27001-2023EN ISO/IEC 27001:2023 (E)
+3
+European foreword
+The text of ISO/IEC 27001:2022 has been prepared by Technical Committee ISO/IEC JTC 1 "Information
+technology” of the International Organization for Standardization (ISO) and has been taken over as
+EN ISO/IEC 27001:2023 by Technical Committee CEN-CENELEC/ JTC 13 “Cybersecurity and Data
+Protection” the secretariat of which is held by DIN.
+This European Standard shall be given the status of a national standard, either by publication of an
+identical text or by endorsement, at the latest by January 2024, and conflicting national standards shall
+be withdrawn at the latest by January 2024.
+Attention is drawn to the possibility that some of the elements of this document may be the subject of
+patent rights. CEN-CENELEC shall not be held responsible for identifying any or all such patent rights.
+This document supersedes EN ISO/IEC 27001:2017.
+Any feedback and questions on this document should be directed to the users’ national standards body.
+A complete listing of these bodies can be found on the CEN and CENELEC websites.
+According to the CEN-CENELEC Internal Regulations, the national standards organizations of the
+following countries are bound to implement this European Standard: Austria, Belgium, Bulgaria,
+Croatia, Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland,
+Ireland, Italy, Latvia, Lithuania, Luxembourg, Malta, Netherlands, Norway, Poland, Portugal, Republic of
+North Macedonia, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Türkiye and the
+United Kingdom.
+Endorsement notice
+The text of ISO/IEC 27001:2022 has been approved by CEN-CENELEC as EN ISO/IEC 27001:2023
+without any modification.
+SIST EN ISO/IEC 27001:2023
+iTeh Standards
+(https://standards.iteh.ai)
+Document Preview
+SIST EN ISO/IEC 27001:2023
+https://standards.iteh.ai/catalog/standards/sist/b69db6f5-8395-4833-8853-ce91cd0c17ef/sist-en-iso-iec-27001-2023SIST EN ISO/IEC 27001:2023
+iTeh Standards
+(https://standards.iteh.ai)
+Document Preview
+SIST EN ISO/IEC 27001:2023
+https://standards.iteh.ai/catalog/standards/sist/b69db6f5-8395-4833-8853-ce91cd0c17ef/sist-en-iso-iec-27001-2023Information security, cybersecurity
+and privacy protection — Information
+security management systems —
+Requirements
+Sécurité de l'information, cybersécurité et protection de la vie
+privée — Systèmes de management de la sécurité de l'information —
+Exigences
+INTERNATIONAL
+STANDARD
+ISO/IEC
+27001
+Third edition
+2022-10
+Reference number
+ISO/IEC 27001:2022(E)
+© ISO/IEC 2022
+SIST EN ISO/IEC 27001:2023
+iTeh Standards
+(https://standards.iteh.ai)
+Document Preview
+SIST EN ISO/IEC 27001:2023
+https://standards.iteh.ai/catalog/standards/sist/b69db6f5-8395-4833-8853-ce91cd0c17ef/sist-en-iso-iec-27001-2023ii
+ISO/IEC 27001:2022(E)
+COPYRIGHT PROTECTED DOCUMENT
+© ISO/IEC 2022
+All rights reserved. Unless otherwise specified, or required in the context of its implementation, no part of this publication may
+bereproducedorutilizedotherwiseinanyformorbyanymeans,electronicormechanical,includingphotocopying,orpostingon
+the internet or an intranet, without prior written permission. Permission can be requested from either ISO at the address below
+or ISO’s member body in the country of the requester.
+ISO copyright office
+CP 401 • Ch. de Blandonnet 8
+CH-1214 Vernier, Geneva
+Phone: +41 22 749 01 11
+Email: copyright@iso.org
+Website: www.iso.org
+Published in Switzerland
+﻿  © ISO/IEC 2022 – All rights reserved
+
+SIST EN ISO/IEC 27001:2023
+iTeh Standards
+(https://standards.iteh.ai)
+Document Preview
+SIST EN ISO/IEC 27001:2023
+https://standards.iteh.ai/catalog/standards/sist/b69db6f5-8395-4833-8853-ce91cd0c17ef/sist-en-iso-iec-27001-2023ISO/IEC 27001:2022(E)
+Foreword.........................................................................................................................................................................................................................................iv
+Introduction..................................................................................................................................................................................................................................v
+1	​Scope..................................................................................................................................................................................................................................1
+2	​Normative references......................................................................................................................................................................................1
+3 ​ Terms and definitions.....................................................................................................................................................................................1
+4	​ Context of the organization.......................................................................................................................................................................1
+4.1	​ Understanding the organization and its context......................................................................................................1
+4.2	​ Understanding the needs and expectations of interested parties............................................................1
+4.3	​ Determining the scope of the information security management system........................................2
+4.4	​ Information security management system....................................................................................................................2
+5	​Leadership...................................................................................................................................................................................................................2
+5.1	​ Leadership and commitment......................................................................................................................................................2
+5.2	​ Policy................................................................................................................................................................................................................3
+5.3	​ Organizational roles, responsibilities and authorities........................................................................................3
+6	​Planning.........................................................................................................................................................................................................................3
+6.1	​ Actions to address risks and opportunities..................................................................................................................3
+6.1.1	​ General.........................................................................................................................................................................................3
+6.1.2	​ Information security risk assessment.............................................................................................................4
+6.1.3	​ Information security risk treatment.................................................................................................................4
+6.2	​ Information security objectives and planning to achieve them..................................................................5
+7	​Support............................................................................................................................................................................................................................6
+7.1	​Resources.....................................................................................................................................................................................................6
+7.2	​Competence................................................................................................................................................................................................6
+7.3	​ Awareness....................................................................................................................................................................................................6
+7.4	​ Communication.......................................................................................................................................................................................6
+7.5	​ Documented information...............................................................................................................................................................6
+7.5.1	​ General.........................................................................................................................................................................................6
+7.5.2	​ Creating and updating....................................................................................................................................................7
+7.5.3	​ Control of documented information..................................................................................................................7
+8	​Operation......................................................................................................................................................................................................................7
+8.1	​ Operational planning and control..........................................................................................................................................7
+8.2	​ Information security risk assessment................................................................................................................................8
+8.3	​ Information security risk treatment...................................................................................................................................8
+9	​Performance evaluation...............................................................................................................................................................................8
+9.1	​ Monitoring, measurement, analysis and evaluation..............................................................................................8
+9.2	​ Internal audit............................................................................................................................................................................................8
+9.2.1 General.........................................................................................................................................................................................8
+9.2.2 Internal audit programme..........................................................................................................................................9
+9.3	​ Management review...........................................................................................................................................................................9
+9.3.1 General.........................................................................................................................................................................................9
+9.3.2 Management review inputs.......................................................................................................................................9
+9.3.3 Management review results......................................................................................................................................9
+10	​Improvement..........................................................................................................................................................................................................10
+10.1	​ Continual improvement................................................................................................................................................................10
+10.2	​ Nonconformity and corrective action..............................................................................................................................10
+Annex A (normative) Information security controls reference............................................................................................11
+Bibliography..............................................................................................................................................................................................................................19
+iii © ISO/IEC 2022 – All rights reserved ﻿
+Contents Page
+SIST EN ISO/IEC 27001:2023
+iTeh Standards
+(https://standards.iteh.ai)
+Document Preview
+SIST EN ISO/IEC 27001:2023
+https://standards.iteh.ai/catalog/standards/sist/b69db6f5-8395-4833-8853-ce91cd0c17ef/sist-en-iso-iec-27001-2023ISO/IEC 27001:2022(E)
+Foreword
+ISO (the International Organization for Standardization) and IEC (the International Electrotechnical
+Commission) form the specialized system for worldwide standardization. National bodies that are
+members of ISO or IEC participate in the development of International Standards through technical
+committees established by the respective organization to deal with particular fields of technical
+activity. ISO and IEC technical committees collaborate in fields of mutual interest. Other international
+organizations, governmental and non-governmental, in liaison with ISO and IEC, also take part in the
+work.
+The procedures used to develop this document and those intended for its further maintenance
+are described in the ISO/IEC Directives, Part 1. In particular, the different approval criteria
+needed for the different types of document should be noted. This document was drafted in
+accordance with the editorial rules of the ISO/IEC Directives, Part 2 (see www.iso.org/directives or
+www.iec.ch/members_experts/refdocs).
+Attention is drawn to the possibility that some of the elements of this document may be the subject
+of patent rights. ISO and IEC shall not be held responsible for identifying any or all such patent
+rights. Details of any patent rights identified during the development of the document will be in the
+Introductionand/orontheISOlistofpatentdeclarationsreceived(seewww.iso.org/patents)ortheIEC
+list of patent declarations received (see https://patents.iec.ch).
+Any trade name used in this document is information given for the convenience of users and does not
+constitute an endorsement.
+For an explanation of the voluntary nature of standards, the meaning of ISO specific terms and
+expressions related to conformity assessment, as well as information about ISO's adherence to
+the World Trade Organization (WTO) principles in the Technical Barriers to Trade (TBT) see
+www.iso.org/iso/foreword.html. In the IEC, see www.iec.ch/understanding-standards.
+This document was prepared by Joint Technical Committee ISO/IEC JTC 1, Information Technology,
+Subcommittee SC 27, Information security, cybersecurity and privacy protection.
+This third edition cancels and replaces the second edition (ISO/IEC 27001:2013), which has been
+technically revised. It also incorporates the Technical Corrigenda ISO/IEC 27001:2013/Cor 1:2014 and
+ISO/IEC 27001:2013/Cor 2:2015.
+The main changes are as follows:
+— the text has been aligned with the harmonized structure for management system standards
+and ISO/IEC 27002:2022.
+Any feedback or questions on this document should be directed to the user’s national standards
+body. A complete listing of these bodies can be found at www.iso.org/members.html and
+www.iec.ch/national-committees.
+iv ﻿  © ISO/IEC 2022 – All rights reserved
+
+SIST EN ISO/IEC 27001:2023
+iTeh Standards
+(https://standards.iteh.ai)
+Document Preview
+SIST EN ISO/IEC 27001:2023
+https://standards.iteh.ai/catalog/standards/sist/b69db6f5-8395-4833-8853-ce91cd0c17ef/sist-en-iso-iec-27001-2023ISO/IEC 27001:2022(E)
+Introduction
+0.1   General
+Thisdocumenthasbeenpreparedtoproviderequirementsforestablishing,implementing,maintaining
+and continually improving an information security management system. The adoption of an
+information security management system is a strategic decision for an organization. The establishment
+and implementation of an organization’s information security management system is influenced by the
+organization’s needs and objectives, security requirements, the organizational processes used and the
+size and structure of the organization. All of these influencing factors are expected to change over time.
+The information security management system preserves the confidentiality, integrity and availability
+of information by applying a risk management process and gives confidence to interested parties that
+risks are adequately managed.
+It is important that the information security management system is part of and integrated with the
+organization’sprocessesandoverallmanagementstructureandthatinformationsecurityisconsidered
+inthedesignofprocesses,informationsystems,andcontrols.Itisexpectedthataninformationsecurity
+management system implementation will be scaled in accordance with the needs of the organization.
+This document can be used by internal and external parties to assess the organization's ability to meet
+the organization’s own information security requirements.
+The order in which requirements are presented in this document does not reflect their importance
+or imply the order in which they are to be implemented. The list items are enumerated for reference
+purpose only.
+ISO/IEC 27000 describes the overview and the vocabulary of information security management
+systems, referencing the information security management system family of standards (including
+ISO/IEC 27003[2], ISO/IEC 27004[3] and ISO/IEC 27005[4]), with related terms and definitions.
+0.2   Compatibility with other management system standards
+Thisdocumentappliesthehigh-levelstructure,identicalsub-clausetitles,identicaltext,commonterms,
+and core definitions defined in Annex SL of ISO/IEC Directives, Part 1, Consolidated ISO Supplement,
+and therefore maintains compatibility with other management system standards that have adopted the
+Annex SL.
+This common approach defined in the Annex SL will be useful for those organizations that choose to
+operate a single management system that meets the requirements of two or more management system
+standards.
+v © ISO/IEC 2022 – All rights reserved ﻿
+SIST EN ISO/IEC 27001:2023
+iTeh Standards
+(https://standards.iteh.ai)
+Document Preview
+SIST EN ISO/IEC 27001:2023
+https://standards.iteh.ai/catalog/standards/sist/b69db6f5-8395-4833-8853-ce91cd0c17ef/sist-en-iso-iec-27001-2023

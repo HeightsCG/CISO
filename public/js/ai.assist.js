@@ -131,7 +131,7 @@ $(function () {
     });
 
     $("#assist_messages").on("click", "[data-download]", function(){
-        download($(this), parseInt($(this).attr("data-download"), 10));
+        download($(this), parseInt($(this).attr("data-download"), 10), $(this).attr("data-format"));
     });
 
     $("#assist_messages").on("click", "[data-vault]", function(){
@@ -319,13 +319,15 @@ $(function () {
         });
     }
 
-    function download(button, attachment_id) {
+    function download(button, attachment_id, format) {
 
         var obj = {
             attachment_id: attachment_id
         };
 
         set_loading(button, true);
+
+        var tab = report_tab(format);
 
         ApiDataSvc.apiCall('post', 'ai_file_url', obj, function (data) {
 
@@ -334,12 +336,14 @@ $(function () {
             set_loading(button, false);
 
             if (obj.success) {
-                window.location.href = obj.url;
+                show_report_tab(tab, obj.url);
             } else {
+                close_report_tab(tab);
                 toastr.error(obj.message);
             }
 
         }, function () {
+            close_report_tab(tab);
             set_loading(button, false);
             toastr.error("That file could not be opened");
         });
@@ -534,7 +538,7 @@ $(function () {
         node.append($("<span>").addClass("assist__file-name").text(item.text));
 
         var bar = $("<span>").addClass("assist__file-bar");
-        bar.append($("<button>").attr("type", "button").addClass("btn btn--tertiary btn--sm").attr("data-download", item.attachment_id).text("Download"));
+        bar.append($("<button>").attr("type", "button").addClass("btn btn--tertiary btn--sm").attr("data-download", item.attachment_id).attr("data-format", item.text.split(".").pop().toLowerCase()).text("Download"));
         bar.append($("<button>").attr("type", "button").addClass("btn btn--tertiary btn--sm").attr("data-vault", item.text).text("Save to vault"));
         node.append(bar);
 

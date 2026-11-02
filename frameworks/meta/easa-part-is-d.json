@@ -1,0 +1,329 @@
+{
+    "key": "easa-part-is-d",
+    "name": "EASA Part-IS",
+    "version": "EU 2022/1645",
+    "full_name": "EASA Part-IS.D.OR: Information security organisation requirements (Annex to Commission Delegated Regulation (EU) 2022/1645) for Part-21 design and production organisations, aerodrome operators and apron management service providers, and, from 27 March 2031, certain ground handling organisations",
+    "issuing_body": "European Commission; European Union Aviation Safety Agency (EASA)",
+    "standard_codes": [
+        "EASA-PART-IS-D"
+    ],
+    "content_licence": "open",
+    "sources": [
+        {
+            "id": "reg1645",
+            "title": "Commission Delegated Regulation (EU) 2022/1645 laying down rules for the application of Regulation (EU) 2018/1139 as regards requirements for the management of information security risks with a potential impact on aviation safety for organisations covered by Regulations (EU) No 748/2012 and (EU) No 139/2014 (consolidated text, CELEX 02022R1645-20251016)",
+            "version": "Consolidated version of 16 October 2025 (incorporating (EU) 2025/22 and corrigendum C1)",
+            "publisher": "Publications Office of the European Union (EUR-Lex)",
+            "url": "http://publications.europa.eu/resource/celex/02022R1645-20251016",
+            "file": "easa/reg-2022-1645-consolidated-2025-10-16.html",
+            "sha256": "cd5788761508be4ece44f3da5356e398b9c87b5a13ee03001e61b377331ec9c4",
+            "date": "2025-10-16"
+        },
+        {
+            "id": "reg2025_22",
+            "title": "Commission Delegated Regulation (EU) 2025/22 amending Delegated Regulation (EU) 2022/1645 as regards requirements on information security for organisations providing ground handling services",
+            "version": "OJ L, 2025/22, 7.3.2025",
+            "publisher": "Publications Office of the European Union (EUR-Lex)",
+            "url": "http://publications.europa.eu/resource/celex/32025R0022",
+            "file": "easa/reg-2025-22.html",
+            "sha256": "a8113c3311a8fade8bb5308f1d7c74993cfff2a98c4b50d59af4d4e77392f86b",
+            "date": "2025-03-07"
+        },
+        {
+            "id": "ear",
+            "title": "Easy Access Rules for Information Security (Regulations (EU) 2023/203 and 2022/1645), including AMC & GM to Part-IS.D.OR",
+            "version": "Revision from December 2025 (ED Decisions 2023/009/R and 2025/014/R, with corrigendum)",
+            "publisher": "European Union Aviation Safety Agency (EASA)",
+            "url": "https://www.easa.europa.eu/en/downloads/138788/en",
+            "file": "easa/ear-information-security-2025-12.pdf",
+            "sha256": "863d24b6ce845d1115bf0d91c64b980eb5b64d9eceb89fb0265cc7bdc63933a1",
+            "date": "2025-12"
+        }
+    ],
+    "source_of": {
+        "controls": "reg1645",
+        "objectives": "reg1645",
+        "guidance": "ear"
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "area",
+        "families": "areas",
+        "objective": "point",
+        "objectives": "points",
+        "plan": "corrective action plan",
+        "plan_short": "corrective action plan",
+        "score": "compliance percentage"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Compliant"
+        },
+        {
+            "key": "partial",
+            "label": "Partially compliant"
+        },
+        {
+            "key": "not_met",
+            "label": "Non-compliant"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Part-IS has no official score. The compliance percentage is the share of applicable requirements assessed compliant; any non-compliance is a finding that needs a corrective action plan."
+    },
+    "rules": [
+        {
+            "id": "applies_from",
+            "type": "effective_date",
+            "date": "2025-10-16",
+            "summary": "Part-IS.D.OR applies from 16 October 2025.",
+            "source": "reg1645",
+            "cite": "Regulation (EU) 2022/1645, Article 8",
+            "quote": "It shall apply from 16 October 2025."
+        },
+        {
+            "id": "applies_from_ground_handling",
+            "type": "effective_date",
+            "date": "2031-03-27",
+            "summary": "Ground handling organisations that process third-party data or supply operational data to aircraft operators come into scope from 27 March 2031.",
+            "source": "reg2025_22",
+            "cite": "Regulation (EU) 2025/22, Article 3(2)",
+            "quote": "Article 1 shall apply from 27 March 2031."
+        },
+        {
+            "id": "scope",
+            "type": "applicability",
+            "summary": "Applies to the organisations listed in Article 2(1): Part-21 design and production organisations (except those solely involved with ELA2 aircraft), and aerodrome operators and apron management service providers under Part-ADR.OR.",
+            "source": "reg1645",
+            "cite": "Regulation (EU) 2022/1645, Article 2(1)",
+            "quote": "This Regulation applies to the following organisations:"
+        },
+        {
+            "id": "isms_exemption",
+            "type": "applicability",
+            "control": "IS.D.OR.200",
+            "summary": "The competent authority may approve an organisation not implementing IS.D.OR.200(a) to (d) and IS.D.OR.205 to IS.D.OR.260, based on a documented risk assessment showing no information security risk with a potential impact on aviation safety. Reporting under Regulation (EU) No 376/2014 and IS.D.OR.200(a)(13) still apply.",
+            "source": "reg1645",
+            "cite": "IS.D.OR.200(e)",
+            "quote": "the organisation may be granted approval by the competent authority not to implement the requirements referred to in points (a) to (d)) and the related requirements contained in points IS.D.OR.205 through IS.D.OR.260"
+        },
+        {
+            "id": "isms_exemption_review",
+            "type": "validity",
+            "control": "IS.D.OR.200",
+            "summary": "An IS.D.OR.200(e) approval is reviewed each oversight audit cycle and whenever the organisation's scope of work changes.",
+            "source": "reg1645",
+            "cite": "IS.D.OR.200(e)",
+            "quote": "The continued validity of that approval will be reviewed by the competent authority following the applicable oversight audit cycle and whenever changes are implemented in the scope of work of the organisation."
+        },
+        {
+            "id": "incident_notification",
+            "type": "deadline",
+            "control": "IS.D.OR.230",
+            "timing": "as soon as known",
+            "from": "the time the condition has been known to the organisation",
+            "summary": "A significant information security incident or vulnerability must be notified to the competent authority (and, where applicable, the design approval holder or system designer) as soon as the organisation knows of it.",
+            "source": "reg1645",
+            "cite": "IS.D.OR.230(c)(1)",
+            "quote": "a notification shall be submitted to the competent authority and, if applicable, to the design approval holder or to the organisation responsible for the design of the system or constituent, as soon as the condition has been known to the organisation"
+        },
+        {
+            "id": "incident_report_72h",
+            "type": "deadline",
+            "control": "IS.D.OR.230",
+            "hours": 72,
+            "from": "the time the condition has been known to the organisation",
+            "summary": "A full report must follow as soon as possible and within 72 hours of the organisation becoming aware, unless exceptional circumstances prevent it.",
+            "source": "reg1645",
+            "cite": "IS.D.OR.230(c)(2)",
+            "quote": "as soon as possible, but not exceeding 72 hours from the time the condition has been known to the organisation, unless exceptional circumstances prevent this"
+        },
+        {
+            "id": "incident_follow_up",
+            "type": "deadline",
+            "control": "IS.D.OR.230",
+            "timing": "as soon as actions are identified",
+            "summary": "A follow-up report on recovery and prevention actions is due as soon as those actions have been identified.",
+            "source": "reg1645",
+            "cite": "IS.D.OR.230(c)(3)",
+            "quote": "The follow-up report shall be submitted as soon as those actions have been identified"
+        },
+        {
+            "id": "findings_corrective_action_plan",
+            "type": "plan_handling",
+            "control": "IS.D.OR.225",
+            "summary": "For each finding notified by the competent authority the organisation identifies the root cause, defines a corrective action plan and demonstrates the correction to the authority's satisfaction.",
+            "source": "reg1645",
+            "cite": "IS.D.OR.225(a)(2)",
+            "quote": "define a corrective action plan"
+        },
+        {
+            "id": "findings_period",
+            "type": "deadline",
+            "control": "IS.D.OR.225",
+            "period": "agreed with the competent authority",
+            "summary": "Root-cause analysis, the corrective action plan and the demonstrated correction must be completed within the period agreed with the competent authority.",
+            "source": "reg1645",
+            "cite": "IS.D.OR.225(b)",
+            "quote": "The actions referred to in point (a) shall be carried out within the period agreed with the competent authority."
+        },
+        {
+            "id": "isms_manual_approval",
+            "type": "gate",
+            "control": "IS.D.OR.250",
+            "summary": "The initial ISMM must be approved by the competent authority, which keeps a copy. Declaring organisations do not need approval.",
+            "source": "reg1645",
+            "cite": "IS.D.OR.250(b)",
+            "quote": "The initial issue of the ISMM shall be approved and a copy shall be retained by the competent authority. An approval shall not be required for declaring organisations."
+        },
+        {
+            "id": "isms_manual_amendments",
+            "type": "gate",
+            "control": "IS.D.OR.250",
+            "summary": "ISMM amendments outside the organisation's amendment procedure, and those linked to IS.D.OR.255(b) changes, need competent authority approval (not for declaring organisations).",
+            "source": "reg1645",
+            "cite": "IS.D.OR.250(c)",
+            "quote": "Any amendments that are not included within the scope of this procedure and any amendments related to the changes referred to in point IS.D. OR.255(b), shall be approved by the competent authority."
+        },
+        {
+            "id": "change_procedure_approval",
+            "type": "gate",
+            "control": "IS.D.OR.255",
+            "summary": "The procedure for managing and notifying ISMS changes must be approved by the competent authority, except for declaring organisations.",
+            "source": "reg1645",
+            "cite": "IS.D.OR.255(a)",
+            "quote": "This procedure shall be approved by the competent authority, except for declaring organisations."
+        },
+        {
+            "id": "change_prior_approval",
+            "type": "gate",
+            "control": "IS.D.OR.255",
+            "summary": "ISMS changes outside the approved procedure need an application before the change and formal approval before implementation; declaring organisations may implement immediately.",
+            "source": "reg1645",
+            "cite": "IS.D.OR.255(b)(3)",
+            "quote": "the change shall be implemented only upon receipt of a formal approval by the competent authority, except for declaring organisations, which may implement the change immediately"
+        },
+        {
+            "id": "continuous_improvement_assessment",
+            "type": "deadline",
+            "control": "IS.D.OR.260",
+            "timing": "organisation-defined calendar or after an incident",
+            "summary": "ISMS effectiveness and maturity must be assessed on a calendar the organisation predefines, and after any information security incident.",
+            "source": "reg1645",
+            "cite": "IS.D.OR.260(a)",
+            "quote": "That assessment shall be carried out on a calendar basis predefined by the organisation or following an information security incident."
+        },
+        {
+            "id": "retention_approval_records",
+            "type": "retention",
+            "control": "IS.D.OR.245",
+            "years": 5,
+            "from": "the approval losing its validity",
+            "summary": "Any IS.D.OR.200(e) approval and its risk assessment are kept at least 5 years after the approval loses validity.",
+            "source": "reg1645",
+            "cite": "IS.D.OR.245(a)(2)",
+            "quote": "shall be retained at least until 5 years after the approval has lost its validity"
+        },
+        {
+            "id": "retention_contracts",
+            "type": "retention",
+            "control": "IS.D.OR.245",
+            "years": 5,
+            "from": "the contract being amended or terminated",
+            "summary": "Contracts for information security management activities are kept at least 5 years after amendment or termination.",
+            "source": "reg1645",
+            "cite": "IS.D.OR.245(a)(3)",
+            "quote": "shall be retained at least until 5 years after the contract has been amended or terminated"
+        },
+        {
+            "id": "retention_isms_records",
+            "type": "retention",
+            "control": "IS.D.OR.245",
+            "years": 5,
+            "summary": "Records of key processes, identified risks and treatments, and reported incidents and vulnerabilities are kept at least 5 years.",
+            "source": "reg1645",
+            "cite": "IS.D.OR.245(a)(4)",
+            "quote": "The records referred to in point (1)(iii), (iv) and (v) shall be retained at least for a period of 5 years."
+        },
+        {
+            "id": "retention_staff_records",
+            "type": "retention",
+            "control": "IS.D.OR.245",
+            "years": 3,
+            "from": "the person leaving the organisation",
+            "summary": "Qualification and experience records of information security staff are kept while they work there and at least 3 years after they leave.",
+            "source": "reg1645",
+            "cite": "IS.D.OR.245(b)(1)",
+            "quote": "records be retained for as long as the person works for the organisation, and for at least 3 years after the person has left the organisation"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "governing_document"
+    ],
+    "governing_document": {
+        "key": "isms_manual",
+        "title": "Information Security Management Manual",
+        "short": "ISMM",
+        "required_by": "IS.D.OR.250",
+        "sections": [
+            "Statement signed by the accountable manager or head of the design organisation (CEO countersignature where applicable)",
+            "Persons responsible for compliance and for compliance monitoring",
+            "Common responsible person, if applicable",
+            "Information security policy",
+            "Staff numbers, categories and availability planning",
+            "Key persons responsible for implementing the ISMS",
+            "Organisation chart and chains of accountability",
+            "Internal reporting scheme",
+            "Compliance procedures: ISMS documentation, contracted activities, ISMM amendment procedure",
+            "Approved alternative means of compliance"
+        ]
+    },
+    "glossary": [
+        {
+            "term": "EASA",
+            "definition": "European Union Aviation Safety Agency, which issues the acceptable means of compliance and guidance material for Part-IS."
+        },
+        {
+            "term": "Part-IS",
+            "definition": "The EU aviation information security rules: organisation requirements in Regulation (EU) 2023/203 (Part-IS.D.OR) and Delegated Regulation (EU) 2022/1645 (Part-IS.D.OR)."
+        },
+        {
+            "term": "ISMS",
+            "definition": "Information security management system: the processes, procedures, roles and responsibilities an organisation uses to manage information security risks with a potential impact on aviation safety."
+        },
+        {
+            "term": "ISMM",
+            "definition": "Information security management manual: the document that describes the organisation's ISMS and is made available to the competent authority."
+        },
+        {
+            "term": "AMC",
+            "definition": "Acceptable means of compliance: EASA's non-binding standards by which an organisation can show it meets a requirement."
+        },
+        {
+            "term": "GM",
+            "definition": "Guidance material: EASA's non-binding material that explains a requirement or its AMC."
+        },
+        {
+            "term": "Part-21",
+            "definition": "Annex I to Regulation (EU) No 748/2012: certification of aircraft and related products, and approval of design and production organisations."
+        },
+        {
+            "term": "ELA2",
+            "definition": "European Light Aircraft 2: a defined class of light aeroplanes, sailplanes, balloons and airships (Regulation (EU) No 748/2012, Article 1(2)(j))."
+        },
+        {
+            "term": "AMS",
+            "definition": "Apron management services, regulated with aerodromes under Part-ADR.OR."
+        }
+    ]
+}

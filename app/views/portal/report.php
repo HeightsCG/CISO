@@ -1,4 +1,4 @@
-<div class="page report">
+<div class="page">
     <a class="page__back" href="/portal/project/id/<?php echo (int) $this->project['id']; ?>"><i class="fa-regular fa-arrow-left"></i> Back to <?php echo htmlspecialchars($this->project['project_name'], ENT_QUOTES, 'UTF-8'); ?></a>
 
     <div class="page__head">
@@ -15,12 +15,12 @@
         </div>
     </div>
 
-    <div class="panel record__panel report__layout report__layout--single">
+    <div class="panel record__panel">
         <div class="panel__head">
             <h2 class="panel__title">Findings</h2>
-            <span class="report__nav-count" id="intro"></span>
+            <span class="field__help" id="intro"></span>
         </div>
-        <div class="findings__list" id="findings"></div>
+        <div class="panel__body" id="findings"></div>
     </div>
 </div>
 
@@ -84,14 +84,21 @@ $(document).ready(function () {
             project_id: project_id
         };
 
+        var tab = report_tab("pdf");
+
         ApiDataSvc.apiCall('post', 'portal_report_download', obj, function (data) {
             var obj = JSON.parse(data);
             set_loading("#do_download", false);
             if (obj.success) {
-                window.location.href = obj.url;
+                show_report_tab(tab, obj.url);
             } else {
+                close_report_tab(tab);
                 toastr.error(obj.message);
             }
+        }, function () {
+            set_loading("#do_download", false);
+            close_report_tab(tab);
+            toastr.error("The report could not be prepared. Try again.");
         });
     });
 
@@ -106,7 +113,7 @@ $(document).ready(function () {
             var obj = JSON.parse(data);
 
             if (!obj.success || obj.report === null) {
-                $("#findings").empty().append($("<p>").addClass("report__empty finding-card").text("The report is not available yet."));
+                $("#findings").empty().append($("<p>").addClass("report__empty").text("The report is not available yet."));
                 return;
             }
 
@@ -133,7 +140,7 @@ $(document).ready(function () {
         });
 
         if (report.findings.length === 0) {
-            box.append($("<p>").addClass("report__empty finding-card").text("There are no findings in this report."));
+            box.append($("<p>").addClass("report__empty").text("There are no findings in this report."));
             return;
         }
 
@@ -145,15 +152,15 @@ $(document).ready(function () {
     function card(finding, domains) {
 
         var id = finding.id;
-        var node = $("<div>").addClass("finding-card");
+        var node = $("<div>").addClass("record__group");
         var head = $("<div>").addClass("finding-card__head");
 
-        head.append($("<h3>").addClass("finding-card__title").text(finding.finding_ref + " " + finding.finding_title));
+        head.append($("<h3>").addClass("panel__title").text(finding.finding_ref + " " + finding.finding_title));
         head.append($("<span>").addClass("badge " + (finding.rating === "High" ? "badge--critical" : (finding.rating === "Medium" ? "badge--onboarding" : "badge--inactive"))).text(finding.rating + " (" + finding.score + ")"));
         node.append(head);
 
         if (domains[finding.domain_id]) {
-            node.append($("<p>").addClass("report__nav-count").text(domains[finding.domain_id]));
+            node.append($("<p>").addClass("field__help").text(domains[finding.domain_id]));
         }
 
         [
@@ -171,20 +178,20 @@ $(document).ready(function () {
             ]
         ].forEach(function (part) {
             if (part[1]) {
-                node.append($("<p>").addClass("finding-card__label").text(part[0]));
+                node.append($("<h4>").addClass("record__group-title finding-card__label").text(part[0]));
                 node.append($("<p>").addClass("finding-card__text").text(part[1]));
             }
         });
 
         if (!can_respond) {
-            node.append($("<p>").addClass("finding-card__label").text("Management response"));
+            node.append($("<h4>").addClass("record__group-title finding-card__label").text("Management response"));
             node.append($("<p>").addClass("finding-card__text").text(response_text(finding)));
             return node;
         }
 
-        var row = $("<div>").addClass("row");
+        var row = $("<div>").addClass("row mb-4");
 
-        var status = $("<select>").attr("id", "status_" + id).addClass("form-select form-control");
+        var status = $("<select>").attr("id", "status_" + id).addClass("form-control");
         status.append($("<option>").val("").text("Choose a response"));
         RESPONSES.forEach(function (option) {
             status.append($("<option>").val(option).text(option));
@@ -194,20 +201,21 @@ $(document).ready(function () {
         row.append(group(4, "status_" + id, "Response", status));
         row.append(group(4, "owner_" + id, "Owner", $("<input>").attr("type", "text").attr("id", "owner_" + id).addClass("form-control").val(finding.response_owner || "")));
         row.append(group(4, "target_" + id, "Target date", $("<input>").attr("type", "date").attr("id", "target_" + id).addClass("form-control").val(finding.target_date || "")));
-        row.append(group(12, "response_" + id, "Comments and planned actions", $("<textarea>").attr("id", "response_" + id).attr("rows", "3").addClass("form-control").val(finding.management_response || "")));
+        var comments = $("<div>").addClass("row mb-4");
+        comments.append(group(12, "response_" + id, "Comments and planned actions", $("<textarea>").attr("id", "response_" + id).attr("rows", "3").addClass("form-control").val(finding.management_response || "")));
 
         node.append(row);
+        node.append(comments);
         node.append($("<button>").attr("type", "button").addClass("btn btn--primary btn--sm").attr("data-save", id).text("Save Response"));
 
         return node;
     }
 
     function group(width, id, label, control) {
-        var col = $("<div>").addClass("col-md-" + width);
-        var wrap = $("<div>").addClass("form-group");
-        wrap.append($("<label>").attr("for", id).text(label));
-        wrap.append(control);
-        return col.append(wrap);
+        var col = $("<div>").addClass("col-md-" + width + " form-group");
+        col.append($("<label>").attr("for", id).text(label));
+        col.append(control);
+        return col;
     }
 
     function response_text(finding) {

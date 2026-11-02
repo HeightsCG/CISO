@@ -456,4 +456,189 @@ class StandardsModel extends Model {
         return count($controls);
     }
 
+    public function framework_standard($company_id, $framework_key, $short_code)
+    {
+        $where = array(
+            'company_id' => $company_id,
+            'framework_key' => $framework_key,
+            'framework_key_order' => $framework_key,
+            'short_code' => $short_code
+        );
+        $sql = "SELECT
+                    s.id,
+                    s.framework_key
+                FROM
+                    standards s
+                WHERE
+                    s.company_id = :company_id
+                    and
+                    s.deleted = 0
+                    and
+                    (s.framework_key = :framework_key or (s.framework_key = '' and s.short_code = :short_code))
+                ORDER BY
+                    (s.framework_key = :framework_key_order) desc,
+                    s.id
+                LIMIT 1";
+        $rows = parent::select($sql, $where);
+        return count($rows) === 0 ? null : $rows[0];
+    }
+
+    public function save_framework_standard(
+        $standard_id,
+        $company_id,
+        $framework_key,
+        $standard_name,
+        $short_code,
+        $version,
+        $full_name,
+        $issuing_body,
+        $source_document,
+        $source_version,
+        $user_id
+    )
+    {
+        $data = array(
+            'framework_key' => $framework_key,
+            'standard_name' => $standard_name,
+            'short_code' => $short_code,
+            'version' => $version,
+            'description' => $full_name,
+            'full_name' => $full_name,
+            'issuing_body' => $issuing_body,
+            'source_document' => $source_document,
+            'source_version' => $source_version,
+            'updated_by' => $user_id,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+
+        if ($standard_id === 0) {
+            $data['company_id'] = $company_id;
+            $data['standard_status'] = 'Active';
+            $data['created_by'] = $user_id;
+            $data['date_created'] = date('Y-m-d H:i:s');
+            $data['deleted'] = 0;
+            return (int) parent::insert('standards', $data);
+        }
+
+        $where = array(
+            'id' => $standard_id,
+            'company_id' => $company_id
+        );
+        parent::update('standards', $data, 'id = :id and company_id = :company_id', $where);
+        return $standard_id;
+    }
+
+    public function framework_control_ids($standard_id)
+    {
+        $where = array(
+            'standard_id' => $standard_id
+        );
+        $sql = "SELECT
+                    sc.id,
+                    sc.control_identifier,
+                    sc.control_kind
+                FROM
+                    standard_controls sc
+                WHERE
+                    sc.standard_id = :standard_id
+                    and
+                    sc.deleted = 0";
+        return parent::select($sql, $where);
+    }
+
+    public function save_framework_control(
+        $control_id,
+        $standard_id,
+        $control_identifier,
+        $parent_identifier,
+        $control_kind,
+        $control_title,
+        $description,
+        $guidance,
+        $family,
+        $control_weight,
+        $partial_weight,
+        $control_flags,
+        $source_document,
+        $source_version,
+        $sort_order,
+        $user_id
+    )
+    {
+        $data = array(
+            'control_identifier' => $control_identifier,
+            'parent_identifier' => $parent_identifier,
+            'control_kind' => $control_kind,
+            'control_title' => $control_title,
+            'description' => $description,
+            'guidance' => $guidance,
+            'family' => $family,
+            'control_weight' => $control_weight,
+            'partial_weight' => $partial_weight,
+            'control_flags' => $control_flags,
+            'source_document' => $source_document,
+            'source_version' => $source_version,
+            'sort_order' => $sort_order,
+            'updated_by' => $user_id,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+
+        if ($control_id === 0) {
+            $data['standard_id'] = $standard_id;
+            $data['created_by'] = $user_id;
+            $data['date_created'] = date('Y-m-d H:i:s');
+            $data['deleted'] = 0;
+            return parent::insert('standard_controls', $data);
+        }
+
+        $where = array(
+            'id' => $control_id,
+            'standard_id' => $standard_id
+        );
+        return parent::update('standard_controls', $data, 'id = :id and standard_id = :standard_id', $where);
+    }
+
+    public function archive_standard($standard_id, $company_id, $user_id)
+    {
+        $data = array(
+            'standard_status' => 'Archived',
+            'updated_by' => $user_id,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+        $where = array(
+            'id' => $standard_id,
+            'company_id' => $company_id
+        );
+        return parent::update('standards', $data, 'id = :id and company_id = :company_id', $where);
+    }
+
+    public function rename_assessments($standard_id, $company_id, $standard_name, $version, $framework_key)
+    {
+        $data = array(
+            'standard_name' => $standard_name,
+            'version' => $version,
+            'framework_key' => $framework_key
+        );
+        $where = array(
+            'standard_id' => $standard_id,
+            'company_id' => $company_id
+        );
+        return parent::update('assessments', $data, 'standard_id = :standard_id and company_id = :company_id', $where);
+    }
+
+    public function begin()
+    {
+        $this->db->beginTransaction();
+    }
+
+    public function commit()
+    {
+        $this->db->commit();
+    }
+
+    public function roll_back()
+    {
+        $this->db->rollBack();
+    }
+
 }

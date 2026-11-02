@@ -1,0 +1,445 @@
+{
+    "key": "nydfs-500",
+    "name": "NYDFS 23 NYCRR 500",
+    "version": "Second Amendment 2023",
+    "full_name": "New York State Department of Financial Services Cybersecurity Regulation, Cybersecurity Requirements for Financial Services Companies (23 NYCRR Part 500)",
+    "issuing_body": "New York State Department of Financial Services (DFS)",
+    "standard_codes": [
+        "NYDFS-500"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "nycrr500",
+            "title": "23 NYCRR Part 500, Cybersecurity Requirements for Financial Services Companies, as amended by the Second Amendment",
+            "version": "Second Amendment, effective 1 November 2023",
+            "publisher": "New York State Department of Financial Services",
+            "url": "https://www.dfs.ny.gov/system/files/documents/2026/10/NYCRR-part-500-Cybersecurity-Regulation_1.pdf",
+            "file": "nydfs/23-nycrr-500.pdf",
+            "date": "2026-10-22",
+            "note": "Linked from https://www.dfs.ny.gov/cybersecurity/23-NYCRR-Part-500. Text identical to the December 2023 DFS publication (rf23_nycrr_part_500_amend02_20231101.pdf). DFS's own header says it is not the official version; the official text is the NYCRR as published by the Department of State.",
+            "sha256": "afb0684ed4b7846ca625179a492683c614296f53b076091486a1ec1484b93684"
+        }
+    ],
+    "source_of": {
+        "controls": "nycrr500",
+        "objectives": "nycrr500"
+    },
+    "control_flags": {
+        "class_a_objectives": "Subsections that apply only to Class A companies (500.1(d)); each such objective also carries class_a_only: true.",
+        "objectives": "The lettered subsections of each section; numbered and roman items are folded into the subsection they belong to."
+    },
+    "terminology": {
+        "control": "section",
+        "controls": "sections",
+        "family": "part",
+        "families": "parts",
+        "objective": "subsection",
+        "objectives": "subsections",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Compliant"
+        },
+        {
+            "key": "partial",
+            "label": "Partially compliant"
+        },
+        {
+            "key": "not_met",
+            "label": "Not compliant"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable sections 500.2 to 500.17 that are compliant. Class A subsections apply only to Class A companies, and sections lifted by an exemption in 500.19 are not applicable. The regulation defines no score; DFS asks only whether the entity materially complied (500.17(b)). This percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "subsection_rollup",
+            "type": "rollup",
+            "summary": "A section is compliant only when every applicable subsection is. A single failure is a violation.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.20(b)",
+            "quote": "The commission of a single act prohibited by this Part or the failure to act to satisfy an obligation required by this Part shall constitute a violation hereof."
+        },
+        {
+            "id": "class_a_company",
+            "type": "applicability",
+            "applies_to": "class_a_only",
+            "revenue_floor": 20000000,
+            "employees_over": 2000,
+            "group_revenue_over": 1000000000,
+            "summary": "Class A requirements apply to a covered entity with at least $20 million gross annual revenue in each of the last two fiscal years (from the entity and its New York affiliates) and either over 2,000 employees or over $1 billion group gross annual revenue.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.1(d)",
+            "quote": "Class A company means a covered entity with at least $20,000,000 in gross annual revenue in each of the last two fiscal years from all business operations of the covered entity and the business operations in this State of the covered entity's affiliates and:"
+        },
+        {
+            "id": "limited_exemption",
+            "type": "applicability",
+            "employees_under": 20,
+            "revenue_under": 7500000,
+            "assets_under": 15000000,
+            "exempt": [
+                "500.4",
+                "500.5",
+                "500.6",
+                "500.8",
+                "500.10",
+                "500.14(a)(1)",
+                "500.14(a)(2)",
+                "500.14(b)",
+                "500.15",
+                "500.16"
+            ],
+            "summary": "An entity with fewer than 20 employees and contractors, or under $7.5 million gross annual revenue in each of the last three fiscal years, or under $15 million year-end total assets, is exempt from the listed sections. MFA is still required for remote access, remote access to third-party applications with nonpublic information, and privileged accounts (500.12(a)).",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.19(a)",
+            "quote": "shall be exempt from the requirements of sections 500.4, 500.5, 500.6, 500.8, 500.10, 500.14(a)(1), (a)(2), and (b), 500.15 and 500.16 of this Part."
+        },
+        {
+            "id": "covered_by_parent_program",
+            "type": "applicability",
+            "summary": "An employee, agent, wholly owned subsidiary or similar that is itself a covered entity is exempt to the extent it is covered by another covered entity's cybersecurity program.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.19(b)",
+            "quote": "who is itself a covered entity, is exempt from this Part and need not develop its own cybersecurity program to the extent that the employee, agent, wholly owned subsidiary, representative or designee is covered by the cybersecurity program of the covered entity."
+        },
+        {
+            "id": "no_systems_exemption",
+            "type": "applicability",
+            "exempt": [
+                "500.2",
+                "500.3",
+                "500.4",
+                "500.5",
+                "500.6",
+                "500.7",
+                "500.8",
+                "500.10",
+                "500.12",
+                "500.14",
+                "500.15",
+                "500.16"
+            ],
+            "summary": "An entity that neither operates or controls information systems nor holds or is required to hold nonpublic information is exempt from most technical sections; 500.9, 500.11, 500.13 and 500.17 still apply.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.19(c)",
+            "quote": "A covered entity that does not directly or indirectly operate, maintain, utilize or control any information systems, and that does not, and is not required to, directly or indirectly control, own, access, generate, receive or possess nonpublic information shall be exempt from the requirements of sections 500.2, 500.3, 500.4, 500.5, 500.6, 500.7, 500.8, 500.10, 500.12, 500.14, 500.15 and 500.16 of this Part."
+        },
+        {
+            "id": "captive_insurer_exemption",
+            "type": "applicability",
+            "exempt": [
+                "500.2",
+                "500.3",
+                "500.4",
+                "500.5",
+                "500.6",
+                "500.7",
+                "500.8",
+                "500.10",
+                "500.12",
+                "500.14",
+                "500.15",
+                "500.16"
+            ],
+            "summary": "An Insurance Law article 70 (captive) entity holding no nonpublic information other than its parent's or affiliates' has the same exemption as 500.19(c).",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.19(d)",
+            "quote": "A covered entity under article 70 of the Insurance Law that does not and is not required to directly or indirectly control, own, access, generate, receive or possess nonpublic information other than information relating to its corporate parent company (or affiliates)"
+        },
+        {
+            "id": "notice_of_exemption",
+            "type": "deadline",
+            "days": 30,
+            "from": "determination that the covered entity is exempt",
+            "summary": "An entity claiming any exemption must file a Notice of Exemption electronically within 30 days of determining it is exempt.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.19(f)",
+            "quote": "shall file electronically a Notice of Exemption in the form set forth on the department's website within 30 days of the determination that the covered entity is exempt."
+        },
+        {
+            "id": "exemption_lapse",
+            "type": "deadline",
+            "days": 180,
+            "from": "date the entity ceases to qualify for an exemption",
+            "summary": "An entity that stops qualifying for an exemption has 180 days to comply with all applicable requirements.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.19(h)",
+            "quote": "such covered entity shall have 180 days from the date that it ceases to so qualify to comply with all applicable requirements of this Part."
+        },
+        {
+            "id": "incident_notification",
+            "type": "deadline",
+            "hours": 72,
+            "from": "determining that a cybersecurity incident has occurred",
+            "control": "500.17",
+            "summary": "Notify DFS electronically as promptly as possible and no later than 72 hours after determining a cybersecurity incident occurred at the entity, an affiliate or a third-party service provider.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.17(a)(1)",
+            "quote": "as promptly as possible but in no event later than 72 hours after determining that a cybersecurity incident has occurred at the covered entity, its affiliates, or a third-party service provider."
+        },
+        {
+            "id": "annual_compliance_notice",
+            "type": "affirmation",
+            "date": "04-15",
+            "interval": "annual",
+            "control": "500.17",
+            "summary": "By 15 April each year, submit either a certification of material compliance or an acknowledgment of non-compliance (with the sections affected and a remediation timeline) for the prior calendar year.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.17(b)(1)",
+            "quote": "Annually each covered entity shall submit to the superintendent electronically by April 15 either:"
+        },
+        {
+            "id": "compliance_notice_signatories",
+            "type": "affirmation",
+            "control": "500.17",
+            "summary": "The certification or acknowledgment is signed by the highest-ranking executive and the CISO (or, without a CISO, the senior officer responsible for the cybersecurity program).",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.17(b)(2)",
+            "quote": "certification or acknowledgment shall be signed by the highest-ranking executive and by the senior officer responsible for the cybersecurity program of the covered entity."
+        },
+        {
+            "id": "compliance_records",
+            "type": "deadline",
+            "years": 5,
+            "control": "500.17",
+            "summary": "Records supporting the certification or acknowledgment must be kept for five years.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.17(b)(3)",
+            "quote": "supporting the certification or acknowledgment for a period of five years"
+        },
+        {
+            "id": "extortion_payment_notice",
+            "type": "deadline",
+            "hours": 24,
+            "days": 30,
+            "from": "the extortion payment",
+            "control": "500.17",
+            "summary": "Notify DFS within 24 hours of an extortion (ransom) payment, and within 30 days explain why payment was necessary, the alternatives considered and the sanctions diligence performed.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.17(c)",
+            "quote": "(1) within 24 hours of the extortion payment, notice of the payment; and (2) within 30 days of the extortion payment, a written description of the reasons payment was necessary"
+        },
+        {
+            "id": "ciso_annual_report",
+            "type": "deadline",
+            "interval": "annual",
+            "control": "500.4",
+            "summary": "The CISO reports in writing to the senior governing body at least annually.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.4(b)",
+            "quote": "The CISO of each covered entity shall report in writing at least annually to the senior governing body on the covered entity's cybersecurity program"
+        },
+        {
+            "id": "policy_annual_approval",
+            "type": "deadline",
+            "interval": "annual",
+            "control": "500.3",
+            "summary": "The cybersecurity policy must be approved at least annually by a senior officer or the senior governing body.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.3",
+            "quote": "approved at least annually by a senior officer or the covered entity's senior governing body"
+        },
+        {
+            "id": "penetration_testing",
+            "type": "deadline",
+            "interval": "annual",
+            "control": "500.5",
+            "summary": "Penetration testing from inside and outside the system boundaries, by a qualified party, at least annually.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.5(a)(1)",
+            "quote": "penetration testing of their information systems from both inside and outside the information systems' boundaries by a qualified internal or external party at least annually"
+        },
+        {
+            "id": "audit_trail_retention",
+            "type": "deadline",
+            "years_transactions": 5,
+            "years_audit_trails": 3,
+            "control": "500.6",
+            "summary": "Financial transaction reconstruction records are kept at least five years; cybersecurity audit trails at least three years.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.6(b)",
+            "quote": "Each covered entity shall maintain records required by paragraph (a)(1) of this section for not fewer than five years and shall maintain records required by paragraph (a)(2) of this section for not fewer than three years."
+        },
+        {
+            "id": "access_review",
+            "type": "deadline",
+            "interval": "annual",
+            "control": "500.7",
+            "summary": "User access privileges are reviewed at least annually and unnecessary access removed.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.7(a)(4)",
+            "quote": "periodically, but at a minimum annually, review all user access privileges and remove or disable accounts and access that are no longer necessary"
+        },
+        {
+            "id": "risk_assessment_review",
+            "type": "deadline",
+            "interval": "annual",
+            "control": "500.9",
+            "summary": "The risk assessment is reviewed and updated at least annually and after material business or technology change.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.9(a)",
+            "quote": "Such risk assessment shall be reviewed and updated as reasonably necessary, but at a minimum annually"
+        },
+        {
+            "id": "awareness_training",
+            "type": "deadline",
+            "interval": "annual",
+            "control": "500.14",
+            "summary": "Cybersecurity awareness training, including social engineering, for all personnel at least annually.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.14(a)(3)",
+            "quote": "provide periodic, but at a minimum annual, cybersecurity awareness training that includes social engineering for all personnel"
+        },
+        {
+            "id": "plan_testing",
+            "type": "deadline",
+            "interval": "annual",
+            "control": "500.16",
+            "summary": "Incident response and BCDR plans, and restoration from backups, are tested at least annually.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.16(d)",
+            "quote": "Each covered entity shall periodically, but at a minimum annually, test its:"
+        },
+        {
+            "id": "second_amendment_effective",
+            "type": "effective_date",
+            "date": "2023-11-01",
+            "summary": "The Second Amendment took effect on 1 November 2023; transitional periods run from this date.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.21(b)",
+            "quote": "The second amendment to this Part shall become effective November 1, 2023."
+        },
+        {
+            "id": "transition_general",
+            "type": "effective_date",
+            "period_days": 180,
+            "date": "2024-04-29",
+            "applies_to": "new requirements of the Second Amendment not listed in 500.22(d) or (e)",
+            "summary": "New Second Amendment requirements without their own period applied from 29 April 2024 (180 days).",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.22(c)",
+            "quote": "Covered entities shall have 180 days from the effective date of the second amendment to this Part to comply with the new requirements set forth in the second amendment to this Part"
+        },
+        {
+            "id": "transition_notices",
+            "type": "effective_date",
+            "period_days": 30,
+            "date": "2023-12-01",
+            "controls": [
+                "500.17"
+            ],
+            "summary": "New notice requirements in 500.17 applied from 1 December 2023 (30 days).",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.22(d)(1)",
+            "quote": "30 days from the effective date of the second amendment to this Part to comply with the new requirements specified in section 500.17 of this Part"
+        },
+        {
+            "id": "transition_one_year",
+            "type": "effective_date",
+            "period_months": 12,
+            "date": "2024-11-01",
+            "controls": [
+                "500.4",
+                "500.15",
+                "500.16",
+                "500.19(a)"
+            ],
+            "summary": "New requirements in governance, encryption, incident response/BCDR and the revised limited exemption applied from 1 November 2024.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.22(d)(2)",
+            "quote": "one year from the effective date of the second amendment to this Part to comply with the new requirements specified in sections 500.4, 500.15, 500.16 and 500.19(a) of this Part"
+        },
+        {
+            "id": "transition_eighteen_months",
+            "type": "effective_date",
+            "period_months": 18,
+            "date": "2025-05-01",
+            "controls": [
+                "500.5(a)(2)",
+                "500.7",
+                "500.14(a)(2)",
+                "500.14(b)"
+            ],
+            "summary": "New requirements for automated scanning, access privileges, malicious-code controls and Class A EDR/central logging applied from 1 May 2025.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.22(d)(3)",
+            "quote": "18 months from the effective date of the second amendment to this Part to comply with the new requirements specified in sections 500.5(a)(2), 500.7, 500.14(a)(2) and 500.14(b) of this Part"
+        },
+        {
+            "id": "transition_two_years",
+            "type": "effective_date",
+            "period_months": 24,
+            "date": "2025-11-01",
+            "controls": [
+                "500.12",
+                "500.13(a)"
+            ],
+            "summary": "Universal multi-factor authentication (500.12) and the asset inventory (500.13(a)) applied from 1 November 2025.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.22(d)(4)",
+            "quote": "two years from the effective date of the second amendment to this Part to comply with the new requirements specified in sections 500.12 and 500.13(a) of this Part."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "Each act or omission is a separate violation, including any material failure to comply with a section for any 24-hour period.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.20(b)(2)",
+            "quote": "the material failure to comply for any 24-hour period with any section of this Part."
+        },
+        {
+            "summary": "Failing to secure nonpublic information because of non-compliance with any section is itself a violation.",
+            "source": "nycrr500",
+            "cite": "23 NYCRR 500.20(b)(1)",
+            "quote": "the failure to secure or prevent unauthorized access to an individual's or an entity's nonpublic information due to noncompliance with any section of this Part"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "DFS",
+            "definition": "New York State Department of Financial Services, which issues and enforces 23 NYCRR Part 500."
+        },
+        {
+            "term": "NYCRR",
+            "definition": "Official Compilation of Codes, Rules and Regulations of the State of New York."
+        },
+        {
+            "term": "CISO",
+            "definition": "Chief Information Security Officer: the qualified individual responsible for overseeing and implementing the cybersecurity program (500.1(c))."
+        },
+        {
+            "term": "Class A company",
+            "definition": "A larger covered entity, defined by revenue and headcount in 500.1(d), subject to additional requirements."
+        },
+        {
+            "term": "MFA",
+            "definition": "Multi-factor authentication: verification of at least two of knowledge, possession and inherence factors (500.1(j))."
+        },
+        {
+            "term": "BCDR",
+            "definition": "Business continuity and disaster recovery."
+        },
+        {
+            "term": "EDR",
+            "definition": "Endpoint detection and response: software that monitors endpoints for anomalous activity such as lateral movement."
+        }
+    ]
+}

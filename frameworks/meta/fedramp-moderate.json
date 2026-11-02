@@ -1,0 +1,240 @@
+{
+    "key": "fedramp-moderate",
+    "name": "FedRAMP Moderate",
+    "version": "Rev 5",
+    "full_name": "Federal Risk and Authorization Management Program (FedRAMP) Rev 5 Moderate Baseline",
+    "issuing_body": "FedRAMP Program Management Office, U.S. General Services Administration (GSA)",
+    "standard_codes": [
+        "FEDRAMP-MODERATE"
+    ],
+    "content_licence": "public_domain",
+    "notice": "FedRAMP has marked the Rev 5 baseline workbook as a legacy document (notice dated June 23, 2026) that is being replaced by the FedRAMP Consolidated Rules for 2026.",
+    "sources": [
+        {
+            "id": "fedrampbaseline",
+            "title": "FedRAMP Security Controls Baseline (Rev 5), High, Moderate, Low and LI-SaaS baselines",
+            "version": "Rev 5, legacy edition (legacy notice dated June 23, 2026)",
+            "publisher": "FedRAMP PMO, GSA",
+            "url": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP_Security_Controls_Baseline.xlsx",
+            "file": "fedramp/FedRAMP_Security_Controls_Baseline.xlsx",
+            "sha256": "aff2fa5eebd556ebed2a6d9eb562554967870780e9b3f85234ae1aabffe8156b"
+        },
+        {
+            "id": "fedrampsrtm",
+            "title": "FedRAMP SAR Appendix B, Moderate Security Requirements Traceability Matrix Template",
+            "version": "Rev 5, legacy edition",
+            "publisher": "FedRAMP PMO, GSA",
+            "url": "https://www.fedramp.gov/legacy/assets/LEGACY%20FedRAMP-SAR-Appendix-B-Moderate-Security-Requirements-Traceability-Matrix-Template.xlsx",
+            "file": "fedramp/FedRAMP-SAR-Appendix-B-Moderate-Security-Requirements-Traceability-Matrix-Template.xlsx",
+            "sha256": "304afffe833065bfd2b1590c1eefb8a617f20582a12984ce41b1d4abf7494a87"
+        },
+        {
+            "id": "fedramppoam",
+            "title": "FedRAMP Playbook for CSPs, Plans of Action and Milestones (POA&M)",
+            "version": "FedRAMP legacy documentation, retrieved 2 November 2026",
+            "publisher": "FedRAMP PMO, GSA",
+            "url": "https://www.fedramp.gov/legacy/playbook/csp/authorization/poam/",
+            "file": "fedramp/fedramp-playbook-csp-poam.html",
+            "sha256": "e10828530748d09d81654057e32fd4a85e6c44d6825461575d8450c7c502dc3a"
+        },
+        {
+            "id": "sp80053cprt",
+            "title": "NIST SP 800-53 Rev 5.2.0, Cybersecurity and Privacy Reference Tool (CPRT) export",
+            "version": "Rev 5.2.0",
+            "publisher": "NIST",
+            "url": "https://csrc.nist.gov/extensions/nudp/services/json/nudp/framework/version/SP_800_53_5_2_0/export/excel",
+            "file": "sp800-53/cprt-sp800-53-5.2.0.xlsx",
+            "sha256": "86d62c1766d7c28db352980a85183360ef1f802c49bef13f0d6dcb46d8a5c48d"
+        },
+        {
+            "id": "sp80053oscal",
+            "title": "NIST SP 800-53 Rev 5.2.0 Controls and SP 800-53A Rev 5.2.0 Assessment Procedures, OSCAL catalog (JSON)",
+            "version": "Rev 5.2.0 (OSCAL catalog, last modified 22 October 2026)",
+            "publisher": "NIST",
+            "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/f0de6d8d8c059d374f15e0ae07508d82e370fc1d/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+            "file": "sp800-53/NIST_SP-800-53_rev5_catalog.json",
+            "sha256": "64ca6b4161de51ab6af098a7d101d326f14c95e1abf721396cd8a049e8115eeb"
+        },
+        {
+            "id": "sp80053a",
+            "title": "NIST SP 800-53A Rev 5, Assessing Security and Privacy Controls in Information Systems and Organizations",
+            "version": "Rev 5 (January 2022)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-53Ar5.pdf",
+            "file": "sp800-53/NIST.SP.800-53Ar5.pdf",
+            "sha256": "75665570048b969ad465a4f4f1db425ce505c374951c2c64e462949c6b21be47"
+        }
+    ],
+    "source_of": {
+        "controls": "sp80053cprt",
+        "objectives": "sp80053oscal",
+        "guidance": "sp80053cprt",
+        "baseline": "fedrampbaseline"
+    },
+    "terminology": {
+        "control": "control",
+        "controls": "controls",
+        "family": "family",
+        "families": "families",
+        "objective": "assessment objective",
+        "objectives": "assessment objectives",
+        "plan": "Plan of Action and Milestones",
+        "plan_short": "POA&M",
+        "score": "Controls satisfied"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Satisfied"
+        },
+        {
+            "key": "not_met",
+            "label": "Other Than Satisfied"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable baseline controls and enhancements assessed as Satisfied. FedRAMP defines no numeric score; the percentage is a reporting measure only. Open risks are rated and tracked on the POA&M."
+    },
+    "rules": [
+        {
+            "id": "finding_scale",
+            "type": "scoring",
+            "summary": "Each determination statement is found either satisfied (S) or other than satisfied (O); there is no partial finding.",
+            "source": "sp80053a",
+            "cite": "NIST SP 800-53A Rev 5, Appendix E",
+            "quote": "Each determination statement executed by an assessor results in one of the following findings: satisfied (S) or other than satisfied (O)."
+        },
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A control is Satisfied only when every determination statement for it is satisfied; any statement found other than satisfied makes the control Other Than Satisfied.",
+            "source": "sp80053a",
+            "cite": "NIST SP 800-53A Rev 5, section 3.3",
+            "quote": "A finding of \"other than satisfied\" indicates - for the portion of the control addressed by the determination statement - potential anomalies in the operation or implementation of the control that may need to be addressed by the organization."
+        },
+        {
+            "id": "insufficient_evidence",
+            "type": "scoring",
+            "counts_as": "not_met",
+            "summary": "If the assessor cannot obtain enough information to make a determination, the statement is found other than satisfied.",
+            "source": "sp80053a",
+            "cite": "NIST SP 800-53A Rev 5, section 3.3",
+            "quote": "may also indicate that the assessor was unable to obtain sufficient information to make the determination called for in the determination statement"
+        },
+        {
+            "id": "remediation_timeframes",
+            "type": "deadline",
+            "days_by_risk": {
+                "critical": 30,
+                "high": 30,
+                "moderate": 90,
+                "low": 180
+            },
+            "from": "discovery",
+            "summary": "Critical and High risks must be remediated within 30 days of discovery, Moderate within 90 days and Low within 180 days.",
+            "source": "fedramppoam",
+            "cite": "FedRAMP Playbook, POA&M, Remediation Requirements",
+            "quote": "FedRAMP requires Critical and High risks to be remediated within 30 days of discovery, Moderate risks within 90 days of discovery, and Low risks within 180 days of discovery."
+        },
+        {
+            "id": "vendor_dependency_mitigation",
+            "type": "deadline",
+            "days": 30,
+            "from": "discovery",
+            "summary": "A High risk that waits on a vendor fix must be mitigated to Moderate with compensating controls within 30 days, and the vendor checked at least monthly.",
+            "source": "fedramppoam",
+            "cite": "FedRAMP Playbook, POA&M, vendor dependencies",
+            "quote": "High-risk VDs must be mitigated to a Moderate level through compensating controls within thirty (30) days."
+        },
+        {
+            "id": "no_operational_requirement_for_high",
+            "type": "plan_handling",
+            "summary": "A High vulnerability cannot be accepted as an operational requirement; it must be remediated or mitigated.",
+            "source": "fedramppoam",
+            "cite": "FedRAMP Playbook, POA&M, operational requirements",
+            "quote": "FedRAMP will not approve an OR for a High vulnerability"
+        },
+        {
+            "id": "open_high_risks",
+            "type": "gate",
+            "summary": "FedRAMP will not list the offering as FedRAMP Certified on the Marketplace while any High risk is open.",
+            "source": "fedramppoam",
+            "cite": "FedRAMP Playbook, POA&M, Do's and Don'ts",
+            "quote": "FedRAMP will not issue a \"FedRAMP Certified\" designation on the FedRAMP Marketplace if there are open High risks."
+        },
+        {
+            "id": "legacy_baseline",
+            "type": "effective_date",
+            "date": "2026-06-23",
+            "summary": "FedRAMP marked this baseline workbook legacy on June 23, 2026; it is being replaced by the FedRAMP Consolidated Rules for 2026.",
+            "source": "fedrampbaseline",
+            "cite": "FedRAMP Security Controls Baseline, cover sheet",
+            "quote": "This is a legacy document that is being replaced by the FedRAMP Consolidated Rules for 2026"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary",
+        "governing_document"
+    ],
+    "governing_document": {
+        "key": "ssp",
+        "title": "System Security Plan",
+        "short": "SSP",
+        "required_by": "PL-2",
+        "sections": [
+            "System identification and scope",
+            "System environment and boundaries",
+            "Interconnections and external services",
+            "Roles and responsibilities",
+            "Control implementation statements",
+            "Plans of action",
+            "Approval and review history"
+        ]
+    },
+    "glossary": [
+        {
+            "term": "FedRAMP",
+            "definition": "Federal Risk and Authorization Management Program, the U.S. government program that authorizes cloud services for federal use."
+        },
+        {
+            "term": "CSP",
+            "definition": "Cloud Service Provider: the company offering the cloud service being assessed."
+        },
+        {
+            "term": "3PAO",
+            "definition": "Third Party Assessment Organization, an accredited assessor that tests the controls."
+        },
+        {
+            "term": "AO",
+            "definition": "Authorizing Official: the agency official who accepts the risk and authorizes the service."
+        },
+        {
+            "term": "POA&M",
+            "definition": "Plan of Action and Milestones: the documented plan for correcting open risks."
+        },
+        {
+            "term": "SSP",
+            "definition": "System Security Plan: the document that describes the system and how each control is implemented."
+        },
+        {
+            "term": "SAR",
+            "definition": "Security Assessment Report: the assessor's report of findings."
+        },
+        {
+            "term": "VD",
+            "definition": "Vendor dependency: a risk that can only be fixed once a vendor releases a patch."
+        },
+        {
+            "term": "OR",
+            "definition": "Operational requirement: a finding that cannot be remediated without breaking the system."
+        }
+    ]
+}

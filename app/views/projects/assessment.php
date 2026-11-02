@@ -6,14 +6,15 @@
             <h1 class="page__title"><?php echo htmlspecialchars($this->assessment['assessment_name'], ENT_QUOTES, 'UTF-8'); ?></h1>
             <div class="client__meta">
                 <span class="badge" id="status_badge"><?php echo htmlspecialchars($this->assessment['assessment_status'], ENT_QUOTES, 'UTF-8'); ?></span>
-                <span class="client__segment"><?php echo htmlspecialchars($this->assessment['standard_name'], ENT_QUOTES, 'UTF-8'); ?></span>
-                <span class="client__segment"><?php echo htmlspecialchars($this->assessment['short_code'], ENT_QUOTES, 'UTF-8'); ?><?php echo ($this->assessment['version'] === '' ? '' : ' &middot; '.htmlspecialchars($this->assessment['version'], ENT_QUOTES, 'UTF-8')); ?></span>
+                <span class="client__segment"><?php echo htmlspecialchars(FrameworkLibrary::display_name($this->assessment['standard_name'], $this->assessment['version']), ENT_QUOTES, 'UTF-8'); ?></span>
+                <span class="client__segment"><?php echo htmlspecialchars($this->assessment['short_code'], ENT_QUOTES, 'UTF-8'); ?></span>
                 <span class="client__segment"><?php echo (int) $this->assessment['item_count']; ?> items</span>
                 <span class="client__segment">Evidence vault: <?php echo htmlspecialchars($this->assessment['project_name'], ENT_QUOTES, 'UTF-8'); ?></span>
             </div>
         </div>
         <div class="page__actions">
             <a class="btn btn--secondary" href="/projects/evidence/id/<?php echo (int) $this->assessment['project_id']; ?>/from/assessment/ref/<?php echo (int) $this->assessment['id']; ?>"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>
+            <button type="button" class="btn btn--secondary" id="do_reports_open"><i class="fa-regular fa-file-chart-column"></i> Reports</button>
             <button type="button" class="btn btn--primary" id="do_complete"><i class="fa-regular fa-circle-check"></i> Mark Complete</button>
             <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete</button>
         </div>
@@ -957,6 +958,107 @@ $(document).ready(function () {
     $('#status_badge').addClass(RESULT_CLASS[$('#status_badge').text().trim()] || 'badge--prospect');
 
     load();
+
+});
+</script>
+
+<div class="modal fade" data-bs-backdrop="static" id="reports_modal" tabindex="-1" aria-labelledby="reports_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="reports_modal_title">Download a Report</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-4">
+                    <div class="col-md-8 form-group">
+                        <label for="ready_type">Report</label>
+                        <select class="form-control" id="ready_type"></select>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label for="ready_format">Format</label>
+                        <select class="form-control" id="ready_format"></select>
+                    </div>
+                </div>
+                <p class="field__help" id="ready_description"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn--primary" id="do_ready_download">Download</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function () {
+
+    var assessment_id = <?php echo (int) $this->assessment['id']; ?>;
+    var reports = <?php echo json_encode(ReadyReports::catalog_for('assessment'), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+    var FORMAT_NAMES = {
+        pdf: "PDF",
+        docx: "Word",
+        xlsx: "Excel"
+    };
+
+    reports.forEach(function (report) {
+        $("#ready_type").append($("<option>").val(report.key).text(report.name));
+    });
+
+    $("#do_reports_open").click(function(){
+        show_formats();
+        modal("reports_modal").show();
+    });
+
+    $("#ready_type").change(function(){
+        show_formats();
+    });
+
+    $("#do_ready_download").click(function(){
+
+        var report = current();
+
+        var obj = {
+            report_type: report.key,
+            target_id: assessment_id,
+            format: $("#ready_format").val()
+        };
+
+        set_loading("#do_ready_download", true);
+
+        var tab = report_tab($("#ready_format").val());
+
+        ApiDataSvc.apiCall('post', 'ready_report_download', obj, function (data) {
+            var obj = JSON.parse(data);
+            set_loading("#do_ready_download", false);
+            if (obj.success) {
+                show_report_tab(tab, obj.url);
+            } else {
+                close_report_tab(tab);
+                toastr.error(obj.message);
+            }
+        }, function () {
+            set_loading("#do_ready_download", false);
+            close_report_tab(tab);
+            toastr.error("The report could not be prepared. Try again.");
+        });
+    });
+
+    function current() {
+        var key = $("#ready_type").val();
+        return reports.filter(function (report) {
+            return report.key === key;
+        })[0];
+    }
+
+    function show_formats() {
+        var report = current();
+        var select = $("#ready_format").empty();
+        report.formats.forEach(function (format) {
+            select.append($("<option>").val(format).text(FORMAT_NAMES[format]));
+        });
+        $("#ready_description").text(report.description);
+    }
 
 });
 </script>

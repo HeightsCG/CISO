@@ -508,7 +508,7 @@ class ReportBuilder {
         );
     }
 
-    private static function default_threats(): array
+    public static function default_threats(): array
     {
         return array(
             array(
@@ -563,7 +563,7 @@ class ReportBuilder {
             .'For each CSF function we also assigned a current implementation tier, using the four CSF tiers (Partial, Risk Informed, Repeatable, Adaptive), and agreed a target tier with management.';
     }
 
-    private static function default_limitations(string $firm): string
+    public static function default_limitations(string $firm): string
     {
         return 'This assessment reflects conditions observed during fieldwork and is based on information and access provided by management and its service providers. '
             .'It is not an audit, and '.$firm.' does not express an opinion on the effectiveness of internal controls or on compliance with any regulation. '

@@ -1,0 +1,494 @@
+{
+    "4.1": {
+        "description": "The organization knows the internal and external factors that shape what its security program must achieve, such as its business model, culture, regulators and threat landscape.",
+        "guidance": "Look for a documented context analysis (for example a PESTLE or SWOT, or an issues register) that is current and visibly feeds the risk assessment and ISMS scope."
+    },
+    "4.2": {
+        "description": "The organization has identified the people and bodies with a stake in its information security, what they expect, and which of those expectations the ISMS will address.",
+        "guidance": "Ask for the interested-parties register with each party's requirements, including legal and contractual ones, and check how the organization decided which requirements the ISMS covers."
+    },
+    "4.3": {
+        "description": "The organization has set clear boundaries for its ISMS: which sites, business units, systems, people and outside connections are in or out.",
+        "guidance": "Review the written scope statement. Confirm it names locations, services and technology, explains exclusions, and accounts for interfaces with parties outside the boundary."
+    },
+    "4.4": {
+        "description": "The organization actually runs its ISMS as a managed set of connected processes that it keeps up to date and improves.",
+        "guidance": "Trace how the ISMS processes link together (risk, controls, audit, review, improvement) and look for evidence that each one has operated during the current cycle."
+    },
+    "5.1": {
+        "description": "Senior leaders visibly own information security: they fund it, set direction, tie it to business goals and hold people to it.",
+        "guidance": "Interview top management and look for minutes, budget approvals and communications that show active involvement rather than delegation of the whole program to IT."
+    },
+    "5.2": {
+        "description": "Leadership has issued a top-level information security policy that fits the organization, commits to meeting requirements and to improving, and frames the security objectives.",
+        "guidance": "Obtain the approved policy. Check its approval date and owner, that it contains the required commitments, and that staff and relevant outside parties can get to it."
+    },
+    "5.3": {
+        "description": "Security duties and decision rights are assigned to named roles, including who makes sure the ISMS conforms and who reports on how it is performing.",
+        "guidance": "Look for a roles and responsibilities matrix or RACI, job descriptions or appointment letters, and confirm the people named know and perform their roles."
+    },
+    "6.1.1": {
+        "description": "When planning the ISMS, the organization works out which risks and opportunities could stop it from achieving its goals and plans how to deal with them.",
+        "guidance": "Check that planning draws on the context (4.1) and stakeholder requirements (4.2), and that the resulting actions are built into ISMS processes and checked for effect."
+    },
+    "6.1.2": {
+        "description": "The organization has a defined, repeatable way to identify, analyse and evaluate information security risks, with set criteria for acceptance and for when to assess.",
+        "guidance": "Review the risk methodology and the latest risk register. Confirm each risk has an owner, likelihood and impact ratings against the documented criteria, and that repeated runs would give comparable results."
+    },
+    "6.1.3": {
+        "description": "For each significant risk the organization chooses how to treat it, selects the controls needed, checks them against Annex A, records the result in a Statement of Applicability, and gets risk owners to accept what remains.",
+        "guidance": "Ask for the risk treatment plan, the Statement of Applicability and risk owner sign-offs. Test that every Annex A control has an inclusion or exclusion decision with a reason and an implementation status."
+    },
+    "6.2": {
+        "description": "The organization has set measurable security objectives and planned who will do what, with which resources and by when, to achieve them.",
+        "guidance": "Review the objectives list for measures, owners and target dates, and check progress records and whether objectives line up with the policy and risk results."
+    },
+    "6.3": {
+        "description": "Changes to the ISMS itself, such as a new scope, reorganization or new process, are planned and controlled rather than made ad hoc.",
+        "guidance": "Ask for examples of recent ISMS changes and look for a change record showing purpose, impact assessment, approval and follow-up."
+    },
+    "7.1": {
+        "description": "The organization provides the people, budget, tools and time needed to set up, run and improve the ISMS.",
+        "guidance": "Compare the resources allocated (headcount, budget, tooling) with the ISMS plan and objectives, and look for evidence that shortfalls are raised and addressed."
+    },
+    "7.2": {
+        "description": "People whose work affects security have the skills and knowledge their roles demand, and gaps are closed through training, hiring or support.",
+        "guidance": "Sample staff in security-relevant roles and check defined competence requirements against training records, certifications or experience, plus evidence that development actions were evaluated."
+    },
+    "7.3": {
+        "description": "Everyone working for the organization knows the security policy, how their work contributes to security, and what happens if they ignore the rules.",
+        "guidance": "Review the awareness program and completion records, and interview a sample of staff to see whether they can describe the policy and their own responsibilities."
+    },
+    "7.4": {
+        "description": "The organization has decided what security matters it communicates, to whom, when, how and by whom, both inside and outside the organization.",
+        "guidance": "Look for a communication plan or matrix and samples of actual communications (internal notices, customer or regulator updates) that match it."
+    },
+    "7.5.1": {
+        "description": "The ISMS keeps the documents and records the standard calls for, plus whatever else the organization finds it needs to run security well.",
+        "guidance": "Build a list of documents and records the standard requires and confirm each exists; check the organization has judged what extra documentation its size and complexity call for."
+    },
+    "7.5.2": {
+        "description": "Security documents are clearly identified, in a suitable format, and reviewed and approved before use.",
+        "guidance": "Sample policies and procedures for title, owner, version, date and approval evidence, and confirm a consistent template or document standard is used."
+    },
+    "7.5.3": {
+        "description": "Security documents and records are available to those who need them and protected from loss, misuse or unauthorized change throughout their life.",
+        "guidance": "Inspect the document repository for access controls, version history, retention and disposal rules, and handling of externally sourced documents."
+    },
+    "8.1": {
+        "description": "The organization runs the processes needed to meet its security requirements and carry out its plans, including control of changes and of outsourced activities.",
+        "guidance": "Check that planned actions are being executed with records to prove it, that operational changes are controlled, and that outsourced processes relevant to the ISMS are identified and managed."
+    },
+    "8.2": {
+        "description": "Risk assessments are actually carried out on the planned schedule and whenever significant changes happen, and the results are kept.",
+        "guidance": "Compare dates of completed risk assessments with the planned frequency and with recent major changes, and confirm the results are retained."
+    },
+    "8.3": {
+        "description": "The risk treatment plan is being carried out, and the results are recorded.",
+        "guidance": "Pick treatment actions from the plan and verify their status with evidence such as tickets, configurations or completed projects; check overdue items are escalated."
+    },
+    "9.1": {
+        "description": "The organization has decided what to measure about security performance and ISMS effectiveness, how and when, and it analyses and acts on the results.",
+        "guidance": "Review the metrics set, data sources, reporting schedule and recent reports, and look for decisions or actions that followed from the analysis."
+    },
+    "9.2.1": {
+        "description": "Internal audits are held at planned intervals to check that the ISMS meets the organization's own requirements and the standard, and that it works in practice.",
+        "guidance": "Obtain recent internal audit reports and confirm they cover conformity to both the standard and the organization's own rules, and assess whether the ISMS is effectively implemented."
+    },
+    "9.2.2": {
+        "description": "The organization runs a planned internal audit programme with defined scope and criteria, objective auditors, and results reported to the right managers.",
+        "guidance": "Review the audit programme and schedule, auditor independence from the areas audited, audit criteria, and evidence that findings reached management and were tracked."
+    },
+    "9.3.1": {
+        "description": "Top management reviews the ISMS at planned intervals to confirm it remains suitable, adequate and effective.",
+        "guidance": "Ask for the management review schedule and the minutes of the most recent reviews, and confirm top management attended."
+    },
+    "9.3.2": {
+        "description": "Management reviews consider a defined set of inputs, such as prior actions, changes in context, performance trends, audit results, stakeholder feedback, risk status and improvement opportunities.",
+        "guidance": "Check the review agenda and pack against the required inputs and note any that were skipped."
+    },
+    "9.3.3": {
+        "description": "Management reviews end in recorded decisions on improvements and on any changes the ISMS needs.",
+        "guidance": "Look for documented outputs with decisions, owners and dates, and trace a sample of those actions through to completion."
+    },
+    "10.1": {
+        "description": "The organization keeps making its ISMS more suitable, adequate and effective over time.",
+        "guidance": "Look for an improvement log or roadmap and examples of improvements made since the last cycle, drawn from audits, incidents, metrics or reviews."
+    },
+    "10.2": {
+        "description": "When something does not meet requirements, the organization contains it, finds the root cause, fixes it so it does not recur, and checks the fix worked.",
+        "guidance": "Sample nonconformities and corrective actions for root-cause analysis, action completion and effectiveness checks, and confirm records are kept."
+    },
+    "A.5.1": {
+        "description": "The organization has a top-level security policy plus supporting topic policies, approved by management, shared with the people they apply to, and kept current.",
+        "guidance": "Review the policy set for approval, ownership, review dates and distribution, and confirm staff acknowledge the policies relevant to them."
+    },
+    "A.5.2": {
+        "description": "Security responsibilities are defined and assigned to roles so it is clear who does what.",
+        "guidance": "Look for documented security roles (for example asset owners, risk owners, security lead) and check that assignees are aware of and carry out their duties."
+    },
+    "A.5.3": {
+        "description": "Incompatible tasks are split between different people so no single person can both carry out and conceal misuse or error.",
+        "guidance": "Review a list of conflicting duties (for example requesting and approving access, developing and deploying code) and test that systems and workflows enforce the separation or that compensating oversight exists."
+    },
+    "A.5.4": {
+        "description": "Managers make sure their staff and contractors follow the organization's security policies and procedures.",
+        "guidance": "Interview managers about how they set expectations and support compliance, and look for security responsibilities in management objectives or performance reviews."
+    },
+    "A.5.5": {
+        "description": "The organization knows which authorities to contact for security matters, such as regulators, law enforcement or national CERTs, and keeps those contacts ready.",
+        "guidance": "Check for a current list of authority contacts with conditions for contacting them, and examples of when contact was made where relevant."
+    },
+    "A.5.6": {
+        "description": "The organization keeps in touch with security forums, professional bodies and industry groups to stay informed and share knowledge.",
+        "guidance": "Look for memberships, subscriptions or participation records and evidence that information gained is passed to the people who need it."
+    },
+    "A.5.7": {
+        "description": "The organization gathers and analyses information about threats relevant to it and uses that to inform its defences.",
+        "guidance": "Ask for threat intelligence sources, analysis outputs and examples of decisions or control changes that resulted from them."
+    },
+    "A.5.8": {
+        "description": "Security is considered from the start and throughout every project, whatever its type.",
+        "guidance": "Review the project methodology for security checkpoints and sample recent projects for security requirements, risk assessments and sign-off."
+    },
+    "A.5.9": {
+        "description": "The organization keeps an up-to-date inventory of its information and related assets, with an owner for each.",
+        "guidance": "Inspect the asset inventory for completeness, accuracy and named owners, and spot-check items found in the environment against it."
+    },
+    "A.5.10": {
+        "description": "There are written rules for how information and assets may and may not be used and handled.",
+        "guidance": "Obtain the acceptable use rules and confirm users have acknowledged them and that handling procedures exist for sensitive assets."
+    },
+    "A.5.11": {
+        "description": "Staff and other users give back organizational assets when they leave or their contract or role ends.",
+        "guidance": "Sample leavers and check return records for laptops, tokens, badges and documents, and confirm the process covers data held on personal devices."
+    },
+    "A.5.12": {
+        "description": "Information is classified according to its sensitivity and importance so that it receives the right level of protection.",
+        "guidance": "Review the classification scheme and check that information owners have applied it to key information sets and systems."
+    },
+    "A.5.13": {
+        "description": "Information carries labels that match its classification so people know how to handle it.",
+        "guidance": "Check labelling procedures for documents, email and systems, and sample information to see whether labels are applied as required."
+    },
+    "A.5.14": {
+        "description": "Rules and agreements govern how information is sent, both within the organization and to outside parties, by any channel.",
+        "guidance": "Review transfer procedures and agreements and test controls on email, file sharing, removable media and verbal transfer of sensitive information."
+    },
+    "A.5.15": {
+        "description": "Access to information and systems is governed by rules based on business need and security requirements.",
+        "guidance": "Obtain the access control policy and check that it defines need-to-know and least-privilege principles and that system access matches it."
+    },
+    "A.5.16": {
+        "description": "Every identity that can access systems, whether a person, device or service, is managed across its whole life from creation to removal.",
+        "guidance": "Review identity lifecycle procedures and sample accounts for unique ownership, approval at creation and timely removal; look for shared or orphaned accounts."
+    },
+    "A.5.17": {
+        "description": "Passwords, keys and other authentication secrets are issued and managed securely, and users know how to protect them.",
+        "guidance": "Check how initial credentials are issued, password and secret rules, secret storage, and user guidance on protecting authentication details."
+    },
+    "A.5.18": {
+        "description": "Access rights are granted, reviewed, changed and removed according to the access rules and the person's current role.",
+        "guidance": "Sample access requests for approval, review records from periodic access recertification, and check that movers and leavers had rights changed promptly."
+    },
+    "A.5.19": {
+        "description": "The organization manages the security risks that come from using suppliers' products and services.",
+        "guidance": "Review the supplier security process, supplier inventory with risk ratings, and due-diligence records for key suppliers."
+    },
+    "A.5.20": {
+        "description": "Agreements with suppliers spell out the security requirements each supplier must meet.",
+        "guidance": "Sample supplier contracts for security clauses appropriate to the risk, such as confidentiality, incident notification, audit rights and data handling."
+    },
+    "A.5.21": {
+        "description": "The organization manages security risks that pass down the technology supply chain, including suppliers' own suppliers.",
+        "guidance": "Look for requirements on suppliers to flow security obligations down, component provenance checks, and monitoring of critical technology supply chains."
+    },
+    "A.5.22": {
+        "description": "The organization watches how suppliers perform on security and manages changes to the services they provide.",
+        "guidance": "Check supplier review records, performance reports or audits, and how changes to supplier services were assessed before acceptance."
+    },
+    "A.5.23": {
+        "description": "The organization sets security requirements for cloud services and manages how it selects, uses, oversees and exits them.",
+        "guidance": "Review the cloud security policy, the cloud service inventory, shared-responsibility analysis for key services, and exit plans."
+    },
+    "A.5.24": {
+        "description": "The organization has prepared for security incidents with defined processes, roles and communication paths before one happens.",
+        "guidance": "Obtain the incident response plan, role assignments and contact lists, and look for training or exercise records."
+    },
+    "A.5.25": {
+        "description": "Security events are assessed to decide whether they are incidents, so that real incidents are recognized and escalated.",
+        "guidance": "Check triage criteria and sample event records to see how classification decisions were made and recorded."
+    },
+    "A.5.26": {
+        "description": "Security incidents are handled according to the documented response procedures.",
+        "guidance": "Sample incident tickets and compare the actions taken, timing and communications with the documented procedure."
+    },
+    "A.5.27": {
+        "description": "Lessons from incidents are captured and used to strengthen controls and reduce the chance or impact of future incidents.",
+        "guidance": "Look for post-incident reviews and evidence that resulting actions were tracked and completed."
+    },
+    "A.5.28": {
+        "description": "The organization can identify, gather and preserve evidence about security events in a way that will stand up if needed.",
+        "guidance": "Review evidence-handling procedures, chain-of-custody forms and tooling, and check whether recent incidents followed them."
+    },
+    "A.5.29": {
+        "description": "The organization has planned how to keep information protected at the right level while operations are disrupted.",
+        "guidance": "Check continuity and crisis plans for security requirements during disruption, and look for test results that include security aspects."
+    },
+    "A.5.30": {
+        "description": "Technology services are prepared and tested so they can be restored in time to meet business continuity needs.",
+        "guidance": "Review business impact analysis outputs, recovery objectives, IT recovery plans and recent recovery test results against those objectives."
+    },
+    "A.5.31": {
+        "description": "The organization identifies the laws, regulations and contracts that bear on information security and keeps track of how it meets them.",
+        "guidance": "Obtain the legal and regulatory register with owners and review dates and check how new or changed obligations are picked up."
+    },
+    "A.5.32": {
+        "description": "The organization respects intellectual property, including software licensing and copyrighted material.",
+        "guidance": "Check software licence management records against deployed software and review policies on use of third-party content."
+    },
+    "A.5.33": {
+        "description": "Records are protected from loss, destruction, falsification and unauthorized access or release for as long as they must be kept.",
+        "guidance": "Review the records retention schedule and check sample records for storage protection, integrity and correct disposal."
+    },
+    "A.5.34": {
+        "description": "The organization meets its obligations for privacy and the protection of personal data.",
+        "guidance": "Look for a privacy policy, data inventory or records of processing, a named privacy role, and evidence of compliance with applicable privacy laws."
+    },
+    "A.5.35": {
+        "description": "The organization's approach to information security is independently reviewed at planned intervals and after significant changes.",
+        "guidance": "Obtain reports from independent reviews (internal audit, external assessors) and confirm the reviewers were independent of the area reviewed."
+    },
+    "A.5.36": {
+        "description": "Compliance with the organization's own security policies, rules and standards is regularly checked.",
+        "guidance": "Review compliance check schedules, results such as configuration reviews or policy attestations, and follow-up of exceptions."
+    },
+    "A.5.37": {
+        "description": "Operating procedures for information processing facilities are written down and available to the people who need them.",
+        "guidance": "Sample operational procedures (backups, start-up and shutdown, monitoring) for currency, approval and availability to operators."
+    },
+    "A.6.1": {
+        "description": "Background checks are done on candidates before they join and repeated where appropriate, in proportion to the role and the law.",
+        "guidance": "Sample personnel files for completed screening appropriate to role risk, and check the screening policy reflects legal constraints."
+    },
+    "A.6.2": {
+        "description": "Employment contracts and terms state the security responsibilities of both the staff member and the organization.",
+        "guidance": "Review contract templates and a sample of signed agreements for security and confidentiality clauses."
+    },
+    "A.6.3": {
+        "description": "Staff and relevant contractors receive security awareness, education and training suited to their roles, and it is kept up to date.",
+        "guidance": "Check the training plan, completion rates and role-specific training for high-risk roles, and how content is refreshed."
+    },
+    "A.6.4": {
+        "description": "There is a formal, communicated process for dealing with people who break security policy.",
+        "guidance": "Obtain the disciplinary process and confirm staff are informed of it; where violations occurred, check it was followed consistently."
+    },
+    "A.6.5": {
+        "description": "Security duties that continue after someone leaves or changes role are defined, communicated and enforced.",
+        "guidance": "Review exit and transfer procedures for reminders of ongoing confidentiality duties, and sample leaver records."
+    },
+    "A.6.6": {
+        "description": "Confidentiality or non-disclosure agreements reflecting the organization's needs are in place, signed and periodically reviewed.",
+        "guidance": "Check NDA templates for currency and sample signed agreements for staff, contractors and relevant third parties."
+    },
+    "A.6.7": {
+        "description": "Security measures protect information when people work away from the organization's premises.",
+        "guidance": "Review the remote working policy and technical controls such as VPN, device encryption and secure home-working guidance, and test a sample of remote setups."
+    },
+    "A.6.8": {
+        "description": "People have a quick, simple way to report security events they notice, and they know to use it.",
+        "guidance": "Confirm the reporting channel exists and is publicized, and review reports received to judge whether staff use it."
+    },
+    "A.7.1": {
+        "description": "Physical boundaries are defined and used to protect areas that hold information and related assets.",
+        "guidance": "Walk the site to verify that perimeters such as walls, doors and fencing match the defined secure areas and have no obvious gaps."
+    },
+    "A.7.2": {
+        "description": "Entry to secure areas is controlled so only authorized people get in.",
+        "guidance": "Test access control systems, visitor logs and badge procedures, and review access lists for secure areas."
+    },
+    "A.7.3": {
+        "description": "Offices, rooms and facilities are designed and run with physical security in mind.",
+        "guidance": "Inspect sensitive rooms for locks, discreet signage and placement away from public access, and review facility security measures."
+    },
+    "A.7.4": {
+        "description": "Premises are monitored to detect unauthorized physical access.",
+        "guidance": "Check CCTV, alarms or guard patrols cover key areas, and review monitoring logs and alarm response records."
+    },
+    "A.7.5": {
+        "description": "Facilities are protected against natural and man-made physical threats such as fire, flood, and power or environmental failures.",
+        "guidance": "Review the physical threat assessment and inspect protections such as fire suppression, water detection and environmental monitoring."
+    },
+    "A.7.6": {
+        "description": "Additional rules govern behaviour and work inside secure areas.",
+        "guidance": "Review secure area rules (for example no unsupervised visitors, no personal recording devices) and observe whether they are followed."
+    },
+    "A.7.7": {
+        "description": "Desks are kept clear of sensitive papers and media, and screens are locked or cleared when unattended.",
+        "guidance": "Check the policy and screen-lock settings, and do a walk-through to spot unattended sensitive material or unlocked sessions."
+    },
+    "A.7.8": {
+        "description": "Equipment is placed and protected to reduce physical and environmental risks and unauthorized access.",
+        "guidance": "Inspect server rooms and equipment locations for appropriate siting, environmental protection and restricted access."
+    },
+    "A.7.9": {
+        "description": "Assets taken off-site, such as laptops and phones, are protected.",
+        "guidance": "Review the off-site asset policy, encryption and tracking of mobile assets, and check records of assets taken off-site."
+    },
+    "A.7.10": {
+        "description": "Storage media are managed securely from acquisition through use, transport and disposal.",
+        "guidance": "Check removable media controls, encryption, transport procedures and disposal records with certificates where used."
+    },
+    "A.7.11": {
+        "description": "Power, cooling and other supporting utilities are protected against failures and disruption.",
+        "guidance": "Inspect UPS, generators and HVAC, and review maintenance and test records."
+    },
+    "A.7.12": {
+        "description": "Power and data cables are protected from interception, interference and damage.",
+        "guidance": "Inspect cabling routes, patch areas and cabinets for physical protection and separation of power and data."
+    },
+    "A.7.13": {
+        "description": "Equipment is maintained properly to keep information available, intact and confidential.",
+        "guidance": "Review maintenance schedules and records, including controls over third-party maintenance staff and equipment leaving for repair."
+    },
+    "A.7.14": {
+        "description": "Before equipment is disposed of or reused, sensitive data and licensed software are removed or securely overwritten.",
+        "guidance": "Check disposal and reuse procedures and sample wipe or destruction certificates."
+    },
+    "A.8.1": {
+        "description": "Information on laptops, phones and other user devices is protected.",
+        "guidance": "Review endpoint standards and device management tooling, and test a sample of devices for encryption, patching and security settings."
+    },
+    "A.8.2": {
+        "description": "Privileged access is tightly restricted and closely managed.",
+        "guidance": "Obtain the list of privileged accounts, check approval and periodic review, and confirm privileged activity is separated from everyday accounts and logged."
+    },
+    "A.8.3": {
+        "description": "Access to information and application functions is limited in line with the access control rules.",
+        "guidance": "Test system access configuration against role definitions, looking for excessive or unauthorized access."
+    },
+    "A.8.4": {
+        "description": "Access to source code, development tools and software libraries is controlled.",
+        "guidance": "Review repository permissions, branch protection and change history to confirm only authorized people can read or change code."
+    },
+    "A.8.5": {
+        "description": "Authentication technology and procedures are strong enough for the sensitivity of the access being granted.",
+        "guidance": "Check MFA coverage for remote, privileged and sensitive access, session controls and login protections such as lockout."
+    },
+    "A.8.6": {
+        "description": "Use of computing, storage and network resources is monitored and adjusted to meet current and expected needs.",
+        "guidance": "Review capacity monitoring dashboards, thresholds, alerts and capacity plans."
+    },
+    "A.8.7": {
+        "description": "Systems are protected against malware, backed by user awareness.",
+        "guidance": "Check anti-malware coverage and update status across endpoints and servers, and review detections and responses."
+    },
+    "A.8.8": {
+        "description": "The organization learns of technical vulnerabilities in its systems, assesses its exposure, and takes timely action.",
+        "guidance": "Review scanning coverage and results, patching timelines against defined targets, and handling of exceptions."
+    },
+    "A.8.9": {
+        "description": "Secure configurations for hardware, software, services and networks are defined, applied, monitored and reviewed.",
+        "guidance": "Obtain configuration baselines and test a sample of systems for drift; review change records for configuration updates."
+    },
+    "A.8.10": {
+        "description": "Information that is no longer needed is deleted from systems, devices and storage.",
+        "guidance": "Check deletion procedures and retention-driven deletion jobs, and sample systems for data kept beyond its retention period."
+    },
+    "A.8.11": {
+        "description": "Data masking hides sensitive data, such as personal data, where policy, law or business need requires it.",
+        "guidance": "Review where masking, tokenization or pseudonymization is applied, for example in test environments and reports, and test whether it works."
+    },
+    "A.8.12": {
+        "description": "Measures detect and prevent unauthorized leakage of sensitive information from systems, networks and devices.",
+        "guidance": "Review DLP tooling and rules, monitored channels, alerts raised and how they were handled."
+    },
+    "A.8.13": {
+        "description": "Backups of information, software and systems are taken and tested in line with an agreed backup policy.",
+        "guidance": "Check backup schedules and success logs, offsite or immutable copies, and recent restore test results."
+    },
+    "A.8.14": {
+        "description": "Systems are built with enough redundancy to meet availability requirements.",
+        "guidance": "Review architecture diagrams for single points of failure and evidence of failover testing for critical services."
+    },
+    "A.8.15": {
+        "description": "Logs of activities, exceptions, faults and other relevant events are produced, kept, protected and analysed.",
+        "guidance": "Check log sources, retention, protection against tampering, and evidence of log review or SIEM use."
+    },
+    "A.8.16": {
+        "description": "Networks, systems and applications are watched for abnormal behaviour, and potential incidents are acted on.",
+        "guidance": "Review monitoring coverage, alert rules, on-call arrangements and a sample of alerts with their response."
+    },
+    "A.8.17": {
+        "description": "System clocks are synchronized to approved time sources so that logs and events line up.",
+        "guidance": "Check NTP configuration on a sample of systems and the approved time sources."
+    },
+    "A.8.18": {
+        "description": "Utility programs that can bypass system or application controls are restricted and tightly controlled.",
+        "guidance": "Identify powerful utilities in use, check who can run them, and review logging of their use."
+    },
+    "A.8.19": {
+        "description": "Software installation on operational systems is controlled.",
+        "guidance": "Review installation rights, allow-listing or software deployment controls, and sample installed software against approved lists."
+    },
+    "A.8.20": {
+        "description": "Networks and network devices are secured, managed and controlled to protect the information on systems and applications.",
+        "guidance": "Review network diagrams, device hardening, administrative access to network devices, and firewall rule reviews."
+    },
+    "A.8.21": {
+        "description": "Security mechanisms, service levels and requirements for network services are identified, put in place and monitored.",
+        "guidance": "Check network service agreements and security features (for example encryption, DDoS protection) and monitoring of provider performance."
+    },
+    "A.8.22": {
+        "description": "Groups of information services, users and systems are separated into different network segments.",
+        "guidance": "Review segmentation design and test that controls between segments, such as firewall rules or VLANs, enforce the intended separation."
+    },
+    "A.8.23": {
+        "description": "Access to external websites is managed to reduce exposure to malicious content.",
+        "guidance": "Review web filtering tooling, blocked categories and exception handling, and test coverage for remote users."
+    },
+    "A.8.24": {
+        "description": "Rules for using cryptography, including managing keys, are defined and put into practice.",
+        "guidance": "Obtain the cryptography policy and key management procedures and check encryption in transit and at rest for key systems."
+    },
+    "A.8.25": {
+        "description": "Rules for developing software and systems securely are set and followed throughout the development life cycle.",
+        "guidance": "Review the secure SDLC standard and sample projects for security activities at each phase."
+    },
+    "A.8.26": {
+        "description": "Security requirements are identified, specified and approved when building or buying applications.",
+        "guidance": "Sample application projects or purchases for documented security requirements and their approval."
+    },
+    "A.8.27": {
+        "description": "Principles for designing secure systems are defined, documented, kept current and applied to all system development.",
+        "guidance": "Check for documented secure architecture principles and evidence they were applied in recent design reviews."
+    },
+    "A.8.28": {
+        "description": "Secure coding practices are applied to software development.",
+        "guidance": "Review coding standards, developer training, code review records and static analysis results."
+    },
+    "A.8.29": {
+        "description": "Security testing is defined and carried out during development and before systems are accepted into use.",
+        "guidance": "Look for security test plans and results (for example SAST, DAST, penetration tests) and acceptance criteria tied to them."
+    },
+    "A.8.30": {
+        "description": "The organization directs, monitors and reviews outsourced development work.",
+        "guidance": "Review outsourced development contracts for security requirements, and evidence of oversight such as code reviews or acceptance testing."
+    },
+    "A.8.31": {
+        "description": "Development, test and production environments are kept separate and secured.",
+        "guidance": "Check environment separation, access differences between environments and controls on promotion to production."
+    },
+    "A.8.32": {
+        "description": "Changes to information processing facilities and systems go through change management.",
+        "guidance": "Sample changes for request, impact assessment, approval, testing and post-implementation review."
+    },
+    "A.8.33": {
+        "description": "Information used for testing is chosen carefully and protected.",
+        "guidance": "Check whether production data is used in test, and if so how it is approved, masked and removed after use."
+    },
+    "A.8.34": {
+        "description": "Audits and other assurance tests on operational systems are planned and agreed between the tester and management to limit disruption.",
+        "guidance": "Review audit or testing plans for agreed scope, timing, access restrictions and approval from system owners."
+    }
+}

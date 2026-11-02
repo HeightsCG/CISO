@@ -1,0 +1,211 @@
+{
+    "key": "iso-27001-2022",
+    "name": "ISO/IEC 27001",
+    "version": "2022",
+    "full_name": "ISO/IEC 27001:2022 Information security, cybersecurity and privacy protection — Information security management systems — Requirements",
+    "issuing_body": "International Organization for Standardization (ISO) and International Electrotechnical Commission (IEC)",
+    "standard_codes": [
+        "ISO-27001"
+    ],
+    "content_licence": "ids_titles_only",
+    "notice": "ISO/IEC 27001 is copyright ISO/IEC. Clause and control numbers and titles are used for identification only; descriptions and guidance are written by Heights Consulting Group and are not ISO text.",
+    "amendments": [
+        {
+            "id": "ISO/IEC 27001:2022/Amd 1:2024",
+            "summary": "Climate action changes: clause 4.1 adds whether climate change is a relevant issue, and 4.2 notes that interested parties can have climate-related requirements. No clause or Annex A numbers or titles change, so this definition covers the amended standard too.",
+            "source": "hcg"
+        }
+    ],
+    "sources": [
+        {
+            "id": "iso27001",
+            "title": "SIST EN ISO/IEC 27001:2023 sample preview (contents list and front matter)",
+            "version": "ISO/IEC 27001:2022, adopted unchanged as EN ISO/IEC 27001:2023",
+            "publisher": "Slovenian Institute for Standardization (SIST), distributed by iTeh Standards",
+            "url": "https://cdn.standards.iteh.ai/samples/77035/9155aef6db56458b8386d15acfe94b38/SIST-EN-ISO-IEC-27001-2023.pdf",
+            "file": "iso27001/sist-en-iso-iec-27001-2023-sample.pdf",
+            "sha256": "04d5da053633f84e204f46416e129451cf87a295091dc07e99645ffb18716422",
+            "note": "Free sample from an ISO/CEN national-body reseller. Supplies the clause 4-10 titles from the contents list. The published contents list omits clause 6.3 (it appears only in the body)."
+        },
+        {
+            "id": "iso27001redline",
+            "title": "ISO/IEC 27001:2022 redline sample preview (compares third edition to second edition)",
+            "version": "ISO/IEC 27001:2022",
+            "publisher": "ISO/IEC, distributed by iTeh Standards",
+            "url": "https://cdn.standards.iteh.ai/samples/82875/4d4c8d99950c4b39aaa39cf5cb9a0bf3/ISO-IEC-27001-2022.pdf",
+            "file": "iso27001/iso-iec-27001-2022-redline-sample.pdf",
+            "sha256": "9c73cd222d9d7c6b643604d787787cc0749af974717b49fab1b526b29d23204f",
+            "note": "Free sample covering the body text up to clause 7.4. Supplies the clause 6.3 heading and the clause 1 and 6.1.3 d) quotes. Redline mark-up merges added and removed words, so it is quoted only where the 2022 text stands on its own."
+        },
+        {
+            "id": "iso27002",
+            "title": "SIST EN ISO/IEC 27002:2022 sample preview (contents list)",
+            "version": "ISO/IEC 27002:2022 (corrected version 2022-03), adopted as EN ISO/IEC 27002:2022",
+            "publisher": "Slovenian Institute for Standardization (SIST), distributed by iTeh Standards",
+            "url": "https://cdn.standards.iteh.ai/samples/sist/sist-en-iso-iec-27002-2022/2780c93ddd364bd0adfeb4bf5120b169/sist-en-iso-iec-27002-2022.pdf",
+            "file": "iso27001/sist-en-iso-iec-27002-2022-sample.pdf",
+            "sha256": "6456ef059779adbb225834e0d729d809b1d37933f91c43c528f36d9b31d4cd6e",
+            "note": "Supplies the Annex A theme names and the 93 control titles. ISO/IEC 27001:2022 Annex A uses the ISO/IEC 27002:2022 controls under the same numbers and titles."
+        },
+        {
+            "id": "olir155",
+            "title": "NIST OLIR 800-53-Rev5-to-ISO 27001-2022 crosswalk",
+            "version": "1.0.0 (2023-10-12, posted 2023-11-13)",
+            "publisher": "NIST",
+            "url": "https://csrc.nist.gov/csrc/media/Projects/olir/documents/submissions/sp800-53r5-to-iso-27001-mapping-2022-OLIR-2023-10-12-UPDATED.xlsx",
+            "file": "iso27001/olir-155-sp800-53r5-to-iso-27001-2022.xlsx",
+            "sha256": "e631de234a1fac057991773f015c221226940540f5602e1b70a3768eaff5cbd9",
+            "note": "NIST-authored. Checksum matches the hash NIST publishes in the OLIR catalog (referenceId 155). IDs only, no titles; used to cross-check clause and control IDs."
+        },
+        {
+            "id": "olir218",
+            "title": "NIST OLIR ISO/IEC-27001:2022-to-NIST-Cybersecurity-Framework-v2.0 (relationship export)",
+            "version": "1.0.0 (posted 2026-07-09)",
+            "publisher": "NIST OLIR catalog; developer: independent submitter (J. Pauloweit), not NIST-authored",
+            "url": "https://csrc.nist.gov/extensions/nudp/services/json/olir/derived-relationship-mapping?informativeReference1Id=218",
+            "file": "iso27001/olir-218-iso-27001-2022-to-csf-2.0.json",
+            "sha256": "c321e167964901b66bae7450bea3a857e81f56be1eff1ce7c354e08b3851555c",
+            "note": "Comprehensive Annex A to CSF 2.0 mapping, kept for the crosswalk. NIST does not test non-NIST mappings for correctness. IDs only."
+        },
+        {
+            "id": "hcg",
+            "title": "HCG ISO/IEC 27001:2022 control descriptions and assessment guidance",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group",
+            "note": "frameworks/meta/controls/iso-27001-2022.json"
+        }
+    ],
+    "source_of": {
+        "controls": "iso27001",
+        "guidance": "hcg"
+    },
+    "terminology": {
+        "control": "control",
+        "controls": "controls",
+        "family": "section",
+        "families": "sections",
+        "objective": "objective",
+        "objectives": "objectives",
+        "plan": "Information security risk treatment plan",
+        "plan_short": "RTP",
+        "score": "Conformity score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Conforming"
+        },
+        {
+            "key": "partial",
+            "label": "Partially conforming"
+        },
+        {
+            "key": "not_met",
+            "label": "Nonconforming"
+        },
+        {
+            "key": "na",
+            "label": "Excluded"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Share of in-scope clauses and Annex A controls assessed as conforming. Partially conforming counts as half. Annex A controls excluded in the Statement of Applicability are left out; clauses 4 to 10 can never be excluded."
+    },
+    "rules": [
+        {
+            "id": "clauses_mandatory",
+            "type": "applicability",
+            "scope": "clauses",
+            "excludable": false,
+            "summary": "Every requirement in clauses 4 to 10 applies. None can be marked Excluded if the organization claims conformity.",
+            "source": "iso27001redline",
+            "cite": "ISO/IEC 27001:2022, clause 1",
+            "quote": "Excluding any of the requirements specified in Clauses 4 to 10 is not acceptable when an organization claims conformity"
+        },
+        {
+            "id": "annex_a_exclusion_justified",
+            "type": "applicability",
+            "scope": "annex_a",
+            "excludable": true,
+            "requires_justification": true,
+            "summary": "Each Annex A control is either Applicable or Excluded in the Statement of Applicability. An exclusion needs a written justification; an included control needs a reason for inclusion and its implementation status.",
+            "source": "iso27001redline",
+            "cite": "ISO/IEC 27001:2022, 6.1.3 d)",
+            "quote": "the justification for excluding any of the Annex A controls"
+        },
+        {
+            "id": "soa_required",
+            "type": "gate",
+            "control": "6.1.3",
+            "summary": "A Statement of Applicability must exist and cover every Annex A control before Annex A results can be reported.",
+            "source": "iso27001redline",
+            "cite": "ISO/IEC 27001:2022, 6.1.3 d)",
+            "quote": "produce a Statement of Applicability that contains the necessary controls"
+        },
+        {
+            "id": "excluded_left_out",
+            "type": "na_handling",
+            "counts_as": "excluded",
+            "summary": "Annex A controls excluded in the Statement of Applicability are left out of the score. They are not counted as conforming.",
+            "source": "hcg",
+            "cite": "HCG scoring convention"
+        },
+        {
+            "id": "partial_half",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A partially conforming clause or control counts as half. This is an HCG convention: certification audits record nonconformities and do not use partial credit.",
+            "source": "hcg",
+            "cite": "HCG scoring convention"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary",
+        "governing_document"
+    ],
+    "governing_document": {
+        "key": "soa",
+        "title": "Statement of Applicability",
+        "short": "SoA",
+        "required_by": "6.1.3",
+        "sections": [
+            "ISMS scope",
+            "Annex A controls: Applicable or Excluded",
+            "Justification for each included control",
+            "Implementation status of each included control",
+            "Justification for each excluded control",
+            "Additional controls beyond Annex A",
+            "Approval and review history"
+        ]
+    },
+    "glossary": [
+        {
+            "term": "ISMS",
+            "definition": "Information security management system: the policies, processes, people and controls an organization uses to manage information security risk."
+        },
+        {
+            "term": "SoA",
+            "definition": "Statement of Applicability: the record of which Annex A controls apply, why, whether they are implemented, and why any are excluded."
+        },
+        {
+            "term": "Annex A",
+            "definition": "The reference list of 93 information security controls in ISO/IEC 27001, grouped into organizational, people, physical and technological themes."
+        },
+        {
+            "term": "RTP",
+            "definition": "Risk treatment plan: the plan for how each identified information security risk will be treated."
+        },
+        {
+            "term": "PII",
+            "definition": "Personally identifiable information: information that can identify a person."
+        },
+        {
+            "term": "ICT",
+            "definition": "Information and communication technology."
+        }
+    ]
+}

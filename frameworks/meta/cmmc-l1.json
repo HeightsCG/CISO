@@ -1,0 +1,192 @@
+{
+    "key": "cmmc-l1",
+    "name": "CMMC Level 1",
+    "version": "32 CFR Part 170",
+    "full_name": "Cybersecurity Maturity Model Certification (CMMC) Level 1",
+    "issuing_body": "U.S. Department of Defense",
+    "standard_codes": [
+        "CMMC-L1"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "far",
+            "title": "48 CFR 52.204-21, Basic Safeguarding of Covered Contractor Information Systems",
+            "version": "Clause dated NOV 2021; eCFR as of 29 October 2026",
+            "publisher": "eCFR, Office of the Federal Register",
+            "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-10-29/title-48.xml?part=52&section=52.204-21",
+            "file": "cmmc/far-52.204-21.xml",
+            "sha256": "6797a48c927c6452104c9352e258e4f3faec87c8d041fe0f45d93db57b8cea9c"
+        },
+        {
+            "id": "cfr170",
+            "title": "32 CFR Part 170, Cybersecurity Maturity Model Certification (CMMC) Program",
+            "version": "eCFR as of 1 January 2025",
+            "publisher": "eCFR, Office of the Federal Register",
+            "url": "https://www.ecfr.gov/api/versioner/v1/full/2025-01-01/title-32.xml?part=170",
+            "file": "cmmc/32-cfr-170.xml",
+            "sha256": "3dc8b9bebbe56753206429657cbac24ff32bfd64c75356ba276af38a1032b628"
+        },
+        {
+            "id": "sp800171r2",
+            "title": "NIST SP 800-171 Rev 2, Protecting Controlled Unclassified Information in Nonfederal Systems and Organizations",
+            "version": "Rev 2 (February 2020, updated January 2021)",
+            "publisher": "NIST",
+            "url": "https://csrc.nist.gov/pubs/sp/800/171/r2/upd1/final",
+            "file": "cmmc/sp800-171r2.xlsx",
+            "sha256": "bc8f3f1ab3213e9252d65809afb84509e83e3c88dc5f2b8439ee5fbdb1f04fd2"
+        },
+        {
+            "id": "sp800171a",
+            "title": "NIST SP 800-171A, Assessing Security Requirements for Controlled Unclassified Information (June 2018)",
+            "version": "June 2018",
+            "publisher": "NIST",
+            "url": "https://doi.org/10.6028/NIST.SP.800-171A",
+            "file": "cmmc/sp800-171a-2018.pdf",
+            "sha256": "21bf3acc43f4284f723639b82eb71e3ce597fa3610f7e9dcf5e8484e22bc0f71"
+        }
+    ],
+    "source_of": {
+        "controls": "far",
+        "objectives": "sp800171a"
+    },
+    "terminology": {
+        "control": "security requirement",
+        "controls": "security requirements",
+        "family": "domain",
+        "families": "domains",
+        "objective": "assessment objective",
+        "objectives": "assessment objectives",
+        "plan": "Plan of Action and Milestones",
+        "plan_short": "POA&M",
+        "score": "compliance result"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "MET"
+        },
+        {
+            "key": "not_met",
+            "label": "NOT MET"
+        },
+        {
+            "key": "na",
+            "label": "N/A"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Each requirement is MET or NOT MET in its entirety. The percentage of requirements MET is shown for progress only; Level 1 is achieved only when all 15 are MET."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is MET only when every applicable assessment objective is satisfied.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.24(b)(2)",
+            "quote": "Not Met. One or more applicable objectives for the security requirement is not satisfied."
+        },
+        {
+            "id": "na_counts_as_met",
+            "type": "na_handling",
+            "counts_as": "met",
+            "summary": "An objective assessed N/A counts as MET.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.24(b)(3)",
+            "quote": "an assessment objective assessed as N/A is equivalent to the same assessment objective being assessed as MET"
+        },
+        {
+            "id": "fci_for_cui",
+            "type": "applicability",
+            "summary": "Level 1 uses the SP 800-171A objectives of the mapped requirement; wherever an objective says CUI, read it as FCI.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.15(c)(1)(i)",
+            "quote": "In any case where an objective addresses CUI, FCI should be substituted for CUI in the objective."
+        },
+        {
+            "id": "whole_requirement",
+            "type": "scoring",
+            "summary": "Requirements are scored MET or NOT MET in their entirety; there are no point values or partial credit.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.24(c)(1)",
+            "quote": "self-assessment results are scored as MET or NOT MET in their entirety"
+        },
+        {
+            "id": "no_poam",
+            "type": "deferral",
+            "permitted": false,
+            "summary": "No requirement may be deferred to a POA&M at Level 1.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.21(a)(1)",
+            "quote": "A POA&M is not permitted at any time for Level 1 self-assessments."
+        },
+        {
+            "id": "final_status",
+            "type": "pass",
+            "metric": "all_met",
+            "outcome": "Final Level 1 (Self)",
+            "summary": "Final Level 1 (Self) requires every one of the 15 requirements to be MET.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.15(a)(1)",
+            "quote": "The OSA must complete and achieve a MET result for all security requirements specified in § 170.14(c)(2) to achieve the CMMC Status of Final Level 1 (Self)."
+        },
+        {
+            "id": "reassessment",
+            "type": "validity",
+            "years": 1,
+            "summary": "The Level 1 self-assessment must be repeated every year and the results entered in SPRS.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.15(a)(1)",
+            "quote": "the OSA must conduct a Level 1 self-assessment on an annual basis and submit the results in SPRS"
+        },
+        {
+            "id": "annual_affirmation",
+            "type": "affirmation",
+            "summary": "A senior Affirming Official must affirm compliance in SPRS at the end of each self-assessment and every year.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.22(b)(1)",
+            "quote": "At the completion of a Level 1 self-assessment and annually thereafter, the Affirming Official shall submit a CMMC affirmation attesting to continuing compliance with all requirements of the CMMC Status Level 1 (Self)."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan"
+    ],
+    "consequences": [
+        {
+            "summary": "Contracts that require CMMC Level 1 cannot be awarded until Level 1 (Self) is achieved and the affirmation is entered in SPRS.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.15(b)",
+            "quote": "Prior to award of any contract or subcontract with a requirement for the CMMC Status of Level 1 (Self), OSAs must both achieve a CMMC Status of Level 1 (Self) and have submitted an affirmation of compliance into SPRS"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "CMMC",
+            "definition": "Cybersecurity Maturity Model Certification, the Department of Defense program that verifies contractors protect federal contract and controlled information."
+        },
+        {
+            "term": "FCI",
+            "definition": "Federal Contract Information: information provided by or generated for the government under a contract and not intended for public release."
+        },
+        {
+            "term": "CUI",
+            "definition": "Controlled Unclassified Information: government information that is not classified but must still be protected."
+        },
+        {
+            "term": "FAR",
+            "definition": "Federal Acquisition Regulation; clause 52.204-21 sets the basic safeguarding requirements for contractor systems holding FCI."
+        },
+        {
+            "term": "SPRS",
+            "definition": "Supplier Performance Risk System, where contractors record assessment results and affirmations."
+        },
+        {
+            "term": "POA&M",
+            "definition": "Plan of Action and Milestones: the documented plan for closing requirements that are not yet met. Not permitted at Level 1."
+        }
+    ]
+}

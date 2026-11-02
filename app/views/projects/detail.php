@@ -12,7 +12,7 @@
         </div>
         <div class="page__actions">
             <a class="btn btn--secondary" href="/projects/evidence/id/<?php echo (int) $this->project['id']; ?>"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>
-            <a class="btn btn--secondary" href="/projects/report/id/<?php echo (int) $this->project['id']; ?>"><i class="fa-regular fa-file-chart-column"></i> Report</a>
+            <button type="button" class="btn btn--secondary" id="do_reports_open"><i class="fa-regular fa-file-chart-column"></i> Reports</button>
             <a class="btn btn--secondary" href="/projects/form/id/<?php echo (int) $this->project['id']; ?>"><i class="fa-regular fa-pen"></i> Edit</a>
             <?php if ($this->room['allowed']) { ?>
             <button type="button" class="btn btn--primary" id="do_assessment_add"><i class="fa-regular fa-plus"></i> Assessment</button>
@@ -108,7 +108,7 @@
                 <p class="import__hint">The standard&rsquo;s controls are copied into the assessment when it is created, so later edits to the library will not change an assessment already under way.</p>
                 <div class="field">
                     <label for="assessment_name">Assessment Name <abbr title="required">*</abbr></label>
-                    <input type="text" id="assessment_name" placeholder="2026 annual CMMC Level 2 assessment">
+                    <input type="text" id="assessment_name" placeholder="Assessment name">
                 </div>
                 <div class="field">
                     <label for="standard_id">Standard <abbr title="required">*</abbr></label>
@@ -153,9 +153,8 @@ $(document).ready(function () {
         for (var i = 0; i < list.length; i++) {
             html += '<tr data-id="' + list[i].id + '" tabindex="0">'
                 + '<td>' + esc(list[i].assessment_name) + '</td>'
-                + '<td><span class="roster__name">' + esc(list[i].standard_name) + '</span>'
-                + '<span class="roster__sub">' + esc(list[i].short_code)
-                + (list[i].version ? ' &middot; ' + esc(list[i].version) : '') + '</span></td>'
+                + '<td><span class="roster__name">' + esc(standard_display(list[i].standard_name, list[i].version)) + '</span>'
+                + '<span class="roster__sub">' + esc(list[i].short_code) + '</span></td>'
                 + '<td>' + progress_bar(parseInt(list[i].assessed_count || 0, 10), parseInt(list[i].item_count || 0, 10)) + '</td>'
                 + '<td>' + status_badge(list[i].assessment_status) + '</td>'
                 + '</tr>';
@@ -203,7 +202,7 @@ $(document).ready(function () {
 
     $('#do_assessment_add').click(function () {
 
-        $('#assessment_name').val('').removeClass('is-invalid');
+        $('#assessment_name').val('').removeClass('is-invalid').removeData('default_name');
 
         ApiDataSvc.apiCall('post', 'load_active_standards', {}, function (data) {
 
@@ -211,13 +210,28 @@ $(document).ready(function () {
             var options = '<option value="0">Choose a standard&hellip;</option>';
 
             for (var i = 0; i < list.length; i++) {
-                options += '<option value="' + list[i].id + '">' + esc(list[i].standard_name)
-                    + (list[i].version ? ' (' + esc(list[i].version) + ')' : '') + '</option>';
+                options += '<option value="' + list[i].id + '">' + esc(standard_display(list[i].standard_name, list[i].version)) + '</option>';
             }
 
             $('#standard_id').html(options);
             modal('assessment_modal').show();
         });
+    });
+
+    $('#standard_id').change(function () {
+
+        var name = $('#assessment_name');
+        var current = name.val().trim();
+        var suggested = '';
+
+        if ($(this).val() !== '0') {
+            suggested = $(this).find('option:selected').text() + ' ' + new Date().getFullYear();
+        }
+
+        if (current === '' || current === name.data('default_name')) {
+            name.val(suggested).removeClass('is-invalid');
+            name.data('default_name', suggested);
+        }
     });
 
     $('#do_assessment_save').click(function () {
@@ -300,6 +314,106 @@ $(document).ready(function () {
     });
 
     load();
+
+});
+</script>
+
+<div class="modal fade" data-bs-backdrop="static" id="reports_modal" tabindex="-1" aria-labelledby="reports_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="reports_modal_title">Project Reports</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-4">
+                    <div class="col-md-8 form-group">
+                        <label for="ready_type">Report</label>
+                        <select class="form-control" id="ready_type"></select>
+                    </div>
+                    <div class="col-md-4 form-group" id="ready_format_group">
+                        <label for="ready_format">Format</label>
+                        <select class="form-control" id="ready_format"></select>
+                    </div>
+                </div>
+                <p class="field__help" id="ready_description"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Close</button>
+                <a class="btn btn--secondary" id="do_builder_open" href="/projects/report/id/<?php echo (int) $this->project['id']; ?>">Customize in Report Builder</a>
+                <button type="button" class="btn btn--primary" id="do_ready_download">Download</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function () {
+
+    var project_id = <?php echo (int) $this->project['id']; ?>;
+    var reports = <?php echo json_encode(ReadyReports::catalog_for('project'), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+
+    var FORMAT_NAMES = {
+        pdf: "PDF",
+        docx: "Word",
+        xlsx: "Excel"
+    };
+
+    reports.forEach(function (report) {
+        $("#ready_type").append($("<option>").val(report.key).text(report.name));
+    });
+
+    $("#do_reports_open").click(function(){
+        show_report();
+        modal("reports_modal").show();
+    });
+
+    $("#ready_type").change(function(){
+        show_report();
+    });
+
+    $("#do_ready_download").click(function(){
+
+        var obj = {
+            report_type: $("#ready_type").val(),
+            target_id: project_id,
+            format: $("#ready_format").val()
+        };
+
+        set_loading("#do_ready_download", true);
+
+        var tab = report_tab($("#ready_format").val());
+
+        ApiDataSvc.apiCall('post', 'ready_report_download', obj, function (data) {
+            var obj = JSON.parse(data);
+            set_loading("#do_ready_download", false);
+            if (obj.success) {
+                show_report_tab(tab, obj.url);
+            } else {
+                close_report_tab(tab);
+                toastr.error(obj.message);
+            }
+        }, function () {
+            set_loading("#do_ready_download", false);
+            close_report_tab(tab);
+            toastr.error("The report could not be prepared. Try again.");
+        });
+    });
+
+    function show_report() {
+
+        var key = $("#ready_type").val();
+        var report = reports.filter(function (item) {
+            return item.key === key;
+        })[0];
+        $("#ready_description").text(report.description);
+        $("#do_builder_open").prop("hidden", key !== "risk_assessment");
+
+        var select = $("#ready_format").empty();
+        report.formats.forEach(function (format) {
+            select.append($("<option>").val(format).text(FORMAT_NAMES[format]));
+        });
+    }
 
 });
 </script>

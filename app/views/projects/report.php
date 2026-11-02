@@ -30,23 +30,26 @@
         </div>
     </div>
 
-    <div class="report__layout" id="report_layout" hidden>
-        <div class="panel report__nav">
-            <div class="panel__head">
-                <h2 class="panel__title">Sections</h2>
+    <div class="settings" id="report_layout" hidden>
+        <nav class="nav nav-pills flex-column submenu" id="section_nav" aria-label="Report sections"></nav>
+        <div class="settings-panes">
+            <section class="card">
+                <header class="card__head report__card-head">
+                    <div>
+                        <h2 class="card__title" id="editor_title"></h2>
+                        <p class="card__desc" id="editor_desc"></p>
+                    </div>
+                    <button type="button" class="btn btn--secondary btn--sm" id="do_row_add" hidden><i class="fa-regular fa-plus"></i> <span id="row_add_label">Add</span></button>
+                </header>
+                <div class="card__body" id="editor_body"></div>
+            </section>
+            <div class="savebar" id="report_savebar" hidden>
+                <span class="savebar__status" id="savebar_text" aria-live="polite"></span>
+                <span class="savebar__actions">
+                    <button type="button" class="btn btn--primary" id="do_text_save" hidden>Save Changes</button>
+                    <button type="button" class="btn btn--primary" id="do_csf_save" hidden>Save Changes</button>
+                </span>
             </div>
-            <div class="report__nav-list" id="section_nav"></div>
-        </div>
-        <div class="panel report__editor">
-            <div class="panel__head">
-                <h2 class="panel__title" id="editor_title"></h2>
-                <div class="report__editor-actions">
-                    <button type="button" class="btn btn--primary btn--sm" id="do_text_save" hidden>Save</button>
-                    <button type="button" class="btn btn--primary btn--sm" id="do_csf_save" hidden>Save</button>
-                    <button type="button" class="btn btn--primary btn--sm" id="do_row_add" hidden><i class="fa-regular fa-plus"></i> <span id="row_add_label">Add</span></button>
-                </div>
-            </div>
-            <div class="report__editor-body" id="editor_body"></div>
         </div>
     </div>
 </div>
@@ -58,9 +61,7 @@
                 <h2 class="modal-title" id="row_modal_title"></h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div class="row" id="row_fields"></div>
-            </div>
+            <div class="modal-body" id="row_fields"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--destructive me-auto" id="do_row_delete">Remove</button>
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
@@ -1140,7 +1141,8 @@ $(document).ready(function () {
 
         render_nav();
 
-        $("#do_text_save, #do_csf_save, #do_row_add").prop("hidden", true);
+        $("#do_text_save, #do_csf_save, #do_row_add, #report_savebar").prop("hidden", true);
+        $("#editor_desc").text("");
 
         if (TEXT_SECTIONS[current]) {
             render_text(TEXT_SECTIONS[current]);
@@ -1157,15 +1159,11 @@ $(document).ready(function () {
         nav.empty();
 
         NAV.forEach(function (item) {
-            var count = "";
+            var label = item[1];
             if (LIST_SECTIONS[item[0]]) {
-                count = String(rows_for(LIST_SECTIONS[item[0]]).length);
+                label += " (" + rows_for(LIST_SECTIONS[item[0]]).length + ")";
             }
-            var button = $("<button>").attr("type", "button").addClass("report__nav-item").attr("data-section", item[0]).toggleClass("is-active", item[0] === current);
-            button.append($("<span>").text(item[1]));
-            if (count !== "") {
-                button.append($("<span>").addClass("report__nav-count").text(count));
-            }
+            var button = $("<button>").attr("type", "button").addClass("nav-link submenu__link").attr("data-section", item[0]).toggleClass("active", item[0] === current).text(label);
             nav.append(button);
         });
     }
@@ -1174,14 +1172,10 @@ $(document).ready(function () {
 
         $("#editor_title").text(config.title);
         $("#do_text_save").prop("hidden", false);
+        $("#report_savebar").prop("hidden", false);
+        $("#savebar_text").text("Changes are saved when you select Save Changes.");
 
-        var row = $("<div>").addClass("row");
-
-        config.fields.forEach(function (field) {
-            row.append(field_control(field, "text_", report.report[field.key]));
-        });
-
-        $("#editor_body").empty().append(row);
+        $("#editor_body").empty().append(field_rows(config.fields, "text_", report.report));
     }
 
     function render_list(config) {
@@ -1193,8 +1187,10 @@ $(document).ready(function () {
         var list = rows_for(config);
         var body = $("#editor_body").empty();
 
+        $("#editor_desc").text("Select a row to edit it.");
+
         if (list.length === 0) {
-            body.append($("<p>").addClass("report__empty").text("Nothing added yet."));
+            body.append($("<p>").addClass("field__help").text("Nothing added yet."));
             return;
         }
 
@@ -1223,7 +1219,10 @@ $(document).ready(function () {
     function render_csf() {
 
         $("#editor_title").text("NIST CSF 2.0 profile");
+        $("#editor_desc").text("Tiers: 1 Partial, 2 Risk Informed, 3 Repeatable, 4 Adaptive.");
         $("#do_csf_save").prop("hidden", false);
+        $("#report_savebar").prop("hidden", false);
+        $("#savebar_text").text("Changes are saved when you select Save Changes.");
 
         var table = $("<table>").addClass("data report__table report__csf");
         table.append($("<thead>").append($("<tr>")
@@ -1240,7 +1239,7 @@ $(document).ready(function () {
             tr.append($("<td>").text(fn));
             tr.append($("<td>").append(tier_select("csf_current_" + fn, row.current_tier, "Current tier for " + fn)));
             tr.append($("<td>").append(tier_select("csf_target_" + fn, row.target_tier, "Target tier for " + fn)));
-            tr.append($("<td>").append($("<input>").attr("type", "text").attr("id", "csf_gaps_" + fn).attr("aria-label", "Main gaps for " + fn).addClass("form-control form-control-sm").val(row.main_gaps || "")));
+            tr.append($("<td>").append($("<input>").attr("type", "text").attr("id", "csf_gaps_" + fn).attr("aria-label", "Main gaps for " + fn).addClass("form-control").val(row.main_gaps || "")));
             tbody.append(tr);
         });
 
@@ -1248,7 +1247,7 @@ $(document).ready(function () {
     }
 
     function tier_select(id, value, label) {
-        var select = $("<select>").attr("id", id).attr("aria-label", label).addClass("form-select form-select-sm");
+        var select = $("<select>").attr("id", id).attr("aria-label", label).addClass("form-control");
         TIERS.forEach(function (tier) {
             select.append($("<option>").val(tier[0]).text(tier[1]));
         });
@@ -1284,12 +1283,13 @@ $(document).ready(function () {
         $("#row_modal_title").text((row === null ? "Add " : "Edit ") + config.noun);
         $("#do_row_delete").prop("hidden", row === null);
 
-        var box = $("#row_fields").empty();
+        var values = {};
 
         config.fields.forEach(function (field) {
-            var value = row === null ? default_value(field) : row[field.key];
-            box.append(field_control(field, "row_", value));
+            values[field.key] = row === null ? default_value(field) : row[field.key];
         });
+
+        $("#row_fields").empty().append(field_rows(config.fields, "row_", values));
 
         modal("row_modal").show();
     }
@@ -1310,11 +1310,31 @@ $(document).ready(function () {
         return "";
     }
 
+    function field_rows(fields, prefix, values) {
+
+        var rows = [];
+        var row = $("<div>").addClass("row mb-4");
+        var used = 0;
+
+        fields.forEach(function (field) {
+            if (used + field.col > 12) {
+                rows.push(row);
+                row = $("<div>").addClass("row mb-4");
+                used = 0;
+            }
+            row.append(field_control(field, prefix, values[field.key]));
+            used += field.col;
+        });
+
+        rows.push(row);
+
+        return rows;
+    }
+
     function field_control(field, prefix, value) {
 
         var id = prefix + field.key;
-        var col = $("<div>").addClass("col-md-" + field.col);
-        var group = $("<div>").addClass("form-group");
+        var group = $("<div>").addClass("col-md-" + field.col + " form-group");
         var control;
 
         group.append($("<label>").attr("for", id).text(field.label));
@@ -1322,7 +1342,7 @@ $(document).ready(function () {
         if (field.type === "long") {
             control = $("<textarea>").attr("rows", field.rows || 4);
         } else if (field.type === "select" || field.type === "domain" || field.type === "finding") {
-            control = $("<select>").addClass("form-select");
+            control = $("<select>");
             options_for(field).forEach(function (option) {
                 control.append($("<option>").val(option[0]).text(option[1]));
             });
@@ -1334,10 +1354,10 @@ $(document).ready(function () {
         group.append(control);
 
         if (field.hint) {
-            group.append($("<small>").addClass("form-text").text(field.hint));
+            group.append($("<p>").addClass("field__help").text(field.hint));
         }
 
-        return col.append(group);
+        return group;
     }
 
     function options_for(field) {
@@ -1439,14 +1459,21 @@ $(document).ready(function () {
             format: format
         };
 
+        var tab = report_tab(format);
+
         ApiDataSvc.apiCall('post', 'report_download', obj, function (data) {
             var obj = JSON.parse(data);
             set_loading(button, false);
             if (obj.success) {
-                window.location.href = obj.url;
+                show_report_tab(tab, obj.url);
             } else {
+                close_report_tab(tab);
                 toastr.error(obj.message);
             }
+        }, function () {
+            set_loading(button, false);
+            close_report_tab(tab);
+            toastr.error("The report could not be prepared. Try again.");
         });
     }
 

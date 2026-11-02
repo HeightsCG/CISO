@@ -1,0 +1,288 @@
+{
+    "key": "cmmc-l2",
+    "name": "CMMC Level 2",
+    "version": "32 CFR Part 170",
+    "full_name": "Cybersecurity Maturity Model Certification (CMMC) Level 2",
+    "issuing_body": "U.S. Department of Defense",
+    "standard_codes": [
+        "CMMC-L2"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "cfr170",
+            "title": "32 CFR Part 170, Cybersecurity Maturity Model Certification (CMMC) Program",
+            "version": "eCFR as of 1 January 2025",
+            "publisher": "eCFR, Office of the Federal Register",
+            "url": "https://www.ecfr.gov/api/versioner/v1/full/2025-01-01/title-32.xml?part=170",
+            "file": "cmmc/32-cfr-170.xml",
+            "sha256": "3dc8b9bebbe56753206429657cbac24ff32bfd64c75356ba276af38a1032b628"
+        },
+        {
+            "id": "sp800171r2",
+            "title": "NIST SP 800-171 Rev 2, Protecting Controlled Unclassified Information in Nonfederal Systems and Organizations",
+            "version": "Rev 2 (February 2020, updated January 2021)",
+            "publisher": "NIST",
+            "url": "https://csrc.nist.gov/pubs/sp/800/171/r2/upd1/final",
+            "file": "cmmc/sp800-171r2.xlsx",
+            "sha256": "bc8f3f1ab3213e9252d65809afb84509e83e3c88dc5f2b8439ee5fbdb1f04fd2"
+        },
+        {
+            "id": "sp800171a",
+            "title": "NIST SP 800-171A, Assessing Security Requirements for Controlled Unclassified Information (June 2018)",
+            "version": "June 2018",
+            "publisher": "NIST",
+            "url": "https://doi.org/10.6028/NIST.SP.800-171A",
+            "file": "cmmc/sp800-171a-2018.pdf",
+            "sha256": "21bf3acc43f4284f723639b82eb71e3ce597fa3610f7e9dcf5e8484e22bc0f71"
+        },
+        {
+            "id": "dodam",
+            "title": "NIST SP 800-171 DoD Assessment Methodology, Version 1.2.1 (June 24, 2020)",
+            "version": "Version 1.2.1 (June 24, 2020)",
+            "publisher": "U.S. Department of Defense",
+            "url": "https://www.acq.osd.mil/asda/dpc/cp/cyber/docs/safeguarding/NIST-SP-800-171-Assessment-Methodology-Version-1.2.1-6.24.2020.pdf",
+            "file": "cmmc/dod-assessment-methodology-1.2.1.pdf",
+            "sha256": "dd88416ca43f34e817c05b9cb416ffce47f615765a9fd0e1cdc52b9f2de60835"
+        }
+    ],
+    "source_of": {
+        "controls": "sp800171r2",
+        "objectives": "sp800171a",
+        "weights": "dodam"
+    },
+    "terminology": {
+        "control": "security requirement",
+        "controls": "security requirements",
+        "family": "domain",
+        "families": "domains",
+        "objective": "assessment objective",
+        "objectives": "assessment objectives",
+        "plan": "Plan of Action and Milestones",
+        "plan_short": "POA&M",
+        "score": "SPRS score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "MET"
+        },
+        {
+            "key": "not_met",
+            "label": "NOT MET"
+        },
+        {
+            "key": "na",
+            "label": "N/A"
+        }
+    ],
+    "scoring": {
+        "model": "points",
+        "maximum": 110,
+        "floor": -203,
+        "summary": "Start at 110 and subtract each NOT MET requirement's point value. The score can be negative."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is MET only when every applicable assessment objective is satisfied.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.24(b)(2)",
+            "quote": "Not Met. One or more applicable objectives for the security requirement is not satisfied."
+        },
+        {
+            "id": "na_counts_as_met",
+            "type": "na_handling",
+            "counts_as": "met",
+            "summary": "An objective assessed N/A counts as MET.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.24(b)(3)",
+            "quote": "an assessment objective assessed as N/A is equivalent to the same assessment objective being assessed as MET"
+        },
+        {
+            "id": "negative_score",
+            "type": "scoring",
+            "summary": "Each NOT MET requirement's value is subtracted from the maximum, which may produce a negative score.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.24(c)(2)",
+            "quote": "For each requirement NOT MET, the associated value of the security requirement is subtracted from the maximum score, which may result in a negative score."
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "controls": {
+                "IA.L2-3.5.3": {
+                    "partial_label": "MFA implemented for remote and privileged users only",
+                    "partial": 3,
+                    "none": 5
+                },
+                "SC.L2-3.13.11": {
+                    "partial_label": "Encryption employed but not FIPS-validated",
+                    "partial": 3,
+                    "none": 5
+                }
+            },
+            "summary": "IA.L2-3.5.3 and SC.L2-3.13.11 subtract 3 points when partially implemented and 5 when not implemented.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.24(c)(2)(i)(B)(4)",
+            "quote": "Two derived security requirements, IA.L2-3.5.3 and SC.L2-3.13.11, can be partially effective even if not completely or properly implemented"
+        },
+        {
+            "id": "ssp_required",
+            "type": "gate",
+            "control": "CA.L2-3.12.4",
+            "summary": "A current System Security Plan must exist, or the assessment cannot be completed. It carries no point value.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.24(c)(2)(i)(B)(5)",
+            "quote": "OSAs must have a System Security Plan (SSP) (CMMC security requirement CA.L2-3.12.4) in place at the time of assessment"
+        },
+        {
+            "id": "conditional_threshold",
+            "type": "threshold",
+            "metric": "score_ratio",
+            "operator": ">=",
+            "value": 0.8,
+            "outcome": "Conditional Level 2",
+            "summary": "Conditional status needs a score of at least 80% of the maximum (88 of 110).",
+            "source": "cfr170",
+            "cite": "32 CFR 170.21(a)(2)(i)",
+            "quote": "The assessment score divided by the total number of CMMC Level 2 security requirements is greater than or equal to 0.8"
+        },
+        {
+            "id": "poam_eligibility",
+            "type": "deferral",
+            "max_weight": 1,
+            "exceptions": [
+                {
+                    "control": "SC.L2-3.13.11",
+                    "when": "partial",
+                    "weight": 3
+                }
+            ],
+            "excluded": [
+                "AC.L2-3.1.20",
+                "AC.L2-3.1.22",
+                "CA.L2-3.12.4",
+                "PE.L2-3.10.3",
+                "PE.L2-3.10.4",
+                "PE.L2-3.10.5"
+            ],
+            "summary": "Only 1-point requirements may go on a POA&M (plus SC.L2-3.13.11 when encryption is used but not FIPS-validated). Six requirements can never be deferred; they must be closed before assessment.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.21(a)(2)(ii)-(iii)",
+            "quote": "None of the security requirements included in the POA&M have a point value of greater than 1"
+        },
+        {
+            "id": "poam_closeout",
+            "type": "deadline",
+            "days": 180,
+            "from": "Conditional status date",
+            "summary": "Every POA&M item must be closed and confirmed by a closeout assessment within 180 days, or Conditional status expires.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.21(b)",
+            "quote": "The closing of a POA&M must be confirmed by a POA&M closeout assessment within 180-days of the Conditional CMMC Status Date"
+        },
+        {
+            "id": "final_status",
+            "type": "pass",
+            "metric": "all_met",
+            "outcome": "Final Level 2",
+            "summary": "Final status requires every requirement to be MET, either at assessment or after POA&M closeout.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(a)(1)(iii)",
+            "quote": "The OSC has achieved the CMMC Status of Final Level 2 (C3PAO) if the Level 2 certification assessment results in a passing score"
+        },
+        {
+            "id": "reassessment",
+            "type": "validity",
+            "years": 3,
+            "summary": "A Level 2 assessment must be repeated every three years, with an annual affirmation of continuing compliance.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(a)(1)",
+            "quote": "The Level 2 certification assessment process must be performed every three years."
+        },
+        {
+            "id": "annual_affirmation",
+            "type": "affirmation",
+            "summary": "A senior Affirming Official must affirm compliance in SPRS after each assessment, after POA&M closeout, and every year.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.22(a)",
+            "quote": "must affirm the continuing compliance of their respective organizations with the specified security requirement after every assessment, including POA&M closeout, and annually thereafter"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary",
+        "governing_document"
+    ],
+    "consequences": [
+        {
+            "summary": "Contracts that require CMMC Level 2 cannot be awarded until Conditional or Final Level 2 status is achieved.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(a)(2)",
+            "quote": "Prior to award of any contract or subcontract with a requirement for the CMMC Status of Level 2 (C3PAO), the following two requirements must be met"
+        },
+        {
+            "summary": "If Conditional status expires during a contract, standard contractual remedies apply and the company cannot win further awards that need Level 2.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(a)(1)(ii)",
+            "quote": "the OSC will be ineligible for additional awards with a requirement for the CMMC Status of Level 2 (C3PAO), or higher requirement"
+        }
+    ],
+    "governing_document": {
+        "key": "ssp",
+        "title": "System Security Plan",
+        "short": "SSP",
+        "required_by": "CA.L2-3.12.4",
+        "sections": [
+            "System identification and scope",
+            "System environment and boundaries",
+            "Interconnections and external services",
+            "Roles and responsibilities",
+            "Requirement implementation statements",
+            "Plans of action",
+            "Approval and review history"
+        ]
+    },
+    "glossary": [
+        {
+            "term": "CMMC",
+            "definition": "Cybersecurity Maturity Model Certification, the Department of Defense program that verifies contractors protect federal contract and controlled information."
+        },
+        {
+            "term": "CUI",
+            "definition": "Controlled Unclassified Information: government information that is not classified but must still be protected."
+        },
+        {
+            "term": "FCI",
+            "definition": "Federal Contract Information: information provided by or generated for the government under a contract and not intended for public release."
+        },
+        {
+            "term": "SPRS",
+            "definition": "Supplier Performance Risk System, where contractors record assessment scores and affirmations."
+        },
+        {
+            "term": "POA&M",
+            "definition": "Plan of Action and Milestones: the documented plan for closing requirements that are not yet met."
+        },
+        {
+            "term": "SSP",
+            "definition": "System Security Plan: the document that describes the system in scope and how each requirement is implemented."
+        },
+        {
+            "term": "C3PAO",
+            "definition": "CMMC Third-Party Assessment Organization, an authorized body that performs Level 2 certification assessments."
+        },
+        {
+            "term": "FIPS",
+            "definition": "Federal Information Processing Standards; FIPS 140 validation confirms a cryptographic module has been independently tested."
+        },
+        {
+            "term": "MFA",
+            "definition": "Multi-factor authentication: signing in with two or more independent factors."
+        }
+    ]
+}

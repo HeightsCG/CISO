@@ -1,0 +1,210 @@
+{
+    "families": [
+        {
+            "code": "GOV",
+            "name": "Cybersecurity Coordination",
+            "controls": [
+                {
+                    "id": "TSA-GOV-01",
+                    "title": "Cybersecurity coordinator designated",
+                    "source": "tsa2021",
+                    "basis": "designate a cybersecurity coordinator",
+                    "description": "The operator has named a person who is accountable for cybersecurity and acts as the contact point for TSA and CISA, with a backup so the role is always covered.",
+                    "guidance": "Ask for the written designation and the contact details on file with TSA. Confirm the named people know they hold the role, that a backup exists, and that the details were updated after any staff change.",
+                    "objectives": [
+                        "A primary cybersecurity coordinator is designated in writing.",
+                        "At least one alternate is designated so the role is covered at all times.",
+                        "The coordinator's current contact details have been provided to TSA.",
+                        "The designation is reviewed and updated when personnel change."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "CIP",
+            "name": "Cybersecurity Implementation Plan",
+            "controls": [
+                {
+                    "id": "TSA-CIP-01",
+                    "title": "Approved cybersecurity implementation plan",
+                    "source": "tsa2023",
+                    "basis": "develop an approved implementation plan that describes measures they are taking to improve their cybersecurity resilience and prevent disruption and degradation to their infrastructure",
+                    "description": "The operator has a written plan, approved by TSA, that sets out how it protects its critical systems from cyber attack and keeps operating if an attack happens.",
+                    "guidance": "Obtain the current plan and TSA's approval correspondence (handle as SSI). Check that it covers each control area in this set, names owners and target dates, and that the measures it describes match what is actually deployed.",
+                    "objectives": [
+                        "A cybersecurity implementation plan exists and is current.",
+                        "The plan has been submitted to and approved by TSA.",
+                        "The plan describes the measures for each required outcome: segmentation, access control, monitoring and detection, and patching.",
+                        "Each measure in the plan has an owner and an implementation schedule.",
+                        "Deployed controls match what the approved plan describes, and changes are submitted to TSA where required."
+                    ]
+                },
+                {
+                    "id": "TSA-CIP-02",
+                    "title": "Critical cyber systems identified",
+                    "source": "tsa2023",
+                    "basis": "access control measures to secure and prevent unauthorized access to critical cyber systems",
+                    "description": "The operator knows which of its information and operational systems are critical, so the required protections are applied to the right systems.",
+                    "guidance": "Request the inventory of critical cyber systems and the criteria used to select them. Sample operational areas (baggage, fuel, airfield, access control, flight operations) and confirm their systems appear in the inventory with owners.",
+                    "objectives": [
+                        "Criteria for deciding which systems are critical cyber systems are documented.",
+                        "An inventory of critical cyber systems, covering both IT and OT, is maintained.",
+                        "Each critical cyber system has a named owner.",
+                        "The inventory is reviewed after significant changes to systems or operations."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "SEG",
+            "name": "Network Segmentation",
+            "controls": [
+                {
+                    "id": "TSA-SEG-01",
+                    "title": "IT and OT network segmentation",
+                    "source": "tsa2023",
+                    "basis": "Develop network segmentation policies and controls to ensure that operational technology systems can continue to safely operate in the event that an information technology system has been compromised, and vice versa",
+                    "description": "Business systems and operational systems are separated so that an attack on one does not stop the other from running safely.",
+                    "guidance": "Review network diagrams, firewall rule sets and the segmentation policy. Trace permitted paths between IT and OT zones and confirm each has a business reason. Look for evidence that OT can keep running if IT is isolated, such as a tested isolation procedure or exercise results.",
+                    "objectives": [
+                        "A network segmentation policy defines the IT and OT zones and the trust boundaries between them.",
+                        "Traffic between IT and OT is restricted to documented, justified connections.",
+                        "OT systems can continue to operate safely if IT systems are compromised or isolated.",
+                        "IT systems can continue to operate if OT systems are compromised or isolated.",
+                        "Segmentation controls are reviewed and tested after changes."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "ACC",
+            "name": "Access Control",
+            "controls": [
+                {
+                    "id": "TSA-ACC-01",
+                    "title": "Access control for critical cyber systems",
+                    "source": "tsa2023",
+                    "basis": "Create access control measures to secure and prevent unauthorized access to critical cyber systems",
+                    "description": "Only authorised people and systems can reach critical systems, and their access is limited to what they need.",
+                    "guidance": "Review the access control policy and user lists for a sample of critical systems. Check for multi-factor authentication on remote and privileged access, removal of leavers, periodic access reviews, and control of shared and vendor accounts.",
+                    "objectives": [
+                        "Access to critical cyber systems is granted only to authorised users, processes and devices.",
+                        "Access is limited to what each role needs.",
+                        "Remote and privileged access uses strong, multi-factor authentication.",
+                        "Shared, default and vendor accounts are controlled or eliminated.",
+                        "Access is reviewed periodically and removed promptly when no longer needed."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "MON",
+            "name": "Continuous Monitoring and Detection",
+            "controls": [
+                {
+                    "id": "TSA-MON-01",
+                    "title": "Continuous monitoring and detection",
+                    "source": "tsa2023",
+                    "basis": "Implement continuous monitoring and detection policies and procedures to defend against, detect, and respond to cybersecurity threats and anomalies that affect critical cyber system operations",
+                    "description": "The operator watches its critical systems for signs of attack or unusual behaviour and acts on what it finds.",
+                    "guidance": "Review the monitoring policy, the log sources feeding central monitoring, alert-handling procedures and recent alert tickets. Confirm OT networks are monitored as well as IT, and that alerts are triaged within defined times.",
+                    "objectives": [
+                        "Monitoring and detection policies and procedures are documented.",
+                        "Security events from critical cyber systems, including OT, are collected and monitored.",
+                        "Malicious and anomalous activity is detected and alerts are triaged.",
+                        "Detected threats are escalated and responded to under defined procedures."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "VUL",
+            "name": "Patching and Vulnerability Management",
+            "controls": [
+                {
+                    "id": "TSA-VUL-01",
+                    "title": "Risk-based timely patching",
+                    "source": "tsa2023",
+                    "basis": "Reduce the risk of exploitation of unpatched systems through the application of security patches and updates for operating systems, applications, drivers and firmware on critical cyber systems in a timely manner using a risk-based methodology",
+                    "description": "Security updates for critical systems are applied promptly, with priorities set by risk, and systems that cannot be patched are protected in other ways.",
+                    "guidance": "Review the patch management procedure and its risk-based timelines. Compare patch status reports for a sample of critical systems, including OT and firmware, against those timelines. Check that unpatchable systems have documented compensating measures.",
+                    "objectives": [
+                        "A documented, risk-based methodology sets patching priorities and timeframes.",
+                        "Patches and updates cover operating systems, applications, drivers and firmware on critical cyber systems.",
+                        "Patches are applied within the timeframes the methodology sets.",
+                        "Systems that cannot be patched promptly have documented mitigating measures."
+                    ]
+                },
+                {
+                    "id": "TSA-VUL-02",
+                    "title": "Cybersecurity vulnerability assessment",
+                    "source": "tsa2023",
+                    "basis": "completing a cybersecurity vulnerability assessment",
+                    "description": "The operator has assessed its systems for weaknesses and is tracking the gaps it found to closure.",
+                    "guidance": "Obtain the most recent vulnerability assessment, its scope and findings. Confirm the scope included critical IT and OT systems and that each finding has an owner, a target date and current status.",
+                    "objectives": [
+                        "A cybersecurity vulnerability assessment has been completed.",
+                        "The assessment scope covers critical IT and OT systems.",
+                        "Identified gaps and vulnerabilities are recorded with owners and target dates.",
+                        "Remediation progress is tracked to closure."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "CAP",
+            "name": "Cybersecurity Assessment",
+            "controls": [
+                {
+                    "id": "TSA-CAP-01",
+                    "title": "Proactive assessment of measure effectiveness",
+                    "source": "tsa2023",
+                    "basis": "They must also proactively assess the effectiveness of these measures",
+                    "description": "The operator regularly tests whether its cybersecurity measures actually work, rather than only confirming they exist.",
+                    "guidance": "Obtain the assessment plan and the most recent assessment report. Confirm it tests each control area in the implementation plan, uses methods such as technical testing as well as document review, follows the cadence in the client's SSI requirements, and that findings feed back into the plan.",
+                    "objectives": [
+                        "A documented plan sets out how and when the effectiveness of cybersecurity measures is assessed.",
+                        "Assessments cover every measure in the approved implementation plan.",
+                        "Assessments include technical testing, not only document review.",
+                        "Assessments are carried out at the frequency the client's TSA requirements set.",
+                        "Assessment findings are tracked and drive updates to the implementation plan."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "INC",
+            "name": "Incident Response and Reporting",
+            "controls": [
+                {
+                    "id": "TSA-INC-01",
+                    "title": "Cybersecurity incident response plan",
+                    "source": "tsa2023",
+                    "basis": "developing and adopting a cybersecurity incident response plan",
+                    "description": "The operator has an approved plan for responding to cyber incidents that limits disruption to operations, and staff know how to use it.",
+                    "guidance": "Review the incident response plan, its approval, contact lists and records of exercises. Confirm it covers OT as well as IT, includes containment steps such as isolating IT from OT, and was updated after lessons learned.",
+                    "objectives": [
+                        "A cybersecurity incident response plan is documented and formally adopted.",
+                        "The plan defines roles, escalation paths and contacts, including TSA and CISA.",
+                        "The plan includes measures to contain incidents and reduce operational disruption.",
+                        "The plan is exercised and updated with lessons learned."
+                    ]
+                },
+                {
+                    "id": "TSA-INC-02",
+                    "title": "Incident reporting to CISA within 24 hours",
+                    "source": "tsa2021",
+                    "basis": "report cybersecurity incidents to CISA within 24 hours",
+                    "description": "The operator reports qualifying cyber incidents to CISA within 24 hours and has a working process to make that happen.",
+                    "guidance": "Review the reporting procedure and the reporting criteria it uses. Check records of past reports against incident tickets for timeliness, and confirm staff on every shift know how to report.",
+                    "objectives": [
+                        "A documented procedure defines which cybersecurity incidents must be reported to CISA.",
+                        "Reports are made to CISA within 24 hours of identifying a reportable incident.",
+                        "Records of reports, including times of identification and submission, are kept.",
+                        "Staff responsible for reporting are trained and available at all times."
+                    ]
+                }
+            ]
+        }
+    ]
+}

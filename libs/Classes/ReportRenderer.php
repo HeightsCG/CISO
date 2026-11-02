@@ -20,6 +20,27 @@ use PhpOffice\PhpWord\Element\Header;
  */
 class ReportRenderer {
 
+    const SEVERITY_COLORS = array(
+        'High' => '#B42318',
+        'Medium' => '#B54708',
+        'Low' => '#067647'
+    );
+
+    const POSTURE_COLORS = array(
+        'Low' => '#067647',
+        'Moderate' => '#A15C07',
+        'Elevated' => '#B54708',
+        'High' => '#B42318',
+        'Critical' => '#7A271A'
+    );
+
+    const RATING_COLORS = array(
+        'Satisfactory' => '#067647',
+        'Satisfactory with exceptions' => '#4D7C0F',
+        'Needs improvement' => '#B54708',
+        'Unsatisfactory' => '#B42318'
+    );
+
     /** Blocks short enough to keep on the same page as the heading above them. */
     const KEEP_WITH_HEADING = array(
         'text',
@@ -37,16 +58,24 @@ class ReportRenderer {
         'RC' => 'Recover'
     );
 
-    /** Returns array('bytes', 'file_name', 'extension', 'content_type'). */
+    /** The risk assessment report. Returns array('bytes', 'file_name', 'extension', 'content_type'). */
     public static function render(array $r, string $format): array
     {
-        $client = ReportBuilder::plain($r['client']['company_name'] ?? 'Client');
-        $title = ReportBuilder::plain($r['report']['report_title']);
-        $base = preg_replace('/[^A-Za-z0-9 ,.&()\'-]/', '', $client.' - '.$title.' v'.$r['report']['report_version']);
+        return self::document(self::risk_document($r), $format);
+    }
+
+    /**
+     * Any document: a cover described by $doc and the blocks that follow it.
+     * $doc keys: title, client, prepared_for, company (row), cover_rows
+     * (label => value), confidential (bool), blocks, file_base.
+     */
+    public static function document(array $doc, string $format): array
+    {
+        $base = preg_replace('/[^A-Za-z0-9 ,.&()\'-]/', '', $doc['file_base']);
 
         if ($format === 'docx') {
             return array(
-                'bytes' => self::docx($r),
+                'bytes' => self::docx($doc),
                 'file_name' => $base.'.docx',
                 'extension' => 'docx',
                 'content_type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
@@ -54,10 +83,180 @@ class ReportRenderer {
         }
 
         return array(
-            'bytes' => self::pdf($r),
+            'bytes' => self::pdf($doc),
             'file_name' => $base.'.pdf',
             'extension' => 'pdf',
             'content_type' => 'application/pdf'
+        );
+    }
+
+    private static function risk_document(array $r): array
+    {
+        $narrative = ReportNarrative::for_risk_report($r);
+
+        if ((int) $r['report']['id'] === 0 && count($narrative['finding_text']) > 0) {
+            $r = self::apply_finding_text($r, $narrative['finding_text']);
+        }
+
+        $outline = self::outline($r, $narrative);
+        $client = $outline['client'];
+        $title = ReportBuilder::plain($r['report']['report_title']);
+
+        $blocks = self::front_blocks($r);
+        $blocks[] = array(
+            'kind' => 'h1',
+            'value' => 'Contents'
+        );
+        $blocks[] = array(
+            'kind' => 'contents',
+            'value' => $outline['contents']
+        );
+
+        return array(
+            'title' => $title,
+            'client' => $client,
+            'prepared_for' => $client,
+            'company' => $r['company'],
+            'cover_rows' => self::cover_rows($r),
+            'confidential' => true,
+            'blocks' => array_merge($blocks, $outline['blocks']),
+            'file_base' => $client.' - '.$title.' v'.$r['report']['report_version']
+        );
+    }
+
+    /** Document control, distribution and assessment team, as ordinary blocks. */
+    private static function front_blocks(array $r): array
+    {
+        $blocks = array(
+            array(
+                'kind' => 'h1',
+                'value' => 'Document control'
+            )
+        );
+
+        if (count($r['versions']) > 0) {
+            $rows = array();
+            foreach ($r['versions'] as $version) {
+                $rows[] = array(
+                    $version['version_label'],
+                    self::date($version['version_date']),
+                    ReportBuilder::plain($version['version_note']),
+                    ReportBuilder::plain($version['version_author'])
+                );
+            }
+            $blocks[] = self::table_block(array(
+                'Version',
+                'Date',
+                'Description',
+                'Author'
+            ), array(
+                12,
+                18,
+                46,
+                24
+            ), $rows);
+        } else {
+            $blocks[] = array(
+                'kind' => 'text',
+                'value' => 'Version '.$r['report']['report_version'].', '.$r['report']['report_stage'].'.'
+            );
+        }
+
+        if (count($r['distribution']) > 0) {
+            $rows = array();
+            foreach ($r['distribution'] as $person) {
+                $rows[] = array(
+                    ReportBuilder::plain($person['person_name']),
+                    ReportBuilder::plain($person['person_title']),
+                    ReportBuilder::plain($person['organisation'])
+                );
+            }
+            $blocks[] = array(
+                'kind' => 'h2',
+                'value' => 'Distribution'
+            );
+            $blocks[] = self::table_block(array(
+                'Name',
+                'Title',
+                'Organization'
+            ), array(
+                32,
+                34,
+                34
+            ), $rows);
+        }
+
+        if (count($r['team']) > 0) {
+            $rows = array();
+            foreach ($r['team'] as $person) {
+                $rows[] = array(
+                    ReportBuilder::plain($person['person_title']),
+                    ReportBuilder::plain($person['person_name']),
+                    ReportBuilder::plain($person['organisation']),
+                    ReportBuilder::plain($person['responsibility'])
+                );
+            }
+            $blocks[] = array(
+                'kind' => 'h2',
+                'value' => 'Assessment team'
+            );
+            $blocks[] = self::table_block(array(
+                'Role',
+                'Name',
+                'Organization',
+                'Responsibility'
+            ), array(
+                26,
+                22,
+                22,
+                30
+            ), $rows);
+        }
+
+        return $blocks;
+    }
+
+    /** Swap the plain-English write-ups into automatically generated findings. */
+    private static function apply_finding_text(array $r, array $texts): array
+    {
+        $by_ref = array();
+
+        foreach ($texts as $text) {
+            $by_ref[$text['ref']] = $text;
+        }
+
+        $rewrite = function (array $finding) use ($by_ref) {
+            $text = $by_ref[$finding['finding_ref']] ?? null;
+            if ($text === null) {
+                return $finding;
+            }
+            $finding['finding_title'] = $text['title'];
+            $finding['observation'] = $text['observation'];
+            $finding['risk_text'] = $text['risk'];
+            $finding['recommendation'] = $text['recommendation'];
+            return $finding;
+        };
+
+        $r['findings'] = array_map($rewrite, $r['findings']);
+        $r['findings_ranked'] = array_map($rewrite, $r['findings_ranked']);
+
+        foreach ($r['domains'] as $index => $domain) {
+            $r['domains'][$index]['findings'] = array_map($rewrite, $domain['findings']);
+        }
+
+        return $r;
+    }
+
+    public static function table_block(array $head, array $widths, array $rows, bool $small = false): array
+    {
+        return array(
+            'kind' => 'table',
+            'value' => array(
+                'head' => $head,
+                'widths' => $widths,
+                'rows' => $rows,
+                'small' => $small
+            )
         );
     }
 
@@ -68,7 +267,7 @@ class ReportRenderer {
      * paragraphs, key-value lists, tables and finding blocks. Building it once
      * keeps the PDF and the Word document identical in content.
      */
-    private static function outline(array $r): array
+    private static function outline(array $r, array $narrative): array
     {
         $report = $r['report'];
         $client = ReportBuilder::plain($r['client']['company_name'] ?? '');
@@ -99,14 +298,43 @@ class ReportRenderer {
         $s = $section('Executive summary');
         $sub = 0;
 
+        $add('posture', array(
+            'rating' => $narrative['posture_rating'],
+            'headline' => $narrative['posture_headline']
+        ));
+
+        $add('callout', array(
+            'title' => 'Key messages',
+            'items' => $narrative['key_messages']
+        ));
+
+        $add('dashboard', array(
+            'totals' => $r['totals'],
+            'total' => count($r['findings']),
+            'areas' => count($r['domains'])
+        ));
+
         if (ReportBuilder::plain($report['purpose_text']) !== '') {
             $add('h2', $s.'.'.(++$sub).' Purpose');
             $text($report['purpose_text']);
         }
 
-        if (ReportBuilder::plain($report['conclusion_text']) !== '') {
-            $add('h2', $s.'.'.(++$sub).' Overall conclusion');
-            $text($report['conclusion_text']);
+        $picture = ReportBuilder::plain($report['conclusion_text']) !== '' ? $report['conclusion_text'] : $narrative['executive_summary'];
+
+        if (ReportBuilder::plain($picture) !== '') {
+            $add('h2', $s.'.'.(++$sub).' Overall picture');
+            $text($picture);
+        }
+
+        if (count($r['findings']) > 0) {
+            $matrix = array();
+            foreach ($r['findings'] as $finding) {
+                $key = (int) $finding['likelihood'].'-'.(int) $finding['impact'];
+                $matrix[$key] = ($matrix[$key] ?? 0) + 1;
+            }
+            $add('h2', $s.'.'.(++$sub).' Risk heat map');
+            $add('heatmap', $matrix);
+            $add('note', 'Each cell shows how many findings sit at that likelihood and impact. Scores of 15 and above are high, 8 to 14 medium, and 7 or below low.');
         }
 
         if (count($r['domains']) > 0) {
@@ -278,21 +506,39 @@ class ReportRenderer {
             );
         }
 
+        $commentary = array();
+
+        foreach ($narrative['domain_commentary'] as $item) {
+            $commentary[(int) $item['domain_id']] = $item['commentary'];
+        }
+
         foreach ($domains as $domain) {
             $sub++;
             $contents[] = '     '.$s.'.'.$sub.'  '.ReportBuilder::plain($domain['domain_name']);
-            $add('h2', $s.'.'.$sub.' '.ReportBuilder::plain($domain['domain_name']));
 
-            $summary = ReportBuilder::plain($domain['domain_summary'] ?? '');
-            if (($domain['domain_rating'] ?? null) !== null || $summary !== '') {
-                $add('lead', array(
-                    'label' => ($domain['domain_rating'] ?? null) !== null ? 'Overall: '.$domain['domain_rating'].'.' : '',
-                    'text' => $summary
-                ));
+            $counts = array(
+                'High' => 0,
+                'Medium' => 0,
+                'Low' => 0
+            );
+            foreach ($domain['findings'] as $finding) {
+                $counts[$finding['rating']]++;
             }
 
-            if (count($domain['findings']) === 0 && $summary === '') {
-                $add('text', 'No findings were identified in this domain.');
+            $add('domain_head', array(
+                'title' => $s.'.'.$sub.' '.ReportBuilder::plain($domain['domain_name']),
+                'rating' => $domain['domain_rating'] ?? null,
+                'counts' => $counts
+            ));
+
+            $written = ReportBuilder::plain($domain['domain_summary'] ?? '');
+            $ai = $commentary[(int) ($domain['id'] ?? 0)] ?? '';
+            $summary = ((int) $report['id'] === 0 && $ai !== '') || $written === '' ? $ai : $written;
+
+            if ($summary !== '') {
+                $add('text', $summary);
+            } elseif (count($domain['findings']) === 0) {
+                $add('text', 'No findings were identified in this area.');
             }
 
             foreach ($domain['findings'] as $finding) {
@@ -345,6 +591,24 @@ class ReportRenderer {
                 'small' => true
             ));
             $add('note', 'L = likelihood, I = impact, each rated 1 to 5. Ratings: High 15 to 25, Medium 8 to 14, Low 1 to 7.');
+        }
+
+        if (count($narrative['roadmap']) > 0) {
+            $section('Remediation roadmap');
+            $add('text', 'The actions below address the findings in order of priority. Each cites the findings it resolves.');
+            $phases = array();
+            foreach (ReportNarrative::PHASES as $phase) {
+                $phases[$phase] = array();
+            }
+            foreach ($narrative['roadmap'] as $item) {
+                $phases[$item['phase']][] = $item;
+            }
+            $add('roadmap', $phases);
+        }
+
+        if (ReportBuilder::plain($narrative['conclusion']) !== '') {
+            $section('Conclusion');
+            $text($narrative['conclusion']);
         }
 
         if (ReportBuilder::plain($report['review_text']) !== '') {
@@ -547,7 +811,10 @@ class ReportRenderer {
         }
 
         return array(
+            'ref' => $finding['finding_ref'],
             'title' => trim($finding['finding_ref'].' '.ReportBuilder::plain($finding['finding_title'])),
+            'heading' => ReportBuilder::plain($finding['finding_title']),
+            'severity' => $finding['rating'],
             'rating' => $finding['rating'].' ('.$finding['score'].')',
             'rows' => $rows
         );
@@ -605,17 +872,24 @@ class ReportRenderer {
         return $rows;
     }
 
-    private static function brand(array $r): string
+    private static function brand(array $company): string
     {
-        $color = (string) ($r['company']['brand_color'] ?? '');
+        $color = (string) ($company['brand_color'] ?? '');
 
         return preg_match('/^#[0-9A-Fa-f]{6}$/', $color) ? $color : '#1F3A5F';
     }
 
-    /** The company logo as raw bytes and type, or null. Fetched once per render. */
-    private static function logo(array $r)
+    private static function accent(array $company): string
     {
-        $url = (string) ($r['company']['logo_path'] ?? '');
+        $color = (string) ($company['brand_color_accent'] ?? '');
+
+        return preg_match('/^#[0-9A-Fa-f]{6}$/', $color) ? $color : '#0EA5E9';
+    }
+
+    /** The company logo as raw bytes and type, or null. Fetched once per render. */
+    private static function logo(array $company)
+    {
+        $url = (string) ($company['logo_path'] ?? '');
 
         if ($url === '' || !preg_match('#^https://#', $url)) {
             return null;
@@ -641,13 +915,13 @@ class ReportRenderer {
 
     /* ------------------------------------------------------------------ PDF */
 
-    private static function pdf(array $r): string
+    private static function pdf(array $doc): string
     {
-        $outline = self::outline($r);
-        $brand = self::brand($r);
-        $logo = self::logo($r);
-        $firm = ReportBuilder::plain($r['company']['company_name'] ?? '');
-        $title = ReportBuilder::plain($r['report']['report_title']);
+        $brand = self::brand($doc['company']);
+        $accent = self::accent($doc['company']);
+        $logo = self::logo($doc['company']);
+        $firm = ReportBuilder::plain($doc['company']['company_name'] ?? '');
+        $title = $doc['title'];
         $e = function ($value) {
             return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
         };
@@ -682,46 +956,84 @@ class ReportRenderer {
             .'.finding table{font-family:"Serif";font-size:10pt;margin:0}'
             .'.finding td{border:none;padding:3pt 4pt 3pt 0}'
             .'.finding td.label{width:30%;font-family:"Sans";font-size:9pt;color:#55636f}'
-            .'.cover{page-break-after:always}'
-            .'.cover .logo{height:42pt;margin-top:8pt}'
-            .'.cover .firm{font-family:"Sans";font-weight:bold;font-size:16pt;color:'.$brand.';margin-top:8pt}'
-            .'.cover .kicker{margin-top:110pt;font-family:"Sans";font-size:8.5pt;letter-spacing:2pt;color:#55636f;text-transform:uppercase}'
-            .'.cover .title{font-family:"Sans";font-weight:bold;font-size:28pt;color:'.$brand.';margin:6pt 0 10pt 0;padding-bottom:14pt;border-bottom:0.8pt solid #1d2733}'
-            .'.cover .for{font-family:"Sans";font-size:13pt;margin-bottom:70pt}'
-            .'.cover table{font-family:"Sans";font-size:9.5pt;width:85%}'
-            .'.cover td{border:none;padding:3pt 0}'
-            .'.cover td.label{color:#55636f;width:30%}'
-            .'.cover .confidential{margin-top:28pt;border-top:0.5pt solid #b8c2cd;padding-top:8pt;font-size:8.5pt;color:#55636f}'
+            .'.cover{position:relative;height:600pt;page-break-after:always}'
+            .'.cover .band{position:absolute;top:-78pt;left:-64pt;width:612pt;height:340pt;background:'.$brand.'}'
+            .'.cover .accent{position:absolute;top:262pt;left:-64pt;width:612pt;height:5pt;background:'.$accent.'}'
+            .'.cover .kicker{position:absolute;top:36pt;left:0;font-family:"Sans";font-size:8.5pt;letter-spacing:2pt;color:#ffffff;text-transform:uppercase}'
+            .'.cover .title{position:absolute;top:92pt;left:0;width:470pt;font-family:"Sans";font-weight:bold;font-size:32pt;line-height:1.08;color:#ffffff}'
+            .'.cover .for{position:absolute;top:214pt;left:0;width:470pt;font-family:"Sans";font-size:13pt;color:#ffffff}'
+            .'.cover .logo{position:absolute;top:296pt;left:0;height:40pt}'
+            .'.cover .firm{position:absolute;top:300pt;left:0;font-family:"Sans";font-weight:bold;font-size:16pt;color:'.$brand.'}'
+            .'.cover table.meta{position:absolute;top:372pt;left:0;width:484pt;font-family:"Sans";font-size:9.5pt;margin:0}'
+            .'.cover table.meta td{border:none;padding:4pt 0}'
+            .'.cover table.meta td.label{color:#55636f;width:30%}'
+            .'.cover .confidential{position:absolute;top:556pt;left:0;width:484pt;border-top:0.5pt solid #b8c2cd;padding-top:7pt;font-size:8pt;line-height:1.4;color:#55636f}'
+            .'tr.alt td{background:#F5F7F9}'
+            .'.posture{margin:0 0 12pt 0;padding:12pt 16pt;color:#ffffff}'
+            .'.posture .label{font-family:"Sans";font-size:8pt;letter-spacing:1.5pt;text-transform:uppercase}'
+            .'.posture .rating{font-family:"Sans";font-weight:bold;font-size:22pt;line-height:1.1}'
+            .'.posture .headline{font-size:11pt;margin-top:4pt}'
+            .'.callout{background:#F3F6F9;border-left:3pt solid '.$brand.';padding:10pt 16pt 6pt 16pt;margin:0 0 14pt 0}'
+            .'.callout .ctitle{font-family:"Sans";font-weight:bold;font-size:11pt;color:'.$brand.';margin-bottom:6pt}'
+            .'.callout ol{margin:0 0 4pt 0;padding-left:16pt}.callout li{margin-bottom:5pt}'
+            .'.dash{width:100%;margin:0 0 6pt 0}.dash td{border:0.5pt solid #d6dce3;padding:8pt 10pt;width:25%;vertical-align:top}'
+            .'.dash .num{font-family:"Sans";font-weight:bold;font-size:22pt}.dash .cap{font-family:"Sans";font-size:8.5pt;color:#55636f}'
+            .'.sevbar{width:100%;margin:0 0 14pt 0}.sevbar td{height:8pt;padding:0;border:none}'
+            .'.heat{width:auto;margin:6pt 0 4pt 0;font-family:"Sans"}.heat td{width:44pt;height:30pt;text-align:center;vertical-align:middle;border:1.5pt solid #ffffff;font-weight:bold;font-size:11pt;padding:0}'
+            .'.heat td.axis{background:none;color:#55636f;font-weight:normal;font-size:8pt;width:44pt}'
+            .'.dhead{margin:20pt 0 8pt 0;border-bottom:0.8pt solid #1d2733;padding-bottom:5pt;page-break-after:avoid}'
+            .'.dhead table{margin:0;font-family:"Sans"}.dhead td{border:none;padding:0;vertical-align:bottom}'
+            .'.dhead .dt{font-weight:bold;font-size:13pt;color:#1d2733}.dhead .dm{text-align:right;font-size:8.5pt;color:#55636f}'
+            .'.pill{padding:1.5pt 6pt;font-family:"Sans";font-size:8pt;font-weight:bold;color:#ffffff}'
+            .'.fcard{border:0.5pt solid #d6dce3;padding:8pt 12pt 6pt 12pt;margin:10pt 0 12pt 0;page-break-inside:avoid}'
+            .'.fcard .fh{margin:0 0 6pt 0;font-family:"Sans"}.fcard .fh td{border:none;padding:0 0 4pt 0;vertical-align:top}'
+            .'.fcard .fref{font-size:8.5pt;color:#55636f;letter-spacing:0.5pt}.fcard .ftitle{font-weight:bold;font-size:11pt;color:#1d2733}'
+            .'.fcard table.rows{font-family:"Serif";font-size:10pt;margin:0}.fcard table.rows td{border:none;border-top:0.5pt solid #EEF1F4;padding:4pt 6pt 4pt 0}'
+            .'.fcard td.label{width:26%;font-family:"Sans";font-size:8.5pt;color:#55636f}'
+            .'.phase{margin:0 0 12pt 0;border:0.5pt solid #d6dce3;page-break-inside:avoid}'
+            .'.phase .ph{color:#ffffff;font-family:"Sans";font-weight:bold;font-size:10.5pt;padding:5pt 12pt}'
+            .'.phase table{margin:0}.phase td{border:none;border-top:0.5pt solid #EEF1F4;padding:6pt 12pt}'
+            .'.phase .at{font-family:"Sans";font-weight:bold;font-size:10pt}.phase .ad{font-size:9.5pt;margin-top:2pt}.phase .ar{font-family:"Sans";font-size:8pt;color:#55636f;width:18%;text-align:right;vertical-align:top}'
             .'.contents p{margin:0 0 5pt 0;font-family:"Sans";white-space:pre}'
+            .'.stats{width:100%;margin:6pt 0 14pt 0}.stats td{border:0.5pt solid #d6dce3;padding:8pt 10pt;width:25%;vertical-align:top}'
+            .'.stats .value{font-family:"Sans";font-weight:bold;font-size:20pt;color:'.$brand.'}.stats .label{font-family:"Sans";font-size:8.5pt;color:#55636f}'
+            .'.bars td{border:none;padding:4pt 5pt;vertical-align:middle}.bars .track{background:#eef1f4;height:10pt;width:100%}.bars .fill{height:10pt}'
             .'.sign{margin-top:40pt;width:100%}.sign td{border:none;padding:26pt 12pt 2pt 0;width:50%}'
             .'.sign .line{border-top:0.5pt solid #1d2733;padding-top:3pt;font-family:"Sans";font-size:8.5pt;color:#55636f}'
             .'.first{page-break-before:avoid}'
             .'</style></head><body>';
 
-        $html .= '<div class="cover">'.$logo_html
+        $html .= '<div class="cover"><div class="band"></div><div class="accent"></div>'
             .'<div class="kicker">Confidential</div>'
             .'<div class="title">'.$e($title).'</div>'
-            .'<div class="for">Prepared for '.$e($outline['client']).'</div><table>';
+            .($doc['prepared_for'] !== '' ? '<div class="for">Prepared for '.$e($doc['prepared_for']).'</div>' : '')
+            .$logo_html
+            .'<table class="meta">';
 
-        foreach (self::cover_rows($r) as $label => $value) {
+        foreach ($doc['cover_rows'] as $label => $value) {
             $html .= '<tr><td class="label">'.$e($label).'</td><td>'.$e($value).'</td></tr>';
         }
 
-        $html .= '</table><div class="confidential">Confidential. This report contains sensitive information about the security of '.$e($outline['client']).'\'s information systems. It is intended solely for the use of '.$e($outline['client']).' management and its board, and should not be distributed to others without the written consent of '.$e($outline['client']).'.</div></div>';
+        $html .= '</table>';
 
-        $html .= self::pdf_front_matter($r, $e);
-
-        $html .= '<h1>Contents</h1><div class="contents">';
-        foreach ($outline['contents'] as $line) {
-            $html .= '<p>'.$e($line).'</p>';
+        if (!empty($doc['confidential']) && $doc['client'] !== '') {
+            $html .= '<div class="confidential">Confidential. This report contains sensitive information about the security of '.$e($doc['client']).'\'s information systems. It is intended solely for the use of '.$e($doc['client']).' management and its board, and should not be distributed to others without the written consent of '.$e($doc['client']).'.</div>';
         }
+
         $html .= '</div>';
 
         $held = '';
+        $first = true;
 
-        foreach ($outline['blocks'] as $block) {
+        foreach ($doc['blocks'] as $block) {
 
-            if ($block['kind'] === 'h2') {
+            if ($block['kind'] === 'h1' && $first) {
+                $html .= '<h1 class="first">'.$e($block['value']).'</h1>';
+                $first = false;
+                continue;
+            }
+
+            if ($block['kind'] === 'h2' || $block['kind'] === 'domain_head') {
                 $held .= self::pdf_block($block, $e);
                 continue;
             }
@@ -752,7 +1064,7 @@ class ReportRenderer {
         $dompdf->setPaper('letter');
         $dompdf->render();
 
-        $header = ($outline['client'] !== '' ? $outline['client'].' · ' : '').$title;
+        $header = ($doc['client'] !== '' ? $doc['client'].' · ' : '').$title;
         $footer = 'Confidential · '.$firm;
 
         $dompdf->getCanvas()->page_script(function ($page, $total, $canvas, $metrics) use ($header, $footer) {
@@ -776,39 +1088,6 @@ class ReportRenderer {
         return $dompdf->output();
     }
 
-    private static function pdf_front_matter(array $r, callable $e): string
-    {
-        $html = '<h1 class="first">Document control</h1>';
-
-        if (count($r['versions']) > 0) {
-            $html .= '<table><tr><th style="width:12%">Version</th><th style="width:18%">Date</th><th>Description</th><th style="width:24%">Author</th></tr>';
-            foreach ($r['versions'] as $version) {
-                $html .= '<tr><td>'.$e($version['version_label']).'</td><td>'.$e(self::date($version['version_date'])).'</td><td>'.$e(ReportBuilder::plain($version['version_note'])).'</td><td>'.$e(ReportBuilder::plain($version['version_author'])).'</td></tr>';
-            }
-            $html .= '</table>';
-        } else {
-            $html .= '<p>Version '.$e($r['report']['report_version']).', '.$e($r['report']['report_stage']).'.</p>';
-        }
-
-        if (count($r['distribution']) > 0) {
-            $html .= '<h2>Distribution</h2><table><tr><th style="width:32%">Name</th><th style="width:34%">Title</th><th>Organization</th></tr>';
-            foreach ($r['distribution'] as $person) {
-                $html .= '<tr><td>'.$e(ReportBuilder::plain($person['person_name'])).'</td><td>'.$e(ReportBuilder::plain($person['person_title'])).'</td><td>'.$e(ReportBuilder::plain($person['organisation'])).'</td></tr>';
-            }
-            $html .= '</table>';
-        }
-
-        if (count($r['team']) > 0) {
-            $html .= '<h2>Assessment team</h2><table><tr><th style="width:26%">Role</th><th style="width:22%">Name</th><th style="width:22%">Organization</th><th>Responsibility</th></tr>';
-            foreach ($r['team'] as $person) {
-                $html .= '<tr><td>'.$e(ReportBuilder::plain($person['person_title'])).'</td><td>'.$e(ReportBuilder::plain($person['person_name'])).'</td><td>'.$e(ReportBuilder::plain($person['organisation'])).'</td><td>'.$e(ReportBuilder::plain($person['responsibility'])).'</td></tr>';
-            }
-            $html .= '</table>';
-        }
-
-        return $html;
-    }
-
     private static function pdf_block(array $block, callable $e): string
     {
         $value = $block['value'];
@@ -829,6 +1108,34 @@ class ReportRenderer {
             return '<p class="note">'.$e($value).'</p>';
         }
 
+        if ($block['kind'] === 'contents') {
+            $html = '<div class="contents">';
+            foreach ($value as $line) {
+                $html .= '<p>'.$e($line).'</p>';
+            }
+            return $html.'</div>';
+        }
+
+        if ($block['kind'] === 'stats') {
+            $html = '<table class="stats"><tr>';
+            foreach ($value as $index => $stat) {
+                if ($index > 0 && $index % 4 === 0) {
+                    $html .= '</tr><tr>';
+                }
+                $html .= '<td><div class="value">'.$e($stat['value']).'</div><div class="label">'.$e($stat['label']).'</div></td>';
+            }
+            return $html.'</tr></table>';
+        }
+
+        if ($block['kind'] === 'bars') {
+            $html = '<table class="bars">';
+            foreach ($value as $bar) {
+                $width = $bar['max'] > 0 ? round(100 * $bar['value'] / $bar['max']) : 0;
+                $html .= '<tr><td style="width:34%">'.$e($bar['label']).'</td><td><div class="track"><div class="fill" style="width:'.$width.'%;background:'.$e($bar['color']).'"></div></div></td><td style="width:16%;text-align:right">'.$e($bar['text']).'</td></tr>';
+            }
+            return $html.'</table>';
+        }
+
         if ($block['kind'] === 'lead') {
             return '<p class="lead">'.($value['label'] !== '' ? '<b>'.$e($value['label']).'</b> ' : '').$e($value['text']).'</p>';
         }
@@ -841,7 +1148,7 @@ class ReportRenderer {
             $html .= '</tr>';
             $last = count($value['rows']) - 1;
             foreach ($value['rows'] as $index => $row) {
-                $html .= '<tr'.(!empty($value['total']) && $index === $last ? ' class="total"' : '').'>';
+                $html .= '<tr'.(!empty($value['total']) && $index === $last ? ' class="total"' : ($index % 2 === 1 ? ' class="alt"' : '')).'>';
                 foreach ($row as $cell) {
                     $html .= '<td>'.$e($cell).'</td>';
                 }
@@ -851,11 +1158,98 @@ class ReportRenderer {
         }
 
         if ($block['kind'] === 'finding') {
-            $html = '<div class="finding"><div class="head"><span>'.$e($value['rating']).'</span>'.$e($value['title']).'</div><table>';
+            $color = self::SEVERITY_COLORS[$value['severity']] ?? '#55636f';
+            $html = '<div class="fcard" style="border-left:4pt solid '.$color.'"><table class="fh"><tr><td><div class="fref">'.$e($value['ref']).'</div><div class="ftitle">'.$e($value['heading']).'</div></td>'
+                .'<td style="width:22%;text-align:right"><span class="pill" style="background:'.$color.'">'.$e($value['rating']).'</span></td></tr></table><table class="rows">';
             foreach ($value['rows'] as $row) {
                 $html .= '<tr><td class="label">'.$e($row[0]).'</td><td>'.nl2br($e($row[1])).'</td></tr>';
             }
             return $html.'</table></div>';
+        }
+
+        if ($block['kind'] === 'posture') {
+            $color = self::POSTURE_COLORS[$value['rating']] ?? '#55636f';
+            return '<div class="posture" style="background:'.$color.'"><div class="label">Overall risk posture</div><div class="rating">'.$e($value['rating']).'</div><div class="headline">'.$e($value['headline']).'</div></div>';
+        }
+
+        if ($block['kind'] === 'callout') {
+            $html = '<div class="callout"><div class="ctitle">'.$e($value['title']).'</div><ol>';
+            foreach ($value['items'] as $item) {
+                $html .= '<li>'.$e($item).'</li>';
+            }
+            return $html.'</ol></div>';
+        }
+
+        if ($block['kind'] === 'dashboard') {
+            $t = $value['totals'];
+            $sum = max(1, $t['High'] + $t['Medium'] + $t['Low']);
+            $html = '<table class="dash"><tr>'
+                .'<td><div class="num">'.(int) $value['total'].'</div><div class="cap">Findings across '.(int) $value['areas'].' areas</div></td>'
+                .'<td><div class="num" style="color:'.self::SEVERITY_COLORS['High'].'">'.(int) $t['High'].'</div><div class="cap">High</div></td>'
+                .'<td><div class="num" style="color:'.self::SEVERITY_COLORS['Medium'].'">'.(int) $t['Medium'].'</div><div class="cap">Medium</div></td>'
+                .'<td><div class="num" style="color:'.self::SEVERITY_COLORS['Low'].'">'.(int) $t['Low'].'</div><div class="cap">Low</div></td>'
+                .'</tr></table><table class="sevbar"><tr>';
+            foreach (self::SEVERITY_COLORS as $rating => $color) {
+                if ($t[$rating] > 0) {
+                    $html .= '<td style="width:'.round(100 * $t[$rating] / $sum).'%;background:'.$color.'"></td>';
+                }
+            }
+            if ($t['High'] + $t['Medium'] + $t['Low'] === 0) {
+                $html .= '<td style="background:#E3E8EE"></td>';
+            }
+            return $html.'</tr></table>';
+        }
+
+        if ($block['kind'] === 'heatmap') {
+            $html = '<table class="heat">';
+            for ($impact = 5; $impact >= 1; $impact--) {
+                $html .= '<tr><td class="axis">'.($impact === 3 ? 'Impact ' : '').$impact.'</td>';
+                for ($likelihood = 1; $likelihood <= 5; $likelihood++) {
+                    $score = $impact * $likelihood;
+                    $background = $score >= 15 ? '#F6C9C4' : ($score >= 8 ? '#FBE2B6' : '#D3EEDD');
+                    $count = $value[$likelihood.'-'.$impact] ?? 0;
+                    $html .= '<td style="background:'.$background.'">'.($count > 0 ? (int) $count : '').'</td>';
+                }
+                $html .= '</tr>';
+            }
+            $html .= '<tr><td class="axis"></td>';
+            for ($likelihood = 1; $likelihood <= 5; $likelihood++) {
+                $html .= '<td class="axis">'.$likelihood.'</td>';
+            }
+            return $html.'</tr><tr><td class="axis"></td><td class="axis" colspan="5">Likelihood</td></tr></table>';
+        }
+
+        if ($block['kind'] === 'domain_head') {
+            $meta = array();
+            foreach ($value['counts'] as $rating => $count) {
+                if ($count > 0) {
+                    $meta[] = $count.' '.strtolower($rating);
+                }
+            }
+            $pill = $value['rating'] !== null ? '<span class="pill" style="background:'.(self::RATING_COLORS[$value['rating']] ?? '#55636f').'">'.$e($value['rating']).'</span>' : '';
+            return '<div class="dhead"><table><tr><td class="dt">'.$e($value['title']).'</td><td class="dm">'.$pill.(count($meta) > 0 ? '<br>'.$e(implode(' · ', $meta)) : '').'</td></tr></table></div>';
+        }
+
+        if ($block['kind'] === 'roadmap') {
+            $colors = array(
+                '#B42318',
+                '#B54708',
+                '#075985'
+            );
+            $html = '';
+            $index = 0;
+            foreach ($value as $phase => $items) {
+                $color = $colors[$index++] ?? '#075985';
+                if (count($items) === 0) {
+                    continue;
+                }
+                $html .= '<div class="phase"><div class="ph" style="background:'.$color.'">'.$e($phase).'</div><table>';
+                foreach ($items as $item) {
+                    $html .= '<tr><td><div class="at">'.$e($item['title']).'</div><div class="ad">'.$e($item['detail']).'</div></td><td class="ar">'.$e(implode(', ', $item['refs'])).'</td></tr>';
+                }
+                $html .= '</table></div>';
+            }
+            return $html;
         }
 
         if ($block['kind'] === 'signature') {
@@ -906,14 +1300,13 @@ class ReportRenderer {
 
     /* ----------------------------------------------------------------- Word */
 
-    private static function docx(array $r): string
+    private static function docx(array $doc): string
     {
         Settings::setOutputEscapingEnabled(true);
 
-        $outline = self::outline($r);
-        $brand = ltrim(self::brand($r), '#');
-        $firm = ReportBuilder::plain($r['company']['company_name'] ?? '');
-        $title = ReportBuilder::plain($r['report']['report_title']);
+        $brand = ltrim(self::brand($doc['company']), '#');
+        $firm = ReportBuilder::plain($doc['company']['company_name'] ?? '');
+        $title = $doc['title'];
 
         $word = new PhpWord();
         $word->setDefaultFontName('Georgia');
@@ -957,7 +1350,7 @@ class ReportRenderer {
         $section->addHeader(Header::FIRST);
         $section->addFooter(Footer::FIRST);
         $header = $section->addHeader();
-        $header->addText(($outline['client'] !== '' ? $outline['client'].' · ' : '').$title, $grey, array(
+        $header->addText(($doc['client'] !== '' ? $doc['client'].' · ' : '').$title, $grey, array(
             'alignment' => 'right'
         ));
         $footer = $section->addFooter();
@@ -965,7 +1358,7 @@ class ReportRenderer {
             'alignment' => 'right'
         ));
 
-        $logo = self::logo($r);
+        $logo = self::logo($doc['company']);
 
         if ($logo !== null) {
             $logo_file = tempnam(sys_get_temp_dir(), 'logo');
@@ -999,7 +1392,7 @@ class ReportRenderer {
             'borderBottomColor' => '1D2733',
             'spaceAfter' => 200
         ));
-        $section->addText('Prepared for '.$outline['client'], array(
+        $section->addText($doc['prepared_for'] !== '' ? 'Prepared for '.$doc['prepared_for'] : '', array(
             'name' => 'Calibri',
             'size' => 13
         ));
@@ -1010,7 +1403,7 @@ class ReportRenderer {
             'layout' => 'fixed'
         ));
 
-        foreach (self::cover_rows($r) as $label => $value) {
+        foreach ($doc['cover_rows'] as $label => $value) {
             $cover->addRow();
             $cover->addCell(2600)->addText($label, array(
                 'name' => 'Calibri',
@@ -1023,96 +1416,18 @@ class ReportRenderer {
             ));
         }
 
-        $section->addTextBreak(2);
-        $section->addText('Confidential. This report contains sensitive information about the security of '.$outline['client'].'\'s information systems. It is intended solely for the use of '.$outline['client'].' management and its board, and should not be distributed to others without the written consent of '.$outline['client'].'.', array(
-            'size' => 8,
-            'color' => '55636F'
-        ), array(
-            'borderTopSize' => 4,
-            'borderTopColor' => 'B8C2CD'
-        ));
-
-        $section->addTitle('Document control', 1);
-
-        if (count($r['versions']) > 0) {
-            $rows = array();
-            foreach ($r['versions'] as $version) {
-                $rows[] = array(
-                    $version['version_label'],
-                    self::date($version['version_date']),
-                    ReportBuilder::plain($version['version_note']),
-                    ReportBuilder::plain($version['version_author'])
-                );
-            }
-            self::docx_table($section, array(
-                'Version',
-                'Date',
-                'Description',
-                'Author'
+        if (!empty($doc['confidential']) && $doc['client'] !== '') {
+            $section->addTextBreak(2);
+            $section->addText('Confidential. This report contains sensitive information about the security of '.$doc['client'].'\'s information systems. It is intended solely for the use of '.$doc['client'].' management and its board, and should not be distributed to others without the written consent of '.$doc['client'].'.', array(
+                'size' => 8,
+                'color' => '55636F'
             ), array(
-                12,
-                18,
-                46,
-                24
-            ), $rows, $brand, false, false);
-        }
-
-        if (count($r['distribution']) > 0) {
-            $section->addTitle('Distribution', 2);
-            $rows = array();
-            foreach ($r['distribution'] as $person) {
-                $rows[] = array(
-                    ReportBuilder::plain($person['person_name']),
-                    ReportBuilder::plain($person['person_title']),
-                    ReportBuilder::plain($person['organisation'])
-                );
-            }
-            self::docx_table($section, array(
-                'Name',
-                'Title',
-                'Organization'
-            ), array(
-                32,
-                34,
-                34
-            ), $rows, $brand, false, false);
-        }
-
-        if (count($r['team']) > 0) {
-            $section->addTitle('Assessment team', 2);
-            $rows = array();
-            foreach ($r['team'] as $person) {
-                $rows[] = array(
-                    ReportBuilder::plain($person['person_title']),
-                    ReportBuilder::plain($person['person_name']),
-                    ReportBuilder::plain($person['organisation']),
-                    ReportBuilder::plain($person['responsibility'])
-                );
-            }
-            self::docx_table($section, array(
-                'Role',
-                'Name',
-                'Organization',
-                'Responsibility'
-            ), array(
-                26,
-                22,
-                22,
-                30
-            ), $rows, $brand, false, false);
-        }
-
-        $section->addTitle('Contents', 1);
-
-        foreach ($outline['contents'] as $line) {
-            $section->addText(str_replace(' ', "\u{00A0}", $line), array(
-                'name' => 'Calibri'
-            ), array(
-                'spaceAfter' => 60
+                'borderTopSize' => 4,
+                'borderTopColor' => 'B8C2CD'
             ));
         }
 
-        foreach ($outline['blocks'] as $block) {
+        foreach ($doc['blocks'] as $block) {
             self::docx_block($section, $block, $brand);
         }
 
@@ -1163,6 +1478,57 @@ class ReportRenderer {
                 'size' => 8.5,
                 'color' => '55636F'
             ));
+            return;
+        }
+
+        if ($block['kind'] === 'contents') {
+            foreach ($value as $line) {
+                $section->addText(str_replace(' ', "\u{00A0}", $line), array(
+                    'name' => 'Calibri'
+                ), array(
+                    'spaceAfter' => 60
+                ));
+            }
+            return;
+        }
+
+        if ($block['kind'] === 'stats') {
+            $rows = array();
+            foreach ($value as $stat) {
+                $rows[] = array(
+                    $stat['label'],
+                    (string) $stat['value']
+                );
+            }
+            self::docx_table($section, array(
+                'Measure',
+                'Value'
+            ), array(
+                70,
+                30
+            ), $rows, $brand, false, false);
+            return;
+        }
+
+        if ($block['kind'] === 'bars') {
+            $rows = array();
+            foreach ($value as $bar) {
+                $width = $bar['max'] > 0 ? (int) round(20 * $bar['value'] / $bar['max']) : 0;
+                $rows[] = array(
+                    $bar['label'],
+                    str_repeat("\u{2588}", $width),
+                    $bar['text']
+                );
+            }
+            self::docx_table($section, array(
+                'Area',
+                '',
+                'Result'
+            ), array(
+                38,
+                44,
+                18
+            ), $rows, $brand, false, false);
             return;
         }
 

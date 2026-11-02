@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<DIV8 N="52.204-21" TYPE="SECTION" hierarchy_metadata="{&quot;path&quot;:&quot;/on/_SUBSTITUTE_DATE_/title-48/section-52.204-21&quot;,&quot;citation&quot;:&quot;48 CFR 52.204-21&quot;,&quot;alternate_reference&quot;:&quot;FAR 52.204-21&quot;}">
+<HEAD>52.204-21 Basic Safeguarding of Covered Contractor Information Systems.</HEAD>
+<P>As prescribed in 4.1903, insert the following clause:</P>
+<EXTRACT>
+<HD1>Basic Safeguarding of Covered Contractor Information Systems (NOV 2021)
+</HD1>
+<P>(a) <I>Definitions.</I> As used in this clause—</P>
+<P><I>Covered contractor information system</I> means an information system that is owned or operated by a contractor that processes, stores, or transmits Federal contract information.</P>
+<P><I>Federal contract information</I> means information, not intended for public release, that is provided by or generated for the Government under a contract to develop or deliver a product or service to the Government, but not including information provided by the Government to the public (such as on public Web sites) or simple transactional information, such as necessary to process payments.</P>
+<P><I>Information</I> means any communication or representation of knowledge such as facts, data, or opinions, in any medium or form, including textual, numerical, graphic, cartographic, narrative, or audiovisual (Committee on National Security Systems Instruction (CNSSI) 4009).</P>
+<P><I>Information system</I> means a discrete set of information resources organized for the collection, processing, maintenance, use, sharing, dissemination, or disposition of information (44 U.S.C. 3502).</P>
+<P><I>Safeguarding</I> means measures or controls that are prescribed to protect information systems.</P>
+<P>(b) <I>Safeguarding requirements and procedures.</I> (1) The Contractor shall apply the following basic safeguarding requirements and procedures to protect covered contractor information systems. Requirements and procedures for basic safeguarding of covered contractor information systems shall include, at a minimum, the following security controls:</P>
+<P>(i) Limit information system access to authorized users, processes acting on behalf of authorized users, or devices (including other information systems).</P>
+<P>(ii) Limit information system access to the types of transactions and functions that authorized users are permitted to execute.</P>
+<P>(iii) Verify and control/limit connections to and use of external information systems.</P>
+<P>(iv) Control information posted or processed on publicly accessible information systems.</P>
+<P>(v) Identify information system users, processes acting on behalf of users, or devices.</P>
+<P>(vi) Authenticate (or verify) the identities of those users, processes, or devices, as a prerequisite to allowing access to organizational information systems.</P>
+<P>(vii) Sanitize or destroy information system media containing Federal Contract Information before disposal or release for reuse.</P>
+<P>(viii) Limit physical access to organizational information systems, equipment, and the respective operating environments to authorized individuals.</P>
+<P>(ix) Escort visitors and monitor visitor activity; maintain audit logs of physical access; and control and manage physical access devices.</P>
+<P>(x) Monitor, control, and protect organizational communications (<I>i.e.,</I> information transmitted or received by organizational information systems) at the external boundaries and key internal boundaries of the information systems.</P>
+<P>(xi) Implement subnetworks for publicly accessible system components that are physically or logically separated from internal networks.</P>
+<P>(xii) Identify, report, and correct information and information system flaws in a timely manner.</P>
+<P>(xiii) Provide protection from malicious code at appropriate locations within organizational information systems.</P>
+<P>(xiv) Update malicious code protection mechanisms when new releases are available.</P>
+<P>(xv) Perform periodic scans of the information system and real-time scans of files from external sources as files are downloaded, opened, or executed.</P>
+<P>(2) <I>Other requirements.</I> This clause does not relieve the Contractor of any other specific safeguarding requirements specified by Federal agencies and departments relating to covered contractor information systems generally or other Federal safeguarding requirements for controlled unclassified information (CUI) as established by Executive Order 13556.</P>
+<P>(c) <I>Subcontracts.</I> The Contractor shall include the substance of this clause, including this paragraph (c), in subcontracts under this contract (including subcontracts for the acquisition of commercial products or commercial services, other than commercially available off-the-shelf items), in which the subcontractor may have Federal contract information residing in or transiting through its information system.</P></EXTRACT>
+<HD3>(End of clause)
+</HD3>
+<CITA TYPE="N">[81 FR 30446, May 16, 2016, as amended at 86 FR 61032, Nov. 4, 2021]
+</CITA>
+</DIV8>

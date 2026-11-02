@@ -6011,6 +6011,47 @@ class ApiController extends Controller {
         );
     }
 
+    /** A ready-made report, generated from the data and stored for a short-lived download link. */
+    public function ready_report_downloadAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        if (Session::get('user_type') !== 'staff') {
+            $response['message'] = 'That report is not available';
+            echo json_encode($response);
+            exit;
+        }
+
+        $file = (new ReadyReports())->render(
+            (string) ($this->post['report_type'] ?? ''),
+            (int) ($this->post['target_id'] ?? 0),
+            (string) ($this->post['format'] ?? 'pdf')
+        );
+
+        if (isset($file['error'])) {
+            $response['message'] = $file['error'];
+            echo json_encode($response);
+            exit;
+        }
+
+        $key = 'reports/'.Session::get('company_id').'/ready/'.bin2hex(random_bytes(10)).'.'.$file['extension'];
+
+        if (!S3Service::put_private_bytes($key, $file['bytes'], $file['content_type'])) {
+            $response['message'] = 'The report could not be stored for download';
+            echo json_encode($response);
+            exit;
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'ok';
+        $response['url'] = S3Service::presigned_get_url($key, 300, $file['file_name']);
+        echo json_encode($response);
+        exit;
+    }
+
     public function portal_report_loadAction(){
 
         $project_id = (int) ($this->post['project_id'] ?? 0);

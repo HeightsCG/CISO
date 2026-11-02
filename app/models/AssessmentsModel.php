@@ -236,6 +236,7 @@ class AssessmentsModel extends Model {
             'standard_name' => $standard[0]['standard_name'],
             'short_code' => $standard[0]['short_code'],
             'version' => $standard[0]['version'],
+            'framework_key' => $standard[0]['framework_key'],
             'assessment_name' => $assessment_name,
             'assessment_status' => 'Planned',
             'created_by' => $created_by,
@@ -251,9 +252,12 @@ class AssessmentsModel extends Model {
                 $assessment_id,
                 $control['control_identifier'],
                 $control['parent_identifier'],
+                $control['control_kind'],
                 $control['control_title'],
                 $control['description'],
                 $control['family'],
+                $control['source_document'],
+                $control['source_version'],
                 $control['sort_order']
             );
         }
@@ -272,7 +276,8 @@ class AssessmentsModel extends Model {
                     s.id,
                     s.standard_name,
                     s.short_code,
-                    s.version
+                    s.version,
+                    s.framework_key
                 FROM
                     standards s
                 WHERE
@@ -294,18 +299,22 @@ class AssessmentsModel extends Model {
         $sql = "SELECT
                     sc.control_identifier,
                     sc.parent_identifier,
+                    sc.control_kind,
                     sc.control_title,
                     sc.description,
                     sc.family,
+                    sc.source_document,
+                    sc.source_version,
                     sc.sort_order
                 FROM
                     standard_controls sc
+                    JOIN standards s ON s.id = sc.standard_id
                 WHERE
                     sc.standard_id = :standard_id
                     and
                     sc.deleted = 0
                 ORDER BY
-                    sc.family,
+                    CASE WHEN s.framework_key = '' THEN sc.family ELSE '' END,
                     sc.sort_order,
                     sc.control_identifier";
         return parent::select($sql, $where);
@@ -315,9 +324,12 @@ class AssessmentsModel extends Model {
         $assessment_id,
         $control_identifier,
         $parent_identifier,
+        $control_kind,
         $control_title,
         $description,
         $family,
+        $source_document,
+        $source_version,
         $sort_order
     )
     {
@@ -325,9 +337,12 @@ class AssessmentsModel extends Model {
             'assessment_id' => $assessment_id,
             'control_identifier' => $control_identifier,
             'parent_identifier' => $parent_identifier,
+            'control_kind' => $control_kind,
             'control_title' => $control_title,
             'description' => $description,
             'family' => $family,
+            'source_document' => $source_document,
+            'source_version' => $source_version,
             'sort_order' => $sort_order,
             'item_result' => 'Not Assessed',
             'notes' => '',

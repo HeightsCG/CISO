@@ -6,6 +6,17 @@ function esc(value) {
         .replace(/'/g, '&#39;');
 }
 
+function standard_display(name, version) {
+    name = (name || '').trim();
+    version = (version || '').trim();
+
+    if (version === '' || name.toLowerCase().indexOf(version.toLowerCase()) !== -1) {
+        return name;
+    }
+
+    return name + ' (' + version + ')';
+}
+
 function text_cell(data, type) {
     return type === 'display' ? esc(data) : data;
 }
@@ -73,3 +84,31 @@ $(function () {
     });
 
 });
+
+function report_tab(format) {
+    if (format !== "pdf") {
+        return null;
+    }
+    var tab = window.open("", "_blank");
+    if (tab) {
+        tab.document.title = "Preparing report";
+        tab.document.body.style.fontFamily = "sans-serif";
+        tab.document.body.style.padding = "40px";
+        tab.document.body.textContent = "Preparing your report...";
+    }
+    return tab;
+}
+
+function show_report_tab(tab, url) {
+    if (tab && !tab.closed) {
+        tab.location.href = url;
+        return;
+    }
+    window.location.href = url;
+}
+
+function close_report_tab(tab) {
+    if (tab && !tab.closed) {
+        tab.close();
+    }
+}

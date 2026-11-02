@@ -1,0 +1,156 @@
+{
+    "sources": [
+        {
+            "id": "csf2refs",
+            "title": "NIST CSF 2.0 Reference Tool, informative references export",
+            "version": "CSF 2.0 (informative references as downloaded 2 November 2026)",
+            "publisher": "NIST",
+            "url": "https://csrc.nist.gov/extensions/nudp/services/json/csf/download?olirids=all",
+            "file": "crosswalk/csf2-informative-references-all.xlsx",
+            "sha256": "fccd59b30d0e070c2cd6c20f24f5a9c7d510ddc0658d4aa63245532512895ec4"
+        },
+        {
+            "id": "cuioverlay",
+            "title": "NIST SP 800-171 Rev 3 CUI Overlay (SP 800-53 Rev 5 to SP 800-171 Rev 3)",
+            "version": "Rev 3 final (May 2024)",
+            "publisher": "NIST",
+            "url": "https://csrc.nist.gov/files/pubs/sp/800/171/r3/final/docs/sp800-171r3-cui-overlay.xlsx",
+            "file": "crosswalk/sp800-171r3-cui-overlay.xlsx",
+            "sha256": "c69914ac7d364b3ec6b661474102389072b5a293bc2dca156433dedd2d1e6da7"
+        },
+        {
+            "id": "r2r3",
+            "title": "NIST SP 800-171 Rev 2 to Rev 3 change analysis",
+            "version": "Rev 3 final (May 2024)",
+            "publisher": "NIST",
+            "url": "https://csrc.nist.gov/files/pubs/sp/800/171/r3/final/docs/sp800-171r2-to-r3-analysis.xlsx",
+            "file": "crosswalk/sp800-171r2-to-r3-analysis.xlsx",
+            "sha256": "ad0908f52945e316dec05a4032cbcaa75958eab2534d2627b3a89f696fb30b84"
+        },
+        {
+            "id": "olir155",
+            "title": "NIST OLIR: SP 800-53 Rev 5 to ISO/IEC 27001:2022",
+            "version": "OLIR 155",
+            "publisher": "NIST",
+            "url": "https://csrc.nist.gov/projects/olir/informative-reference-catalog",
+            "file": "iso27001/olir-155-sp800-53r5-to-iso-27001-2022.xlsx",
+            "sha256": "e631de234a1fac057991773f015c221226940540f5602e1b70a3768eaff5cbd9"
+        },
+        {
+            "id": "definitions",
+            "title": "Framework definitions (shared control sets: CMMC uses SP 800-171 Rev 2, FedRAMP baselines use SP 800-53 Rev 5)",
+            "version": "as built"
+        }
+    ],
+    "sets": [
+        {
+            "id": "csf-53",
+            "from": "nist-csf-2",
+            "to": "nist-800-53-r5",
+            "source": "csf2refs",
+            "author": "NIST"
+        },
+        {
+            "id": "csf-171r3",
+            "from": "nist-csf-2",
+            "to": "nist-800-171-r3",
+            "source": "csf2refs",
+            "author": "NIST"
+        },
+        {
+            "id": "csf-iso",
+            "from": "nist-csf-2",
+            "to": "iso-27001-2022",
+            "source": "csf2refs",
+            "author": "Published in the NIST CSF 2.0 Reference Tool; developed independently, not by NIST or ISO"
+        },
+        {
+            "id": "53-171r3",
+            "from": "nist-800-53-r5",
+            "to": "nist-800-171-r3",
+            "source": "cuioverlay",
+            "author": "NIST"
+        },
+        {
+            "id": "171r2-171r3",
+            "from": "nist-800-171-r2",
+            "to": "nist-800-171-r3",
+            "source": "r2r3",
+            "author": "NIST"
+        },
+        {
+            "id": "53-iso",
+            "from": "nist-800-53-r5",
+            "to": "iso-27001-2022",
+            "source": "olir155",
+            "author": "NIST"
+        },
+        {
+            "id": "cmmcl2-171r2",
+            "from": "cmmc-l2",
+            "to": "nist-800-171-r2",
+            "source": "definitions",
+            "author": "32 CFR 170 (same requirements)"
+        },
+        {
+            "id": "cmmcl1-171r2",
+            "from": "cmmc-l1",
+            "to": "nist-800-171-r2",
+            "source": "definitions",
+            "author": "32 CFR 170.15 Table 2"
+        },
+        {
+            "id": "fedramplow-53",
+            "from": "fedramp-low",
+            "to": "nist-800-53-r5",
+            "source": "definitions",
+            "author": "FedRAMP (same controls)"
+        },
+        {
+            "id": "fedrampmod-53",
+            "from": "fedramp-moderate",
+            "to": "nist-800-53-r5",
+            "source": "definitions",
+            "author": "FedRAMP (same controls)"
+        },
+        {
+            "id": "fedramphigh-53",
+            "from": "fedramp-high",
+            "to": "nist-800-53-r5",
+            "source": "definitions",
+            "author": "FedRAMP (same controls)"
+        }
+    ],
+    "unresolved_allowed": [
+        "nist-800-53-r5:CP",
+        "nist-800-53-r5:IR",
+        "nist-800-53-r5:PT",
+        "iso-27001-2022:None",
+        "iso-27001-2022:All applicable controls",
+        "iso-27001-2022:",
+        "nist-800-53-r5:RA-4"
+    ],
+    "corrections": [
+        {
+            "set": "csf-iso",
+            "source_id": "6.11",
+            "id": "6.1.1",
+            "reason": "ISO/IEC 27001 has no clause 6.11; GV.RM-07 (risk opportunities) matches 6.1.1 Actions to address risks and opportunities"
+        },
+        {
+            "set": "csf-iso",
+            "source_id": "6.13",
+            "id": "6.1.3",
+            "reason": "ISO/IEC 27001 has no clause 6.13; ID.RA-06 (risk responses) matches 6.1.3 Information security risk treatment"
+        }
+    ],
+    "unresolved_notes": {
+        "nist-800-53-r5:CP": "Family-level reference in the CSF 2.0 tool; not a single control",
+        "nist-800-53-r5:IR": "Family-level reference in the CSF 2.0 tool; not a single control",
+        "nist-800-53-r5:PT": "Family-level reference in the CSF 2.0 tool; not a single control",
+        "nist-800-53-r5:RA-4": "Withdrawn in SP 800-53 Rev 5 (incorporated into RA-3); referenced by the CSF 2.0 tool for DE.AE-06",
+        "iso-27001-2022:None": "Source states no ISO control maps",
+        "iso-27001-2022:All applicable controls": "Source refers to all Annex A controls generically",
+        "iso-27001-2022:": "Empty reference after the 'Annex A Controls:' label in the source"
+    }
+}
