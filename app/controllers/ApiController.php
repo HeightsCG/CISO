@@ -1537,10 +1537,12 @@ class ApiController extends Controller {
             exit;
         }
 
-        $unassessed = $this->assessments_model->unassessed_count($assessment_id, Session::get('company_id'));
+        $review = $this->assessment_review($assessment[0]);
+        $blocking = AssessmentChecks::blocking($review['issues']);
 
-        if ($unassessed > 0) {
-            $response['message'] = $unassessed . ' ' . ($unassessed === 1 ? 'control is' : 'controls are') . ' still unanswered';
+        if (count($blocking) > 0) {
+            $response['message'] = count($blocking).' '.(count($blocking) === 1 ? 'check needs' : 'checks need').' fixing before this assessment can be completed';
+            $response['issues'] = $review['issues'];
             echo json_encode($response);
             exit;
         }
@@ -1559,6 +1561,42 @@ class ApiController extends Controller {
         $response['message'] = 'Assessment complete';
         $response['assessment_status'] = 'Complete';
         echo json_encode($response);
+    }
+
+    /** Score and checks for one assessment row (as returned by get_assessment). */
+    private function assessment_review(array $assessment): array
+    {
+        $definition = FrameworkLibrary::get((string) $assessment['framework_key']);
+        $controls = $this->assessments_model->load_controls((int) $assessment['id'], Session::get('company_id'));
+        $project = $this->projects_model->get_project($assessment['project_id'], Session::get('company_id'))[0];
+        $score = $definition === null ? null : AssessmentScore::score($definition, $assessment, $controls);
+
+        return array(
+            'score' => $score,
+            'issues' => AssessmentChecks::run($definition, $assessment, $project, $controls, $score)
+        );
+    }
+
+    public function assessment_checksAction(){
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+        $assessment = $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'));
+
+        if (count($assessment) !== 1) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'That assessment could not be found'
+            ));
+            exit;
+        }
+
+        $review = $this->assessment_review($assessment[0]);
+
+        echo json_encode(array(
+            'success' => true,
+            'score' => $review['score'],
+            'issues' => $review['issues']
+        ));
     }
 
     public function load_project_usersAction(){
@@ -2878,6 +2916,12 @@ class ApiController extends Controller {
         }
 
         $ssi_reviewed = ($this->post['ssi_reviewed'] ?? '') === '1' ? 1 : 0;
+        $levels = ($definition['scoring']['model'] ?? '') === 'maturity' ? array_map('intval', array_column($definition['scoring']['levels'], 'level')) : array();
+        $tier = function (string $key) use ($levels) {
+            $value = (int) ($this->post[$key] ?? 0);
+
+            return in_array($value, $levels, true) ? $value : 0;
+        };
 
         $this->assessments_model->save_details(
             $assessment_id,
@@ -2890,6 +2934,10 @@ class ApiController extends Controller {
             implode(',', $categories),
             $ssi_reviewed,
             $ssi_reviewed === 1 ? $this->input('ssi_note') : '',
+            $tier('tier_governance'),
+            $tier('tier_management'),
+            $tier('target_tier_governance'),
+            $tier('target_tier_management'),
             Session::get('user_id')
         );
 

@@ -7,6 +7,11 @@
     "standard_codes": [
         "SOC2"
     ],
+    "aliases": [
+        "SOC 2",
+        "SOC2",
+        "Trust Services"
+    ],
     "content_licence": "ids_titles_only",
     "notice": "Trust services criteria numbers and point of focus names are used for identification only. Criteria text is copyrighted by the AICPA; descriptions and guidance are written by HCG.",
     "sources": [

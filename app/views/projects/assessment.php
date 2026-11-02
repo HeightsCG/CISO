@@ -25,8 +25,15 @@
         </div>
     </div>
 
+    <div class="notice notice--warn" id="mismatch_notice" role="status" hidden></div>
+
     <div class="panel record__panel">
         <div class="panel__body">
+            <div class="rollup__score" id="score_row" hidden>
+                <span class="rollup__score-value" id="score_value"></span>
+                <span class="rollup__score-outcome" id="score_outcome"></span>
+                <button type="button" class="btn btn--tertiary btn--sm" id="do_checks_open" hidden></button>
+            </div>
             <div class="rollup" id="rollup"></div>
             <div class="rollup__progress">
                 <div class="progress progress--lg"><div class="progress__bar" id="rollup_bar" style="width:0%"></div></div>
@@ -249,6 +256,26 @@
                         <textarea class="form-control" id="details_method" rows="3" placeholder="Interviews, document review, configuration testing, sampling."><?php echo htmlspecialchars((string) $this->assessment['assessment_method'], ENT_QUOTES, 'UTF-8'); ?></textarea>
                     </div>
                 </div>
+                <?php if (count($this->features['tiers']) > 0) { ?>
+                <div class="row mb-4">
+                    <div class="col-md-3 form-group">
+                        <label for="details_tier_governance">Governance tier</label>
+                        <select class="form-control details__tier" id="details_tier_governance" data-current="<?php echo (int) $this->assessment['tier_governance']; ?>"></select>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label for="details_target_governance">Target</label>
+                        <select class="form-control details__tier" id="details_target_governance" data-current="<?php echo (int) $this->assessment['target_tier_governance']; ?>"></select>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label for="details_tier_management">Management tier</label>
+                        <select class="form-control details__tier" id="details_tier_management" data-current="<?php echo (int) $this->assessment['tier_management']; ?>"></select>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label for="details_target_management">Target</label>
+                        <select class="form-control details__tier" id="details_target_management" data-current="<?php echo (int) $this->assessment['target_tier_management']; ?>"></select>
+                    </div>
+                </div>
+                <?php } ?>
                 <?php if (count($this->features['categories']) > 0) { ?>
                 <div class="form-group mb-4">
                     <label>Categories in scope, in addition to the common criteria</label>
@@ -278,6 +305,28 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" id="do_details_save" class="btn btn--primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop="static" id="checks_modal" tabindex="-1" aria-labelledby="checks_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="checks_modal_title">Checks</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3 class="record__group-title" id="checks_block_title">Fix before completing</h3>
+                <ul class="checks" id="checks_block"></ul>
+                <h3 class="record__group-title" id="checks_warn_title">Worth a look</h3>
+                <ul class="checks" id="checks_warn"></ul>
+                <p class="checks__clear" id="checks_clear">Everything checks out.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn--primary" id="do_checks_complete">Mark Complete</button>
             </div>
         </div>
     </div>
@@ -429,6 +478,9 @@ $(document).ready(function () {
     var project_name = <?php echo json_encode(html_entity_decode((string) $this->assessment['project_name'], ENT_QUOTES, 'UTF-8'), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
     var terms = <?php echo json_encode($this->terminology, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
     var rolls_up = <?php echo $this->features['rolls_up'] ? 'true' : 'false'; ?>;
+    var tiers = <?php echo json_encode((object) $this->features['tiers'], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+    var review = null;
+    var partial_labels = <?php echo json_encode((object) $this->features['partial_labels'], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
     var details = <?php echo json_encode(array(
         'assessment_type' => $this->assessment['assessment_type'],
         'baseline_assessment_id' => (int) $this->assessment['baseline_assessment_id'],
@@ -597,7 +649,7 @@ $(document).ready(function () {
             return;
         }
 
-        $('#do_complete').prop('disabled', remaining > 0).attr('title', remaining > 0
+        $('#do_complete').prop('disabled', false).attr('title', remaining > 0
             ? remaining + ' ' + (remaining === 1 ? term('control', 'control') : term('controls', 'controls')) + ' still unanswered'
             : '');
     }
@@ -608,24 +660,191 @@ $(document).ready(function () {
             .addClass(RESULT_CLASS[assessment_status] || 'badge--prospect');
     }
 
-    $('#do_complete').click(function () {
+    function tier_text(tier) {
+        return tier.level > 0 ? tier.label : 'not set';
+    }
 
-        set_loading('#do_complete', true);
+    function outcome_text(outcome) {
+
+        if (!outcome) {
+            return '';
+        }
+
+        if (outcome.status === 'pass' || outcome.status === 'conditional') {
+            return 'Supports ' + outcome.label;
+        }
+
+        if (outcome.status === 'provisional_pass' || outcome.status === 'provisional_conditional') {
+            return 'On track for ' + outcome.label;
+        }
+
+        return outcome.label;
+    }
+
+    function render_review() {
+
+        if (!review) {
+            return;
+        }
+
+        var score = review.score;
+        var blocking = 0;
+        var warnings = 0;
+        var mismatch = '';
+
+        for (var i = 0; i < review.issues.length; i++) {
+            if (review.issues[i].severity === 'block') {
+                blocking++;
+            } else {
+                warnings++;
+            }
+
+            if (review.issues[i].code === 'framework_mismatch') {
+                mismatch = review.issues[i].message;
+            }
+        }
+
+        $('#mismatch_notice').text(mismatch).prop('hidden', mismatch === '');
+
+        if (score) {
+            var value = '';
+
+            if (score.outcome && score.outcome.status === 'not_started' || score.counts['Not Assessed'] === score.in_scope) {
+                value = capitalise(score.model === 'points' ? term('score', 'score') : 'assessment') + ': not started';
+            } else if (score.model === 'points') {
+                value = capitalise(term('score', 'score')) + ': ' + score.points.score + ' of ' + score.points.maximum + (score.complete ? '' : ' so far');
+            } else if (score.model === 'maturity') {
+                value = 'Governance: ' + tier_text(score.maturity.governance) + ' (target ' + tier_text(score.maturity.target_governance) + ') · Management: ' + tier_text(score.maturity.management) + ' (target ' + tier_text(score.maturity.target_management) + ')';
+            } else {
+                value = score.percentage + '% of applicable ' + term('controls', 'controls') + ' implemented' + (score.complete ? '' : ' so far');
+            }
+
+            $('#score_value').text(value);
+            $('#score_outcome').text(outcome_text(score.outcome))
+                .attr('title', score.outcome && score.outcome.reasons.length ? score.outcome.reasons.join('\n') : '')
+                .toggleClass('is-ok', !!score.outcome && score.outcome.status !== 'not_eligible');
+        }
+
+        $('#do_checks_open').prop('hidden', false).text(blocking + warnings === 0
+            ? 'All checks pass'
+            : (blocking > 0 ? blocking + ' to fix' : '') + (blocking > 0 && warnings > 0 ? ' · ' : '') + (warnings > 0 ? warnings + (warnings === 1 ? ' warning' : ' warnings') : ''));
+        $('#score_row').prop('hidden', false);
+    }
+
+    function refresh_checks(done) {
+        ApiDataSvc.apiCall('post', 'assessment_checks', { assessment_id: assessment_id }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            if (obj.success) {
+                review = obj;
+                render_review();
+            }
+
+            if (typeof done === 'function') {
+                done();
+            }
+        });
+    }
+
+    function issue_item(issue) {
+
+        var links = '';
+
+        for (var i = 0; i < issue.controls.length && i < 12; i++) {
+            links += '<button type="button" class="btn btn--tertiary btn--sm checks__control" data-identifier="' + esc(issue.controls[i]) + '">' + esc(issue.controls[i]) + '</button>';
+        }
+
+        if (issue.controls.length > 12) {
+            links += '<span class="checks__more">and ' + (issue.controls.length - 12) + ' more</span>';
+        }
+
+        return '<li class="checks__item checks__item--' + issue.severity + '"><p class="checks__message">' + esc(issue.message) + '</p>'
+            + (links === '' ? '' : '<div class="checks__controls">' + links + '</div>') + '</li>';
+    }
+
+    function show_checks(issues) {
+
+        var block = '';
+        var warn = '';
+
+        for (var i = 0; i < issues.length; i++) {
+            if (issues[i].severity === 'block') {
+                block += issue_item(issues[i]);
+            } else {
+                warn += issue_item(issues[i]);
+            }
+        }
+
+        $('#checks_block').html(block);
+        $('#checks_warn').html(warn);
+        $('#checks_block, #checks_block_title').toggle(block !== '');
+        $('#checks_warn, #checks_warn_title').toggle(warn !== '');
+        $('#checks_clear').toggle(block === '' && warn === '');
+        $('#do_checks_complete').prop('disabled', block !== '' || $('#status_badge').text().trim() === 'Complete');
+        modal('checks_modal').show();
+    }
+
+    $('#do_checks_open').click(function () {
+        set_loading('#do_checks_open', true);
+        refresh_checks(function () {
+            set_loading('#do_checks_open', false);
+            show_checks(review ? review.issues : []);
+        });
+    });
+
+    $('#checks_modal').on('click', '.checks__control', function () {
+
+        var identifier = $(this).attr('data-identifier');
+
+        for (var i = 0; i < controls.length; i++) {
+            if (controls[i].control_identifier === identifier) {
+                modal('checks_modal').hide();
+                $('#item_search').val('');
+                $('#family_filter, #result_filter, #evidence_filter').val('');
+                filter();
+                open_item(controls[i].id);
+
+                var row = $('#items_body .item__row[data-id="' + controls[i].id + '"]')[0];
+
+                if (row) {
+                    row.scrollIntoView({ block: 'center' });
+                }
+
+                return;
+            }
+        }
+    });
+
+    function complete(button) {
+
+        set_loading(button, true);
 
         ApiDataSvc.apiCall('post', 'complete_assessment', { assessment_id: assessment_id }, function (data) {
 
             var obj = JSON.parse(data);
 
-            set_loading('#do_complete', false);
+            set_loading(button, false);
 
             if (obj.success) {
+                modal('checks_modal').hide();
                 toastr.success(obj.message);
                 set_status(obj.assessment_status);
                 load(true);
+            } else if (obj.issues) {
+                show_checks(obj.issues);
             } else {
                 toastr.error(obj.message);
             }
         });
+    }
+
+    $('#do_complete').click(function () {
+        complete('#do_complete');
+    });
+
+    $('#do_checks_complete').click(function () {
+        complete('#do_checks_complete');
     });
 
     function objective_summary(control) {
@@ -782,6 +1001,7 @@ $(document).ready(function () {
 
                 render();
                 filter();
+                refresh_checks();
             });
         });
     }
@@ -935,7 +1155,7 @@ $(document).ready(function () {
         render_objectives(list);
 
         $('#partial_row').toggle(partial !== null);
-        $('#partial_label').text(partial === null ? '' : 'Partially effective: subtract ' + partial + ' points instead of ' + weight);
+        $('#partial_label').text(partial === null ? '' : (partial_labels[current_item.control_identifier] || 'Partially effective') + ': subtract ' + partial + ' points instead of ' + weight);
         $('#item_partial_credit').prop('checked', parseInt(current_item.partial_credit, 10) === 1);
 
         set_result(current_item.item_result);
@@ -1416,6 +1636,17 @@ $(document).ready(function () {
 
     $('#details_type, #details_no_baseline, #details_ssi').on('change', sync_details_form);
 
+    $('.details__tier').each(function () {
+
+        var options = '<option value="0">Not set</option>';
+
+        for (var level in tiers) {
+            options += '<option value="' + level + '">Tier ' + level + ': ' + esc(tiers[level]) + '</option>';
+        }
+
+        $(this).html(options).val($(this).attr('data-current'));
+    });
+
     $('#do_details_open').click(function () {
 
         $('#details_type').val(details.assessment_type);
@@ -1454,6 +1685,10 @@ $(document).ready(function () {
                 return $(this).val();
             }).get(),
             ssi_reviewed: $('#details_ssi').is(':checked') ? '1' : '0',
+            tier_governance: $('#details_tier_governance').val() || '0',
+            tier_management: $('#details_tier_management').val() || '0',
+            target_tier_governance: $('#details_target_governance').val() || '0',
+            target_tier_management: $('#details_target_management').val() || '0',
             ssi_note: $('#details_ssi_note').length ? $('#details_ssi_note').val().trim() : ''
         };
 

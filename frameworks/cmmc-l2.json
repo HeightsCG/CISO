@@ -7,6 +7,13 @@
     "standard_codes": [
         "CMMC-L2"
     ],
+    "aliases": [
+        "CMMC",
+        "800-171",
+        "SPRS",
+        "DFARS 7012",
+        "CUI"
+    ],
     "content_licence": "public_domain",
     "sources": [
         {

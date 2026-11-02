@@ -7,6 +7,12 @@
     "standard_codes": [
         "EASA-PART-IS-I"
     ],
+    "aliases": [
+        "Part-IS",
+        "Part IS",
+        "EASA",
+        "2023/203"
+    ],
     "content_licence": "open",
     "sources": [
         {

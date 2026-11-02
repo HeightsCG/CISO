@@ -92,7 +92,9 @@ class FrameworkLibrary {
             'categories' => array(),
             'ssi_field' => null,
             'notice' => '',
-            'rolls_up' => false
+            'rolls_up' => false,
+            'tiers' => array(),
+            'partial_labels' => array()
         );
 
         if ($definition === null) {
@@ -117,6 +119,18 @@ class FrameworkLibrary {
 
         $features['notice'] = (string) ($definition['notice'] ?? '');
         $features['rolls_up'] = self::rolls_up($key);
+
+        foreach ($definition['rules'] as $rule) {
+            foreach (($rule['type'] ?? '') === 'partial_credit' ? ($rule['controls'] ?? array()) : array() as $id => $control) {
+                $features['partial_labels'][$id] = (string) ($control['partial_label'] ?? '');
+            }
+        }
+
+        if ($definition['scoring']['model'] === 'maturity') {
+            foreach ($definition['scoring']['levels'] as $level) {
+                $features['tiers'][(int) $level['level']] = $level['label'];
+            }
+        }
 
         return $features;
     }

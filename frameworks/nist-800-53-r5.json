@@ -7,6 +7,12 @@
     "standard_codes": [
         "NIST-800-53"
     ],
+    "aliases": [
+        "800-53",
+        "NIST 53",
+        "FISMA",
+        "RMF"
+    ],
     "content_licence": "public_domain",
     "release": "5.2.0",
     "sources": [

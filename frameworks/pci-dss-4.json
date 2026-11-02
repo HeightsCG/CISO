@@ -7,6 +7,12 @@
     "standard_codes": [
         "PCI-DSS"
     ],
+    "aliases": [
+        "PCI",
+        "PCI DSS",
+        "PCI-DSS",
+        "cardholder"
+    ],
     "content_licence": "ids_titles_only",
     "notice": "PCI DSS requirement numbers and principal requirement names are used for identification only. Requirement text is licensed by the PCI Security Standards Council; descriptions and guidance are written by HCG.",
     "sources": [

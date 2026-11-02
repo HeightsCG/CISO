@@ -7,6 +7,10 @@
     "standard_codes": [
         "CMMC-L3"
     ],
+    "aliases": [
+        "CMMC",
+        "800-172"
+    ],
     "content_licence": "public_domain",
     "sources": [
         {

@@ -7,6 +7,14 @@
     "standard_codes": [
         "NIST-800-171-R2"
     ],
+    "aliases": [
+        "800-171",
+        "NIST 171",
+        "SPRS",
+        "DFARS 7012",
+        "CUI",
+        "CMMC"
+    ],
     "content_licence": "public_domain",
     "sources": [
         {

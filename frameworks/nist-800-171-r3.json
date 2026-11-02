@@ -7,6 +7,11 @@
     "standard_codes": [
         "NIST-800-171"
     ],
+    "aliases": [
+        "800-171",
+        "NIST 171",
+        "CUI"
+    ],
     "content_licence": "public_domain",
     "sources": [
         {

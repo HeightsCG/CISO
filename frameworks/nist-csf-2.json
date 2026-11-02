@@ -7,6 +7,10 @@
     "standard_codes": [
         "NIST-CSF"
     ],
+    "aliases": [
+        "CSF",
+        "Cybersecurity Framework"
+    ],
     "content_licence": "public_domain",
     "sources": [
         {
@@ -110,7 +114,7 @@
         },
         {
             "id": "tier_by_practice_area",
-            "type": "rollup",
+            "type": "scoring",
             "summary": "A Tier is set for cybersecurity risk governance (the GOVERN function) and for cybersecurity risk management (the other five functions).",
             "source": "cswp29",
             "cite": "NIST CSWP 29, Appendix B",

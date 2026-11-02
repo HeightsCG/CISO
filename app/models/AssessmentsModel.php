@@ -899,10 +899,18 @@ class AssessmentsModel extends Model {
         $scope_categories,
         $ssi_reviewed,
         $ssi_note,
+        $tier_governance,
+        $tier_management,
+        $target_tier_governance,
+        $target_tier_management,
         $updated_by
     )
     {
         $data = array(
+            'tier_governance' => $tier_governance,
+            'tier_management' => $tier_management,
+            'target_tier_governance' => $target_tier_governance,
+            'target_tier_management' => $target_tier_management,
             'assessment_type' => $assessment_type,
             'baseline_assessment_id' => $baseline_assessment_id,
             'no_baseline' => $no_baseline,

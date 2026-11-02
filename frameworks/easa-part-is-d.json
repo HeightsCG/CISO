@@ -7,6 +7,12 @@
     "standard_codes": [
         "EASA-PART-IS-D"
     ],
+    "aliases": [
+        "Part-IS",
+        "Part IS",
+        "EASA",
+        "2022/1645"
+    ],
     "content_licence": "open",
     "sources": [
         {

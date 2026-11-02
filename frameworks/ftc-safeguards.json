@@ -7,6 +7,11 @@
     "standard_codes": [
         "FTC-SAFEGUARDS"
     ],
+    "aliases": [
+        "FTC",
+        "Safeguards Rule",
+        "GLBA"
+    ],
     "content_licence": "public_domain",
     "sources": [
         {

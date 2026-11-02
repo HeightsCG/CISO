@@ -7,6 +7,11 @@
     "standard_codes": [
         "NYDFS-500"
     ],
+    "aliases": [
+        "NYDFS",
+        "23 NYCRR",
+        "Part 500"
+    ],
     "content_licence": "public_domain",
     "sources": [
         {

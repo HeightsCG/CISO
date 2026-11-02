@@ -7,6 +7,10 @@
     "standard_codes": [
         "TSA-AVIATION-CYBER"
     ],
+    "aliases": [
+        "TSA",
+        "Security Directive"
+    ],
     "content_licence": "hcg_authored",
     "notice": "HCG control set based on public TSA outcomes",
     "sources": [

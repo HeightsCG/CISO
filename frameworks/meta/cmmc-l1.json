@@ -7,6 +7,11 @@
     "standard_codes": [
         "CMMC-L1"
     ],
+    "aliases": [
+        "CMMC",
+        "FAR 52.204-21",
+        "FCI"
+    ],
     "content_licence": "public_domain",
     "sources": [
         {
