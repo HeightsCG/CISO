@@ -35,7 +35,7 @@
                 <div class="row mb-4">
                     <div class="col-md-12 form-group">
                         <label for="standard_ids">Frameworks</label>
-                        <select id="standard_ids" class="selectpicker" multiple data-live-search="true" data-size="10" data-width="100%" title="Choose the frameworks this project covers"></select>
+                        <select id="standard_ids" class="selectpicker" multiple data-live-search="true" data-size="10" data-width="100%" data-style="form-control" data-selected-text-format="count > 3" title="Choose the frameworks this project covers"></select>
                     </div>
                 </div>
                 <div class="row mb-4">

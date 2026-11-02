@@ -1914,19 +1914,16 @@ table.data .actions {
     color: var(--critical);
 }
 
-.settings .bootstrap-select,
-.form-group .bootstrap-select {
+.settings .bootstrap-select {
     position: relative;
     width: 100% !important;
 }
 
-.settings .bootstrap-select.show,
-.form-group .bootstrap-select.show {
+.settings .bootstrap-select.show {
     z-index: 40;
 }
 
-.settings .bootstrap-select > .dropdown-toggle,
-.form-group .bootstrap-select > .dropdown-toggle {
+.settings .bootstrap-select > .dropdown-toggle {
     display: flex;
     align-items: center;
     height: var(--s-field);
@@ -1941,46 +1938,38 @@ table.data .actions {
     transition: border-color var(--transition), box-shadow var(--transition);
 }
 
-.settings .bootstrap-select > .dropdown-toggle:hover,
-.form-group .bootstrap-select > .dropdown-toggle:hover {
+.settings .bootstrap-select > .dropdown-toggle:hover {
     background: var(--surface-app);
     color: var(--text-primary);
     border-color: var(--text-muted);
 }
 
 .settings .bootstrap-select > .dropdown-toggle:focus,
-.form-group .bootstrap-select > .dropdown-toggle:focus,
 .settings .bootstrap-select > .dropdown-toggle:focus-visible,
-.form-group .bootstrap-select > .dropdown-toggle:focus-visible,
-.settings .bootstrap-select.show > .dropdown-toggle,
-.form-group .bootstrap-select.show > .dropdown-toggle {
+.settings .bootstrap-select.show > .dropdown-toggle {
     background: var(--surface-app);
     color: var(--text-primary);
     border-color: var(--accent);
     box-shadow: var(--s-ring);
 }
 
-.settings .bootstrap-select .dropdown-menu,
-.form-group .bootstrap-select .dropdown-menu {
+.settings .bootstrap-select .dropdown-menu {
     z-index: 40;
     border-radius: var(--radius);
     box-shadow: var(--s-shadow-lift);
 }
 
-.settings .bootstrap-select .dropdown-menu li.selected a,
-.form-group .bootstrap-select .dropdown-menu li.selected a {
+.settings .bootstrap-select .dropdown-menu li.selected a {
     background: var(--accent-subtle);
     color: var(--accent);
 }
 
-.settings .bootstrap-select .filter-option-inner-inner,
-.form-group .bootstrap-select .filter-option-inner-inner {
+.settings .bootstrap-select .filter-option-inner-inner {
     line-height: 1.2;
     color: var(--text-primary);
 }
 
-.settings .bootstrap-select .filter-option-inner,
-.form-group .bootstrap-select .filter-option-inner {
+.settings .bootstrap-select .filter-option-inner {
     width: 100%;
 }
 
@@ -7045,4 +7034,43 @@ table.data tbody tr.item__row.is-selected td {
 .checks__clear {
     font-size: var(--fs-meta);
     color: var(--text-muted);
+}
+
+.bootstrap-select > .form-control.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    min-height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 2rem 0.375rem 0.75rem;
+    font-weight: var(--fw-regular);
+    line-height: 1.5;
+    color: var(--text-primary);
+    text-align: left;
+}
+
+.bootstrap-select > .form-control.dropdown-toggle:hover {
+    color: var(--text-primary);
+    background: var(--surface-app);
+    border-color: var(--border);
+}
+
+.bootstrap-select > .form-control.dropdown-toggle .filter-option {
+    position: static;
+    display: flex;
+    align-items: center;
+    height: auto;
+    padding: 0;
+}
+
+.bootstrap-select > .form-control.dropdown-toggle .filter-option-inner-inner {
+    line-height: 1.5;
+    color: var(--text-primary);
+}
+
+.bootstrap-select > .form-control.dropdown-toggle.bs-placeholder .filter-option-inner-inner {
+    color: var(--text-muted);
+}
+
+.bootstrap-select.show > .form-control.dropdown-toggle {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-subtle);
 }
