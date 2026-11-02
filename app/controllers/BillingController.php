@@ -212,37 +212,13 @@ class BillingController extends Controller {
 
         $invoice = $this->invoices_model->get_invoice(Main::get_param('id'), Session::get('company_id'));
 
-        if (!is_array($invoice) || count($invoice) !== 1 || $invoice[0]['invoice_pdf_url'] === '') {
+        if (!is_array($invoice) || count($invoice) !== 1 || in_array($invoice[0]['invoice_status'], array('Draft', 'Finalizing'), true)) {
             Errors::page_not_found();
             return;
         }
 
-        $this->stream_invoice_pdf($invoice[0]['invoice_pdf_url'], $invoice[0]['invoice_number']);
-    }
-
-    /**
-     * The origin allow-list is not optional. Without it a corrupted or
-     * attacker-influenced URL in that column turns this action into a server-side
-     * request forgery primitive, fetching arbitrary internal addresses with the web
-     * server's network position.
-     */
-    private function stream_invoice_pdf($url, $invoice_number): void
-    {
-        if (!preg_match('#^https://[a-z0-9.\-]+\.stripe\.com/#i', $url)) {
-            error_log('[billing] refused to proxy a PDF from an unexpected origin');
-            Errors::page_not_found();
-            return;
-        }
-
-        $pdf = @file_get_contents($url);
-
-        if ($pdf === false || $pdf === '') {
-            Errors::page_not_found();
-            return;
-        }
-
-        /** The number comes from Stripe and lands in a header, so CR/LF cannot survive. */
-        $filename = preg_replace('/[^A-Za-z0-9\-]/', '', (string) $invoice_number);
+        $pdf      = InvoicePdf::render($invoice[0], $this->invoices_model->get_invoice_items($invoice[0]['id']), $this->company());
+        $filename = preg_replace('/[^A-Za-z0-9\-]/', '', (string) $invoice[0]['invoice_number']);
 
         header('Content-Type: application/pdf');
         header('Content-Disposition: inline; filename="'.($filename === '' ? 'invoice' : $filename).'.pdf"');

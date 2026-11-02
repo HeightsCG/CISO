@@ -872,14 +872,14 @@ class ReportRenderer {
         return $rows;
     }
 
-    private static function brand(array $company): string
+    public static function brand(array $company): string
     {
         $color = (string) ($company['brand_color'] ?? '');
 
         return preg_match('/^#[0-9A-Fa-f]{6}$/', $color) ? $color : '#1F3A5F';
     }
 
-    private static function accent(array $company): string
+    public static function accent(array $company): string
     {
         $color = (string) ($company['brand_color_accent'] ?? '');
 
@@ -887,7 +887,7 @@ class ReportRenderer {
     }
 
     /** The company logo as raw bytes and type, or null. Fetched once per render. */
-    private static function logo(array $company)
+    public static function logo(array $company)
     {
         $url = (string) ($company['logo_path'] ?? '');
 
