@@ -142,22 +142,52 @@ class S3Service {
      * (default 10 min). Returns '' if S3 isn't configured or $key is empty. The
      * CALLER is responsible for the entitlement check before calling this.
      */
-    public static function presigned_get_url($key, $ttl = 600): string
+    public static function presigned_get_url($key, $ttl = 600, $file_name = ''): string
     {
         if (!self::configured() || (string) $key === '') {
             return '';
         }
         try {
-            $cmd = self::client()->getCommand('GetObject', array(
-                'Bucket' => self::bucket(),
-                'Key'    => $key,
-            ));
+            $cmd = self::client()->getCommand('GetObject', self::get_object_params($key, $file_name));
             $request = self::client()->createPresignedRequest($cmd, '+' . (int) $ttl . ' seconds');
             return (string) $request->getUri();
         } catch (\Throwable $e) {
             error_log('[s3] presign failed: ' . $e->getMessage());
             return '';
         }
+    }
+
+    /**
+     * The stored content type came from sniffing the upload, so an HTML or SVG
+     * file named .txt or .xml would render as a page on the bucket's origin.
+     * Only PDFs and raster images open in the browser, and always with the type
+     * their extension promises; anything else is downloaded.
+     */
+    private static function get_object_params($key, $file_name): array
+    {
+        $inline_types = array(
+            'pdf'  => 'application/pdf',
+            'png'  => 'image/png',
+            'jpg'  => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'gif'  => 'image/gif',
+            'webp' => 'image/webp'
+        );
+
+        $extension = strtolower((string) pathinfo((string) $key, PATHINFO_EXTENSION));
+        $name = (string) $file_name !== '' ? (string) $file_name : basename((string) $key);
+        $ascii_name = preg_replace('/[^A-Za-z0-9._ -]/', '_', $name);
+        $disposition = (isset($inline_types[$extension]) ? 'inline' : 'attachment')
+            .'; filename="'.$ascii_name.'"; filename*=UTF-8\'\''.rawurlencode($name);
+
+        $params = array(
+            'Bucket'                     => self::bucket(),
+            'Key'                        => $key,
+            'ResponseContentDisposition' => $disposition,
+            'ResponseContentType'        => $inline_types[$extension] ?? 'application/octet-stream'
+        );
+
+        return $params;
     }
 
     /** Delete a private object by its raw key. */

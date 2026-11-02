@@ -1,9 +1,6 @@
 <?php
 class NotificationsModel extends Model {
 
-    /** Where all mail is diverted outside production. */
-    const NON_PRODUCTION_INBOX = 'danglauber@gmail.com';
-
     public function __construct(){
         parent::__construct();
     }
@@ -149,6 +146,14 @@ class NotificationsModel extends Model {
     {
         if (Main::get_environment() !== 'production') {
 
+            $config = Main::get_config();
+            $divert_to = (string) ($config[Main::get_environment()]['mail_divert_to'] ?? '');
+
+            if ($divert_to === '') {
+                error_log('[mail] not sent: set mail_divert_to for the '.Main::get_environment().' environment');
+                return false;
+            }
+
             $intended = array();
 
             foreach ($to_array as $recipient) {
@@ -159,7 +164,7 @@ class NotificationsModel extends Model {
             $cc_array = 0;
             $to_array = array(
                 array(
-                    'email' => self::NON_PRODUCTION_INBOX,
+                    'email' => $divert_to,
                     'name' => Main::site_name()
                 )
             );

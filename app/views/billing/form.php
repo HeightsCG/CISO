@@ -1056,7 +1056,7 @@ $(document).ready(function () {
     load_clients();
 
     <?php foreach ($this->items as $item) { ?>
-    add_line("<?php echo htmlspecialchars(addslashes($item['item_description']), ENT_QUOTES, 'UTF-8'); ?>", "<?php echo Money::format_quantity($item['quantity_milli']); ?>", "<?php echo number_format($item['unit_amount_cents'] / 100, 2, '.', ''); ?>", "<?php echo ($item['discount_type'] === 'Percent' ? Money::format_percent($item['discount_percent_bp']) : ($item['discount_type'] === 'Amount' ? number_format($item['discount_cents'] / 100, 2, '.', '') : '0')); ?>", "<?php echo htmlspecialchars($item['discount_type'], ENT_QUOTES, 'UTF-8'); ?>");
+    add_line(<?php echo json_encode(html_entity_decode((string) $item['item_description'], ENT_QUOTES, 'UTF-8'), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>, "<?php echo Money::format_quantity($item['quantity_milli']); ?>", "<?php echo number_format($item['unit_amount_cents'] / 100, 2, '.', ''); ?>", "<?php echo ($item['discount_type'] === 'Percent' ? Money::format_percent($item['discount_percent_bp']) : ($item['discount_type'] === 'Amount' ? number_format($item['discount_cents'] / 100, 2, '.', '') : '0')); ?>", "<?php echo htmlspecialchars($item['discount_type'], ENT_QUOTES, 'UTF-8'); ?>");
     <?php } ?>
 
     <?php if ($this->invoice !== null && $this->invoice['due_date'] !== null) { ?>

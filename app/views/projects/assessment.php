@@ -226,7 +226,7 @@ $(document).ready(function () {
 
     var assessment_id = <?php echo (int) $this->assessment['id']; ?>;
     var project_id = <?php echo (int) $this->assessment['project_id']; ?>;
-    var project_name = "<?php echo htmlspecialchars($this->assessment['project_name'], ENT_QUOTES, 'UTF-8'); ?>";
+    var project_name = <?php echo json_encode(html_entity_decode((string) $this->assessment['project_name'], ENT_QUOTES, 'UTF-8'), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
     var items = [];
     var current_item = null;
 

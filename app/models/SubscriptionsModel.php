@@ -258,6 +258,30 @@ class SubscriptionsModel extends Model {
         return parent::select($sql, $where);
     }
 
+    /** Subscriptions for this client that Stripe may still be billing. */
+    public function count_live_client_subscriptions($client_id, $company_id)
+    {
+        $where = array(
+            'client_id'  => $client_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    COUNT(*) AS live_count
+                FROM
+                    subscriptions
+                WHERE
+                    client_id = :client_id
+                    and
+                    company_id = :company_id
+                    and
+                    subscription_status not in ('Draft', 'Canceled', 'Incomplete Expired')
+                    and
+                    deleted = 0";
+        $rows = parent::select($sql, $where);
+
+        return isset($rows[0]['live_count']) ? (int) $rows[0]['live_count'] : 0;
+    }
+
     public function delete_subscription($subscription_id, $company_id, $updated_by)
     {
         $where = array(

@@ -361,8 +361,11 @@ class StripeService {
                 'limit'    => 10
             ));
 
+            /* Entitlement, not display: past_due keeps the plan while Stripe retries,
+               but unpaid (retries exhausted) and paused (trial ended without a
+               card) fall back to the free tier until payment is fixed. */
             foreach ($list->data as $subscription) {
-                if (in_array($subscription->status, array('active', 'trialing', 'past_due', 'unpaid', 'paused'), true)) {
+                if (in_array($subscription->status, array('active', 'trialing', 'past_due'), true)) {
                     return array('reachable' => true, 'subscription' => $subscription->toArray());
                 }
             }
@@ -566,6 +569,9 @@ class StripeService {
      * always_invoice rather than create_prorations: the person has just been
      * shown what this costs and agreed to it, so it is billed now at that figure
      * rather than appearing unannounced on the next invoice.
+     *
+     * pending_if_incomplete: the new price only takes effect once that invoice
+     * is paid, so a declined card cannot buy a higher plan.
      */
     public static function change_platform_subscription($subscription_id, $item_id, $price_id, $proration_date = 0): array
     {
@@ -579,6 +585,7 @@ class StripeService {
                 'price' => $price_id
             )),
             'proration_behavior' => 'always_invoice',
+            'payment_behavior'   => 'pending_if_incomplete',
             'expand'             => array('latest_invoice.confirmation_secret')
         );
 

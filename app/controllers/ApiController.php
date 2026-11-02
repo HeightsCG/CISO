@@ -25,6 +25,7 @@ class ApiController extends Controller {
     public $standards_model;
     public $dashboard_model;
     public $invoices_model;
+    public $subscriptions_model;
 
     public function __construct(){
         parent::__construct();
@@ -587,7 +588,7 @@ class ApiController extends Controller {
             exit;
         }
 
-        if (!empty($this->post['website']) && !filter_var($this->post['website'], FILTER_VALIDATE_URL)) {
+        if (!empty($this->post['website']) && !$this->is_web_url(html_entity_decode($this->post['website'], ENT_QUOTES, 'UTF-8'))) {
             $response['message'] = 'Enter a valid website address, including https://';
             echo json_encode($response);
             exit;
@@ -937,7 +938,7 @@ class ApiController extends Controller {
             exit;
         }
 
-        $url = S3Service::presigned_get_url($evidence['file_key'], 300);
+        $url = S3Service::presigned_get_url($evidence['file_key'], 300, html_entity_decode((string) $evidence['file_name'], ENT_QUOTES, 'UTF-8'));
 
         if ($url === '') {
             $response['message'] = 'That file could not be opened';
@@ -1399,7 +1400,7 @@ class ApiController extends Controller {
 
         $website = html_entity_decode((string) ($this->post['website'] ?? ''), ENT_QUOTES, 'UTF-8');
 
-        if ($website !== '' && !filter_var($website, FILTER_VALIDATE_URL)) {
+        if ($website !== '' && !$this->is_web_url($website)) {
             $response['message'] = 'Enter a valid website address, including https://';
             echo json_encode($response);
             return;
@@ -1498,7 +1499,16 @@ class ApiController extends Controller {
             return;
         }
 
+        $live = $this->subscriptions_model->count_live_client_subscriptions($client_id, $company_id);
+
+        if ($live > 0) {
+            $response['message'] = 'This client has '.$live.' active subscription(s). Cancel them first.';
+            echo json_encode($response);
+            return;
+        }
+
         $this->clients_model->delete_client($client_id, $company_id, Session::get('user_id'));
+        $this->user_model->disable_client_users($client_id, $company_id);
 
         $response['success'] = true;
         $response['message'] = 'Client deleted';
@@ -1778,6 +1788,14 @@ class ApiController extends Controller {
                 $response['message'] = 'User ID is required';
                 echo json_encode($response);
                 exit;
+            }
+
+            $existing = $this->editable_company_user($this->post['user_id']);
+
+            /* A portal account does not hold a seat, so turning one into staff
+               takes a seat and has to pass the same limit as adding one. */
+            if ($existing['user_type'] === 'portal' && $user_type === 'staff') {
+                $this->refuse_unless_plan_allows('users', $this->user_model->count_users($company_id), 'users');
             }
 
             $this->user_model->update_user(
@@ -2168,7 +2186,15 @@ class ApiController extends Controller {
             'message' => 'Something went wrong'
         );
 
-        $this->user_model->delete_user($this->post['user_id'], Session::get('company_id'));
+        $user = $this->editable_company_user($this->post['user_id'] ?? 0);
+
+        if ((int) $user['user_id'] === (int) Session::get('user_id')) {
+            $response['message'] = 'You cannot remove your own account';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->user_model->delete_user($user['user_id'], Session::get('company_id'));
 
         $response['success'] = true;
         $response['message'] = 'User removed';
@@ -2184,15 +2210,7 @@ class ApiController extends Controller {
             'message' => 'Something went wrong'
         );
 
-        $rows = $this->user_model->get_company_user($this->post['user_id'], Session::get('company_id'));
-
-        if (count($rows) !== 1) {
-            $response['message'] = 'That user could not be found';
-            echo json_encode($response);
-            exit;
-        }
-
-        $user = $rows[0];
+        $user = $this->editable_company_user($this->post['user_id'] ?? 0);
         $raw_token = $this->user_model->set_reset_token($user['user_id']);
         $this->notifications_model->send_password_reset($user['user_email'], $user['first_name'], $raw_token);
 
@@ -3506,7 +3524,7 @@ class ApiController extends Controller {
 
         // Short-lived signed URL: the object itself stays private, so a link that
         // leaks stops working within minutes.
-        $url = S3Service::presigned_get_url($evidence[0]['file_key'], 300);
+        $url = S3Service::presigned_get_url($evidence[0]['file_key'], 300, html_entity_decode((string) $evidence[0]['file_name'], ENT_QUOTES, 'UTF-8'));
 
         if ($url === '') {
             $response['message'] = 'That file could not be opened';
@@ -3725,7 +3743,13 @@ class ApiController extends Controller {
             return '';
         }
 
-        if (!in_array($subscription['status'] ?? '', array('incomplete', 'past_due', 'unpaid'), true)) {
+        /* A plan change whose charge did not go through leaves the subscription
+           active with a pending_update, and the change only lands once this
+           invoice is paid. */
+        $awaiting_payment = in_array($subscription['status'] ?? '', array('incomplete', 'past_due', 'unpaid'), true)
+            || !empty($subscription['pending_update']);
+
+        if (!$awaiting_payment) {
             return '';
         }
 
@@ -3958,7 +3982,7 @@ class ApiController extends Controller {
         Plans::forget();
 
         $response['success'] = true;
-        $response['message'] = 'Plan changed';
+        $response['message'] = (empty($changed['pending_update']) ? 'Plan changed' : 'Complete the payment to change your plan');
         $response['client_secret'] = $this->payment_secret_if_due($changed);
         echo json_encode($response);
     }
@@ -5627,6 +5651,33 @@ class ApiController extends Controller {
         $response['message'] = 'ok';
         $response['url'] = $url;
         echo json_encode($response);
+    }
+
+    /**
+     * A user in this company that a company admin may edit, reset or remove.
+     * Global admins are refused: a company admin who could change their email
+     * and send a reset would take over the cross-tenant account.
+     */
+    private function editable_company_user($user_id): array
+    {
+        $rows = $this->user_model->get_company_user((int) $user_id, Session::get('company_id'));
+
+        if (!is_array($rows) || count($rows) !== 1 || (int) $rows[0]['global_admin'] === 1) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'That user could not be found'
+            ));
+            exit;
+        }
+
+        return $rows[0];
+    }
+
+    /** A link that is safe to put in an href: http or https only, never javascript: or data:. */
+    private function is_web_url(string $url): bool
+    {
+        return filter_var($url, FILTER_VALIDATE_URL) !== false
+            && preg_match('#^https?://#i', $url) === 1;
     }
 
     private function owns_client($client_id): bool

@@ -69,29 +69,23 @@ class UsersModel extends Model {
         return parent::select($sql, $where);
     }
 
-    /**
-     * Staff accounts this company has, for the plan limit. Portal users belong to
-     * a client rather than to the company's own seat count, so they are not
-     * counted here.
-     */
     public function count_users($company_id)
     {
         $where = array(
             'company_id' => $company_id
         );
         $sql = "SELECT COUNT(*) AS total
-                FROM user_accounts
-                WHERE company_id = :company_id and user_type = 'staff' and deleted = 0";
-        $rows = parent::select($sql, $where);
-
-        return (int) ($rows[0]['total'] ?? 0);
+                FROM 
+                    user_accounts
+                WHERE 
+                    company_id = :company_id 
+                    and 
+                    user_type = 'staff' 
+                    and 
+                    deleted = 0";
+        return count(parent::select($sql, $where));
     }
 
-    /**
-     * Every account in the system, for the global admin roster. The date format
-     * is joined through each user's own company, so a row reads in the format that
-     * company uses rather than the one the admin signed in under.
-     */
     public function get_all_users()
     {
         $sql = "SELECT
@@ -307,6 +301,52 @@ class UsersModel extends Model {
         return parent::select($sql, $where);
     }
 
+    /**
+     * What the session is allowed to keep trusting, read fresh on every request.
+     * A missing row means the account was deleted.
+     */
+    public function get_session_state($user_id)
+    {
+        $where = array(
+            'user_id' => $user_id
+        );
+        $sql = "SELECT
+                    u.user_id,
+                    u.company_id,
+                    u.role_id,
+                    u.user_type,
+                    u.client_id,
+                    u.global_admin,
+                    u.user_status,
+                    u.reset_pw,
+                    c.deleted AS company_deleted,
+                    cl.deleted AS client_deleted
+                FROM
+                    user_accounts u
+                    LEFT JOIN companies c ON c.id = u.company_id
+                    LEFT JOIN clients cl ON cl.id = u.client_id
+                WHERE
+                    u.user_id = :user_id
+                    and
+                    u.deleted = 0";
+        return parent::select($sql, $where);
+    }
+
+    /** Disable every portal account belonging to a client that is being removed. */
+    public function disable_client_users($client_id, $company_id)
+    {
+        $where = array(
+            'client_id' => $client_id,
+            'company_id' => $company_id
+        );
+        $data = array(
+            'user_status' => 'Disabled',
+            'updated_by' => Session::get('user_id'),
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+        return parent::update('user_accounts', $data, "client_id = :client_id and company_id = :company_id and user_type = 'portal'", $where);
+    }
+
     public function get_user_by_reset_token($raw_token)
     {
         $where = array(
@@ -434,6 +474,7 @@ class UsersModel extends Model {
                     u.reset_pw,
                     u.user_type,
                     u.client_id,
+                    u.global_admin,
                     DATE_FORMAT(u.date_created, df.sql_format) AS date_created_display
                 FROM
                     user_accounts u

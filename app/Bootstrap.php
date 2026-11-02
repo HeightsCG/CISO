@@ -12,12 +12,21 @@ class Bootstrap
         $env    = Main::get_environment();
         $config = Main::get_config();
 
+        if ($env === '' || !isset($config[$env])) {
+            error_log('[boot] APPLICATION_ENV is unset or has no section in app.ini');
+            http_response_code(500);
+            echo 'The application is not configured.';
+            return;
+        }
+
         $this->configure_errors();
         date_default_timezone_set($config['global']['timezone'] ?? 'UTC');
         $this->configure_session($config, $env);
 
         Session::init();
         $this->enforce_idle_timeout();
+        $this->revalidate_session();
+        $this->enforce_forced_reset();
 
         $c = Main::controller_name();
         $m = Main::method_name();
@@ -75,26 +84,99 @@ class Bootstrap
         $last_activity = (int) Session::get('last_activity');
 
         if ($last_activity > 0 && (time() - $last_activity) > ($minutes * 60)) {
-
-            Session::destroy();
-
-            if (strtolower(Main::controller_name()) === 'apicontroller') {
-
-                $response = array(
-                    'success' => false,
-                    'message' => 'Your session has expired. Sign in again.'
-                );
-
-                header('Content-Type: application/json');
-                echo json_encode($response);
-                exit;
-            }
-
-            header('Location: /');
-            exit;
+            $this->end_session('Your session has expired. Sign in again.');
         }
 
         Session::set('last_activity', time());
+    }
+
+    /**
+     * The session was filled from the user row at sign-in. Everything access
+     * control reads from it is re-read here, so a user who is deleted, disabled,
+     * demoted or moved loses the old access on their next request rather than
+     * when the session happens to end.
+     */
+    private function revalidate_session(): void
+    {
+        $user_id = (int) Session::get('user_id');
+
+        if ($user_id <= 0) {
+            return;
+        }
+
+        $users_model = new UsersModel();
+        $rows = $users_model->get_session_state($user_id);
+
+        if (!is_array($rows) || count($rows) !== 1) {
+            $this->end_session('Your session has ended. Sign in again.');
+        }
+
+        $user = $rows[0];
+
+        $ended = $user['user_status'] !== 'Active'
+            || (int) $user['company_deleted'] === 1
+            || ($user['user_type'] === 'portal' && (empty($user['client_id']) || $user['client_deleted'] === null || (int) $user['client_deleted'] === 1));
+
+        if ($ended) {
+            $this->end_session('Your session has ended. Sign in again.');
+        }
+
+        $fields = array(
+            'company_id',
+            'role_id',
+            'user_type',
+            'client_id',
+            'global_admin',
+            'user_status',
+            'reset_pw'
+        );
+
+        foreach ($fields as $field) {
+            Session::set($field, $user[$field]);
+        }
+    }
+
+    /**
+     * A forced password change is shown by the layout, but the API answers
+     * without one, so until the password is changed the only API action left
+     * open is the change itself.
+     */
+    private function enforce_forced_reset(): void
+    {
+        if ((int) Session::get('reset_pw') !== 1) {
+            return;
+        }
+
+        if (strtolower(Main::controller_name()) !== 'apicontroller' || Main::method_name() === 'change_passwordAction') {
+            return;
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode(array(
+            'success' => false,
+            'message' => 'Change your password to continue.'
+        ));
+        exit;
+    }
+
+    private function end_session(string $message): void
+    {
+        Session::destroy();
+
+        if (strtolower(Main::controller_name()) === 'apicontroller') {
+
+            $response = array(
+                'success' => false,
+                'message' => $message
+            );
+
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            exit;
+        }
+
+        header('Location: /');
+        exit;
     }
 
     private function configure_session(array $config, string $env): void

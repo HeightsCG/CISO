@@ -4,8 +4,6 @@ var hostname = window.location.hostname;
 var protocol = window.location.protocol;
 var url = protocol+"//"+hostname+"/api/";
 
-var storage = window.localStorage;
-
 var ApiDataSvc = {
     baseUrl: url,
     apiCall: apiCall
@@ -24,43 +22,33 @@ $.ajaxSetup({
 
 function apiCall(type, endpoint, body, success, callFail) {
 
-    var url  = this.baseUrl + endpoint;
-    if (type === 'post' && body && typeof body === 'object' && !(body instanceof FormData)) {
+    var url = this.baseUrl + endpoint;
+
+    if (type !== 'post') {
+        toastr.error('Something went wrong. Please try again.');
+        return null;
+    }
+
+    if (body && typeof body === 'object' && !(body instanceof FormData)) {
         var csrfMeta = document.querySelector('meta[name="csrf-token"]');
         if (csrfMeta) {
             body.csrf_token = csrfMeta.getAttribute('content');
         }
     }
 
-    switch (type) {
-        case 'get':
-            $.get(url, body, success, callFail);
-            break;
+    var request = $.post(url, body, success);
 
-        case 'post':
-            $.post(url, body, success, callFail);
-            break;
+    request.fail(function (xhr, status) {
+        if (status === 'abort') {
+            return;
+        }
+        if (typeof callFail === 'function') {
+            callFail(xhr, status);
+            return;
+        }
+        $('.is-loading').removeClass('is-loading').prop('disabled', false);
+        toastr.error(navigator.onLine ? 'The server could not be reached. Please try again.' : 'You appear to be offline. Check your connection and try again.');
+    });
 
-        case 'put':
-            $.put(url, body, success, callFail);
-            break;
-
-        case 'delete':
-            $.delete(url, body, success, callFail);
-            break;
-
-        default:
-            callFailed();
-    }
-
-    function callFailed() {
-        var conn = checkConnection();
-        sweetAlert("Connection Error", "Please try again later..."+conn, "error");
-    }
-    
-    function checkConnection() {
-        var online = navigator.onLine;
-        return online;
-    }
-
+    return request;
 }
