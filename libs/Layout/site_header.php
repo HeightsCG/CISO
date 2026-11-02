@@ -27,6 +27,7 @@
 <script src="/js/api.data.js?v=<?php echo (int) @filemtime(Main::app_path().'/public/js/api.data.js'); ?>"></script>
 <script src="/js/address.autocomplete.js?v=<?php echo (int) @filemtime(Main::app_path().'/public/js/address.autocomplete.js'); ?>"></script>
 <script src="/js/site.js?v=<?php echo (int) @filemtime(Main::app_path().'/public/js/site.js'); ?>"></script>
+<script src="/js/ai.assist.js?v=<?php echo (int) @filemtime(Main::app_path().'/public/js/ai.assist.js'); ?>"></script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
@@ -51,7 +52,7 @@ $(document).ready(function () {
 </head>
 <body>
 
-<div class="shell">
+<div class="shell<?php echo (AiAssistant::configured() && Session::get('ai_panel_open') !== 0) ? ' has-assist' : ''; ?>" id="shell">
     <aside class="shell__nav" id="shell_nav">
         <div class="shell__brand">
             <img class="shell__logo" src="/images/logo-dark.png" alt="CISO.aero">
@@ -108,6 +109,12 @@ $(document).ready(function () {
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
             </button>
             <div class="shell__topbar-spacer"></div>
+            <?php if (AiAssistant::configured()) { ?>
+            <button type="button" class="shell__assist-toggle" id="assist_toggle" aria-label="Show or hide the assistant">
+                <i class="fa-regular fa-sparkles"></i>
+                <span>Assistant</span>
+            </button>
+            <?php } ?>
             <div class="shell__user dropdown">
                 <button type="button" class="shell__user-btn" data-bs-toggle="dropdown" aria-expanded="false">
                     <span class="shell__avatar"><?php echo htmlspecialchars(strtoupper(substr(Session::get('first_name'), 0, 1) . substr(Session::get('last_name'), 0, 1)), ENT_QUOTES, 'UTF-8'); ?></span>

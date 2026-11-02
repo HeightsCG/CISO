@@ -12,13 +12,6 @@ class Bootstrap
         $env    = Main::get_environment();
         $config = Main::get_config();
 
-        if ($env === '' || !isset($config[$env])) {
-            error_log('[boot] APPLICATION_ENV is unset or has no section in app.ini');
-            http_response_code(500);
-            echo 'The application is not configured.';
-            return;
-        }
-
         $this->configure_errors();
         date_default_timezone_set($config['global']['timezone'] ?? 'UTC');
         $this->configure_session($config, $env);
@@ -281,6 +274,12 @@ class Bootstrap
         }
 
         if ($name === 'apicontroller' && strpos($method, 'portal_') === 0) {
+            return;
+        }
+
+        /* The assistant's actions are shared with staff and scope themselves to
+           the caller's client inside AiAssistant. */
+        if ($name === 'apicontroller' && strpos($method, 'ai_') === 0) {
             return;
         }
 

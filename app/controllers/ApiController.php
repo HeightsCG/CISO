@@ -5673,6 +5673,148 @@ class ApiController extends Controller {
         return $rows[0];
     }
 
+    /* ------------------------------------------------------------ assistant */
+
+    public function ai_conversationsAction(){
+
+        $ai_model = new AiModel();
+        echo json_encode($ai_model->load_conversations(Session::get('user_id'), Session::get('company_id')));
+        exit;
+    }
+
+    public function ai_historyAction(){
+
+        $this->refuse_unless_ai_configured();
+
+        $assistant = new AiAssistant();
+        echo json_encode($assistant->history((int) ($this->post['conversation_id'] ?? 0)));
+        exit;
+    }
+
+    public function ai_sendAction(){
+
+        $this->refuse_unless_ai_configured();
+
+        set_time_limit(300);
+
+        $attachment_ids = array_filter(array_map('intval', explode(',', (string) ($this->post['attachment_ids'] ?? ''))));
+
+        $assistant = new AiAssistant();
+        $response = $assistant->send(
+            (int) ($this->post['conversation_id'] ?? 0),
+            $this->input('message'),
+            $attachment_ids,
+            $this->input('page_path')
+        );
+
+        echo json_encode($response);
+        exit;
+    }
+
+    public function ai_resolveAction(){
+
+        $this->refuse_unless_ai_configured();
+
+        set_time_limit(300);
+
+        $assistant = new AiAssistant();
+        $response = $assistant->resolve(
+            (int) ($this->post['conversation_id'] ?? 0),
+            $this->input('tool_use_id'),
+            ($this->post['confirmed'] ?? '') === '1',
+            ($this->post['succeeded'] ?? '') === '1',
+            mb_substr($this->input('outcome'), 0, 500)
+        );
+
+        echo json_encode($response);
+        exit;
+    }
+
+    public function ai_uploadAction(){
+
+        $this->refuse_unless_ai_configured();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        if (!isset($_FILES['ai_file']) || $_FILES['ai_file']['error'] !== UPLOAD_ERR_OK) {
+            $response['message'] = 'Choose a file to attach';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($_FILES['ai_file']['size'] > 26214400) {
+            $response['message'] = 'The file must be 25MB or smaller';
+            echo json_encode($response);
+            exit;
+        }
+
+        $allowed_extensions = array(
+            'pdf',
+            'png',
+            'jpg',
+            'jpeg',
+            'gif',
+            'webp',
+            'docx',
+            'xlsx',
+            'txt',
+            'csv',
+            'md',
+            'json',
+            'xml',
+            'log'
+        );
+
+        $file_name = basename((string) $_FILES['ai_file']['name']);
+        $extension = strtolower((string) pathinfo($file_name, PATHINFO_EXTENSION));
+
+        if (!in_array($extension, $allowed_extensions, true)) {
+            $response['message'] = 'The assistant reads PDF, image, Word, Excel and text files';
+            echo json_encode($response);
+            exit;
+        }
+
+        try {
+            $assistant = new AiAssistant();
+            $response = $assistant->upload($_FILES['ai_file']['tmp_name'], $file_name, (int) $_FILES['ai_file']['size']);
+        } catch (\Throwable $e) {
+            error_log('[ai] upload failed: '.$e->getMessage());
+            $response['message'] = 'That file could not be attached';
+        }
+
+        echo json_encode($response);
+        exit;
+    }
+
+    public function ai_panelAction(){
+
+        Session::set('ai_panel_open', ($this->post['open'] ?? '') === '1' ? 1 : 0);
+
+        $response = array(
+            'success' => true,
+            'message' => 'ok'
+        );
+
+        echo json_encode($response);
+        exit;
+    }
+
+    private function refuse_unless_ai_configured(): void
+    {
+        if (AiAssistant::configured()) {
+            return;
+        }
+
+        echo json_encode(array(
+            'success' => false,
+            'message' => 'The assistant is not set up yet'
+        ));
+        exit;
+    }
+
     /** A link that is safe to put in an href: http or https only, never javascript: or data:. */
     private function is_web_url(string $url): bool
     {

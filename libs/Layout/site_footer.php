@@ -1,5 +1,30 @@
         </main>
     </div>
+    <?php if (AiAssistant::configured()) { ?>
+    <aside class="assist" id="assist" aria-label="Assistant">
+        <div class="assist__head">
+            <select class="form-select form-select-sm assist__picker" id="assist_conversations" aria-label="Conversations"></select>
+            <button type="button" class="btn btn--tertiary btn--sm" id="assist_new">New chat</button>
+            <button type="button" class="assist__close" id="assist_close" aria-label="Hide assistant">
+                <i class="fa-regular fa-xmark"></i>
+            </button>
+        </div>
+        <div class="assist__messages" id="assist_messages">
+            <p class="assist__empty" id="assist_empty"><?php echo Session::get('user_type') === 'portal' ? 'Ask about your projects, assessments, evidence and invoices, or attach a file to discuss.' : 'Ask about your clients, projects, assessments and evidence, ask for changes, or attach a file to discuss.'; ?></p>
+        </div>
+        <div class="assist__composer">
+            <div class="assist__files" id="assist_files"></div>
+            <textarea class="form-control assist__input" id="assist_input" rows="3" aria-label="Message the assistant"></textarea>
+            <div class="assist__bar">
+                <button type="button" class="btn btn--tertiary btn--sm" id="assist_attach" aria-label="Attach a file">
+                    <i class="fa-regular fa-paperclip"></i>
+                </button>
+                <input type="file" id="assist_file" accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.docx,.xlsx,.txt,.csv,.md,.json,.xml,.log" hidden>
+                <button type="button" class="btn btn--primary btn--sm" id="assist_send">Send</button>
+            </div>
+        </div>
+    </aside>
+    <?php } ?>
 </div>
 <div class="modal fade policy-modal" id="privacy_modal" tabindex="-1" aria-labelledby="privacy_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
