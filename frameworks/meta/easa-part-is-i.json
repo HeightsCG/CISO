@@ -70,6 +70,13 @@
     },
     "rules": [
         {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every applicable point of it is met.",
+            "source": "reg203",
+            "cite": "Regulation (EU) 2023/203, Annex II (Part-IS.I.OR)"
+        },
+        {
             "id": "applies_from",
             "type": "effective_date",
             "date": "2026-02-22",

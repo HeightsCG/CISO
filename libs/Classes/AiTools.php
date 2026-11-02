@@ -789,7 +789,7 @@ class AiTools {
             if (count($this->assessments_model->get_assessment($assessment_id, $company_id)) !== 1) {
                 return null;
             }
-            return self::rows($this->assessments_model->load_items($assessment_id, $company_id));
+            return self::rows($this->assessments_model->load_controls($assessment_id, $company_id));
         }
 
         if ($name === 'get_assessment_results') {

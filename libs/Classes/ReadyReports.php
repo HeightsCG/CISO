@@ -173,7 +173,7 @@ class ReadyReports {
         }
 
         $assessment = $rows[0];
-        $items = $this->assessments_model->load_items($assessment_id, $this->company_id);
+        $items = $this->assessments_model->load_controls($assessment_id, $this->company_id);
         $counts = array_fill_keys(self::RESULTS, 0);
         $families = array();
 
@@ -1288,7 +1288,7 @@ class ReadyReports {
 
         foreach ($this->assessments_model->load_assessments($project_id, $this->company_id) as $assessment) {
             $rows_missing = array();
-            foreach ($this->assessments_model->load_items((int) $assessment['id'], $this->company_id) as $item) {
+            foreach ($this->assessments_model->load_controls((int) $assessment['id'], $this->company_id) as $item) {
                 if ((int) $item['evidence_count'] === 0 && $item['item_result'] !== 'Not Applicable') {
                     $rows_missing[] = array(
                         self::plain($item['control_identifier']),

@@ -1,4 +1,4 @@
-<div class="page">
+<div class="page page--assessment">
     <a class="page__back" href="/projects/detail/id/<?php echo (int) $this->assessment['project_id']; ?>"><i class="fa-regular fa-arrow-left"></i> Back to <?php echo htmlspecialchars($this->assessment['project_name'], ENT_QUOTES, 'UTF-8'); ?></a>
 
     <div class="page__head">
@@ -6,14 +6,19 @@
             <h1 class="page__title"><?php echo htmlspecialchars($this->assessment['assessment_name'], ENT_QUOTES, 'UTF-8'); ?></h1>
             <div class="client__meta">
                 <span class="badge" id="status_badge"><?php echo htmlspecialchars($this->assessment['assessment_status'], ENT_QUOTES, 'UTF-8'); ?></span>
+                <span class="client__segment"><?php echo htmlspecialchars($this->assessment['assessment_type'], ENT_QUOTES, 'UTF-8'); ?></span>
                 <span class="client__segment"><?php echo htmlspecialchars(FrameworkLibrary::display_name($this->assessment['standard_name'], $this->assessment['version']), ENT_QUOTES, 'UTF-8'); ?></span>
-                <span class="client__segment"><?php echo htmlspecialchars($this->assessment['short_code'], ENT_QUOTES, 'UTF-8'); ?></span>
-                <span class="client__segment"><?php echo (int) $this->assessment['item_count']; ?> items</span>
+                <span class="client__segment" id="control_count">&nbsp;</span>
                 <span class="client__segment">Evidence vault: <?php echo htmlspecialchars($this->assessment['project_name'], ENT_QUOTES, 'UTF-8'); ?></span>
             </div>
         </div>
         <div class="page__actions">
             <a class="btn btn--secondary" href="/projects/evidence/id/<?php echo (int) $this->assessment['project_id']; ?>/from/assessment/ref/<?php echo (int) $this->assessment['id']; ?>"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>
+            <button type="button" class="btn btn--secondary" id="do_details_open"><i class="fa-regular fa-sliders"></i> Details</button>
+            <button type="button" class="btn btn--secondary" id="do_narrative_open"><i class="fa-regular fa-pen-line"></i> Narrative</button>
+            <?php if ($this->features['governing_document'] !== null) { ?>
+            <a class="btn btn--secondary" href="/projects/document/id/<?php echo (int) $this->assessment['id']; ?>"><i class="fa-regular fa-file-lines"></i> <?php echo htmlspecialchars(ucfirst($this->features['governing_document']['short']), ENT_QUOTES, 'UTF-8'); ?></a>
+            <?php } ?>
             <button type="button" class="btn btn--secondary" id="do_reports_open"><i class="fa-regular fa-file-chart-column"></i> Reports</button>
             <button type="button" class="btn btn--primary" id="do_complete"><i class="fa-regular fa-circle-check"></i> Mark Complete</button>
             <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete</button>
@@ -30,7 +35,7 @@
         </div>
     </div>
 
-    <div class="panel record__panel">
+    <div class="panel record__panel workbench">
         <div class="panel__head roster__toolbar">
             <input type="search" id="item_search" class="input roster__search" placeholder="Search by identifier or title..." autocomplete="off" spellcheck="false">
             <div class="roster__filters">
@@ -58,8 +63,8 @@
                 </div>
             </div>
         </div>
-        <div class="panel__body panel__body--flush">
-            <div class="table-wrap controls__scroll">
+        <div class="workbench__body">
+            <div class="workbench__list">
                 <table class="data controls__table" id="items_table">
                     <thead>
                         <tr>
@@ -71,58 +76,252 @@
                     </thead>
                     <tbody id="items_body"></tbody>
                 </table>
+                <p class="controls__empty" id="items_empty">Loading items&hellip;</p>
             </div>
-            <p class="controls__empty" id="items_empty">Loading items&hellip;</p>
+
+            <section class="workbench__detail" id="detail" aria-label="Control detail">
+                <p class="workbench__empty" id="detail_empty">Select a control to assess it.</p>
+
+                <div class="workbench__form" id="detail_form" hidden>
+                    <div class="workbench__scroll">
+                        <div class="assess__control-head workbench__head">
+                            <p class="assess__eyebrow"><span class="assess__id" id="item_identifier"></span> <span class="assess__sep" aria-hidden="true">&middot;</span> <span class="assess__family" id="item_family"></span></p>
+                            <h3 class="assess__title" id="item_title"></h3>
+                            <p class="assess__text workbench__requirement" id="item_description"></p>
+                            <details class="workbench__guidance" id="item_guidance_wrap">
+                                <summary>Assessment guidance</summary>
+                                <p class="assess__text" id="item_guidance"></p>
+                            </details>
+                        </div>
+
+                        <div class="workbench__section">
+                            <div class="row mb-4" id="applicability_row">
+                                <div class="col-md-4 form-group">
+                                    <label for="item_applicability">Applicability</label>
+                                    <select class="form-control" id="item_applicability">
+                                        <option value="Applicable">Applicable</option>
+                                        <option value="Excluded">Excluded</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-8 form-group" id="justification_group">
+                                    <label for="item_justification">Justification for exclusion <abbr title="required">*</abbr></label>
+                                    <textarea class="form-control" id="item_justification" rows="2"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-4" id="objectives_group">
+                                <label id="objectives_label">Objectives</label>
+                                <ul class="objectives" id="item_objectives"></ul>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label id="item_result_label">Result</label>
+                                <div class="segmented segmented--wrap" id="item_result" role="group" aria-labelledby="item_result_label">
+                                    <button type="button" class="segmented__btn" data-value="Not Assessed" aria-pressed="false">Not Assessed</button>
+                                    <button type="button" class="segmented__btn" data-value="Implemented" aria-pressed="false">Implemented</button>
+                                    <button type="button" class="segmented__btn" data-value="Partially Implemented" aria-pressed="false">Partially Implemented</button>
+                                    <button type="button" class="segmented__btn" data-value="Not Implemented" aria-pressed="false">Not Implemented</button>
+                                    <button type="button" class="segmented__btn" data-value="Not Applicable" aria-pressed="false">Not Applicable</button>
+                                </div>
+                                <p class="field__help" id="result_help" hidden></p>
+                            </div>
+
+                            <div class="form-check mb-4" id="partial_row">
+                                <input class="form-check-input" type="checkbox" id="item_partial_credit">
+                                <label class="form-check-label" for="item_partial_credit" id="partial_label">Partially effective</label>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-12 form-group">
+                                    <label for="item_notes">Observation</label>
+                                    <textarea class="form-control" id="item_notes" rows="3" placeholder="What was examined, who was interviewed, what was observed."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-12 form-group">
+                                    <label for="item_implementation">Implementation description</label>
+                                    <textarea class="form-control" id="item_implementation" rows="3" placeholder="How the organization meets this today."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="workbench__section" id="finding_section">
+                            <h3 class="record__group-title">Finding</h3>
+                            <div class="row mb-4">
+                                <div class="col-md-12 form-group">
+                                    <label for="item_gap">Gap</label>
+                                    <textarea class="form-control" id="item_gap" rows="2" placeholder="What is missing or not working."></textarea>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-8 form-group">
+                                    <label for="item_impact">Business impact</label>
+                                    <textarea class="form-control" id="item_impact" rows="2" placeholder="What this exposes the business to."></textarea>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="item_risk">Risk</label>
+                                    <select class="form-control" id="item_risk">
+                                        <option value="">Not rated</option>
+                                        <option value="Low">Low</option>
+                                        <option value="Moderate">Moderate</option>
+                                        <option value="High">High</option>
+                                        <option value="Critical">Critical</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-12 form-group">
+                                    <label for="item_recommendation">Recommendation</label>
+                                    <textarea class="form-control" id="item_recommendation" rows="2" placeholder="What to do to close the gap."></textarea>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-8 form-group">
+                                    <label for="item_owner">Owner</label>
+                                    <input type="text" class="form-control" id="item_owner" placeholder="Person or role responsible">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="item_target">Target date</label>
+                                    <input type="date" class="form-control" id="item_target">
+                                </div>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label>Milestones</label>
+                                <div id="item_milestones"></div>
+                                <button type="button" class="btn btn--secondary btn--sm" id="do_milestone_add"><i class="fa-regular fa-plus"></i> Add Milestone</button>
+                            </div>
+                        </div>
+
+                        <div class="workbench__section">
+                            <h3 class="record__group-title">Evidence</h3>
+                            <ul class="evidence__list" id="item_evidence"></ul>
+                            <div class="assess__actions">
+                                <button type="button" class="btn btn--secondary btn--sm" id="do_attach_open"><i class="fa-regular fa-link"></i> Attach from Vault</button>
+                                <button type="button" class="btn btn--secondary btn--sm" id="do_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload New</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="workbench__foot">
+                        <button type="button" id="do_item_save" class="btn btn--primary">Save</button>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 </div>
 
-<div class="modal fade" data-bs-backdrop="static" id="item_modal" tabindex="-1" aria-labelledby="item_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="details_modal" tabindex="-1" aria-labelledby="details_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="details_modal_title">Assessment Details</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-4">
+                    <div class="col-md-4 form-group">
+                        <label for="details_type">Assessment type</label>
+                        <select class="form-control" id="details_type">
+                            <option value="Baseline">Baseline</option>
+                            <option value="Interim">Interim</option>
+                            <option value="Final">Final</option>
+                        </select>
+                    </div>
+                    <div class="col-md-8 form-group" id="baseline_group">
+                        <label for="details_baseline">Baseline to compare against</label>
+                        <select class="form-control" id="details_baseline"></select>
+                    </div>
+                </div>
+                <div class="form-check mb-4" id="no_baseline_row">
+                    <input class="form-check-input" type="checkbox" id="details_no_baseline">
+                    <label class="form-check-label" for="details_no_baseline">There is no baseline for this assessment</label>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-12 form-group">
+                        <label for="details_scope">Scope</label>
+                        <textarea class="form-control" id="details_scope" rows="3" placeholder="Systems, locations, business units and data in scope."><?php echo htmlspecialchars((string) $this->assessment['assessment_scope'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-12 form-group">
+                        <label for="details_method">Method</label>
+                        <textarea class="form-control" id="details_method" rows="3" placeholder="Interviews, document review, configuration testing, sampling."><?php echo htmlspecialchars((string) $this->assessment['assessment_method'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                    </div>
+                </div>
+                <?php if (count($this->features['categories']) > 0) { ?>
+                <div class="form-group mb-4">
+                    <label>Categories in scope, in addition to the common criteria</label>
+                    <div id="details_categories">
+                        <?php foreach ($this->features['categories'] as $i => $category) { ?>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="category_<?php echo (int) $i; ?>" value="<?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?>"<?php echo in_array($category, explode(',', (string) $this->assessment['scope_categories']), true) ? ' checked' : ''; ?>>
+                            <label class="form-check-label" for="category_<?php echo (int) $i; ?>"><?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?></label>
+                        </div>
+                        <?php } ?>
+                    </div>
+                </div>
+                <?php } ?>
+                <?php if ($this->features['ssi_field'] !== null) { ?>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="details_ssi"<?php echo (int) $this->assessment['ssi_reviewed'] === 1 ? ' checked' : ''; ?>>
+                    <label class="form-check-label" for="details_ssi"><?php echo htmlspecialchars($this->features['ssi_field']['label'], ENT_QUOTES, 'UTF-8'); ?></label>
+                </div>
+                <div class="row mb-4" id="ssi_note_row">
+                    <div class="col-md-12 form-group">
+                        <label for="details_ssi_note">Review note</label>
+                        <textarea class="form-control" id="details_ssi_note" rows="2" placeholder="Who reviewed the SSI requirements, when, and how they were handled."><?php echo htmlspecialchars((string) $this->assessment['ssi_note'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                    </div>
+                </div>
+                <?php } ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="do_details_save" class="btn btn--primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop="static" id="narrative_modal" tabindex="-1" aria-labelledby="narrative_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="item_modal_title">Assess Control</h2>
+                <h2 class="modal-title" id="narrative_modal_title">Consultant Narrative</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body assess">
-                <div class="assess__pane assess__pane--form">
-                    <div class="field">
-                        <label id="item_result_label">Result</label>
-                        <div class="segmented segmented--wrap" id="item_result" role="group" aria-labelledby="item_result_label">
-                            <button type="button" class="segmented__btn" data-value="Not Assessed" aria-pressed="false">Not Assessed</button>
-                            <button type="button" class="segmented__btn" data-value="Implemented" aria-pressed="false">Implemented</button>
-                            <button type="button" class="segmented__btn" data-value="Partially Implemented" aria-pressed="false">Partially Implemented</button>
-                            <button type="button" class="segmented__btn" data-value="Not Implemented" aria-pressed="false">Not Implemented</button>
-                            <button type="button" class="segmented__btn" data-value="Not Applicable" aria-pressed="false">Not Applicable</button>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label for="item_notes">Notes and observations</label>
-                        <textarea id="item_notes" rows="6" placeholder="What was examined, who was interviewed, what was observed."></textarea>
-                    </div>
-                    <div class="assess__evidence">
-                        <h3 class="record__group-title">Evidence</h3>
-                        <ul class="evidence__list" id="item_evidence"></ul>
-                        <div class="assess__actions">
-                            <button type="button" class="btn btn--secondary btn--sm" id="do_attach_open"><i class="fa-regular fa-link"></i> Attach from Vault</button>
-                            <button type="button" class="btn btn--secondary btn--sm" id="do_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload New</button>
-                        </div>
+            <div class="modal-body">
+                <p class="import__hint">Written by the consultant. These words appear in the reports exactly as entered.</p>
+                <div class="row mb-4">
+                    <div class="col-md-12 form-group">
+                        <label for="narrative_posture">Overall security posture</label>
+                        <textarea class="form-control" id="narrative_posture" rows="4"><?php echo htmlspecialchars((string) $this->assessment['posture_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
                     </div>
                 </div>
-                <div class="assess__pane assess__pane--control">
-                    <div class="assess__control-head">
-                        <p class="assess__eyebrow"><span class="assess__id" id="item_identifier"></span> <span class="assess__sep" aria-hidden="true">&middot;</span> <span class="assess__family" id="item_family"></span></p>
-                        <h3 class="assess__title" id="item_title"></h3>
-                        <p class="assess__statement" id="item_statement"></p>
+                <div class="row mb-4">
+                    <div class="col-md-6 form-group">
+                        <label for="narrative_strengths">Strengths</label>
+                        <textarea class="form-control" id="narrative_strengths" rows="5"><?php echo htmlspecialchars((string) $this->assessment['strengths_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
                     </div>
-                    <div class="assess__scroll">
-                        <p class="assess__text" id="item_description"></p>
+                    <div class="col-md-6 form-group">
+                        <label for="narrative_concerns">Key concerns</label>
+                        <textarea class="form-control" id="narrative_concerns" rows="5"><?php echo htmlspecialchars((string) $this->assessment['concerns_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6 form-group">
+                        <label for="narrative_readiness">Readiness opinion</label>
+                        <textarea class="form-control" id="narrative_readiness" rows="4"><?php echo htmlspecialchars((string) $this->assessment['readiness_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="narrative_decisions">Decisions needed from leadership</label>
+                        <textarea class="form-control" id="narrative_decisions" rows="4"><?php echo htmlspecialchars((string) $this->assessment['decisions_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="do_item_save" class="btn btn--primary">Save</button>
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="do_narrative_save" class="btn btn--primary">Save</button>
             </div>
         </div>
     </div>
@@ -228,10 +427,35 @@ $(document).ready(function () {
     var assessment_id = <?php echo (int) $this->assessment['id']; ?>;
     var project_id = <?php echo (int) $this->assessment['project_id']; ?>;
     var project_name = <?php echo json_encode(html_entity_decode((string) $this->assessment['project_name'], ENT_QUOTES, 'UTF-8'), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+    var terms = <?php echo json_encode($this->terminology, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+    var rolls_up = <?php echo $this->features['rolls_up'] ? 'true' : 'false'; ?>;
+    var details = <?php echo json_encode(array(
+        'assessment_type' => $this->assessment['assessment_type'],
+        'baseline_assessment_id' => (int) $this->assessment['baseline_assessment_id'],
+        'no_baseline' => (int) $this->assessment['no_baseline']
+    ), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
     var items = [];
+    var controls = [];
+    var objectives_of = {};
+    var milestones_of = {};
     var current_item = null;
 
     var RESULTS = ['Not Assessed', 'Implemented', 'Partially Implemented', 'Not Implemented', 'Not Applicable'];
+    var FINDING_RESULTS = ['Partially Implemented', 'Not Implemented'];
+    var OBJECTIVE_CHOICES = [
+        {
+            value: 'Implemented',
+            label: 'Met'
+        },
+        {
+            value: 'Not Implemented',
+            label: 'Not met'
+        },
+        {
+            value: 'Not Applicable',
+            label: 'N/A'
+        }
+    ];
     var RESULT_CLASS = {
         'Not Assessed': 'badge--inactive',
         'Implemented': 'badge--active',
@@ -247,14 +471,73 @@ $(document).ready(function () {
         'Not Applicable': 'is-na'
     };
 
+    function term(key, fallback) {
+        return terms && terms[key] ? terms[key] : fallback;
+    }
+
+    function capitalise(text) {
+        return text.charAt(0).toUpperCase() + text.slice(1);
+    }
+
+    function flags_of(item) {
+        if (!item.control_flags) {
+            return {};
+        }
+
+        try {
+            return JSON.parse(item.control_flags);
+        } catch (e) {
+            return {};
+        }
+    }
+
     function set_result(item_result) {
         $('#item_result .segmented__btn').removeClass('is-on').attr('aria-pressed', 'false');
         $('#item_result .segmented__btn[data-value="' + item_result + '"]').addClass('is-on').attr('aria-pressed', 'true');
+        $('#finding_section').toggle(FINDING_RESULTS.indexOf(item_result) !== -1);
+    }
+
+    function current_result() {
+        return $('#item_result .segmented__btn.is-on').attr('data-value') || 'Not Assessed';
     }
 
     $('#item_result').on('click', '.segmented__btn', function () {
+        if ($('#item_result').hasClass('is-locked')) {
+            return;
+        }
+
         set_result($(this).attr('data-value'));
     });
+
+    function result_from_objectives(results) {
+
+        if (results.length === 0 || results.indexOf('Not Assessed') !== -1) {
+            return 'Not Assessed';
+        }
+
+        var met = 0;
+        var not_met = 0;
+
+        for (var i = 0; i < results.length; i++) {
+            if (results[i] === 'Implemented') {
+                met++;
+            }
+
+            if (results[i] === 'Not Implemented') {
+                not_met++;
+            }
+        }
+
+        if (met === 0 && not_met === 0) {
+            return 'Not Applicable';
+        }
+
+        if (not_met === 0) {
+            return 'Implemented';
+        }
+
+        return met === 0 ? 'Not Implemented' : 'Partially Implemented';
+    }
 
     function result_badge(value) {
         return '<span class="badge ' + (RESULT_CLASS[value] || 'badge--inactive') + '">' + esc(value) + '</span>';
@@ -272,14 +555,19 @@ $(document).ready(function () {
         var counts = {};
         var evidenced = 0;
 
-        for (var i = 0; i < RESULTS.length; i++) { counts[RESULTS[i]] = 0; }
-
-        for (var j = 0; j < items.length; j++) {
-            counts[items[j].item_result] = (counts[items[j].item_result] || 0) + 1;
-            if (parseInt(items[j].evidence_count, 10) > 0) { evidenced++; }
+        for (var i = 0; i < RESULTS.length; i++) {
+            counts[RESULTS[i]] = 0;
         }
 
-        var total = items.length;
+        for (var j = 0; j < controls.length; j++) {
+            counts[controls[j].item_result] = (counts[controls[j].item_result] || 0) + 1;
+
+            if (parseInt(controls[j].evidence_count, 10) > 0) {
+                evidenced++;
+            }
+        }
+
+        var total = controls.length;
         var assessed = total - counts['Not Assessed'];
         var pct = total > 0 ? Math.round(assessed / total * 100) : 0;
         var html = '';
@@ -296,7 +584,8 @@ $(document).ready(function () {
 
         $('#rollup').html(html);
         $('#rollup_bar').css('width', pct + '%');
-        $('#rollup_label').text(assessed + ' of ' + total + ' items assessed · ' + pct + '%');
+        $('#rollup_label').text(assessed + ' of ' + total + ' ' + term('controls', 'controls') + ' assessed · ' + pct + '%');
+        $('#control_count').text(total + ' ' + term('controls', 'controls'));
 
         sync_complete(counts['Not Assessed']);
     }
@@ -309,7 +598,7 @@ $(document).ready(function () {
         }
 
         $('#do_complete').prop('disabled', remaining > 0).attr('title', remaining > 0
-            ? remaining + ' control' + (remaining === 1 ? '' : 's') + ' still unanswered'
+            ? remaining + ' ' + (remaining === 1 ? term('control', 'control') : term('controls', 'controls')) + ' still unanswered'
             : '');
     }
 
@@ -332,12 +621,30 @@ $(document).ready(function () {
             if (obj.success) {
                 toastr.success(obj.message);
                 set_status(obj.assessment_status);
-                load();
+                load(true);
             } else {
                 toastr.error(obj.message);
             }
         });
     });
+
+    function objective_summary(control) {
+
+        var list = objectives_of[control.control_identifier] || [];
+        var answered = 0;
+
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].item_result !== 'Not Assessed') {
+                answered++;
+            }
+        }
+
+        if (list.length === 0) {
+            return '';
+        }
+
+        return '<span class="controls__sub">' + answered + ' of ' + list.length + ' ' + esc(term('objectives', 'objectives')) + ' answered</span>';
+    }
 
     function render() {
 
@@ -345,9 +652,9 @@ $(document).ready(function () {
         var current = null;
         var families = [];
 
-        for (var i = 0; i < items.length; i++) {
+        for (var i = 0; i < controls.length; i++) {
 
-            var it = items[i];
+            var it = controls[i];
             var family = it.family === '' ? 'Ungrouped' : it.family;
 
             if (family !== current) {
@@ -356,32 +663,35 @@ $(document).ready(function () {
                 html += '<tr class="controls__family" data-family="' + esc(family) + '"><td colspan="4">' + esc(family) + '</td></tr>';
             }
 
-            html += '<tr class="item__row" data-id="' + it.id + '" data-family="' + esc(family) + '"'
+            html += '<tr class="item__row' + (current_item && parseInt(current_item.id, 10) === parseInt(it.id, 10) ? ' is-selected' : '') + '" data-id="' + it.id + '" data-family="' + esc(family) + '"'
                 + ' data-result="' + esc(it.item_result) + '"'
                 + ' data-evidence="' + (parseInt(it.evidence_count, 10) > 0 ? 'yes' : 'no') + '" tabindex="0">'
                 + '<td class="controls__id">' + esc(it.control_identifier) + '</td>'
-                + '<td><span class="controls__title">' + esc(it.control_title) + '</span></td>'
+                + '<td><span class="controls__title">' + esc(it.control_title) + '</span>' + objective_summary(it) + '</td>'
                 + '<td>' + result_badge(it.item_result) + '</td>'
                 + '<td class="item__evidence">' + (parseInt(it.evidence_count, 10) > 0
                     ? '<span class="badge badge--active">' + it.evidence_count + '</span>'
-                    : '<span class="roster__none">&mdash;</span>') + '</td>'
+                    : '') + '</td>'
                 + '</tr>';
         }
 
         $('#items_body').html(html);
 
-        var options = '<option value="">All families</option>';
+        var chosen = $('#family_filter').val();
+        var options = '<option value="">All ' + esc(term('families', 'families')) + '</option>';
+
         for (var f = 0; f < families.length; f++) {
             options += '<option value="' + esc(families[f]) + '">' + esc(families[f]) + '</option>';
         }
-        $('#family_filter').html(options);
+
+        $('#family_filter').html(options).val(chosen);
 
         rollup();
     }
 
     function filter() {
 
-        var term = $('#item_search').val().trim().toLowerCase();
+        var text_term = $('#item_search').val().trim().toLowerCase();
         var family = $('#family_filter').val();
         var result = $('#result_filter').val();
         var evidence = $('#evidence_filter').val();
@@ -397,7 +707,7 @@ $(document).ready(function () {
                 var text = row.find('.controls__id').text().toLowerCase()
                     + ' ' + row.find('.controls__title').text().toLowerCase();
 
-                var hit = (term === '' || text.indexOf(term) !== -1)
+                var hit = (text_term === '' || text.indexOf(text_term) !== -1)
                     && (family === '' || row.attr('data-family') === family)
                     && (result === '' || row.attr('data-result') === result)
                     && (evidence === '' || row.attr('data-evidence') === evidence);
@@ -417,52 +727,180 @@ $(document).ready(function () {
         $('#items_empty').toggle(visible === 0);
 
         if (visible === 0) {
-            $('#items_empty').text(items.length === 0
+            $('#items_empty').text(controls.length === 0
                 ? 'This assessment has no items.'
                 : 'No items match the current filters');
         }
     }
 
+    function split(list) {
+
+        controls = [];
+        objectives_of = {};
+
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].control_kind === 'objective') {
+                if (!objectives_of[list[i].parent_identifier]) {
+                    objectives_of[list[i].parent_identifier] = [];
+                }
+
+                objectives_of[list[i].parent_identifier].push(list[i]);
+            } else {
+                controls.push(list[i]);
+            }
+        }
+    }
+
     function load(keep_open) {
+
         ApiDataSvc.apiCall('post', 'load_items', { assessment_id: assessment_id }, function (data) {
-            items = JSON.parse(data);
-            render();
-            filter();
-            if (keep_open && current_item) {
-                for (var i = 0; i < items.length; i++) {
-                    if (parseInt(items[i].id, 10) === parseInt(current_item.id, 10)) {
-                        current_item = items[i];
-                        break;
+
+            split(JSON.parse(data));
+
+            ApiDataSvc.apiCall('post', 'load_milestones', { assessment_id: assessment_id }, function (rows) {
+
+                var list = JSON.parse(rows);
+
+                milestones_of = {};
+
+                for (var i = 0; i < list.length; i++) {
+                    if (!milestones_of[list[i].assessment_item_id]) {
+                        milestones_of[list[i].assessment_item_id] = [];
+                    }
+
+                    milestones_of[list[i].assessment_item_id].push(list[i]);
+                }
+
+                if (keep_open && current_item) {
+                    for (var j = 0; j < controls.length; j++) {
+                        if (parseInt(controls[j].id, 10) === parseInt(current_item.id, 10)) {
+                            current_item = controls[j];
+                            break;
+                        }
                     }
                 }
-            }
+
+                render();
+                filter();
+            });
         });
     }
 
     $('#item_search').on('input', filter);
     $('#family_filter, #result_filter, #evidence_filter').on('change', filter);
 
-    function set_control_text(item) {
+    function render_objectives(list) {
 
-        var text = item.description === '' ? 'No control text was supplied for this item.' : item.description;
-        var at = text.search(/(^|\n)\s*Discussion:/);
-        var statement = at > 0 ? text.slice(0, at).trim() : '';
-        var body = at > 0 ? text.slice(at).trim() : text;
+        var html = '';
 
-        if (statement === item.control_title.trim()) {
-            statement = '';
+        for (var i = 0; i < list.length; i++) {
+
+            var buttons = '';
+
+            for (var c = 0; c < OBJECTIVE_CHOICES.length; c++) {
+                var on = list[i].item_result === OBJECTIVE_CHOICES[c].value;
+
+                buttons += '<button type="button" class="segmented__btn' + (on ? ' is-on' : '') + '" data-value="' + OBJECTIVE_CHOICES[c].value + '" aria-pressed="' + (on ? 'true' : 'false') + '">' + OBJECTIVE_CHOICES[c].label + '</button>';
+            }
+
+            html += '<li class="objectives__item" data-id="' + list[i].id + '">'
+                + '<div class="objectives__text"><span class="objectives__id">' + esc(list[i].control_identifier) + '</span> ' + esc(list[i].control_title) + '</div>'
+                + '<div class="segmented segmented--sm objectives__choice" role="group" aria-label="Result for ' + esc(list[i].control_identifier) + '">' + buttons + '</div>'
+                + '</li>';
         }
 
-        $('#item_statement').text(statement).toggle(statement !== '');
-        $('#item_description').text(body);
-        $('.assess__scroll').scrollTop(0);
+        $('#item_objectives').html(html);
+    }
+
+    function objective_values() {
+        return $('#item_objectives .objectives__item').map(function () {
+            return {
+                id: $(this).attr('data-id'),
+                result: $(this).find('.segmented__btn.is-on').attr('data-value') || 'Not Assessed'
+            };
+        }).get();
+    }
+
+    function sync_locked_result() {
+
+        var list = objective_values();
+        var excluded = $('#applicability_row').css('display') !== 'none' && $('#item_applicability').val() === 'Excluded';
+
+        if (excluded) {
+            set_result('Not Applicable');
+            $('#item_result').addClass('is-locked');
+            $('#result_help').prop('hidden', false).text('Excluded controls are reported as not applicable.');
+            return;
+        }
+
+        if (list.length > 0 && rolls_up) {
+            set_result(result_from_objectives(list.map(function (o) {
+                return o.result;
+            })));
+            $('#item_result').addClass('is-locked');
+            $('#result_help').prop('hidden', false).text('Worked out from the ' + term('objectives', 'objectives') + ': implemented only when every one is met.');
+            return;
+        }
+
+        $('#item_result').removeClass('is-locked');
+        $('#result_help').prop('hidden', true).text('');
+    }
+
+    $('#item_objectives').on('click', '.segmented__btn', function () {
+
+        var group = $(this).closest('.segmented');
+        var was_on = $(this).hasClass('is-on');
+
+        group.find('.segmented__btn').removeClass('is-on').attr('aria-pressed', 'false');
+
+        if (!was_on) {
+            $(this).addClass('is-on').attr('aria-pressed', 'true');
+        }
+
+        sync_locked_result();
+    });
+
+    $('#item_applicability').on('change', function () {
+        $('#justification_group').toggle($(this).val() === 'Excluded');
+        sync_locked_result();
+    });
+
+    function milestone_row(milestone) {
+        return '<div class="row mb-2 milestone" data-id="' + (milestone.id || 0) + '">'
+            + '<div class="col-md-7 form-group"><input type="text" class="form-control milestone__text" aria-label="Milestone" placeholder="Milestone" value="' + esc(milestone.milestone_text || '') + '"></div>'
+            + '<div class="col-md-3 form-group"><input type="date" class="form-control milestone__due" aria-label="Due date" value="' + esc(milestone.due_date || '') + '"></div>'
+            + '<div class="col-md-1 form-group milestone__done"><input class="form-check-input" type="checkbox" aria-label="Done"' + (milestone.milestone_status === 'Done' ? ' checked' : '') + '></div>'
+            + '<div class="col-md-1 form-group"><button type="button" class="btn btn--tertiary btn--sm" data-action="remove-milestone" aria-label="Remove milestone"><i class="fa-regular fa-xmark"></i></button></div>'
+            + '</div>';
+    }
+
+    $('#do_milestone_add').click(function () {
+        $('#item_milestones').append(milestone_row({}));
+        $('#item_milestones .milestone:last .milestone__text').focus();
+    });
+
+    $('#item_milestones').on('click', '[data-action="remove-milestone"]', function () {
+        $(this).closest('.milestone').remove();
+    });
+
+    function milestone_values() {
+        return $('#item_milestones .milestone').map(function () {
+            return {
+                id: $(this).attr('data-id'),
+                text: $(this).find('.milestone__text').val().trim(),
+                due: $(this).find('.milestone__due').val(),
+                done: $(this).find('.milestone__done input').is(':checked') ? '1' : '0'
+            };
+        }).get();
     }
 
     function open_item(id) {
 
-        for (var i = 0; i < items.length; i++) {
-            if (parseInt(items[i].id, 10) === parseInt(id, 10)) {
-                current_item = items[i];
+        current_item = null;
+
+        for (var i = 0; i < controls.length; i++) {
+            if (parseInt(controls[i].id, 10) === parseInt(id, 10)) {
+                current_item = controls[i];
                 break;
             }
         }
@@ -471,16 +909,61 @@ $(document).ready(function () {
             return;
         }
 
+        var flags = flags_of(current_item);
+        var list = objectives_of[current_item.control_identifier] || [];
+        var guidance = (current_item.guidance || '').trim();
+        var weight = current_item.control_weight === null ? null : parseInt(current_item.control_weight, 10);
+        var partial = current_item.partial_weight === null ? null : parseInt(current_item.partial_weight, 10);
+
+        $('#items_body .item__row').removeClass('is-selected');
+        $('#items_body .item__row[data-id="' + current_item.id + '"]').addClass('is-selected');
+
         $('#item_identifier').text(current_item.control_identifier);
         $('#item_title').text(current_item.control_title);
         $('#item_family').text(current_item.family === '' ? 'Ungrouped' : current_item.family);
-        $('#item_modal_title').text('Assess ' + current_item.control_identifier);
-        set_control_text(current_item);
+        $('#item_description').text(current_item.description === current_item.control_title ? '' : current_item.description).toggle(current_item.description !== '' && current_item.description !== current_item.control_title);
+        $('#item_guidance').text(guidance);
+        $('#item_guidance_wrap').toggle(guidance !== '').prop('open', false);
+
+        $('#applicability_row').toggle(flags.applicability === true);
+        $('#item_applicability').val(current_item.applicability || 'Applicable');
+        $('#item_justification').val(current_item.applicability_justification || '');
+        $('#justification_group').toggle(current_item.applicability === 'Excluded');
+
+        $('#objectives_group').toggle(list.length > 0);
+        $('#objectives_label').text(capitalise(term('objectives', 'objectives')));
+        render_objectives(list);
+
+        $('#partial_row').toggle(partial !== null);
+        $('#partial_label').text(partial === null ? '' : 'Partially effective: subtract ' + partial + ' points instead of ' + weight);
+        $('#item_partial_credit').prop('checked', parseInt(current_item.partial_credit, 10) === 1);
+
         set_result(current_item.item_result);
-        $('#item_notes').val(current_item.notes);
+        sync_locked_result();
+
+        $('#item_notes').val(current_item.notes || '');
+        $('#item_implementation').val(current_item.implementation_description || '');
+        $('#item_gap').val(current_item.gap_description || '');
+        $('#item_impact').val(current_item.business_impact || '');
+        $('#item_risk').val(current_item.risk_rating || '');
+        $('#item_recommendation').val(current_item.recommendation || '');
+        $('#item_owner').val(current_item.owner_name || '');
+        $('#item_target').val(current_item.target_date || '');
+
+        var milestones = milestones_of[current_item.id] || [];
+        var rows = '';
+
+        for (var m = 0; m < milestones.length; m++) {
+            rows += milestone_row(milestones[m]);
+        }
+
+        $('#item_milestones').html(rows);
+
+        $('#detail_empty').prop('hidden', true);
+        $('#detail_form').prop('hidden', false);
+        $('#detail .workbench__scroll').scrollTop(0);
 
         load_item_evidence();
-        modal('item_modal').show();
     }
 
     $('#items_body').on('click', '.item__row', function () {
@@ -499,12 +982,32 @@ $(document).ready(function () {
             return;
         }
 
+        if ($('#applicability_row').css('display') !== 'none' && $('#item_applicability').val() === 'Excluded' && $('#item_justification').val().trim() === '') {
+            $('#item_justification').addClass('is-invalid').focus();
+            toastr.error('Give a justification for excluding this control.');
+            return;
+        }
+
+        $('#item_justification').removeClass('is-invalid');
         set_loading('#do_item_save', true);
 
         var values = {
             item_id: current_item.id,
-            item_result: $('#item_result .segmented__btn.is-on').attr('data-value'),
-            notes: $('#item_notes').val().trim()
+            item_result: current_result(),
+            notes: $('#item_notes').val().trim(),
+            implementation_description: $('#item_implementation').val().trim(),
+            gap_description: $('#item_gap').val().trim(),
+            business_impact: $('#item_impact').val().trim(),
+            risk_rating: $('#item_risk').val(),
+            recommendation: $('#item_recommendation').val().trim(),
+            owner_name: $('#item_owner').val().trim(),
+            target_date: $('#item_target').val(),
+            partial_credit: $('#item_partial_credit').is(':checked') ? '1' : '0',
+            applicability: $('#item_applicability').val(),
+            applicability_justification: $('#item_justification').val().trim(),
+            objectives: objective_values(),
+            milestones: milestone_values(),
+            milestones_sent: '1'
         };
 
         ApiDataSvc.apiCall('post', 'save_item', values, function (data) {
@@ -514,10 +1017,9 @@ $(document).ready(function () {
             set_loading('#do_item_save', false);
 
             if (obj.success) {
-
-                modal('item_modal').hide();
+                toastr.success(obj.message);
                 set_status(obj.assessment_status);
-                load();
+                load(true);
             } else {
                 toastr.error(obj.message);
             }
@@ -902,30 +1404,101 @@ $(document).ready(function () {
         });
     });
 
-    $('#do_settings_save').click(function () {
+    function sync_details_form() {
+
+        var type = $('#details_type').val();
+        var none = $('#details_no_baseline').is(':checked');
+
+        $('#baseline_group').toggle(type !== 'Baseline' && !none);
+        $('#no_baseline_row').toggle(type !== 'Baseline');
+        $('#ssi_note_row').toggle($('#details_ssi').is(':checked'));
+    }
+
+    $('#details_type, #details_no_baseline, #details_ssi').on('change', sync_details_form);
+
+    $('#do_details_open').click(function () {
+
+        $('#details_type').val(details.assessment_type);
+        $('#details_no_baseline').prop('checked', details.no_baseline === 1);
+        $('#details_baseline').html('<option value="0">Loading&hellip;</option>');
+        sync_details_form();
+        modal('details_modal').show();
+
+        ApiDataSvc.apiCall('post', 'load_baselines', { assessment_id: assessment_id }, function (data) {
+
+            var list = JSON.parse(data);
+            var options = '<option value="0">' + (list.length === 0 ? 'No baseline assessments for this client and framework' : 'Choose a baseline&hellip;') + '</option>';
+
+            for (var i = 0; i < list.length; i++) {
+                options += '<option value="' + list[i].id + '">' + esc(list[i].assessment_name) + ' (' + esc(list[i].project_name) + ', ' + esc(list[i].created_on) + ')</option>';
+            }
+
+            $('#details_baseline').html(options).val(String(details.baseline_assessment_id));
+
+            if ($('#details_baseline').val() === null) {
+                $('#details_baseline').val('0');
+            }
+        });
+    });
+
+    $('#do_details_save').click(function () {
 
         var values = {
             assessment_id: assessment_id,
-            assessment_name: $('#assessment_name').val().trim(),
+            assessment_type: $('#details_type').val(),
+            baseline_assessment_id: $('#details_baseline').val() || '0',
+            no_baseline: $('#details_no_baseline').is(':checked') ? '1' : '0',
+            assessment_scope: $('#details_scope').val().trim(),
+            assessment_method: $('#details_method').val().trim(),
+            scope_categories: $('#details_categories input:checked').map(function () {
+                return $(this).val();
+            }).get(),
+            ssi_reviewed: $('#details_ssi').is(':checked') ? '1' : '0',
+            ssi_note: $('#details_ssi_note').length ? $('#details_ssi_note').val().trim() : ''
         };
 
-        if (values.assessment_name === '') {
-            $('#assessment_name').addClass('is-invalid').focus();
-            toastr.error('Please fix the errors before continuing.');
-            return;
-        }
+        set_loading('#do_details_save', true);
 
-        set_loading('#do_settings_save', true);
-
-        ApiDataSvc.apiCall('post', 'save_assessment', values, function (data) {
+        ApiDataSvc.apiCall('post', 'save_assessment_details', values, function (data) {
 
             var obj = JSON.parse(data);
 
-            set_loading('#do_settings_save', false);
+            set_loading('#do_details_save', false);
 
             if (obj.success) {
-
                 window.location.reload();
+            } else {
+                toastr.error(obj.message);
+            }
+        });
+    });
+
+    $('#do_narrative_open').click(function () {
+        modal('narrative_modal').show();
+    });
+
+    $('#do_narrative_save').click(function () {
+
+        var values = {
+            assessment_id: assessment_id,
+            posture_text: $('#narrative_posture').val().trim(),
+            strengths_text: $('#narrative_strengths').val().trim(),
+            concerns_text: $('#narrative_concerns').val().trim(),
+            readiness_text: $('#narrative_readiness').val().trim(),
+            decisions_text: $('#narrative_decisions').val().trim()
+        };
+
+        set_loading('#do_narrative_save', true);
+
+        ApiDataSvc.apiCall('post', 'save_assessment_narrative', values, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading('#do_narrative_save', false);
+
+            if (obj.success) {
+                toastr.success(obj.message);
+                modal('narrative_modal').hide();
             } else {
                 toastr.error(obj.message);
             }
@@ -947,8 +1520,7 @@ $(document).ready(function () {
             set_loading('#do_delete', false);
 
             if (obj.success) {
-
-                window.location.href = '/projects/detail/id/<?php echo (int) $this->assessment['project_id']; ?>';
+                window.location.href = '/projects/detail/id/' + project_id;
             } else {
                 toastr.error(obj.message);
             }

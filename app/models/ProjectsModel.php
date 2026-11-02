@@ -66,13 +66,15 @@ class ProjectsModel extends Model {
                         JOIN assessments a ON a.id = ai.assessment_id
                         WHERE a.project_id = p.id
                         and a.deleted = 0
-                        and ai.deleted = 0) AS item_count,
+                        and ai.deleted = 0
+                        and ai.control_kind = 'control') AS item_count,
                     (SELECT COUNT(*)
                         FROM assessment_items ai
                         JOIN assessments a ON a.id = ai.assessment_id
                         WHERE a.project_id = p.id
                         and a.deleted = 0
                         and ai.deleted = 0
+                        and ai.control_kind = 'control'
                         and ai.item_result <> 'Not Assessed') AS assessed_count,
                     (SELECT COUNT(*)
                         FROM evidence e

@@ -1,0 +1,158 @@
+{
+    "key": "soc2",
+    "name": "SOC 2 Trust Services Criteria",
+    "version": "2017, revised points of focus 2022",
+    "full_name": "AICPA 2017 Trust Services Criteria for Security, Availability, Processing Integrity, Confidentiality, and Privacy (with Revised Points of Focus, 2022)",
+    "issuing_body": "AICPA Assurance Services Executive Committee",
+    "standard_codes": [
+        "SOC2"
+    ],
+    "content_licence": "ids_titles_only",
+    "notice": "Trust services criteria numbers and point of focus names are used for identification only. Criteria text is copyrighted by the AICPA; descriptions and guidance are written by HCG.",
+    "sources": [
+        {
+            "id": "tsc",
+            "title": "2017 Trust Services Criteria for Security, Availability, Processing Integrity, Confidentiality, and Privacy (With Revised Points of Focus, 2022), TSP section 100",
+            "version": "2017 TSC, revised points of focus 2022",
+            "publisher": "AICPA",
+            "url": "https://www.aicpa-cima.com/resources/download/2017-trust-services-criteria-with-revised-points-of-focus-2022",
+            "licensed_copy": "frameworks/sources/soc2/Trust-services-criteria.pdf (kept locally, not committed)",
+            "sha256_local": "23a099dd1dc273b7a45fda2351f376344c33fcb2911d586036c0e0d631b8ad69"
+        },
+        {
+            "id": "tscids",
+            "title": "Trust services criteria list derived from HCG's copy (criterion IDs, groups, point of focus names and scope)",
+            "version": "2017 TSC, revised points of focus 2022",
+            "publisher": "HCG",
+            "file": "soc2/tsc-2017-ids.json",
+            "sha256": "a18a8f4ad79d6dfea92dbff320e084e2a18cc1dd6216d8d9c4812881c3f00500"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG plain-language descriptions and assessment guidance",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "tscids",
+        "objectives": "tscids"
+    },
+    "terminology": {
+        "control": "criterion",
+        "controls": "criteria",
+        "family": "category",
+        "families": "categories",
+        "objective": "point of focus",
+        "objectives": "points of focus",
+        "plan": "remediation plan",
+        "plan_short": "remediation plan",
+        "score": "criteria met"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Met"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Met"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Met"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Share of in-scope criteria met. SOC 2 has no official score; an auditor's opinion depends on whether controls meet every in-scope criterion."
+    },
+    "rules": [
+        {
+            "id": "category_scope",
+            "type": "applicability",
+            "always": [
+                "CC1",
+                "CC2",
+                "CC3",
+                "CC4",
+                "CC5",
+                "CC6",
+                "CC7",
+                "CC8",
+                "CC9"
+            ],
+            "optional": {
+                "Availability": "A1",
+                "Confidentiality": "C1",
+                "Processing Integrity": "PI1",
+                "Privacy": "P"
+            },
+            "summary": "The common criteria (CC1 to CC9) always apply. Availability, Confidentiality, Processing Integrity and Privacy criteria apply only when that category is in scope.",
+            "source": "tsc",
+            "cite": "TSP section 100, paragraph .10",
+            "quote": "a complete set of criteria consists of (a) the common criteria and (b) the control activity criteria applicable to the specific trust services category or categories addressed by the engagement"
+        },
+        {
+            "id": "points_of_focus_optional",
+            "type": "na_handling",
+            "summary": "Points of focus guide the assessment but are not requirements; ones that do not fit the entity are marked not applicable without affecting the criterion.",
+            "source": "tsc",
+            "cite": "TSP section 100, paragraph .05",
+            "quote": "Some points of focus may not be suitable or relevant to the entity or to the engagement to be performed."
+        },
+        {
+            "id": "revisions_unchanged_criteria",
+            "type": "effective_date",
+            "summary": "The 2022 revisions changed points of focus only; the criteria themselves are unchanged from 2017.",
+            "source": "tsc",
+            "cite": "TSP section 100, Notice to Readers",
+            "quote": "The changes to the points of focus in the 2022 revisions do not, in any way, alter the criteria in the 2017 TSC."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "governing_document"
+    ],
+    "governing_document": {
+        "key": "system_description",
+        "title": "System Description",
+        "short": "system description",
+        "sections": [
+            "Services provided and principal service commitments",
+            "System requirements",
+            "Components of the system: infrastructure, software, people, procedures and data",
+            "System boundaries and subservice organizations",
+            "Complementary user entity controls",
+            "Incidents and significant changes during the period"
+        ]
+    },
+    "glossary": [
+        {
+            "term": "SOC 2",
+            "definition": "System and Organization Controls 2: an independent examination of a service organization's controls against the AICPA trust services criteria."
+        },
+        {
+            "term": "AICPA",
+            "definition": "American Institute of Certified Public Accountants, which publishes the trust services criteria."
+        },
+        {
+            "term": "TSC",
+            "definition": "Trust services criteria: the AICPA criteria for security, availability, processing integrity, confidentiality and privacy."
+        },
+        {
+            "term": "COSO",
+            "definition": "Committee of Sponsoring Organizations of the Treadway Commission, whose internal control framework the common criteria build on."
+        },
+        {
+            "term": "CUEC",
+            "definition": "Complementary user entity control: a control the service organization's customers must operate for the system's controls to work as described."
+        }
+    ]
+}

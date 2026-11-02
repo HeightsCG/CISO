@@ -1,0 +1,1789 @@
+{
+    "pdf_sha256": "23a099dd1dc273b7a45fda2351f376344c33fcb2911d586036c0e0d631b8ad69",
+    "criteria": [
+        {
+            "id": "CC1.1",
+            "group": "Control Environment",
+            "points_of_focus": [
+                {
+                    "title": "Sets the Tone at the Top",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Establishes Standards of Conduct",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Evaluates Adherence to Standards of Conduct",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Addresses Deviations in a Timely Manner",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Considers Contractors and Vendor Employees in Demonstrating Its Commitment",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC1.2",
+            "group": "Control Environment",
+            "points_of_focus": [
+                {
+                    "title": "Establishes Oversight Responsibilities",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Applies Relevant Expertise",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Operates Independently",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Supplements Board Expertise",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC1.3",
+            "group": "Control Environment",
+            "points_of_focus": [
+                {
+                    "title": "Considers All Structures of the Entity",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Establishes Reporting Lines",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Defines, Assigns, and Limits Authorities and Responsibilities",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Addresses Specific Requirements When Defining Authorities and Responsibilities",
+                    "scope": "all"
+                },
+                {
+                    "title": "Considers Interactions With External Parties When Establishing Structures, Reporting Lines, Authorities, and Responsibilities",
+                    "scope": "all"
+                },
+                {
+                    "title": "Establishes Structures, Reporting Lines, and Authorities to Support Compliance With Legal and Contractual Privacy Requirements",
+                    "scope": "privacy"
+                }
+            ]
+        },
+        {
+            "id": "CC1.4",
+            "group": "Control Environment",
+            "points_of_focus": [
+                {
+                    "title": "Establishes Policies and Practices",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Evaluates Competence and Addresses Shortcomings",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Attracts, Develops, and Retains Individuals",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Plans and Prepares for Succession",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Considers the Background of Individuals",
+                    "scope": "all"
+                },
+                {
+                    "title": "Considers the Technical Competency of Individuals",
+                    "scope": "all"
+                },
+                {
+                    "title": "Provides Training to Maintain Technical Competencies",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC1.5",
+            "group": "Control Environment",
+            "points_of_focus": [
+                {
+                    "title": "Enforces Accountability Through Structures, Authorities, and Responsibilities",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Establishes Performance Measures, Incentives, and Rewards",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Evaluates Performance Measures, Incentives, and Rewards for Ongoing Relevance",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Considers Excessive Pressures",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Evaluates Performance and Rewards or Disciplines Individuals",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Takes Disciplinary Actions",
+                    "scope": "privacy"
+                }
+            ]
+        },
+        {
+            "id": "CC2.1",
+            "group": "Information and Communication",
+            "points_of_focus": [
+                {
+                    "title": "Identifies Information Requirements",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Captures Internal and External Sources of Data",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Processes Relevant Data Into Information",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Maintains Quality Throughout Processing",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Documents Data Flow",
+                    "scope": "all"
+                },
+                {
+                    "title": "Manages Assets",
+                    "scope": "all"
+                },
+                {
+                    "title": "Classifies Information",
+                    "scope": "all"
+                },
+                {
+                    "title": "Uses Information That Is Complete and Accurate",
+                    "scope": "all"
+                },
+                {
+                    "title": "Manages the Location of Assets",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC2.2",
+            "group": "Information and Communication",
+            "points_of_focus": [
+                {
+                    "title": "Communicates Internal Control Information",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Communicates With the Board of Directors",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Provides Separate Communication Lines",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Selects Relevant Method of Communication",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Communicates Responsibilities",
+                    "scope": "all"
+                },
+                {
+                    "title": "Communicates Information on Reporting Failures, Incidents, Concerns, and Other Matters",
+                    "scope": "all"
+                },
+                {
+                    "title": "Communicates Objectives and Changes to Objectives",
+                    "scope": "all"
+                },
+                {
+                    "title": "Communicates Information to Improve Security Knowledge and Awareness",
+                    "scope": "all"
+                },
+                {
+                    "title": "Communicates Information to Improve Privacy Knowledge and Awareness",
+                    "scope": "privacy"
+                },
+                {
+                    "title": "Communicates Incident Reporting Methods",
+                    "scope": "privacy"
+                },
+                {
+                    "title": "Communicates Information About System Operation and Boundaries",
+                    "scope": "system level"
+                },
+                {
+                    "title": "Communicates System Objectives",
+                    "scope": "system level"
+                },
+                {
+                    "title": "Communicates System Changes",
+                    "scope": "system level"
+                }
+            ]
+        },
+        {
+            "id": "CC2.3",
+            "group": "Information and Communication",
+            "points_of_focus": [
+                {
+                    "title": "Communicates to External Parties",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Enables Inbound Communications",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Communicates With the Board of Directors",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Provides Separate Communication Lines",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Selects Relevant Method of Communication",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Communicates Objectives Related to Confidentiality and Changes to Those Objectives",
+                    "scope": "confidentiality"
+                },
+                {
+                    "title": "Communicates Objectives Related to Privacy and Changes to Those Objectives",
+                    "scope": "privacy"
+                },
+                {
+                    "title": "Communicates Incident Reporting Methods",
+                    "scope": "privacy"
+                },
+                {
+                    "title": "Communicates Information About System Operation and Boundaries",
+                    "scope": "system level"
+                },
+                {
+                    "title": "Communicates System Objectives",
+                    "scope": "system level"
+                },
+                {
+                    "title": "Communicates System Responsibilities",
+                    "scope": "system level"
+                },
+                {
+                    "title": "Communicates Information on Reporting System Failures, Incidents, Concerns, and Other Matters",
+                    "scope": "system level"
+                }
+            ]
+        },
+        {
+            "id": "CC3.1",
+            "group": "Risk Assessment",
+            "points_of_focus": [
+                {
+                    "title": "Reflects Management's Choices",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Considers Tolerances for Risk",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Includes Operations and Financial Performance Goals",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Forms a Basis for Committing of Resources",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Complies With Applicable Accounting Standards",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Considers Materiality",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Reflects Entity Activities",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Complies With Externally Established Frameworks",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Considers the Required Level of Precision",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Reflects Entity Activities",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Reflects Management's Choices",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Considers the Required Level of Precision",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Reflects Entity Activities",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Reflects External Laws and Regulations",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Considers Tolerances for Risk",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Establishes Sub-Objectives for Risk Assessment",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC3.2",
+            "group": "Risk Assessment",
+            "points_of_focus": [
+                {
+                    "title": "Includes Entity, Subsidiary, Division, Operating Unit, and Functional Levels",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Analyzes Internal and External Factors",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Involves Appropriate Levels of Management",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Estimates Significance of Risks Identified",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Determines How to Respond to Risks",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Identifies Threats to Objectives",
+                    "scope": "all"
+                },
+                {
+                    "title": "Identifies Vulnerability of System Components",
+                    "scope": "all"
+                },
+                {
+                    "title": "Analyzes Threats and Vulnerabilities From Vendors, Business Partners, and Other Parties",
+                    "scope": "all"
+                },
+                {
+                    "title": "Assesses the Significance of the Risks",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC3.3",
+            "group": "Risk Assessment",
+            "points_of_focus": [
+                {
+                    "title": "Considers Various Types of Fraud",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Assesses Incentives and Pressures",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Assesses Opportunities",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Assesses Attitudes and Rationalizations",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Considers the Risks Related to the Use of IT and Access to Information",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC3.4",
+            "group": "Risk Assessment",
+            "points_of_focus": [
+                {
+                    "title": "Assesses Changes in the External Environment",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Assesses Changes in the Business Model",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Assesses Changes in Leadership",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Assesses Changes in Systems and Technology",
+                    "scope": "all"
+                },
+                {
+                    "title": "Assesses Changes in Vendor and Business Partner Relationships",
+                    "scope": "all"
+                },
+                {
+                    "title": "Assesses Changes in Threats and Vulnerabilities",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC4.1",
+            "group": "Monitoring Activities",
+            "points_of_focus": [
+                {
+                    "title": "Considers a Mix of Ongoing and Separate Evaluations",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Considers Rate of Change",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Establishes Baseline Understanding",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Uses Knowledgeable Personnel",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Integrates With Business Processes",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Adjusts Scope and Frequency",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Objectively Evaluates",
+                    "scope": "coso"
+                },
+                {
+                    "title": "Considers Different Types of Ongoing and Separate Evaluations",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC4.2",
+            "group": "Monitoring Activities",
+            "points_of_focus": [
+                {
+                    "title": "Assesses Results",
+                    "scope": "all"
+                },
+                {
+                    "title": "Communicates Deficiencies",
+                    "scope": "all"
+                },
+                {
+                    "title": "Monitors Corrective Action",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC5.1",
+            "group": "Control Activities",
+            "points_of_focus": [
+                {
+                    "title": "Integrates With Risk Assessment",
+                    "scope": "all"
+                },
+                {
+                    "title": "Considers Entity-Specific Factors",
+                    "scope": "all"
+                },
+                {
+                    "title": "Determines Relevant Business Processes",
+                    "scope": "all"
+                },
+                {
+                    "title": "Evaluates a Mix of Control Activity Types",
+                    "scope": "all"
+                },
+                {
+                    "title": "Considers at What Level Activities Are Applied",
+                    "scope": "all"
+                },
+                {
+                    "title": "Addresses Segregation of Duties",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC5.2",
+            "group": "Control Activities",
+            "points_of_focus": [
+                {
+                    "title": "Determines Dependency Between the Use of Technology in Business Processes and Technology General Controls",
+                    "scope": "all"
+                },
+                {
+                    "title": "Establishes Relevant Technology Infrastructure Control Activities",
+                    "scope": "all"
+                },
+                {
+                    "title": "Establishes Relevant Security Management Process Controls Activities",
+                    "scope": "all"
+                },
+                {
+                    "title": "Establishes Relevant Technology Acquisition, Development, and Maintenance Process Control Activities",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC5.3",
+            "group": "Control Activities",
+            "points_of_focus": [
+                {
+                    "title": "Establishes Policies and Procedures to Support Deployment of Management’s Directives",
+                    "scope": "all"
+                },
+                {
+                    "title": "Establishes Responsibility and Accountability for Executing Policies and Procedures",
+                    "scope": "all"
+                },
+                {
+                    "title": "Performs in a Timely Manner",
+                    "scope": "all"
+                },
+                {
+                    "title": "Takes Corrective Action",
+                    "scope": "all"
+                },
+                {
+                    "title": "Performs Using Competent Personnel",
+                    "scope": "all"
+                },
+                {
+                    "title": "Reassesses Policies and Procedures",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC6.1",
+            "group": "Logical and Physical Access Controls",
+            "points_of_focus": [
+                {
+                    "title": "Identifies and Manages the Inventory of Information Assets",
+                    "scope": "all"
+                },
+                {
+                    "title": "Assesses New Architectures",
+                    "scope": "all"
+                },
+                {
+                    "title": "Restricts Logical Access",
+                    "scope": "all"
+                },
+                {
+                    "title": "Identifies and Authenticates Users",
+                    "scope": "all"
+                },
+                {
+                    "title": "Considers Network Segmentation",
+                    "scope": "all"
+                },
+                {
+                    "title": "Manages Points of Access",
+                    "scope": "all"
+                },
+                {
+                    "title": "Restricts Access to Information Assets",
+                    "scope": "all"
+                },
+                {
+                    "title": "Manages Identification and Authentication",
+                    "scope": "all"
+                },
+                {
+                    "title": "Manages Credentials for Infrastructure and Software",
+                    "scope": "all"
+                },
+                {
+                    "title": "Uses Encryption to Protect Data",
+                    "scope": "all"
+                },
+                {
+                    "title": "Protects Cryptographic Keys",
+                    "scope": "all"
+                },
+                {
+                    "title": "Restricts Access to and Use of Confidential Information for Identified Purposes",
+                    "scope": "confidentiality"
+                },
+                {
+                    "title": "Restricts Access to and the Use of Personal Information",
+                    "scope": "privacy"
+                }
+            ]
+        },
+        {
+            "id": "CC6.2",
+            "group": "Logical and Physical Access Controls",
+            "points_of_focus": [
+                {
+                    "title": "Creates Access Credentials to Protected Information Assets",
+                    "scope": "all"
+                },
+                {
+                    "title": "Reviews Validity of Access Credentials",
+                    "scope": "all"
+                },
+                {
+                    "title": "Prevents the Use of Credentials When No Longer Valid",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC6.3",
+            "group": "Logical and Physical Access Controls",
+            "points_of_focus": [
+                {
+                    "title": "Creates or Modifies Access to Protected Information Assets",
+                    "scope": "all"
+                },
+                {
+                    "title": "Removes Access to Protected Information Assets",
+                    "scope": "all"
+                },
+                {
+                    "title": "Uses Access Control Structures",
+                    "scope": "all"
+                },
+                {
+                    "title": "Reviews Access Roles and Rules",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC6.4",
+            "group": "Logical and Physical Access Controls",
+            "points_of_focus": [
+                {
+                    "title": "Creates or Modifies Physical Access",
+                    "scope": "all"
+                },
+                {
+                    "title": "Removes Physical Access",
+                    "scope": "all"
+                },
+                {
+                    "title": "Recovers Physical Devices",
+                    "scope": "all"
+                },
+                {
+                    "title": "Reviews Physical Access",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC6.5",
+            "group": "Logical and Physical Access Controls",
+            "points_of_focus": [
+                {
+                    "title": "Removes Data and Software for Disposal",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC6.6",
+            "group": "Logical and Physical Access Controls",
+            "points_of_focus": [
+                {
+                    "title": "Restricts Access",
+                    "scope": "all"
+                },
+                {
+                    "title": "Protects Identification and Authentication Credentials",
+                    "scope": "all"
+                },
+                {
+                    "title": "Requires Additional Authentication or Credentials",
+                    "scope": "all"
+                },
+                {
+                    "title": "Implements Boundary Protection Systems",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC6.7",
+            "group": "Logical and Physical Access Controls",
+            "points_of_focus": [
+                {
+                    "title": "Restricts the Ability to Perform Transmission",
+                    "scope": "all"
+                },
+                {
+                    "title": "Uses Encryption Technologies or Secure Communication Channels to Protect Data",
+                    "scope": "all"
+                },
+                {
+                    "title": "Protects Removal Media",
+                    "scope": "all"
+                },
+                {
+                    "title": "Protects Endpoint Devices",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC6.8",
+            "group": "Logical and Physical Access Controls",
+            "points_of_focus": [
+                {
+                    "title": "Restricts Installation and Modification of Application and Software",
+                    "scope": "all"
+                },
+                {
+                    "title": "Detects Unauthorized Changes to Software and Configuration Parameters",
+                    "scope": "all"
+                },
+                {
+                    "title": "Uses a Defined Change Control Process",
+                    "scope": "all"
+                },
+                {
+                    "title": "Uses Antivirus and Anti-Malware Software",
+                    "scope": "all"
+                },
+                {
+                    "title": "Scans Information Assets From Outside the Entity for Malware and Other Unauthorized Software",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC7.1",
+            "group": "System Operations",
+            "points_of_focus": [
+                {
+                    "title": "Uses Defined Configuration Standards",
+                    "scope": "all"
+                },
+                {
+                    "title": "Monitors Infrastructure and Software",
+                    "scope": "all"
+                },
+                {
+                    "title": "Implements Change-Detection Mechanisms",
+                    "scope": "all"
+                },
+                {
+                    "title": "Detects Unknown or Unauthorized Components",
+                    "scope": "all"
+                },
+                {
+                    "title": "Conducts Vulnerability Scans",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC7.2",
+            "group": "System Operations",
+            "points_of_focus": [
+                {
+                    "title": "Implements Detection Policies, Procedures, and Tools",
+                    "scope": "all"
+                },
+                {
+                    "title": "Designs Detection Measures",
+                    "scope": "all"
+                },
+                {
+                    "title": "Implements Filters to Analyze Anomalies",
+                    "scope": "all"
+                },
+                {
+                    "title": "Monitors Detection Tools for Effective Operation",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC7.3",
+            "group": "System Operations",
+            "points_of_focus": [
+                {
+                    "title": "Responds to Security Incidents",
+                    "scope": "all"
+                },
+                {
+                    "title": "Communicates and Reviews Detected Security Events",
+                    "scope": "all"
+                },
+                {
+                    "title": "Develops and Implements Procedures to Analyze Security Incidents",
+                    "scope": "all"
+                },
+                {
+                    "title": "Assesses the Impact on Confidential Information",
+                    "scope": "confidentiality"
+                },
+                {
+                    "title": "Determines Confidential Information Used or Disclosed",
+                    "scope": "confidentiality"
+                },
+                {
+                    "title": "Assesses the Impact on Personal Information",
+                    "scope": "privacy"
+                },
+                {
+                    "title": "Determines Personal Information Used or Disclosed",
+                    "scope": "privacy"
+                }
+            ]
+        },
+        {
+            "id": "CC7.4",
+            "group": "System Operations",
+            "points_of_focus": [
+                {
+                    "title": "Assigns Roles and Responsibilities",
+                    "scope": "all"
+                },
+                {
+                    "title": "Contains and Responds to Security Incidents",
+                    "scope": "all"
+                },
+                {
+                    "title": "Mitigates Ongoing Security Incidents",
+                    "scope": "all"
+                },
+                {
+                    "title": "Resolves Security Incidents",
+                    "scope": "all"
+                },
+                {
+                    "title": "Restores Operations",
+                    "scope": "all"
+                },
+                {
+                    "title": "Develops and Implements Communication of Security Incidents",
+                    "scope": "all"
+                },
+                {
+                    "title": "Obtains Understanding of Nature of Incident and Determines Containment Strategy",
+                    "scope": "all"
+                },
+                {
+                    "title": "Remediates Identified Vulnerabilities",
+                    "scope": "all"
+                },
+                {
+                    "title": "Communicates Remediation Activities",
+                    "scope": "all"
+                },
+                {
+                    "title": "Evaluates the Effectiveness of Incident Response",
+                    "scope": "all"
+                },
+                {
+                    "title": "Periodically Evaluates Incidents",
+                    "scope": "all"
+                },
+                {
+                    "title": "Applies Breach Response Procedures",
+                    "scope": "privacy"
+                },
+                {
+                    "title": "Communicates Unauthorized Use and Disclosure",
+                    "scope": "privacy"
+                },
+                {
+                    "title": "Application of Sanctions",
+                    "scope": "privacy"
+                }
+            ]
+        },
+        {
+            "id": "CC7.5",
+            "group": "System Operations",
+            "points_of_focus": [
+                {
+                    "title": "Restores the Affected Environment",
+                    "scope": "all"
+                },
+                {
+                    "title": "Communicates Information About the Incident",
+                    "scope": "all"
+                },
+                {
+                    "title": "Determines Root Cause of the Incident",
+                    "scope": "all"
+                },
+                {
+                    "title": "Implements Changes to Prevent and Detect Recurrences",
+                    "scope": "all"
+                },
+                {
+                    "title": "Improves Response and Recovery Procedures",
+                    "scope": "all"
+                },
+                {
+                    "title": "Implements Incident-Recovery Plan Testing",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC8.1",
+            "group": "Change Management",
+            "points_of_focus": [
+                {
+                    "title": "Manages Changes Throughout the System Life Cycle",
+                    "scope": "all"
+                },
+                {
+                    "title": "Authorizes Changes",
+                    "scope": "all"
+                },
+                {
+                    "title": "Designs and Develops Changes",
+                    "scope": "all"
+                },
+                {
+                    "title": "Documents Changes",
+                    "scope": "all"
+                },
+                {
+                    "title": "Tracks System Changes",
+                    "scope": "all"
+                },
+                {
+                    "title": "Configures Software",
+                    "scope": "all"
+                },
+                {
+                    "title": "Tests System Changes",
+                    "scope": "all"
+                },
+                {
+                    "title": "Approves System Changes",
+                    "scope": "all"
+                },
+                {
+                    "title": "Deploys System Changes",
+                    "scope": "all"
+                },
+                {
+                    "title": "Identifies and Evaluates System Changes",
+                    "scope": "all"
+                },
+                {
+                    "title": "Identifies Changes in Infrastructure, Data, Software, and Procedures Required to Remediate Incidents",
+                    "scope": "all"
+                },
+                {
+                    "title": "Creates Baseline Configuration of IT Technology",
+                    "scope": "all"
+                },
+                {
+                    "title": "Provides for Changes Necessary in Emergency Situations",
+                    "scope": "all"
+                },
+                {
+                    "title": "Manages Patch Changes",
+                    "scope": "all"
+                },
+                {
+                    "title": "Considers System Resilience",
+                    "scope": "availability"
+                },
+                {
+                    "title": "Protects Confidential Information",
+                    "scope": "confidentiality"
+                },
+                {
+                    "title": "Protects Personal Information",
+                    "scope": "privacy"
+                },
+                {
+                    "title": "Privacy by Design",
+                    "scope": "privacy"
+                }
+            ]
+        },
+        {
+            "id": "CC9.1",
+            "group": "Risk Mitigation",
+            "points_of_focus": [
+                {
+                    "title": "Considers Mitigation of Risks of Business Disruption",
+                    "scope": "all"
+                },
+                {
+                    "title": "Considers the Use of Insurance to Mitigate Financial Impact Risks",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "CC9.2",
+            "group": "Risk Mitigation",
+            "points_of_focus": [
+                {
+                    "title": "Establishes Requirements for Vendor and Business Partner Engagements",
+                    "scope": "all"
+                },
+                {
+                    "title": "Identifies Vulnerabilities",
+                    "scope": "all"
+                },
+                {
+                    "title": "Assesses Vendor and Business Partner Risks",
+                    "scope": "all"
+                },
+                {
+                    "title": "Assigns Responsibility and Accountability for Managing Vendors and Business Partners",
+                    "scope": "all"
+                },
+                {
+                    "title": "Establishes Communication Protocols for Vendors and Business Partners",
+                    "scope": "all"
+                },
+                {
+                    "title": "Establishes Exception Handling Procedures From Vendors and Business Partners",
+                    "scope": "all"
+                },
+                {
+                    "title": "Assesses Vendor and Business Partner Performance",
+                    "scope": "all"
+                },
+                {
+                    "title": "Implements Procedures for Addressing Issues Identified During Vendor and Business Partner Assessments",
+                    "scope": "all"
+                },
+                {
+                    "title": "Implements Procedures for Terminating Vendor and Business Partner Relationships",
+                    "scope": "all"
+                },
+                {
+                    "title": "Obtains Confidentiality Commitments From Vendors and Business Partners",
+                    "scope": "confidentiality"
+                },
+                {
+                    "title": "Assesses Compliance With Confidentiality Commitments of Vendors and Business Partners",
+                    "scope": "confidentiality"
+                },
+                {
+                    "title": "Obtains Privacy Commitments From Vendors and Business Partners",
+                    "scope": "privacy"
+                },
+                {
+                    "title": "Assesses Compliance With Privacy Commitments of Vendors and Business Partners",
+                    "scope": "privacy"
+                }
+            ]
+        },
+        {
+            "id": "A1.1",
+            "group": "Availability",
+            "points_of_focus": [
+                {
+                    "title": "Measures Current Usage",
+                    "scope": "all"
+                },
+                {
+                    "title": "Forecasts Capacity",
+                    "scope": "all"
+                },
+                {
+                    "title": "Makes Changes Based on Forecasts",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "A1.2",
+            "group": "Availability",
+            "points_of_focus": [
+                {
+                    "title": "Identifies Environmental Threats",
+                    "scope": "all"
+                },
+                {
+                    "title": "Designs Detection Measures",
+                    "scope": "all"
+                },
+                {
+                    "title": "Implements and Maintains Environmental Protection Mechanisms",
+                    "scope": "all"
+                },
+                {
+                    "title": "Implements Alerts to Analyze Anomalies",
+                    "scope": "all"
+                },
+                {
+                    "title": "Responds to Environmental Threat Events",
+                    "scope": "all"
+                },
+                {
+                    "title": "Communicates and Reviews Detected Environmental Threat Events",
+                    "scope": "all"
+                },
+                {
+                    "title": "Determines Data Requiring Backup",
+                    "scope": "all"
+                },
+                {
+                    "title": "Performs Data Backup",
+                    "scope": "all"
+                },
+                {
+                    "title": "Addresses Offsite Storage",
+                    "scope": "all"
+                },
+                {
+                    "title": "Implements Alternate Processing Infrastructure",
+                    "scope": "all"
+                },
+                {
+                    "title": "Considers Data Recoverability",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "A1.3",
+            "group": "Availability",
+            "points_of_focus": [
+                {
+                    "title": "Implements Business Continuity Plan Testing",
+                    "scope": "all"
+                },
+                {
+                    "title": "Tests Integrity and Completeness of Backup Data",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "C1.1",
+            "group": "Confidentiality",
+            "points_of_focus": [
+                {
+                    "title": "Defines and Identifies Confidential information",
+                    "scope": "all"
+                },
+                {
+                    "title": "Retains Confidential Information",
+                    "scope": "all"
+                },
+                {
+                    "title": "Protects Confidential Information From Destruction",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "C1.2",
+            "group": "Confidentiality",
+            "points_of_focus": [
+                {
+                    "title": "Identifies Confidential Information for Destruction",
+                    "scope": "all"
+                },
+                {
+                    "title": "Destroys Confidential Information",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "PI1.1",
+            "group": "Processing Integrity",
+            "points_of_focus": [
+                {
+                    "title": "Identifies Functional and Nonfunctional Requirements and Information Specifications",
+                    "scope": "all"
+                },
+                {
+                    "title": "Defines Data Necessary to Support a Product or Service",
+                    "scope": "all"
+                },
+                {
+                    "title": "Defines Information Necessary to Support the Use of a Good or Product",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "PI1.2",
+            "group": "Processing Integrity",
+            "points_of_focus": [
+                {
+                    "title": "Defines Characteristics of Processing Inputs",
+                    "scope": "all"
+                },
+                {
+                    "title": "Evaluates Processing Inputs",
+                    "scope": "all"
+                },
+                {
+                    "title": "Creates and Maintains Records of System Inputs",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "PI1.3",
+            "group": "Processing Integrity",
+            "points_of_focus": [
+                {
+                    "title": "Defines Processing Specifications",
+                    "scope": "all"
+                },
+                {
+                    "title": "Defines Processing Activities",
+                    "scope": "all"
+                },
+                {
+                    "title": "Detects and Corrects Processing or Production Activity Errors",
+                    "scope": "all"
+                },
+                {
+                    "title": "Records System Processing Activities",
+                    "scope": "all"
+                },
+                {
+                    "title": "Processes Inputs",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "PI1.4",
+            "group": "Processing Integrity",
+            "points_of_focus": [
+                {
+                    "title": "Protects Output",
+                    "scope": "all"
+                },
+                {
+                    "title": "Distributes Output Only to Intended Parties",
+                    "scope": "all"
+                },
+                {
+                    "title": "Distributes Output Completely and Accurately",
+                    "scope": "all"
+                },
+                {
+                    "title": "Creates and Maintains Records of System Output Activities",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "PI1.5",
+            "group": "Processing Integrity",
+            "points_of_focus": [
+                {
+                    "title": "Protects Stored Items",
+                    "scope": "all"
+                },
+                {
+                    "title": "Archives and Protects System Records",
+                    "scope": "all"
+                },
+                {
+                    "title": "Stores Data Completely and Accurately",
+                    "scope": "all"
+                },
+                {
+                    "title": "Creates and Maintains Records of System Storage Activities",
+                    "scope": "all"
+                }
+            ]
+        },
+        {
+            "id": "P1.1",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Communicates to Data Subjects",
+                    "scope": "all",
+                    "controller": true
+                },
+                {
+                    "title": "Provides Notice to Data Subjects",
+                    "scope": "all",
+                    "controller": true
+                },
+                {
+                    "title": "Covers Entities and Activities in Notice",
+                    "scope": "all",
+                    "controller": true
+                },
+                {
+                    "title": "Uses Clear Language and Presents a Current Privacy Notice in a Location Easily Found by Data Subjects",
+                    "scope": "all",
+                    "controller": true
+                },
+                {
+                    "title": "Reviews the Privacy Notice",
+                    "scope": "all",
+                    "controller": true
+                },
+                {
+                    "title": "Communicates Changes to Notice",
+                    "scope": "all",
+                    "controller": true
+                },
+                {
+                    "title": "Retains Prior Notices",
+                    "scope": "all",
+                    "controller": true
+                }
+            ]
+        },
+        {
+            "id": "P2.1",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Communicates to Data Subjects",
+                    "scope": "all",
+                    "controller": true
+                },
+                {
+                    "title": "Communicates Consequences of Denying or Withdrawing Consent",
+                    "scope": "all",
+                    "controller": true
+                },
+                {
+                    "title": "Obtains Implicit or Explicit Consent",
+                    "scope": "all",
+                    "controller": true
+                },
+                {
+                    "title": "Documents and Obtains Consent for New Purposes and Uses",
+                    "scope": "all",
+                    "controller": true
+                },
+                {
+                    "title": "Obtains Explicit Consent for Sensitive Information",
+                    "scope": "all",
+                    "controller": true
+                },
+                {
+                    "title": "Obtains Consent for Data Transfers",
+                    "scope": "all",
+                    "controller": true
+                }
+            ]
+        },
+        {
+            "id": "P3.1",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Limits the Collection of Personal Information",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Collects Information by Fair and Lawful Means",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Collects Information From Reliable Sources",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Informs Data Subjects When Additional Information Is Acquired",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                }
+            ]
+        },
+        {
+            "id": "P3.2",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Informs Data Subjects of Consequences of Failure to Provide Consent",
+                    "scope": "all",
+                    "controller": true
+                },
+                {
+                    "title": "Documents Explicit Consent to Retain Information",
+                    "scope": "all",
+                    "controller": true
+                }
+            ]
+        },
+        {
+            "id": "P4.1",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Uses Personal Information for Intended Purposes",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                }
+            ]
+        },
+        {
+            "id": "P4.2",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Retains Personal Information",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Protects Personal Information",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                }
+            ]
+        },
+        {
+            "id": "P4.3",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Captures, Identifies, and Flags Requests for Deletion",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Disposes of, Destroys, and Redacts Personal Information",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Destroys Personal Information",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                }
+            ]
+        },
+        {
+            "id": "P5.1",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Responds to Data Controller Requests",
+                    "scope": "all",
+                    "processor": true
+                },
+                {
+                    "title": "Authenticates Data Subjects’ Identity",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Permits Data Subjects Access to Their Personal Information",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Provides Understandable Personal Information Within Reasonable Time",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Informs Data Subjects If Access Is Denied",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                }
+            ]
+        },
+        {
+            "id": "P5.2",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Responds to Data Controller Requests",
+                    "scope": "all",
+                    "processor": true
+                },
+                {
+                    "title": "Communicates Denial of Access Requests",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Permits Data Subjects to Update or Correct Personal Information",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Communicates Denial of Correction Requests",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                }
+            ]
+        },
+        {
+            "id": "P6.1",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Communicates Privacy Policies to Third Parties",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Discloses Personal Information Only When Appropriate",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Discloses Personal Information Only to Appropriate Third Parties",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Discloses Information to Third Parties for New Purposes and Uses",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                }
+            ]
+        },
+        {
+            "id": "P6.2",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Creates and Retains Record of Authorized Disclosures",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                }
+            ]
+        },
+        {
+            "id": "P6.3",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Creates and Retains Record of Detected or Reported Unauthorized Disclosures",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                }
+            ]
+        },
+        {
+            "id": "P6.4",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Evaluates Third-Party Compliance With Privacy Commitments",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Remediates Misuse of Personal Information by a Third Party",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Obtains Commitments to Report Unauthorized Disclosures",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                }
+            ]
+        },
+        {
+            "id": "P6.5",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Remediates Misuse of Personal Information by a Third Party",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Reports Actual or Suspected Unauthorized Disclosures",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                }
+            ]
+        },
+        {
+            "id": "P6.6",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Identifies Reporting Requirements",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Provides Notice of Breaches and Incidents",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                }
+            ]
+        },
+        {
+            "id": "P6.7",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Responds to Data Controller Requests",
+                    "scope": "all",
+                    "processor": true
+                },
+                {
+                    "title": "Identifies Types of Personal Information and Handling Process",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Captures, Identifies, and Communicates Requests for Information",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                }
+            ]
+        },
+        {
+            "id": "P7.1",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Ensures Accuracy and Completeness of Personal Information",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Ensures Relevance of Personal Information",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                }
+            ]
+        },
+        {
+            "id": "P8.1",
+            "group": "Privacy",
+            "points_of_focus": [
+                {
+                    "title": "Communicates to Data Subjects or Data Controllers",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Addresses Inquiries, Complaints, and Disputes",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Documents and Communicates Dispute Resolution and Recourse",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Documents and Reports Compliance Review Results",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Documents and Reports Instances of Noncompliance",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                },
+                {
+                    "title": "Performs Ongoing Monitoring",
+                    "scope": "all",
+                    "controller": true,
+                    "processor": true
+                }
+            ]
+        }
+    ]
+}

@@ -58,6 +58,8 @@ class DashboardModel extends Model {
                     a.deleted = 0
                     and
                     ai.deleted = 0
+                    and
+                    ai.control_kind = 'control'
                 GROUP BY
                     ai.item_result";
         return parent::select($sql, $where);
@@ -107,7 +109,7 @@ class DashboardModel extends Model {
                     assessments a
                     JOIN projects p ON p.id = a.project_id and p.deleted = 0
                     LEFT JOIN clients cl ON cl.id = p.client_id and cl.deleted = 0
-                    LEFT JOIN assessment_items ai ON ai.assessment_id = a.id and ai.deleted = 0
+                    LEFT JOIN assessment_items ai ON ai.assessment_id = a.id and ai.deleted = 0 and ai.control_kind = 'control'
                 WHERE
                     a.company_id = :company_id
                     and
@@ -155,7 +157,7 @@ class DashboardModel extends Model {
                     clients c
                     LEFT JOIN projects p ON p.client_id = c.id and p.deleted = 0
                     LEFT JOIN assessments a ON a.project_id = p.id and a.deleted = 0
-                    LEFT JOIN assessment_items ai ON ai.assessment_id = a.id and ai.deleted = 0
+                    LEFT JOIN assessment_items ai ON ai.assessment_id = a.id and ai.deleted = 0 and ai.control_kind = 'control'
                 WHERE
                     c.company_id = :company_id
                     and

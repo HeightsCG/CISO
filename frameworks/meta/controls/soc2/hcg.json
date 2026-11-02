@@ -1,0 +1,307 @@
+{
+    "CC1.1": {
+        "title": "Integrity and Ethical Values",
+        "description": "The organization sets and enforces expectations for ethical conduct, including a code of conduct, so that commitments to integrity are demonstrated across the entity.",
+        "guidance": "Code of conduct: Maintain a written code of conduct covering ethics, acceptable use, and security responsibilities, acknowledged by every employee and contractor at hire and annually.\nTone at the top: Leadership visibly reinforces ethical and security expectations, and violations are addressed consistently regardless of seniority.\nContractor coverage: Extend conduct and integrity expectations to contractors and temporary staff through onboarding terms and agreements."
+    },
+    "CC1.2": {
+        "title": "Board Oversight",
+        "description": "Those charged with governance operate independently of management and oversee the development and performance of internal control.",
+        "guidance": "Independent oversight: A board, advisory body, or independent owner reviews security program performance on a set cadence.\nOversight of management: Governance reviews management's design and operation of controls rather than relying on management self-reporting.\nSecurity expertise: Governance has access to security expertise, internal or external, sufficient to challenge management."
+    },
+    "CC1.3": {
+        "title": "Organizational Structure",
+        "description": "Management defines reporting lines, authorities, and responsibilities appropriate to the entity's objectives.",
+        "guidance": "Defined structure: Maintain an org chart with clear reporting lines covering security roles and responsibilities.\nRole definitions: Document responsibilities for control operation in role descriptions or a RACI so ownership of each control is unambiguous.\nAuthority delegation: Delegate authority commensurate with responsibility and periodically review it as the entity changes."
+    },
+    "CC1.4": {
+        "title": "Competence",
+        "description": "The organization attracts, develops, and retains people with the skills needed to meet its objectives, including security responsibilities.",
+        "guidance": "Hiring standards: Screen candidates per policy (background checks where lawful) and verify competence for security-relevant roles.\nTraining and development: Provide role-appropriate training so personnel can carry out control responsibilities, refreshed on a defined cadence.\nSuccession: Identify backups for critical security roles to avoid single points of failure."
+    },
+    "CC1.5": {
+        "title": "Accountability",
+        "description": "Individuals are held accountable for their internal control responsibilities, with incentives and disciplinary processes aligned to them.",
+        "guidance": "Performance accountability: Include control and security responsibilities in performance evaluation for relevant roles.\nIncentive alignment: Design incentives that avoid rewarding behavior that undermines controls, and apply discipline consistently for violations.\nEscalation: Provide a channel to report control failures and misconduct without fear of retaliation."
+    },
+    "CC2.1": {
+        "title": "Information Quality",
+        "description": "The organization identifies what information its controls depend on and makes sure that information is accurate, complete, timely and fit for purpose.",
+        "guidance": "Data quality: Identify the information internal control depends on (logs, reports, metrics) and validate its completeness and accuracy.\nRelevant reporting: Produce security reporting (posture, incidents, exceptions) at a frequency that supports timely decisions.\nSource reliability: Prefer system-generated evidence over manual assertions for control monitoring."
+    },
+    "CC2.2": {
+        "title": "Internal Communication",
+        "description": "Objectives, responsibilities, and expectations for internal control, including security commitments, are communicated internally.",
+        "guidance": "Policy communication: Publish security policies where personnel can find them and notify on material changes.\nObjectives and responsibilities: Communicate each person's control responsibilities at onboarding and when roles change.\nWhistleblower channel: Maintain and publicize a confidential channel for reporting concerns."
+    },
+    "CC2.3": {
+        "title": "External Communication",
+        "description": "The organization communicates with external parties about matters affecting internal control, such as service commitments, incidents, and changes.",
+        "guidance": "Customer commitments: Communicate service commitments, system boundaries, and responsibilities to customers (terms, trust page, SLAs).\nIncident communication: Define how and when external parties, including customers and regulators, are notified of incidents.\nVendor expectations: Communicate security expectations to vendors and receive their communications, such as breach notices and SOC reports."
+    },
+    "CC3.1": {
+        "title": "Objective Setting",
+        "description": "The organization specifies objectives clearly enough that risks to their achievement can be identified and assessed.",
+        "guidance": "Objective clarity: State security, availability, and processing objectives specifically enough to assess risk against them.\nCommitment linkage: Trace objectives to customer commitments and legal or contractual obligations.\nTolerance definition: Define risk tolerance so deviations from objectives are recognizable."
+    },
+    "CC3.2": {
+        "title": "Risk Identification",
+        "description": "Risks to objectives are identified across the entity and analyzed to determine how they should be managed.",
+        "guidance": "Risk register: Maintain a risk register identifying threats to objectives across the entity, systems, and data, with likelihood and impact ratings.\nPeriodic assessment: Perform the risk assessment on a defined cadence and on significant change.\nTreatment decisions: Record how each significant risk is treated: mitigated, accepted, transferred, or avoided, with an owner."
+    },
+    "CC3.3": {
+        "title": "Fraud Risk",
+        "description": "The potential for fraud, including unauthorized access and misuse of assets, is considered in assessing risks.",
+        "guidance": "Fraud scenarios: Consider fraud explicitly, including unauthorized access, data theft, management override, and misuse of assets.\nIncentive review: Assess where incentives and pressures could motivate fraudulent behavior.\nAnti-fraud controls: Map fraud risks to the controls that mitigate them, such as segregation of duties and monitoring."
+    },
+    "CC3.4": {
+        "title": "Change Analysis",
+        "description": "The organization identifies and assesses changes, internal and external, that could significantly affect internal control.",
+        "guidance": "Change identification: Identify internal and external changes (new systems, vendors, regulations, threats, business models) that alter risk.\nAssessment refresh: Update the risk assessment when significant changes occur rather than waiting for the annual cycle.\nLeadership review: Review the impact of significant changes on internal control with leadership."
+    },
+    "CC4.1": {
+        "title": "Ongoing Evaluations",
+        "description": "The organization performs ongoing and separate evaluations to confirm that controls are present and functioning.",
+        "guidance": "Monitoring program: Perform ongoing monitoring (metrics, alerts, control self-tests) and periodic evaluations (internal audits, assessments) of control effectiveness.\nIndependent evaluation: Use evaluators independent of control operators where practicable, including third-party assessments.\nBaseline understanding: Establish an understood baseline of control design so deviations are detectable."
+    },
+    "CC4.2": {
+        "title": "Deficiency Communication",
+        "description": "Control deficiencies are evaluated and communicated to those responsible for corrective action, including senior management and governance as appropriate.",
+        "guidance": "Deficiency tracking: Record identified deficiencies with severity, owner, and remediation date, and track to closure.\nEscalation of findings: Communicate deficiencies to those able to act, escalating significant ones to senior management and governance.\nRemediation verification: Verify remediation effectiveness rather than closing on assertion."
+    },
+    "CC5.1": {
+        "title": "Control Selection",
+        "description": "Controls are chosen and designed specifically to bring the risks identified in the risk assessment down to a level management is willing to accept.",
+        "guidance": "Risk-linked controls: Select and design control activities that directly address risks in the risk register.\nLayered approach: Mix preventive, detective, and corrective controls at entity, process, and technology levels.\nSegregation of duties: Segregate incompatible duties, applying compensating monitoring where segregation is impracticable."
+    },
+    "CC5.2": {
+        "title": "Technology Controls",
+        "description": "General controls over technology are selected and developed to support the achievement of objectives.",
+        "guidance": "Technology general controls: Implement general controls over technology: access, change, and operations controls for the infrastructure controls rely on.\nControl coverage: Ensure security tooling and infrastructure controls span the full system boundary, including cloud services.\nConfiguration baselines: Maintain secure configuration baselines for infrastructure supporting control activities."
+    },
+    "CC5.3": {
+        "title": "Policy Deployment",
+        "description": "Control activities are deployed through policies that establish expectations and procedures that put them into action.",
+        "guidance": "Policy-to-procedure: Back each policy with procedures naming who performs the activity, how, and how often.\nCompetent execution: Assign control activities to competent personnel with the authority to perform them.\nPeriodic reassessment: Reassess policies, procedures, and control activities on a cadence and after incidents or change."
+    },
+    "CC6.1": {
+        "title": "Logical Access Security",
+        "description": "Software, network design and system settings work together to keep protected data and systems open only to authorized people and services.",
+        "guidance": "Identity lifecycle: Manage identities from provisioning to deprovisioning in an identity store of record covering employees, contractors, and service accounts.\nAuthentication strength: Enforce strong authentication: MFA for remote, privileged, and sensitive access; strong credential standards elsewhere.\nAsset and data boundaries: Inventory protected information assets and define the system boundary the access controls protect.\nEncryption of protected assets: Protect information at rest with encryption or equivalent safeguards aligned to its classification."
+    },
+    "CC6.2": {
+        "title": "User Registration",
+        "description": "New internal and external users are registered and authorized before credentials are issued, and access is removed when no longer appropriate.",
+        "guidance": "Provisioning approval: Require documented authorization before credentials are issued, tied to role.\nDeprovisioning: Remove access promptly on termination or role change, with a defined SLA and verification.\nAccess recertification: Recertify user access on a cadence, removing access not reaffirmed by owners."
+    },
+    "CC6.3": {
+        "title": "Access Modification and Removal",
+        "description": "Access to data and system resources is granted, modified, and revoked based on roles and responsibilities, applying least privilege and segregation of duties.",
+        "guidance": "Role-based access: Grant access through roles reflecting least privilege and need-to-know; exceptions are documented and time-bound.\nPrivileged access management: Control privileged access separately: separate accounts, stronger authentication, session logging, and periodic review.\nSegregation enforcement: Enforce segregation of duties in entitlements, with compensating monitoring where technical enforcement is not possible."
+    },
+    "CC6.4": {
+        "title": "Physical Access",
+        "description": "Only authorized people can enter data centers, server rooms, media storage and other sensitive places, and that access is withdrawn when it is no longer needed.",
+        "guidance": "Facility access: Restrict physical access to facilities and sensitive areas to authorized personnel with badge or equivalent controls.\nVisitor management: Log and escort visitors in areas containing protected assets.\nPhysical access review: Review and revoke physical access rights on the same lifecycle as logical access."
+    },
+    "CC6.5": {
+        "title": "Asset Disposal",
+        "description": "Protected information is removed from assets and media before disposal or repurposing.",
+        "guidance": "Sanitization before disposal: Sanitize or destroy media and equipment containing protected information before disposal or reuse, with certificates where third parties perform it.\nDecommissioning process: Formally decommission systems: remove data, revoke credentials and certificates, and update inventories."
+    },
+    "CC6.6": {
+        "title": "External Threat Protection",
+        "description": "The organization implements measures to protect against threats from sources outside its system boundaries.",
+        "guidance": "Perimeter defenses: Defend external boundaries with firewalls, hardened endpoints, and controlled ingress and egress.\nRemote access security: Secure remote access via encrypted channels with MFA, avoiding split exposure of internal resources.\nExternal threat monitoring: Monitor external-facing services for attack and abuse, including credential stuffing and scanning."
+    },
+    "CC6.7": {
+        "title": "Data in Transit and on Devices",
+        "description": "The movement of information to and from the system, and its handling on removable media and end-user devices, is restricted and protected.",
+        "guidance": "Transmission encryption: Encrypt protected information in transit over public and untrusted networks with current protocols.\nEndpoint and media controls: Restrict movement of protected data to removable media and unmanaged endpoints; encrypt and manage what is allowed.\nData loss prevention: Apply controls to detect or block unauthorized exfiltration channels appropriate to risk."
+    },
+    "CC6.8": {
+        "title": "Unauthorized Software",
+        "description": "Controls prevent and detect the introduction of unauthorized or malicious software.",
+        "guidance": "Malware defense: Deploy anti-malware or endpoint detection on susceptible systems, kept current and centrally monitored.\nSoftware allowlisting: Control what software can be introduced and executed, through allowlisting, signing, or managed distribution.\nUnauthorized software detection: Detect unauthorized software through inventory reconciliation or endpoint telemetry."
+    },
+    "CC7.1": {
+        "title": "Vulnerability Monitoring",
+        "description": "The organization monitors its infrastructure and software for vulnerabilities and configuration deviations that could expose the system.",
+        "guidance": "Vulnerability scanning: Scan infrastructure and applications for vulnerabilities on a cadence and after significant change, remediating by risk-based SLAs.\nConfiguration monitoring: Detect deviations from secure configuration baselines.\nThreat intelligence: Track new vulnerabilities and threats relevant to the technology stack."
+    },
+    "CC7.2": {
+        "title": "Anomaly Detection",
+        "description": "System components are monitored for anomalies and security events that could indicate malicious acts, natural disasters, or errors.",
+        "guidance": "Security monitoring: Collect and analyze security-relevant logs across the boundary; alert on anomalies indicating incidents, errors, or misuse.\nCoverage completeness: Ensure monitoring covers critical systems, identity providers, and cloud control planes, not just servers.\nAlert triage: Define who reviews alerts, how fast, and how false positives are tuned."
+    },
+    "CC7.3": {
+        "title": "Event Evaluation",
+        "description": "Alerts and suspicious activity are triaged to decide whether they are real incidents that put commitments at risk, and confirmed incidents are acted on.",
+        "guidance": "Event evaluation: Assess detected events against incident criteria to decide whether objectives were or could be affected.\nSeverity classification: Classify incidents by impact to drive proportionate response.\nLessons captured: Record evaluation outcomes, including non-incidents, to improve detection."
+    },
+    "CC7.4": {
+        "title": "Incident Response",
+        "description": "The organization responds to identified security incidents through an established program of containment, remediation, and communication.",
+        "guidance": "Incident response program: Operate a documented incident response process: roles, containment, eradication, communication, and legal or regulatory notification.\nResponse testing: Exercise the plan (tabletops or simulations) at least annually and after material change.\nNotification obligations: Map notification duties to customers and regulators with their deadlines, and meet them during response."
+    },
+    "CC7.5": {
+        "title": "Incident Recovery",
+        "description": "After an incident, the organization restores affected systems and data, confirms normal operation and puts lessons learned into practice.",
+        "guidance": "Recovery execution: Restore affected systems and data to known-good state, verifying integrity before return to service.\nRoot cause and improvement: Perform post-incident review, fix root causes, and feed changes back into controls and training.\nRecovery capability: Maintain and test backups and recovery procedures supporting incident recovery."
+    },
+    "CC8.1": {
+        "title": "Change Management",
+        "description": "Changes to infrastructure, data, software, and procedures are authorized, designed, developed, tested, approved, and implemented in a controlled manner.",
+        "guidance": "Change process: Authorize, test, and approve changes to infrastructure, software, and configurations before deployment, with records.\nSegregated environments: Separate development, test, and production; restrict who can deploy to production.\nEmergency changes: Allow expedited emergency changes with retrospective review and approval.\nInfrastructure as code: Apply the same change discipline to infrastructure and configuration changes as to application code."
+    },
+    "CC9.1": {
+        "title": "Risk Mitigation",
+        "description": "The organization plans for events that could interrupt the business, such as outages or disasters, and puts measures in place to limit their impact.",
+        "guidance": "Business disruption risk: Identify disruption scenarios (loss of facility, provider, key personnel, data) and mitigate per business impact.\nResilience planning: Maintain continuity and disaster recovery arrangements aligned to recovery objectives.\nInsurance and transfer: Consider risk transfer, including cyber insurance, where mitigation alone is insufficient."
+    },
+    "CC9.2": {
+        "title": "Vendor Risk Management",
+        "description": "Vendors and business partners are vetted before onboarding and monitored afterwards, so the risks they introduce stay understood and under control.",
+        "guidance": "Vendor inventory and tiering: Maintain a vendor inventory tiered by access to systems and data and criticality to operations.\nPre-engagement diligence: Assess vendor security before engagement, proportionate to tier (SOC reports, questionnaires, certifications).\nContractual requirements: Bind vendors to security, confidentiality, and breach notification obligations in contracts.\nOngoing monitoring: Reassess vendors periodically and on trigger events; track remediation of identified issues."
+    },
+    "A1.1": {
+        "title": "Capacity Management",
+        "description": "Current processing capacity and usage are monitored and evaluated so that capacity demand can be met and future needs planned.",
+        "guidance": "Capacity monitoring: Monitor utilization of compute, storage, and network against thresholds that trigger action before service is degraded.\nDemand forecasting: Project future capacity needs from growth trends and planned launches, and provision ahead of demand.\nScaling mechanisms: Use scaling arrangements (auto-scaling, headroom, burst capacity) appropriate to the architecture and availability commitments."
+    },
+    "A1.2": {
+        "title": "Environmental and Recovery Infrastructure",
+        "description": "Environmental protections, backup processes, and recovery infrastructure are designed, implemented, operated, and maintained to meet availability objectives.",
+        "guidance": "Environmental protections: Protect infrastructure against environmental hazards (power loss, fire, water, temperature) directly or through hosting providers' certified controls.\nBackup regime: Back up data on a schedule aligned to recovery point objectives, protect backups from tampering, and monitor job success.\nRecovery infrastructure: Maintain recovery arrangements (redundancy, failover, restore procedures) sized to recovery time objectives."
+    },
+    "A1.3": {
+        "title": "Recovery Testing",
+        "description": "Recovery plan procedures supporting system recovery are tested to help meet availability objectives.",
+        "guidance": "Restore testing: Test restoration from backups on a cadence, verifying data integrity and completeness, not just job completion.\nFailover exercises: Exercise failover and recovery procedures for critical services and record results.\nTest-driven improvement: Feed recovery test failures and timing misses back into plan and architecture changes."
+    },
+    "C1.1": {
+        "title": "Confidential Information Identification",
+        "description": "Information designated as confidential is identified and maintained to meet the entity's confidentiality objectives.",
+        "guidance": "Confidentiality identification: Identify and label information subject to confidentiality commitments at ingestion or creation.\nHandling requirements: Define handling requirements (access, storage, sharing, retention) per confidentiality classification.\nCommitment traceability: Trace confidentiality obligations from contracts and NDAs to the systems and data they cover."
+    },
+    "C1.2": {
+        "title": "Confidential Information Disposal",
+        "description": "Confidential information is disposed of when the retention purpose ends, in a manner that meets confidentiality objectives.",
+        "guidance": "Retention-driven disposal: Dispose of confidential information when retention periods lapse or obligations end, on a schedule rather than ad hoc.\nVerifiable destruction: Use destruction methods that prevent reconstruction, with certificates or logs as evidence.\nThird-party copies: Ensure vendors and processors destroy or return confidential information at engagement end."
+    },
+    "PI1.1": {
+        "title": "Processing Specifications",
+        "description": "The organization documents what data its services process and how processing should work, and shares that information so the services are used correctly.",
+        "guidance": "Data definitions: Document the data processed, its sources, and the specifications the processing must meet.\nSpecification communication: Make processing specifications available to the personnel and customers who rely on them.\nDefinition change control: Version and communicate changes to data definitions and processing specifications."
+    },
+    "PI1.2": {
+        "title": "Input Completeness and Accuracy",
+        "description": "System inputs are complete and accurate, and input errors are captured and addressed.",
+        "guidance": "Input validation: Validate inputs for completeness, accuracy, and authorization at entry, rejecting or quarantining failures.\nError handling: Capture input errors with enough context to correct and reprocess them.\nSource reconciliation: Reconcile received inputs against source counts or control totals where feasible."
+    },
+    "PI1.3": {
+        "title": "Processing Completeness and Accuracy",
+        "description": "System processing is complete, accurate, timely, and authorized, with deviations identified and resolved.",
+        "guidance": "Processing controls: Enforce completeness and accuracy through the pipeline with control totals, sequence checks, and idempotency safeguards.\nException management: Detect, log, and resolve processing deviations within defined timeframes.\nAuthorized processing: Permit processing to run only under authorized schedules, versions, and configurations."
+    },
+    "PI1.4": {
+        "title": "Output Delivery",
+        "description": "System outputs are complete, accurate, distributed only to intended parties, and protected during delivery.",
+        "guidance": "Output verification: Verify outputs for completeness and accuracy before release, reconciling against processed inputs.\nDistribution control: Deliver outputs only to defined recipients over protected channels.\nOutput retention: Retain outputs and delivery evidence per policy to support inquiry and rework."
+    },
+    "PI1.5": {
+        "title": "Stored Data Integrity",
+        "description": "Data stored by the system is protected and maintained completely and accurately for its specified retention period.",
+        "guidance": "Storage integrity: Protect stored data against unauthorized alteration with access controls, checksums, or immutability where warranted.\nRetention execution: Store data for its specified retention period and dispose of it at expiry.\nArchival recovery: Ensure archived data remains retrievable and readable for its retention life."
+    },
+    "P1.1": {
+        "title": "Privacy Notice",
+        "description": "Notice is provided to data subjects about the entity's privacy practices, and is updated and communicated when practices change.",
+        "guidance": "Notice content: Publish a privacy notice covering what is collected, purposes, disclosures, retention, and data subject rights.\nNotice availability: Make the notice available at or before collection and keep it accessible.\nNotice maintenance: Review the notice on a cadence and on practice changes; communicate material updates."
+    },
+    "P2.1": {
+        "title": "Choice and Consent",
+        "description": "Data subjects are informed about choices available to them, and consent for collection, use, retention, disclosure, and disposal is obtained where required.",
+        "guidance": "Choice presentation: Present choices about collection and use clearly, without dark patterns, where choices are offered or required.\nConsent capture: Capture and store consent with who, when, what version, and scope.\nConsent withdrawal: Provide a withdrawal path as easy as the grant, and honor it across systems."
+    },
+    "P3.1": {
+        "title": "Collection Limitation",
+        "description": "Personal information collection is limited to what is consistent with the entity's privacy objectives.",
+        "guidance": "Minimal collection: Collect only personal information needed for stated purposes; challenge fields that lack a purpose.\nCollection review: Review collection points periodically for scope creep.\nLawful means: Collect by lawful, fair means consistent with the notice."
+    },
+    "P3.2": {
+        "title": "Explicit Consent",
+        "description": "Where explicit consent is required, it is obtained from data subjects before collecting or using their information for the stated purpose.",
+        "guidance": "Explicit consent events: Identify processing that requires explicit consent (sensitive categories, jurisdictional rules) and gate it on captured consent.\nConsent evidence: Retain evidence of explicit consent linked to the data subject and purpose.\nRefusal handling: Define system behavior when explicit consent is refused, avoiding service denial beyond what the refusal requires."
+    },
+    "P4.1": {
+        "title": "Use Limitation",
+        "description": "Personal information is used only for the purposes identified in the entity's privacy objectives.",
+        "guidance": "Purpose binding: Bind use of personal information to the purposes in the notice; new uses require review and, where needed, fresh consent.\nInternal enforcement: Limit internal access and analytics to purpose-consistent uses through controls and review.\nSecondary-use review: Route proposed secondary uses (marketing, model training, analytics) through privacy review."
+    },
+    "P4.2": {
+        "title": "Retention",
+        "description": "Personal information is retained only as long as needed to fulfill the stated purposes.",
+        "guidance": "Retention schedule: Maintain a retention schedule per data category tied to purpose and legal requirements.\nRetention enforcement: Automate retention enforcement where possible; audit manual stores against the schedule.\nLegal holds: Suspend disposal under legal hold with a defined release process."
+    },
+    "P4.3": {
+        "title": "Disposal",
+        "description": "Personal information is securely disposed of when no longer retained.",
+        "guidance": "Disposal methods: Dispose of personal information by methods preventing reconstruction across production, backups, and vendor copies.\nDisposal verification: Log disposals and verify execution, including derived copies and caches.\nAnonymization option: Where data is kept for analytics, anonymize to remove identifiability rather than merely archiving."
+    },
+    "P5.1": {
+        "title": "Access",
+        "description": "Data subjects are able to access their personal information for review and correction.",
+        "guidance": "Access requests: Provide a channel for data subjects to request access to their personal information, with identity verification.\nComplete responses: Return the personal information held, within required timeframes, in an intelligible format.\nCorrection handling: Correct inaccurate information on request and propagate corrections to recipients where required."
+    },
+    "P5.2": {
+        "title": "Correction Denials",
+        "description": "When a request for access or correction is denied, the data subject is informed of the denial and the reason for it.",
+        "guidance": "Denial communication: When denying access or correction, inform the data subject of the denial, the reason, and any recourse.\nDenial criteria: Apply documented criteria for permissible denials (legal exemptions, others' rights) consistently.\nDenial records: Record denials and their justification for accountability."
+    },
+    "P6.1": {
+        "title": "Disclosure Consent",
+        "description": "Personal information is disclosed to third parties only with consent where required, and consistent with privacy objectives.",
+        "guidance": "Disclosure gating: Disclose personal information to third parties only under a lawful basis and consistent with the notice and consents.\nRecipient inventory: Maintain an inventory of recipient categories and the data shared with each.\nTransfer safeguards: Apply required safeguards to cross-border transfers."
+    },
+    "P6.2": {
+        "title": "Authorized Disclosure Records",
+        "description": "Every authorized release of personal information to another party is logged, and the log is kept complete, accurate and current.",
+        "guidance": "Disclosure logging: Record authorized disclosures: recipient, data categories, purpose, and date.\nLog completeness: Capture disclosures made through integrations and automated feeds, not just manual releases.\nLog retention: Retain disclosure records long enough to support accounting obligations."
+    },
+    "P6.3": {
+        "title": "Unauthorized Disclosure Records",
+        "description": "A record of detected or reported unauthorized disclosures is created and maintained.",
+        "guidance": "Unauthorized disclosure capture: Record detected or reported unauthorized disclosures with scope, cause, and affected data subjects.\nIntake channels: Accept reports of unauthorized disclosure from personnel, vendors, and data subjects.\nLinkage to response: Feed unauthorized disclosure records into incident response and notification decisions."
+    },
+    "P6.4": {
+        "title": "Third-Party Commitments",
+        "description": "Third parties handling personal information are subject to privacy commitments consistent with the entity's, and their compliance is assessed.",
+        "guidance": "Processor commitments: Bind processors and third parties to privacy terms consistent with the entity's commitments before sharing data.\nCompliance assessment: Assess third-party compliance with privacy commitments on a risk-based cadence.\nRemediation follow-through: Track third-party privacy gaps to remediation or exit."
+    },
+    "P6.5": {
+        "title": "Third-Party Notification of Breach",
+        "description": "Contracts require vendors with access to personal information to report any real or suspected breach promptly, and those reports feed the incident response process.",
+        "guidance": "Breach notification clauses: Require third parties by contract to notify of actual or suspected unauthorized disclosures within defined timeframes.\nNotification intake: Route third-party breach notices to incident response immediately on receipt.\nObligation testing: Verify vendors can meet notification obligations during diligence or review."
+    },
+    "P6.6": {
+        "title": "Breach Notification to Data Subjects",
+        "description": "When personal information is breached, the organization tells affected individuals, regulators and other required parties within the required timeframes.",
+        "guidance": "Notification obligations map: Maintain a map of breach notification duties to data subjects, regulators, and partners with triggers and deadlines.\nNotification execution: Notify affected data subjects and authorities within required timeframes with required content.\nNotification records: Document notifications sent, timing, and content as evidence of compliance."
+    },
+    "P6.7": {
+        "title": "Accounting of Disclosures",
+        "description": "Upon request, data subjects receive an accounting of the disclosures of their personal information.",
+        "guidance": "Accounting capability: Be able to produce, per data subject, an accounting of disclosures from the disclosure records.\nRequest handling: Respond to accounting requests within required timeframes after identity verification.\nFormat usability: Provide the accounting in an understandable form naming recipients, purposes, and dates."
+    },
+    "P7.1": {
+        "title": "Data Quality",
+        "description": "Personal information the organization holds is kept correct, current, complete and limited to what is relevant for its stated purpose.",
+        "guidance": "Accuracy maintenance: Maintain personal information accurate, complete, and current for its purposes, with update mechanisms.\nQuality checks: Run periodic data quality checks on personal information stores and fix systemic error sources.\nPropagation of updates: Propagate corrections and updates to downstream systems and, where required, recipients."
+    },
+    "P8.1": {
+        "title": "Inquiries and Disputes",
+        "description": "A process exists for receiving, addressing, and resolving privacy-related inquiries, complaints, and disputes, including monitoring of compliance.",
+        "guidance": "Inquiry channel: Publish a channel for privacy questions, complaints, and disputes, monitored and staffed.\nResolution process: Track inquiries to resolution within defined timeframes, escalating unresolved disputes.\nCompliance monitoring: Monitor complaint patterns and dispute outcomes as inputs to privacy program improvement."
+    }
+}

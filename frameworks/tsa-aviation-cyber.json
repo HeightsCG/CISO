@@ -77,6 +77,13 @@
     },
     "rules": [
         {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A control is met only when every HCG test point under it is met.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
             "id": "applicability",
             "type": "applicability",
             "summary": "The 2023 emergency amendment applies to certain TSA-regulated airport and aircraft operators through their security programs; confirm the client holds such a program before using this control set as a compliance gap assessment.",

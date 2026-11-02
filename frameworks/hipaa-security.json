@@ -65,6 +65,13 @@
     },
     "rules": [
         {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A standard or implementation specification is met only when every element it lists is met.",
+            "source": "cfr164c",
+            "cite": "45 CFR 164 Subpart C"
+        },
+        {
             "id": "standards_mandatory",
             "type": "applicability",
             "applies_to": "standard",

@@ -2568,10 +2568,40 @@ class ApiController extends Controller {
         );
 
         $item_id = (int) ($this->post['item_id'] ?? 0);
-        $item_result = $this->input('item_result');
-        $notes = $this->input('notes');
+        $item = $this->assessments_model->get_item($item_id, Session::get('company_id'));
 
-        $allowed = array('Not Assessed', 'Implemented', 'Partially Implemented', 'Not Implemented', 'Not Applicable');
+        if (count($item) !== 1) {
+            $response['message'] = 'That item could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $assessment_id = (int) $item[0]['assessment_id'];
+        $kept = function (string $key, string $column) use ($item) {
+            return array_key_exists($key, $this->post) ? $this->input($key) : trim((string) ($item[0][$column] ?? ''));
+        };
+        $item_result = $this->input('item_result');
+        $risk_rating = $kept('risk_rating', 'risk_rating');
+        $target_date = $kept('target_date', 'target_date');
+        $applicability = $kept('applicability', 'applicability') === 'Excluded' ? 'Excluded' : 'Applicable';
+        $applicability_justification = $kept('applicability_justification', 'applicability_justification');
+        $allowed = array(
+            'Not Assessed',
+            'Implemented',
+            'Partially Implemented',
+            'Not Implemented',
+            'Not Applicable'
+        );
+        $objective_allowed = array(
+            'Not Assessed',
+            'Implemented',
+            'Not Implemented',
+            'Not Applicable'
+        );
+
+        if ($item[0]['control_kind'] === 'objective') {
+            $this->save_objective_item($item[0], $item_result, $objective_allowed);
+        }
 
         if (!in_array($item_result, $allowed, true)) {
             $response['message'] = 'Choose a valid result';
@@ -2579,25 +2609,136 @@ class ApiController extends Controller {
             exit;
         }
 
-        $rows = $this->assessments_model->save_item(
-            $item_id,
-            Session::get('company_id'),
-            $item_result,
-            $notes,
-            Session::get('user_id')
-        );
-
-        if ($rows === 0) {
-            $response['message'] = 'That item could not be found';
+        if (!in_array($risk_rating, array('', 'Low', 'Moderate', 'High', 'Critical'), true)) {
+            $response['message'] = 'Choose a valid risk rating';
             echo json_encode($response);
             exit;
         }
 
-        $item = $this->assessments_model->get_item($item_id, Session::get('company_id'));
-        $assessment = $this->assessments_model->get_assessment($item[0]['assessment_id'], Session::get('company_id'));
+        if ($target_date !== '' && (\DateTime::createFromFormat('Y-m-d', $target_date) === false || \DateTime::createFromFormat('Y-m-d', $target_date)->format('Y-m-d') !== $target_date)) {
+            $response['message'] = 'Enter the target date as a valid date';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($applicability === 'Excluded' && $applicability_justification === '') {
+            $response['message'] = 'Give a justification for excluding this control';
+            echo json_encode($response);
+            exit;
+        }
+
+        $objectives = array();
+        $posted_objectives = is_array($this->post['objectives'] ?? null) ? $this->post['objectives'] : array();
+
+        foreach ($this->assessments_model->control_objectives($assessment_id, $item[0]['control_identifier']) as $objective) {
+            $objectives[(int) $objective['id']] = $objective['item_result'];
+        }
+
+        foreach ($posted_objectives as $posted) {
+            $objective_id = (int) ($posted['id'] ?? 0);
+            $objective_result = trim((string) ($posted['result'] ?? ''));
+
+            if (!isset($objectives[$objective_id]) || !in_array($objective_result, $objective_allowed, true)) {
+                $response['message'] = 'An objective result is not valid';
+                echo json_encode($response);
+                exit;
+            }
+
+            $objectives[$objective_id] = $objective_result;
+        }
+
+        $framework_key = (string) $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'))[0]['framework_key'];
+
+        if (count($objectives) > 0 && FrameworkLibrary::rolls_up($framework_key)) {
+            $item_result = AssessmentsModel::result_from_objectives(array_values($objectives));
+        }
+
+        if ($applicability === 'Excluded') {
+            $item_result = 'Not Applicable';
+        }
+
+        $milestones = array();
+        $posted_milestones = is_array($this->post['milestones'] ?? null) ? $this->post['milestones'] : array();
+
+        foreach ($posted_milestones as $posted) {
+            $text = trim(html_entity_decode((string) ($posted['text'] ?? ''), ENT_QUOTES, 'UTF-8'));
+            $due = trim((string) ($posted['due'] ?? ''));
+
+            if ($text === '') {
+                continue;
+            }
+
+            if ($due !== '' && (\DateTime::createFromFormat('Y-m-d', $due) === false || \DateTime::createFromFormat('Y-m-d', $due)->format('Y-m-d') !== $due)) {
+                $response['message'] = 'Enter each milestone date as a valid date';
+                echo json_encode($response);
+                exit;
+            }
+
+            $milestones[] = array(
+                'id' => (int) ($posted['id'] ?? 0),
+                'text' => mb_substr($text, 0, 400),
+                'due' => $due,
+                'status' => ($posted['done'] ?? '') === '1' ? 'Done' : 'Open'
+            );
+        }
+
+        $this->assessments_model->begin();
+
+        try {
+            $this->assessments_model->save_control(
+                $item_id,
+                Session::get('company_id'),
+                $item_result,
+                $kept('notes', 'notes'),
+                $kept('gap_description', 'gap_description'),
+                $kept('business_impact', 'business_impact'),
+                $risk_rating,
+                $kept('recommendation', 'recommendation'),
+                mb_substr($kept('owner_name', 'owner_name'), 0, 200),
+                $target_date,
+                $kept('implementation_description', 'implementation_description'),
+                array_key_exists('partial_credit', $this->post)
+                    ? (($this->post['partial_credit'] === '1' && $item[0]['partial_weight'] !== null) ? 1 : 0)
+                    : (int) $item[0]['partial_credit'],
+                $applicability,
+                $applicability === 'Excluded' ? $applicability_justification : '',
+                Session::get('user_id')
+            );
+
+            foreach ($objectives as $objective_id => $objective_result) {
+                $this->assessments_model->set_objective_result($objective_id, $assessment_id, $objective_result, Session::get('user_id'));
+            }
+
+            $existing = ($this->post['milestones_sent'] ?? '') === '1' ? $this->assessments_model->milestone_ids($item_id) : array();
+            $saved = array();
+
+            foreach ($milestones as $order => $milestone) {
+                $milestone_id = in_array($milestone['id'], $existing, true) ? $milestone['id'] : 0;
+                $saved[] = $this->assessments_model->save_milestone(
+                    $milestone_id,
+                    $item_id,
+                    $milestone['text'],
+                    $milestone['due'],
+                    $milestone['status'],
+                    $order + 1,
+                    Session::get('user_id')
+                );
+            }
+
+            foreach (array_diff($existing, $saved) as $milestone_id) {
+                $this->assessments_model->delete_milestone($milestone_id, $item_id, Session::get('user_id'));
+            }
+
+            $this->assessments_model->commit();
+        } catch (Throwable $e) {
+            $this->assessments_model->roll_back();
+            throw $e;
+        }
+
+        $assessment = $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'));
 
         $response['assessment_status'] = $this->assessments_model->sync_assessment_status(
-            $item[0]['assessment_id'],
+            $assessment_id,
             Session::get('company_id'),
             Session::get('user_id')
         );
@@ -2609,7 +2750,231 @@ class ApiController extends Controller {
         );
 
         $response['success'] = true;
-        $response['message'] = 'Item saved';
+        $response['item_result'] = $item_result;
+        $response['message'] = 'Control saved';
+        echo json_encode($response);
+    }
+
+    /** Saves one objective's result on its own and re-works out its control's result, then responds. */
+    private function save_objective_item(array $objective, string $item_result, array $allowed): void
+    {
+        $response = array(
+            'success' => false,
+            'message' => 'Choose Implemented, Not Implemented or Not Applicable for an objective'
+        );
+
+        if (!in_array($item_result, $allowed, true)) {
+            echo json_encode($response);
+            exit;
+        }
+
+        $assessment_id = (int) $objective['assessment_id'];
+        $this->assessments_model->set_objective_result((int) $objective['id'], $assessment_id, $item_result, Session::get('user_id'));
+        $control = null;
+
+        foreach ($this->assessments_model->load_controls($assessment_id, Session::get('company_id')) as $row) {
+            if ($row['control_identifier'] === $objective['parent_identifier']) {
+                $control = $row;
+            }
+        }
+
+        $framework_key = (string) $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'))[0]['framework_key'];
+
+        if ($control !== null && $control['applicability'] !== 'Excluded' && FrameworkLibrary::rolls_up($framework_key)) {
+            $results = array_column($this->assessments_model->control_objectives($assessment_id, $control['control_identifier']), 'item_result');
+            $this->assessments_model->set_control_result((int) $control['id'], $assessment_id, AssessmentsModel::result_from_objectives($results), Session::get('user_id'));
+        }
+
+        $assessment = $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'));
+        $response['assessment_status'] = $this->assessments_model->sync_assessment_status($assessment_id, Session::get('company_id'), Session::get('user_id'));
+        $this->projects_model->sync_project_status($assessment[0]['project_id'], Session::get('company_id'), Session::get('user_id'));
+        $response['success'] = true;
+        $response['message'] = 'Objective saved';
+        echo json_encode($response);
+        exit;
+    }
+
+    public function load_milestonesAction(){
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+
+        if (!$this->owns_assessment($assessment_id)) {
+            echo json_encode(array());
+            exit;
+        }
+
+        echo json_encode($this->assessments_model->item_milestones($assessment_id, Session::get('company_id')));
+    }
+
+    public function load_baselinesAction(){
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+
+        if (!$this->owns_assessment($assessment_id)) {
+            echo json_encode(array());
+            exit;
+        }
+
+        echo json_encode($this->assessments_model->baseline_options($assessment_id, Session::get('company_id')));
+    }
+
+    public function save_assessment_detailsAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+
+        if (!$this->owns_assessment($assessment_id)) {
+            $response['message'] = 'That assessment could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $assessment = $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'))[0];
+        $definition = FrameworkLibrary::get((string) $assessment['framework_key']);
+        $assessment_type = $this->input('assessment_type');
+        $baseline_assessment_id = (int) ($this->post['baseline_assessment_id'] ?? 0);
+        $no_baseline = ($this->post['no_baseline'] ?? '') === '1' ? 1 : 0;
+
+        if (!in_array($assessment_type, array('Baseline', 'Interim', 'Final'), true)) {
+            $response['message'] = 'Choose a valid assessment type';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($assessment_type === 'Baseline') {
+            $baseline_assessment_id = 0;
+            $no_baseline = 0;
+        } elseif ($baseline_assessment_id > 0) {
+            $options = array_map('intval', array_column($this->assessments_model->baseline_options($assessment_id, Session::get('company_id')), 'id'));
+
+            if (!in_array($baseline_assessment_id, $options, true)) {
+                $response['message'] = 'That baseline assessment is not available';
+                echo json_encode($response);
+                exit;
+            }
+
+            $no_baseline = 0;
+        }
+
+        $categories = array();
+        $optional = array();
+
+        foreach ($definition['rules'] ?? array() as $rule) {
+            if (($rule['id'] ?? '') === 'category_scope') {
+                $optional = array_keys($rule['optional']);
+            }
+        }
+
+        foreach ((array) ($this->post['scope_categories'] ?? array()) as $category) {
+            $category = html_entity_decode((string) $category, ENT_QUOTES, 'UTF-8');
+
+            if (in_array($category, $optional, true)) {
+                $categories[] = $category;
+            }
+        }
+
+        $ssi_reviewed = ($this->post['ssi_reviewed'] ?? '') === '1' ? 1 : 0;
+
+        $this->assessments_model->save_details(
+            $assessment_id,
+            Session::get('company_id'),
+            $assessment_type,
+            $baseline_assessment_id,
+            $no_baseline,
+            $this->input('assessment_scope'),
+            $this->input('assessment_method'),
+            implode(',', $categories),
+            $ssi_reviewed,
+            $ssi_reviewed === 1 ? $this->input('ssi_note') : '',
+            Session::get('user_id')
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'Assessment details saved';
+        echo json_encode($response);
+    }
+
+    public function save_assessment_narrativeAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+
+        if (!$this->owns_assessment($assessment_id)) {
+            $response['message'] = 'That assessment could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->assessments_model->save_narrative(
+            $assessment_id,
+            Session::get('company_id'),
+            $this->input('posture_text'),
+            $this->input('strengths_text'),
+            $this->input('concerns_text'),
+            $this->input('readiness_text'),
+            $this->input('decisions_text'),
+            Session::get('user_id')
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'Narrative saved';
+        echo json_encode($response);
+    }
+
+    public function save_documentAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+
+        if (!$this->owns_assessment($assessment_id)) {
+            $response['message'] = 'That assessment could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
+        $assessment = $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'))[0];
+        $sections = FrameworkLibrary::document_sections((string) $assessment['framework_key']);
+        $posted = is_array($this->post['sections'] ?? null) ? $this->post['sections'] : array();
+
+        if (count($sections) === 0) {
+            $response['message'] = 'This framework has no governing document';
+            echo json_encode($response);
+            exit;
+        }
+
+        foreach ($posted as $key => $body) {
+            if (!isset($sections[$key])) {
+                $response['message'] = 'A section is not part of this document';
+                echo json_encode($response);
+                exit;
+            }
+        }
+
+        foreach ($posted as $key => $body) {
+            $this->assessments_model->save_document_section(
+                $assessment_id,
+                $key,
+                $sections[$key]['title'],
+                trim(html_entity_decode((string) $body, ENT_QUOTES, 'UTF-8')),
+                $sections[$key]['order'],
+                Session::get('user_id')
+            );
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Document saved';
         echo json_encode($response);
     }
 

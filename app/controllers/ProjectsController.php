@@ -93,7 +93,50 @@ class ProjectsController extends Controller {
             return;
         }
 
+        $definition = FrameworkLibrary::get((string) $assessment[0]['framework_key']);
+
         $this->view->assessment = $assessment[0];
+        $this->view->features = FrameworkLibrary::assessment_features((string) $assessment[0]['framework_key']);
+        $this->view->terminology = $definition['terminology'] ?? array();
+        $this->view->render();
+    }
+
+    public function documentAction() {
+
+        $assessment = $this->assessments_model->get_assessment(Main::get_param('id'), Session::get('company_id'));
+
+        if (!is_array($assessment) || count($assessment) !== 1) {
+            Errors::page_not_found();
+            return;
+        }
+
+        $features = FrameworkLibrary::assessment_features((string) $assessment[0]['framework_key']);
+
+        if ($features['governing_document'] === null) {
+            Errors::page_not_found();
+            return;
+        }
+
+        $saved = array();
+
+        foreach ($this->assessments_model->document_sections($assessment[0]['id'], Session::get('company_id')) as $row) {
+            $saved[$row['section_key']] = $row;
+        }
+
+        $sections = array();
+
+        foreach (FrameworkLibrary::document_sections((string) $assessment[0]['framework_key']) as $key => $section) {
+            $sections[] = array(
+                'key' => $key,
+                'title' => $section['title'],
+                'body' => (string) ($saved[$key]['section_body'] ?? ''),
+                'updated_on' => (string) ($saved[$key]['updated_on'] ?? '')
+            );
+        }
+
+        $this->view->assessment = $assessment[0];
+        $this->view->document = $features['governing_document'];
+        $this->view->sections = $sections;
         $this->view->render();
     }
 

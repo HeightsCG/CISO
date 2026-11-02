@@ -80,6 +80,13 @@
     },
     "rules": [
         {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every applicable point of it is met.",
+            "source": "reg1645",
+            "cite": "Regulation (EU) 2022/1645, Annex (Part-IS.D.OR)"
+        },
+        {
             "id": "applies_from",
             "type": "effective_date",
             "date": "2025-10-16",
