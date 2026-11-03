@@ -3116,6 +3116,7 @@ tr.is-drop-target > td:last-child {
     justify-content: space-between;
     gap: var(--space-2);
     padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+    min-height: calc(var(--control-height) + (2 * var(--space-3)) + 1px);
     border-bottom: 1px solid var(--border);
 }
 
@@ -6906,6 +6907,51 @@ table.data tbody tr.item__row.is-selected td {
     justify-content: flex-end;
 }
 
+.assess__vault .vault {
+    flex: 1 1 auto;
+    min-height: 0;
+    align-items: stretch;
+}
+
+.assess__vault .vault__tree,
+.assess__vault .vault__files {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.assess__vault .vault__list {
+    overflow-y: auto;
+}
+
+.assess__vault .vault__files {
+    overflow-y: auto;
+}
+
+.assess__vault .vault__toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: var(--surface-app);
+}
+
+.controls__scope-note {
+    margin-left: var(--space-2);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--text-muted);
+}
+
+.controls__scope-note::before {
+    content: "\00b7";
+    margin-right: var(--space-2);
+}
+
+table.data tbody tr.item__row.is-out-of-scope td {
+    opacity: 0.5;
+}
+
 .assess__danger {
     margin-top: var(--space-4);
 }
@@ -6915,10 +6961,6 @@ table.data tbody tr.item__row.is-selected td {
     align-items: center;
     justify-content: space-between;
     gap: var(--space-4);
-}
-
-.assess__danger-body .card__desc {
-    margin-top: 0;
 }
 
 .assess__danger-body .btn {

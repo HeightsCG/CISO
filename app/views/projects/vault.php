@@ -17,7 +17,7 @@
                 <option value="archive">Archives</option>
                 <option value="other">Other</option>
             </select>
-            <button type="button" class="btn btn--primary" id="do_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload Evidence</button>
+            <button type="button" class="btn btn--primary" id="do_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload</button>
         </div>
         <table class="data data--light" id="evidence_table">
             <thead>
@@ -403,7 +403,7 @@ $(document).ready(function () {
             $('#evidence_empty').text(
                 $('#evidence_search').val().trim() !== '' || $('#type_filter').val() !== ''
                     ? 'Nothing matches the current search or filter.'
-                    : folder_name_of(selected_folder) + ' has no evidence yet. Use Upload Evidence to add a file.');
+                    : (selected_folder === 0 ? 'No evidence yet.' : 'This folder is empty.'));
         }
 
         $('#vault_count').text(folders.length + (folders.length === 1 ? ' folder' : ' folders')

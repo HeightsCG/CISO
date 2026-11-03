@@ -22,8 +22,6 @@
 
     <div class="tab-content assess__panes">
         <div class="tab-pane show active" id="tab_controls" role="tabpanel" aria-labelledby="tab_controls_btn">
-            <div class="notice notice--warn" id="mismatch_notice" role="status" hidden></div>
-
             <div class="panel record__panel">
                 <div class="panel__body">
                     <div class="rollup__score" id="score_row" hidden>
@@ -233,7 +231,6 @@
                         <tr>
                             <td>
                                 <span class="roster__name"><?php echo htmlspecialchars($report['name'], ENT_QUOTES, 'UTF-8'); ?></span>
-                                <span class="roster__sub"><?php echo htmlspecialchars($report['description'], ENT_QUOTES, 'UTF-8'); ?></span>
                             </td>
                             <td class="reports__col-download">
                                 <span class="reports__formats">
@@ -255,7 +252,6 @@
                     <section class="card">
                         <header class="card__head">
                             <h2 class="card__title">Assessment Type</h2>
-                            <p class="card__desc">Interim and final assessments are compared against an earlier baseline for the same client and framework.</p>
                         </header>
                         <div class="card__body">
                             <div class="row g-3">
@@ -282,7 +278,6 @@
                     <section class="card">
                         <header class="card__head">
                             <h2 class="card__title">Maturity Tiers</h2>
-                            <p class="card__desc">Where the organization is today and where it is aiming to be.</p>
                         </header>
                         <div class="card__body">
                             <div class="row g-3">
@@ -318,7 +313,6 @@
                     <section class="card">
                         <header class="card__head">
                             <h2 class="card__title">Categories in Scope</h2>
-                            <p class="card__desc">The common criteria always apply. Tick any additional categories this assessment covers.</p>
                         </header>
                         <div class="card__body" id="details_categories">
                             <?php foreach ($this->features['categories'] as $i => $category) { ?>
@@ -358,7 +352,6 @@
                             <h2 class="card__title">Delete Assessment</h2>
                         </header>
                         <div class="card__body assess__danger-body">
-                            <p class="card__desc">Removes this assessment and all <?php echo (int) $this->assessment['item_count']; ?> of its items, including results and notes. Evidence stays in the project&rsquo;s vault. This cannot be undone.</p>
                             <button type="button" class="btn btn--destructive" id="do_assessment_delete_open"><i class="fa-regular fa-trash"></i> Delete Assessment</button>
                         </div>
                     </section>
@@ -616,16 +609,50 @@ $(document).ready(function () {
         return (n / 1048576).toFixed(1) + ' MB';
     }
 
+    function out_of_scope_families() {
+        return review && review.score && review.score.out_of_scope_families ? review.score.out_of_scope_families : [];
+    }
+
+    function counts_toward_scope(control) {
+        return control.applicability !== 'Excluded' && out_of_scope_families().indexOf(control.family) === -1;
+    }
+
+    function mark_out_of_scope() {
+
+        var out = out_of_scope_families();
+
+        $('#items_body .controls__scope-note').remove();
+        $('#items_body tr').removeClass('is-out-of-scope');
+
+        $('#items_body .controls__family').each(function () {
+            if (out.indexOf($(this).attr('data-family')) !== -1) {
+                $(this).addClass('is-out-of-scope').find('td').append('<span class="controls__scope-note">Not in scope</span>');
+            }
+        });
+
+        $('#items_body .item__row').each(function () {
+            if (out.indexOf($(this).attr('data-family')) !== -1) {
+                $(this).addClass('is-out-of-scope');
+            }
+        });
+    }
+
     function rollup() {
 
         var counts = {};
         var evidenced = 0;
+        var total = 0;
 
         for (var i = 0; i < RESULTS.length; i++) {
             counts[RESULTS[i]] = 0;
         }
 
         for (var j = 0; j < controls.length; j++) {
+            if (!counts_toward_scope(controls[j])) {
+                continue;
+            }
+
+            total++;
             counts[controls[j].item_result] = (counts[controls[j].item_result] || 0) + 1;
 
             if (parseInt(controls[j].evidence_count, 10) > 0) {
@@ -633,7 +660,6 @@ $(document).ready(function () {
             }
         }
 
-        var total = controls.length;
         var assessed = total - counts['Not Assessed'];
         var pct = total > 0 ? Math.round(assessed / total * 100) : 0;
         var html = '';
@@ -703,7 +729,6 @@ $(document).ready(function () {
         var score = review.score;
         var blocking = 0;
         var warnings = 0;
-        var mismatch = '';
 
         for (var i = 0; i < review.issues.length; i++) {
             if (review.issues[i].severity === 'block') {
@@ -711,13 +736,7 @@ $(document).ready(function () {
             } else {
                 warnings++;
             }
-
-            if (review.issues[i].code === 'framework_mismatch') {
-                mismatch = review.issues[i].message;
-            }
         }
-
-        $('#mismatch_notice').text(mismatch).prop('hidden', mismatch === '');
 
         if (score) {
             var value = '';
@@ -742,6 +761,8 @@ $(document).ready(function () {
             ? 'All checks pass'
             : (blocking > 0 ? blocking + ' to fix' : '') + (blocking > 0 && warnings > 0 ? ' · ' : '') + (warnings > 0 ? warnings + (warnings === 1 ? ' warning' : ' warnings') : ''));
         $('#score_row').prop('hidden', false);
+        rollup();
+        mark_out_of_scope();
     }
 
     function refresh_checks(done) {
@@ -908,6 +929,7 @@ $(document).ready(function () {
         }
 
         $('#items_body').html(html);
+        mark_out_of_scope();
 
         var chosen = $('#family_filter').val();
         var options = '<option value="">All ' + esc(term('families', 'families')) + '</option>';

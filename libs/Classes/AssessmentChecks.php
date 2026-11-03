@@ -79,8 +79,6 @@ class AssessmentChecks {
             $issues[] = self::issue('block', 'final_needs_baseline', 'A Final assessment needs a Baseline to compare against, or the "no baseline" box ticked on the Settings tab.', array());
         }
 
-        $issues = array_merge($issues, self::project_framework_checks($definition, $assessment, $project));
-
         if ($definition !== null) {
             $issues = array_merge($issues, self::framework_checks($definition, $assessment, $project, $score));
         }
@@ -110,89 +108,6 @@ class AssessmentChecks {
         }
 
         return $issues;
-    }
-
-    /**
-     * The assessment's framework must be one the project covers. When the
-     * project has no frameworks chosen yet, fall back to the frameworks its
-     * name or description mentions, and say the project needs them set.
-     */
-    private static function project_framework_checks(?array $definition, array $assessment, array $project): array
-    {
-        $issues = array();
-        $frameworks = $project['frameworks'] ?? array();
-        $assessed = FrameworkLibrary::display_name((string) $assessment['standard_name'], (string) $assessment['version']);
-
-        if (count($frameworks) > 0) {
-            $ids = array_map('intval', array_column($frameworks, 'standard_id'));
-            $keys = array_filter(array_column($frameworks, 'framework_key'));
-            $covered = in_array((int) $assessment['standard_id'], $ids, true)
-                || ((string) $assessment['framework_key'] !== '' && in_array($assessment['framework_key'], $keys, true));
-
-            if (!$covered) {
-                $names = array();
-
-                foreach ($frameworks as $framework) {
-                    $names[] = FrameworkLibrary::display_name($framework['standard_name'], $framework['version']);
-                }
-
-                $issues[] = self::issue('warn', 'framework_mismatch', 'This project covers '.self::join($names).', but this assessment uses '.$assessed.'. Check the right framework was chosen, or add it to the project.', array());
-            }
-
-            return $issues;
-        }
-
-        if ($definition !== null) {
-            $mismatch = self::mismatch($definition, $project['project_name'].' '.($project['description'] ?? ''));
-
-            if ($mismatch !== null) {
-                $issues[] = self::issue('warn', 'framework_mismatch', $mismatch, array());
-            }
-        }
-
-        $issues[] = self::issue('warn', 'project_frameworks_missing', 'The project has no frameworks chosen. Choose them on the project\'s Edit page so a wrong framework is always caught.', array());
-
-        return $issues;
-    }
-
-    /**
-     * Warns when the project's name or description names a different
-     * framework from the one assessed (for example a "Part-IS" project assessed
-     * against CMMC). Returns null when there is no mismatch.
-     */
-    public static function mismatch(array $definition, string $project_text): ?string
-    {
-        $own = array_map('mb_strtolower', $definition['aliases'] ?? array());
-        $named = array();
-
-        foreach ($own as $alias) {
-            if (self::mentions($project_text, $alias)) {
-                return null;
-            }
-        }
-
-        foreach (FrameworkLibrary::all() as $other) {
-            if ($other['key'] === $definition['key']) {
-                continue;
-            }
-
-            foreach ($other['aliases'] ?? array() as $alias) {
-                if (!in_array(mb_strtolower($alias), $own, true) && self::mentions($project_text, $alias)) {
-                    $named[$other['name']] = $alias;
-                }
-            }
-        }
-
-        if (count($named) === 0) {
-            return null;
-        }
-
-        return 'The project mentions '.self::join(array_keys($named)).', but this assessment uses '.$definition['display_name'].'. Check the right framework was chosen.';
-    }
-
-    private static function mentions(string $text, string $alias): bool
-    {
-        return preg_match('/(?<![\p{L}\d])'.preg_quote($alias, '/').'(?![\p{L}\d])/iu', $text) === 1;
     }
 
     private static function writing_checks(?array $definition, array $assessment, array $project, array $controls): array
