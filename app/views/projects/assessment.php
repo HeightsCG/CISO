@@ -1,18 +1,20 @@
 <div class="page page--assessment">
     <a class="page__back" href="/projects/detail/id/<?php echo (int) $this->assessment['project_id']; ?>"><i class="fa-regular fa-arrow-left"></i> Back to <?php echo htmlspecialchars($this->assessment['project_name'], ENT_QUOTES, 'UTF-8'); ?></a>
 
-    <div class="page__head">
-        <div>
-            <h1 class="page__title"><?php echo htmlspecialchars($this->assessment['assessment_name'], ENT_QUOTES, 'UTF-8'); ?></h1>
-            <div class="client__meta">
+    <div class="page__head assess__head">
+        <div class="assess__heading">
+            <div class="assess__title-row">
+                <h1 class="page__title"><?php echo htmlspecialchars($this->assessment['assessment_name'], ENT_QUOTES, 'UTF-8'); ?></h1>
                 <span class="badge" id="status_badge"><?php echo htmlspecialchars($this->assessment['assessment_status'], ENT_QUOTES, 'UTF-8'); ?></span>
-                <span class="client__segment"><?php echo htmlspecialchars($this->assessment['assessment_type'], ENT_QUOTES, 'UTF-8'); ?></span>
-                <span class="client__segment"><?php echo htmlspecialchars(FrameworkLibrary::display_name($this->assessment['standard_name'], $this->assessment['version']), ENT_QUOTES, 'UTF-8'); ?></span>
-                <span class="client__segment" id="control_count">&nbsp;</span>
-                <span class="client__segment">Evidence vault: <?php echo htmlspecialchars($this->assessment['project_name'], ENT_QUOTES, 'UTF-8'); ?></span>
+            </div>
+            <div class="assess__meta">
+                <span class="assess__meta-item"><?php echo htmlspecialchars($this->assessment['assessment_type'], ENT_QUOTES, 'UTF-8'); ?></span>
+                <span class="assess__meta-item"><?php echo htmlspecialchars(FrameworkLibrary::display_name($this->assessment['standard_name'], $this->assessment['version']), ENT_QUOTES, 'UTF-8'); ?></span>
+                <span class="assess__meta-item" id="control_count">&nbsp;</span>
+                <span class="assess__meta-item">Evidence vault: <?php echo htmlspecialchars($this->assessment['project_name'], ENT_QUOTES, 'UTF-8'); ?></span>
             </div>
         </div>
-        <div class="page__actions">
+        <div class="page__actions assess__actions-bar">
             <a class="btn btn--secondary" href="/projects/evidence/id/<?php echo (int) $this->assessment['project_id']; ?>/from/assessment/ref/<?php echo (int) $this->assessment['id']; ?>"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>
             <button type="button" class="btn btn--secondary" id="do_details_open"><i class="fa-regular fa-sliders"></i> Details</button>
             <button type="button" class="btn btn--secondary" id="do_narrative_open"><i class="fa-regular fa-pen-line"></i> Narrative</button>
@@ -21,7 +23,12 @@
             <?php } ?>
             <button type="button" class="btn btn--secondary" id="do_reports_open"><i class="fa-regular fa-file-chart-column"></i> Reports</button>
             <button type="button" class="btn btn--primary" id="do_complete"><i class="fa-regular fa-circle-check"></i> Mark Complete</button>
-            <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete</button>
+            <span class="dropdown">
+                <button type="button" class="btn btn--secondary assess__more" data-bs-toggle="dropdown" aria-expanded="false" aria-label="More actions"><i class="fa-regular fa-ellipsis"></i></button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><button type="button" class="dropdown-item dropdown-item--danger" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete assessment</button></li>
+                </ul>
+            </span>
         </div>
     </div>
 
@@ -78,7 +85,7 @@
                             <th scope="col">Identifier</th>
                             <th scope="col">Control</th>
                             <th scope="col">Result</th>
-                            <th scope="col">Evidence</th>
+                            <th scope="col" title="Evidence" aria-label="Evidence"><i class="fa-regular fa-paperclip" aria-hidden="true"></i></th>
                         </tr>
                     </thead>
                     <tbody id="items_body"></tbody>
