@@ -62,33 +62,14 @@ class FrameworkLibrary {
         return false;
     }
 
-    /** Governing document sections for a framework, keyed by a slug of the section title. */
-    public static function document_sections(string $key): array
-    {
-        $definition = self::get($key);
-        $sections = array();
-
-        foreach ($definition['governing_document']['sections'] ?? array() as $i => $title) {
-            $slug = trim(preg_replace('/[^a-z0-9]+/', '_', strtolower($title)), '_');
-            $sections[$slug] = array(
-                'title' => $title,
-                'order' => $i + 1
-            );
-        }
-
-        return $sections;
-    }
-
     /**
-     * What the assessment screens need from a framework: the governing
-     * document, optional scope categories (SOC 2) and extra fields such as the
-     * TSA SSI review. Empty for standards not built from a definition.
+     * What the assessment screens need from a framework: optional scope
+     * categories (SOC 2) and extra fields such as the TSA SSI review. Empty for standards not built from a definition.
      */
     public static function assessment_features(string $key): array
     {
         $definition = self::get($key);
         $features = array(
-            'governing_document' => null,
             'categories' => array(),
             'ssi_field' => null,
             'notice' => '',
@@ -99,10 +80,6 @@ class FrameworkLibrary {
 
         if ($definition === null) {
             return $features;
-        }
-
-        if (in_array('governing_document', $definition['deliverables'], true) && isset($definition['governing_document'])) {
-            $features['governing_document'] = $definition['governing_document'];
         }
 
         foreach ($definition['rules'] as $rule) {

@@ -10,20 +10,13 @@
         </div>
         <div class="page__actions assess__actions-bar">
             <a class="btn btn--secondary" href="/projects/evidence/id/<?php echo (int) $this->assessment['project_id']; ?>/from/assessment/ref/<?php echo (int) $this->assessment['id']; ?>"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>
-            <button type="button" class="btn btn--secondary" id="do_reports_open"><i class="fa-regular fa-file-chart-column"></i> Reports</button>
             <button type="button" class="btn btn--primary" id="do_complete"><i class="fa-regular fa-circle-check"></i> Mark Complete</button>
-            <span class="dropdown">
-                <button type="button" class="btn btn--secondary assess__more" data-bs-toggle="dropdown" aria-expanded="false" aria-label="More actions"><i class="fa-regular fa-ellipsis"></i></button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><button type="button" class="dropdown-item dropdown-item--danger" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete assessment</button></li>
-                </ul>
-            </span>
         </div>
     </div>
 
     <nav class="subtabs subtabs--page" role="tablist" aria-label="Assessment">
         <button class="subtabs__link active" id="tab_controls_btn" data-bs-toggle="pill" data-bs-target="#tab_controls" type="button" role="tab" aria-controls="tab_controls" aria-selected="true">Controls</button>
-        <button class="subtabs__link" id="tab_writeup_btn" data-bs-toggle="pill" data-bs-target="#tab_writeup" type="button" role="tab" aria-controls="tab_writeup" aria-selected="false">Write-up</button>
+        <button class="subtabs__link" id="tab_reports_btn" data-bs-toggle="pill" data-bs-target="#tab_reports" type="button" role="tab" aria-controls="tab_reports" aria-selected="false">Reports</button>
         <button class="subtabs__link" id="tab_settings_btn" data-bs-toggle="pill" data-bs-target="#tab_settings" type="button" role="tab" aria-controls="tab_settings" aria-selected="false">Settings</button>
     </nav>
 
@@ -222,98 +215,33 @@
             </div>
         </div>
 
-        <div class="tab-pane" id="tab_writeup" role="tabpanel" aria-labelledby="tab_writeup_btn">
-            <div class="assess__form">
-                <div class="settings settings--single" id="writeup_form">
-                    <section class="card">
-                        <header class="card__head">
-                            <h2 class="card__title">Scope and Method</h2>
-                            <p class="card__desc">Printed in the Assessment Results Report.</p>
-                        </header>
-                        <div class="card__body">
-                            <div class="row g-3">
-                                <div class="col-md-12">
-                                    <div class="form-floating">
-                                        <textarea class="form-control form-control--notes" id="writeup_scope" placeholder="Scope"><?php echo htmlspecialchars((string) $this->assessment['assessment_scope'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                                        <label for="writeup_scope">Scope</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-floating">
-                                        <textarea class="form-control form-control--notes" id="writeup_method" placeholder="Method"><?php echo htmlspecialchars((string) $this->assessment['assessment_method'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                                        <label for="writeup_method">Method</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    <section class="card">
-                        <header class="card__head">
-                            <h2 class="card__title">Consultant Narrative</h2>
-                            <p class="card__desc">Your professional opinion, printed in the Executive Summary exactly as written.</p>
-                        </header>
-                        <div class="card__body">
-                            <div class="row g-3">
-                                <div class="col-md-12">
-                                    <div class="form-floating">
-                                        <textarea class="form-control form-control--notes" id="narrative_posture" placeholder="Overall security posture"><?php echo htmlspecialchars((string) $this->assessment['posture_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                                        <label for="narrative_posture">Overall security posture</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <textarea class="form-control form-control--notes" id="narrative_strengths" placeholder="Strengths"><?php echo htmlspecialchars((string) $this->assessment['strengths_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                                        <label for="narrative_strengths">Strengths</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <textarea class="form-control form-control--notes" id="narrative_concerns" placeholder="Key concerns"><?php echo htmlspecialchars((string) $this->assessment['concerns_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                                        <label for="narrative_concerns">Key concerns</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <textarea class="form-control form-control--notes" id="narrative_readiness" placeholder="Readiness opinion"><?php echo htmlspecialchars((string) $this->assessment['readiness_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                                        <label for="narrative_readiness">Readiness opinion</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <textarea class="form-control form-control--notes" id="narrative_decisions" placeholder="Decisions needed from leadership"><?php echo htmlspecialchars((string) $this->assessment['decisions_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                                        <label for="narrative_decisions">Decisions needed from leadership</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    <?php if ($this->features['governing_document'] !== null) { ?>
-                    <section class="card">
-                        <header class="card__head">
-                            <h2 class="card__title"><?php echo htmlspecialchars($this->features['governing_document']['title'], ENT_QUOTES, 'UTF-8'); ?></h2>
-                            <p class="card__desc">Downloadable from Reports as its own document.</p>
-                        </header>
-                        <div class="card__body">
-                            <div class="row g-3">
-                                <?php foreach ($this->sections as $i => $section) { ?>
-                                <div class="col-md-12">
-                                    <div class="form-floating">
-                                        <textarea class="form-control form-control--notes document__section" id="section_<?php echo (int) $i; ?>" data-key="<?php echo htmlspecialchars($section['key'], ENT_QUOTES, 'UTF-8'); ?>" placeholder="<?php echo htmlspecialchars($section['title'], ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($section['body'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                                        <label for="section_<?php echo (int) $i; ?>"><?php echo htmlspecialchars($section['title'], ENT_QUOTES, 'UTF-8'); ?></label>
-                                    </div>
-                                </div>
-                                <?php } ?>
-                            </div>
-                        </div>
-                    </section>
-                    <?php } ?>
-                    <div class="savebar" id="writeup_savebar">
-                        <span class="savebar__status" id="writeup_status" aria-live="polite">All changes saved</span>
-                        <span class="savebar__actions">
-                            <button type="button" id="do_writeup_save" class="btn btn--primary" disabled>Save Changes</button>
-                        </span>
-                    </div>
-                </div>
+        <div class="tab-pane" id="tab_reports" role="tabpanel" aria-labelledby="tab_reports_btn">
+            <div class="panel record__panel assess__reports">
+                <table class="data data--light reports__table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Report</th>
+                            <th scope="col" class="reports__col-download">Download</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach (ReadyReports::catalog_for('assessment') as $report) { ?>
+                        <tr>
+                            <td>
+                                <span class="roster__name"><?php echo htmlspecialchars($report['name'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                <span class="roster__sub"><?php echo htmlspecialchars($report['description'], ENT_QUOTES, 'UTF-8'); ?></span>
+                            </td>
+                            <td class="reports__col-download">
+                                <span class="reports__formats">
+                                    <?php foreach ($report['formats'] as $format) { ?>
+                                    <button type="button" class="btn btn--secondary btn--sm" data-action="download_report" data-report="<?php echo htmlspecialchars($report['key'], ENT_QUOTES, 'UTF-8'); ?>" data-format="<?php echo htmlspecialchars($format, ENT_QUOTES, 'UTF-8'); ?>"><i class="fa-regular <?php echo $format === 'pdf' ? 'fa-file-pdf' : ($format === 'docx' ? 'fa-file-word' : 'fa-file-excel'); ?>"></i> <?php echo $format === 'pdf' ? 'PDF' : ($format === 'docx' ? 'Word' : 'Excel'); ?></button>
+                                    <?php } ?>
+                                </span>
+                            </td>
+                        </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -421,6 +349,15 @@
                             <button type="button" id="do_details_save" class="btn btn--primary" disabled>Save Changes</button>
                         </span>
                     </div>
+                    <section class="card assess__danger">
+                        <header class="card__head">
+                            <h2 class="card__title">Delete Assessment</h2>
+                        </header>
+                        <div class="card__body assess__danger-body">
+                            <p class="card__desc">Removes this assessment and all <?php echo (int) $this->assessment['item_count']; ?> of its items, including results and notes. Evidence stays in the project&rsquo;s vault. This cannot be undone.</p>
+                            <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete Assessment</button>
+                        </div>
+                    </section>
                 </div>
             </div>
         </div>
@@ -1728,7 +1665,7 @@ $(document).ready(function () {
         $(form).find('.savebar').addClass('is-saved');
     }
 
-    $('#details_form, #writeup_form').on('input change', 'input, select, textarea', function () {
+    $('#details_form').on('input change', 'input, select, textarea', function () {
         refresh_savebar('#' + $(this).closest('.settings').attr('id'));
     });
 
@@ -1780,7 +1717,6 @@ $(document).ready(function () {
     $('#details_type').val(details.assessment_type);
     sync_details_form();
     load_baselines();
-    mark_saved('#writeup_form');
 
     $('#do_details_save').click(function () {
 
@@ -1823,44 +1759,6 @@ $(document).ready(function () {
         });
     });
 
-    $('#do_writeup_save').click(function () {
-
-        var sections = {};
-
-        $('.document__section').each(function () {
-            sections[$(this).attr('data-key')] = $(this).val().trim();
-        });
-
-        var values = {
-            assessment_id: assessment_id,
-            assessment_scope: $('#writeup_scope').val().trim(),
-            assessment_method: $('#writeup_method').val().trim(),
-            posture_text: $('#narrative_posture').val().trim(),
-            strengths_text: $('#narrative_strengths').val().trim(),
-            concerns_text: $('#narrative_concerns').val().trim(),
-            readiness_text: $('#narrative_readiness').val().trim(),
-            decisions_text: $('#narrative_decisions').val().trim(),
-            sections: sections
-        };
-
-        set_loading('#do_writeup_save', true);
-
-        ApiDataSvc.apiCall('post', 'save_assessment_writeup', values, function (data) {
-
-            var obj = JSON.parse(data);
-
-            set_loading('#do_writeup_save', false);
-
-            if (obj.success) {
-                show_saved('#writeup_form');
-                refresh_checks();
-            } else {
-                refresh_savebar('#writeup_form');
-                toastr.error(obj.message);
-            }
-        });
-    });
-
     $('#do_delete_open').click(function () {
         modal('delete_modal').show();
     });
@@ -1890,75 +1788,29 @@ $(document).ready(function () {
 });
 </script>
 
-<div class="modal fade" data-bs-backdrop="static" id="reports_modal" tabindex="-1" aria-labelledby="reports_modal_title" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="reports_modal_title">Download a Report</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row mb-4">
-                    <div class="col-md-8 form-group">
-                        <label for="ready_type">Report</label>
-                        <select class="form-control" id="ready_type"></select>
-                    </div>
-                    <div class="col-md-4 form-group">
-                        <label for="ready_format">Format</label>
-                        <select class="form-control" id="ready_format"></select>
-                    </div>
-                </div>
-                <p class="field__help" id="ready_description"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn--primary" id="do_ready_download">Download</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
 $(document).ready(function () {
 
     var assessment_id = <?php echo (int) $this->assessment['id']; ?>;
-    var reports = <?php echo json_encode(ReadyReports::catalog_for_assessment($this->features), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
-    var FORMAT_NAMES = {
-        pdf: "PDF",
-        docx: "Word",
-        xlsx: "Excel"
-    };
 
-    reports.forEach(function (report) {
-        $("#ready_type").append($("<option>").val(report.key).text(report.name));
-    });
+    $("#tab_reports").on("click", "[data-action='download_report']", function () {
 
-    $("#do_reports_open").click(function(){
-        show_formats();
-        modal("reports_modal").show();
-    });
-
-    $("#ready_type").change(function(){
-        show_formats();
-    });
-
-    $("#do_ready_download").click(function(){
-
-        var report = current();
+        var button = this;
+        var format = $(button).attr("data-format");
 
         var obj = {
-            report_type: report.key,
+            report_type: $(button).attr("data-report"),
             target_id: assessment_id,
-            format: $("#ready_format").val()
+            format: format
         };
 
-        set_loading("#do_ready_download", true);
+        set_loading(button, true);
 
-        var tab = report_tab($("#ready_format").val());
+        var tab = report_tab(format);
 
         ApiDataSvc.apiCall('post', 'ready_report_download', obj, function (data) {
             var obj = JSON.parse(data);
-            set_loading("#do_ready_download", false);
+            set_loading(button, false);
             if (obj.success) {
                 show_report_tab(tab, obj.url);
             } else {
@@ -1966,27 +1818,11 @@ $(document).ready(function () {
                 toastr.error(obj.message);
             }
         }, function () {
-            set_loading("#do_ready_download", false);
+            set_loading(button, false);
             close_report_tab(tab);
             toastr.error("The report could not be prepared. Try again.");
         });
     });
-
-    function current() {
-        var key = $("#ready_type").val();
-        return reports.filter(function (report) {
-            return report.key === key;
-        })[0];
-    }
-
-    function show_formats() {
-        var report = current();
-        var select = $("#ready_format").empty();
-        report.formats.forEach(function (format) {
-            select.append($("<option>").val(format).text(FORMAT_NAMES[format]));
-        });
-        $("#ready_description").text(report.description);
-    }
 
 });
 </script>

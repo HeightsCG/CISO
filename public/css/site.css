@@ -6906,10 +6906,44 @@ table.data tbody tr.item__row.is-selected td {
     justify-content: flex-end;
 }
 
-.assess__more {
-    justify-content: center;
-    width: var(--control-height);
-    padding: 0;
+.assess__danger {
+    margin-top: var(--space-4);
+}
+
+.assess__danger-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+}
+
+.assess__danger-body .card__desc {
+    margin-top: 0;
+}
+
+.assess__danger-body .btn {
+    flex: 0 0 auto;
+}
+
+.assess__reports {
+    min-height: 0;
+    overflow-y: auto;
+}
+
+table.data--light.reports__table {
+    table-layout: auto;
+}
+
+.reports__table th.reports__col-download,
+.reports__table td.reports__col-download {
+    width: 1%;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.reports__formats {
+    display: inline-flex;
+    gap: var(--space-2);
 }
 
 .workbench .roster__toolbar {

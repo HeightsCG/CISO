@@ -925,37 +925,6 @@ class AssessmentsModel extends Model {
         return parent::update('assessments', $data, 'id = :id and company_id = :company_id', $where);
     }
 
-    public function save_writeup(
-        $assessment_id,
-        $company_id,
-        $assessment_scope,
-        $assessment_method,
-        $posture_text,
-        $strengths_text,
-        $concerns_text,
-        $readiness_text,
-        $decisions_text,
-        $updated_by
-    )
-    {
-        $data = array(
-            'assessment_scope' => $assessment_scope,
-            'assessment_method' => $assessment_method,
-            'posture_text' => $posture_text,
-            'strengths_text' => $strengths_text,
-            'concerns_text' => $concerns_text,
-            'readiness_text' => $readiness_text,
-            'decisions_text' => $decisions_text,
-            'updated_by' => $updated_by,
-            'date_updated' => date('Y-m-d H:i:s')
-        );
-        $where = array(
-            'id' => $assessment_id,
-            'company_id' => $company_id
-        );
-        return parent::update('assessments', $data, 'id = :id and company_id = :company_id', $where);
-    }
-
     /** Baseline assessments for the same client and framework that this one can be compared against. */
     public function baseline_options($assessment_id, $company_id)
     {
@@ -989,52 +958,6 @@ class AssessmentsModel extends Model {
                 ORDER BY
                     b.date_created desc";
         return parent::select($sql, $where);
-    }
-
-    public function document_sections($assessment_id, $company_id)
-    {
-        $where = array(
-            'assessment_id' => $assessment_id,
-            'company_id' => $company_id
-        );
-        $sql = "SELECT
-                    d.section_key,
-                    d.section_title,
-                    d.section_body,
-                    DATE_FORMAT(d.date_updated, '%Y-%m-%d') AS updated_on
-                FROM
-                    assessment_documents d
-                    JOIN assessments a ON a.id = d.assessment_id and a.deleted = 0
-                WHERE
-                    d.assessment_id = :assessment_id
-                    and
-                    a.company_id = :company_id
-                ORDER BY
-                    d.sort_order";
-        return parent::select($sql, $where);
-    }
-
-    public function save_document_section($assessment_id, $section_key, $section_title, $section_body, $sort_order, $user_id)
-    {
-        $sql = "INSERT INTO assessment_documents
-                    (assessment_id, section_key, section_title, section_body, sort_order, updated_by, date_created, date_updated)
-                VALUES
-                    (:assessment_id, :section_key, :section_title, :section_body, :sort_order, :updated_by, UTC_TIMESTAMP(), UTC_TIMESTAMP())
-                ON DUPLICATE KEY UPDATE
-                    section_title = VALUES(section_title),
-                    section_body = VALUES(section_body),
-                    sort_order = VALUES(sort_order),
-                    updated_by = VALUES(updated_by),
-                    date_updated = UTC_TIMESTAMP()";
-        $values = array(
-            'assessment_id' => $assessment_id,
-            'section_key' => $section_key,
-            'section_title' => $section_title,
-            'section_body' => $section_body,
-            'sort_order' => $sort_order,
-            'updated_by' => $user_id
-        );
-        return parent::sql($sql, $values);
     }
 
     public function begin()

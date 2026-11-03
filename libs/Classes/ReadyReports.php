@@ -18,7 +18,6 @@ class ReadyReports {
         'executive_summary' => 'Executive Summary|assessment|pdf,docx|A short summary for leadership: score, progress, results charts, strongest and weakest areas, and top gaps.',
         'statement_of_applicability' => 'Statement of Applicability|assessment|pdf,docx,xlsx|Each control marked applicable or not, with implementation status, justification and supporting evidence.',
         'remediation_plan' => 'Remediation Plan|assessment|pdf,docx,xlsx|Gaps turned into a prioritized action list, including report findings with their owners and target dates.',
-        'governing_document' => 'Governing Document|assessment|pdf,docx|The framework\'s governing document as written on the Write-up tab.',
         'risk_assessment' => 'Risk Assessment Report|project|pdf,docx|The client deliverable: executive summary, results by area, rated findings for every gap, and sign-off. Uses your edited report when one exists.',
         'evidence_register' => 'Evidence Register|project|pdf,docx,xlsx|Every evidence file in the project and the controls it supports, plus controls still without evidence.'
     );
@@ -104,26 +103,6 @@ class ReadyReports {
             if ($item['scope'] === $scope) {
                 $list[] = $item;
             }
-        }
-
-        return $list;
-    }
-
-    /** The assessment reports for one framework, with its governing document named, or left out when it has none. */
-    public static function catalog_for_assessment(array $features): array
-    {
-        $list = array();
-        $document = $features['governing_document'];
-
-        foreach (self::catalog_for('assessment') as $item) {
-            if ($item['key'] === 'governing_document') {
-                if ($document === null) {
-                    continue;
-                }
-                $item['name'] = $document['title'];
-                $item['description'] = 'The '.$document['short'].' as written on the Write-up tab, one section per heading.';
-            }
-            $list[] = $item;
         }
 
         return $list;
@@ -362,22 +341,7 @@ class ReadyReports {
             self::text('This report records the results of the '.$a['name'].' assessment against '.$a['standard'].($a['client'] !== '' ? ' for '.$a['client'] : '').'. '
                 .$a['assessed'].' of '.$a['total'].' controls have been assessed.'),
             $this->overview_stats($a),
-            self::score_note()
-        );
-
-        foreach (array(
-            'assessment_scope' => 'Scope',
-            'assessment_method' => 'Method'
-        ) as $field => $heading) {
-            $value = self::plain($a['assessment'][$field] ?? '');
-            if ($value !== '') {
-                $blocks[] = self::h2($heading);
-                $blocks[] = self::text($value);
-            }
-        }
-
-        array_push(
-            $blocks,
+            self::score_note(),
             self::h2('Results by status'),
             $this->status_table($a),
             self::h2('Results by family'),
@@ -674,24 +638,9 @@ class ReadyReports {
             self::h1('At a glance'),
             self::text($narrative),
             $this->overview_stats($a),
-            self::score_note()
+            self::score_note(),
+            self::h2('Results')
         );
-
-        foreach (array(
-            'posture_text' => 'Overall security posture',
-            'strengths_text' => 'Strengths',
-            'concerns_text' => 'Key concerns',
-            'readiness_text' => 'Readiness opinion',
-            'decisions_text' => 'Decisions needed from leadership'
-        ) as $field => $heading) {
-            $value = self::plain($a['assessment'][$field] ?? '');
-            if ($value !== '') {
-                $blocks[] = self::h2($heading);
-                $blocks[] = self::text($value);
-            }
-        }
-
-        $blocks[] = self::h2('Results');
 
         $bars = array();
         foreach (self::RESULTS as $result) {
@@ -778,47 +727,6 @@ class ReadyReports {
 
         return array(
             'doc' => $this->doc($a, 'Executive Summary', $blocks),
-            'sheets' => array()
-        );
-    }
-
-    private function build_governing_document(int $id): array
-    {
-        $a = $this->assessment($id);
-
-        if ($a === null) {
-            return self::fail('That assessment could not be found');
-        }
-
-        $key = (string) $a['assessment']['framework_key'];
-        $document = FrameworkLibrary::assessment_features($key)['governing_document'];
-
-        if ($document === null) {
-            return self::fail('This framework has no governing document');
-        }
-
-        $saved = array();
-
-        foreach ($this->assessments_model->document_sections($id, $this->company_id) as $row) {
-            $saved[$row['section_key']] = self::plain($row['section_body']);
-        }
-
-        $blocks = array();
-
-        foreach (FrameworkLibrary::document_sections($key) as $section_key => $section) {
-            $body = $saved[$section_key] ?? '';
-            if ($body !== '') {
-                $blocks[] = self::h1($section['title']);
-                $blocks[] = self::text($body);
-            }
-        }
-
-        if (count($blocks) === 0) {
-            return self::fail('Write the '.$document['short'].' on the Write-up tab first');
-        }
-
-        return array(
-            'doc' => $this->doc($a, $document['title'], $blocks),
             'sheets' => array()
         );
     }

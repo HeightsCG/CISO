@@ -97,26 +97,10 @@ class ProjectsController extends Controller {
         }
 
         $definition = FrameworkLibrary::get((string) $assessment[0]['framework_key']);
-        $saved = array();
-
-        foreach ($this->assessments_model->document_sections($assessment[0]['id'], Session::get('company_id')) as $row) {
-            $saved[$row['section_key']] = $row;
-        }
-
-        $sections = array();
-
-        foreach (FrameworkLibrary::document_sections((string) $assessment[0]['framework_key']) as $key => $section) {
-            $sections[] = array(
-                'key' => $key,
-                'title' => $section['title'],
-                'body' => (string) ($saved[$key]['section_body'] ?? '')
-            );
-        }
 
         $this->view->assessment = $assessment[0];
         $this->view->features = FrameworkLibrary::assessment_features((string) $assessment[0]['framework_key']);
         $this->view->terminology = $definition['terminology'] ?? array();
-        $this->view->sections = $sections;
         $this->view->render();
     }
 

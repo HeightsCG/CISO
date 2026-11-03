@@ -24,16 +24,6 @@ class AssessmentChecks {
         'applicability_justification' => 'exclusion justification'
     );
 
-    const NARRATIVE_FIELDS = array(
-        'posture_text' => 'Overall security posture',
-        'strengths_text' => 'Strengths',
-        'concerns_text' => 'Key concerns',
-        'readiness_text' => 'Readiness opinion',
-        'decisions_text' => 'Decisions needed',
-        'assessment_scope' => 'Scope',
-        'assessment_method' => 'Method'
-    );
-
     /**
      * @param array      $definition framework definition, or null for standards not built from one
      * @param array      $assessment assessments row (with project_name, client_name)
@@ -223,14 +213,6 @@ class AssessmentChecks {
         }
 
         $texts = array();
-
-        foreach (self::NARRATIVE_FIELDS as $field => $label) {
-            $texts[] = array(
-                'label' => $label,
-                'id' => null,
-                'text' => (string) ($assessment[$field] ?? '')
-            );
-        }
 
         foreach ($controls as $control) {
             foreach (self::TEXT_FIELDS as $field => $label) {
