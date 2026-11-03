@@ -89,9 +89,11 @@ return array(
     },
 
     'spelling and repeated words warn but never block' => function () use ($assessment, $control, $codes) {
-        $issues = AssessmentChecks::run(null, $assessment(array(
-            'posture_text' => 'Geneva Ground Services has has a recieved policy set, and MFA is enforced for every organisation user.'
-        )), array('project_name' => 'Part-IS Implementation'), array(), null);
+        $issues = AssessmentChecks::run(null, $assessment(), array('project_name' => 'Part-IS Implementation'), array(
+            $control('AC.L2-3.1.1', 'Implemented', array(
+                'notes' => 'Geneva Ground Services has has a recieved policy set, and MFA is enforced for every organisation user.'
+            ))
+        ), null);
         Assert::same(array('project_frameworks_missing', 'repeated_word', 'spelling'), $codes($issues), 'warnings');
         Assert::same(array(), $codes($issues, 'block'), 'nothing blocks');
         Assert::true(strpos($issues[2]['message'], 'recieved') !== false, 'flags the misspelling');
