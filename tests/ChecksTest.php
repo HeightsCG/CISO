@@ -47,23 +47,15 @@ $codes = function (array $issues, string $severity = '') {
 };
 
 return array(
-    'unassessed controls and incomplete findings block completion' => function () use ($assessment, $control, $codes) {
+    'only unassessed controls block completion; failed controls need nothing more' => function () use ($assessment, $control, $codes) {
         $controls = array(
             $control('AC.L2-3.1.1', 'Not Assessed'),
-            $control('AC.L2-3.1.2', 'Not Implemented', array(
-                'gap_description' => 'No access reviews.',
-                'risk_rating' => 'High'
-            )),
-            $control('AC.L2-3.1.3', 'Partially Implemented', array(
-                'gap_description' => 'Flow rules incomplete.',
-                'business_impact' => 'CUI could leave the enclave.',
-                'recommendation' => 'Add egress rules.',
-                'risk_rating' => 'Moderate'
-            ))
+            $control('AC.L2-3.1.2', 'Not Implemented'),
+            $control('AC.L2-3.1.3', 'Partially Implemented')
         );
         $issues = AssessmentChecks::run(null, $assessment(), array('project_name' => 'CMMC readiness'), $controls, null);
-        Assert::same(array('unassessed', 'finding_incomplete'), $codes($issues, 'block'), 'blocking checks');
-        Assert::true(strpos($issues[1]['message'], 'business impact and recommendation') !== false, 'names the missing fields: '.$issues[1]['message']);
+        Assert::same(array('unassessed'), $codes($issues, 'block'), 'blocking checks');
+        Assert::same(array(), $codes($issues, 'warn'), 'no warnings');
     },
 
     'a Final needs a baseline or the no-baseline flag' => function () use ($assessment, $codes) {
@@ -77,8 +69,9 @@ return array(
 
     'spelling and repeated words warn but never block' => function () use ($assessment, $control, $codes) {
         $issues = AssessmentChecks::run(null, $assessment(), array('project_name' => 'Part-IS Implementation'), array(
-            $control('AC.L2-3.1.1', 'Implemented', array(
-                'gap_description' => 'Geneva Ground Services has has a recieved policy set, and MFA is enforced for every organisation user.'
+            $control('AC.L2-3.1.1', 'Not Applicable', array(
+                'applicability' => 'Excluded',
+                'applicability_justification' => 'Geneva Ground Services has has a recieved policy set, and MFA is enforced for every organisation user.'
             ))
         ), null);
         Assert::same(array('repeated_word', 'spelling'), $codes($issues), 'warnings');
