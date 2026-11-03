@@ -14,7 +14,7 @@ class ReadyReports {
     /** key => name|scope|formats|description. Scope is assessment or project. */
     const TYPES = array(
         'assessment_results' => 'Assessment Results Report|assessment|pdf,docx,xlsx|Scorecard, results by family, and every control with its result and evidence.',
-        'gap_analysis' => 'Gap Analysis|assessment|pdf,docx,xlsx|Only the controls not implemented or partially implemented, by family, with the gap and a priority.',
+        'gap_analysis' => 'Gap Analysis|assessment|pdf,docx,xlsx|Only the controls not implemented or partially implemented, by family, with a priority.',
         'executive_summary' => 'Executive Summary|assessment|pdf,docx|A short summary for leadership: score, progress, results charts, strongest and weakest areas, and top gaps.',
         'statement_of_applicability' => 'Statement of Applicability|assessment|pdf,docx,xlsx|Each control marked applicable or not, with implementation status, justification and supporting evidence.',
         'remediation_plan' => 'Remediation Plan|assessment|pdf,docx,xlsx|Gaps turned into a prioritized action list, including report findings with their owners and target dates.',
@@ -541,16 +541,14 @@ class ReadyReports {
                         self::priority($item['item_result']),
                         self::plain($item['control_identifier']),
                         self::plain($item['control_title']),
-                        $item['item_result'],
-                        self::plain($item['gap_description'])
+                        $item['item_result']
                     );
                     $sheet_rows[] = array(
                         self::priority($item['item_result']),
                         $family,
                         self::plain($item['control_identifier']),
                         self::plain($item['control_title']),
-                        $item['item_result'],
-                        self::plain($item['gap_description'])
+                        $item['item_result']
                     );
                 }
                 $blocks[] = self::h2($family);
@@ -558,14 +556,12 @@ class ReadyReports {
                     'Priority',
                     'ID',
                     'Control',
-                    'Result',
-                    'Gap'
+                    'Result'
                 ), array(
-                    10,
                     12,
-                    30,
-                    15,
-                    33
+                    14,
+                    52,
+                    22
                 ), $rows, true);
             }
         }
@@ -580,16 +576,14 @@ class ReadyReports {
                         'Family',
                         'Identifier',
                         'Control',
-                        'Result',
-                        'Gap'
+                        'Result'
                     ),
                     'widths' => array(
                         10,
                         24,
                         14,
                         50,
-                        22,
-                        70
+                        22
                     ),
                     'rows' => $sheet_rows
                 )
@@ -674,8 +668,7 @@ class ReadyReports {
             if ($item['item_result'] === 'Not Implemented' && count($priority) < 10) {
                 $priority[] = array(
                     self::plain($item['control_identifier']),
-                    self::plain($item['control_title']),
-                    mb_strimwidth(self::plain($item['gap_description']), 0, 220, '...')
+                    self::plain($item['control_title'])
                 );
             }
         }
@@ -684,12 +677,10 @@ class ReadyReports {
             $blocks[] = self::h2('Priority gaps');
             $blocks[] = ReportRenderer::table_block(array(
                 'ID',
-                'Control',
-                'Gap'
+                'Control'
             ), array(
                 14,
-                40,
-                46
+                86
             ), $priority, true);
         }
 
@@ -905,7 +896,7 @@ class ReadyReports {
             $rows = array();
             foreach ($gaps as $family => $items) {
                 foreach ($items as $item) {
-                    $action = self::plain($item['recommendation']) !== '' ? self::plain($item['recommendation']) : 'Implement the control as described in '.$a['standard'].'.';
+                    $action = 'Implement the control as described in '.$a['standard'].'.';
                     $rows[] = array(
                         self::priority($item['item_result']),
                         self::plain($item['control_identifier']),
@@ -1078,18 +1069,16 @@ class ReadyReports {
 
                     $number++;
                     $high = $item['item_result'] === 'Not Implemented';
-                    $gap = self::plain($item['gap_description']);
-                    $recommendation = self::plain($item['recommendation']);
                     $finding = array(
                         'id' => $number,
                         'domain_id' => $domain_id,
                         'finding_ref' => 'F-'.str_pad((string) $number, 2, '0', STR_PAD_LEFT),
                         'finding_title' => self::plain($item['control_identifier']).' '.rtrim(self::plain($item['control_title']), '. ').' ('.strtolower($item['item_result']).')',
-                        'observation' => $gap !== '' ? $gap : 'Assessed as '.strtolower($item['item_result']).' during the '.$a['name'].' assessment ('.self::plain($item['control_identifier']).').',
+                        'observation' => 'Assessed as '.strtolower($item['item_result']).' during the '.$a['name'].' assessment ('.self::plain($item['control_identifier']).').',
                         'risk_text' => $high
                             ? 'Without this control, the organization is exposed to the threats it is designed to address.'
                             : 'The control is only partly in place, so the protection it is meant to give is incomplete.',
-                        'recommendation' => $recommendation !== '' ? $recommendation : ($high ? 'Put this control in place in full.' : 'Complete the implementation of this control.'),
+                        'recommendation' => $high ? 'Put this control in place in full.' : 'Complete the implementation of this control.',
                         'likelihood' => $high ? 4 : 3,
                         'impact' => $high ? 4 : 3,
                         'score' => $high ? 16 : 9,

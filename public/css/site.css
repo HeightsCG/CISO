@@ -4105,6 +4105,13 @@ table.data tbody tr.item__row {
     color: var(--text-muted);
 }
 
+.assess__title-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+}
+
 .assess__title {
     max-width: 72ch;
     font-size: var(--fs-section);
@@ -6743,11 +6750,30 @@ table.data.ledger .ledger__amount {
     margin-top: var(--space-3);
 }
 
-.workbench__guidance summary {
+.workbench__guidance-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: 0;
+    font-family: inherit;
     font-size: var(--fs-meta);
     font-weight: var(--fw-semibold);
     color: var(--accent);
+    background: none;
+    border: 0;
     cursor: pointer;
+}
+
+.workbench__guidance-menu {
+    width: min(560px, 90vw);
+    max-height: 60vh;
+    padding: var(--space-4);
+    overflow-y: auto;
+    box-shadow: var(--shadow-overlay);
+}
+
+.workbench__guidance-menu .workbench__requirement {
+    margin-top: 0;
 }
 
 .workbench__guidance-list {
@@ -6771,12 +6797,6 @@ table.data.ledger .ledger__amount {
     display: block;
     font-weight: var(--fw-semibold);
     color: var(--text-primary);
-}
-
-.workbench__guidance .assess__text {
-    margin-top: var(--space-2);
-    max-height: 260px;
-    overflow-y: auto;
 }
 
 .workbench__section {
@@ -6821,32 +6841,75 @@ table.data tbody tr.item__row.is-selected td {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-3);
-    padding: var(--space-2) var(--space-3);
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    border-left: 3px solid transparent;
 }
 
 .objectives__item + .objectives__item {
     border-top: 1px solid var(--border);
 }
 
-.objectives__text {
-    font-size: var(--fs-body);
-    line-height: var(--lh-normal);
-    color: var(--text-primary);
+.objectives__item[data-result="Implemented"] {
+    border-left-color: var(--ok);
 }
 
-.objectives__desc {
-    display: block;
-    margin-top: 2px;
-    font-size: var(--fs-meta);
-    line-height: var(--lh-normal);
-    color: var(--text-secondary);
+.objectives__item[data-result="Not Implemented"] {
+    border-left-color: var(--critical);
+}
+
+.objectives__item[data-result="Not Applicable"] {
+    border-left-color: var(--border-strong);
+}
+
+.objectives__text {
+    min-width: 0;
 }
 
 .objectives__id {
+    display: block;
+    margin-bottom: 2px;
     font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+}
+
+.objectives__statement {
+    display: block;
+    font-size: var(--fs-body);
+    line-height: 1.5;
+    color: var(--text-primary);
+}
+
+.objectives__choice .segmented__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    height: var(--control-height);
+    padding: 0 var(--space-3);
     font-size: var(--fs-meta);
-    color: var(--accent);
+}
+
+.objectives__choice .segmented__btn i {
+    font-size: 12px;
+}
+
+.objectives__choice .segmented__btn.is-on[data-value="Implemented"] {
+    color: var(--ok);
+    background: var(--ok-bg);
+}
+
+.objectives__choice .segmented__btn.is-on[data-value="Not Implemented"] {
+    color: var(--critical);
+    background: var(--critical-bg);
+}
+
+.objectives__choice .segmented__btn.is-on[data-value="Not Applicable"] {
+    color: var(--text-primary);
+    background: var(--surface-inset);
 }
 
 .segmented--sm .segmented__btn {

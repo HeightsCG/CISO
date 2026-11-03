@@ -80,12 +80,17 @@
                             <div class="workbench__scroll">
                                 <div class="assess__control-head workbench__head">
                                     <p class="assess__eyebrow"><span class="assess__id" id="item_identifier"></span> <span class="assess__sep" aria-hidden="true">&middot;</span> <span class="assess__family" id="item_family"></span></p>
-                                    <h3 class="assess__title" id="item_title"></h3>
-                                    <details class="workbench__guidance" id="item_guidance_wrap">
-                                        <summary>Assessment guidance</summary>
-                                        <p class="assess__text workbench__requirement" id="item_description"></p>
-                                        <ul class="workbench__guidance-list" id="item_guidance"></ul>
-                                    </details>
+                                    <div class="assess__title-line">
+                                        <h3 class="assess__title" id="item_title"></h3>
+                                        <span id="item_result_badge"></span>
+                                    </div>
+                                    <div class="dropdown workbench__guidance" id="item_guidance_wrap">
+                                        <button type="button" class="workbench__guidance-toggle" id="item_guidance_toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false"><i class="fa-regular fa-circle-info"></i> Assessment guidance</button>
+                                        <div class="dropdown-menu workbench__guidance-menu">
+                                            <p class="assess__text workbench__requirement" id="item_description"></p>
+                                            <ul class="workbench__guidance-list" id="item_guidance"></ul>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="workbench__section">
@@ -124,48 +129,6 @@
                                     </div>
                                 </div>
 
-                                <div class="workbench__section" id="finding_section">
-                                    <h3 class="record__group-title">Finding</h3>
-                                    <div class="row mb-4">
-                                        <div class="col-md-12 form-group">
-                                            <label for="item_gap">Gap</label>
-                                            <textarea class="form-control" id="item_gap" rows="2" placeholder="What is missing or not working."></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-4">
-                                        <div class="col-md-8 form-group">
-                                            <label for="item_impact">Business impact</label>
-                                            <textarea class="form-control" id="item_impact" rows="2" placeholder="What this exposes the business to."></textarea>
-                                        </div>
-                                        <div class="col-md-4 form-group">
-                                            <label for="item_risk">Risk</label>
-                                            <select class="form-control" id="item_risk">
-                                                <option value="">Not rated</option>
-                                                <option value="Low">Low</option>
-                                                <option value="Moderate">Moderate</option>
-                                                <option value="High">High</option>
-                                                <option value="Critical">Critical</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-4">
-                                        <div class="col-md-12 form-group">
-                                            <label for="item_recommendation">Recommendation</label>
-                                            <textarea class="form-control" id="item_recommendation" rows="2" placeholder="What to do to close the gap."></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-4">
-                                        <div class="col-md-8 form-group">
-                                            <label for="item_owner">Owner</label>
-                                            <input type="text" class="form-control" id="item_owner" placeholder="Person or role responsible">
-                                        </div>
-                                        <div class="col-md-4 form-group">
-                                            <label for="item_target">Target date</label>
-                                            <input type="date" class="form-control" id="item_target">
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="workbench__section">
                                     <h3 class="record__group-title">Evidence</h3>
                                     <ul class="evidence__list" id="item_evidence"></ul>
@@ -174,9 +137,6 @@
                                         <button type="button" class="btn btn--secondary btn--sm" id="do_item_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload New</button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="workbench__foot">
-                                <button type="button" id="do_item_save" class="btn btn--primary">Save</button>
                             </div>
                         </div>
                     </section>
@@ -469,19 +429,21 @@ $(document).ready(function () {
     var current_item = null;
 
     var RESULTS = ['Not Assessed', 'Implemented', 'Partially Implemented', 'Not Implemented', 'Not Applicable'];
-    var FINDING_RESULTS = ['Partially Implemented', 'Not Implemented'];
     var OBJECTIVE_CHOICES = [
         {
             value: 'Implemented',
-            label: 'Met'
+            label: 'Met',
+            icon: 'fa-check'
         },
         {
             value: 'Not Implemented',
-            label: 'Not Met'
+            label: 'Not Met',
+            icon: 'fa-xmark'
         },
         {
             value: 'Not Applicable',
-            label: 'N/A'
+            label: 'N/A',
+            icon: 'fa-minus'
         }
     ];
     var RESULT_CLASS = {
@@ -515,7 +477,7 @@ $(document).ready(function () {
     function set_result(item_result) {
         $('#item_result .segmented__btn').removeClass('is-on').attr('aria-pressed', 'false');
         $('#item_result .segmented__btn[data-value="' + item_result + '"]').addClass('is-on').attr('aria-pressed', 'true');
-        $('#finding_section').toggle(FINDING_RESULTS.indexOf(item_result) !== -1);
+        $('#item_result_badge').html(result_badge(item_result));
     }
 
     function current_result() {
@@ -1008,13 +970,16 @@ $(document).ready(function () {
             for (var c = 0; c < OBJECTIVE_CHOICES.length; c++) {
                 var on = list[i].item_result === OBJECTIVE_CHOICES[c].value;
 
-                buttons += '<button type="button" class="segmented__btn' + (on ? ' is-on' : '') + '" data-value="' + OBJECTIVE_CHOICES[c].value + '" aria-pressed="' + (on ? 'true' : 'false') + '">' + OBJECTIVE_CHOICES[c].label + '</button>';
+                buttons += '<button type="button" class="segmented__btn' + (on ? ' is-on' : '') + '" data-value="' + OBJECTIVE_CHOICES[c].value + '" aria-pressed="' + (on ? 'true' : 'false') + '"><i class="fa-regular ' + OBJECTIVE_CHOICES[c].icon + '"></i> ' + OBJECTIVE_CHOICES[c].label + '</button>';
             }
 
-            html += '<li class="objectives__item" data-id="' + list[i].id + '">'
-                + '<div class="objectives__text"><span class="objectives__id">' + esc(list[i].control_identifier) + '</span> ' + esc(list[i].control_title)
-                + (list[i].description && list[i].description !== list[i].control_title ? '<span class="objectives__desc">' + esc(list[i].description) + '</span>' : '')
-                + '</div>'
+            var short_id = list[i].control_identifier.indexOf(list[i].parent_identifier) === 0
+                ? list[i].control_identifier.slice(list[i].parent_identifier.length).replace(/^[-.]/, '')
+                : list[i].control_identifier;
+
+            html += '<li class="objectives__item" data-id="' + list[i].id + '" data-result="' + esc(list[i].item_result) + '">'
+                + '<div class="objectives__text"><span class="objectives__id">' + esc(short_id) + '</span>'
+                + '<span class="objectives__statement">' + esc(list[i].description || list[i].control_title) + '</span></div>'
                 + '<div class="segmented segmented--sm objectives__choice" role="group" aria-label="Result for ' + esc(list[i].control_identifier) + '">' + buttons + '</div>'
                 + '</li>';
         }
@@ -1057,6 +1022,8 @@ $(document).ready(function () {
         if (!was_on) {
             $(this).addClass('is-on').attr('aria-pressed', 'true');
         }
+
+        $(this).closest('.objectives__item').attr('data-result', was_on ? 'Not Assessed' : $(this).attr('data-value'));
 
         sync_locked_result();
     });
@@ -1103,7 +1070,8 @@ $(document).ready(function () {
                 ? '<li><strong>' + esc(match[1]) + '</strong> ' + esc(match[2]) + '</li>'
                 : '<li>' + esc(line) + '</li>';
         }).join(''));
-        $('#item_guidance_wrap').toggle(guidance !== '' || (current_item.description !== '' && current_item.description !== current_item.control_title)).prop('open', false);
+        bootstrap.Dropdown.getOrCreateInstance(document.getElementById('item_guidance_toggle')).hide();
+        $('#item_guidance_wrap').toggle(guidance !== '' || (current_item.description !== '' && current_item.description !== current_item.control_title));
 
         $('#applicability_row').toggle(flags.applicability === true);
         $('#item_applicability').val(current_item.applicability || 'Applicable');
@@ -1120,12 +1088,6 @@ $(document).ready(function () {
         set_result(current_item.item_result);
         sync_locked_result();
 
-        $('#item_gap').val(current_item.gap_description || '');
-        $('#item_impact').val(current_item.business_impact || '');
-        $('#item_risk').val(current_item.risk_rating || '');
-        $('#item_recommendation').val(current_item.recommendation || '');
-        $('#item_owner').val(current_item.owner_name || '');
-        $('#item_target').val(current_item.target_date || '');
 
         $('#detail_empty').prop('hidden', true);
         $('#detail_form').prop('hidden', false);
@@ -1144,51 +1106,60 @@ $(document).ready(function () {
         }
     });
 
-    $('#do_item_save').click(function () {
+    var saving = false;
+    var save_again = false;
+
+    function save_item() {
 
         if (!current_item) {
             return;
         }
 
         if ($('#applicability_row').css('display') !== 'none' && $('#item_applicability').val() === 'Excluded' && $('#item_justification').val().trim() === '') {
-            $('#item_justification').addClass('is-invalid').focus();
-            toastr.error('Give a justification for excluding this control.');
             return;
         }
 
-        $('#item_justification').removeClass('is-invalid');
-        set_loading('#do_item_save', true);
+        if (saving) {
+            save_again = true;
+            return;
+        }
+
+        saving = true;
 
         var values = {
             item_id: current_item.id,
             item_result: current_result(),
-            gap_description: $('#item_gap').val().trim(),
-            business_impact: $('#item_impact').val().trim(),
-            risk_rating: $('#item_risk').val(),
-            recommendation: $('#item_recommendation').val().trim(),
-            owner_name: $('#item_owner').val().trim(),
-            target_date: $('#item_target').val(),
             partial_credit: $('#item_partial_credit').is(':checked') ? '1' : '0',
             applicability: $('#item_applicability').val(),
             applicability_justification: $('#item_justification').val().trim(),
-            objectives: objective_values(),
+            objectives: objective_values()
         };
 
         ApiDataSvc.apiCall('post', 'save_item', values, function (data) {
 
             var obj = JSON.parse(data);
 
-            set_loading('#do_item_save', false);
+            saving = false;
 
             if (obj.success) {
-                toastr.success(obj.message);
                 set_status(obj.assessment_status);
                 load(true);
             } else {
                 toastr.error(obj.message);
             }
+
+            if (save_again) {
+                save_again = false;
+                save_item();
+            }
+        }, function () {
+            saving = false;
+            toastr.error('That change could not be saved. Try again.');
         });
-    });
+    }
+
+    $('#item_objectives, #item_result').on('click', '.segmented__btn', save_item);
+    $('#item_applicability, #item_justification, #item_partial_credit').on('change', save_item);
 
     function load_item_evidence() {
 

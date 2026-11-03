@@ -2618,8 +2618,6 @@ class ApiController extends Controller {
             return array_key_exists($key, $this->post) ? $this->input($key) : trim((string) ($item[0][$column] ?? ''));
         };
         $item_result = $this->input('item_result');
-        $risk_rating = $kept('risk_rating', 'risk_rating');
-        $target_date = $kept('target_date', 'target_date');
         $applicability = $kept('applicability', 'applicability') === 'Excluded' ? 'Excluded' : 'Applicable';
         $applicability_justification = $kept('applicability_justification', 'applicability_justification');
         $allowed = array(
@@ -2642,18 +2640,6 @@ class ApiController extends Controller {
 
         if (!in_array($item_result, $allowed, true)) {
             $response['message'] = 'Choose a valid result';
-            echo json_encode($response);
-            exit;
-        }
-
-        if (!in_array($risk_rating, array('', 'Low', 'Moderate', 'High', 'Critical'), true)) {
-            $response['message'] = 'Choose a valid risk rating';
-            echo json_encode($response);
-            exit;
-        }
-
-        if ($target_date !== '' && (\DateTime::createFromFormat('Y-m-d', $target_date) === false || \DateTime::createFromFormat('Y-m-d', $target_date)->format('Y-m-d') !== $target_date)) {
-            $response['message'] = 'Enter the target date as a valid date';
             echo json_encode($response);
             exit;
         }
@@ -2701,12 +2687,6 @@ class ApiController extends Controller {
                 $item_id,
                 Session::get('company_id'),
                 $item_result,
-                $kept('gap_description', 'gap_description'),
-                $kept('business_impact', 'business_impact'),
-                $risk_rating,
-                $kept('recommendation', 'recommendation'),
-                mb_substr($kept('owner_name', 'owner_name'), 0, 200),
-                $target_date,
                 array_key_exists('partial_credit', $this->post)
                     ? (($this->post['partial_credit'] === '1' && $item[0]['partial_weight'] !== null) ? 1 : 0)
                     : (int) $item[0]['partial_credit'],

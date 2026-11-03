@@ -9,16 +9,7 @@
  */
 class AssessmentChecks {
 
-    const FINDING_FIELDS = array(
-        'gap_description' => 'gap',
-        'business_impact' => 'business impact',
-        'recommendation' => 'recommendation'
-    );
-
     const TEXT_FIELDS = array(
-        'gap_description' => 'gap',
-        'business_impact' => 'business impact',
-        'recommendation' => 'recommendation',
         'applicability_justification' => 'exclusion justification'
     );
 
@@ -43,28 +34,6 @@ class AssessmentChecks {
 
         if (count($unassessed) > 0) {
             $issues[] = self::issue('block', 'unassessed', count($unassessed).' '.(count($unassessed) === 1 ? 'control has' : 'controls have').' not been assessed.', array_column($unassessed, 'control_identifier'));
-        }
-
-        foreach ($in_scope as $control) {
-            if (!in_array($control['item_result'], array('Partially Implemented', 'Not Implemented'), true)) {
-                continue;
-            }
-
-            $missing = array();
-
-            foreach (self::FINDING_FIELDS as $field => $label) {
-                if (trim((string) ($control[$field] ?? '')) === '') {
-                    $missing[] = $label;
-                }
-            }
-
-            if (count($missing) > 0) {
-                $issues[] = self::issue('block', 'finding_incomplete', $control['control_identifier'].' is '.strtolower($control['item_result']).' but has no '.self::join($missing).'.', array($control['control_identifier']));
-            }
-
-            if (($control['risk_rating'] ?? '') === '') {
-                $issues[] = self::issue('warn', 'risk_not_rated', $control['control_identifier'].' has a finding with no risk rating.', array($control['control_identifier']));
-            }
         }
 
         foreach ($controls as $control) {
@@ -167,17 +136,6 @@ class AssessmentChecks {
             'message' => $message,
             'controls' => $ids
         );
-    }
-
-    private static function join(array $words): string
-    {
-        if (count($words) <= 1) {
-            return implode('', $words);
-        }
-
-        $last = array_pop($words);
-
-        return implode(', ', $words).' and '.$last;
     }
 
 }
