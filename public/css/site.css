@@ -4105,13 +4105,6 @@ table.data tbody tr.item__row {
     color: var(--text-muted);
 }
 
-.assess__title-line {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-}
-
 .assess__title {
     max-width: 72ch;
     font-size: var(--fs-section);
@@ -7015,16 +7008,11 @@ table.data tbody tr.item__row.is-selected td {
 }
 
 .controls__scope-note {
-    margin-left: var(--space-2);
+    white-space: pre;
     font-weight: var(--fw-medium);
     letter-spacing: 0;
     text-transform: none;
     color: var(--text-muted);
-}
-
-.controls__scope-note::before {
-    content: "\00b7";
-    margin-right: var(--space-2);
 }
 
 table.data tbody tr.item__row.is-out-of-scope td {
@@ -7175,12 +7163,6 @@ table.data--light.reports__table {
     display: none;
 }
 
-.assess__progress-value {
-    font-weight: var(--fw-semibold);
-    color: var(--text-primary);
-}
-
-.assess__progress-value:empty,
 .assess__progress-outcome:empty {
     display: none;
 }

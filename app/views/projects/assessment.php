@@ -19,7 +19,6 @@
         <button class="subtabs__link" id="tab_reports_btn" data-bs-toggle="pill" data-bs-target="#tab_reports" type="button" role="tab" aria-controls="tab_reports" aria-selected="false">Reports</button>
         <button class="subtabs__link" id="tab_settings_btn" data-bs-toggle="pill" data-bs-target="#tab_settings" type="button" role="tab" aria-controls="tab_settings" aria-selected="false">Settings</button>
         <div class="assess__progress" id="score_row" hidden>
-            <span class="assess__progress-value" id="score_value"></span>
             <span class="assess__progress-outcome" id="score_outcome"></span>
             <span class="assess__progress-count" id="rollup_label"></span>
             <div class="assess__bar" id="rollup_bar"></div>
@@ -43,7 +42,7 @@
                                 <option value="">All results</option>
                                 <option value="Not Assessed">Not Assessed</option>
                                 <option value="Implemented">Implemented</option>
-                                <option value="Partially Implemented">Partially Implemented</option>
+                                <option value="Partially Implemented">Partially</option>
                                 <option value="Not Implemented">Not Implemented</option>
                                 <option value="Not Applicable">Not Applicable</option>
                             </select>
@@ -80,10 +79,7 @@
                             <div class="workbench__scroll">
                                 <div class="assess__control-head workbench__head">
                                     <p class="assess__eyebrow"><span class="assess__id" id="item_identifier"></span> <span class="assess__sep" aria-hidden="true">&middot;</span> <span class="assess__family" id="item_family"></span></p>
-                                    <div class="assess__title-line">
-                                        <h3 class="assess__title" id="item_title"></h3>
-                                        <span id="item_result_badge"></span>
-                                    </div>
+                                    <h3 class="assess__title" id="item_title"></h3>
                                     <div class="dropdown workbench__guidance" id="item_guidance_wrap">
                                         <button type="button" class="workbench__guidance-toggle" id="item_guidance_toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false"><i class="fa-regular fa-circle-info"></i> Assessment guidance</button>
                                         <div class="dropdown-menu workbench__guidance-menu">
@@ -117,7 +113,7 @@
                                         <div class="segmented segmented--wrap" id="item_result" role="group" aria-labelledby="item_result_label">
                                             <button type="button" class="segmented__btn" data-value="Not Assessed" aria-pressed="false">Not Assessed</button>
                                             <button type="button" class="segmented__btn" data-value="Implemented" aria-pressed="false">Implemented</button>
-                                            <button type="button" class="segmented__btn" data-value="Partially Implemented" aria-pressed="false">Partially Implemented</button>
+                                            <button type="button" class="segmented__btn" data-value="Partially Implemented" aria-pressed="false">Partially</button>
                                             <button type="button" class="segmented__btn" data-value="Not Implemented" aria-pressed="false">Not Implemented</button>
                                             <button type="button" class="segmented__btn" data-value="Not Applicable" aria-pressed="false">Not Applicable</button>
                                         </div>
@@ -186,7 +182,7 @@
                         </header>
                         <div class="card__body">
                             <div class="row g-3">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="form-floating">
                                         <select class="form-select" id="details_type">
                                             <option value="Baseline">Baseline</option>
@@ -196,7 +192,7 @@
                                         <label for="details_type">Type</label>
                                     </div>
                                 </div>
-                                <div class="col-md-6" id="baseline_group">
+                                <div class="col-md-12" id="baseline_group">
                                     <div class="form-floating">
                                         <select class="form-select" id="details_baseline"></select>
                                         <label for="details_baseline">Compare against</label>
@@ -272,12 +268,6 @@
                         </div>
                     </section>
                     <?php } ?>
-                    <div class="savebar" id="details_savebar">
-                        <span class="savebar__status" id="details_status" aria-live="polite">All changes saved</span>
-                        <span class="savebar__actions">
-                            <button type="button" id="do_details_save" class="btn btn--primary" disabled>Save Changes</button>
-                        </span>
-                    </div>
                     <section class="card assess__danger">
                         <header class="card__head">
                             <h2 class="card__title">Delete Assessment</h2>
@@ -458,10 +448,6 @@ $(document).ready(function () {
         return terms && terms[key] ? terms[key] : fallback;
     }
 
-    function capitalise(text) {
-        return text.charAt(0).toUpperCase() + text.slice(1);
-    }
-
     function flags_of(item) {
         if (!item.control_flags) {
             return {};
@@ -477,7 +463,6 @@ $(document).ready(function () {
     function set_result(item_result) {
         $('#item_result .segmented__btn').removeClass('is-on').attr('aria-pressed', 'false');
         $('#item_result .segmented__btn[data-value="' + item_result + '"]').addClass('is-on').attr('aria-pressed', 'true');
-        $('#item_result_badge').html(result_badge(item_result));
     }
 
     function current_result() {
@@ -518,8 +503,12 @@ $(document).ready(function () {
         return met === 0 ? 'Not Implemented' : 'Partially Implemented';
     }
 
+    function result_label(value) {
+        return value === 'Partially Implemented' ? 'Partially' : value;
+    }
+
     function result_badge(value) {
-        return '<span class="badge ' + (RESULT_CLASS[value] || 'badge--inactive') + '">' + esc(value) + '</span>';
+        return '<span class="badge ' + (RESULT_CLASS[value] || 'badge--inactive') + '">' + esc(result_label(value)) + '</span>';
     }
 
     function size_label(bytes) {
@@ -546,7 +535,7 @@ $(document).ready(function () {
 
         $('#items_body .controls__family').each(function () {
             if (out.indexOf($(this).attr('data-family')) !== -1) {
-                $(this).addClass('is-out-of-scope').find('td').append('<span class="controls__scope-note">Not in scope</span>');
+                $(this).addClass('is-out-of-scope').find('td').append('<span class="controls__scope-note"> \u00b7 Not in scope</span>');
             }
         });
 
@@ -583,7 +572,7 @@ $(document).ready(function () {
         var assessed = total - counts['Not Assessed'];
 
         for (var k = 0; k < RESULTS.length; k++) {
-            $('#result_filter option[value="' + RESULTS[k] + '"]').text(RESULTS[k] + ' (' + counts[RESULTS[k]] + ')');
+            $('#result_filter option[value="' + RESULTS[k] + '"]').text(result_label(RESULTS[k]) + ' (' + counts[RESULTS[k]] + ')');
         }
 
         $('#evidence_filter option[value="yes"]').text('Has evidence (' + evidenced + ')');
@@ -598,7 +587,7 @@ $(document).ready(function () {
 
         for (var b = 0; b < BAR.length; b++) {
             if (counts[BAR[b][0]] > 0) {
-                segments += '<span class="assess__bar-part ' + BAR[b][1] + '" style="width:' + (counts[BAR[b][0]] / total * 100) + '%" title="' + counts[BAR[b][0]] + ' ' + BAR[b][0] + '"></span>';
+                segments += '<span class="assess__bar-part ' + BAR[b][1] + '" style="width:' + (counts[BAR[b][0]] / total * 100) + '%" title="' + counts[BAR[b][0]] + ' ' + result_label(BAR[b][0]) + '"></span>';
             }
         }
 
@@ -624,10 +613,6 @@ $(document).ready(function () {
         $('#status_badge').text(assessment_status)
             .removeClass('badge--active badge--onboarding badge--prospect')
             .addClass(RESULT_CLASS[assessment_status] || 'badge--prospect');
-    }
-
-    function tier_text(tier) {
-        return tier.level > 0 ? tier.label : 'not set';
     }
 
     function outcome_text(outcome) {
@@ -669,19 +654,6 @@ $(document).ready(function () {
         }
 
         if (score) {
-            var value = '';
-
-            if (score.outcome && score.outcome.status === 'not_started' || score.counts['Not Assessed'] === score.in_scope) {
-                value = '';
-            } else if (score.model === 'points') {
-                value = capitalise(term('score', 'score')) + ': ' + score.points.score + ' of ' + score.points.maximum + (score.complete ? '' : ' so far');
-            } else if (score.model === 'maturity') {
-                value = 'Governance: ' + tier_text(score.maturity.governance) + ' (target ' + tier_text(score.maturity.target_governance) + ') · Management: ' + tier_text(score.maturity.management) + ' (target ' + tier_text(score.maturity.target_management) + ')';
-            } else {
-                value = score.percentage + '% of applicable ' + term('controls', 'controls') + ' implemented' + (score.complete ? '' : ' so far');
-            }
-
-            $('#score_value').text(value);
             $('#score_outcome').text(outcome_text(score.outcome))
                 .attr('title', score.outcome && score.outcome.reasons.length ? score.outcome.reasons.join('\n') : '')
                 .toggleClass('is-ok', !!score.outcome && score.outcome.status !== 'not_eligible');
@@ -1529,42 +1501,6 @@ $(document).ready(function () {
         });
     });
 
-    var saved_state = {};
-
-    function form_state(form) {
-        return JSON.stringify($(form).find('input, select, textarea').map(function () {
-            return this.type === 'checkbox' ? this.checked : $(this).val();
-        }).get());
-    }
-
-    function mark_saved(form) {
-        saved_state[form] = form_state(form);
-        refresh_savebar(form);
-    }
-
-    function refresh_savebar(form) {
-
-        var bar = $(form).find('.savebar');
-        var dirty = saved_state[form] !== undefined && form_state(form) !== saved_state[form];
-
-        bar.toggleClass('is-dirty', dirty);
-        bar.find('.savebar__status').text(dirty ? 'Unsaved changes' : 'All changes saved');
-        bar.find('.btn--primary').prop('disabled', !dirty);
-
-        if (dirty) {
-            bar.removeClass('is-saved');
-        }
-    }
-
-    function show_saved(form) {
-        mark_saved(form);
-        $(form).find('.savebar').addClass('is-saved');
-    }
-
-    $('#details_form').on('input change', 'input, select, textarea', function () {
-        refresh_savebar('#' + $(this).closest('.settings').attr('id'));
-    });
-
     function sync_details_form() {
         $('#baseline_group').toggle($('#details_type').val() !== 'Baseline');
         $('#ssi_note_row').toggle($('#details_ssi').is(':checked'));
@@ -1605,8 +1541,6 @@ $(document).ready(function () {
             if ($('#details_baseline').val() === null) {
                 $('#details_baseline').val('0');
             }
-
-            mark_saved('#details_form');
         });
     }
 
@@ -1614,7 +1548,7 @@ $(document).ready(function () {
     sync_details_form();
     load_baselines();
 
-    $('#do_details_save').click(function () {
+    function save_details() {
 
         var choice = $('#details_baseline').val() || '0';
 
@@ -1634,26 +1568,22 @@ $(document).ready(function () {
             ssi_note: $('#details_ssi_note').length ? $('#details_ssi_note').val().trim() : ''
         };
 
-        set_loading('#do_details_save', true);
-
         ApiDataSvc.apiCall('post', 'save_assessment_details', values, function (data) {
 
             var obj = JSON.parse(data);
-
-            set_loading('#do_details_save', false);
 
             if (obj.success) {
                 details.assessment_type = values.assessment_type;
                 details.baseline_assessment_id = values.assessment_type === 'Baseline' ? 0 : parseInt(values.baseline_assessment_id, 10);
                 details.no_baseline = values.no_baseline === '1' && values.assessment_type !== 'Baseline' ? 1 : 0;
-                show_saved('#details_form');
                 load(true);
             } else {
-                refresh_savebar('#details_form');
                 toastr.error(obj.message);
             }
         });
-    });
+    }
+
+    $('#details_form').on('change', 'input, select, textarea', save_details);
 
     $('#do_assessment_delete_open').click(function () {
         modal('assessment_delete_modal').show();
