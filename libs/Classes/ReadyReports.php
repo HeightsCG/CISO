@@ -13,8 +13,8 @@ class ReadyReports {
 
     /** key => name|scope|formats|description. Scope is assessment or project. */
     const TYPES = array(
-        'assessment_results' => 'Assessment Results Report|assessment|pdf,docx,xlsx|Scorecard, results by family, and every control with its result, notes and evidence.',
-        'gap_analysis' => 'Gap Analysis|assessment|pdf,docx,xlsx|Only the controls not implemented or partially implemented, by family, with the assessor\'s notes and a priority.',
+        'assessment_results' => 'Assessment Results Report|assessment|pdf,docx,xlsx|Scorecard, results by family, and every control with its result and evidence.',
+        'gap_analysis' => 'Gap Analysis|assessment|pdf,docx,xlsx|Only the controls not implemented or partially implemented, by family, with the gap and a priority.',
         'executive_summary' => 'Executive Summary|assessment|pdf,docx|A short summary for leadership: score, progress, results charts, strongest and weakest areas, and top gaps.',
         'statement_of_applicability' => 'Statement of Applicability|assessment|pdf,docx,xlsx|Each control marked applicable or not, with implementation status, justification and supporting evidence.',
         'remediation_plan' => 'Remediation Plan|assessment|pdf,docx,xlsx|Gaps turned into a prioritized action list, including report findings with their owners and target dates.',
@@ -359,7 +359,6 @@ class ReadyReports {
                     self::plain($item['control_identifier']),
                     self::plain($item['control_title']),
                     $item['item_result'],
-                    self::plain($item['notes']),
                     (string) count($titles)
                 );
                 $sheet_rows[] = array(
@@ -367,7 +366,6 @@ class ReadyReports {
                     self::plain($item['control_identifier']),
                     self::plain($item['control_title']),
                     $item['item_result'],
-                    self::plain($item['notes']),
                     count($titles),
                     implode('; ', $titles)
                 );
@@ -377,14 +375,12 @@ class ReadyReports {
                 'ID',
                 'Control',
                 'Result',
-                'Notes',
                 'Evidence'
             ), array(
                 12,
-                32,
-                15,
-                31,
-                10
+                58,
+                18,
+                12
             ), $rows, true);
         }
 
@@ -398,7 +394,6 @@ class ReadyReports {
                         'Identifier',
                         'Control',
                         'Result',
-                        'Notes',
                         'Evidence count',
                         'Evidence'
                     ),
@@ -407,7 +402,6 @@ class ReadyReports {
                         14,
                         50,
                         20,
-                        60,
                         14,
                         50
                     ),
@@ -548,7 +542,7 @@ class ReadyReports {
                         self::plain($item['control_identifier']),
                         self::plain($item['control_title']),
                         $item['item_result'],
-                        self::plain($item['notes'])
+                        self::plain($item['gap_description'])
                     );
                     $sheet_rows[] = array(
                         self::priority($item['item_result']),
@@ -556,7 +550,7 @@ class ReadyReports {
                         self::plain($item['control_identifier']),
                         self::plain($item['control_title']),
                         $item['item_result'],
-                        self::plain($item['notes'])
+                        self::plain($item['gap_description'])
                     );
                 }
                 $blocks[] = self::h2($family);
@@ -565,7 +559,7 @@ class ReadyReports {
                     'ID',
                     'Control',
                     'Result',
-                    'Assessor notes'
+                    'Gap'
                 ), array(
                     10,
                     12,
@@ -587,7 +581,7 @@ class ReadyReports {
                         'Identifier',
                         'Control',
                         'Result',
-                        'Assessor notes'
+                        'Gap'
                     ),
                     'widths' => array(
                         10,
@@ -681,7 +675,7 @@ class ReadyReports {
                 $priority[] = array(
                     self::plain($item['control_identifier']),
                     self::plain($item['control_title']),
-                    mb_strimwidth(self::plain($item['notes']), 0, 220, '...')
+                    mb_strimwidth(self::plain($item['gap_description']), 0, 220, '...')
                 );
             }
         }
@@ -691,7 +685,7 @@ class ReadyReports {
             $blocks[] = ReportRenderer::table_block(array(
                 'ID',
                 'Control',
-                'Notes'
+                'Gap'
             ), array(
                 14,
                 40,
@@ -778,7 +772,7 @@ class ReadyReports {
                     self::plain($item['control_title']),
                     $excluded ? 'No' : 'Yes',
                     $status,
-                    self::plain($item['notes']),
+                    self::plain($item['applicability_justification']),
                     $titles
                 );
                 $sheet_rows[] = array(
@@ -787,7 +781,7 @@ class ReadyReports {
                     self::plain($item['control_title']),
                     $excluded ? 'No' : 'Yes',
                     $status,
-                    self::plain($item['notes']),
+                    self::plain($item['applicability_justification']),
                     $titles
                 );
             }
@@ -911,7 +905,7 @@ class ReadyReports {
             $rows = array();
             foreach ($gaps as $family => $items) {
                 foreach ($items as $item) {
-                    $action = self::plain($item['notes']) !== '' ? self::plain($item['notes']) : 'Implement the control as described in '.$a['standard'].'.';
+                    $action = self::plain($item['recommendation']) !== '' ? self::plain($item['recommendation']) : 'Implement the control as described in '.$a['standard'].'.';
                     $rows[] = array(
                         self::priority($item['item_result']),
                         self::plain($item['control_identifier']),
@@ -944,7 +938,7 @@ class ReadyReports {
                 'ID',
                 'Control',
                 'Current result',
-                'Action and notes'
+                'Action'
             ), array(
                 10,
                 12,
@@ -965,7 +959,7 @@ class ReadyReports {
                     'Identifier',
                     'Control',
                     'Current result',
-                    'Action and notes',
+                    'Action',
                     'Owner',
                     'Target date',
                     'Status'
@@ -1084,17 +1078,18 @@ class ReadyReports {
 
                     $number++;
                     $high = $item['item_result'] === 'Not Implemented';
-                    $notes = self::plain($item['notes']);
+                    $gap = self::plain($item['gap_description']);
+                    $recommendation = self::plain($item['recommendation']);
                     $finding = array(
                         'id' => $number,
                         'domain_id' => $domain_id,
                         'finding_ref' => 'F-'.str_pad((string) $number, 2, '0', STR_PAD_LEFT),
                         'finding_title' => self::plain($item['control_identifier']).' '.rtrim(self::plain($item['control_title']), '. ').' ('.strtolower($item['item_result']).')',
-                        'observation' => $notes !== '' ? $notes : 'Assessed as '.strtolower($item['item_result']).' during the '.$a['name'].' assessment ('.self::plain($item['control_identifier']).').',
+                        'observation' => $gap !== '' ? $gap : 'Assessed as '.strtolower($item['item_result']).' during the '.$a['name'].' assessment ('.self::plain($item['control_identifier']).').',
                         'risk_text' => $high
                             ? 'Without this control, the organization is exposed to the threats it is designed to address.'
                             : 'The control is only partly in place, so the protection it is meant to give is incomplete.',
-                        'recommendation' => $high ? 'Put this control in place in full.' : 'Complete the implementation of this control.',
+                        'recommendation' => $recommendation !== '' ? $recommendation : ($high ? 'Put this control in place in full.' : 'Complete the implementation of this control.'),
                         'likelihood' => $high ? 4 : 3,
                         'impact' => $high ? 4 : 3,
                         'score' => $high ? 16 : 9,
@@ -1178,7 +1173,7 @@ class ReadyReports {
             'background_text' => self::plain($project['description']),
             'scope_text' => 'The assessment covered '.$total.' controls in '.implode(' and ', array_unique($standards)).', grouped into the areas below.',
             'out_of_scope_text' => '',
-            'approach_text' => 'Each control was reviewed and assigned a result: implemented, partially implemented, not implemented or not applicable, supported by evidence held in the project\'s evidence vault and the assessor\'s notes.',
+            'approach_text' => 'Each control was reviewed and assigned a result: implemented, partially implemented, not implemented or not applicable, supported by evidence held in the project\'s evidence vault and the assessor\'s findings.',
             'methodology_text' => 'Each control not implemented or only partially implemented is reported as a finding. Findings for controls not implemented are rated likelihood 4 and impact 4, a score of 16 (High). Findings for controls partially implemented are rated likelihood 3 and impact 3, a score of 9 (Medium). '
                 ."\n\n".'Each area is rated from its compliance score, in which implemented controls count in full and partially implemented controls count half: 85% or more is Satisfactory, 60% or more Satisfactory with exceptions, 30% or more Needs improvement, and below 30% Unsatisfactory.',
             'limitations_text' => ReportBuilder::default_limitations($firm),

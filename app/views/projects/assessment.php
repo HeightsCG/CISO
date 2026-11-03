@@ -22,7 +22,7 @@
             <span class="assess__progress-value" id="score_value"></span>
             <span class="assess__progress-outcome" id="score_outcome"></span>
             <span class="assess__progress-count" id="rollup_label"></span>
-            <div class="progress"><div class="progress__bar" id="rollup_bar" style="width:0%"></div></div>
+            <div class="assess__bar" id="rollup_bar"></div>
             <button type="button" class="btn btn--tertiary btn--sm" id="do_checks_open" hidden></button>
         </div>
     </nav>
@@ -81,9 +81,9 @@
                                 <div class="assess__control-head workbench__head">
                                     <p class="assess__eyebrow"><span class="assess__id" id="item_identifier"></span> <span class="assess__sep" aria-hidden="true">&middot;</span> <span class="assess__family" id="item_family"></span></p>
                                     <h3 class="assess__title" id="item_title"></h3>
-                                    <p class="assess__text workbench__requirement" id="item_description"></p>
                                     <details class="workbench__guidance" id="item_guidance_wrap">
                                         <summary>Assessment guidance</summary>
+                                        <p class="assess__text workbench__requirement" id="item_description"></p>
                                         <p class="assess__text" id="item_guidance"></p>
                                     </details>
                                 </div>
@@ -104,11 +104,10 @@
                                     </div>
 
                                     <div class="form-group mb-4" id="objectives_group">
-                                        <label id="objectives_label">Objectives</label>
                                         <ul class="objectives" id="item_objectives"></ul>
                                     </div>
 
-                                    <div class="form-group mb-4">
+                                    <div class="form-group mb-4" id="result_group">
                                         <label id="item_result_label">Result</label>
                                         <div class="segmented segmented--wrap" id="item_result" role="group" aria-labelledby="item_result_label">
                                             <button type="button" class="segmented__btn" data-value="Not Assessed" aria-pressed="false">Not Assessed</button>
@@ -117,26 +116,11 @@
                                             <button type="button" class="segmented__btn" data-value="Not Implemented" aria-pressed="false">Not Implemented</button>
                                             <button type="button" class="segmented__btn" data-value="Not Applicable" aria-pressed="false">Not Applicable</button>
                                         </div>
-                                        <p class="field__help" id="result_help" hidden></p>
                                     </div>
 
                                     <div class="form-check mb-4" id="partial_row">
                                         <input class="form-check-input" type="checkbox" id="item_partial_credit">
                                         <label class="form-check-label" for="item_partial_credit" id="partial_label">Partially effective</label>
-                                    </div>
-
-                                    <div class="row mb-4">
-                                        <div class="col-md-12 form-group">
-                                            <label for="item_notes">Observation</label>
-                                            <textarea class="form-control" id="item_notes" rows="3" placeholder="What was examined, who was interviewed, what was observed."></textarea>
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-4">
-                                        <div class="col-md-12 form-group">
-                                            <label for="item_implementation">Implementation description</label>
-                                            <textarea class="form-control" id="item_implementation" rows="3" placeholder="How the organization meets this today."></textarea>
-                                        </div>
                                     </div>
                                 </div>
 
@@ -179,11 +163,6 @@
                                             <label for="item_target">Target date</label>
                                             <input type="date" class="form-control" id="item_target">
                                         </div>
-                                    </div>
-                                    <div class="form-group mb-4">
-                                        <label>Milestones</label>
-                                        <div id="item_milestones"></div>
-                                        <button type="button" class="btn btn--secondary btn--sm" id="do_milestone_add"><i class="fa-regular fa-plus"></i> Add Milestone</button>
                                     </div>
                                 </div>
 
@@ -476,7 +455,6 @@ $(document).ready(function () {
     var project_id = <?php echo (int) $this->assessment['project_id']; ?>;
     var project_name = <?php echo json_encode(html_entity_decode((string) $this->assessment['project_name'], ENT_QUOTES, 'UTF-8'), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
     var terms = <?php echo json_encode($this->terminology, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
-    var rolls_up = <?php echo $this->features['rolls_up'] ? 'true' : 'false'; ?>;
     var tiers = <?php echo json_encode((object) $this->features['tiers'], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
     var review = null;
     var partial_labels = <?php echo json_encode((object) $this->features['partial_labels'], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
@@ -488,7 +466,6 @@ $(document).ready(function () {
     var items = [];
     var controls = [];
     var objectives_of = {};
-    var milestones_of = {};
     var current_item = null;
 
     var RESULTS = ['Not Assessed', 'Implemented', 'Partially Implemented', 'Not Implemented', 'Not Applicable'];
@@ -500,7 +477,7 @@ $(document).ready(function () {
         },
         {
             value: 'Not Implemented',
-            label: 'Not met'
+            label: 'Not Met'
         },
         {
             value: 'Not Applicable',
@@ -546,10 +523,6 @@ $(document).ready(function () {
     }
 
     $('#item_result').on('click', '.segmented__btn', function () {
-        if ($('#item_result').hasClass('is-locked')) {
-            return;
-        }
-
         set_result($(this).attr('data-value'));
     });
 
@@ -646,7 +619,6 @@ $(document).ready(function () {
         }
 
         var assessed = total - counts['Not Assessed'];
-        var pct = total > 0 ? Math.round(assessed / total * 100) : 0;
 
         for (var k = 0; k < RESULTS.length; k++) {
             $('#result_filter option[value="' + RESULTS[k] + '"]').text(RESULTS[k] + ' (' + counts[RESULTS[k]] + ')');
@@ -654,7 +626,21 @@ $(document).ready(function () {
 
         $('#evidence_filter option[value="yes"]').text('Has evidence (' + evidenced + ')');
         $('#evidence_filter option[value="no"]').text('No evidence (' + (total - evidenced) + ')');
-        $('#rollup_bar').css('width', pct + '%');
+        var segments = '';
+        var BAR = [
+            ['Implemented', 'is-ok'],
+            ['Partially Implemented', 'is-partial'],
+            ['Not Implemented', 'is-gap'],
+            ['Not Applicable', 'is-na']
+        ];
+
+        for (var b = 0; b < BAR.length; b++) {
+            if (counts[BAR[b][0]] > 0) {
+                segments += '<span class="assess__bar-part ' + BAR[b][1] + '" style="width:' + (counts[BAR[b][0]] / total * 100) + '%" title="' + counts[BAR[b][0]] + ' ' + BAR[b][0] + '"></span>';
+            }
+        }
+
+        $('#rollup_bar').html(segments);
         $('#rollup_label').text(assessed + ' of ' + total);
 
         sync_complete(counts['Not Assessed']);
@@ -993,33 +979,18 @@ $(document).ready(function () {
 
             split(JSON.parse(data));
 
-            ApiDataSvc.apiCall('post', 'load_milestones', { assessment_id: assessment_id }, function (rows) {
-
-                var list = JSON.parse(rows);
-
-                milestones_of = {};
-
-                for (var i = 0; i < list.length; i++) {
-                    if (!milestones_of[list[i].assessment_item_id]) {
-                        milestones_of[list[i].assessment_item_id] = [];
-                    }
-
-                    milestones_of[list[i].assessment_item_id].push(list[i]);
-                }
-
-                if (keep_open && current_item) {
-                    for (var j = 0; j < controls.length; j++) {
-                        if (parseInt(controls[j].id, 10) === parseInt(current_item.id, 10)) {
-                            current_item = controls[j];
-                            break;
-                        }
+            if (keep_open && current_item) {
+                for (var j = 0; j < controls.length; j++) {
+                    if (parseInt(controls[j].id, 10) === parseInt(current_item.id, 10)) {
+                        current_item = controls[j];
+                        break;
                     }
                 }
+            }
 
-                render();
-                filter();
-                refresh_checks();
-            });
+            render();
+            filter();
+            refresh_checks();
         });
     }
 
@@ -1065,22 +1036,13 @@ $(document).ready(function () {
 
         if (excluded) {
             set_result('Not Applicable');
-            $('#item_result').addClass('is-locked');
-            $('#result_help').prop('hidden', false).text('Excluded controls are reported as not applicable.');
-            return;
-        }
-
-        if (list.length > 0 && rolls_up) {
+        } else if (list.length > 0) {
             set_result(result_from_objectives(list.map(function (o) {
                 return o.result;
             })));
-            $('#item_result').addClass('is-locked');
-            $('#result_help').prop('hidden', false).text('Worked out from the ' + term('objectives', 'objectives') + ': implemented only when every one is met.');
-            return;
         }
 
-        $('#item_result').removeClass('is-locked');
-        $('#result_help').prop('hidden', true).text('');
+        $('#result_group').toggle(!excluded && list.length === 0);
     }
 
     $('#item_objectives').on('click', '.segmented__btn', function () {
@@ -1101,35 +1063,6 @@ $(document).ready(function () {
         $('#justification_group').toggle($(this).val() === 'Excluded');
         sync_locked_result();
     });
-
-    function milestone_row(milestone) {
-        return '<div class="row mb-2 milestone" data-id="' + (milestone.id || 0) + '">'
-            + '<div class="col-md-7 form-group"><input type="text" class="form-control milestone__text" aria-label="Milestone" placeholder="Milestone" value="' + esc(milestone.milestone_text || '') + '"></div>'
-            + '<div class="col-md-3 form-group"><input type="date" class="form-control milestone__due" aria-label="Due date" value="' + esc(milestone.due_date || '') + '"></div>'
-            + '<div class="col-md-1 form-group milestone__done"><input class="form-check-input" type="checkbox" aria-label="Done"' + (milestone.milestone_status === 'Done' ? ' checked' : '') + '></div>'
-            + '<div class="col-md-1 form-group"><button type="button" class="btn btn--tertiary btn--sm" data-action="remove-milestone" aria-label="Remove milestone"><i class="fa-regular fa-xmark"></i></button></div>'
-            + '</div>';
-    }
-
-    $('#do_milestone_add').click(function () {
-        $('#item_milestones').append(milestone_row({}));
-        $('#item_milestones .milestone:last .milestone__text').focus();
-    });
-
-    $('#item_milestones').on('click', '[data-action="remove-milestone"]', function () {
-        $(this).closest('.milestone').remove();
-    });
-
-    function milestone_values() {
-        return $('#item_milestones .milestone').map(function () {
-            return {
-                id: $(this).attr('data-id'),
-                text: $(this).find('.milestone__text').val().trim(),
-                due: $(this).find('.milestone__due').val(),
-                done: $(this).find('.milestone__done input').is(':checked') ? '1' : '0'
-            };
-        }).get();
-    }
 
     function open_item(id) {
 
@@ -1160,7 +1093,7 @@ $(document).ready(function () {
         $('#item_family').text(current_item.family === '' ? 'Ungrouped' : current_item.family);
         $('#item_description').text(current_item.description === current_item.control_title ? '' : current_item.description).toggle(current_item.description !== '' && current_item.description !== current_item.control_title);
         $('#item_guidance').text(guidance);
-        $('#item_guidance_wrap').toggle(guidance !== '').prop('open', false);
+        $('#item_guidance_wrap').toggle(guidance !== '' || (current_item.description !== '' && current_item.description !== current_item.control_title)).prop('open', false);
 
         $('#applicability_row').toggle(flags.applicability === true);
         $('#item_applicability').val(current_item.applicability || 'Applicable');
@@ -1168,7 +1101,6 @@ $(document).ready(function () {
         $('#justification_group').toggle(current_item.applicability === 'Excluded');
 
         $('#objectives_group').toggle(list.length > 0);
-        $('#objectives_label').text(capitalise(term('objectives', 'objectives')));
         render_objectives(list);
 
         $('#partial_row').toggle(partial !== null);
@@ -1178,23 +1110,12 @@ $(document).ready(function () {
         set_result(current_item.item_result);
         sync_locked_result();
 
-        $('#item_notes').val(current_item.notes || '');
-        $('#item_implementation').val(current_item.implementation_description || '');
         $('#item_gap').val(current_item.gap_description || '');
         $('#item_impact').val(current_item.business_impact || '');
         $('#item_risk').val(current_item.risk_rating || '');
         $('#item_recommendation').val(current_item.recommendation || '');
         $('#item_owner').val(current_item.owner_name || '');
         $('#item_target').val(current_item.target_date || '');
-
-        var milestones = milestones_of[current_item.id] || [];
-        var rows = '';
-
-        for (var m = 0; m < milestones.length; m++) {
-            rows += milestone_row(milestones[m]);
-        }
-
-        $('#item_milestones').html(rows);
 
         $('#detail_empty').prop('hidden', true);
         $('#detail_form').prop('hidden', false);
@@ -1231,8 +1152,6 @@ $(document).ready(function () {
         var values = {
             item_id: current_item.id,
             item_result: current_result(),
-            notes: $('#item_notes').val().trim(),
-            implementation_description: $('#item_implementation').val().trim(),
             gap_description: $('#item_gap').val().trim(),
             business_impact: $('#item_impact').val().trim(),
             risk_rating: $('#item_risk').val(),
@@ -1243,8 +1162,6 @@ $(document).ready(function () {
             applicability: $('#item_applicability').val(),
             applicability_justification: $('#item_justification').val().trim(),
             objectives: objective_values(),
-            milestones: milestone_values(),
-            milestones_sent: '1'
         };
 
         ApiDataSvc.apiCall('post', 'save_item', values, function (data) {
@@ -1283,7 +1200,7 @@ $(document).ready(function () {
                     + '</li>';
             }
 
-            $('#item_evidence').html(html === '' ? '<li class="evidence__none">No evidence attached to this control yet.</li>' : html);
+            $('#item_evidence').html(html === '' ? '<li class="evidence__none">No evidence attached yet.</li>' : html);
         });
     }
 

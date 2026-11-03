@@ -2686,37 +2686,12 @@ class ApiController extends Controller {
 
         $framework_key = (string) $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'))[0]['framework_key'];
 
-        if (count($objectives) > 0 && FrameworkLibrary::rolls_up($framework_key)) {
+        if (count($objectives) > 0) {
             $item_result = AssessmentsModel::result_from_objectives(array_values($objectives));
         }
 
         if ($applicability === 'Excluded') {
             $item_result = 'Not Applicable';
-        }
-
-        $milestones = array();
-        $posted_milestones = is_array($this->post['milestones'] ?? null) ? $this->post['milestones'] : array();
-
-        foreach ($posted_milestones as $posted) {
-            $text = trim(html_entity_decode((string) ($posted['text'] ?? ''), ENT_QUOTES, 'UTF-8'));
-            $due = trim((string) ($posted['due'] ?? ''));
-
-            if ($text === '') {
-                continue;
-            }
-
-            if ($due !== '' && (\DateTime::createFromFormat('Y-m-d', $due) === false || \DateTime::createFromFormat('Y-m-d', $due)->format('Y-m-d') !== $due)) {
-                $response['message'] = 'Enter each milestone date as a valid date';
-                echo json_encode($response);
-                exit;
-            }
-
-            $milestones[] = array(
-                'id' => (int) ($posted['id'] ?? 0),
-                'text' => mb_substr($text, 0, 400),
-                'due' => $due,
-                'status' => ($posted['done'] ?? '') === '1' ? 'Done' : 'Open'
-            );
         }
 
         $this->assessments_model->begin();
@@ -2726,14 +2701,12 @@ class ApiController extends Controller {
                 $item_id,
                 Session::get('company_id'),
                 $item_result,
-                $kept('notes', 'notes'),
                 $kept('gap_description', 'gap_description'),
                 $kept('business_impact', 'business_impact'),
                 $risk_rating,
                 $kept('recommendation', 'recommendation'),
                 mb_substr($kept('owner_name', 'owner_name'), 0, 200),
                 $target_date,
-                $kept('implementation_description', 'implementation_description'),
                 array_key_exists('partial_credit', $this->post)
                     ? (($this->post['partial_credit'] === '1' && $item[0]['partial_weight'] !== null) ? 1 : 0)
                     : (int) $item[0]['partial_credit'],
@@ -2744,26 +2717,6 @@ class ApiController extends Controller {
 
             foreach ($objectives as $objective_id => $objective_result) {
                 $this->assessments_model->set_objective_result($objective_id, $assessment_id, $objective_result, Session::get('user_id'));
-            }
-
-            $existing = ($this->post['milestones_sent'] ?? '') === '1' ? $this->assessments_model->milestone_ids($item_id) : array();
-            $saved = array();
-
-            foreach ($milestones as $order => $milestone) {
-                $milestone_id = in_array($milestone['id'], $existing, true) ? $milestone['id'] : 0;
-                $saved[] = $this->assessments_model->save_milestone(
-                    $milestone_id,
-                    $item_id,
-                    $milestone['text'],
-                    $milestone['due'],
-                    $milestone['status'],
-                    $order + 1,
-                    Session::get('user_id')
-                );
-            }
-
-            foreach (array_diff($existing, $saved) as $milestone_id) {
-                $this->assessments_model->delete_milestone($milestone_id, $item_id, Session::get('user_id'));
             }
 
             $this->assessments_model->commit();
@@ -2815,9 +2768,7 @@ class ApiController extends Controller {
             }
         }
 
-        $framework_key = (string) $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'))[0]['framework_key'];
-
-        if ($control !== null && $control['applicability'] !== 'Excluded' && FrameworkLibrary::rolls_up($framework_key)) {
+        if ($control !== null && $control['applicability'] !== 'Excluded') {
             $results = array_column($this->assessments_model->control_objectives($assessment_id, $control['control_identifier']), 'item_result');
             $this->assessments_model->set_control_result((int) $control['id'], $assessment_id, AssessmentsModel::result_from_objectives($results), Session::get('user_id'));
         }
@@ -2829,18 +2780,6 @@ class ApiController extends Controller {
         $response['message'] = 'Objective saved';
         echo json_encode($response);
         exit;
-    }
-
-    public function load_milestonesAction(){
-
-        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
-
-        if (!$this->owns_assessment($assessment_id)) {
-            echo json_encode(array());
-            exit;
-        }
-
-        echo json_encode($this->assessments_model->item_milestones($assessment_id, Session::get('company_id')));
     }
 
     public function load_baselinesAction(){

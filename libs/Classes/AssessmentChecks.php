@@ -16,8 +16,6 @@ class AssessmentChecks {
     );
 
     const TEXT_FIELDS = array(
-        'notes' => 'observation',
-        'implementation_description' => 'implementation description',
         'gap_description' => 'gap',
         'business_impact' => 'business impact',
         'recommendation' => 'recommendation',

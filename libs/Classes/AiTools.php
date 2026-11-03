@@ -389,15 +389,14 @@ class AiTools {
             ), array(
                 'assessment_id'
             )),
-            'set_control_results' => $tool('staff', true, 'Record results, and optionally notes, for one or many assessment controls in one step.', array(
+            'set_control_results' => $tool('staff', true, 'Record results for one or many assessment controls in one step.', array(
                 'results' => array(
                     'type' => 'array',
                     'items' => array(
                         'type' => 'object',
                         'properties' => array(
                             'item_id' => $id('Assessment control (item) id'),
-                            'item_result' => $choice(self::ITEM_RESULTS, 'Result'),
-                            'notes' => $text('Assessor notes; omit to keep the existing notes')
+                            'item_result' => $choice(self::ITEM_RESULTS, 'Result')
                         ),
                         'required' => array(
                             'item_id',
@@ -946,9 +945,7 @@ class AiTools {
             if (count($this->assessments_model->client_assessment($assessment_id, $client_id, $company_id)) !== 1) {
                 return null;
             }
-            return self::rows($this->assessments_model->portal_items($assessment_id, $client_id, $company_id), array(
-                'notes'
-            ));
+            return self::rows($this->assessments_model->portal_items($assessment_id, $client_id, $company_id));
         }
 
         if ($name === 'get_control_evidence') {
@@ -1314,18 +1311,15 @@ class AiTools {
                 return self::fail('item_result must be one of: '.implode(', ', self::ITEM_RESULTS));
             }
 
-            $notes = array_key_exists('notes', $result) ? (string) $result['notes'] : self::plain($item['notes'] ?? '');
-
             $calls[] = array(
                 'endpoint' => 'save_item',
                 'params' => array(
                     'item_id' => (int) $item['id'],
-                    'item_result' => $result['item_result'],
-                    'notes' => $notes
+                    'item_result' => $result['item_result']
                 )
             );
 
-            $fields[self::plain($item['control_identifier'])] = $result['item_result'].(array_key_exists('notes', $result) && $notes !== '' ? ' - '.$notes : '');
+            $fields[self::plain($item['control_identifier'])] = $result['item_result'];
         }
 
         $summary = count($calls) === 1

@@ -6824,20 +6824,6 @@ table.data tbody tr.item__row.is-selected td {
     font-size: var(--fs-meta);
 }
 
-#item_result.is-locked .segmented__btn {
-    cursor: default;
-}
-
-#item_result.is-locked .segmented__btn:not(.is-on) {
-    opacity: 0.45;
-}
-
-.milestone__done {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .assess__head {
     flex-wrap: wrap;
     align-items: center;
@@ -7110,9 +7096,55 @@ table.data--light.reports__table {
     color: var(--accent);
 }
 
-.assess__progress .progress {
-    width: 120px;
-    margin-top: 0;
+.subtabs__count {
+    display: inline-block;
+    margin-left: var(--space-1);
+    padding: 0 6px;
+    font-size: var(--fs-meta);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary);
+    background: var(--surface-inset);
+    border-radius: var(--radius);
+}
+
+.subtabs__count:empty {
+    display: none;
+}
+
+.assess__progress-count {
+    font-size: var(--fs-body);
+    font-weight: var(--fw-semibold);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+}
+
+.assess__bar {
+    display: flex;
+    width: 160px;
+    height: 8px;
+    overflow: hidden;
+    background: var(--border);
+    border-radius: var(--radius);
+}
+
+.assess__bar-part {
+    height: 100%;
+}
+
+.assess__bar-part.is-ok {
+    background: var(--ok);
+}
+
+.assess__bar-part.is-partial {
+    background: var(--high);
+}
+
+.assess__bar-part.is-gap {
+    background: var(--critical);
+}
+
+.assess__bar-part.is-na {
+    background: var(--text-muted);
 }
 
 .assess__progress .btn {

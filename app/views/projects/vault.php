@@ -295,7 +295,7 @@ $(document).ready(function () {
         return '<span class="dropdown vault__menu">'
             + '<button type="button" class="btn btn--tertiary btn--sm" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Folder actions"><i class="fa-regular fa-ellipsis"></i></button>'
             + '<ul class="dropdown-menu dropdown-menu-end">'
-            + '<li><button type="button" class="dropdown-item" data-action="folder_add" data-id="' + folder_id + '">New subfolder</button></li>'
+            + '<li><button type="button" class="dropdown-item" data-action="folder_add" data-id="' + folder_id + '">New Subfolder</button></li>'
             + '<li><button type="button" class="dropdown-item" data-action="folder_edit" data-id="' + folder_id + '">Rename</button></li>'
             + '<li><button type="button" class="dropdown-item dropdown-item--danger" data-action="folder_delete" data-id="' + folder_id + '">Delete</button></li>'
             + '</ul></span>';

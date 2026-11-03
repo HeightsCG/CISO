@@ -363,7 +363,6 @@ class AssessmentsModel extends Model {
             'source_version' => $source_version,
             'sort_order' => $sort_order,
             'item_result' => 'Not Assessed',
-            'notes' => '',
             'updated_by' => 0,
             'date_created' => date('Y-m-d H:i:s'),
             'date_updated' => date('Y-m-d H:i:s'),
@@ -438,14 +437,12 @@ class AssessmentsModel extends Model {
                     ai.control_flags,
                     ai.sort_order,
                     ai.item_result,
-                    ai.notes,
                     ai.gap_description,
                     ai.business_impact,
                     ai.risk_rating,
                     ai.recommendation,
                     ai.owner_name,
                     ai.target_date,
-                    ai.implementation_description,
                     ai.partial_credit,
                     ai.applicability,
                     ai.applicability_justification,
@@ -503,26 +500,6 @@ class AssessmentsModel extends Model {
                     and
                     a.deleted = 0";
         return parent::select($sql, $where);
-    }
-
-    public function save_item($item_id, $company_id, $item_result, $notes, $updated_by)
-    {
-        $item = $this->get_item($item_id, $company_id);
-
-        if (count($item) !== 1) {
-            return 0;
-        }
-
-        $where = array(
-            'id' => $item_id
-        );
-        $data = array(
-            'item_result' => $item_result,
-            'notes' => $notes,
-            'updated_by' => $updated_by,
-            'date_updated' => date('Y-m-d H:i:s')
-        );
-        return parent::update('assessment_items', $data, 'id = :id', $where);
     }
 
     public function unassessed_count($assessment_id, $company_id)
@@ -677,14 +654,12 @@ class AssessmentsModel extends Model {
         $item_id,
         $company_id,
         $item_result,
-        $notes,
         $gap_description,
         $business_impact,
         $risk_rating,
         $recommendation,
         $owner_name,
         $target_date,
-        $implementation_description,
         $partial_credit,
         $applicability,
         $applicability_justification,
@@ -702,14 +677,12 @@ class AssessmentsModel extends Model {
         );
         $data = array(
             'item_result' => $item_result,
-            'notes' => $notes,
             'gap_description' => $gap_description,
             'business_impact' => $business_impact,
             'risk_rating' => $risk_rating,
             'recommendation' => $recommendation,
             'owner_name' => $owner_name,
             'target_date' => $target_date === '' ? null : $target_date,
-            'implementation_description' => $implementation_description,
             'partial_credit' => $partial_credit,
             'applicability' => $applicability,
             'applicability_justification' => $applicability_justification,
@@ -799,93 +772,6 @@ class AssessmentsModel extends Model {
         }
 
         return $met === 0 ? 'Not Implemented' : 'Partially Implemented';
-    }
-
-    public function item_milestones($assessment_id, $company_id)
-    {
-        $where = array(
-            'assessment_id' => $assessment_id,
-            'company_id' => $company_id
-        );
-        $sql = "SELECT
-                    m.id,
-                    m.assessment_item_id,
-                    m.milestone_text,
-                    m.due_date,
-                    m.milestone_status,
-                    m.sort_order
-                FROM
-                    item_milestones m
-                    JOIN assessment_items ai ON ai.id = m.assessment_item_id and ai.deleted = 0
-                    JOIN assessments a ON a.id = ai.assessment_id and a.deleted = 0
-                WHERE
-                    ai.assessment_id = :assessment_id
-                    and
-                    a.company_id = :company_id
-                    and
-                    m.deleted = 0
-                ORDER BY
-                    m.assessment_item_id,
-                    m.sort_order,
-                    m.id";
-        return parent::select($sql, $where);
-    }
-
-    public function save_milestone($milestone_id, $item_id, $milestone_text, $due_date, $milestone_status, $sort_order, $user_id)
-    {
-        $data = array(
-            'milestone_text' => $milestone_text,
-            'due_date' => $due_date === '' ? null : $due_date,
-            'milestone_status' => $milestone_status,
-            'sort_order' => $sort_order,
-            'updated_by' => $user_id,
-            'date_updated' => date('Y-m-d H:i:s')
-        );
-
-        if ($milestone_id === 0) {
-            $data['assessment_item_id'] = $item_id;
-            $data['created_by'] = $user_id;
-            $data['date_created'] = date('Y-m-d H:i:s');
-            $data['deleted'] = 0;
-            return (int) parent::insert('item_milestones', $data);
-        }
-
-        $where = array(
-            'id' => $milestone_id,
-            'assessment_item_id' => $item_id
-        );
-        parent::update('item_milestones', $data, 'id = :id and assessment_item_id = :assessment_item_id', $where);
-        return $milestone_id;
-    }
-
-    public function milestone_ids($item_id)
-    {
-        $where = array(
-            'item_id' => $item_id
-        );
-        $sql = "SELECT
-                    m.id
-                FROM
-                    item_milestones m
-                WHERE
-                    m.assessment_item_id = :item_id
-                    and
-                    m.deleted = 0";
-        return array_map('intval', array_column(parent::select($sql, $where), 'id'));
-    }
-
-    public function delete_milestone($milestone_id, $item_id, $user_id)
-    {
-        $data = array(
-            'deleted' => 1,
-            'updated_by' => $user_id,
-            'date_updated' => date('Y-m-d H:i:s')
-        );
-        $where = array(
-            'id' => $milestone_id,
-            'assessment_item_id' => $item_id
-        );
-        return parent::update('item_milestones', $data, 'id = :id and assessment_item_id = :assessment_item_id', $where);
     }
 
     public function save_details(

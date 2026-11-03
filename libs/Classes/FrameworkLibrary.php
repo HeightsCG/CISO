@@ -50,18 +50,6 @@ class FrameworkLibrary {
         return null;
     }
 
-    /** Whether a control's result is worked out from its objectives (the framework has a rollup rule). */
-    public static function rolls_up(string $key): bool
-    {
-        foreach (self::get($key)['rules'] ?? array() as $rule) {
-            if (($rule['type'] ?? '') === 'rollup') {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * What the assessment screens need from a framework: optional scope
      * categories (SOC 2) and extra fields such as the TSA SSI review. Empty for standards not built from a definition.
@@ -73,7 +61,6 @@ class FrameworkLibrary {
             'categories' => array(),
             'ssi_field' => null,
             'notice' => '',
-            'rolls_up' => false,
             'tiers' => array(),
             'partial_labels' => array()
         );
@@ -95,7 +82,6 @@ class FrameworkLibrary {
         }
 
         $features['notice'] = (string) ($definition['notice'] ?? '');
-        $features['rolls_up'] = self::rolls_up($key);
 
         foreach ($definition['rules'] as $rule) {
             foreach (($rule['type'] ?? '') === 'partial_credit' ? ($rule['controls'] ?? array()) : array() as $id => $control) {
