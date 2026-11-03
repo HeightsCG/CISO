@@ -6867,6 +6867,14 @@ table.data tbody tr.item__row.is-selected td {
     color: var(--text-muted);
 }
 
+.objectives__title {
+    display: block;
+    font-size: var(--fs-body);
+    font-weight: var(--fw-semibold);
+    line-height: 1.5;
+    color: var(--text-primary);
+}
+
 .objectives__statement {
     display: block;
     font-size: var(--fs-body);

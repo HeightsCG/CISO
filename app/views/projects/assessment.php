@@ -443,7 +443,7 @@ $(document).ready(function () {
         {
             value: 'Not Applicable',
             label: 'N/A',
-            icon: 'fa-minus'
+            icon: ''
         }
     ];
     var RESULT_CLASS = {
@@ -970,7 +970,7 @@ $(document).ready(function () {
             for (var c = 0; c < OBJECTIVE_CHOICES.length; c++) {
                 var on = list[i].item_result === OBJECTIVE_CHOICES[c].value;
 
-                buttons += '<button type="button" class="segmented__btn' + (on ? ' is-on' : '') + '" data-value="' + OBJECTIVE_CHOICES[c].value + '" aria-pressed="' + (on ? 'true' : 'false') + '"><i class="fa-regular ' + OBJECTIVE_CHOICES[c].icon + '"></i> ' + OBJECTIVE_CHOICES[c].label + '</button>';
+                buttons += '<button type="button" class="segmented__btn' + (on ? ' is-on' : '') + '" data-value="' + OBJECTIVE_CHOICES[c].value + '" aria-pressed="' + (on ? 'true' : 'false') + '">' + (OBJECTIVE_CHOICES[c].icon === '' ? '' : '<i class="fa-regular ' + OBJECTIVE_CHOICES[c].icon + '"></i> ') + OBJECTIVE_CHOICES[c].label + '</button>';
             }
 
             var short_id = list[i].control_identifier.indexOf(list[i].parent_identifier) === 0
@@ -979,6 +979,7 @@ $(document).ready(function () {
 
             html += '<li class="objectives__item" data-id="' + list[i].id + '" data-result="' + esc(list[i].item_result) + '">'
                 + '<div class="objectives__text"><span class="objectives__id">' + esc(short_id) + '</span>'
+                + (list[i].description && list[i].description !== list[i].control_title ? '<span class="objectives__title">' + esc(list[i].control_title) + '</span>' : '')
                 + '<span class="objectives__statement">' + esc(list[i].description || list[i].control_title) + '</span></div>'
                 + '<div class="segmented segmented--sm objectives__choice" role="group" aria-label="Result for ' + esc(list[i].control_identifier) + '">' + buttons + '</div>'
                 + '</li>';
