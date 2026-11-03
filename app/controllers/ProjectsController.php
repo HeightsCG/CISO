@@ -99,6 +99,7 @@ class ProjectsController extends Controller {
         $definition = FrameworkLibrary::get((string) $assessment[0]['framework_key']);
 
         $this->view->assessment = $assessment[0];
+        $this->view->project = $this->projects_model->get_project($assessment[0]['project_id'], Session::get('company_id'))[0];
         $this->view->features = FrameworkLibrary::assessment_features((string) $assessment[0]['framework_key']);
         $this->view->terminology = $definition['terminology'] ?? array();
         $this->view->render();

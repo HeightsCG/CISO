@@ -9,13 +9,13 @@
             </div>
         </div>
         <div class="page__actions assess__actions-bar">
-            <a class="btn btn--secondary" href="/projects/evidence/id/<?php echo (int) $this->assessment['project_id']; ?>/from/assessment/ref/<?php echo (int) $this->assessment['id']; ?>"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>
             <button type="button" class="btn btn--primary" id="do_complete"><i class="fa-regular fa-circle-check"></i> Mark Complete</button>
         </div>
     </div>
 
     <nav class="subtabs subtabs--page" role="tablist" aria-label="Assessment">
         <button class="subtabs__link active" id="tab_controls_btn" data-bs-toggle="pill" data-bs-target="#tab_controls" type="button" role="tab" aria-controls="tab_controls" aria-selected="true">Controls</button>
+        <button class="subtabs__link" id="tab_vault_btn" data-bs-toggle="pill" data-bs-target="#tab_vault" type="button" role="tab" aria-controls="tab_vault" aria-selected="false">Evidence Vault</button>
         <button class="subtabs__link" id="tab_reports_btn" data-bs-toggle="pill" data-bs-target="#tab_reports" type="button" role="tab" aria-controls="tab_reports" aria-selected="false">Reports</button>
         <button class="subtabs__link" id="tab_settings_btn" data-bs-toggle="pill" data-bs-target="#tab_settings" type="button" role="tab" aria-controls="tab_settings" aria-selected="false">Settings</button>
     </nav>
@@ -202,7 +202,7 @@
                                     <ul class="evidence__list" id="item_evidence"></ul>
                                     <div class="assess__actions">
                                         <button type="button" class="btn btn--secondary btn--sm" id="do_attach_open"><i class="fa-regular fa-link"></i> Attach from Vault</button>
-                                        <button type="button" class="btn btn--secondary btn--sm" id="do_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload New</button>
+                                        <button type="button" class="btn btn--secondary btn--sm" id="do_item_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload New</button>
                                     </div>
                                 </div>
                             </div>
@@ -213,6 +213,10 @@
                     </section>
                 </div>
             </div>
+        </div>
+
+        <div class="tab-pane assess__vault" id="tab_vault" role="tabpanel" aria-labelledby="tab_vault_btn">
+            <?php require __DIR__.'/vault.php'; ?>
         </div>
 
         <div class="tab-pane" id="tab_reports" role="tabpanel" aria-labelledby="tab_reports_btn">
@@ -355,7 +359,7 @@
                         </header>
                         <div class="card__body assess__danger-body">
                             <p class="card__desc">Removes this assessment and all <?php echo (int) $this->assessment['item_count']; ?> of its items, including results and notes. Evidence stays in the project&rsquo;s vault. This cannot be undone.</p>
-                            <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete Assessment</button>
+                            <button type="button" class="btn btn--destructive" id="do_assessment_delete_open"><i class="fa-regular fa-trash"></i> Delete Assessment</button>
                         </div>
                     </section>
                 </div>
@@ -432,41 +436,41 @@
     </div>
 </div>
 
-<div class="modal fade" data-bs-backdrop="static" id="upload_modal" tabindex="-1" aria-labelledby="upload_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="item_upload_modal" tabindex="-1" aria-labelledby="item_upload_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="upload_modal_title">Upload Evidence</h2>
+                <h2 class="modal-title" id="item_upload_modal_title">Upload Evidence</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p class="import__hint">The file is stored in this project&rsquo;s vault and attached to this control. It can be reused on any other control without uploading it again.</p>
                 <div class="field">
-                    <label for="evidence_title">Title <abbr title="required">*</abbr></label>
-                    <input type="text" id="evidence_title" placeholder="Information security policy, signed">
+                    <label for="item_upload_title">Title <abbr title="required">*</abbr></label>
+                    <input type="text" id="item_upload_title" placeholder="Information security policy, signed">
                 </div>
                 <div class="field">
-                    <label for="evidence_description">Description</label>
-                    <textarea id="evidence_description" rows="3" placeholder="What this shows and where it came from."></textarea>
+                    <label for="item_upload_description">Description</label>
+                    <textarea id="item_upload_description" rows="3" placeholder="What this shows and where it came from."></textarea>
                 </div>
                 <div class="field">
-                    <label for="evidence_file">File <abbr title="required">*</abbr></label>
-                    <input type="file" id="evidence_file" class="import__file">
+                    <label for="item_upload_file">File <abbr title="required">*</abbr></label>
+                    <input type="file" id="item_upload_file" class="import__file">
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="do_upload" class="btn btn--primary">Upload</button>
+                <button type="button" id="do_item_upload" class="btn btn--primary">Upload</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" data-bs-backdrop="static" id="delete_modal" tabindex="-1" aria-labelledby="delete_modal_title" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" id="assessment_delete_modal" tabindex="-1" aria-labelledby="assessment_delete_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="delete_modal_title">Delete Assessment</h2>
+                <h2 class="modal-title" id="assessment_delete_modal_title">Delete Assessment</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -474,7 +478,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="do_delete" class="btn btn--destructive">Delete</button>
+                <button type="button" id="do_assessment_delete" class="btn btn--destructive">Delete</button>
             </div>
         </div>
     </div>
@@ -1561,20 +1565,20 @@ $(document).ready(function () {
         });
     });
 
-    $('#do_upload_open').click(function () {
+    $('#do_item_upload_open').click(function () {
 
-        $('#evidence_title, #evidence_description').val('').removeClass('is-invalid');
-        $('#evidence_file').val('');
-        modal('upload_modal').show();
+        $('#item_upload_title, #item_upload_description').val('').removeClass('is-invalid');
+        $('#item_upload_file').val('');
+        modal('item_upload_modal').show();
     });
 
-    $('#do_upload').click(function () {
+    $('#do_item_upload').click(function () {
 
-        var file = document.getElementById('evidence_file').files[0];
-        var title = $('#evidence_title').val().trim();
+        var file = document.getElementById('item_upload_file').files[0];
+        var title = $('#item_upload_title').val().trim();
 
         if (title === '') {
-            $('#evidence_title').addClass('is-invalid').focus();
+            $('#item_upload_title').addClass('is-invalid').focus();
             toastr.error('Give the evidence a title.');
             return;
         }
@@ -1589,10 +1593,10 @@ $(document).ready(function () {
         form_data.append('evidence_file', file);
         form_data.append('project_id', project_id);
         form_data.append('evidence_title', title);
-        form_data.append('description', $('#evidence_description').val().trim());
+        form_data.append('description', $('#item_upload_description').val().trim());
         form_data.append('csrf_token', $('meta[name="csrf-token"]').attr('content'));
 
-        set_loading('#do_upload', true);
+        set_loading('#do_item_upload', true);
 
         $.ajax({
             url: '/api/upload_evidence',
@@ -1610,10 +1614,10 @@ $(document).ready(function () {
 
                         var res = JSON.parse(linked);
 
-                        set_loading('#do_upload', false);
+                        set_loading('#do_item_upload', false);
 
                         if (res.success) {
-                            modal('upload_modal').hide();
+                            modal('item_upload_modal').hide();
                             toastr.success(res.message);
                             load_item_evidence();
                             load(true);
@@ -1622,12 +1626,12 @@ $(document).ready(function () {
                         }
                     });
                 } else {
-                    set_loading('#do_upload', false);
+                    set_loading('#do_item_upload', false);
                     toastr.error(obj.message);
                 }
             },
             error: function () {
-                set_loading('#do_upload', false);
+                set_loading('#do_item_upload', false);
                 toastr.error('That file could not be uploaded.');
             }
         });
@@ -1759,19 +1763,19 @@ $(document).ready(function () {
         });
     });
 
-    $('#do_delete_open').click(function () {
-        modal('delete_modal').show();
+    $('#do_assessment_delete_open').click(function () {
+        modal('assessment_delete_modal').show();
     });
 
-    $('#do_delete').click(function () {
+    $('#do_assessment_delete').click(function () {
 
-        set_loading('#do_delete', true);
+        set_loading('#do_assessment_delete', true);
 
         ApiDataSvc.apiCall('post', 'delete_assessment', { assessment_id: assessment_id }, function (data) {
 
             var obj = JSON.parse(data);
 
-            set_loading('#do_delete', false);
+            set_loading('#do_assessment_delete', false);
 
             if (obj.success) {
                 window.location.href = '/projects/detail/id/' + project_id;
