@@ -18,25 +18,17 @@
         <button class="subtabs__link" id="tab_vault_btn" data-bs-toggle="pill" data-bs-target="#tab_vault" type="button" role="tab" aria-controls="tab_vault" aria-selected="false">Evidence Vault</button>
         <button class="subtabs__link" id="tab_reports_btn" data-bs-toggle="pill" data-bs-target="#tab_reports" type="button" role="tab" aria-controls="tab_reports" aria-selected="false">Reports</button>
         <button class="subtabs__link" id="tab_settings_btn" data-bs-toggle="pill" data-bs-target="#tab_settings" type="button" role="tab" aria-controls="tab_settings" aria-selected="false">Settings</button>
+        <div class="assess__progress" id="score_row" hidden>
+            <span class="assess__progress-value" id="score_value"></span>
+            <span class="assess__progress-outcome" id="score_outcome"></span>
+            <span class="assess__progress-count" id="rollup_label"></span>
+            <div class="progress"><div class="progress__bar" id="rollup_bar" style="width:0%"></div></div>
+            <button type="button" class="btn btn--tertiary btn--sm" id="do_checks_open" hidden></button>
+        </div>
     </nav>
 
     <div class="tab-content assess__panes">
         <div class="tab-pane show active" id="tab_controls" role="tabpanel" aria-labelledby="tab_controls_btn">
-            <div class="panel record__panel">
-                <div class="panel__body">
-                    <div class="rollup__score" id="score_row" hidden>
-                        <span class="rollup__score-value" id="score_value"></span>
-                        <span class="rollup__score-outcome" id="score_outcome"></span>
-                        <button type="button" class="btn btn--tertiary btn--sm" id="do_checks_open" hidden></button>
-                    </div>
-                    <div class="rollup" id="rollup"></div>
-                    <div class="rollup__progress">
-                        <div class="progress progress--lg"><div class="progress__bar" id="rollup_bar" style="width:0%"></div></div>
-                        <span class="progress__label" id="rollup_label">&nbsp;</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="panel record__panel workbench">
                 <div class="panel__head roster__toolbar">
                     <input type="search" id="item_search" class="input roster__search" placeholder="Search by identifier or title..." autocomplete="off" spellcheck="false">
@@ -522,13 +514,6 @@ $(document).ready(function () {
         'Not Implemented': 'badge--critical',
         'Not Applicable': 'badge--prospect'
     };
-    var RESULT_DOT = {
-        'Not Assessed': 'is-none',
-        'Implemented': 'is-ok',
-        'Partially Implemented': 'is-partial',
-        'Not Implemented': 'is-gap',
-        'Not Applicable': 'is-na'
-    };
 
     function term(key, fallback) {
         return terms && terms[key] ? terms[key] : fallback;
@@ -662,21 +647,15 @@ $(document).ready(function () {
 
         var assessed = total - counts['Not Assessed'];
         var pct = total > 0 ? Math.round(assessed / total * 100) : 0;
-        var html = '';
 
         for (var k = 0; k < RESULTS.length; k++) {
-            html += '<span class="rollup__stat"><span class="rollup__dot ' + (RESULT_DOT[RESULTS[k]] || '') + '"></span>'
-                + '<span class="rollup__n">' + counts[RESULTS[k]] + '</span>'
-                + '<span class="rollup__label">' + esc(RESULTS[k]) + '</span></span>';
+            $('#result_filter option[value="' + RESULTS[k] + '"]').text(RESULTS[k] + ' (' + counts[RESULTS[k]] + ')');
         }
 
-        html += '<span class="rollup__stat rollup__stat--split"><i class="fa-regular fa-paperclip"></i>'
-            + '<span class="rollup__n">' + evidenced + '</span>'
-            + '<span class="rollup__label">with evidence</span></span>';
-
-        $('#rollup').html(html);
+        $('#evidence_filter option[value="yes"]').text('Has evidence (' + evidenced + ')');
+        $('#evidence_filter option[value="no"]').text('No evidence (' + (total - evidenced) + ')');
         $('#rollup_bar').css('width', pct + '%');
-        $('#rollup_label').text(assessed + ' of ' + total + ' ' + term('controls', 'controls') + ' assessed · ' + pct + '%');
+        $('#rollup_label').text(assessed + ' of ' + total);
 
         sync_complete(counts['Not Assessed']);
     }
@@ -729,9 +708,12 @@ $(document).ready(function () {
         var score = review.score;
         var blocking = 0;
         var warnings = 0;
+        var unassessed = false;
 
         for (var i = 0; i < review.issues.length; i++) {
-            if (review.issues[i].severity === 'block') {
+            if (review.issues[i].code === 'unassessed') {
+                unassessed = true;
+            } else if (review.issues[i].severity === 'block') {
                 blocking++;
             } else {
                 warnings++;
@@ -742,7 +724,7 @@ $(document).ready(function () {
             var value = '';
 
             if (score.outcome && score.outcome.status === 'not_started' || score.counts['Not Assessed'] === score.in_scope) {
-                value = capitalise(score.model === 'points' ? term('score', 'score') : 'assessment') + ': not started';
+                value = '';
             } else if (score.model === 'points') {
                 value = capitalise(term('score', 'score')) + ': ' + score.points.score + ' of ' + score.points.maximum + (score.complete ? '' : ' so far');
             } else if (score.model === 'maturity') {
@@ -757,7 +739,7 @@ $(document).ready(function () {
                 .toggleClass('is-ok', !!score.outcome && score.outcome.status !== 'not_eligible');
         }
 
-        $('#do_checks_open').prop('hidden', false).text(blocking + warnings === 0
+        $('#do_checks_open').prop('hidden', blocking + warnings === 0 && unassessed).text(blocking + warnings === 0
             ? 'All checks pass'
             : (blocking > 0 ? blocking + ' to fix' : '') + (blocking > 0 && warnings > 0 ? ' · ' : '') + (warnings > 0 ? warnings + (warnings === 1 ? ' warning' : ' warnings') : ''));
         $('#score_row').prop('hidden', false);

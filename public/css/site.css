@@ -7082,31 +7082,41 @@ table.data--light.reports__table {
     }
 }
 
-.rollup__score {
+.assess__progress {
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--space-2) var(--space-4);
-    margin-bottom: var(--space-3);
+    align-items: center;
+    gap: var(--space-3);
+    margin-left: auto;
+    font-size: var(--fs-meta);
+    color: var(--text-secondary);
+    white-space: nowrap;
 }
 
-.rollup__score-value {
-    font-size: var(--fs-subsection);
+.assess__progress[hidden] {
+    display: none;
+}
+
+.assess__progress-value {
     font-weight: var(--fw-semibold);
     color: var(--text-primary);
 }
 
-.rollup__score-outcome {
-    font-size: var(--fs-body);
-    color: var(--text-secondary);
+.assess__progress-value:empty,
+.assess__progress-outcome:empty {
+    display: none;
 }
 
-.rollup__score-outcome.is-ok {
+.assess__progress-outcome.is-ok {
     color: var(--accent);
 }
 
-.rollup__score .btn {
-    margin-left: auto;
+.assess__progress .progress {
+    width: 120px;
+    margin-top: 0;
+}
+
+.assess__progress .btn {
+    padding: 0;
 }
 
 .checks {
