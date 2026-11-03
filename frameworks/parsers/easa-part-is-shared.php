@@ -207,7 +207,7 @@ return function (string $letter, string $regulation_file, string $guidance_file,
     // Full text (labelled lines) and one objective per point, depth first. $lead is the
     // parent's lead-in: a point that finishes it ("the organisation shall:" / "define a
     // corrective action plan;") gets the joined sentence as its description, and a point
-    // that only introduces its sub-points gets its own lead-in as a sentence.
+    // that only introduces its sub-points gets them listed in its description.
     $render = function (array $p, string $parent_id, string $depth, string $lead) use (&$render, $full): array {
         $id = $parent_id.$p['label'];
         $own_lead = implode(' ', $p['lead']);
@@ -232,9 +232,15 @@ return function (string $letter, string $regulation_file, string $guidance_file,
         );
 
         if ($fragment) {
-            $objective['description'] = ObjectiveText::complete($lead, count($p['points']) > 0 ? $own_lead : $full($p));
+            $objective['description'] = ObjectiveText::complete($lead, $full($p));
         } elseif (count($p['points']) > 0 && ObjectiveText::introduces_list($own_lead)) {
-            $objective['description'] = ObjectiveText::sentence(ObjectiveText::item($own_lead));
+            $items = array();
+
+            foreach ($p['points'] as $sub) {
+                $items[] = ObjectiveText::item($full($sub));
+            }
+
+            $objective['description'] = trim(ObjectiveText::sentence($own_lead.' '.implode('; ', $items)).' '.implode(' ', $p['tail']));
         } elseif (ObjectiveText::trailing_connector($own)) {
             $objective['description'] = ObjectiveText::sentence($own);
         }

@@ -403,7 +403,7 @@ $(document).ready(function () {
             $('#evidence_empty').text(
                 $('#evidence_search').val().trim() !== '' || $('#type_filter').val() !== ''
                     ? 'Nothing matches the current search or filter.'
-                    : (selected_folder === 0 ? 'No evidence yet.' : 'This folder is empty.'));
+                    : (selected_folder === 0 ? 'No evidence uploaded yet.' : 'This folder is empty.'));
         }
 
         $('#vault_count').text(folders.length + (folders.length === 1 ? ' folder' : ' folders')

@@ -1210,7 +1210,7 @@ $(document).ready(function () {
                     + '</li>';
             }
 
-            $('#item_evidence').html(html === '' ? '<li class="evidence__none">No evidence attached yet.</li>' : html);
+            $('#item_evidence').html(html === '' ? '<li class="evidence__none">No evidence attached to this control yet.</li>' : html);
         });
     }
 
@@ -1315,17 +1315,6 @@ $(document).ready(function () {
         return '<span class="vault__count' + (total === 0 ? ' vault__count--empty' : '') + '">' + total + '</span>';
     }
 
-    function pick_folder_name() {
-
-        for (var i = 0; i < pick.folders.length; i++) {
-            if (parseInt(pick.folders[i].id, 10) === pick.folder) {
-                return pick.folders[i].folder_name;
-            }
-        }
-
-        return 'This vault';
-    }
-
     function pick_branch(parent_id, depth) {
 
         var html = '';
@@ -1406,7 +1395,7 @@ $(document).ready(function () {
             return 'No files match \u201c' + term + '\u201d.';
         }
 
-        return pick_folder_name() + ' has no evidence yet.';
+        return 'This folder is empty.';
     }
 
     function pick_row(row, attached) {
