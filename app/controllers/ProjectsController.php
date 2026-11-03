@@ -35,7 +35,6 @@ class ProjectsController extends Controller {
         }
 
         $this->view->project = $project[0];
-        $this->view->standard_ids = array_map('intval', array_column($this->projects_model->project_standards($project[0]['id'], Session::get('company_id')), 'standard_id'));
         $this->view->room = Plans::room(
             'assessments_per_project',
             $this->assessments_model->count_assessments($project[0]['id'], Session::get('company_id'))
@@ -57,7 +56,6 @@ class ProjectsController extends Controller {
             }
 
             $this->view->project = null;
-            $this->view->standard_ids = array();
             $this->view->render();
             return;
         }
@@ -70,7 +68,6 @@ class ProjectsController extends Controller {
         }
 
         $this->view->project = $project[0];
-        $this->view->standard_ids = array_map('intval', array_column($this->projects_model->project_standards($project[0]['id'], Session::get('company_id')), 'standard_id'));
         $this->view->render();
     }
 
