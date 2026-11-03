@@ -10,6 +10,8 @@
  * - class_a_only: on objectives that begin "Each class A company"; the control lists them in
  *   class_a_objectives so the flag survives loading (objective rows carry no flags).
  */
+require_once dirname(__DIR__).'/lib/ObjectiveText.php';
+
 return function (): array {
     $raw = Source::pdf_text('nydfs/23-nycrr-500.pdf');
 
@@ -116,6 +118,13 @@ return function (): array {
                 'id' => $number.'('.$l.')',
                 'text' => $text
             );
+
+            // A subsection that continues the section's lead-in ("... address ... the following areas:").
+            if (ObjectiveText::introduces_list($join($intro))) {
+                $objective['description'] = ObjectiveText::complete($join($intro), $text);
+            } elseif (ObjectiveText::trailing_connector($text)) {
+                $objective['description'] = ObjectiveText::sentence($text);
+            }
 
             if (preg_match('/^Each class A company\b/', $text)) {
                 $objective['class_a_only'] = true;

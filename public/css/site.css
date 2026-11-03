@@ -6703,7 +6703,7 @@ table.data.ledger .ledger__amount {
     display: flex;
     flex-direction: column;
     min-height: 0;
-    background: var(--surface-sunken);
+    background: var(--surface-app);
     border-left: 1px solid var(--border);
 }
 
@@ -6750,6 +6750,29 @@ table.data.ledger .ledger__amount {
     cursor: pointer;
 }
 
+.workbench__guidance-list {
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.workbench__guidance-list li {
+    padding: var(--space-2) 0;
+    font-size: var(--fs-body);
+    line-height: var(--lh-normal);
+    color: var(--text-secondary);
+}
+
+.workbench__guidance-list li + li {
+    border-top: 1px solid var(--border);
+}
+
+.workbench__guidance-list strong {
+    display: block;
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+}
+
 .workbench__guidance .assess__text {
     margin-top: var(--space-2);
     max-height: 260px;
@@ -6770,7 +6793,7 @@ table.data.ledger .ledger__amount {
     flex: 0 0 auto;
     justify-content: flex-end;
     padding: var(--space-3) var(--space-5);
-    background: var(--surface);
+    background: var(--surface-app);
     border-top: 1px solid var(--border);
 }
 
@@ -6789,7 +6812,7 @@ table.data tbody tr.item__row.is-selected td {
     margin: 0;
     padding: 0;
     list-style: none;
-    background: var(--surface);
+    background: var(--surface-app);
     border: 1px solid var(--border);
     border-radius: var(--radius);
 }
@@ -6808,6 +6831,14 @@ table.data tbody tr.item__row.is-selected td {
 
 .objectives__text {
     font-size: var(--fs-body);
+    line-height: var(--lh-normal);
+    color: var(--text-primary);
+}
+
+.objectives__desc {
+    display: block;
+    margin-top: 2px;
+    font-size: var(--fs-meta);
     line-height: var(--lh-normal);
     color: var(--text-secondary);
 }

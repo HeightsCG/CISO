@@ -183,30 +183,35 @@
                         {
                             "id": "CC1.1-PF01",
                             "text": "Sets the Tone at the Top",
+                            "description": "Leadership visibly backs ethical and security expectations through its own decisions and messaging, so staff see integrity treated as a priority rather than a slogan.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.1-PF02",
                             "text": "Establishes Standards of Conduct",
+                            "description": "The organization has a written code of conduct that spells out expected behavior and is shared with staff and relevant outside parties.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.1-PF03",
                             "text": "Evaluates Adherence to Standards of Conduct",
+                            "description": "Staff periodically acknowledge the code of conduct, and the organization checks whether people actually follow it through reviews, monitoring or reported issues.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.1-PF04",
                             "text": "Addresses Deviations in a Timely Manner",
+                            "description": "Breaches of conduct are investigated and corrected promptly, with consistent consequences applied regardless of the person's role or seniority.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.1-PF05",
                             "text": "Considers Contractors and Vendor Employees in Demonstrating Its Commitment",
+                            "description": "Contractors and vendor staff are held to the same ethical and conduct expectations as employees, typically through contracts, onboarding and acknowledgments.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -224,24 +229,28 @@
                         {
                             "id": "CC1.2-PF01",
                             "text": "Establishes Oversight Responsibilities",
+                            "description": "The board or an equivalent governing body has defined, documented responsibilities for overseeing security, risk and internal control.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.2-PF02",
                             "text": "Applies Relevant Expertise",
+                            "description": "Board members collectively have the skills and experience needed to challenge management and oversee security and control matters effectively.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.2-PF03",
                             "text": "Operates Independently",
+                            "description": "The oversight body includes members independent of management, giving it the objectivity to question decisions and hold executives accountable.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.2-PF04",
                             "text": "Supplements Board Expertise",
+                            "description": "The board brings in outside advisors or specialists when it lacks in-house expertise on topics such as cybersecurity or privacy.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -259,36 +268,42 @@
                         {
                             "id": "CC1.3-PF01",
                             "text": "Considers All Structures of the Entity",
+                            "description": "Management designs its organizational structure across all business units, subsidiaries, locations and outsourced functions so control responsibilities are covered everywhere.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.3-PF02",
                             "text": "Establishes Reporting Lines",
+                            "description": "Clear reporting lines exist so each role knows who it answers to and information on security and controls flows to the right decision makers.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.3-PF03",
                             "text": "Defines, Assigns, and Limits Authorities and Responsibilities",
+                            "description": "Roles, approval authorities and responsibilities are documented and limited to what each position needs, supporting segregation of duties.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.3-PF04",
                             "text": "Addresses Specific Requirements When Defining Authorities and Responsibilities",
+                            "description": "Security, compliance and other specialized responsibilities are explicitly assigned in job descriptions or charters, including any required by law or contract.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.3-PF05",
                             "text": "Considers Interactions With External Parties When Establishing Structures, Reporting Lines, Authorities, and Responsibilities",
+                            "description": "The organization defines who is responsible for managing vendors, customers and other external parties that affect its systems and controls.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.3-PF06",
                             "text": "Establishes Structures, Reporting Lines, and Authorities to Support Compliance With Legal and Contractual Privacy Requirements",
+                            "description": "A designated privacy function, such as a privacy officer, has clear authority and reporting lines to ensure legal and contractual privacy obligations are met.",
                             "scope": "privacy",
                             "source": "tscids"
                         }
@@ -306,42 +321,49 @@
                         {
                             "id": "CC1.4-PF01",
                             "text": "Establishes Policies and Practices",
+                            "description": "Documented hiring, training and performance policies define the skills and competence expected for each role, especially those with security responsibilities.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.4-PF02",
                             "text": "Evaluates Competence and Addresses Shortcomings",
+                            "description": "Management regularly assesses whether staff and providers have the needed competence and takes action, such as training or reassignment, when gaps appear.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.4-PF03",
                             "text": "Attracts, Develops, and Retains Individuals",
+                            "description": "The organization recruits, mentors, trains and retains qualified people so it keeps enough capable staff to run its controls.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.4-PF04",
                             "text": "Plans and Prepares for Succession",
+                            "description": "Succession and backup plans exist for key roles so critical security and control duties continue if someone leaves or is unavailable.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.4-PF05",
                             "text": "Considers the Background of Individuals",
+                            "description": "Background checks appropriate to the role's sensitivity are performed on new hires and contractors before they are given access.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.4-PF06",
                             "text": "Considers the Technical Competency of Individuals",
+                            "description": "Candidates' technical skills are verified against role requirements during hiring and when people move into technical or security positions.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.4-PF07",
                             "text": "Provides Training to Maintain Technical Competencies",
+                            "description": "Staff receive ongoing technical and security training, certifications or education so their skills stay current with technology and threats.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -359,36 +381,42 @@
                         {
                             "id": "CC1.5-PF01",
                             "text": "Enforces Accountability Through Structures, Authorities, and Responsibilities",
+                            "description": "Management holds individuals accountable for their control responsibilities, with expectations tracked through the organizational structure and corrective action taken when needed.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.5-PF02",
                             "text": "Establishes Performance Measures, Incentives, and Rewards",
+                            "description": "Performance goals, incentives and rewards include security and control responsibilities, not just business results.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.5-PF03",
                             "text": "Evaluates Performance Measures, Incentives, and Rewards for Ongoing Relevance",
+                            "description": "Management periodically reviews performance measures and incentives to confirm they still fit current objectives and don't encourage unwanted behavior.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.5-PF04",
                             "text": "Considers Excessive Pressures",
+                            "description": "Management watches for unrealistic targets or workload pressures that could push staff to bypass controls and adjusts goals or resources accordingly.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.5-PF05",
                             "text": "Evaluates Performance and Rewards or Disciplines Individuals",
+                            "description": "Individual performance reviews cover adherence to security and conduct expectations, leading to recognition or discipline as appropriate.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC1.5-PF06",
                             "text": "Takes Disciplinary Actions",
+                            "description": "Staff who mishandle personal information or violate privacy policies face defined, consistently applied disciplinary consequences.",
                             "scope": "privacy",
                             "source": "tscids"
                         }
@@ -413,54 +441,63 @@
                         {
                             "id": "CC2.1-PF01",
                             "text": "Identifies Information Requirements",
+                            "description": "The organization defines what information it needs to operate and monitor its controls, and revisits those needs as objectives change.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.1-PF02",
                             "text": "Captures Internal and External Sources of Data",
+                            "description": "Relevant data is collected from both internal sources, such as system logs, and external sources, such as threat intelligence and vendor reports.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.1-PF03",
                             "text": "Processes Relevant Data Into Information",
+                            "description": "Raw data is turned into usable information, such as reports, dashboards or alerts, that people can act on to run controls.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.1-PF04",
                             "text": "Maintains Quality Throughout Processing",
+                            "description": "Controls keep data accurate, complete and protected as it is collected, processed and stored, so decisions rely on trustworthy information.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.1-PF05",
                             "text": "Documents Data Flow",
+                            "description": "Data flow diagrams or similar documentation show how information moves through systems, interfaces and third parties.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.1-PF06",
                             "text": "Manages Assets",
+                            "description": "A maintained inventory of hardware, software, data and other assets identifies each item and its owner.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.1-PF07",
                             "text": "Classifies Information",
+                            "description": "Information is labeled by sensitivity, such as public, internal or confidential, so appropriate handling and protection rules apply.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.1-PF08",
                             "text": "Uses Information That Is Complete and Accurate",
+                            "description": "Reports and data used to run or test controls are checked for completeness and accuracy before people rely on them.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.1-PF09",
                             "text": "Manages the Location of Assets",
+                            "description": "The organization tracks where its assets and data physically and logically reside, including cloud regions and third-party locations.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -478,78 +515,91 @@
                         {
                             "id": "CC2.2-PF01",
                             "text": "Communicates Internal Control Information",
+                            "description": "Policies, procedures and control expectations are communicated to staff so everyone knows how to carry out their control responsibilities.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.2-PF02",
                             "text": "Communicates With the Board of Directors",
+                            "description": "Management regularly reports to the board on security, risk and control matters so directors can exercise oversight.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.2-PF03",
                             "text": "Provides Separate Communication Lines",
+                            "description": "Staff have an alternative, confidential channel, such as an ethics hotline, to raise concerns when normal reporting lines fail or are unsuitable.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.2-PF04",
                             "text": "Selects Relevant Method of Communication",
+                            "description": "Internal communications use methods suited to the audience and message, such as training, intranet posts, meetings or email, considering timing and sensitivity.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.2-PF05",
                             "text": "Communicates Responsibilities",
+                            "description": "Employees and contractors are informed of their specific security and control duties through job descriptions, policies and onboarding.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.2-PF06",
                             "text": "Communicates Information on Reporting Failures, Incidents, Concerns, and Other Matters",
+                            "description": "Staff know how and where to report security incidents, system failures, policy violations and other concerns.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.2-PF07",
                             "text": "Communicates Objectives and Changes to Objectives",
+                            "description": "Business and security objectives, and any changes to them, are shared with staff who need them to do their jobs.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.2-PF08",
                             "text": "Communicates Information to Improve Security Knowledge and Awareness",
+                            "description": "Regular security awareness training and communications keep staff informed about threats such as phishing and their part in preventing them.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.2-PF09",
                             "text": "Communicates Information to Improve Privacy Knowledge and Awareness",
+                            "description": "Staff receive privacy training and communications explaining how to handle personal information and meet privacy obligations.",
                             "scope": "privacy",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.2-PF10",
                             "text": "Communicates Incident Reporting Methods",
+                            "description": "Personnel are told how to report suspected privacy incidents or breaches involving personal information, and to whom.",
                             "scope": "privacy",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.2-PF11",
                             "text": "Communicates Information About System Operation and Boundaries",
+                            "description": "Internal staff have access to a description of how the system works, what it includes and where its boundaries lie.",
                             "scope": "system level",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.2-PF12",
                             "text": "Communicates System Objectives",
+                            "description": "The commitments and requirements the system must meet are communicated internally so staff understand what the system is designed to achieve.",
                             "scope": "system level",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.2-PF13",
                             "text": "Communicates System Changes",
+                            "description": "Changes to the system that affect staff responsibilities or how work is done are communicated to them in a timely way.",
                             "scope": "system level",
                             "source": "tscids"
                         }
@@ -567,72 +617,84 @@
                         {
                             "id": "CC2.3-PF01",
                             "text": "Communicates to External Parties",
+                            "description": "The organization shares relevant control and security information with customers, vendors, regulators and other outside parties.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.3-PF02",
                             "text": "Enables Inbound Communications",
+                            "description": "Customers, vendors and the public have open channels, such as support portals or contact addresses, to send concerns and information to the organization.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.3-PF03",
                             "text": "Communicates With the Board of Directors",
+                            "description": "Relevant information from external parties, such as customer complaints or regulator findings, is passed on to the board.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.3-PF04",
                             "text": "Provides Separate Communication Lines",
+                            "description": "External parties have a confidential or anonymous way, such as a whistleblower line, to report concerns outside normal contacts.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.3-PF05",
                             "text": "Selects Relevant Method of Communication",
+                            "description": "Communications to external parties use methods appropriate to the audience, sensitivity and legal requirements of the message.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.3-PF06",
                             "text": "Communicates Objectives Related to Confidentiality and Changes to Those Objectives",
+                            "description": "Confidentiality commitments, and any changes to them, are communicated to customers, vendors and other parties who handle or rely on confidential data.",
                             "scope": "confidentiality",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.3-PF07",
                             "text": "Communicates Objectives Related to Privacy and Changes to Those Objectives",
+                            "description": "Privacy commitments, such as privacy notices and their updates, are communicated clearly to data subjects and relevant third parties.",
                             "scope": "privacy",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.3-PF08",
                             "text": "Communicates Incident Reporting Methods",
+                            "description": "Data subjects and external parties are told how to report privacy incidents, complaints or suspected misuse of personal information.",
                             "scope": "privacy",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.3-PF09",
                             "text": "Communicates Information About System Operation and Boundaries",
+                            "description": "Customers and other external users receive a description of how the system works and what it does and does not cover.",
                             "scope": "system level",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.3-PF10",
                             "text": "Communicates System Objectives",
+                            "description": "Customers and relevant external parties are told what the system is designed to achieve and the service commitments it supports.",
                             "scope": "system level",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.3-PF11",
                             "text": "Communicates System Responsibilities",
+                            "description": "External users are informed of their own responsibilities, such as complementary user controls, for using the system securely.",
                             "scope": "system level",
                             "source": "tscids"
                         },
                         {
                             "id": "CC2.3-PF12",
                             "text": "Communicates Information on Reporting System Failures, Incidents, Concerns, and Other Matters",
+                            "description": "Customers and other external users know how to report system outages, security incidents or other concerns, and how those reports are handled.",
                             "scope": "system level",
                             "source": "tscids"
                         }
@@ -657,96 +719,112 @@
                         {
                             "id": "CC3.1-PF01",
                             "text": "Reflects Management's Choices",
+                            "description": "Leadership deliberately chooses its operational objectives, such as service levels and uptime targets, and documents how they tie to strategy.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.1-PF02",
                             "text": "Considers Tolerances for Risk",
+                            "description": "Operational objectives state how much variation or underperformance leadership will accept, giving risk assessments a clear threshold to measure against.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.1-PF03",
                             "text": "Includes Operations and Financial Performance Goals",
+                            "description": "Objectives cover both operational and financial performance targets, so risk assessments can show which risks threaten service delivery and which threaten results.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.1-PF04",
                             "text": "Forms a Basis for Committing of Resources",
+                            "description": "Documented objectives drive where budget, staff and technology are allocated, so investment decisions trace back to stated goals.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.1-PF05",
                             "text": "Complies With Applicable Accounting Standards",
+                            "description": "Financial reporting objectives are set to meet the accounting standards that apply to the organization, so reporting risks can be judged against them.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.1-PF06",
                             "text": "Considers Materiality",
+                            "description": "Financial reporting objectives account for what size of error or omission would matter to users of the reports, focusing risk work on significant items.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.1-PF07",
                             "text": "Reflects Entity Activities",
+                            "description": "Financial reporting objectives are grounded in the organization's actual transactions and operations, so reports describe what really happens in the business.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.1-PF08",
                             "text": "Complies With Externally Established Frameworks",
+                            "description": "Non-financial external reports, such as sustainability or security disclosures, are aligned to the recognized frameworks and standards the organization has adopted.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.1-PF09",
                             "text": "Considers the Required Level of Precision",
+                            "description": "Objectives for non-financial external reports define how accurate and detailed the information must be for readers to rely on it.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.1-PF10",
                             "text": "Reflects Entity Activities",
+                            "description": "Non-financial external reports reflect real events and activities across the organization rather than aspirational or selectively chosen information.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.1-PF11",
                             "text": "Reflects Management's Choices",
+                            "description": "Leadership decides what internal reports it needs to run the business, and those choices shape the objectives for internal reporting.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.1-PF12",
                             "text": "Considers the Required Level of Precision",
+                            "description": "Internal reports have defined accuracy and detail requirements so managers can rely on them when making decisions.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.1-PF13",
                             "text": "Reflects Entity Activities",
+                            "description": "Internal reporting covers the organization's actual operations and events, giving management an accurate picture of what is happening.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.1-PF14",
                             "text": "Reflects External Laws and Regulations",
+                            "description": "Compliance objectives are built from the laws and regulations that apply to the organization, including aviation, privacy and security requirements.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.1-PF15",
                             "text": "Considers Tolerances for Risk",
+                            "description": "Leadership defines how much compliance risk it will accept, generally with very little tolerance for breaking laws or regulations.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.1-PF16",
                             "text": "Establishes Sub-Objectives for Risk Assessment",
+                            "description": "Top-level objectives are broken down into specific security, availability, confidentiality, processing integrity and privacy sub-objectives that risk assessments can target directly.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -764,54 +842,63 @@
                         {
                             "id": "CC3.2-PF01",
                             "text": "Includes Entity, Subsidiary, Division, Operating Unit, and Functional Levels",
+                            "description": "Risk identification covers the whole organization, including subsidiaries, divisions, business units and individual functions, not just headquarters or IT.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.2-PF02",
                             "text": "Analyzes Internal and External Factors",
+                            "description": "Risk assessments consider both internal factors, such as staffing and systems, and external ones, such as regulation, economic conditions and threat actors.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.2-PF03",
                             "text": "Involves Appropriate Levels of Management",
+                            "description": "Managers at the right levels take part in identifying and analyzing risks, so those closest to each area contribute and own the results.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.2-PF04",
                             "text": "Estimates Significance of Risks Identified",
+                            "description": "Identified risks are rated for likelihood and impact using a consistent method, so the organization knows which risks matter most.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.2-PF05",
                             "text": "Determines How to Respond to Risks",
+                            "description": "Each significant risk has a documented decision to accept, avoid, reduce or transfer it, with an owner and planned actions.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.2-PF06",
                             "text": "Identifies Threats to Objectives",
+                            "description": "The organization identifies threats, such as attackers, insiders, outages and natural events, that could stop it from meeting its system objectives.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.2-PF07",
                             "text": "Identifies Vulnerability of System Components",
+                            "description": "Weaknesses in infrastructure, software, data, people and processes are identified, for example through vulnerability scans and architecture reviews.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.2-PF08",
                             "text": "Analyzes Threats and Vulnerabilities From Vendors, Business Partners, and Other Parties",
+                            "description": "Risk assessments cover threats and weaknesses introduced by vendors, partners and other third parties with access to systems or data.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.2-PF09",
                             "text": "Assesses the Significance of the Risks",
+                            "description": "Each risk's potential impact and likelihood are evaluated against objectives to decide which require treatment and how urgently.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -829,30 +916,35 @@
                         {
                             "id": "CC3.3-PF01",
                             "text": "Considers Various Types of Fraud",
+                            "description": "Fraud risk assessments consider fraudulent reporting, theft or misuse of assets, corruption and unauthorized system access.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.3-PF02",
                             "text": "Assesses Incentives and Pressures",
+                            "description": "The organization examines pressures and incentives, such as aggressive targets or bonus structures, that could push people to commit fraud.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.3-PF03",
                             "text": "Assesses Opportunities",
+                            "description": "The organization identifies where weak controls, excessive access or poor oversight could give someone the chance to commit and conceal fraud.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.3-PF04",
                             "text": "Assesses Attitudes and Rationalizations",
+                            "description": "Fraud assessments consider how individuals might justify misconduct, and whether the culture or past tolerance of wrongdoing makes this more likely.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.3-PF05",
                             "text": "Considers the Risks Related to the Use of IT and Access to Information",
+                            "description": "Fraud risk analysis covers how IT systems and access to data could be abused, for example through privileged accounts, data changes or credential misuse.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -870,36 +962,42 @@
                         {
                             "id": "CC3.4-PF01",
                             "text": "Assesses Changes in the External Environment",
+                            "description": "The organization tracks external changes, such as new regulations, market shifts or geopolitical events, and assesses their effect on controls.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.4-PF02",
                             "text": "Assesses Changes in the Business Model",
+                            "description": "New products, services, locations, acquisitions or rapid growth trigger a review of whether existing controls still fit the business.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.4-PF03",
                             "text": "Assesses Changes in Leadership",
+                            "description": "Changes in senior management or key personnel are reviewed for effects on control culture, oversight and knowledge of how controls operate.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.4-PF04",
                             "text": "Assesses Changes in Systems and Technology",
+                            "description": "New or significantly changed systems, platforms and technologies are assessed for new risks before and after they are introduced.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.4-PF05",
                             "text": "Assesses Changes in Vendor and Business Partner Relationships",
+                            "description": "New, ended or changed vendor and partner relationships are evaluated for how they shift risk and affect controls.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC3.4-PF06",
                             "text": "Assesses Changes in Threats and Vulnerabilities",
+                            "description": "The organization monitors the evolving threat landscape and newly discovered vulnerabilities, and updates its risk assessment when these change.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -924,48 +1022,56 @@
                         {
                             "id": "CC4.1-PF01",
                             "text": "Considers a Mix of Ongoing and Separate Evaluations",
+                            "description": "Monitoring combines continuous, built-in checks with periodic standalone reviews such as internal audits or independent assessments.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC4.1-PF02",
                             "text": "Considers Rate of Change",
+                            "description": "The frequency and depth of monitoring increase where the business, systems or risks are changing quickly.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC4.1-PF03",
                             "text": "Establishes Baseline Understanding",
+                            "description": "Evaluations start from a documented understanding of how controls are designed and expected to work, so deviations can be recognized.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC4.1-PF04",
                             "text": "Uses Knowledgeable Personnel",
+                            "description": "Control evaluations are performed by people who understand the controls, processes and systems being reviewed.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC4.1-PF05",
                             "text": "Integrates With Business Processes",
+                            "description": "Ongoing monitoring is embedded in day-to-day operations, such as automated alerts and routine reconciliations, rather than being a separate exercise.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC4.1-PF06",
                             "text": "Adjusts Scope and Frequency",
+                            "description": "How often and how deeply controls are evaluated is adjusted according to risk, past findings and the significance of each control.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC4.1-PF07",
                             "text": "Objectively Evaluates",
+                            "description": "Periodic evaluations are carried out by reviewers independent of the control's operation, such as internal audit or external assessors, to ensure objectivity.",
                             "scope": "coso",
                             "source": "tscids"
                         },
                         {
                             "id": "CC4.1-PF08",
                             "text": "Considers Different Types of Ongoing and Separate Evaluations",
+                            "description": "The organization uses varied evaluation methods, such as penetration tests, compliance audits, certifications and supplier reviews, to confirm controls are working.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -983,18 +1089,21 @@
                         {
                             "id": "CC4.2-PF01",
                             "text": "Assesses Results",
+                            "description": "Management or governance reviews the results of control evaluations to determine which issues are deficiencies and how serious they are.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC4.2-PF02",
                             "text": "Communicates Deficiencies",
+                            "description": "Control deficiencies are reported promptly to the people responsible for fixing them and, when significant, to senior management and the board.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC4.2-PF03",
                             "text": "Monitors Corrective Action",
+                            "description": "Corrective actions for deficiencies are tracked to completion, with owners, deadlines and verification that the fix actually works.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -1019,36 +1128,42 @@
                         {
                             "id": "CC5.1-PF01",
                             "text": "Integrates With Risk Assessment",
+                            "description": "Control activities are mapped to the risks identified in the risk assessment, so each significant risk has controls designed to address it.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC5.1-PF02",
                             "text": "Considers Entity-Specific Factors",
+                            "description": "Control design takes into account the organization's size, environment, complexity, regulatory setting and operating model.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC5.1-PF03",
                             "text": "Determines Relevant Business Processes",
+                            "description": "The organization identifies which business processes are relevant to its objectives and places controls within those processes.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC5.1-PF04",
                             "text": "Evaluates a Mix of Control Activity Types",
+                            "description": "The control set mixes preventive and detective, manual and automated controls so no single type carries all the risk.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC5.1-PF05",
                             "text": "Considers at What Level Activities Are Applied",
+                            "description": "Controls are applied at appropriate levels, from organization-wide policies down to individual transactions and system functions.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC5.1-PF06",
                             "text": "Addresses Segregation of Duties",
+                            "description": "Incompatible duties, such as requesting, approving and executing changes, are split between different people, or compensating controls exist where separation is impractical.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -1066,24 +1181,28 @@
                         {
                             "id": "CC5.2-PF01",
                             "text": "Determines Dependency Between the Use of Technology in Business Processes and Technology General Controls",
+                            "description": "The organization understands which business processes rely on technology and ensures general IT controls protect the systems those processes depend on.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC5.2-PF02",
                             "text": "Establishes Relevant Technology Infrastructure Control Activities",
+                            "description": "Controls over networks, servers, databases and other infrastructure ensure systems are complete, accurate and available.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC5.2-PF03",
                             "text": "Establishes Relevant Security Management Process Controls Activities",
+                            "description": "Security controls such as access management, authentication and monitoring protect systems and data from unauthorized access.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC5.2-PF04",
                             "text": "Establishes Relevant Technology Acquisition, Development, and Maintenance Process Control Activities",
+                            "description": "Controls govern how technology is acquired, developed, changed and maintained, including testing, approval and change management.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -1101,36 +1220,42 @@
                         {
                             "id": "CC5.3-PF01",
                             "text": "Establishes Policies and Procedures to Support Deployment of Management’s Directives",
+                            "description": "Documented policies and procedures turn leadership's directives into specific, day-to-day control activities that staff can follow.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC5.3-PF02",
                             "text": "Establishes Responsibility and Accountability for Executing Policies and Procedures",
+                            "description": "Named roles are assigned ownership of carrying out each policy and procedure, and are held accountable for doing so.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC5.3-PF03",
                             "text": "Performs in a Timely Manner",
+                            "description": "Control activities are performed on schedule, so reviews, approvals and checks happen when they are supposed to, not after the fact.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC5.3-PF04",
                             "text": "Takes Corrective Action",
+                            "description": "Issues found while performing control activities are investigated and resolved, with follow-up action taken by those responsible.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC5.3-PF05",
                             "text": "Performs Using Competent Personnel",
+                            "description": "Control activities are carried out by people with the skills, authority and training needed to perform them properly.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC5.3-PF06",
                             "text": "Reassesses Policies and Procedures",
+                            "description": "Policies and procedures are reviewed periodically and updated when the business, risks or technology change.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -1155,78 +1280,91 @@
                         {
                             "id": "CC6.1-PF01",
                             "text": "Identifies and Manages the Inventory of Information Assets",
+                            "description": "The organization keeps a current inventory of its systems, data stores and devices, each with an owner and classification, so access controls cover every asset.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.1-PF02",
                             "text": "Assesses New Architectures",
+                            "description": "New systems, cloud services and design changes are reviewed for access and security implications before they go live, not bolted on afterward.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.1-PF03",
                             "text": "Restricts Logical Access",
+                            "description": "Access to systems and data is limited to approved users and services through enforced controls such as role-based permissions and deny-by-default settings.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.1-PF04",
                             "text": "Identifies and Authenticates Users",
+                            "description": "Every person and service is uniquely identified and must prove who they are, for example with passwords and MFA, before reaching protected resources.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.1-PF05",
                             "text": "Considers Network Segmentation",
+                            "description": "Networks are divided into zones so sensitive systems are isolated from general traffic and a compromise in one area cannot spread freely.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.1-PF06",
                             "text": "Manages Points of Access",
+                            "description": "Entry points such as VPNs, remote access gateways, APIs and admin consoles are known, limited in number and controlled.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.1-PF07",
                             "text": "Restricts Access to Information Assets",
+                            "description": "Permissions on individual databases, files and applications are set so users reach only the information their job requires.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.1-PF08",
                             "text": "Manages Identification and Authentication",
+                            "description": "Rules for identity and login, such as password strength, MFA, lockout and session timeouts, are defined, applied consistently and kept up to date.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.1-PF09",
                             "text": "Manages Credentials for Infrastructure and Software",
+                            "description": "Service accounts, API keys, default passwords and other system credentials are inventoried, stored securely, rotated and never left at vendor defaults.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.1-PF10",
                             "text": "Uses Encryption to Protect Data",
+                            "description": "Sensitive data is encrypted at rest using approved algorithms wherever it is stored, including databases, backups and laptops.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.1-PF11",
                             "text": "Protects Cryptographic Keys",
+                            "description": "Encryption keys are generated, stored, rotated and retired under controlled procedures, with access limited to a small set of authorized custodians.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.1-PF12",
                             "text": "Restricts Access to and Use of Confidential Information for Identified Purposes",
+                            "description": "Access to confidential business information is granted only to people who need it for an approved purpose, and its use is restricted to that purpose.",
                             "scope": "confidentiality",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.1-PF13",
                             "text": "Restricts Access to and the Use of Personal Information",
+                            "description": "Personal data is accessible only to staff and systems that need it for the purposes disclosed to individuals, and is not used for anything else.",
                             "scope": "privacy",
                             "source": "tscids"
                         }
@@ -1244,18 +1382,21 @@
                         {
                             "id": "CC6.2-PF01",
                             "text": "Creates Access Credentials to Protected Information Assets",
+                            "description": "User accounts and credentials are issued only after a documented request is approved by the appropriate owner or manager.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.2-PF02",
                             "text": "Reviews Validity of Access Credentials",
+                            "description": "Active accounts and credentials are reviewed periodically to confirm each one still belongs to a current, authorized user with a valid need.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.2-PF03",
                             "text": "Prevents the Use of Credentials When No Longer Valid",
+                            "description": "Accounts and credentials are disabled promptly when someone leaves, changes roles or a contract ends, so stale logins cannot be used.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -1273,24 +1414,28 @@
                         {
                             "id": "CC6.3-PF01",
                             "text": "Creates or Modifies Access to Protected Information Assets",
+                            "description": "Granting or changing a user's access follows an approved request tied to their role, with records kept of who authorized it.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.3-PF02",
                             "text": "Removes Access to Protected Information Assets",
+                            "description": "Access is revoked in a timely, tracked way when it is no longer needed, such as at termination, transfer or project completion.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.3-PF03",
                             "text": "Uses Access Control Structures",
+                            "description": "Access is organized through defined roles or groups that enforce least privilege and keep conflicting duties separated.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.3-PF04",
                             "text": "Reviews Access Roles and Rules",
+                            "description": "Roles, group memberships and access rules are reviewed on a schedule by owners, and excess or conflicting permissions are corrected.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -1308,24 +1453,28 @@
                         {
                             "id": "CC6.4-PF01",
                             "text": "Creates or Modifies Physical Access",
+                            "description": "Badges, keys or entry rights to secure facilities are issued or changed only after documented approval based on job need.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.4-PF02",
                             "text": "Removes Physical Access",
+                            "description": "Physical access rights are withdrawn promptly when people leave or no longer need entry, including deactivating badges and collecting keys.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.4-PF03",
                             "text": "Recovers Physical Devices",
+                            "description": "Badges, keys, laptops and other company devices are collected back from departing staff and contractors.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.4-PF04",
                             "text": "Reviews Physical Access",
+                            "description": "Lists of who can enter secure areas, and entry logs, are reviewed periodically and unneeded access is removed.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -1343,6 +1492,7 @@
                         {
                             "id": "CC6.5-PF01",
                             "text": "Removes Data and Software for Disposal",
+                            "description": "Data and software are securely wiped or the media physically destroyed before equipment is discarded, resold or reused, with records of disposal kept.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -1360,24 +1510,28 @@
                         {
                             "id": "CC6.6-PF01",
                             "text": "Restricts Access",
+                            "description": "Connections from outside the network are limited to approved sources, protocols and ports, with everything else blocked.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.6-PF02",
                             "text": "Protects Identification and Authentication Credentials",
+                            "description": "Passwords, tokens and other credentials used over external connections are protected from interception, for example through encryption and secure storage.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.6-PF03",
                             "text": "Requires Additional Authentication or Credentials",
+                            "description": "Remote and higher-risk access, such as VPN, admin or third-party logins, requires an extra factor or step beyond a password.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.6-PF04",
                             "text": "Implements Boundary Protection Systems",
+                            "description": "Firewalls, web gateways, intrusion prevention and similar tools guard the network perimeter and are configured and maintained to block threats.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -1395,24 +1549,28 @@
                         {
                             "id": "CC6.7-PF01",
                             "text": "Restricts the Ability to Perform Transmission",
+                            "description": "Only authorized users and systems can send data out of the environment, with controls such as DLP or restricted file-sharing limiting transfers.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.7-PF02",
                             "text": "Uses Encryption Technologies or Secure Communication Channels to Protect Data",
+                            "description": "Data moving across networks is protected with encryption such as TLS or VPN tunnels, especially over public or untrusted links.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.7-PF03",
                             "text": "Protects Removal Media",
+                            "description": "USB drives and other removable media are restricted, encrypted when allowed, and tracked to prevent data loss.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.7-PF04",
                             "text": "Protects Endpoint Devices",
+                            "description": "Laptops, phones and workstations are protected with measures like disk encryption, screen locks, device management and remote wipe.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -1430,30 +1588,35 @@
                         {
                             "id": "CC6.8-PF01",
                             "text": "Restricts Installation and Modification of Application and Software",
+                            "description": "Only authorized personnel can install or change software, with users blocked from adding unapproved applications.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.8-PF02",
                             "text": "Detects Unauthorized Changes to Software and Configuration Parameters",
+                            "description": "Tools such as file integrity monitoring alert staff when software or configuration settings change without authorization.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.8-PF03",
                             "text": "Uses a Defined Change Control Process",
+                            "description": "Software and configuration changes go through a documented process of request, testing, approval and deployment.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.8-PF04",
                             "text": "Uses Antivirus and Anti-Malware Software",
+                            "description": "Anti-malware or endpoint protection runs on servers and endpoints, stays updated and alerts on detected threats.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC6.8-PF05",
                             "text": "Scans Information Assets From Outside the Entity for Malware and Other Unauthorized Software",
+                            "description": "Files, email attachments and devices arriving from outside are scanned for malware or unapproved software before being allowed in.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -1478,30 +1641,35 @@
                         {
                             "id": "CC7.1-PF01",
                             "text": "Uses Defined Configuration Standards",
+                            "description": "Systems are built and maintained against documented hardening baselines, and deviations from those standards are identified and fixed.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.1-PF02",
                             "text": "Monitors Infrastructure and Software",
+                            "description": "Infrastructure and applications are continuously monitored for vulnerabilities, misconfigurations and signs of weakness.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.1-PF03",
                             "text": "Implements Change-Detection Mechanisms",
+                            "description": "Automated tools flag changes to critical files, settings or infrastructure so unexpected modifications are noticed and investigated.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.1-PF04",
                             "text": "Detects Unknown or Unauthorized Components",
+                            "description": "The environment is regularly checked for unknown devices, software or cloud resources, and anything unauthorized is investigated and removed.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.1-PF05",
                             "text": "Conducts Vulnerability Scans",
+                            "description": "Internal and external vulnerability scans run on a regular schedule and after major changes, with findings tracked to remediation.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -1519,24 +1687,28 @@
                         {
                             "id": "CC7.2-PF01",
                             "text": "Implements Detection Policies, Procedures, and Tools",
+                            "description": "Documented monitoring procedures and tools, such as logging, SIEM and alerting, are in place to spot suspicious activity.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.2-PF02",
                             "text": "Designs Detection Measures",
+                            "description": "Monitoring is designed around known threats and critical assets so it catches unauthorized access, malware and unusual behavior.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.2-PF03",
                             "text": "Implements Filters to Analyze Anomalies",
+                            "description": "Logs and events are filtered, correlated and analyzed to separate real anomalies from normal activity and noise.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.2-PF04",
                             "text": "Monitors Detection Tools for Effective Operation",
+                            "description": "Detection tools are checked regularly to confirm they are running, collecting data and generating alerts as intended.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -1554,42 +1726,49 @@
                         {
                             "id": "CC7.3-PF01",
                             "text": "Responds to Security Incidents",
+                            "description": "Confirmed security incidents are handled through a defined response process with assigned owners and tracked actions.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.3-PF02",
                             "text": "Communicates and Reviews Detected Security Events",
+                            "description": "Detected security events are reported to the right people and reviewed to decide whether they warrant incident handling.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.3-PF03",
                             "text": "Develops and Implements Procedures to Analyze Security Incidents",
+                            "description": "Written procedures guide how staff investigate events to determine their cause, scope and severity.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.3-PF04",
                             "text": "Assesses the Impact on Confidential Information",
+                            "description": "When an incident occurs, the organization determines whether confidential business information was affected and how seriously.",
                             "scope": "confidentiality",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.3-PF05",
                             "text": "Determines Confidential Information Used or Disclosed",
+                            "description": "Investigations establish exactly which confidential information was accessed, used or disclosed without authorization.",
                             "scope": "confidentiality",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.3-PF06",
                             "text": "Assesses the Impact on Personal Information",
+                            "description": "Incidents are evaluated to determine whether personal data was involved and what harm could result for the individuals concerned.",
                             "scope": "privacy",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.3-PF07",
                             "text": "Determines Personal Information Used or Disclosed",
+                            "description": "Investigations identify which personal data records and individuals were exposed, used or disclosed improperly.",
                             "scope": "privacy",
                             "source": "tscids"
                         }
@@ -1607,84 +1786,98 @@
                         {
                             "id": "CC7.4-PF01",
                             "text": "Assigns Roles and Responsibilities",
+                            "description": "Incident response roles, such as incident lead, technical responders and communications, are named and understood in advance.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.4-PF02",
                             "text": "Contains and Responds to Security Incidents",
+                            "description": "Responders follow defined steps to contain an incident and limit its spread, such as isolating systems or disabling accounts.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.4-PF03",
                             "text": "Mitigates Ongoing Security Incidents",
+                            "description": "Active incidents are mitigated in real time to reduce ongoing damage while the full response continues.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.4-PF04",
                             "text": "Resolves Security Incidents",
+                            "description": "Incidents are worked through to closure, with the threat eliminated and resolution documented before the case is closed.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.4-PF05",
                             "text": "Restores Operations",
+                            "description": "Affected systems and services are brought back into normal operation in a controlled way after containment.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.4-PF06",
                             "text": "Develops and Implements Communication of Security Incidents",
+                            "description": "A plan defines who is told about incidents, when and how, covering management, customers, regulators and other stakeholders.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.4-PF07",
                             "text": "Obtains Understanding of Nature of Incident and Determines Containment Strategy",
+                            "description": "Responders analyze what happened and how far it reaches before choosing a containment approach suited to the incident.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.4-PF08",
                             "text": "Remediates Identified Vulnerabilities",
+                            "description": "Weaknesses exploited or uncovered during an incident are fixed, for example through patching or configuration changes.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.4-PF09",
                             "text": "Communicates Remediation Activities",
+                            "description": "Progress and results of remediation work are shared with management and other affected parties.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.4-PF10",
                             "text": "Evaluates the Effectiveness of Incident Response",
+                            "description": "After incidents, the organization reviews how well its response worked and updates the plan based on what it learned.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.4-PF11",
                             "text": "Periodically Evaluates Incidents",
+                            "description": "Incident records are reviewed periodically for trends and recurring issues that signal broader control weaknesses.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.4-PF12",
                             "text": "Applies Breach Response Procedures",
+                            "description": "A defined breach procedure is followed when personal data is compromised, including legal and regulatory notification deadlines.",
                             "scope": "privacy",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.4-PF13",
                             "text": "Communicates Unauthorized Use and Disclosure",
+                            "description": "Individuals, regulators and other required parties are informed when personal data has been used or disclosed without authorization.",
                             "scope": "privacy",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.4-PF14",
                             "text": "Application of Sanctions",
+                            "description": "Staff or third parties who mishandle personal data face disciplinary or contractual consequences that are applied consistently.",
                             "scope": "privacy",
                             "source": "tscids"
                         }
@@ -1702,36 +1895,42 @@
                         {
                             "id": "CC7.5-PF01",
                             "text": "Restores the Affected Environment",
+                            "description": "Systems and data affected by an incident are restored from trusted sources, such as clean backups or rebuilt images, and verified.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.5-PF02",
                             "text": "Communicates Information About the Incident",
+                            "description": "Relevant details about the incident and recovery are shared with management, staff and affected external parties as appropriate.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.5-PF03",
                             "text": "Determines Root Cause of the Incident",
+                            "description": "Each significant incident is investigated to find its underlying cause, not just the immediate symptoms.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.5-PF04",
                             "text": "Implements Changes to Prevent and Detect Recurrences",
+                            "description": "Control or system changes are made after an incident so the same problem is less likely to happen again and easier to detect.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.5-PF05",
                             "text": "Improves Response and Recovery Procedures",
+                            "description": "Response and recovery procedures are updated with lessons learned from incidents and exercises.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC7.5-PF06",
                             "text": "Implements Incident-Recovery Plan Testing",
+                            "description": "Recovery plans are tested regularly through exercises or restore tests to confirm systems can actually be brought back.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -1756,108 +1955,126 @@
                         {
                             "id": "CC8.1-PF01",
                             "text": "Manages Changes Throughout the System Life Cycle",
+                            "description": "Changes are governed by one consistent process from initial request through design, build, release and retirement of system components.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF02",
                             "text": "Authorizes Changes",
+                            "description": "Each change request is reviewed and given permission to proceed by an appropriate owner before any work on it begins.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF03",
                             "text": "Designs and Develops Changes",
+                            "description": "Changes are designed and built to agreed requirements and coding standards, in environments kept separate from live production systems.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF04",
                             "text": "Documents Changes",
+                            "description": "Each change has a written record of what is changing, why, who is involved, and how it was built and verified.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF05",
                             "text": "Tracks System Changes",
+                            "description": "A ticketing or change log tracks every system change and its current status so nothing reaches production untracked.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF06",
                             "text": "Configures Software",
+                            "description": "Software and system settings are configured to approved, hardened standards, and configuration changes follow the same controlled process.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF07",
                             "text": "Tests System Changes",
+                            "description": "Changes are tested in a non-production environment, with results recorded, before they are allowed into the live system.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF08",
                             "text": "Approves System Changes",
+                            "description": "A designated authority reviews test results and signs off on each change before it is released to production.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF09",
                             "text": "Deploys System Changes",
+                            "description": "Approved changes are released to production in a controlled way, with rollback plans and checks that deployment succeeded.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF10",
                             "text": "Identifies and Evaluates System Changes",
+                            "description": "The organization identifies needed changes and evaluates their security, operational and business impact before deciding whether to proceed.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF11",
                             "text": "Identifies Changes in Infrastructure, Data, Software, and Procedures Required to Remediate Incidents",
+                            "description": "Lessons from security incidents feed into the change process, so fixes to systems, data, software or procedures are identified and made.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF12",
                             "text": "Creates Baseline Configuration of IT Technology",
+                            "description": "Documented standard configurations exist for servers, network devices and endpoints, and systems are compared against them to spot drift.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF13",
                             "text": "Provides for Changes Necessary in Emergency Situations",
+                            "description": "A defined fast-track path lets urgent fixes go in quickly, with authorization and documentation completed afterward.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF14",
                             "text": "Manages Patch Changes",
+                            "description": "Security patches and updates are identified, prioritized, tested and applied within set timeframes through the change process.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF15",
                             "text": "Considers System Resilience",
+                            "description": "Changes are assessed for their effect on uptime and recovery, so updates do not weaken redundancy or availability of the system.",
                             "scope": "availability",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF16",
                             "text": "Protects Confidential Information",
+                            "description": "Change work keeps confidential data protected, for example by keeping real sensitive data out of test environments or masking it.",
                             "scope": "confidentiality",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF17",
                             "text": "Protects Personal Information",
+                            "description": "Changes are reviewed so personal information stays protected, such as avoiding live personal data in development and testing.",
                             "scope": "privacy",
                             "source": "tscids"
                         },
                         {
                             "id": "CC8.1-PF18",
                             "text": "Privacy by Design",
+                            "description": "Privacy requirements are built into new systems and changes from the start, limiting personal data collection and exposure by default.",
                             "scope": "privacy",
                             "source": "tscids"
                         }
@@ -1882,12 +2099,14 @@
                         {
                             "id": "CC9.1-PF01",
                             "text": "Considers Mitigation of Risks of Business Disruption",
+                            "description": "The organization plans for disruptive events and puts measures such as continuity and recovery arrangements in place to limit business impact.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC9.1-PF02",
                             "text": "Considers the Use of Insurance to Mitigate Financial Impact Risks",
+                            "description": "Leadership evaluates whether insurance, such as cyber or business interruption cover, should absorb part of the financial loss from major incidents.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -1905,78 +2124,91 @@
                         {
                             "id": "CC9.2-PF01",
                             "text": "Establishes Requirements for Vendor and Business Partner Engagements",
+                            "description": "Security, service and compliance expectations for vendors and partners are defined up front and written into contracts or agreements.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC9.2-PF02",
                             "text": "Identifies Vulnerabilities",
+                            "description": "The organization identifies weaknesses that vendors and partners could introduce, such as insecure connections, products or access to its data.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC9.2-PF03",
                             "text": "Assesses Vendor and Business Partner Risks",
+                            "description": "Vendors and partners are risk-assessed before onboarding and periodically after, scaled to their access to systems and data.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC9.2-PF04",
                             "text": "Assigns Responsibility and Accountability for Managing Vendors and Business Partners",
+                            "description": "Named owners are responsible for each vendor or partner relationship, including oversight of security, performance and contract obligations.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC9.2-PF05",
                             "text": "Establishes Communication Protocols for Vendors and Business Partners",
+                            "description": "Agreed channels and contacts exist for exchanging information with vendors and partners, including how security incidents get reported both ways.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC9.2-PF06",
                             "text": "Establishes Exception Handling Procedures From Vendors and Business Partners",
+                            "description": "There is a defined process for handling vendor or partner shortfalls, deviations from agreed terms, or requests for exceptions.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC9.2-PF07",
                             "text": "Assesses Vendor and Business Partner Performance",
+                            "description": "Vendor and partner performance against service levels and security obligations is reviewed regularly, using reports, audits or attestations.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC9.2-PF08",
                             "text": "Implements Procedures for Addressing Issues Identified During Vendor and Business Partner Assessments",
+                            "description": "Issues found during vendor reviews are recorded, followed up with the vendor, and tracked until fixed or formally accepted.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC9.2-PF09",
                             "text": "Implements Procedures for Terminating Vendor and Business Partner Relationships",
+                            "description": "Ending a vendor relationship follows a defined process covering revoking access, returning or destroying data, and transitioning services.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "CC9.2-PF10",
                             "text": "Obtains Confidentiality Commitments From Vendors and Business Partners",
+                            "description": "Vendors and partners who handle confidential information sign agreements binding them to protect it and limit its use and disclosure.",
                             "scope": "confidentiality",
                             "source": "tscids"
                         },
                         {
                             "id": "CC9.2-PF11",
                             "text": "Assesses Compliance With Confidentiality Commitments of Vendors and Business Partners",
+                            "description": "The organization checks that vendors and partners actually honor their confidentiality obligations, through reviews, attestations or audits.",
                             "scope": "confidentiality",
                             "source": "tscids"
                         },
                         {
                             "id": "CC9.2-PF12",
                             "text": "Obtains Privacy Commitments From Vendors and Business Partners",
+                            "description": "Vendors and partners that process personal information commit in writing to privacy obligations consistent with the organization's own commitments.",
                             "scope": "privacy",
                             "source": "tscids"
                         },
                         {
                             "id": "CC9.2-PF13",
                             "text": "Assesses Compliance With Privacy Commitments of Vendors and Business Partners",
+                            "description": "The organization verifies that vendors and partners handle personal information as their privacy commitments require, and acts on gaps.",
                             "scope": "privacy",
                             "source": "tscids"
                         }
@@ -2001,18 +2233,21 @@
                         {
                             "id": "A1.1-PF01",
                             "text": "Measures Current Usage",
+                            "description": "System capacity such as compute, storage and network usage is monitored continuously against defined thresholds to keep services available.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "A1.1-PF02",
                             "text": "Forecasts Capacity",
+                            "description": "Future capacity needs are projected from usage trends and planned business growth so shortfalls are anticipated before they affect availability.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "A1.1-PF03",
                             "text": "Makes Changes Based on Forecasts",
+                            "description": "Capacity forecasts lead to concrete actions, such as adding resources or rebalancing workloads, before demand outstrips supply.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -2030,66 +2265,77 @@
                         {
                             "id": "A1.2-PF01",
                             "text": "Identifies Environmental Threats",
+                            "description": "Environmental risks to facilities and equipment, such as fire, flood, power loss and overheating, are identified and assessed.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "A1.2-PF02",
                             "text": "Designs Detection Measures",
+                            "description": "Facilities have measures in place to detect environmental problems, such as smoke, water, temperature and humidity sensors.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "A1.2-PF03",
                             "text": "Implements and Maintains Environmental Protection Mechanisms",
+                            "description": "Protective equipment such as fire suppression, UPS, generators and cooling is installed, serviced and kept in working order.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "A1.2-PF04",
                             "text": "Implements Alerts to Analyze Anomalies",
+                            "description": "Environmental monitoring raises alerts on abnormal conditions so staff can investigate and act before systems are affected.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "A1.2-PF05",
                             "text": "Responds to Environmental Threat Events",
+                            "description": "Documented procedures guide staff in responding to environmental events to protect equipment and restore normal operations.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "A1.2-PF06",
                             "text": "Communicates and Reviews Detected Environmental Threat Events",
+                            "description": "Environmental incidents are reported to the right people and reviewed afterward to improve protections and response.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "A1.2-PF07",
                             "text": "Determines Data Requiring Backup",
+                            "description": "The organization identifies which systems and data must be backed up, and how often, based on business and recovery needs.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "A1.2-PF08",
                             "text": "Performs Data Backup",
+                            "description": "Backups run on a defined schedule, are monitored for success, and failures are investigated and corrected.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "A1.2-PF09",
                             "text": "Addresses Offsite Storage",
+                            "description": "Backup copies are kept at a separate, protected location, physical or cloud, so a single site loss cannot destroy them.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "A1.2-PF10",
                             "text": "Implements Alternate Processing Infrastructure",
+                            "description": "Secondary or redundant infrastructure is available so critical processing can continue or resume if the primary environment fails.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "A1.2-PF11",
                             "text": "Considers Data Recoverability",
+                            "description": "Recovery objectives are defined and backup and replication approaches are chosen so data can be restored within acceptable loss limits.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -2107,12 +2353,14 @@
                         {
                             "id": "A1.3-PF01",
                             "text": "Implements Business Continuity Plan Testing",
+                            "description": "The business continuity and disaster recovery plans are exercised regularly, with results reviewed and the plans updated accordingly.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "A1.3-PF02",
                             "text": "Tests Integrity and Completeness of Backup Data",
+                            "description": "Restores from backup are tested periodically to confirm the data comes back complete, uncorrupted and usable.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -2137,18 +2385,21 @@
                         {
                             "id": "C1.1-PF01",
                             "text": "Defines and Identifies Confidential information",
+                            "description": "The organization defines what counts as confidential information and identifies and labels it as it is created or received.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "C1.1-PF02",
                             "text": "Retains Confidential Information",
+                            "description": "Confidential information is kept only for the period required by commitments, contracts or law, under a defined retention schedule.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "C1.1-PF03",
                             "text": "Protects Confidential Information From Destruction",
+                            "description": "Confidential information is safeguarded against accidental or unauthorized deletion or loss while it must still be retained.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -2166,12 +2417,14 @@
                         {
                             "id": "C1.2-PF01",
                             "text": "Identifies Confidential Information for Destruction",
+                            "description": "Confidential information that has reached the end of its retention period is identified and flagged for disposal on a regular basis.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "C1.2-PF02",
                             "text": "Destroys Confidential Information",
+                            "description": "Confidential information is disposed of securely, using methods such as wiping, shredding or crypto-erasure, with records of destruction kept.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -2196,18 +2449,21 @@
                         {
                             "id": "PI1.1-PF01",
                             "text": "Identifies Functional and Nonfunctional Requirements and Information Specifications",
+                            "description": "The organization documents what the system must do and how it must perform, including the data it needs to process correctly.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "PI1.1-PF02",
                             "text": "Defines Data Necessary to Support a Product or Service",
+                            "description": "The data required to deliver each product or service, including its sources, format and quality, is defined and documented.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "PI1.1-PF03",
                             "text": "Defines Information Necessary to Support the Use of a Good or Product",
+                            "description": "Users are given the information they need to use the product or service correctly, such as specifications, instructions and limitations.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -2225,18 +2481,21 @@
                         {
                             "id": "PI1.2-PF01",
                             "text": "Defines Characteristics of Processing Inputs",
+                            "description": "Required characteristics of incoming data, such as format, completeness, valid ranges and sources, are defined for each input.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "PI1.2-PF02",
                             "text": "Evaluates Processing Inputs",
+                            "description": "Inputs are validated against defined rules when received, and errors or rejected items are flagged and corrected.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "PI1.2-PF03",
                             "text": "Creates and Maintains Records of System Inputs",
+                            "description": "Records of data entering the system are kept, showing what was received, when and from where, to support reconciliation.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -2254,30 +2513,35 @@
                         {
                             "id": "PI1.3-PF01",
                             "text": "Defines Processing Specifications",
+                            "description": "The organization documents how data must be processed, including the rules, calculations and expected outputs for each function.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "PI1.3-PF02",
                             "text": "Defines Processing Activities",
+                            "description": "The processing steps, schedules and responsibilities for each system activity are defined so work runs consistently.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "PI1.3-PF03",
                             "text": "Detects and Corrects Processing or Production Activity Errors",
+                            "description": "Processing errors and failed jobs are detected through checks and monitoring, then investigated and corrected in a timely manner.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "PI1.3-PF04",
                             "text": "Records System Processing Activities",
+                            "description": "System processing activity is logged so what ran, when and with what result can be traced and reviewed.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "PI1.3-PF05",
                             "text": "Processes Inputs",
+                            "description": "Inputs are processed completely, accurately and on time according to the defined specifications.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -2295,24 +2559,28 @@
                         {
                             "id": "PI1.4-PF01",
                             "text": "Protects Output",
+                            "description": "System outputs such as reports and files are protected from unauthorized access, change or loss.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "PI1.4-PF02",
                             "text": "Distributes Output Only to Intended Parties",
+                            "description": "Outputs are delivered only to authorized recipients, with controls that confirm the correct destination before release.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "PI1.4-PF03",
                             "text": "Distributes Output Completely and Accurately",
+                            "description": "Checks such as reconciliations and control totals confirm that outputs are delivered in full and without errors.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "PI1.4-PF04",
                             "text": "Creates and Maintains Records of System Output Activities",
+                            "description": "Records of output generation and distribution are kept, showing what was sent, to whom and when.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -2330,24 +2598,28 @@
                         {
                             "id": "PI1.5-PF01",
                             "text": "Protects Stored Items",
+                            "description": "Data and items held in storage are protected from unauthorized access, change, theft or damage.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "PI1.5-PF02",
                             "text": "Archives and Protects System Records",
+                            "description": "System records are archived on a defined basis and protected so they remain intact and retrievable when needed.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "PI1.5-PF03",
                             "text": "Stores Data Completely and Accurately",
+                            "description": "Stored data is checked to remain complete and accurate, with integrity controls that catch corruption or unintended changes.",
                             "scope": "all",
                             "source": "tscids"
                         },
                         {
                             "id": "PI1.5-PF04",
                             "text": "Creates and Maintains Records of System Storage Activities",
+                            "description": "Records of storage activities, such as data being written, changed, moved or deleted, are kept and available for review.",
                             "scope": "all",
                             "source": "tscids"
                         }
@@ -2372,6 +2644,7 @@
                         {
                             "id": "P1.1-PF01",
                             "text": "Communicates to Data Subjects",
+                            "description": "The organization tells individuals what personal information it handles, why, and how they can reach it with privacy questions or concerns.",
                             "scope": "all",
                             "controller": true,
                             "source": "tscids"
@@ -2379,6 +2652,7 @@
                         {
                             "id": "P1.1-PF02",
                             "text": "Provides Notice to Data Subjects",
+                            "description": "Individuals receive a privacy notice at or before the point their personal information is collected, or as soon as practical afterward.",
                             "scope": "all",
                             "controller": true,
                             "source": "tscids"
@@ -2386,6 +2660,7 @@
                         {
                             "id": "P1.1-PF03",
                             "text": "Covers Entities and Activities in Notice",
+                            "description": "The privacy notice names which business units, affiliates, websites, and processing activities it applies to, so nothing in scope is left unexplained.",
                             "scope": "all",
                             "controller": true,
                             "source": "tscids"
@@ -2393,6 +2668,7 @@
                         {
                             "id": "P1.1-PF04",
                             "text": "Uses Clear Language and Presents a Current Privacy Notice in a Location Easily Found by Data Subjects",
+                            "description": "Privacy notices are written in plain wording, kept up to date, and posted where individuals can easily find them, such as a website footer or signup page.",
                             "scope": "all",
                             "controller": true,
                             "source": "tscids"
@@ -2400,6 +2676,7 @@
                         {
                             "id": "P1.1-PF05",
                             "text": "Reviews the Privacy Notice",
+                            "description": "The organization reviews its privacy notice on a set schedule and whenever practices change, confirming it still matches how data is actually handled.",
                             "scope": "all",
                             "controller": true,
                             "source": "tscids"
@@ -2407,6 +2684,7 @@
                         {
                             "id": "P1.1-PF06",
                             "text": "Communicates Changes to Notice",
+                            "description": "When the privacy notice changes, the organization alerts affected individuals in advance or promptly, explaining what changed and how it affects them.",
                             "scope": "all",
                             "controller": true,
                             "source": "tscids"
@@ -2414,6 +2692,7 @@
                         {
                             "id": "P1.1-PF07",
                             "text": "Retains Prior Notices",
+                            "description": "Earlier versions of the privacy notice are archived with their effective dates, so the organization can show which terms applied at any point.",
                             "scope": "all",
                             "controller": true,
                             "source": "tscids"
@@ -2432,6 +2711,7 @@
                         {
                             "id": "P2.1-PF01",
                             "text": "Communicates to Data Subjects",
+                            "description": "Individuals are told what choices they have about how their personal information is collected, used, shared, and kept, and how to exercise them.",
                             "scope": "all",
                             "controller": true,
                             "source": "tscids"
@@ -2439,6 +2719,7 @@
                         {
                             "id": "P2.1-PF02",
                             "text": "Communicates Consequences of Denying or Withdrawing Consent",
+                            "description": "Individuals learn what happens if they refuse or later withdraw consent, such as losing access to certain services or features.",
                             "scope": "all",
                             "controller": true,
                             "source": "tscids"
@@ -2446,6 +2727,7 @@
                         {
                             "id": "P2.1-PF03",
                             "text": "Obtains Implicit or Explicit Consent",
+                            "description": "The organization captures consent before relying on personal information, using opt-in or opt-out mechanisms appropriate to the data and applicable law.",
                             "scope": "all",
                             "controller": true,
                             "source": "tscids"
@@ -2453,6 +2735,7 @@
                         {
                             "id": "P2.1-PF04",
                             "text": "Documents and Obtains Consent for New Purposes and Uses",
+                            "description": "Before reusing personal information for a purpose not originally disclosed, the organization records the new use and gets fresh consent where required.",
                             "scope": "all",
                             "controller": true,
                             "source": "tscids"
@@ -2460,6 +2743,7 @@
                         {
                             "id": "P2.1-PF05",
                             "text": "Obtains Explicit Consent for Sensitive Information",
+                            "description": "Sensitive data such as health, biometric, or financial details is only collected or used after individuals give clear, affirmative, documented consent.",
                             "scope": "all",
                             "controller": true,
                             "source": "tscids"
@@ -2467,6 +2751,7 @@
                         {
                             "id": "P2.1-PF06",
                             "text": "Obtains Consent for Data Transfers",
+                            "description": "Individuals agree before their personal information is transferred to other parties or across borders, and that consent is recorded.",
                             "scope": "all",
                             "controller": true,
                             "source": "tscids"
@@ -2485,6 +2770,7 @@
                         {
                             "id": "P3.1-PF01",
                             "text": "Limits the Collection of Personal Information",
+                            "description": "The organization collects only the personal information needed for its stated purposes, and data-gathering forms and systems avoid asking for extras.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2493,6 +2779,7 @@
                         {
                             "id": "P3.1-PF02",
                             "text": "Collects Information by Fair and Lawful Means",
+                            "description": "Personal information is gathered honestly and legally, without deception, hidden tracking, or coercion, and collection methods are reviewed for compliance.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2501,6 +2788,7 @@
                         {
                             "id": "P3.1-PF03",
                             "text": "Collects Information From Reliable Sources",
+                            "description": "Personal information obtained from third parties or public sources comes from vetted, trustworthy providers whose data practices are lawful and accurate.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2509,6 +2797,7 @@
                         {
                             "id": "P3.1-PF04",
                             "text": "Informs Data Subjects When Additional Information Is Acquired",
+                            "description": "When the organization obtains extra information about individuals from other sources, it tells them what was acquired and why.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2528,6 +2817,7 @@
                         {
                             "id": "P3.2-PF01",
                             "text": "Informs Data Subjects of Consequences of Failure to Provide Consent",
+                            "description": "Before asking for explicit consent, individuals are told what will happen if they decline, such as a service they cannot receive.",
                             "scope": "all",
                             "controller": true,
                             "source": "tscids"
@@ -2535,6 +2825,7 @@
                         {
                             "id": "P3.2-PF02",
                             "text": "Documents Explicit Consent to Retain Information",
+                            "description": "Explicit consent is captured in a retrievable record showing who agreed, when, and to what, and that record is kept for evidence.",
                             "scope": "all",
                             "controller": true,
                             "source": "tscids"
@@ -2553,6 +2844,7 @@
                         {
                             "id": "P4.1-PF01",
                             "text": "Uses Personal Information for Intended Purposes",
+                            "description": "Personal information is used only for the purposes disclosed to individuals, with access controls and reviews that stop unrelated or secondary use.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2572,6 +2864,7 @@
                         {
                             "id": "P4.2-PF01",
                             "text": "Retains Personal Information",
+                            "description": "A retention schedule defines how long each type of personal information is kept, and records are held no longer than needed or legally required.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2580,6 +2873,7 @@
                         {
                             "id": "P4.2-PF02",
                             "text": "Protects Personal Information",
+                            "description": "Personal information kept under retention rules stays protected against loss, alteration, or unauthorized access for as long as it is stored.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2599,6 +2893,7 @@
                         {
                             "id": "P4.3-PF01",
                             "text": "Captures, Identifies, and Flags Requests for Deletion",
+                            "description": "The organization logs and tracks individuals' deletion requests and marks the affected records so they are reliably removed or excluded from use.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2607,6 +2902,7 @@
                         {
                             "id": "P4.3-PF02",
                             "text": "Disposes of, Destroys, and Redacts Personal Information",
+                            "description": "Personal information that is no longer needed is disposed of, anonymized, or redacted using approved methods, and disposal is documented.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2615,6 +2911,7 @@
                         {
                             "id": "P4.3-PF03",
                             "text": "Destroys Personal Information",
+                            "description": "Personal information on paper, devices, and backups is irrecoverably destroyed through shredding, secure wiping, or certified destruction once its retention ends.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2634,6 +2931,7 @@
                         {
                             "id": "P5.1-PF01",
                             "text": "Responds to Data Controller Requests",
+                            "description": "As a processor, the organization helps its client controllers fulfill individuals' access requests promptly and within agreed timeframes.",
                             "scope": "all",
                             "processor": true,
                             "source": "tscids"
@@ -2641,6 +2939,7 @@
                         {
                             "id": "P5.1-PF02",
                             "text": "Authenticates Data Subjects’ Identity",
+                            "description": "Before releasing personal information, the organization verifies the requester's identity so data is never disclosed to an impostor.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2649,6 +2948,7 @@
                         {
                             "id": "P5.1-PF03",
                             "text": "Permits Data Subjects Access to Their Personal Information",
+                            "description": "Individuals can request and view the personal information held about them through a defined, accessible process such as a portal or request form.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2657,6 +2957,7 @@
                         {
                             "id": "P5.1-PF04",
                             "text": "Provides Understandable Personal Information Within Reasonable Time",
+                            "description": "Personal information is returned to requesters in a readable, plain format and within a reasonable or legally set response period.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2665,6 +2966,7 @@
                         {
                             "id": "P5.1-PF05",
                             "text": "Informs Data Subjects If Access Is Denied",
+                            "description": "When an access request is refused, the individual is told in writing, with the reason and any options to challenge the decision.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2684,6 +2986,7 @@
                         {
                             "id": "P5.2-PF01",
                             "text": "Responds to Data Controller Requests",
+                            "description": "As a processor, the organization acts on controllers' instructions to correct or update personal information and confirms when changes are made.",
                             "scope": "all",
                             "processor": true,
                             "source": "tscids"
@@ -2691,6 +2994,7 @@
                         {
                             "id": "P5.2-PF02",
                             "text": "Communicates Denial of Access Requests",
+                            "description": "Individuals whose access requests are refused receive a written explanation of the reason, as permitted by law, and how to dispute it.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2699,6 +3003,7 @@
                         {
                             "id": "P5.2-PF03",
                             "text": "Permits Data Subjects to Update or Correct Personal Information",
+                            "description": "Individuals can ask to fix or update inaccurate personal information, and the corrections are applied and passed to others who received the data.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2707,6 +3012,7 @@
                         {
                             "id": "P5.2-PF04",
                             "text": "Communicates Denial of Correction Requests",
+                            "description": "When a correction request is declined, the individual is told why and can have their disagreement noted alongside the record.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2726,6 +3032,7 @@
                         {
                             "id": "P6.1-PF01",
                             "text": "Communicates Privacy Policies to Third Parties",
+                            "description": "Third parties receiving personal information are informed of the organization's privacy requirements, typically through contracts or data-processing agreements.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2734,6 +3041,7 @@
                         {
                             "id": "P6.1-PF02",
                             "text": "Discloses Personal Information Only When Appropriate",
+                            "description": "Personal information is shared only for disclosed purposes, with consent where required, or when the law compels it, and each release is checked first.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2742,6 +3050,7 @@
                         {
                             "id": "P6.1-PF03",
                             "text": "Discloses Personal Information Only to Appropriate Third Parties",
+                            "description": "Personal information goes only to vetted recipients who need it and are bound to protect it, rather than to any party that asks.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2750,6 +3059,7 @@
                         {
                             "id": "P6.1-PF04",
                             "text": "Discloses Information to Third Parties for New Purposes and Uses",
+                            "description": "Before sharing personal information with third parties for a new purpose, the organization informs individuals and obtains consent where required.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2769,6 +3079,7 @@
                         {
                             "id": "P6.2-PF01",
                             "text": "Creates and Retains Record of Authorized Disclosures",
+                            "description": "The organization keeps a complete log of each approved release of personal information, recording what was shared, with whom, when, and why.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2788,6 +3099,7 @@
                         {
                             "id": "P6.3-PF01",
                             "text": "Creates and Retains Record of Detected or Reported Unauthorized Disclosures",
+                            "description": "Every detected or reported unauthorized disclosure of personal information is logged with details of what happened, the data involved, and the response.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2807,6 +3119,7 @@
                         {
                             "id": "P6.4-PF01",
                             "text": "Evaluates Third-Party Compliance With Privacy Commitments",
+                            "description": "The organization periodically checks, through audits, questionnaires, or reports, that vendors handling personal information keep their contractual privacy commitments.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2815,6 +3128,7 @@
                         {
                             "id": "P6.4-PF02",
                             "text": "Remediates Misuse of Personal Information by a Third Party",
+                            "description": "When a vendor misuses personal information, the organization takes corrective action such as requiring fixes, restricting access, or ending the relationship.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2823,6 +3137,7 @@
                         {
                             "id": "P6.4-PF03",
                             "text": "Obtains Commitments to Report Unauthorized Disclosures",
+                            "description": "Vendor agreements require third parties to promptly notify the organization of any unauthorized disclosure of personal information they detect.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2842,6 +3157,7 @@
                         {
                             "id": "P6.5-PF01",
                             "text": "Remediates Misuse of Personal Information by a Third Party",
+                            "description": "When a vendor reports or is found misusing personal information, the organization investigates and drives corrective actions to contain and fix the problem.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2850,6 +3166,7 @@
                         {
                             "id": "P6.5-PF02",
                             "text": "Reports Actual or Suspected Unauthorized Disclosures",
+                            "description": "Vendors notify the organization quickly of actual or suspected unauthorized disclosures, and those notices trigger the incident response process.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2869,6 +3186,7 @@
                         {
                             "id": "P6.6-PF01",
                             "text": "Identifies Reporting Requirements",
+                            "description": "The organization maintains a current list of breach notification obligations by jurisdiction and contract, including who must be told and the deadlines.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2877,6 +3195,7 @@
                         {
                             "id": "P6.6-PF02",
                             "text": "Provides Notice of Breaches and Incidents",
+                            "description": "After a breach involving personal information, affected individuals, regulators, and other required parties are notified accurately and within mandated timeframes.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2896,6 +3215,7 @@
                         {
                             "id": "P6.7-PF01",
                             "text": "Responds to Data Controller Requests",
+                            "description": "As a processor, the organization supplies controllers with the disclosure details they need to answer individuals' requests for an accounting of disclosures.",
                             "scope": "all",
                             "processor": true,
                             "source": "tscids"
@@ -2903,6 +3223,7 @@
                         {
                             "id": "P6.7-PF02",
                             "text": "Identifies Types of Personal Information and Handling Process",
+                            "description": "The organization knows which types of personal information it holds and how each is handled, so it can accurately report what was disclosed.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2911,6 +3232,7 @@
                         {
                             "id": "P6.7-PF03",
                             "text": "Captures, Identifies, and Communicates Requests for Information",
+                            "description": "Requests for an accounting of disclosures are logged, routed to the right team, and answered with a clear list of who received the individual's data.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2930,6 +3252,7 @@
                         {
                             "id": "P7.1-PF01",
                             "text": "Ensures Accuracy and Completeness of Personal Information",
+                            "description": "Personal information is validated at entry and periodically reviewed so records remain correct, complete, and up to date for their intended use.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2938,6 +3261,7 @@
                         {
                             "id": "P7.1-PF02",
                             "text": "Ensures Relevance of Personal Information",
+                            "description": "The organization periodically confirms that the personal information it holds is still relevant to its stated purposes and removes data that is not.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2957,6 +3281,7 @@
                         {
                             "id": "P8.1-PF01",
                             "text": "Communicates to Data Subjects or Data Controllers",
+                            "description": "Individuals and client controllers are told how to submit privacy questions, complaints, or disputes and whom to contact.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2965,6 +3290,7 @@
                         {
                             "id": "P8.1-PF02",
                             "text": "Addresses Inquiries, Complaints, and Disputes",
+                            "description": "Privacy inquiries, complaints, and disputes are logged, investigated, and resolved within defined timeframes, with outcomes communicated back to the requester.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2973,6 +3299,7 @@
                         {
                             "id": "P8.1-PF03",
                             "text": "Documents and Communicates Dispute Resolution and Recourse",
+                            "description": "The dispute-resolution process and available recourse, such as independent arbitration or regulator escalation, are documented and shared with individuals.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2981,6 +3308,7 @@
                         {
                             "id": "P8.1-PF04",
                             "text": "Documents and Reports Compliance Review Results",
+                            "description": "Results of privacy compliance reviews are documented and reported to management, with corrective actions tracked to closure.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2989,6 +3317,7 @@
                         {
                             "id": "P8.1-PF05",
                             "text": "Documents and Reports Instances of Noncompliance",
+                            "description": "Instances of privacy noncompliance are recorded, reported to the appropriate leaders, and tracked until they are resolved.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,
@@ -2997,6 +3326,7 @@
                         {
                             "id": "P8.1-PF06",
                             "text": "Performs Ongoing Monitoring",
+                            "description": "The organization continuously monitors privacy controls and practices, using reviews, metrics, or audits to catch noncompliance early.",
                             "scope": "all",
                             "controller": true,
                             "processor": true,

@@ -9,6 +9,8 @@
  * - Objectives: the unlabelled sub-paragraphs a standard or specification lists
  *   (e.g. the three things a business associate contract must provide).
  */
+require_once dirname(__DIR__).'/lib/ObjectiveText.php';
+
 return function (): array {
     $xml = simplexml_load_file(Source::path('hipaa/45-cfr-164-subpart-c.xml'));
     $sections = array(
@@ -121,10 +123,19 @@ return function (): array {
                     );
                 }
 
-                $c['objectives'][] = array(
+                $objective = array(
                     'id' => $id,
                     'text' => $strip($rest)
                 );
+
+                // An element that continues the control's lead-in ("The contract must provide that ... will—").
+                if (ObjectiveText::introduces_list($c['body'])) {
+                    $objective['description'] = ObjectiveText::complete($c['body'], $objective['text']);
+                } elseif (ObjectiveText::trailing_connector($objective['text'])) {
+                    $objective['description'] = ObjectiveText::sentence($objective['text']);
+                }
+
+                $c['objectives'][] = $objective;
                 $c['text'] .= ' '.$levels[$depth].' '.$strip($rest);
                 unset($c);
                 continue;

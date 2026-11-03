@@ -207,16 +207,19 @@
                         {
                             "id": "314.4(a)(1)",
                             "text": "Retain responsibility for compliance with this part;",
+                            "description": "To the extent the requirement in this paragraph (a) is met using a service provider or an affiliate, you shall retain responsibility for compliance with this part.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(a)(2)",
                             "text": "Designate a senior member of your personnel responsible for direction and oversight of the Qualified Individual; and",
+                            "description": "To the extent the requirement in this paragraph (a) is met using a service provider or an affiliate, you shall designate a senior member of your personnel responsible for direction and oversight of the Qualified Individual.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(a)(3)",
                             "text": "Require the service provider or affiliate to maintain an information security program that protects you in accordance with the requirements of this part.",
+                            "description": "To the extent the requirement in this paragraph (a) is met using a service provider or an affiliate, you shall require the service provider or affiliate to maintain an information security program that protects you in accordance with the requirements of this part.",
                             "source": "cfr314"
                         }
                     ],
@@ -254,41 +257,49 @@
                         {
                             "id": "314.4(c)(1)",
                             "text": "Implementing and periodically reviewing access controls, including technical and, as appropriate, physical controls to: (i) Authenticate and permit access only to authorized users to protect against the unauthorized acquisition of customer information; and (ii) Limit authorized users' access only to customer information that they need to perform their duties and functions, or, in the case of customers, to access their own information;",
+                            "description": "Design and implement safeguards to control the risks you identify through risk assessment, including by implementing and periodically reviewing access controls, including technical and, as appropriate, physical controls to: (i) Authenticate and permit access only to authorized users to protect against the unauthorized acquisition of customer information; and (ii) Limit authorized users' access only to customer information that they need to perform their duties and functions, or, in the case of customers, to access their own information.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(c)(2)",
                             "text": "Identify and manage the data, personnel, devices, systems, and facilities that enable you to achieve business purposes in accordance with their relative importance to business objectives and your risk strategy;",
+                            "description": "Design and implement safeguards to control the risks you identify through risk assessment, including by: Identify and manage the data, personnel, devices, systems, and facilities that enable you to achieve business purposes in accordance with their relative importance to business objectives and your risk strategy.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(c)(3)",
                             "text": "Protect by encryption all customer information held or transmitted by you both in transit over external networks and at rest. To the extent you determine that encryption of customer information, either in transit over external networks or at rest, is infeasible, you may instead secure such customer information using effective alternative compensating controls reviewed and approved by your Qualified Individual;",
+                            "description": "Design and implement safeguards to control the risks you identify through risk assessment, including by: Protect by encryption all customer information held or transmitted by you both in transit over external networks and at rest. To the extent you determine that encryption of customer information, either in transit over external networks or at rest, is infeasible, you may instead secure such customer information using effective alternative compensating controls reviewed and approved by your Qualified Individual.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(c)(4)",
                             "text": "Adopt secure development practices for in-house developed applications utilized by you for transmitting, accessing, or storing customer information and procedures for evaluating, assessing, or testing the security of externally developed applications you utilize to transmit, access, or store customer information;",
+                            "description": "Design and implement safeguards to control the risks you identify through risk assessment, including by: Adopt secure development practices for in-house developed applications utilized by you for transmitting, accessing, or storing customer information and procedures for evaluating, assessing, or testing the security of externally developed applications you utilize to transmit, access, or store customer information.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(c)(5)",
                             "text": "Implement multi-factor authentication for any individual accessing any information system, unless your Qualified Individual has approved in writing the use of reasonably equivalent or more secure access controls;",
+                            "description": "Design and implement safeguards to control the risks you identify through risk assessment, including by: Implement multi-factor authentication for any individual accessing any information system, unless your Qualified Individual has approved in writing the use of reasonably equivalent or more secure access controls.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(c)(6)",
                             "text": "(i) Develop, implement, and maintain procedures for the secure disposal of customer information in any format no later than two years after the last date the information is used in connection with the provision of a product or service to the customer to which it relates, unless such information is necessary for business operations or for other legitimate business purposes, is otherwise required to be retained by law or regulation, or where targeted disposal is not reasonably feasible due to the manner in which the information is maintained; and (ii) Periodically review your data retention policy to minimize the unnecessary retention of data;",
+                            "description": "Design and implement safeguards to control the risks you identify through risk assessment, including by: (i) Develop, implement, and maintain procedures for the secure disposal of customer information in any format no later than two years after the last date the information is used in connection with the provision of a product or service to the customer to which it relates, unless such information is necessary for business operations or for other legitimate business purposes, is otherwise required to be retained by law or regulation, or where targeted disposal is not reasonably feasible due to the manner in which the information is maintained; and (ii) Periodically review your data retention policy to minimize the unnecessary retention of data.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(c)(7)",
                             "text": "Adopt procedures for change management; and",
+                            "description": "Design and implement safeguards to control the risks you identify through risk assessment, including by: Adopt procedures for change management.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(c)(8)",
                             "text": "Implement policies, procedures, and controls designed to monitor and log the activity of authorized users and detect unauthorized access or use of, or tampering with, customer information by such users.",
+                            "description": "Design and implement safeguards to control the risks you identify through risk assessment, including by: Implement policies, procedures, and controls designed to monitor and log the activity of authorized users and detect unauthorized access or use of, or tampering with, customer information by such users.",
                             "source": "cfr314"
                         }
                     ],
@@ -326,21 +337,25 @@
                         {
                             "id": "314.4(e)(1)",
                             "text": "Providing your personnel with security awareness training that is updated as necessary to reflect risks identified by the risk assessment;",
+                            "description": "Implement policies and procedures to ensure that personnel are able to enact your information security program by providing your personnel with security awareness training that is updated as necessary to reflect risks identified by the risk assessment.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(e)(2)",
                             "text": "Utilizing qualified information security personnel employed by you or an affiliate or service provider sufficient to manage your information security risks and to perform or oversee the information security program;",
+                            "description": "Implement policies and procedures to ensure that personnel are able to enact your information security program by utilizing qualified information security personnel employed by you or an affiliate or service provider sufficient to manage your information security risks and to perform or oversee the information security program.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(e)(3)",
                             "text": "Providing information security personnel with security updates and training sufficient to address relevant security risks; and",
+                            "description": "Implement policies and procedures to ensure that personnel are able to enact your information security program by providing information security personnel with security updates and training sufficient to address relevant security risks.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(e)(4)",
                             "text": "Verifying that key information security personnel take steps to maintain current knowledge of changing information security threats and countermeasures.",
+                            "description": "Implement policies and procedures to ensure that personnel are able to enact your information security program by verifying that key information security personnel take steps to maintain current knowledge of changing information security threats and countermeasures.",
                             "source": "cfr314"
                         }
                     ],
@@ -357,16 +372,19 @@
                         {
                             "id": "314.4(f)(1)",
                             "text": "Taking reasonable steps to select and retain service providers that are capable of maintaining appropriate safeguards for the customer information at issue;",
+                            "description": "Oversee service providers, by taking reasonable steps to select and retain service providers that are capable of maintaining appropriate safeguards for the customer information at issue.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(f)(2)",
                             "text": "Requiring your service providers by contract to implement and maintain such safeguards; and",
+                            "description": "Oversee service providers, by requiring your service providers by contract to implement and maintain such safeguards.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(f)(3)",
                             "text": "Periodically assessing your service providers based on the risk they present and the continued adequacy of their safeguards.",
+                            "description": "Oversee service providers, by: Periodically assessing your service providers based on the risk they present and the continued adequacy of their safeguards.",
                             "source": "cfr314"
                         }
                     ],
@@ -393,36 +411,43 @@
                         {
                             "id": "314.4(h)(1)",
                             "text": "The goals of the incident response plan;",
+                            "description": "Establish a written incident response plan designed to promptly respond to, and recover from, any security event materially affecting the confidentiality, integrity, or availability of customer information in your control. Such incident response plan shall address the goals of the incident response plan.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(h)(2)",
                             "text": "The internal processes for responding to a security event;",
+                            "description": "Establish a written incident response plan designed to promptly respond to, and recover from, any security event materially affecting the confidentiality, integrity, or availability of customer information in your control. Such incident response plan shall address the internal processes for responding to a security event.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(h)(3)",
                             "text": "The definition of clear roles, responsibilities, and levels of decision-making authority;",
+                            "description": "Establish a written incident response plan designed to promptly respond to, and recover from, any security event materially affecting the confidentiality, integrity, or availability of customer information in your control. Such incident response plan shall address the definition of clear roles, responsibilities, and levels of decision-making authority.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(h)(4)",
                             "text": "External and internal communications and information sharing;",
+                            "description": "Establish a written incident response plan designed to promptly respond to, and recover from, any security event materially affecting the confidentiality, integrity, or availability of customer information in your control. Such incident response plan shall address external and internal communications and information sharing.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(h)(5)",
                             "text": "Identification of requirements for the remediation of any identified weaknesses in information systems and associated controls;",
+                            "description": "Establish a written incident response plan designed to promptly respond to, and recover from, any security event materially affecting the confidentiality, integrity, or availability of customer information in your control. Such incident response plan shall address identification of requirements for the remediation of any identified weaknesses in information systems and associated controls.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(h)(6)",
                             "text": "Documentation and reporting regarding security events and related incident response activities; and",
+                            "description": "Establish a written incident response plan designed to promptly respond to, and recover from, any security event materially affecting the confidentiality, integrity, or availability of customer information in your control. Such incident response plan shall address documentation and reporting regarding security events and related incident response activities.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(h)(7)",
                             "text": "The evaluation and revision as necessary of the incident response plan following a security event.",
+                            "description": "Establish a written incident response plan designed to promptly respond to, and recover from, any security event materially affecting the confidentiality, integrity, or availability of customer information in your control. Such incident response plan shall address the evaluation and revision as necessary of the incident response plan following a security event.",
                             "source": "cfr314"
                         }
                     ],
@@ -439,11 +464,13 @@
                         {
                             "id": "314.4(i)(1)",
                             "text": "The overall status of the information security program and your compliance with this part; and",
+                            "description": "The report shall include the overall status of the information security program and your compliance with this part.",
                             "source": "cfr314"
                         },
                         {
                             "id": "314.4(i)(2)",
                             "text": "Material matters related to the information security program, addressing issues such as risk assessment, risk management and control decisions, service provider arrangements, results of testing, security events or violations and management's responses thereto, and recommendations for changes in the information security program.",
+                            "description": "The report shall include material matters related to the information security program, addressing issues such as risk assessment, risk management and control decisions, service provider arrangements, results of testing, security events or violations and management's responses thereto, and recommendations for changes in the information security program.",
                             "source": "cfr314"
                         }
                     ],

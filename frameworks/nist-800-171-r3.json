@@ -270,6 +270,7 @@
                         {
                             "id": "A.03.01.01.f.02",
                             "text": "system accounts are disabled when the accounts have been inactive for <A.03.01.01.ODP[01]: time period>.",
+                            "description": "System accounts are disabled when the accounts have been inactive for [organization-defined time period].",
                             "source": "oscal"
                         },
                         {
@@ -290,21 +291,25 @@
                         {
                             "id": "A.03.01.01.g.01",
                             "text": "account managers and designated personnel or roles are notified within <A.03.01.01.ODP[02]: time period> when accounts are no longer required.",
+                            "description": "Account managers and designated personnel or roles are notified within [organization-defined time period] when accounts are no longer required.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.01.01.g.02",
                             "text": "account managers and designated personnel or roles are notified within <A.03.01.01.ODP[03]: time period> when users are terminated or transferred.",
+                            "description": "Account managers and designated personnel or roles are notified within [organization-defined time period] when users are terminated or transferred.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.01.01.g.03",
                             "text": "account managers and designated personnel or roles are notified within <A.03.01.01.ODP[04]: time period> when system usage or the need-to-know changes for an individual.",
+                            "description": "Account managers and designated personnel or roles are notified within [organization-defined time period] when system usage or the need-to-know changes for an individual.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.01.01.h",
                             "text": "users are required to log out of the system after <A.03.01.01.ODP[05]: time period> of expected inactivity or when the following circumstances occur: <A.03.01.01.ODP[06]: circumstances>.",
+                            "description": "Users are required to log out of the system after [organization-defined time period] of expected inactivity or when the following circumstances occur: [organization-defined circumstances].",
                             "source": "oscal"
                         }
                     ],
@@ -405,16 +410,19 @@
                         {
                             "id": "A.03.01.05.b[01]",
                             "text": "access to <A.03.01.05.ODP[01]: security functions> is authorized.",
+                            "description": "Access to [organization-defined security functions] is authorized.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.01.05.b[02]",
                             "text": "access to <A.03.01.05.ODP[02]: security-relevant information> is authorized.",
+                            "description": "Access to [organization-defined security-relevant information] is authorized.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.01.05.c",
                             "text": "the privileges assigned to roles or classes of users are reviewed <A.03.01.05.ODP[03]: frequency> to validate the need for such privileges.",
+                            "description": "The privileges assigned to roles or classes of users are reviewed at an organization-defined frequency to validate the need for such privileges.",
                             "source": "oscal"
                         },
                         {
@@ -442,6 +450,7 @@
                         {
                             "id": "A.03.01.06.a",
                             "text": "privileged accounts on the system are restricted to <A.03.01.06.ODP[01]: personnel or roles>.",
+                            "description": "Privileged accounts on the system are restricted to [organization-defined personnel or roles].",
                             "source": "oscal"
                         },
                         {
@@ -505,11 +514,13 @@
                         {
                             "id": "A.03.01.08.a",
                             "text": "a limit of <A.03.01.08.ODP[01]: number> consecutive invalid logon attempts by a user during <A.03.01.08.ODP[02]: time period> is enforced.",
+                            "description": "A limit of [organization-defined number] consecutive invalid logon attempts by a user during [organization-defined time period] is enforced.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.01.08.b",
                             "text": "<A.03.01.08.ODP[03]: SELECTED PARAMETER VALUES> when the maximum number of unsuccessful attempts is exceeded.",
+                            "description": "[one or more of: lock the account or node for an [organization-defined time period]; lock the account or node until released by an administrator; delay next logon prompt; notify system administrator; take other action] when the maximum number of unsuccessful attempts is exceeded.",
                             "source": "oscal"
                         }
                     ],
@@ -553,6 +564,7 @@
                         {
                             "id": "A.03.01.10.a",
                             "text": "access to the system is prevented by <A.03.01.10.ODP[01]: SELECTED PARAMETER VALUES>.",
+                            "description": "Access to the system is prevented by [one or more of: initiating a device lock after [organization-defined time period] of inactivity; requiring the user to initiate a device lock before leaving the system unattended].",
                             "source": "oscal"
                         },
                         {
@@ -585,6 +597,7 @@
                         {
                             "id": "A.03.01.11",
                             "text": "a user session is terminated automatically after <A.03.01.11.ODP[01]: conditions or trigger events>.",
+                            "description": "A user session is terminated automatically after [organization-defined conditions or trigger events requiring session disconnect].",
                             "source": "oscal"
                         }
                     ],
@@ -755,6 +768,7 @@
                         {
                             "id": "A.03.01.20.b",
                             "text": "the following security requirements to be satisfied on external systems prior to allowing the use of or access to those systems by authorized individuals are established: <A.03.01.20.ODP[01]: security requirements>.",
+                            "description": "The following security requirements to be satisfied on external systems prior to allowing the use of or access to those systems by authorized individuals are established: [organization-defined security requirements].",
                             "source": "oscal"
                         },
                         {
@@ -845,11 +859,13 @@
                         {
                             "id": "A.03.02.01.a.01[02]",
                             "text": "security literacy training is provided to system users <A.03.02.01.ODP[01]: frequency> after initial training.",
+                            "description": "Security literacy training is provided to system users at an organization-defined frequency after initial training.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.02.01.a.02",
                             "text": "security literacy training is provided to system users when required by system changes or following <A.03.02.01.ODP[02]: events>.",
+                            "description": "Security literacy training is provided to system users when required by system changes or following [organization-defined events].",
                             "source": "oscal"
                         },
                         {
@@ -885,11 +901,13 @@
                         {
                             "id": "A.03.02.01.b[01]",
                             "text": "security literacy training content is updated <A.03.02.01.ODP[03]: frequency>.",
+                            "description": "Security literacy training content is updated at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.02.01.b[02]",
                             "text": "security literacy training content is updated following <A.03.02.01.ODP[04]: events>.",
+                            "description": "Security literacy training content is updated following [organization-defined events].",
                             "source": "oscal"
                         }
                     ],
@@ -937,21 +955,25 @@
                         {
                             "id": "A.03.02.02.a.01[03]",
                             "text": "role-based security training is provided to organizational personnel <A.03.02.02.ODP[01]: frequency> after initial training.",
+                            "description": "Role-based security training is provided to organizational personnel at an organization-defined frequency after initial training.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.02.02.a.02",
                             "text": "role-based security training is provided to organizational personnel when required by system changes or following <A.03.02.02.ODP[02]: events>.",
+                            "description": "Role-based security training is provided to organizational personnel when required by system changes or following [organization-defined events].",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.02.02.b[01]",
                             "text": "role-based security training content is updated <A.03.02.02.ODP[03]: frequency>.",
+                            "description": "Role-based security training content is updated at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.02.02.b[02]",
                             "text": "role-based security training content is updated following <A.03.02.02.ODP[04]: events>.",
+                            "description": "Role-based security training content is updated following [organization-defined events].",
                             "source": "oscal"
                         }
                     ],
@@ -986,16 +1008,19 @@
                         {
                             "id": "A.03.03.01.a",
                             "text": "the following event types are specified for logging within the system: <A.03.03.01.ODP[01]: event types>.",
+                            "description": "The following event types are specified for logging within the system: [organization-defined event types].",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.03.01.b[01]",
                             "text": "the event types selected for logging are reviewed <A.03.03.01.ODP[02]: frequency>.",
+                            "description": "The event types selected for logging are reviewed at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.03.01.b[02]",
                             "text": "the event types selected for logging are updated <A.03.03.01.ODP[02]: frequency>.",
+                            "description": "The event types selected for logging are updated at an organization-defined frequency.",
                             "source": "oscal"
                         }
                     ],
@@ -1090,11 +1115,13 @@
                         {
                             "id": "A.03.03.04.a",
                             "text": "organizational personnel or roles are alerted in the event of an audit logging process failure within <A.03.03.04.ODP[01]: time period>.",
+                            "description": "Organizational personnel or roles are alerted in the event of an audit logging process failure within [organization-defined time period].",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.03.04.b",
                             "text": "the following additional actions are taken: <A.03.03.04.ODP[02]: additional actions>.",
+                            "description": "The following additional actions are taken: [organization-defined additional actions].",
                             "source": "oscal"
                         }
                     ],
@@ -1117,6 +1144,7 @@
                         {
                             "id": "A.03.03.05.a",
                             "text": "system audit records are reviewed and analyzed <A.03.03.05.ODP[01]: frequency> for indications and the potential impact of inappropriate or unusual activity.",
+                            "description": "System audit records are reviewed and analyzed at an organization-defined frequency for indications and the potential impact of inappropriate or unusual activity.",
                             "source": "oscal"
                         },
                         {
@@ -1200,6 +1228,7 @@
                         {
                             "id": "A.03.03.07.b[01]",
                             "text": "time stamps are recorded for audit records that meet <A.03.03.07.ODP[01]: granularity of time measurement>.",
+                            "description": "Time stamps are recorded for audit records that meet [organization-defined granularity of time measurement].",
                             "source": "oscal"
                         },
                         {
@@ -1270,11 +1299,13 @@
                         {
                             "id": "A.03.04.01.b[01]",
                             "text": "the baseline configuration of the system is reviewed <A.03.04.01.ODP[01]: frequency>.",
+                            "description": "The baseline configuration of the system is reviewed at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.04.01.b[02]",
                             "text": "the baseline configuration of the system is updated <A.03.04.01.ODP[01]: frequency>.",
+                            "description": "The baseline configuration of the system is updated at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
@@ -1307,11 +1338,13 @@
                         {
                             "id": "A.03.04.02.a[01]",
                             "text": "the following configuration settings for the system that reflect the most restrictive mode consistent with operational requirements are established and documented: <A.03.04.02.ODP[01]: configuration settings>.",
+                            "description": "The following configuration settings for the system that reflect the most restrictive mode consistent with operational requirements are established and documented: [organization-defined configuration settings].",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.04.02.a[02]",
                             "text": "the following configuration settings for the system are implemented: <A.03.04.02.ODP[01]: configuration settings>.",
+                            "description": "The following configuration settings for the system are implemented: [organization-defined configuration settings].",
                             "source": "oscal"
                         },
                         {
@@ -1482,31 +1515,37 @@
                         {
                             "id": "A.03.04.06.b[01]",
                             "text": "the use of the following functions is prohibited or restricted: <A.03.04.06.ODP[01]: functions>.",
+                            "description": "The use of the following functions is prohibited or restricted: [organization-defined functions, ports, protocols, connections, and services].",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.04.06.b[02]",
                             "text": "the use of the following ports is prohibited or restricted: <A.03.04.06.ODP[02]: ports>.",
+                            "description": "The use of the following ports is prohibited or restricted: [organization-defined functions, ports, protocols, connections, and services].",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.04.06.b[03]",
                             "text": "the use of the following protocols is prohibited or restricted: <A.03.04.06.ODP[03]: protocols>.",
+                            "description": "The use of the following protocols is prohibited or restricted: [organization-defined functions, ports, protocols, connections, and services].",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.04.06.b[04]",
                             "text": "the use of the following connections is prohibited or restricted: <A.03.04.06.ODP[04]: connections>.",
+                            "description": "The use of the following connections is prohibited or restricted: [organization-defined functions, ports, protocols, connections, and services].",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.04.06.b[05]",
                             "text": "the use of the following services is prohibited or restricted: <A.03.04.06.ODP[05]: services>.",
+                            "description": "The use of the following services is prohibited or restricted: [organization-defined functions, ports, protocols, connections, and services].",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.04.06.c",
                             "text": "the system is reviewed <A.03.04.06.ODP[06]: frequency> to identify unnecessary or nonsecure functions, ports, protocols, connections, and services.",
+                            "description": "The system is reviewed at an organization-defined frequency to identify unnecessary or nonsecure functions, ports, protocols, connections, and services.",
                             "source": "oscal"
                         },
                         {
@@ -1544,6 +1583,7 @@
                         {
                             "id": "A.03.04.08.c",
                             "text": "the list of authorized software programs is reviewed and updated <A.03.04.08.ODP[01]: frequency>.",
+                            "description": "The list of authorized software programs is reviewed and updated at an organization-defined frequency.",
                             "source": "oscal"
                         }
                     ],
@@ -1571,11 +1611,13 @@
                         {
                             "id": "A.03.04.10.b[01]",
                             "text": "the system component inventory is reviewed <A.03.04.10.ODP[01]: frequency>.",
+                            "description": "The system component inventory is reviewed at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.04.10.b[02]",
                             "text": "the system component inventory is updated <A.03.04.10.ODP[01]: frequency>.",
+                            "description": "The system component inventory is updated at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
@@ -1654,11 +1696,13 @@
                         {
                             "id": "A.03.04.12.a",
                             "text": "systems or system components with the following configurations are issued to individuals traveling to high-risk locations: <A.03.04.12.ODP[01]: configurations>.",
+                            "description": "Systems or system components with the following configurations are issued to individuals traveling to high-risk locations: [organization-defined system configurations].",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.04.12.b",
                             "text": "the following security requirements are applied to the system or system components when the individuals return from travel: <A.03.04.12.ODP[02]: security requirements>.",
+                            "description": "The following security requirements are applied to the system or system components when the individuals return from travel: [organization-defined security requirements].",
                             "source": "oscal"
                         }
                     ],
@@ -1703,6 +1747,7 @@
                         {
                             "id": "A.03.05.01.b",
                             "text": "users are reauthenticated when <A.03.05.01.ODP[01]: circumstances or situations>.",
+                            "description": "Users are reauthenticated when [organization-defined circumstances or situations requiring re-authentication].",
                             "source": "oscal"
                         }
                     ],
@@ -1725,11 +1770,13 @@
                         {
                             "id": "A.03.05.02[01]",
                             "text": "<A.03.05.02.ODP[01]: devices or types of devices> are uniquely identified before establishing a system connection.",
+                            "description": "[organization-defined devices or types of devices] are uniquely identified before establishing a system connection.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.05.02[02]",
                             "text": "<A.03.05.02.ODP[01]: devices or types of devices> are authenticated before establishing a system connection.",
+                            "description": "[organization-defined devices or types of devices] are authenticated before establishing a system connection.",
                             "source": "oscal"
                         }
                     ],
@@ -1814,11 +1861,13 @@
                         {
                             "id": "A.03.05.05.c",
                             "text": "the reuse of identifiers for <A.03.05.05.ODP[01]: time period> is prevented.",
+                            "description": "The reuse of identifiers for [organization-defined time period] is prevented.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.05.05.d",
                             "text": "individual identifiers are managed by uniquely identifying each individual as <A.03.05.05.ODP[02]: characteristic>.",
+                            "description": "Individual identifiers are managed by uniquely identifying each individual as [organization-defined characteristic identifying individual status].",
                             "source": "oscal"
                         }
                     ],
@@ -1851,6 +1900,7 @@
                         {
                             "id": "A.03.05.07.a[02]",
                             "text": "a list of commonly used, expected, or compromised passwords is updated <A.03.05.07.ODP[01]: frequency>.",
+                            "description": "A list of commonly used, expected, or compromised passwords is updated at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
@@ -1881,6 +1931,7 @@
                         {
                             "id": "A.03.05.07.f",
                             "text": "the following composition and complexity rules for passwords are enforced: <A.03.05.07.ODP[02]: rules>.",
+                            "description": "The following composition and complexity rules for passwords are enforced: [organization-defined composition and complexity rules].",
                             "source": "oscal"
                         }
                     ],
@@ -1969,6 +2020,7 @@
                         {
                             "id": "A.03.05.12.e",
                             "text": "authenticators are changed or refreshed <A.03.05.12.ODP[01]: frequency> or when the following events occur: <A.03.05.12.ODP[02]: events>.",
+                            "description": "Authenticators are changed or refreshed at an organization-defined frequency or when the following events occur: [organization-defined events].",
                             "source": "oscal"
                         },
                         {
@@ -2064,11 +2116,13 @@
                         {
                             "id": "A.03.06.02.b",
                             "text": "suspected incidents are reported to the organizational incident response capability within <A.03.06.02.ODP[01]: time period>.",
+                            "description": "Suspected incidents are reported to the organizational incident response capability within [organization-defined time period].",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.06.02.c",
                             "text": "incident information is reported to <A.03.06.02.ODP[02]: authorities>.",
+                            "description": "Incident information is reported to [organization-defined authorities].",
                             "source": "oscal"
                         },
                         {
@@ -2096,6 +2150,7 @@
                         {
                             "id": "A.03.06.03",
                             "text": "the effectiveness of the incident response capability is tested <A.03.06.03.ODP[01]: frequency>.",
+                            "description": "The effectiveness of the incident response capability is tested at an organization-defined frequency.",
                             "source": "oscal"
                         }
                     ],
@@ -2133,6 +2188,7 @@
                         {
                             "id": "A.03.06.04.a.01",
                             "text": "incident response training for system users consistent with assigned roles and responsibilities is provided within <A.03.06.04.ODP[01]: time period> of assuming an incident response role or responsibility or acquiring system access.",
+                            "description": "Incident response training for system users consistent with assigned roles and responsibilities is provided within [organization-defined time period] of assuming an incident response role or responsibility or acquiring system access.",
                             "source": "oscal"
                         },
                         {
@@ -2143,26 +2199,31 @@
                         {
                             "id": "A.03.06.04.a.03",
                             "text": "incident response training for system users consistent with assigned roles and responsibilities is provided <A.03.06.04.ODP[02]: frequency> thereafter.",
+                            "description": "Incident response training for system users consistent with assigned roles and responsibilities is provided at an organization-defined frequency thereafter.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.06.04.b[01]",
                             "text": "incident response training content is reviewed <A.03.06.04.ODP[03]: frequency>.",
+                            "description": "Incident response training content is reviewed at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.06.04.b[02]",
                             "text": "incident response training content is updated <A.03.06.04.ODP[03]: frequency>.",
+                            "description": "Incident response training content is updated at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.06.04.b[03]",
                             "text": "incident response training content is reviewed following <A.03.06.04.ODP[04]: events>.",
+                            "description": "Incident response training content is reviewed following [organization-defined events].",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.06.04.b[04]",
                             "text": "incident response training content is updated following <A.03.06.04.ODP[04]: events>.",
+                            "description": "Incident response training content is updated following [organization-defined events].",
                             "source": "oscal"
                         }
                     ],
@@ -2483,6 +2544,7 @@
                         {
                             "id": "A.03.08.07.a",
                             "text": "the use of the following types of system media is restricted or prohibited: <A.03.08.07.ODP[01]: types of system media>.",
+                            "description": "The use of the following types of system media is restricted or prohibited: [organization-defined types of system media].",
                             "source": "oscal"
                         },
                         {
@@ -2543,6 +2605,7 @@
                         {
                             "id": "A.03.09.01.b",
                             "text": "individuals are rescreened in accordance with the following conditions: <A.03.09.01.ODP[01]: conditions>.",
+                            "description": "Individuals are rescreened in accordance with the following conditions: [organization-defined conditions requiring rescreening].",
                             "source": "oscal"
                         }
                     ],
@@ -2565,6 +2628,7 @@
                         {
                             "id": "A.03.09.02.a.01",
                             "text": "upon termination of individual employment, system access is disabled within <A.03.09.02.ODP[01]: time period>.",
+                            "description": "Upon termination of individual employment, system access is disabled within [organization-defined time period].",
                             "source": "oscal"
                         },
                         {
@@ -2644,6 +2708,7 @@
                         {
                             "id": "A.03.10.01.c",
                             "text": "the facility access list is reviewed <A.03.10.01.ODP[01]: frequency>.",
+                            "description": "The facility access list is reviewed at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
@@ -2686,11 +2751,13 @@
                         {
                             "id": "A.03.10.02.b[01]",
                             "text": "physical access logs are reviewed <A.03.10.02.ODP[01]: frequency>.",
+                            "description": "Physical access logs are reviewed at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.10.02.b[02]",
                             "text": "physical access logs are reviewed upon occurrence of <A.03.10.02.ODP[02]: events or potential indicators of events>.",
+                            "description": "Physical access logs are reviewed upon occurrence of [organization-defined events or potential indications of events].",
                             "source": "oscal"
                         }
                     ],
@@ -2718,6 +2785,7 @@
                         {
                             "id": "A.03.10.06.b",
                             "text": "the following security requirements are employed at alternate work sites: <A.03.10.06.ODP[01]: security requirements>.",
+                            "description": "The following security requirements are employed at alternate work sites: [organization-defined security requirements].",
                             "source": "oscal"
                         }
                     ],
@@ -2814,6 +2882,7 @@
                         {
                             "id": "A.03.11.01.b",
                             "text": "risk assessments are updated <A.03.11.01.ODP[01]: frequency>.",
+                            "description": "Risk assessments are updated at an organization-defined frequency.",
                             "source": "oscal"
                         }
                     ],
@@ -2851,11 +2920,13 @@
                         {
                             "id": "A.03.11.02.a[01]",
                             "text": "the system is monitored for vulnerabilities <A.03.11.02.ODP[01]: frequency>.",
+                            "description": "The system is monitored for vulnerabilities at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.11.02.a[02]",
                             "text": "the system is scanned for vulnerabilities <A.03.11.02.ODP[02]: frequency>.",
+                            "description": "The system is scanned for vulnerabilities at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
@@ -2871,11 +2942,13 @@
                         {
                             "id": "A.03.11.02.b",
                             "text": "system vulnerabilities are remediated within <A.03.11.02.ODP[03]: response times>.",
+                            "description": "System vulnerabilities are remediated within [organization-defined response times].",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.11.02.c[01]",
                             "text": "system vulnerabilities to be scanned are updated <A.03.11.02.ODP[04]: frequency>.",
+                            "description": "System vulnerabilities to be scanned are updated at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
@@ -2936,6 +3009,7 @@
                         {
                             "id": "A.03.12.01",
                             "text": "the security requirements for the system and its environment of operation are assessed <A.03.12.01.ODP[01]: frequency> to determine if the requirements have been satisfied.",
+                            "description": "The security requirements for the system and its environment of operation are assessed at an organization-defined frequency to determine if the requirements have been satisfied.",
                             "source": "oscal"
                         }
                     ],
@@ -3030,11 +3104,13 @@
                         {
                             "id": "A.03.12.05.a[01]",
                             "text": "the exchange of CUI between the system and other systems is approved using <A.03.12.05.ODP[01]: SELECTED PARAMETER VALUES>.",
+                            "description": "The exchange of CUI between the system and other systems is approved using [one or more of: interconnection security agreements; information exchange security agreements; memoranda of understanding or agreement; service-level agreements; user agreements; non-disclosure agreements; other types of agreements].",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.12.05.a[02]",
                             "text": "the exchange of CUI between the system and other systems is managed using <A.03.12.05.ODP[01]: SELECTED PARAMETER VALUES>.",
+                            "description": "The exchange of CUI between the system and other systems is managed using [one or more of: interconnection security agreements; information exchange security agreements; memoranda of understanding or agreement; service-level agreements; user agreements; non-disclosure agreements; other types of agreements].",
                             "source": "oscal"
                         },
                         {
@@ -3055,11 +3131,13 @@
                         {
                             "id": "A.03.12.05.c[01]",
                             "text": "exchange agreements are reviewed <A.03.12.05.ODP[02]: frequency>.",
+                            "description": "Exchange agreements are reviewed at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.12.05.c[02]",
                             "text": "exchange agreements are updated <A.03.12.05.ODP[02]: frequency>.",
+                            "description": "Exchange agreements are updated at an organization-defined frequency.",
                             "source": "oscal"
                         }
                     ],
@@ -3193,6 +3271,7 @@
                         {
                             "id": "A.03.13.09",
                             "text": "the network connection associated with a communications session is terminated at the end of the session or after <A.03.13.09.ODP[01]: time period> of inactivity.",
+                            "description": "The network connection associated with a communications session is terminated at the end of the session or after [organization-defined time period] of inactivity.",
                             "source": "oscal"
                         }
                     ],
@@ -3215,11 +3294,13 @@
                         {
                             "id": "A.03.13.10[01]",
                             "text": "cryptographic keys are established in the system in accordance with the following key management requirements: <A.03.13.10.ODP[01]: requirements>.",
+                            "description": "Cryptographic keys are established in the system in accordance with the following key management requirements: [organization-defined requirements for key generation, distribution, storage, access, and destruction].",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.13.10[02]",
                             "text": "cryptographic keys are managed in the system in accordance with the following key management requirements: <A.03.13.10.ODP[01]: requirements>.",
+                            "description": "Cryptographic keys are managed in the system in accordance with the following key management requirements: [organization-defined requirements for key generation, distribution, storage, access, and destruction].",
                             "source": "oscal"
                         }
                     ],
@@ -3242,6 +3323,7 @@
                         {
                             "id": "A.03.13.11",
                             "text": "the following types of cryptography are implemented to protect the confidentiality of CUI: <A.03.13.11.ODP[01]: types of cryptography>.",
+                            "description": "The following types of cryptography are implemented to protect the confidentiality of CUI: [organization-defined types of cryptography].",
                             "source": "oscal"
                         }
                     ],
@@ -3264,6 +3346,7 @@
                         {
                             "id": "A.03.13.12.a",
                             "text": "the remote activation of collaborative computing devices and applications is prohibited with the following exceptions: <A.03.13.12.ODP[01]: exceptions>.",
+                            "description": "The remote activation of collaborative computing devices and applications is prohibited with the following exceptions: [organization-defined exceptions where remote activation is to be allowed].",
                             "source": "oscal"
                         },
                         {
@@ -3370,11 +3453,13 @@
                         {
                             "id": "A.03.14.01.b[01]",
                             "text": "security-relevant software updates are installed within <A.03.14.01.ODP[01]: time period> of the release of the updates.",
+                            "description": "Security-relevant software updates are installed within [organization-defined time period] of the release of the updates.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.14.01.b[02]",
                             "text": "security-relevant firmware updates are installed within <A.03.14.01.ODP[02]: time period> of the release of the updates.",
+                            "description": "Security-relevant firmware updates are installed within [organization-defined time period] of the release of the updates.",
                             "source": "oscal"
                         }
                     ],
@@ -3412,6 +3497,7 @@
                         {
                             "id": "A.03.14.02.c.01[01]",
                             "text": "malicious code protection mechanisms are configured to perform scans of the system <A.03.14.02.ODP[01]: frequency>.",
+                            "description": "Malicious code protection mechanisms are configured to perform scans of the system at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
@@ -3569,11 +3655,13 @@
                         {
                             "id": "A.03.15.01.b[01]",
                             "text": "policies and procedures are reviewed <A.03.15.01.ODP[01]: frequency>.",
+                            "description": "Policies and procedures are reviewed at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.15.01.b[02]",
                             "text": "policies and procedures are updated <A.03.15.01.ODP[01]: frequency>.",
+                            "description": "Policies and procedures are updated at an organization-defined frequency.",
                             "source": "oscal"
                         }
                     ],
@@ -3636,11 +3724,13 @@
                         {
                             "id": "A.03.15.02.b[01]",
                             "text": "the system security plan is reviewed <A.03.15.02.ODP[01]: frequency>.",
+                            "description": "The system security plan is reviewed at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.15.02.b[02]",
                             "text": "the system security plan is updated <A.03.15.02.ODP[01]: frequency>.",
+                            "description": "The system security plan is updated at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
@@ -3683,11 +3773,13 @@
                         {
                             "id": "A.03.15.03.d[01]",
                             "text": "the rules of behavior are reviewed <A.03.15.03.ODP[01]: frequency>.",
+                            "description": "The rules of behavior are reviewed at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.15.03.d[02]",
                             "text": "the rules of behavior are updated <A.03.15.03.ODP[01]: frequency>.",
+                            "description": "The rules of behavior are updated at an organization-defined frequency.",
                             "source": "oscal"
                         }
                     ],
@@ -3717,6 +3809,7 @@
                         {
                             "id": "A.03.16.01",
                             "text": "<A.03.16.01.ODP[01]: systems security engineering principles> are applied to the development or modification of the system and system components.",
+                            "description": "[organization-defined systems security engineering principles] are applied to the development or modification of the system and system components.",
                             "source": "oscal"
                         }
                     ],
@@ -3760,6 +3853,7 @@
                         {
                             "id": "A.03.16.03.a",
                             "text": "the providers of external system services used for the processing, storage, or transmission of CUI comply with the following security requirements: <A.03.16.03.ODP[01]: security requirements>.",
+                            "description": "The providers of external system services used for the processing, storage, or transmission of CUI comply with the following security requirements: [organization-defined security requirements].",
                             "source": "oscal"
                         },
                         {
@@ -3849,11 +3943,13 @@
                         {
                             "id": "A.03.17.01.b[01]",
                             "text": "the SCRM plan is reviewed <A.03.17.01.ODP[01]: frequency>.",
+                            "description": "The SCRM plan is reviewed at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
                             "id": "A.03.17.01.b[02]",
                             "text": "the SCRM plan is updated <A.03.17.01.ODP[01]: frequency>.",
+                            "description": "The SCRM plan is updated at an organization-defined frequency.",
                             "source": "oscal"
                         },
                         {
@@ -3932,6 +4028,7 @@
                         {
                             "id": "A.03.17.03.b",
                             "text": "the following security requirements are enforced to protect against supply chain risks to the system, system components, or system services and to limit the harm or consequences of supply chain-related events: <A.03.17.03.ODP[01]: security requirements>.",
+                            "description": "The following security requirements are enforced to protect against supply chain risks to the system, system components, or system services and to limit the harm or consequences of supply chain-related events: [organization-defined security requirements].",
                             "source": "oscal"
                         }
                     ],

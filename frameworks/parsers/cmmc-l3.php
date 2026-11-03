@@ -11,6 +11,8 @@
  *   defined") are left out: at Level 3 the DoD assigns those values in Table 1.
  * - Domains: the SP 800-171 r2 family of the same number, with its CMMC code.
  */
+require_once dirname(__DIR__).'/lib/ObjectiveText.php';
+
 return function (): array {
     $r2 = (require __DIR__.'/nist-800-171-r2.php')();
     $by_number = array();
@@ -120,6 +122,7 @@ return function (): array {
         }
 
         $list = array();
+        $placeholders = array();
 
         foreach ($objectives[$row['number']] as $entry) {
             if (strpos($entry['id'], '_ODP[') !== false) {
@@ -132,6 +135,27 @@ return function (): array {
                 'id' => $entry['id'],
                 'text' => Source::normalise($joined)
             );
+            preg_match_all('/<[^>]+>/', end($list)['text'], $found);
+            $placeholders = array_values(array_unique(array_merge($placeholders, $found[0])));
+        }
+
+        // Each 172A placeholder, in order of first use, is the DoD value Table 1 prints
+        // in italics at the same place; a verb-phrase placeholder keeps 172A's wording.
+        if (count($placeholders) > 0 && count($placeholders) !== count($row['dod_parameters'])) {
+            throw new RuntimeException('Placeholders and DoD values do not pair up in '.$row['id']);
+        }
+
+        $values = array();
+
+        foreach ($placeholders as $i => $placeholder) {
+            $label = trim(preg_replace('/^<[^\s:]+:?\s*|>$/', '', $placeholder));
+            $values[$placeholder] = preg_match('/^\w+ed\b/', $label) === 1 ? $label : rtrim($row['dod_parameters'][$i], ' .');
+        }
+
+        foreach ($list as $o => $objective) {
+            if (strpos($objective['text'], '<') !== false) {
+                $list[$o]['description'] = ObjectiveText::sentence(preg_replace('/,(?=[.;]|$)/', '', strtr($objective['text'], $values)));
+            }
         }
 
         if (!isset($families[$row['code']])) {

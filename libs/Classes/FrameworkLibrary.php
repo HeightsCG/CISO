@@ -300,7 +300,7 @@ class FrameworkLibrary {
                     $objective_flags = array();
 
                     foreach ($objective as $field => $value) {
-                        if (!in_array($field, array('id', 'text', 'source'), true) && $value !== null && $value !== false && $value !== '') {
+                        if (!in_array($field, array('id', 'text', 'description', 'source'), true) && $value !== null && $value !== false && $value !== '') {
                             $objective_flags[$field] = $value;
                         }
                     }
@@ -310,7 +310,7 @@ class FrameworkLibrary {
                         'parent' => $control['id'],
                         'kind' => 'objective',
                         'title' => $objective['text'],
-                        'description' => $objective['text'],
+                        'description' => trim($objective['description'] ?? '') !== '' ? trim($objective['description']) : $objective['text'],
                         'guidance' => '',
                         'family' => $family_name,
                         'weight' => null,

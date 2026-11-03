@@ -16,6 +16,8 @@
  *
  * Returns a function so it can be required by both parsers in one build.
  */
+require_once dirname(__DIR__).'/lib/ObjectiveText.php';
+
 return function (string $letter, string $regulation_file, string $guidance_file, string $guidance_start, string $guidance_end): array {
     $prefix = 'IS.'.$letter.'.OR.';
     $quoted = preg_quote($prefix, '/');
@@ -185,15 +187,37 @@ return function (string $letter, string $regulation_file, string $guidance_file,
         $requirements[$number] = $requirement;
     }
 
-    // Full text (labelled lines) and one objective per point, depth first.
-    $render = function (array $p, string $parent_id, string $depth) use (&$render): array {
+    // A point with its sub-points run together as one list item ("... in particular: a; b; c").
+    $full = function (array $p) use (&$full): string {
+        $items = array();
+
+        foreach ($p['points'] as $sub) {
+            $items[] = ObjectiveText::item($full($sub));
+        }
+
+        $text = implode(' ', $p['lead']);
+
+        if (count($items) > 0) {
+            $text = trim($text.' '.implode('; ', $items));
+        }
+
+        return trim($text.' '.implode(' ', $p['tail']));
+    };
+
+    // Full text (labelled lines) and one objective per point, depth first. $lead is the
+    // parent's lead-in: a point that finishes it ("the organisation shall:" / "define a
+    // corrective action plan;") gets the joined sentence as its description, and a point
+    // that only introduces its sub-points gets them listed in its description.
+    $render = function (array $p, string $parent_id, string $depth, string $lead) use (&$render, $full): array {
         $id = $parent_id.$p['label'];
+        $own_lead = implode(' ', $p['lead']);
         $own = trim(implode(' ', array_merge($p['lead'], $p['tail'])));
+        $fragment = ObjectiveText::introduces_list($lead);
         $lines = array();
         $objectives = array();
 
         if (count($p['lead']) > 0) {
-            $lines[] = $depth.$p['label'].' '.implode(' ', $p['lead']);
+            $lines[] = $depth.$p['label'].' '.$own_lead;
         } else {
             $lines[] = $depth.$p['label'];
         }
@@ -202,13 +226,30 @@ return function (string $letter, string $regulation_file, string $guidance_file,
             throw new RuntimeException('Point '.$id.' has no text');
         }
 
-        $objectives[] = array(
+        $objective = array(
             'id' => $id,
             'text' => $own
         );
 
+        if ($fragment) {
+            $objective['description'] = ObjectiveText::complete($lead, $full($p));
+        } elseif (count($p['points']) > 0 && ObjectiveText::introduces_list($own_lead)) {
+            $items = array();
+
+            foreach ($p['points'] as $sub) {
+                $items[] = ObjectiveText::item($full($sub));
+            }
+
+            $objective['description'] = trim(ObjectiveText::sentence($own_lead.' '.implode('; ', $items)).' '.implode(' ', $p['tail']));
+        } elseif (ObjectiveText::trailing_connector($own)) {
+            $objective['description'] = ObjectiveText::sentence($own);
+        }
+
+        $objectives[] = $objective;
+        $child_lead = $fragment ? ObjectiveText::join($lead, $own_lead) : $own_lead;
+
         foreach ($p['points'] as $sub) {
-            $child = $render($sub, $id, $depth.'  ');
+            $child = $render($sub, $id, $depth.'  ', $child_lead);
             $lines = array_merge($lines, $child['lines']);
             $objectives = array_merge($objectives, $child['objectives']);
         }
@@ -393,7 +434,7 @@ return function (string $letter, string $regulation_file, string $guidance_file,
             $objectives = array();
 
             foreach ($r['points'] as $p) {
-                $rendered = $render($p, $id, '');
+                $rendered = $render($p, $id, '', '');
                 $text_lines = array_merge($text_lines, $rendered['lines']);
                 $objectives = array_merge($objectives, $rendered['objectives']);
             }

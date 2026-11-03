@@ -10,6 +10,8 @@
  *   information on fewer than 5,000 consumers (whole elements only; paragraphs (b)(1)
  *   and (d)(2) are listed in the applicability rule).
  */
+require_once dirname(__DIR__).'/lib/ObjectiveText.php';
+
 return function (): array {
     $xml = simplexml_load_file(Source::path('ftc/16-cfr-314.xml'));
     $squash = function (string $text): string {
@@ -85,9 +87,19 @@ return function (): array {
     }
 
     // Full element text: lead paragraph followed by each numbered paragraph with its marker.
+    // A numbered paragraph that continues its element's lead-in ("... including by:") gets
+    // the lead-in as its description.
     foreach ($controls as $letter => $control) {
+        $lead = $control['text'];
+
         foreach ($control['objectives'] as $n => $objective) {
             $control['text'] = trim($control['text'].' ('.$n.') '.$objective['text']);
+
+            if (ObjectiveText::introduces_list($lead)) {
+                $control['objectives'][$n]['description'] = ObjectiveText::complete($lead, $objective['text']);
+            } elseif (ObjectiveText::trailing_connector($objective['text'])) {
+                $control['objectives'][$n]['description'] = ObjectiveText::sentence($objective['text']);
+            }
         }
 
         $control['objectives'] = array_values($control['objectives']);

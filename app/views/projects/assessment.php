@@ -84,7 +84,7 @@
                                     <details class="workbench__guidance" id="item_guidance_wrap">
                                         <summary>Assessment guidance</summary>
                                         <p class="assess__text workbench__requirement" id="item_description"></p>
-                                        <p class="assess__text" id="item_guidance"></p>
+                                        <ul class="workbench__guidance-list" id="item_guidance"></ul>
                                     </details>
                                 </div>
 
@@ -1012,7 +1012,9 @@ $(document).ready(function () {
             }
 
             html += '<li class="objectives__item" data-id="' + list[i].id + '">'
-                + '<div class="objectives__text"><span class="objectives__id">' + esc(list[i].control_identifier) + '</span> ' + esc(list[i].control_title) + '</div>'
+                + '<div class="objectives__text"><span class="objectives__id">' + esc(list[i].control_identifier) + '</span> ' + esc(list[i].control_title)
+                + (list[i].description && list[i].description !== list[i].control_title ? '<span class="objectives__desc">' + esc(list[i].description) + '</span>' : '')
+                + '</div>'
                 + '<div class="segmented segmented--sm objectives__choice" role="group" aria-label="Result for ' + esc(list[i].control_identifier) + '">' + buttons + '</div>'
                 + '</li>';
         }
@@ -1092,7 +1094,15 @@ $(document).ready(function () {
         $('#item_title').text(current_item.control_title);
         $('#item_family').text(current_item.family === '' ? 'Ungrouped' : current_item.family);
         $('#item_description').text(current_item.description === current_item.control_title ? '' : current_item.description).toggle(current_item.description !== '' && current_item.description !== current_item.control_title);
-        $('#item_guidance').text(guidance);
+        $('#item_guidance').html(guidance === '' ? '' : guidance.split('\n').filter(function (line) {
+            return line.trim() !== '';
+        }).map(function (line) {
+            var match = line.match(/^([^:]{2,60}):\s*(.+)$/);
+
+            return match
+                ? '<li><strong>' + esc(match[1]) + '</strong> ' + esc(match[2]) + '</li>'
+                : '<li>' + esc(line) + '</li>';
+        }).join(''));
         $('#item_guidance_wrap').toggle(guidance !== '' || (current_item.description !== '' && current_item.description !== current_item.control_title)).prop('open', false);
 
         $('#applicability_row').toggle(flags.applicability === true);

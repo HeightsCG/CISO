@@ -384,71 +384,85 @@
                         {
                             "id": "IS.D.OR.200(a)",
                             "text": "In order to achieve the objectives set out in Article 1, the organisation shall set up, implement and maintain an information security management system (ISMS) which ensures that the organisation:",
+                            "description": "In order to achieve the objectives set out in Article 1, the organisation shall set up, implement and maintain an information security management system (ISMS) which ensures that the organisation: establishes a policy on information security setting out the overall principles of the organisation with regard to the potential impact of information security risks on aviation safety; identifies and reviews information security risks in accordance with point IS.D.OR.205; defines and implements information security risk treatment measures in accordance with point IS.D.OR.210; implements an information security internal reporting scheme in accordance with point IS.D.OR.215; defines and implements, in accordance with point IS.D.OR.220, the measures required to detect information security events, identifies those events which are considered incidents with a potential impact on aviation safety, and responds to, and recovers from, those information security incidents; implements the measures that have been notified by the competent authority as an immediate reaction to an information security incident or vulnerability with an impact on aviation safety; takes appropriate action, in accordance with point IS.D.OR.225, to address findings notified by the competent authority; implements an external reporting scheme in accordance with point IS.D.OR.230 in order to enable the competent authority to take appropriate actions; complies with the requirements contained in point IS.D.OR.235 when contracting any part of the activities referred to in point IS.D.OR.200 to other organisations; complies with the personnel requirements laid down in point IS.D.OR.240; complies with the record-keeping requirements laid down in point IS.D.OR.245; monitors compliance of the organisation with the requirements of this Regulation and provides feedback on findings to the accountable manager or, in the case of design organisations, to the head of the design organisation, in order to ensure effective implementation of corrective actions; protects, without prejudice to applicable incident reporting requirements, the confidentiality of any information that the organisation may have received from other organisations, according to its level of sensitivity.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.200(a)(1)",
                             "text": "establishes a policy on information security setting out the overall principles of the organisation with regard to the potential impact of information security risks on aviation safety;",
+                            "description": "In order to achieve the objectives set out in Article 1, the organisation shall set up, implement and maintain an information security management system (ISMS) which ensures that the organisation establishes a policy on information security setting out the overall principles of the organisation with regard to the potential impact of information security risks on aviation safety.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.200(a)(2)",
                             "text": "identifies and reviews information security risks in accordance with point IS.D.OR.205;",
+                            "description": "In order to achieve the objectives set out in Article 1, the organisation shall set up, implement and maintain an information security management system (ISMS) which ensures that the organisation identifies and reviews information security risks in accordance with point IS.D.OR.205.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.200(a)(3)",
                             "text": "defines and implements information security risk treatment measures in accordance with point IS.D.OR.210;",
+                            "description": "In order to achieve the objectives set out in Article 1, the organisation shall set up, implement and maintain an information security management system (ISMS) which ensures that the organisation defines and implements information security risk treatment measures in accordance with point IS.D.OR.210.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.200(a)(4)",
                             "text": "implements an information security internal reporting scheme in accordance with point IS.D.OR.215;",
+                            "description": "In order to achieve the objectives set out in Article 1, the organisation shall set up, implement and maintain an information security management system (ISMS) which ensures that the organisation implements an information security internal reporting scheme in accordance with point IS.D.OR.215.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.200(a)(5)",
                             "text": "defines and implements, in accordance with point IS.D.OR.220, the measures required to detect information security events, identifies those events which are considered incidents with a potential impact on aviation safety, and responds to, and recovers from, those information security incidents;",
+                            "description": "In order to achieve the objectives set out in Article 1, the organisation shall set up, implement and maintain an information security management system (ISMS) which ensures that the organisation defines and implements, in accordance with point IS.D.OR.220, the measures required to detect information security events, identifies those events which are considered incidents with a potential impact on aviation safety, and responds to, and recovers from, those information security incidents.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.200(a)(6)",
                             "text": "implements the measures that have been notified by the competent authority as an immediate reaction to an information security incident or vulnerability with an impact on aviation safety;",
+                            "description": "In order to achieve the objectives set out in Article 1, the organisation shall set up, implement and maintain an information security management system (ISMS) which ensures that the organisation implements the measures that have been notified by the competent authority as an immediate reaction to an information security incident or vulnerability with an impact on aviation safety.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.200(a)(7)",
                             "text": "takes appropriate action, in accordance with point IS.D.OR.225, to address findings notified by the competent authority;",
+                            "description": "In order to achieve the objectives set out in Article 1, the organisation shall set up, implement and maintain an information security management system (ISMS) which ensures that the organisation takes appropriate action, in accordance with point IS.D.OR.225, to address findings notified by the competent authority.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.200(a)(8)",
                             "text": "implements an external reporting scheme in accordance with point IS.D.OR.230 in order to enable the competent authority to take appropriate actions;",
+                            "description": "In order to achieve the objectives set out in Article 1, the organisation shall set up, implement and maintain an information security management system (ISMS) which ensures that the organisation implements an external reporting scheme in accordance with point IS.D.OR.230 in order to enable the competent authority to take appropriate actions.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.200(a)(9)",
                             "text": "complies with the requirements contained in point IS.D.OR.235 when contracting any part of the activities referred to in point IS.D.OR.200 to other organisations;",
+                            "description": "In order to achieve the objectives set out in Article 1, the organisation shall set up, implement and maintain an information security management system (ISMS) which ensures that the organisation complies with the requirements contained in point IS.D.OR.235 when contracting any part of the activities referred to in point IS.D.OR.200 to other organisations.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.200(a)(10)",
                             "text": "complies with the personnel requirements laid down in point IS.D.OR.240;",
+                            "description": "In order to achieve the objectives set out in Article 1, the organisation shall set up, implement and maintain an information security management system (ISMS) which ensures that the organisation complies with the personnel requirements laid down in point IS.D.OR.240.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.200(a)(11)",
                             "text": "complies with the record-keeping requirements laid down in point IS.D.OR.245;",
+                            "description": "In order to achieve the objectives set out in Article 1, the organisation shall set up, implement and maintain an information security management system (ISMS) which ensures that the organisation complies with the record-keeping requirements laid down in point IS.D.OR.245.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.200(a)(12)",
                             "text": "monitors compliance of the organisation with the requirements of this Regulation and provides feedback on findings to the accountable manager or, in the case of design organisations, to the head of the design organisation, in order to ensure effective implementation of corrective actions;",
+                            "description": "In order to achieve the objectives set out in Article 1, the organisation shall set up, implement and maintain an information security management system (ISMS) which ensures that the organisation monitors compliance of the organisation with the requirements of this Regulation and provides feedback on findings to the accountable manager or, in the case of design organisations, to the head of the design organisation, in order to ensure effective implementation of corrective actions.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.200(a)(13)",
                             "text": "protects, without prejudice to applicable incident reporting requirements, the confidentiality of any information that the organisation may have received from other organisations, according to its level of sensitivity.",
+                            "description": "In order to achieve the objectives set out in Article 1, the organisation shall set up, implement and maintain an information security management system (ISMS) which ensures that the organisation protects, without prejudice to applicable incident reporting requirements, the confidentiality of any information that the organisation may have received from other organisations, according to its level of sensitivity.",
                             "source": "reg1645"
                         },
                         {
@@ -488,71 +502,85 @@
                         {
                             "id": "IS.D.OR.250(a)",
                             "text": "The organisation shall make available to the competent authority an information security management manual (ISMM) and, where applicable, any referenced associated manuals and procedures, containing:",
+                            "description": "The organisation shall make available to the competent authority an information security management manual (ISMM) and, where applicable, any referenced associated manuals and procedures, containing: a statement signed by the accountable manager or, in the case of design organisations, by the head of the design organisation, confirming that the organisation will at all times work in accordance with this Annex and with the ISMM. If the accountable manager or, in the case of design organisations, the head of the design organisation, is not the chief executive officer (CEO) of the organisation, then such CEO shall countersign the statement; the title(s), name(s), duties, accountabilities, responsibilities and authorities of the person or persons referred to in point IS.D.OR.240(b) and (c); the title, name, duties, accountabilities, responsibilities and authorities of the common responsible person referred to in point IS.D.OR.240(d), if applicable; the information security policy of the organisation as referred to in point IS.D.OR.200(a)(1); a general description of the number and categories of staff and of the system in place to plan the availability of staff as required by point IS.D.OR.240; the title(s), name(s), duties, accountabilities, responsibilities and authorities of the key persons responsible for the implementation of point IS.D.OR.200, including the person or persons responsible for the compliance monitoring function referred to in point IS.D.OR.200(a)(12); an organisation chart showing the associated chains of accountability and responsibility for the persons referred to in points (2) and (6); the description of the internal reporting scheme referred to in point IS.D.OR.215; the procedures that specify how the organisation ensures compliance with this Part, and in particular: the documentation point IS.D.OR.200(c); the procedures that define how the organisation controls any contracted activities referred to in point IS.D.OR.200(a)(9); the ISMM amendment procedure defined in point (c); the details of currently approved alternative means of compliance.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.250(a)(1)",
                             "text": "a statement signed by the accountable manager or, in the case of design organisations, by the head of the design organisation, confirming that the organisation will at all times work in accordance with this Annex and with the ISMM. If the accountable manager or, in the case of design organisations, the head of the design organisation, is not the chief executive officer (CEO) of the organisation, then such CEO shall countersign the statement;",
+                            "description": "The organisation shall make available to the competent authority an information security management manual (ISMM) and, where applicable, any referenced associated manuals and procedures, containing a statement signed by the accountable manager or, in the case of design organisations, by the head of the design organisation, confirming that the organisation will at all times work in accordance with this Annex and with the ISMM. If the accountable manager or, in the case of design organisations, the head of the design organisation, is not the chief executive officer (CEO) of the organisation, then such CEO shall countersign the statement.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.250(a)(2)",
                             "text": "the title(s), name(s), duties, accountabilities, responsibilities and authorities of the person or persons referred to in point IS.D.OR.240(b) and (c);",
+                            "description": "The organisation shall make available to the competent authority an information security management manual (ISMM) and, where applicable, any referenced associated manuals and procedures, containing the title(s), name(s), duties, accountabilities, responsibilities and authorities of the person or persons referred to in point IS.D.OR.240(b) and (c).",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.250(a)(3)",
                             "text": "the title, name, duties, accountabilities, responsibilities and authorities of the common responsible person referred to in point IS.D.OR.240(d), if applicable;",
+                            "description": "The organisation shall make available to the competent authority an information security management manual (ISMM) and, where applicable, any referenced associated manuals and procedures, containing the title, name, duties, accountabilities, responsibilities and authorities of the common responsible person referred to in point IS.D.OR.240(d), if applicable.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.250(a)(4)",
                             "text": "the information security policy of the organisation as referred to in point IS.D.OR.200(a)(1);",
+                            "description": "The organisation shall make available to the competent authority an information security management manual (ISMM) and, where applicable, any referenced associated manuals and procedures, containing the information security policy of the organisation as referred to in point IS.D.OR.200(a)(1).",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.250(a)(5)",
                             "text": "a general description of the number and categories of staff and of the system in place to plan the availability of staff as required by point IS.D.OR.240;",
+                            "description": "The organisation shall make available to the competent authority an information security management manual (ISMM) and, where applicable, any referenced associated manuals and procedures, containing a general description of the number and categories of staff and of the system in place to plan the availability of staff as required by point IS.D.OR.240.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.250(a)(6)",
                             "text": "the title(s), name(s), duties, accountabilities, responsibilities and authorities of the key persons responsible for the implementation of point IS.D.OR.200, including the person or persons responsible for the compliance monitoring function referred to in point IS.D.OR.200(a)(12);",
+                            "description": "The organisation shall make available to the competent authority an information security management manual (ISMM) and, where applicable, any referenced associated manuals and procedures, containing the title(s), name(s), duties, accountabilities, responsibilities and authorities of the key persons responsible for the implementation of point IS.D.OR.200, including the person or persons responsible for the compliance monitoring function referred to in point IS.D.OR.200(a)(12).",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.250(a)(7)",
                             "text": "an organisation chart showing the associated chains of accountability and responsibility for the persons referred to in points (2) and (6);",
+                            "description": "The organisation shall make available to the competent authority an information security management manual (ISMM) and, where applicable, any referenced associated manuals and procedures, containing an organisation chart showing the associated chains of accountability and responsibility for the persons referred to in points (2) and (6).",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.250(a)(8)",
                             "text": "the description of the internal reporting scheme referred to in point IS.D.OR.215;",
+                            "description": "The organisation shall make available to the competent authority an information security management manual (ISMM) and, where applicable, any referenced associated manuals and procedures, containing the description of the internal reporting scheme referred to in point IS.D.OR.215.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.250(a)(9)",
                             "text": "the procedures that specify how the organisation ensures compliance with this Part, and in particular:",
+                            "description": "The organisation shall make available to the competent authority an information security management manual (ISMM) and, where applicable, any referenced associated manuals and procedures, containing the procedures that specify how the organisation ensures compliance with this Part, and in particular: the documentation point IS.D.OR.200(c); the procedures that define how the organisation controls any contracted activities referred to in point IS.D.OR.200(a)(9); the ISMM amendment procedure defined in point (c).",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.250(a)(9)(i)",
                             "text": "the documentation point IS.D.OR.200(c);",
+                            "description": "The organisation shall make available to the competent authority an information security management manual (ISMM) and, where applicable, any referenced associated manuals and procedures, containing the procedures that specify how the organisation ensures compliance with this Part, and in particular the documentation point IS.D.OR.200(c).",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.250(a)(9)(ii)",
                             "text": "the procedures that define how the organisation controls any contracted activities referred to in point IS.D.OR.200(a)(9);",
+                            "description": "The organisation shall make available to the competent authority an information security management manual (ISMM) and, where applicable, any referenced associated manuals and procedures, containing the procedures that specify how the organisation ensures compliance with this Part, and in particular the procedures that define how the organisation controls any contracted activities referred to in point IS.D.OR.200(a)(9).",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.250(a)(9)(iii)",
                             "text": "the ISMM amendment procedure defined in point (c);",
+                            "description": "The organisation shall make available to the competent authority an information security management manual (ISMM) and, where applicable, any referenced associated manuals and procedures, containing the procedures that specify how the organisation ensures compliance with this Part, and in particular the ISMM amendment procedure defined in point (c).",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.250(a)(10)",
                             "text": "the details of currently approved alternative means of compliance.",
+                            "description": "The organisation shall make available to the competent authority an information security management manual (ISMM) and, where applicable, any referenced associated manuals and procedures, containing the details of currently approved alternative means of compliance.",
                             "source": "reg1645"
                         },
                         {
@@ -592,26 +620,31 @@
                         {
                             "id": "IS.D.OR.255(b)",
                             "text": "With regard to changes to the ISMS not covered by the procedure referred to in point (a), the organisation shall apply for and obtain an approval issued by the competent authority, except for declaring organisations, for which an approval is not required. With regard to these changes:",
+                            "description": "With regard to changes to the ISMS not covered by the procedure referred to in point (a), the organisation shall apply for and obtain an approval issued by the competent authority, except for declaring organisations, for which an approval is not required. With regard to these changes: the application shall be submitted before any such change takes place, in order to enable the competent authority to determine continued compliance with this Regulation and to amend, if necessary, the organisation certificate and related terms of approval attached to it; the organisation shall make available to the competent authority any information it requests to evaluate the change; the change shall be implemented only upon receipt of a formal approval by the competent authority, except for declaring organisations, which may implement the change immediately; the organisation shall operate under the conditions prescribed by the competent authority during the implementation of such changes.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.255(b)(1)",
                             "text": "the application shall be submitted before any such change takes place, in order to enable the competent authority to determine continued compliance with this Regulation and to amend, if necessary, the organisation certificate and related terms of approval attached to it;",
+                            "description": "With regard to changes to the ISMS not covered by the procedure referred to in point (a), the organisation shall apply for and obtain an approval issued by the competent authority, except for declaring organisations, for which an approval is not required. With regard to these changes: the application shall be submitted before any such change takes place, in order to enable the competent authority to determine continued compliance with this Regulation and to amend, if necessary, the organisation certificate and related terms of approval attached to it.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.255(b)(2)",
                             "text": "the organisation shall make available to the competent authority any information it requests to evaluate the change;",
+                            "description": "With regard to changes to the ISMS not covered by the procedure referred to in point (a), the organisation shall apply for and obtain an approval issued by the competent authority, except for declaring organisations, for which an approval is not required. With regard to these changes: the organisation shall make available to the competent authority any information it requests to evaluate the change.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.255(b)(3)",
                             "text": "the change shall be implemented only upon receipt of a formal approval by the competent authority, except for declaring organisations, which may implement the change immediately;",
+                            "description": "With regard to changes to the ISMS not covered by the procedure referred to in point (a), the organisation shall apply for and obtain an approval issued by the competent authority, except for declaring organisations, for which an approval is not required. With regard to these changes: the change shall be implemented only upon receipt of a formal approval by the competent authority, except for declaring organisations, which may implement the change immediately.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.255(b)(4)",
                             "text": "the organisation shall operate under the conditions prescribed by the competent authority during the implementation of such changes.",
+                            "description": "With regard to changes to the ISMS not covered by the procedure referred to in point (a), the organisation shall apply for and obtain an approval issued by the competent authority, except for declaring organisations, for which an approval is not required. With regard to these changes: the organisation shall operate under the conditions prescribed by the competent authority during the implementation of such changes.",
                             "source": "reg1645"
                         }
                     ],
@@ -662,16 +695,19 @@
                         {
                             "id": "IS.D.OR.205(a)",
                             "text": "The organisation shall identify all of its elements, which could be exposed to information security risks. That shall include:",
+                            "description": "The organisation shall identify all of its elements, which could be exposed to information security risks. That shall include: the organisation's activities, facilities and resources, as well as the services the organisation operates, provides, receives or maintains; the equipment, systems, data and information that contribute to the functioning of the elements listed in point (1).",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.205(a)(1)",
                             "text": "the organisation's activities, facilities and resources, as well as the services the organisation operates, provides, receives or maintains;",
+                            "description": "The organisation shall identify all of its elements, which could be exposed to information security risks. That shall include the organisation's activities, facilities and resources, as well as the services the organisation operates, provides, receives or maintains.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.205(a)(2)",
                             "text": "the equipment, systems, data and information that contribute to the functioning of the elements listed in point (1).",
+                            "description": "The organisation shall identify all of its elements, which could be exposed to information security risks. That shall include the equipment, systems, data and information that contribute to the functioning of the elements listed in point (1).",
                             "source": "reg1645"
                         },
                         {
@@ -682,41 +718,49 @@
                         {
                             "id": "IS.D.OR.205(c)",
                             "text": "With regard to the elements and interfaces referred to in points (a) and (b), the organisation shall identify the information security risks which may have a potential impact on aviation safety. For each identified risk, the organisation shall: The predefined classification referred to in point (1) shall take into account the potential of occurrence of the threat scenario and the severity of its safety consequences. Based on that classification, and taking into account whether the organisation has a structured and repeatable risk management process for operations, the organisation shall be able to establish whether the risk is acceptable or needs to be treated in accordance with point IS.D.OR.210. In order to facilitate the mutual comparability of risks assessments, the assignment of the risk level pursuant to point (1) shall take into account relevant information acquired in coordination with the organisations referred to in point (b).",
+                            "description": "With regard to the elements and interfaces referred to in points (a) and (b), the organisation shall identify the information security risks which may have a potential impact on aviation safety. For each identified risk, the organisation shall: assign a risk level according to a predefined classification established by the organisation; associate each risk and its level with the corresponding element or interface identified in accordance with points (a) and (b). The predefined classification referred to in point (1) shall take into account the potential of occurrence of the threat scenario and the severity of its safety consequences. Based on that classification, and taking into account whether the organisation has a structured and repeatable risk management process for operations, the organisation shall be able to establish whether the risk is acceptable or needs to be treated in accordance with point IS.D.OR.210. In order to facilitate the mutual comparability of risks assessments, the assignment of the risk level pursuant to point (1) shall take into account relevant information acquired in coordination with the organisations referred to in point (b).",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.205(c)(1)",
                             "text": "assign a risk level according to a predefined classification established by the organisation;",
+                            "description": "For each identified risk, the organisation shall assign a risk level according to a predefined classification established by the organisation.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.205(c)(2)",
                             "text": "associate each risk and its level with the corresponding element or interface identified in accordance with points (a) and (b).",
+                            "description": "For each identified risk, the organisation shall associate each risk and its level with the corresponding element or interface identified in accordance with points (a) and (b).",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.205(d)",
                             "text": "The organisation shall review and update the risk assessment carried out in accordance with points (a), (b) and (c) in any of the following situations:",
+                            "description": "The organisation shall review and update the risk assessment carried out in accordance with points (a), (b) and (c) in any of the following situations: there is a change in the elements subject to information security risks; there is a change in the interfaces between the organisation and other organisations, or in the risks communicated by the other organisations; there is a change in the information or knowledge used for the identification, analysis and classification of risks; there are lessons learnt from the analysis of information security incidents.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.205(d)(1)",
                             "text": "there is a change in the elements subject to information security risks;",
+                            "description": "The organisation shall review and update the risk assessment carried out in accordance with points (a), (b) and (c) in any of the following situations: there is a change in the elements subject to information security risks.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.205(d)(2)",
                             "text": "there is a change in the interfaces between the organisation and other organisations, or in the risks communicated by the other organisations;",
+                            "description": "The organisation shall review and update the risk assessment carried out in accordance with points (a), (b) and (c) in any of the following situations: there is a change in the interfaces between the organisation and other organisations, or in the risks communicated by the other organisations.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.205(d)(3)",
                             "text": "there is a change in the information or knowledge used for the identification, analysis and classification of risks;",
+                            "description": "The organisation shall review and update the risk assessment carried out in accordance with points (a), (b) and (c) in any of the following situations: there is a change in the information or knowledge used for the identification, analysis and classification of risks.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.205(d)(4)",
                             "text": "there are lessons learnt from the analysis of information security incidents.",
+                            "description": "The organisation shall review and update the risk assessment carried out in accordance with points (a), (b) and (c) in any of the following situations: there are lessons learnt from the analysis of information security incidents.",
                             "source": "reg1645"
                         }
                     ],
@@ -736,21 +780,25 @@
                         {
                             "id": "IS.D.OR.210(a)",
                             "text": "The organisation shall develop measures to address unacceptable risks identified in accordance with point IS.D.OR.205, implement them in a timely manner and check their continued effectiveness. Those measures shall enable the organisation to: Those measures shall not introduce any new potential unacceptable risks to aviation safety.",
+                            "description": "The organisation shall develop measures to address unacceptable risks identified in accordance with point IS.D.OR.205, implement them in a timely manner and check their continued effectiveness. Those measures shall enable the organisation to: control the circumstances that contribute to the effective occurrence of the threat scenario; reduce the consequences on aviation safety associated with the materialisation of the threat scenario; avoid the risks. Those measures shall not introduce any new potential unacceptable risks to aviation safety.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.210(a)(1)",
                             "text": "control the circumstances that contribute to the effective occurrence of the threat scenario;",
+                            "description": "The organisation shall develop measures to address unacceptable risks identified in accordance with point IS.D.OR.205, implement them in a timely manner and check their continued effectiveness. Those measures shall enable the organisation to control the circumstances that contribute to the effective occurrence of the threat scenario.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.210(a)(2)",
                             "text": "reduce the consequences on aviation safety associated with the materialisation of the threat scenario;",
+                            "description": "The organisation shall develop measures to address unacceptable risks identified in accordance with point IS.D.OR.205, implement them in a timely manner and check their continued effectiveness. Those measures shall enable the organisation to reduce the consequences on aviation safety associated with the materialisation of the threat scenario.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.210(a)(3)",
                             "text": "avoid the risks.",
+                            "description": "The organisation shall develop measures to address unacceptable risks identified in accordance with point IS.D.OR.205, implement them in a timely manner and check their continued effectiveness. Those measures shall enable the organisation to avoid the risks.",
                             "source": "reg1645"
                         },
                         {
@@ -787,26 +835,31 @@
                         {
                             "id": "IS.D.OR.215(b)",
                             "text": "That scheme and the process referred to in point IS.D.OR.220 shall enable the organisation to:",
+                            "description": "That scheme and the process referred to in point IS.D.OR.220 shall enable the organisation to: identify which of the events reported pursuant to point (a) are considered information security incidents or vulnerabilities with a potential impact on aviation safety; identify the causes of, and contributing factors to, the information security incidents and vulnerabilities identified in accordance with point (1), and address them as part of the information security risk management process in accordance with points IS.D.OR.205 and IS.D.OR.220; ensure an evaluation of all known, relevant information relating to the information security incidents and vulnerabilities identified in accordance with point (1); ensure the implementation of a method to distribute internally the information as necessary.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.215(b)(1)",
                             "text": "identify which of the events reported pursuant to point (a) are considered information security incidents or vulnerabilities with a potential impact on aviation safety;",
+                            "description": "That scheme and the process referred to in point IS.D.OR.220 shall enable the organisation to identify which of the events reported pursuant to point (a) are considered information security incidents or vulnerabilities with a potential impact on aviation safety.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.215(b)(2)",
                             "text": "identify the causes of, and contributing factors to, the information security incidents and vulnerabilities identified in accordance with point (1), and address them as part of the information security risk management process in accordance with points IS.D.OR.205 and IS.D.OR.220;",
+                            "description": "That scheme and the process referred to in point IS.D.OR.220 shall enable the organisation to identify the causes of, and contributing factors to, the information security incidents and vulnerabilities identified in accordance with point (1), and address them as part of the information security risk management process in accordance with points IS.D.OR.205 and IS.D.OR.220.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.215(b)(3)",
                             "text": "ensure an evaluation of all known, relevant information relating to the information security incidents and vulnerabilities identified in accordance with point (1);",
+                            "description": "That scheme and the process referred to in point IS.D.OR.220 shall enable the organisation to ensure an evaluation of all known, relevant information relating to the information security incidents and vulnerabilities identified in accordance with point (1).",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.215(b)(4)",
                             "text": "ensure the implementation of a method to distribute internally the information as necessary.",
+                            "description": "That scheme and the process referred to in point IS.D.OR.220 shall enable the organisation to ensure the implementation of a method to distribute internally the information as necessary.",
                             "source": "reg1645"
                         },
                         {
@@ -841,51 +894,61 @@
                         {
                             "id": "IS.D.OR.220(a)",
                             "text": "Based on the outcome of the risk assessment carried out in accordance with point IS.D.OR.205 and the outcome of the risk treatment performed in accordance with point IS.D.OR.210, the organisation shall implement measures to detect incidents and vulnerabilities that indicate the potential materialisation of unacceptable risks and which may have a potential impact on aviation safety. Those detection measures shall enable the organisation to:",
+                            "description": "Based on the outcome of the risk assessment carried out in accordance with point IS.D.OR.205 and the outcome of the risk treatment performed in accordance with point IS.D.OR.210, the organisation shall implement measures to detect incidents and vulnerabilities that indicate the potential materialisation of unacceptable risks and which may have a potential impact on aviation safety. Those detection measures shall enable the organisation to: identify deviations from predetermined functional performance baselines; trigger warnings to activate proper response measures, in case of any deviation.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.220(a)(1)",
                             "text": "identify deviations from predetermined functional performance baselines;",
+                            "description": "Based on the outcome of the risk assessment carried out in accordance with point IS.D.OR.205 and the outcome of the risk treatment performed in accordance with point IS.D.OR.210, the organisation shall implement measures to detect incidents and vulnerabilities that indicate the potential materialisation of unacceptable risks and which may have a potential impact on aviation safety. Those detection measures shall enable the organisation to identify deviations from predetermined functional performance baselines.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.220(a)(2)",
                             "text": "trigger warnings to activate proper response measures, in case of any deviation.",
+                            "description": "Based on the outcome of the risk assessment carried out in accordance with point IS.D.OR.205 and the outcome of the risk treatment performed in accordance with point IS.D.OR.210, the organisation shall implement measures to detect incidents and vulnerabilities that indicate the potential materialisation of unacceptable risks and which may have a potential impact on aviation safety. Those detection measures shall enable the organisation to trigger warnings to activate proper response measures, in case of any deviation.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.220(b)",
                             "text": "The organisation shall implement measures to respond to any event conditions identified in accordance with point (a) that may develop or have developed into an information security incident. Those response measures shall enable the organisation to:",
+                            "description": "The organisation shall implement measures to respond to any event conditions identified in accordance with point (a) that may develop or have developed into an information security incident. Those response measures shall enable the organisation to: initiate the reaction to the warnings referred to in point (a)(2) by activating predefined resources and course of actions; contain the spread of an attack and avoid the full materialisation of a threat scenario; control the failure mode of the affected elements defined in point IS.D.OR.205(a).",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.220(b)(1)",
                             "text": "initiate the reaction to the warnings referred to in point (a)(2) by activating predefined resources and course of actions;",
+                            "description": "The organisation shall implement measures to respond to any event conditions identified in accordance with point (a) that may develop or have developed into an information security incident. Those response measures shall enable the organisation to initiate the reaction to the warnings referred to in point (a)(2) by activating predefined resources and course of actions.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.220(b)(2)",
                             "text": "contain the spread of an attack and avoid the full materialisation of a threat scenario;",
+                            "description": "The organisation shall implement measures to respond to any event conditions identified in accordance with point (a) that may develop or have developed into an information security incident. Those response measures shall enable the organisation to contain the spread of an attack and avoid the full materialisation of a threat scenario.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.220(b)(3)",
                             "text": "control the failure mode of the affected elements defined in point IS.D.OR.205(a).",
+                            "description": "The organisation shall implement measures to respond to any event conditions identified in accordance with point (a) that may develop or have developed into an information security incident. Those response measures shall enable the organisation to control the failure mode of the affected elements defined in point IS.D.OR.205(a).",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.220(c)",
                             "text": "The organisation shall implement measures aimed at recovering from information security incidents, including emergency measures, if needed. Those recovery measures shall enable the organisation to:",
+                            "description": "The organisation shall implement measures aimed at recovering from information security incidents, including emergency measures, if needed. Those recovery measures shall enable the organisation to: remove the condition that caused the incident, or constrain it to a tolerable level; reach a safe state of the affected elements defined in point IS.D.OR.205(a) within a recovery time previously defined by the organisation.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.220(c)(1)",
                             "text": "remove the condition that caused the incident, or constrain it to a tolerable level;",
+                            "description": "The organisation shall implement measures aimed at recovering from information security incidents, including emergency measures, if needed. Those recovery measures shall enable the organisation to remove the condition that caused the incident, or constrain it to a tolerable level.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.220(c)(2)",
                             "text": "reach a safe state of the affected elements defined in point IS.D.OR.205(a) within a recovery time previously defined by the organisation.",
+                            "description": "The organisation shall implement measures aimed at recovering from information security incidents, including emergency measures, if needed. Those recovery measures shall enable the organisation to reach a safe state of the affected elements defined in point IS.D.OR.205(a) within a recovery time previously defined by the organisation.",
                             "source": "reg1645"
                         }
                     ],
@@ -905,21 +968,25 @@
                         {
                             "id": "IS.D.OR.225(a)",
                             "text": "After receipt of the notification of findings submitted by the competent authority, the organisation shall:",
+                            "description": "After receipt of the notification of findings submitted by the competent authority, the organisation shall: identify the root cause or causes of, and contributing factors to, the non-compliance; define a corrective action plan; demonstrate the correction of the non-compliance to the satisfaction of the competent authority.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.225(a)(1)",
                             "text": "identify the root cause or causes of, and contributing factors to, the non-compliance;",
+                            "description": "After receipt of the notification of findings submitted by the competent authority, the organisation shall identify the root cause or causes of, and contributing factors to, the non-compliance.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.225(a)(2)",
                             "text": "define a corrective action plan;",
+                            "description": "After receipt of the notification of findings submitted by the competent authority, the organisation shall define a corrective action plan.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.225(a)(3)",
                             "text": "demonstrate the correction of the non-compliance to the satisfaction of the competent authority.",
+                            "description": "After receipt of the notification of findings submitted by the competent authority, the organisation shall demonstrate the correction of the non-compliance to the satisfaction of the competent authority.",
                             "source": "reg1645"
                         },
                         {
@@ -949,36 +1016,43 @@
                         {
                             "id": "IS.D.OR.230(b)",
                             "text": "Without prejudice to the obligations of Regulation (EU) No 376/2014, the organisation shall ensure that any information security incident or vulnerability, which may represent a significant risk to aviation safety, is reported to their competent authority. Furthermore:",
+                            "description": "Without prejudice to the obligations of Regulation (EU) No 376/2014, the organisation shall ensure that any information security incident or vulnerability, which may represent a significant risk to aviation safety, is reported to their competent authority. Furthermore: where such an incident or vulnerability affects an aircraft or associated system or component, the organisation shall also report it to the design approval holder; where such an incident or vulnerability affects a system or constituent used by the organisation, the organisation shall report it to the organisation responsible for the design of the system or constituent.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.230(b)(1)",
                             "text": "where such an incident or vulnerability affects an aircraft or associated system or component, the organisation shall also report it to the design approval holder;",
+                            "description": "Without prejudice to the obligations of Regulation (EU) No 376/2014, the organisation shall ensure that any information security incident or vulnerability, which may represent a significant risk to aviation safety, is reported to their competent authority. Furthermore: where such an incident or vulnerability affects an aircraft or associated system or component, the organisation shall also report it to the design approval holder.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.230(b)(2)",
                             "text": "where such an incident or vulnerability affects a system or constituent used by the organisation, the organisation shall report it to the organisation responsible for the design of the system or constituent.",
+                            "description": "Without prejudice to the obligations of Regulation (EU) No 376/2014, the organisation shall ensure that any information security incident or vulnerability, which may represent a significant risk to aviation safety, is reported to their competent authority. Furthermore: where such an incident or vulnerability affects a system or constituent used by the organisation, the organisation shall report it to the organisation responsible for the design of the system or constituent.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.230(c)",
                             "text": "The organisation shall report the conditions referred to in point (b) as follows:",
+                            "description": "The organisation shall report the conditions referred to in point (b) as follows: a notification shall be submitted to the competent authority and, if applicable, to the design approval holder or to the organisation responsible for the design of the system or constituent, as soon as the condition has been known to the organisation; a report shall be submitted to the competent authority and, if applicable, to the design approval holder or to the organisation responsible for the design of the system or constituent, as soon as possible, but not exceeding 72 hours from the time the condition has been known to the organisation, unless exceptional circumstances prevent this. The report shall be made in the form defined by the competent authority and shall contain all relevant information about the condition known to the organisation; a follow-up report shall be submitted to the competent authority and, if applicable, to the design approval holder or to the organisation responsible for the design of the system or constituent, providing details of the actions the organisation has taken or intends to take to recover from the incident and the actions it intends to take to prevent similar information security incidents in the future. The follow-up report shall be submitted as soon as those actions have been identified, and shall be produced in the form defined by the competent authority.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.230(c)(1)",
                             "text": "a notification shall be submitted to the competent authority and, if applicable, to the design approval holder or to the organisation responsible for the design of the system or constituent, as soon as the condition has been known to the organisation;",
+                            "description": "The organisation shall report the conditions referred to in point (b) as follows: a notification shall be submitted to the competent authority and, if applicable, to the design approval holder or to the organisation responsible for the design of the system or constituent, as soon as the condition has been known to the organisation.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.230(c)(2)",
                             "text": "a report shall be submitted to the competent authority and, if applicable, to the design approval holder or to the organisation responsible for the design of the system or constituent, as soon as possible, but not exceeding 72 hours from the time the condition has been known to the organisation, unless exceptional circumstances prevent this. The report shall be made in the form defined by the competent authority and shall contain all relevant information about the condition known to the organisation;",
+                            "description": "The organisation shall report the conditions referred to in point (b) as follows: a report shall be submitted to the competent authority and, if applicable, to the design approval holder or to the organisation responsible for the design of the system or constituent, as soon as possible, but not exceeding 72 hours from the time the condition has been known to the organisation, unless exceptional circumstances prevent this. The report shall be made in the form defined by the competent authority and shall contain all relevant information about the condition known to the organisation.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.230(c)(3)",
                             "text": "a follow-up report shall be submitted to the competent authority and, if applicable, to the design approval holder or to the organisation responsible for the design of the system or constituent, providing details of the actions the organisation has taken or intends to take to recover from the incident and the actions it intends to take to prevent similar information security incidents in the future. The follow-up report shall be submitted as soon as those actions have been identified, and shall be produced in the form defined by the competent authority.",
+                            "description": "The organisation shall report the conditions referred to in point (b) as follows: a follow-up report shall be submitted to the competent authority and, if applicable, to the design approval holder or to the organisation responsible for the design of the system or constituent, providing details of the actions the organisation has taken or intends to take to recover from the incident and the actions it intends to take to prevent similar information security incidents in the future. The follow-up report shall be submitted as soon as those actions have been identified, and shall be produced in the form defined by the competent authority.",
                             "source": "reg1645"
                         }
                     ],
@@ -1029,21 +1103,25 @@
                         {
                             "id": "IS.D.OR.240(a)",
                             "text": "The accountable manager of the organisation or, in the case of design organisations, the head of the design organisation, designated in accordance with Regulation (EU) No 748/2012 and Regulation (EU) No 139/2014 as referred to in points 1(a) and (b) of Article 2 of this Regulation, shall have corporate authority to ensure that all activities required by this Regulation can be financed and carried out. That person shall:",
+                            "description": "The accountable manager of the organisation or, in the case of design organisations, the head of the design organisation, designated in accordance with Regulation (EU) No 748/2012 and Regulation (EU) No 139/2014 as referred to in points 1(a) and (b) of Article 2 of this Regulation, shall have corporate authority to ensure that all activities required by this Regulation can be financed and carried out. That person shall: ensure that all necessary resources are available to comply with the requirements of this Regulation; establish and promote the information security policy referred to in point IS.D.OR.200(a)(1); demonstrate a basic understanding of this Regulation.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.240(a)(1)",
                             "text": "ensure that all necessary resources are available to comply with the requirements of this Regulation;",
+                            "description": "The accountable manager of the organisation or, in the case of design organisations, the head of the design organisation, designated in accordance with Regulation (EU) No 748/2012 and Regulation (EU) No 139/2014 as referred to in points 1(a) and (b) of Article 2 of this Regulation, shall have corporate authority to ensure that all activities required by this Regulation can be financed and carried out. That person shall ensure that all necessary resources are available to comply with the requirements of this Regulation.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.240(a)(2)",
                             "text": "establish and promote the information security policy referred to in point IS.D.OR.200(a)(1);",
+                            "description": "The accountable manager of the organisation or, in the case of design organisations, the head of the design organisation, designated in accordance with Regulation (EU) No 748/2012 and Regulation (EU) No 139/2014 as referred to in points 1(a) and (b) of Article 2 of this Regulation, shall have corporate authority to ensure that all activities required by this Regulation can be financed and carried out. That person shall establish and promote the information security policy referred to in point IS.D.OR.200(a)(1).",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.240(a)(3)",
                             "text": "demonstrate a basic understanding of this Regulation.",
+                            "description": "The accountable manager of the organisation or, in the case of design organisations, the head of the design organisation, designated in accordance with Regulation (EU) No 748/2012 and Regulation (EU) No 139/2014 as referred to in points 1(a) and (b) of Article 2 of this Regulation, shall have corporate authority to ensure that all activities required by this Regulation can be financed and carried out. That person shall demonstrate a basic understanding of this Regulation.",
                             "source": "reg1645"
                         },
                         {
@@ -1108,36 +1186,43 @@
                         {
                             "id": "IS.D.OR.245(a)(1)",
                             "text": "The organisation shall ensure that the following records are archived and traceable:",
+                            "description": "The organisation shall ensure that the following records are archived and traceable: any approval received and any associated information security risk assessment in accordance with point IS.D.OR.200(e); contracts for activities referred to in point IS.D.OR.200(a)(9); records of the key processes referred to in point IS.D.OR.200(d); records of the risks identified in the risk assessment referred to in point IS.D.OR.205 along with the associated risk treatment measures referred to in point IS.D.OR.210; records of information security incidents and vulnerabilities reported in accordance with the reporting schemes referred to in points IS.D.OR.215 and IS.D.OR.230; records of those information security events which may need to be reassessed to reveal undetected information security incidents or vulnerabilities.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.245(a)(1)(i)",
                             "text": "any approval received and any associated information security risk assessment in accordance with point IS.D.OR.200(e);",
+                            "description": "The organisation shall ensure that any approval received and any associated information security risk assessment in accordance with point IS.D.OR.200(e) are archived and traceable.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.245(a)(1)(ii)",
                             "text": "contracts for activities referred to in point IS.D.OR.200(a)(9);",
+                            "description": "The organisation shall ensure that contracts for activities referred to in point IS.D.OR.200(a)(9) are archived and traceable.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.245(a)(1)(iii)",
                             "text": "records of the key processes referred to in point IS.D.OR.200(d);",
+                            "description": "The organisation shall ensure that records of the key processes referred to in point IS.D.OR.200(d) are archived and traceable.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.245(a)(1)(iv)",
                             "text": "records of the risks identified in the risk assessment referred to in point IS.D.OR.205 along with the associated risk treatment measures referred to in point IS.D.OR.210;",
+                            "description": "The organisation shall ensure that records of the risks identified in the risk assessment referred to in point IS.D.OR.205 along with the associated risk treatment measures referred to in point IS.D.OR.210 are archived and traceable.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.245(a)(1)(v)",
                             "text": "records of information security incidents and vulnerabilities reported in accordance with the reporting schemes referred to in points IS.D.OR.215 and IS.D.OR.230;",
+                            "description": "The organisation shall ensure that records of information security incidents and vulnerabilities reported in accordance with the reporting schemes referred to in points IS.D.OR.215 and IS.D.OR.230 are archived and traceable.",
                             "source": "reg1645"
                         },
                         {
                             "id": "IS.D.OR.245(a)(1)(vi)",
                             "text": "records of those information security events which may need to be reassessed to reveal undetected information security incidents or vulnerabilities.",
+                            "description": "The organisation shall ensure that records of those information security events which may need to be reassessed to reveal undetected information security incidents or vulnerabilities are archived and traceable.",
                             "source": "reg1645"
                         },
                         {

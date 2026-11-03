@@ -12,6 +12,8 @@
  *   controls: ID ("AC-2", "AC-2(1)") => control row, withdrawn ones excluded
  *   withdrawn: IDs the catalog marks withdrawn
  */
+require_once dirname(__DIR__).'/lib/ObjectiveText.php';
+
 return function (): array {
     $catalog = json_decode(file_get_contents(Source::path('sp800-53/NIST_SP-800-53_rev5_catalog.json')), true)['catalog'];
 
@@ -60,6 +62,31 @@ return function (): array {
         }, $prose);
     };
 
+    // The same objective in words, for its description: placeholders become
+    // [organization-defined ...] / [one or more of: ...], and references such as
+    // "defined in AU-02_ODP[01]" cite the control (AU-2).
+    $readable = function (string $prose) use (&$readable, &$params): string {
+        $prose = preg_replace_callback('/\{\{\s*insert:\s*param,\s*([^\s}]+)\s*\}\}/', function ($m) use (&$readable, &$params, $prose) {
+            $p = $params[$m[1][0]];
+
+            if (isset($p['select'])) {
+                $choices = array();
+
+                foreach ($p['select']['choice'] as $choice) {
+                    $choices[] = trim($readable($choice));
+                }
+
+                return ObjectiveText::selection($choices, $p['select']['how-many'] ?? 'one');
+            }
+
+            return ObjectiveText::assignment($p['label'], substr($prose, 0, $m[0][1]));
+        }, $prose, -1, $count, PREG_OFFSET_CAPTURE);
+
+        return preg_replace_callback('/\b([A-Z]{2})-0*(\d+)(?:\(0*(\d+)\))?_ODP(?:\[\d+\])?/', function ($m) {
+            return $m[1].'-'.$m[2].(isset($m[3]) && $m[3] !== '' ? '('.$m[3].')' : '');
+        }, $prose);
+    };
+
     // Statement and discussion as NIST renders them in its CPRT export of the same release.
     $cprt = array();
 
@@ -90,15 +117,23 @@ return function (): array {
 
     // Every assessment-objective part with prose is a determination statement; parts
     // without prose only group their children, and "Determine if:" is a lead-in.
-    $objectives = function (array $part) use (&$objectives, $render, $prop): array {
+    // An objective gets a description when its text carries a placeholder or
+    // an ODP reference, or ends in list punctuation ("; or", ":").
+    $objectives = function (array $part) use (&$objectives, $render, $readable, $prop): array {
         $out = array();
         $prose = Source::normalise($part['prose'] ?? '');
 
         if ($prose !== '' && $prose !== 'Determine if:') {
-            $out[] = array(
+            $objective = array(
                 'id' => $prop($part, 'label', 'sp800-53a'),
                 'text' => Source::normalise($render($part['prose']))
             );
+
+            if (strpos($objective['text'], '<') !== false || strpos($objective['text'], '_ODP') !== false || ObjectiveText::trailing_connector($objective['text'])) {
+                $objective['description'] = ObjectiveText::sentence(preg_replace('/^Determine if:\s*/', '', Source::normalise($readable($part['prose']))));
+            }
+
+            $out[] = $objective;
         }
 
         foreach ($part['parts'] ?? array() as $child) {

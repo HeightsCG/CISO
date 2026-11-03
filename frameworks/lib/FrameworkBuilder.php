@@ -51,6 +51,10 @@ class FrameworkBuilder {
                 $control['source'] = $control['source'] ?? $control_source;
 
                 foreach ($control['objectives'] as $o => $objective) {
+                    if (isset($objective['description']) && (!is_string($objective['description']) || trim($objective['description']) === '')) {
+                        throw new RuntimeException($key.' objective '.$objective['id'].' has an empty description');
+                    }
+
                     $control['objectives'][$o]['source'] = $objective['source'] ?? $objective_source;
                     $objectives++;
                 }

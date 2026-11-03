@@ -511,76 +511,91 @@
                         {
                             "id": "500.3(a)",
                             "text": "information security;",
+                            "description": "The cybersecurity policy or policies and procedures shall be based on the covered entity’s risk assessment and address, at a minimum, information security to the extent applicable to the covered entity’s operations.",
                             "source": "nycrr500"
                         },
                         {
                             "id": "500.3(b)",
                             "text": "data governance, classification and retention;",
+                            "description": "The cybersecurity policy or policies and procedures shall be based on the covered entity’s risk assessment and address, at a minimum, data governance, classification and retention to the extent applicable to the covered entity’s operations.",
                             "source": "nycrr500"
                         },
                         {
                             "id": "500.3(c)",
                             "text": "asset inventory, device management and end of life management;",
+                            "description": "The cybersecurity policy or policies and procedures shall be based on the covered entity’s risk assessment and address, at a minimum, asset inventory, device management and end of life management to the extent applicable to the covered entity’s operations.",
                             "source": "nycrr500"
                         },
                         {
                             "id": "500.3(d)",
                             "text": "access controls, including remote access and identity management;",
+                            "description": "The cybersecurity policy or policies and procedures shall be based on the covered entity’s risk assessment and address, at a minimum, access controls, including remote access and identity management to the extent applicable to the covered entity’s operations.",
                             "source": "nycrr500"
                         },
                         {
                             "id": "500.3(e)",
                             "text": "business continuity and disaster recovery planning and resources;",
+                            "description": "The cybersecurity policy or policies and procedures shall be based on the covered entity’s risk assessment and address, at a minimum, business continuity and disaster recovery planning and resources to the extent applicable to the covered entity’s operations.",
                             "source": "nycrr500"
                         },
                         {
                             "id": "500.3(f)",
                             "text": "systems operations and availability concerns;",
+                            "description": "The cybersecurity policy or policies and procedures shall be based on the covered entity’s risk assessment and address, at a minimum, systems operations and availability concerns to the extent applicable to the covered entity’s operations.",
                             "source": "nycrr500"
                         },
                         {
                             "id": "500.3(g)",
                             "text": "systems and network security and monitoring;",
+                            "description": "The cybersecurity policy or policies and procedures shall be based on the covered entity’s risk assessment and address, at a minimum, systems and network security and monitoring to the extent applicable to the covered entity’s operations.",
                             "source": "nycrr500"
                         },
                         {
                             "id": "500.3(h)",
                             "text": "security awareness and training;",
+                            "description": "The cybersecurity policy or policies and procedures shall be based on the covered entity’s risk assessment and address, at a minimum, security awareness and training to the extent applicable to the covered entity’s operations.",
                             "source": "nycrr500"
                         },
                         {
                             "id": "500.3(i)",
                             "text": "systems and application security and development and quality assurance;",
+                            "description": "The cybersecurity policy or policies and procedures shall be based on the covered entity’s risk assessment and address, at a minimum, systems and application security and development and quality assurance to the extent applicable to the covered entity’s operations.",
                             "source": "nycrr500"
                         },
                         {
                             "id": "500.3(j)",
                             "text": "physical security and environmental controls;",
+                            "description": "The cybersecurity policy or policies and procedures shall be based on the covered entity’s risk assessment and address, at a minimum, physical security and environmental controls to the extent applicable to the covered entity’s operations.",
                             "source": "nycrr500"
                         },
                         {
                             "id": "500.3(k)",
                             "text": "customer data privacy;",
+                            "description": "The cybersecurity policy or policies and procedures shall be based on the covered entity’s risk assessment and address, at a minimum, customer data privacy to the extent applicable to the covered entity’s operations.",
                             "source": "nycrr500"
                         },
                         {
                             "id": "500.3(l)",
                             "text": "vendor and third-party service provider management;",
+                            "description": "The cybersecurity policy or policies and procedures shall be based on the covered entity’s risk assessment and address, at a minimum, vendor and third-party service provider management to the extent applicable to the covered entity’s operations.",
                             "source": "nycrr500"
                         },
                         {
                             "id": "500.3(m)",
                             "text": "risk assessment;",
+                            "description": "The cybersecurity policy or policies and procedures shall be based on the covered entity’s risk assessment and address, at a minimum, risk assessment to the extent applicable to the covered entity’s operations.",
                             "source": "nycrr500"
                         },
                         {
                             "id": "500.3(n)",
                             "text": "incident response and notification; and",
+                            "description": "The cybersecurity policy or policies and procedures shall be based on the covered entity’s risk assessment and address, at a minimum, incident response and notification to the extent applicable to the covered entity’s operations.",
                             "source": "nycrr500"
                         },
                         {
                             "id": "500.3(o)",
                             "text": "vulnerability management.",
+                            "description": "The cybersecurity policy or policies and procedures shall be based on the covered entity’s risk assessment and address, at a minimum, vulnerability management to the extent applicable to the covered entity’s operations.",
                             "source": "nycrr500"
                         }
                     ],
@@ -630,16 +645,19 @@
                         {
                             "id": "500.5(a)",
                             "text": "conduct, at a minimum: (1) penetration testing of their information systems from both inside and outside the information systems’ boundaries by a qualified internal or external party at least annually; and (2) automated scans of information systems, and a manual review of systems not covered by such scans, for the purpose of discovering, analyzing and reporting vulnerabilities at a frequency determined by the risk assessment, and promptly after any material system changes;",
+                            "description": "Each covered entity shall, in accordance with its risk assessment, develop and implement written policies and procedures for vulnerability management that are designed to assess and maintain the effectiveness of its cybersecurity program. These policies and procedures shall be designed to ensure that covered entities conduct, at a minimum: (1) penetration testing of their information systems from both inside and outside the information systems’ boundaries by a qualified internal or external party at least annually; and (2) automated scans of information systems, and a manual review of systems not covered by such scans, for the purpose of discovering, analyzing and reporting vulnerabilities at a frequency determined by the risk assessment, and promptly after any material system changes.",
                             "source": "nycrr500"
                         },
                         {
                             "id": "500.5(b)",
                             "text": "are promptly informed of new security vulnerabilities by having a monitoring process in place; and",
+                            "description": "Each covered entity shall, in accordance with its risk assessment, develop and implement written policies and procedures for vulnerability management that are designed to assess and maintain the effectiveness of its cybersecurity program. These policies and procedures shall be designed to ensure that covered entities are promptly informed of new security vulnerabilities by having a monitoring process in place.",
                             "source": "nycrr500"
                         },
                         {
                             "id": "500.5(c)",
                             "text": "timely remediate vulnerabilities, giving priority to vulnerabilities based on the risk they pose to the covered entity.",
+                            "description": "Each covered entity shall, in accordance with its risk assessment, develop and implement written policies and procedures for vulnerability management that are designed to assess and maintain the effectiveness of its cybersecurity program. These policies and procedures shall be designed to ensure that covered entities timely remediate vulnerabilities, giving priority to vulnerabilities based on the risk they pose to the covered entity.",
                             "source": "nycrr500"
                         }
                     ],

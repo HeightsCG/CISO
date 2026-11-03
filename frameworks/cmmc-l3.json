@@ -349,6 +349,7 @@
                         {
                             "id": "3.1.3e[b]",
                             "text": "<3.1.3e_ODP[1]: solutions> are employed to control information flows between security domains on connected systems.",
+                            "description": "Secure information transfer solutions are employed to control information flows between security domains on connected systems.",
                             "source": "sp800172a"
                         }
                     ],
@@ -379,6 +380,7 @@
                         {
                             "id": "3.2.1e[b]",
                             "text": "Awareness training focused on recognizing and responding to threats from social engineering, advanced persistent threat actors, breaches, and suspicious behaviors is provided <3.2.1e_ODP[1]: frequency>.",
+                            "description": "Awareness training focused on recognizing and responding to threats from social engineering, advanced persistent threat actors, breaches, and suspicious behaviors is provided upon initial hire, following a significant cyber event, and at least annually.",
                             "source": "sp800172a"
                         },
                         {
@@ -389,6 +391,7 @@
                         {
                             "id": "3.2.1e[d]",
                             "text": "Awareness training is updated <3.2.1e_ODP[2]: frequency> or when there are significant changes to the threat.",
+                            "description": "Awareness training is updated at least annually or when there are significant changes to the threat.",
                             "source": "sp800172a"
                         }
                     ],
@@ -421,6 +424,7 @@
                         {
                             "id": "3.2.2e[d]",
                             "text": "Practical exercises that are aligned with current threat scenarios are included in awareness training for <3.2.2e_ODP[1]: roles>.",
+                            "description": "Practical exercises that are aligned with current threat scenarios are included in awareness training for all users, tailored by roles, to include general users, users with specialized roles, and privileged users.",
                             "source": "sp800172a"
                         },
                         {
@@ -495,6 +499,7 @@
                         {
                             "id": "3.4.2e[d]",
                             "text": "After detection, system components are <3.4.2.e_ODP[1]: removed and/or placed in a quarantine or remediation network> to facilitate patching, re-configuration, or other mitigations.",
+                            "description": "After detection, system components are removed and/or placed in a quarantine or remediation network to facilitate patching, re-configuration, or other mitigations.",
                             "source": "sp800172a"
                         }
                     ],
@@ -554,6 +559,7 @@
                         {
                             "id": "3.5.1e[c]",
                             "text": "<3.5.1e_ODP[1]: systems and system components> are identified and authenticated before establishing a network connection using bidirectional authentication that is cryptographically-based and replay-resistant.",
+                            "description": "Systems and system components, where possible, are identified and authenticated before establishing a network connection using bidirectional authentication that is cryptographically-based and replay-resistant.",
                             "source": "sp800172a"
                         }
                     ],
@@ -608,6 +614,7 @@
                         {
                             "id": "3.6.1e[b]",
                             "text": "The security operations center capability operates <3.6.1e_ODP[1]: time period>.",
+                            "description": "The security operations center capability operates 24/7, with allowance for remote/on-call staff.",
                             "source": "sp800172a"
                         },
                         {
@@ -635,6 +642,7 @@
                         {
                             "id": "3.6.2e[b]",
                             "text": "The cyber incident response team can be deployed by the organization within <3.6.2e_ODP[1]: time period>.",
+                            "description": "The cyber incident response team can be deployed by the organization within 24 hours.",
                             "source": "sp800172a"
                         },
                         {
@@ -706,26 +714,31 @@
                         {
                             "id": "3.11.1e[b]",
                             "text": "<3.11.1e_ODP[1]: sources of threat intelligence> are employed as part of a risk assessment to guide and inform the development of organizational systems and security architectures.",
+                            "description": "Threat intelligence, at a minimum from open or commercial sources, and any DoD-provided sources, are employed as part of a risk assessment to guide and inform the development of organizational systems and security architectures.",
                             "source": "sp800172a"
                         },
                         {
                             "id": "3.11.1e[c]",
                             "text": "<3.11.1e_ODP[1]: sources of threat intelligence> are employed as part of a risk assessment to guide and inform the selection of security solutions.",
+                            "description": "Threat intelligence, at a minimum from open or commercial sources, and any DoD-provided sources, are employed as part of a risk assessment to guide and inform the selection of security solutions.",
                             "source": "sp800172a"
                         },
                         {
                             "id": "3.11.1e[d]",
                             "text": "<3.11.1e_ODP[1]: sources of threat intelligence> are employed as part of a risk assessment to guide and inform system monitoring activities.",
+                            "description": "Threat intelligence, at a minimum from open or commercial sources, and any DoD-provided sources, are employed as part of a risk assessment to guide and inform system monitoring activities.",
                             "source": "sp800172a"
                         },
                         {
                             "id": "3.11.1e[e]",
                             "text": "<3.11.1e_ODP[1]: sources of threat intelligence> are employed as part of a risk assessment to guide and inform threat hunting activities.",
+                            "description": "Threat intelligence, at a minimum from open or commercial sources, and any DoD-provided sources, are employed as part of a risk assessment to guide and inform threat hunting activities.",
                             "source": "sp800172a"
                         },
                         {
                             "id": "3.11.1e[f]",
                             "text": "<3.11.1e_ODP[1]: sources of threat intelligence> are employed as part of a risk assessment to guide and inform response and recovery activities.",
+                            "description": "Threat intelligence, at a minimum from open or commercial sources, and any DoD-provided sources, are employed as part of a risk assessment to guide and inform response and recovery activities.",
                             "source": "sp800172a"
                         }
                     ],
@@ -749,11 +762,13 @@
                         {
                             "id": "3.11.2e[b]",
                             "text": "Cyber threat hunting activities are conducted <3.11.2e_ODP[2] frequency and/or 3.11.2e_ODP[3] event> to search for indicators of compromise in <3.11.2e_ODP[4]: systems>.",
+                            "description": "Cyber threat hunting activities are conducted on an on-going aperiodic basis or when indications warrant, to search for indicators of compromise in organizational systems.",
                             "source": "sp800172a"
                         },
                         {
                             "id": "3.11.2e[c]",
                             "text": "Cyber threat hunting activities are conducted <3.11.2e_ODP[2] frequency and/or 3.11.2e_ODP[3] event> to detect, track, and disrupt threats that evade existing controls.",
+                            "description": "Cyber threat hunting activities are conducted on an on-going aperiodic basis or when indications warrant, to detect, track, and disrupt threats that evade existing controls.",
                             "source": "sp800172a"
                         }
                     ],
@@ -836,6 +851,7 @@
                         {
                             "id": "3.11.5e[d]",
                             "text": "The effectiveness of security solutions is assessed <3.11.5e_ODP[1]: frequency> to address anticipated risk to organizational systems and the organization based on current and accumulated threat intelligence.",
+                            "description": "The effectiveness of security solutions is assessed at least annually or upon receipt of relevant cyber threat information, or in response to a relevant cyber incident, to address anticipated risk to organizational systems and the organization based on current and accumulated threat intelligence.",
                             "source": "sp800172a"
                         }
                     ],
@@ -898,6 +914,7 @@
                         {
                             "id": "3.11.7e[d]",
                             "text": "The plan for managing supply chain risks is updated <3.11.7e_ODP[1]: frequency>.",
+                            "description": "The plan for managing supply chain risks is updated at least annually, and upon receipt of relevant cyber threat information, or in response to a relevant cyber incident.",
                             "source": "sp800172a"
                         }
                     ],
@@ -932,6 +949,7 @@
                         {
                             "id": "3.12.1e[c]",
                             "text": "Penetration testing is conducted <3.12.1e_ODP[1]: frequency> leveraging automated scanning tools and ad hoc tests using subject matter experts.",
+                            "description": "Penetration testing is conducted at least annually or when significant security changes are made to the system, leveraging automated scanning tools and ad hoc tests using subject matter experts.",
                             "source": "sp800172a"
                         }
                     ],
@@ -956,6 +974,7 @@
                         {
                             "id": "3.13.4e[a]",
                             "text": "<3.13.4e_ODP[2]: physical isolation techniques and/or 3.13.4e_ODP[3] logical isolation techniques> are employed in organizational systems and system components.",
+                            "description": "Physical isolation techniques or logical isolation techniques or both are employed in organizational systems and system components.",
                             "source": "sp800172a"
                         }
                     ],
@@ -985,6 +1004,7 @@
                         {
                             "id": "3.14.1e[b]",
                             "text": "The integrity of <3.14.1e_ODP[1]: security critical or essential software> is verified using root of trust mechanisms or cryptographic signatures.",
+                            "description": "The integrity of security critical and essential software is verified using root of trust mechanisms or cryptographic signatures.",
                             "source": "sp800172a"
                         }
                     ],
@@ -1002,11 +1022,13 @@
                         {
                             "id": "3.14.3e[a]",
                             "text": "<3.14.3e_ODP[1]: systems and system components> are included in the scope of the specified enhanced security requirements.",
+                            "description": "Specialized assets including IoT, IIoT, OT, GFE, Restricted Information Systems, and test equipment are included in the scope of the specified enhanced security requirements.",
                             "source": "sp800172a"
                         },
                         {
                             "id": "3.14.3e[b]",
                             "text": "Systems and system components that are not included in <3.14.3e_ODP[1]: systems and system components> are segregated in purpose-specific networks.",
+                            "description": "Systems and system components that are not included in specialized assets including IoT, IIoT, OT, GFE, Restricted Information Systems, and test equipment are segregated in purpose-specific networks.",
                             "source": "sp800172a"
                         }
                     ],
@@ -1044,6 +1066,7 @@
                         {
                             "id": "3.14.6e[e]",
                             "text": "Threat indicator information and effective mitigations obtained from <3.14.6e_ODP[1]: external organizations> are used to guide and inform intrusion detection and threat hunting.",
+                            "description": "Threat indicator information and effective mitigations obtained from at a minimum, open or commercial sources, and any DoD-provided sources, are used to guide and inform intrusion detection and threat hunting.",
                             "source": "sp800172a"
                         }
                     ],

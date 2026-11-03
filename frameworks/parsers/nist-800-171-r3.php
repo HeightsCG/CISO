@@ -15,6 +15,8 @@
  * - Two catalog typos are tidied (a space before closing punctuation, one doubled
  *   full stop in 03.01.06); the reference test checks the result against the PDFs.
  */
+require_once dirname(__DIR__).'/lib/ObjectiveText.php';
+
 return function (): array {
     $catalog = json_decode(file_get_contents(Source::path('nist-800-171r3/NIST_SP800-171_rev3_catalog.json')), true)['catalog'];
     $params = array();
@@ -79,6 +81,25 @@ return function (): array {
 
             return '<'.$label($param).': '.$param['label'].'>';
         }, $prose);
+    };
+
+    // The objective in words, for its description: [organization-defined ...] / [one or more of: ...].
+    $readable = function (string $prose) use (&$readable, $params): string {
+        return preg_replace_callback('/\{\{\s*insert:\s*param,\s*([^\s}]+)\s*\}\}/', function ($m) use ($readable, $params, $prose) {
+            $param = $params[$m[1][0]];
+
+            if (isset($param['select'])) {
+                $choices = array();
+
+                foreach ($param['select']['choice'] as $choice) {
+                    $choices[] = trim($readable($choice));
+                }
+
+                return ObjectiveText::selection($choices, $param['select']['how-many'] ?? 'one');
+            }
+
+            return ObjectiveText::assignment($param['usage'] ?? $param['label'], substr($prose, 0, $m[0][1]));
+        }, $prose, -1, $count, PREG_OFFSET_CAPTURE);
     };
 
     // Statement items: "a. ...", nested "1. ..." as the PDF prints them.
@@ -175,10 +196,16 @@ return function (): array {
                     }
 
                     $id = $item.preg_replace('/\.(\d+)/', '[$1]', substr($oid, strlen($item)));
-                    $objectives[$sort_key($id)] = array(
+                    $objective = array(
                         'id' => $id,
                         'text' => $tidy($reference($part['prose']))
                     );
+
+                    if (strpos($objective['text'], '<') !== false || ObjectiveText::trailing_connector($objective['text'])) {
+                        $objective['description'] = ObjectiveText::sentence($tidy($readable($part['prose'])));
+                    }
+
+                    $objectives[$sort_key($id)] = $objective;
                 }
             }
 

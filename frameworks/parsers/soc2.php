@@ -2,7 +2,8 @@
 /**
  * SOC 2 (2017 TSC, revised points of focus 2022): criterion IDs, groups and
  * point of focus names from the committed list derived from HCG's copy, with
- * HCG titles, descriptions and guidance from frameworks/meta/controls/soc2/.
+ * HCG titles, descriptions, guidance and point of focus explanations from
+ * frameworks/meta/controls/soc2/.
  * No AICPA criteria text is stored. Points of focus are loaded as objectives,
  * by name only, with the engagement scope they apply to.
  */
@@ -11,6 +12,7 @@ return function (): array {
 
     $list = json_decode(file_get_contents(Source::path('soc2/tsc-2017-ids.json')), true);
     $content = json_decode(file_get_contents(dirname(__DIR__).'/meta/controls/soc2/hcg.json'), true);
+    $explanations = json_decode(file_get_contents(dirname(__DIR__).'/meta/controls/soc2/points-of-focus.json'), true);
     $codes = array_flip(soc2_groups());
     $families = array();
 
@@ -24,11 +26,19 @@ return function (): array {
         $objectives = array();
 
         foreach ($criterion['points_of_focus'] as $i => $point) {
+            $objective_id = $id.'-PF'.str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT);
+
+            if (!isset($explanations[$objective_id])) {
+                throw new RuntimeException('No HCG explanation for SOC 2 '.$objective_id);
+            }
+
             $objective = array(
-                'id' => $id.'-PF'.str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT),
+                'id' => $objective_id,
                 'text' => $point['title'],
+                'description' => $explanations[$objective_id],
                 'scope' => $point['scope']
             );
+            unset($explanations[$objective_id]);
 
             if (!empty($point['controller'])) {
                 $objective['controller'] = true;
@@ -62,6 +72,10 @@ return function (): array {
             'objectives' => $objectives
         );
         unset($content[$id]);
+    }
+
+    if (count($explanations) > 0) {
+        throw new RuntimeException('HCG explanations for unknown SOC 2 points of focus: '.implode(', ', array_keys($explanations)));
     }
 
     if (count($content) > 0) {
