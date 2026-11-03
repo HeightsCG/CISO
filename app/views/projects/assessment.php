@@ -10,11 +10,6 @@
         </div>
         <div class="page__actions assess__actions-bar">
             <a class="btn btn--secondary" href="/projects/evidence/id/<?php echo (int) $this->assessment['project_id']; ?>/from/assessment/ref/<?php echo (int) $this->assessment['id']; ?>"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>
-            <button type="button" class="btn btn--secondary" id="do_details_open"><i class="fa-regular fa-sliders"></i> Details</button>
-            <button type="button" class="btn btn--secondary" id="do_narrative_open"><i class="fa-regular fa-pen-line"></i> Narrative</button>
-            <?php if ($this->features['governing_document'] !== null) { ?>
-            <a class="btn btn--secondary" href="/projects/document/id/<?php echo (int) $this->assessment['id']; ?>"><i class="fa-regular fa-file-lines"></i> <?php echo htmlspecialchars(ucfirst($this->features['governing_document']['short']), ENT_QUOTES, 'UTF-8'); ?></a>
-            <?php } ?>
             <button type="button" class="btn btn--secondary" id="do_reports_open"><i class="fa-regular fa-file-chart-column"></i> Reports</button>
             <button type="button" class="btn btn--primary" id="do_complete"><i class="fa-regular fa-circle-check"></i> Mark Complete</button>
             <span class="dropdown">
@@ -26,286 +21,407 @@
         </div>
     </div>
 
-    <div class="notice notice--warn" id="mismatch_notice" role="status" hidden></div>
+    <nav class="subtabs subtabs--page" role="tablist" aria-label="Assessment">
+        <button class="subtabs__link active" id="tab_controls_btn" data-bs-toggle="pill" data-bs-target="#tab_controls" type="button" role="tab" aria-controls="tab_controls" aria-selected="true">Controls</button>
+        <button class="subtabs__link" id="tab_writeup_btn" data-bs-toggle="pill" data-bs-target="#tab_writeup" type="button" role="tab" aria-controls="tab_writeup" aria-selected="false">Write-up</button>
+        <button class="subtabs__link" id="tab_settings_btn" data-bs-toggle="pill" data-bs-target="#tab_settings" type="button" role="tab" aria-controls="tab_settings" aria-selected="false">Settings</button>
+    </nav>
 
-    <div class="panel record__panel">
-        <div class="panel__body">
-            <div class="rollup__score" id="score_row" hidden>
-                <span class="rollup__score-value" id="score_value"></span>
-                <span class="rollup__score-outcome" id="score_outcome"></span>
-                <button type="button" class="btn btn--tertiary btn--sm" id="do_checks_open" hidden></button>
+    <div class="tab-content assess__panes">
+        <div class="tab-pane show active" id="tab_controls" role="tabpanel" aria-labelledby="tab_controls_btn">
+            <div class="notice notice--warn" id="mismatch_notice" role="status" hidden></div>
+
+            <div class="panel record__panel">
+                <div class="panel__body">
+                    <div class="rollup__score" id="score_row" hidden>
+                        <span class="rollup__score-value" id="score_value"></span>
+                        <span class="rollup__score-outcome" id="score_outcome"></span>
+                        <button type="button" class="btn btn--tertiary btn--sm" id="do_checks_open" hidden></button>
+                    </div>
+                    <div class="rollup" id="rollup"></div>
+                    <div class="rollup__progress">
+                        <div class="progress progress--lg"><div class="progress__bar" id="rollup_bar" style="width:0%"></div></div>
+                        <span class="progress__label" id="rollup_label">&nbsp;</span>
+                    </div>
+                </div>
             </div>
-            <div class="rollup" id="rollup"></div>
-            <div class="rollup__progress">
-                <div class="progress progress--lg"><div class="progress__bar" id="rollup_bar" style="width:0%"></div></div>
-                <span class="progress__label" id="rollup_label">&nbsp;</span>
+
+            <div class="panel record__panel workbench">
+                <div class="panel__head roster__toolbar">
+                    <input type="search" id="item_search" class="input roster__search" placeholder="Search by identifier or title..." autocomplete="off" spellcheck="false">
+                    <div class="roster__filters">
+                        <div class="roster__filter">
+                            <select id="family_filter" class="form-select">
+                                <option value="">All families</option>
+                            </select>
+                        </div>
+                        <div class="roster__filter">
+                            <select id="result_filter" class="form-select">
+                                <option value="">All results</option>
+                                <option value="Not Assessed">Not Assessed</option>
+                                <option value="Implemented">Implemented</option>
+                                <option value="Partially Implemented">Partially Implemented</option>
+                                <option value="Not Implemented">Not Implemented</option>
+                                <option value="Not Applicable">Not Applicable</option>
+                            </select>
+                        </div>
+                        <div class="roster__filter">
+                            <select id="evidence_filter" class="form-select">
+                                <option value="">Any</option>
+                                <option value="yes">Has evidence</option>
+                                <option value="no">No evidence</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="workbench__body">
+                    <div class="workbench__list">
+                        <table class="data controls__table" id="items_table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Identifier</th>
+                                    <th scope="col">Control</th>
+                                    <th scope="col">Result</th>
+                                    <th scope="col" title="Evidence" aria-label="Evidence"><i class="fa-regular fa-paperclip" aria-hidden="true"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody id="items_body"></tbody>
+                        </table>
+                        <p class="controls__empty" id="items_empty">Loading items&hellip;</p>
+                    </div>
+
+                    <section class="workbench__detail" id="detail" aria-label="Control detail">
+                        <p class="workbench__empty" id="detail_empty">Select a control to assess it.</p>
+
+                        <div class="workbench__form" id="detail_form" hidden>
+                            <div class="workbench__scroll">
+                                <div class="assess__control-head workbench__head">
+                                    <p class="assess__eyebrow"><span class="assess__id" id="item_identifier"></span> <span class="assess__sep" aria-hidden="true">&middot;</span> <span class="assess__family" id="item_family"></span></p>
+                                    <h3 class="assess__title" id="item_title"></h3>
+                                    <p class="assess__text workbench__requirement" id="item_description"></p>
+                                    <details class="workbench__guidance" id="item_guidance_wrap">
+                                        <summary>Assessment guidance</summary>
+                                        <p class="assess__text" id="item_guidance"></p>
+                                    </details>
+                                </div>
+
+                                <div class="workbench__section">
+                                    <div class="row mb-4" id="applicability_row">
+                                        <div class="col-md-4 form-group">
+                                            <label for="item_applicability">Applicability</label>
+                                            <select class="form-control" id="item_applicability">
+                                                <option value="Applicable">Applicable</option>
+                                                <option value="Excluded">Excluded</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-8 form-group" id="justification_group">
+                                            <label for="item_justification">Justification for exclusion <abbr title="required">*</abbr></label>
+                                            <textarea class="form-control" id="item_justification" rows="2"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group mb-4" id="objectives_group">
+                                        <label id="objectives_label">Objectives</label>
+                                        <ul class="objectives" id="item_objectives"></ul>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label id="item_result_label">Result</label>
+                                        <div class="segmented segmented--wrap" id="item_result" role="group" aria-labelledby="item_result_label">
+                                            <button type="button" class="segmented__btn" data-value="Not Assessed" aria-pressed="false">Not Assessed</button>
+                                            <button type="button" class="segmented__btn" data-value="Implemented" aria-pressed="false">Implemented</button>
+                                            <button type="button" class="segmented__btn" data-value="Partially Implemented" aria-pressed="false">Partially Implemented</button>
+                                            <button type="button" class="segmented__btn" data-value="Not Implemented" aria-pressed="false">Not Implemented</button>
+                                            <button type="button" class="segmented__btn" data-value="Not Applicable" aria-pressed="false">Not Applicable</button>
+                                        </div>
+                                        <p class="field__help" id="result_help" hidden></p>
+                                    </div>
+
+                                    <div class="form-check mb-4" id="partial_row">
+                                        <input class="form-check-input" type="checkbox" id="item_partial_credit">
+                                        <label class="form-check-label" for="item_partial_credit" id="partial_label">Partially effective</label>
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <div class="col-md-12 form-group">
+                                            <label for="item_notes">Observation</label>
+                                            <textarea class="form-control" id="item_notes" rows="3" placeholder="What was examined, who was interviewed, what was observed."></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <div class="col-md-12 form-group">
+                                            <label for="item_implementation">Implementation description</label>
+                                            <textarea class="form-control" id="item_implementation" rows="3" placeholder="How the organization meets this today."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="workbench__section" id="finding_section">
+                                    <h3 class="record__group-title">Finding</h3>
+                                    <div class="row mb-4">
+                                        <div class="col-md-12 form-group">
+                                            <label for="item_gap">Gap</label>
+                                            <textarea class="form-control" id="item_gap" rows="2" placeholder="What is missing or not working."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4">
+                                        <div class="col-md-8 form-group">
+                                            <label for="item_impact">Business impact</label>
+                                            <textarea class="form-control" id="item_impact" rows="2" placeholder="What this exposes the business to."></textarea>
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label for="item_risk">Risk</label>
+                                            <select class="form-control" id="item_risk">
+                                                <option value="">Not rated</option>
+                                                <option value="Low">Low</option>
+                                                <option value="Moderate">Moderate</option>
+                                                <option value="High">High</option>
+                                                <option value="Critical">Critical</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4">
+                                        <div class="col-md-12 form-group">
+                                            <label for="item_recommendation">Recommendation</label>
+                                            <textarea class="form-control" id="item_recommendation" rows="2" placeholder="What to do to close the gap."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-4">
+                                        <div class="col-md-8 form-group">
+                                            <label for="item_owner">Owner</label>
+                                            <input type="text" class="form-control" id="item_owner" placeholder="Person or role responsible">
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label for="item_target">Target date</label>
+                                            <input type="date" class="form-control" id="item_target">
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label>Milestones</label>
+                                        <div id="item_milestones"></div>
+                                        <button type="button" class="btn btn--secondary btn--sm" id="do_milestone_add"><i class="fa-regular fa-plus"></i> Add Milestone</button>
+                                    </div>
+                                </div>
+
+                                <div class="workbench__section">
+                                    <h3 class="record__group-title">Evidence</h3>
+                                    <ul class="evidence__list" id="item_evidence"></ul>
+                                    <div class="assess__actions">
+                                        <button type="button" class="btn btn--secondary btn--sm" id="do_attach_open"><i class="fa-regular fa-link"></i> Attach from Vault</button>
+                                        <button type="button" class="btn btn--secondary btn--sm" id="do_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload New</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="workbench__foot">
+                                <button type="button" id="do_item_save" class="btn btn--primary">Save</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="panel record__panel workbench">
-        <div class="panel__head roster__toolbar">
-            <input type="search" id="item_search" class="input roster__search" placeholder="Search by identifier or title..." autocomplete="off" spellcheck="false">
-            <div class="roster__filters">
-                <div class="roster__filter">
-                    <select id="family_filter" class="form-select">
-                        <option value="">All families</option>
-                    </select>
-                </div>
-                <div class="roster__filter">
-                    <select id="result_filter" class="form-select">
-                        <option value="">All results</option>
-                        <option value="Not Assessed">Not Assessed</option>
-                        <option value="Implemented">Implemented</option>
-                        <option value="Partially Implemented">Partially Implemented</option>
-                        <option value="Not Implemented">Not Implemented</option>
-                        <option value="Not Applicable">Not Applicable</option>
-                    </select>
-                </div>
-                <div class="roster__filter">
-                    <select id="evidence_filter" class="form-select">
-                        <option value="">Any</option>
-                        <option value="yes">Has evidence</option>
-                        <option value="no">No evidence</option>
-                    </select>
+        <div class="tab-pane" id="tab_writeup" role="tabpanel" aria-labelledby="tab_writeup_btn">
+            <div class="assess__form">
+                <div class="settings settings--single" id="writeup_form">
+                    <section class="card">
+                        <header class="card__head">
+                            <h2 class="card__title">Scope and Method</h2>
+                            <p class="card__desc">Printed in the Assessment Results Report.</p>
+                        </header>
+                        <div class="card__body">
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <div class="form-floating">
+                                        <textarea class="form-control form-control--notes" id="writeup_scope" placeholder="Scope"><?php echo htmlspecialchars((string) $this->assessment['assessment_scope'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                                        <label for="writeup_scope">Scope</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-floating">
+                                        <textarea class="form-control form-control--notes" id="writeup_method" placeholder="Method"><?php echo htmlspecialchars((string) $this->assessment['assessment_method'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                                        <label for="writeup_method">Method</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="card">
+                        <header class="card__head">
+                            <h2 class="card__title">Consultant Narrative</h2>
+                            <p class="card__desc">Your professional opinion, printed in the Executive Summary exactly as written.</p>
+                        </header>
+                        <div class="card__body">
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <div class="form-floating">
+                                        <textarea class="form-control form-control--notes" id="narrative_posture" placeholder="Overall security posture"><?php echo htmlspecialchars((string) $this->assessment['posture_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                                        <label for="narrative_posture">Overall security posture</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <textarea class="form-control form-control--notes" id="narrative_strengths" placeholder="Strengths"><?php echo htmlspecialchars((string) $this->assessment['strengths_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                                        <label for="narrative_strengths">Strengths</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <textarea class="form-control form-control--notes" id="narrative_concerns" placeholder="Key concerns"><?php echo htmlspecialchars((string) $this->assessment['concerns_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                                        <label for="narrative_concerns">Key concerns</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <textarea class="form-control form-control--notes" id="narrative_readiness" placeholder="Readiness opinion"><?php echo htmlspecialchars((string) $this->assessment['readiness_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                                        <label for="narrative_readiness">Readiness opinion</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <textarea class="form-control form-control--notes" id="narrative_decisions" placeholder="Decisions needed from leadership"><?php echo htmlspecialchars((string) $this->assessment['decisions_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                                        <label for="narrative_decisions">Decisions needed from leadership</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <?php if ($this->features['governing_document'] !== null) { ?>
+                    <section class="card">
+                        <header class="card__head">
+                            <h2 class="card__title"><?php echo htmlspecialchars($this->features['governing_document']['title'], ENT_QUOTES, 'UTF-8'); ?></h2>
+                            <p class="card__desc">Downloadable from Reports as its own document.</p>
+                        </header>
+                        <div class="card__body">
+                            <div class="row g-3">
+                                <?php foreach ($this->sections as $i => $section) { ?>
+                                <div class="col-md-12">
+                                    <div class="form-floating">
+                                        <textarea class="form-control form-control--notes document__section" id="section_<?php echo (int) $i; ?>" data-key="<?php echo htmlspecialchars($section['key'], ENT_QUOTES, 'UTF-8'); ?>" placeholder="<?php echo htmlspecialchars($section['title'], ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($section['body'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                                        <label for="section_<?php echo (int) $i; ?>"><?php echo htmlspecialchars($section['title'], ENT_QUOTES, 'UTF-8'); ?></label>
+                                    </div>
+                                </div>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </section>
+                    <?php } ?>
+                    <div class="savebar" id="writeup_savebar">
+                        <span class="savebar__status" id="writeup_status" aria-live="polite">All changes saved</span>
+                        <span class="savebar__actions">
+                            <button type="button" id="do_writeup_save" class="btn btn--primary" disabled>Save Changes</button>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="workbench__body">
-            <div class="workbench__list">
-                <table class="data controls__table" id="items_table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Identifier</th>
-                            <th scope="col">Control</th>
-                            <th scope="col">Result</th>
-                            <th scope="col" title="Evidence" aria-label="Evidence"><i class="fa-regular fa-paperclip" aria-hidden="true"></i></th>
-                        </tr>
-                    </thead>
-                    <tbody id="items_body"></tbody>
-                </table>
-                <p class="controls__empty" id="items_empty">Loading items&hellip;</p>
-            </div>
 
-            <section class="workbench__detail" id="detail" aria-label="Control detail">
-                <p class="workbench__empty" id="detail_empty">Select a control to assess it.</p>
-
-                <div class="workbench__form" id="detail_form" hidden>
-                    <div class="workbench__scroll">
-                        <div class="assess__control-head workbench__head">
-                            <p class="assess__eyebrow"><span class="assess__id" id="item_identifier"></span> <span class="assess__sep" aria-hidden="true">&middot;</span> <span class="assess__family" id="item_family"></span></p>
-                            <h3 class="assess__title" id="item_title"></h3>
-                            <p class="assess__text workbench__requirement" id="item_description"></p>
-                            <details class="workbench__guidance" id="item_guidance_wrap">
-                                <summary>Assessment guidance</summary>
-                                <p class="assess__text" id="item_guidance"></p>
-                            </details>
-                        </div>
-
-                        <div class="workbench__section">
-                            <div class="row mb-4" id="applicability_row">
-                                <div class="col-md-4 form-group">
-                                    <label for="item_applicability">Applicability</label>
-                                    <select class="form-control" id="item_applicability">
-                                        <option value="Applicable">Applicable</option>
-                                        <option value="Excluded">Excluded</option>
-                                    </select>
+        <div class="tab-pane" id="tab_settings" role="tabpanel" aria-labelledby="tab_settings_btn">
+            <div class="assess__form">
+                <div class="settings settings--single" id="details_form">
+                    <section class="card">
+                        <header class="card__head">
+                            <h2 class="card__title">Assessment Type</h2>
+                            <p class="card__desc">Interim and final assessments are compared against an earlier baseline for the same client and framework.</p>
+                        </header>
+                        <div class="card__body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="details_type">
+                                            <option value="Baseline">Baseline</option>
+                                            <option value="Interim">Interim</option>
+                                            <option value="Final">Final</option>
+                                        </select>
+                                        <label for="details_type">Type</label>
+                                    </div>
                                 </div>
-                                <div class="col-md-8 form-group" id="justification_group">
-                                    <label for="item_justification">Justification for exclusion <abbr title="required">*</abbr></label>
-                                    <textarea class="form-control" id="item_justification" rows="2"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="form-group mb-4" id="objectives_group">
-                                <label id="objectives_label">Objectives</label>
-                                <ul class="objectives" id="item_objectives"></ul>
-                            </div>
-
-                            <div class="form-group mb-4">
-                                <label id="item_result_label">Result</label>
-                                <div class="segmented segmented--wrap" id="item_result" role="group" aria-labelledby="item_result_label">
-                                    <button type="button" class="segmented__btn" data-value="Not Assessed" aria-pressed="false">Not Assessed</button>
-                                    <button type="button" class="segmented__btn" data-value="Implemented" aria-pressed="false">Implemented</button>
-                                    <button type="button" class="segmented__btn" data-value="Partially Implemented" aria-pressed="false">Partially Implemented</button>
-                                    <button type="button" class="segmented__btn" data-value="Not Implemented" aria-pressed="false">Not Implemented</button>
-                                    <button type="button" class="segmented__btn" data-value="Not Applicable" aria-pressed="false">Not Applicable</button>
-                                </div>
-                                <p class="field__help" id="result_help" hidden></p>
-                            </div>
-
-                            <div class="form-check mb-4" id="partial_row">
-                                <input class="form-check-input" type="checkbox" id="item_partial_credit">
-                                <label class="form-check-label" for="item_partial_credit" id="partial_label">Partially effective</label>
-                            </div>
-
-                            <div class="row mb-4">
-                                <div class="col-md-12 form-group">
-                                    <label for="item_notes">Observation</label>
-                                    <textarea class="form-control" id="item_notes" rows="3" placeholder="What was examined, who was interviewed, what was observed."></textarea>
-                                </div>
-                            </div>
-
-                            <div class="row mb-4">
-                                <div class="col-md-12 form-group">
-                                    <label for="item_implementation">Implementation description</label>
-                                    <textarea class="form-control" id="item_implementation" rows="3" placeholder="How the organization meets this today."></textarea>
+                                <div class="col-md-6" id="baseline_group">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="details_baseline"></select>
+                                        <label for="details_baseline">Compare against</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="workbench__section" id="finding_section">
-                            <h3 class="record__group-title">Finding</h3>
-                            <div class="row mb-4">
-                                <div class="col-md-12 form-group">
-                                    <label for="item_gap">Gap</label>
-                                    <textarea class="form-control" id="item_gap" rows="2" placeholder="What is missing or not working."></textarea>
+                    </section>
+                    <?php if (count($this->features['tiers']) > 0) { ?>
+                    <section class="card">
+                        <header class="card__head">
+                            <h2 class="card__title">Maturity Tiers</h2>
+                            <p class="card__desc">Where the organization is today and where it is aiming to be.</p>
+                        </header>
+                        <div class="card__body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <select class="form-select details__tier" id="details_tier_governance" data-current="<?php echo (int) $this->assessment['tier_governance']; ?>"></select>
+                                        <label for="details_tier_governance">Current governance tier</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="col-md-8 form-group">
-                                    <label for="item_impact">Business impact</label>
-                                    <textarea class="form-control" id="item_impact" rows="2" placeholder="What this exposes the business to."></textarea>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <select class="form-select details__tier" id="details_target_governance" data-current="<?php echo (int) $this->assessment['target_tier_governance']; ?>"></select>
+                                        <label for="details_target_governance">Target governance tier</label>
+                                    </div>
                                 </div>
-                                <div class="col-md-4 form-group">
-                                    <label for="item_risk">Risk</label>
-                                    <select class="form-control" id="item_risk">
-                                        <option value="">Not rated</option>
-                                        <option value="Low">Low</option>
-                                        <option value="Moderate">Moderate</option>
-                                        <option value="High">High</option>
-                                        <option value="Critical">Critical</option>
-                                    </select>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <select class="form-select details__tier" id="details_tier_management" data-current="<?php echo (int) $this->assessment['tier_management']; ?>"></select>
+                                        <label for="details_tier_management">Current management tier</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="col-md-12 form-group">
-                                    <label for="item_recommendation">Recommendation</label>
-                                    <textarea class="form-control" id="item_recommendation" rows="2" placeholder="What to do to close the gap."></textarea>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <select class="form-select details__tier" id="details_target_management" data-current="<?php echo (int) $this->assessment['target_tier_management']; ?>"></select>
+                                        <label for="details_target_management">Target management tier</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="col-md-8 form-group">
-                                    <label for="item_owner">Owner</label>
-                                    <input type="text" class="form-control" id="item_owner" placeholder="Person or role responsible">
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label for="item_target">Target date</label>
-                                    <input type="date" class="form-control" id="item_target">
-                                </div>
-                            </div>
-                            <div class="form-group mb-4">
-                                <label>Milestones</label>
-                                <div id="item_milestones"></div>
-                                <button type="button" class="btn btn--secondary btn--sm" id="do_milestone_add"><i class="fa-regular fa-plus"></i> Add Milestone</button>
                             </div>
                         </div>
-
-                        <div class="workbench__section">
-                            <h3 class="record__group-title">Evidence</h3>
-                            <ul class="evidence__list" id="item_evidence"></ul>
-                            <div class="assess__actions">
-                                <button type="button" class="btn btn--secondary btn--sm" id="do_attach_open"><i class="fa-regular fa-link"></i> Attach from Vault</button>
-                                <button type="button" class="btn btn--secondary btn--sm" id="do_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload New</button>
+                    </section>
+                    <?php } ?>
+                    <?php if (count($this->features['categories']) > 0) { ?>
+                    <section class="card">
+                        <header class="card__head">
+                            <h2 class="card__title">Categories in Scope</h2>
+                            <p class="card__desc">The common criteria always apply. Tick any additional categories this assessment covers.</p>
+                        </header>
+                        <div class="card__body" id="details_categories">
+                            <?php foreach ($this->features['categories'] as $i => $category) { ?>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="category_<?php echo (int) $i; ?>" value="<?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?>"<?php echo in_array($category, explode(',', (string) $this->assessment['scope_categories']), true) ? ' checked' : ''; ?>>
+                                <label class="form-check-label" for="category_<?php echo (int) $i; ?>"><?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?></label>
+                            </div>
+                            <?php } ?>
+                        </div>
+                    </section>
+                    <?php } ?>
+                    <?php if ($this->features['ssi_field'] !== null) { ?>
+                    <section class="card">
+                        <header class="card__head">
+                            <h2 class="card__title">Sensitive Security Information</h2>
+                        </header>
+                        <div class="card__body">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="details_ssi"<?php echo (int) $this->assessment['ssi_reviewed'] === 1 ? ' checked' : ''; ?>>
+                                <label class="form-check-label" for="details_ssi"><?php echo htmlspecialchars($this->features['ssi_field']['label'], ENT_QUOTES, 'UTF-8'); ?></label>
+                            </div>
+                            <div class="form-floating mt-3" id="ssi_note_row">
+                                <textarea class="form-control form-control--notes" id="details_ssi_note" placeholder="Review note"><?php echo htmlspecialchars((string) $this->assessment['ssi_note'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                                <label for="details_ssi_note">Review note: who reviewed the SSI requirements, when, and how</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="workbench__foot">
-                        <button type="button" id="do_item_save" class="btn btn--primary">Save</button>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" data-bs-backdrop="static" id="details_modal" tabindex="-1" aria-labelledby="details_modal_title" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="details_modal_title">Assessment Details</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row mb-4">
-                    <div class="col-md-4 form-group">
-                        <label for="details_type">Assessment type</label>
-                        <select class="form-control" id="details_type">
-                            <option value="Baseline">Baseline</option>
-                            <option value="Interim">Interim</option>
-                            <option value="Final">Final</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8 form-group" id="baseline_group">
-                        <label for="details_baseline">Baseline to compare against</label>
-                        <select class="form-control" id="details_baseline"></select>
+                    </section>
+                    <?php } ?>
+                    <div class="savebar" id="details_savebar">
+                        <span class="savebar__status" id="details_status" aria-live="polite">All changes saved</span>
+                        <span class="savebar__actions">
+                            <button type="button" id="do_details_save" class="btn btn--primary" disabled>Save Changes</button>
+                        </span>
                     </div>
                 </div>
-                <div class="form-check mb-4" id="no_baseline_row">
-                    <input class="form-check-input" type="checkbox" id="details_no_baseline">
-                    <label class="form-check-label" for="details_no_baseline">There is no baseline for this assessment</label>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-12 form-group">
-                        <label for="details_scope">Scope</label>
-                        <textarea class="form-control" id="details_scope" rows="3" placeholder="Systems, locations, business units and data in scope."><?php echo htmlspecialchars((string) $this->assessment['assessment_scope'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-12 form-group">
-                        <label for="details_method">Method</label>
-                        <textarea class="form-control" id="details_method" rows="3" placeholder="Interviews, document review, configuration testing, sampling."><?php echo htmlspecialchars((string) $this->assessment['assessment_method'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                    </div>
-                </div>
-                <?php if (count($this->features['tiers']) > 0) { ?>
-                <div class="row mb-4">
-                    <div class="col-md-3 form-group">
-                        <label for="details_tier_governance">Governance tier</label>
-                        <select class="form-control details__tier" id="details_tier_governance" data-current="<?php echo (int) $this->assessment['tier_governance']; ?>"></select>
-                    </div>
-                    <div class="col-md-3 form-group">
-                        <label for="details_target_governance">Target</label>
-                        <select class="form-control details__tier" id="details_target_governance" data-current="<?php echo (int) $this->assessment['target_tier_governance']; ?>"></select>
-                    </div>
-                    <div class="col-md-3 form-group">
-                        <label for="details_tier_management">Management tier</label>
-                        <select class="form-control details__tier" id="details_tier_management" data-current="<?php echo (int) $this->assessment['tier_management']; ?>"></select>
-                    </div>
-                    <div class="col-md-3 form-group">
-                        <label for="details_target_management">Target</label>
-                        <select class="form-control details__tier" id="details_target_management" data-current="<?php echo (int) $this->assessment['target_tier_management']; ?>"></select>
-                    </div>
-                </div>
-                <?php } ?>
-                <?php if (count($this->features['categories']) > 0) { ?>
-                <div class="form-group mb-4">
-                    <label>Categories in scope, in addition to the common criteria</label>
-                    <div id="details_categories">
-                        <?php foreach ($this->features['categories'] as $i => $category) { ?>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="category_<?php echo (int) $i; ?>" value="<?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?>"<?php echo in_array($category, explode(',', (string) $this->assessment['scope_categories']), true) ? ' checked' : ''; ?>>
-                            <label class="form-check-label" for="category_<?php echo (int) $i; ?>"><?php echo htmlspecialchars($category, ENT_QUOTES, 'UTF-8'); ?></label>
-                        </div>
-                        <?php } ?>
-                    </div>
-                </div>
-                <?php } ?>
-                <?php if ($this->features['ssi_field'] !== null) { ?>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" id="details_ssi"<?php echo (int) $this->assessment['ssi_reviewed'] === 1 ? ' checked' : ''; ?>>
-                    <label class="form-check-label" for="details_ssi"><?php echo htmlspecialchars($this->features['ssi_field']['label'], ENT_QUOTES, 'UTF-8'); ?></label>
-                </div>
-                <div class="row mb-4" id="ssi_note_row">
-                    <div class="col-md-12 form-group">
-                        <label for="details_ssi_note">Review note</label>
-                        <textarea class="form-control" id="details_ssi_note" rows="2" placeholder="Who reviewed the SSI requirements, when, and how they were handled."><?php echo htmlspecialchars((string) $this->assessment['ssi_note'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                    </div>
-                </div>
-                <?php } ?>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="do_details_save" class="btn btn--primary">Save</button>
             </div>
         </div>
     </div>
@@ -328,50 +444,6 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn--primary" id="do_checks_complete">Mark Complete</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" data-bs-backdrop="static" id="narrative_modal" tabindex="-1" aria-labelledby="narrative_modal_title" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="narrative_modal_title">Consultant Narrative</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p class="import__hint">Written by the consultant. These words appear in the reports exactly as entered.</p>
-                <div class="row mb-4">
-                    <div class="col-md-12 form-group">
-                        <label for="narrative_posture">Overall security posture</label>
-                        <textarea class="form-control" id="narrative_posture" rows="4"><?php echo htmlspecialchars((string) $this->assessment['posture_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-6 form-group">
-                        <label for="narrative_strengths">Strengths</label>
-                        <textarea class="form-control" id="narrative_strengths" rows="5"><?php echo htmlspecialchars((string) $this->assessment['strengths_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label for="narrative_concerns">Key concerns</label>
-                        <textarea class="form-control" id="narrative_concerns" rows="5"><?php echo htmlspecialchars((string) $this->assessment['concerns_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-6 form-group">
-                        <label for="narrative_readiness">Readiness opinion</label>
-                        <textarea class="form-control" id="narrative_readiness" rows="4"><?php echo htmlspecialchars((string) $this->assessment['readiness_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label for="narrative_decisions">Decisions needed from leadership</label>
-                        <textarea class="form-control" id="narrative_decisions" rows="4"><?php echo htmlspecialchars((string) $this->assessment['decisions_text'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="do_narrative_save" class="btn btn--primary">Save</button>
             </div>
         </div>
     </div>
@@ -1624,17 +1696,48 @@ $(document).ready(function () {
         });
     });
 
+    var saved_state = {};
+
+    function form_state(form) {
+        return JSON.stringify($(form).find('input, select, textarea').map(function () {
+            return this.type === 'checkbox' ? this.checked : $(this).val();
+        }).get());
+    }
+
+    function mark_saved(form) {
+        saved_state[form] = form_state(form);
+        refresh_savebar(form);
+    }
+
+    function refresh_savebar(form) {
+
+        var bar = $(form).find('.savebar');
+        var dirty = saved_state[form] !== undefined && form_state(form) !== saved_state[form];
+
+        bar.toggleClass('is-dirty', dirty);
+        bar.find('.savebar__status').text(dirty ? 'Unsaved changes' : 'All changes saved');
+        bar.find('.btn--primary').prop('disabled', !dirty);
+
+        if (dirty) {
+            bar.removeClass('is-saved');
+        }
+    }
+
+    function show_saved(form) {
+        mark_saved(form);
+        $(form).find('.savebar').addClass('is-saved');
+    }
+
+    $('#details_form, #writeup_form').on('input change', 'input, select, textarea', function () {
+        refresh_savebar('#' + $(this).closest('.settings').attr('id'));
+    });
+
     function sync_details_form() {
-
-        var type = $('#details_type').val();
-        var none = $('#details_no_baseline').is(':checked');
-
-        $('#baseline_group').toggle(type !== 'Baseline' && !none);
-        $('#no_baseline_row').toggle(type !== 'Baseline');
+        $('#baseline_group').toggle($('#details_type').val() !== 'Baseline');
         $('#ssi_note_row').toggle($('#details_ssi').is(':checked'));
     }
 
-    $('#details_type, #details_no_baseline, #details_ssi').on('change', sync_details_form);
+    $('#details_type, #details_ssi').on('change', sync_details_form);
 
     $('.details__tier').each(function () {
 
@@ -1647,40 +1750,47 @@ $(document).ready(function () {
         $(this).html(options).val($(this).attr('data-current'));
     });
 
-    $('#do_details_open').click(function () {
+    function baseline_choice() {
+        return details.no_baseline === 1 ? 'none' : String(details.baseline_assessment_id);
+    }
 
-        $('#details_type').val(details.assessment_type);
-        $('#details_no_baseline').prop('checked', details.no_baseline === 1);
-        $('#details_baseline').html('<option value="0">Loading&hellip;</option>');
-        sync_details_form();
-        modal('details_modal').show();
+    function load_baselines() {
 
         ApiDataSvc.apiCall('post', 'load_baselines', { assessment_id: assessment_id }, function (data) {
 
             var list = JSON.parse(data);
-            var options = '<option value="0">' + (list.length === 0 ? 'No baseline assessments for this client and framework' : 'Choose a baseline&hellip;') + '</option>';
+            var options = '<option value="0">' + (list.length === 0 ? 'No earlier baseline for this client' : 'Choose a baseline&hellip;') + '</option>';
 
             for (var i = 0; i < list.length; i++) {
                 options += '<option value="' + list[i].id + '">' + esc(list[i].assessment_name) + ' (' + esc(list[i].project_name) + ', ' + esc(list[i].created_on) + ')</option>';
             }
 
-            $('#details_baseline').html(options).val(String(details.baseline_assessment_id));
+            options += '<option value="none">There is no baseline for this assessment</option>';
+
+            $('#details_baseline').html(options).val(baseline_choice());
 
             if ($('#details_baseline').val() === null) {
                 $('#details_baseline').val('0');
             }
+
+            mark_saved('#details_form');
         });
-    });
+    }
+
+    $('#details_type').val(details.assessment_type);
+    sync_details_form();
+    load_baselines();
+    mark_saved('#writeup_form');
 
     $('#do_details_save').click(function () {
+
+        var choice = $('#details_baseline').val() || '0';
 
         var values = {
             assessment_id: assessment_id,
             assessment_type: $('#details_type').val(),
-            baseline_assessment_id: $('#details_baseline').val() || '0',
-            no_baseline: $('#details_no_baseline').is(':checked') ? '1' : '0',
-            assessment_scope: $('#details_scope').val().trim(),
-            assessment_method: $('#details_method').val().trim(),
+            baseline_assessment_id: choice === 'none' ? '0' : choice,
+            no_baseline: choice === 'none' ? '1' : '0',
             scope_categories: $('#details_categories input:checked').map(function () {
                 return $(this).val();
             }).get(),
@@ -1701,40 +1811,51 @@ $(document).ready(function () {
             set_loading('#do_details_save', false);
 
             if (obj.success) {
-                window.location.reload();
+                details.assessment_type = values.assessment_type;
+                details.baseline_assessment_id = values.assessment_type === 'Baseline' ? 0 : parseInt(values.baseline_assessment_id, 10);
+                details.no_baseline = values.no_baseline === '1' && values.assessment_type !== 'Baseline' ? 1 : 0;
+                show_saved('#details_form');
+                load(true);
             } else {
+                refresh_savebar('#details_form');
                 toastr.error(obj.message);
             }
         });
     });
 
-    $('#do_narrative_open').click(function () {
-        modal('narrative_modal').show();
-    });
+    $('#do_writeup_save').click(function () {
 
-    $('#do_narrative_save').click(function () {
+        var sections = {};
+
+        $('.document__section').each(function () {
+            sections[$(this).attr('data-key')] = $(this).val().trim();
+        });
 
         var values = {
             assessment_id: assessment_id,
+            assessment_scope: $('#writeup_scope').val().trim(),
+            assessment_method: $('#writeup_method').val().trim(),
             posture_text: $('#narrative_posture').val().trim(),
             strengths_text: $('#narrative_strengths').val().trim(),
             concerns_text: $('#narrative_concerns').val().trim(),
             readiness_text: $('#narrative_readiness').val().trim(),
-            decisions_text: $('#narrative_decisions').val().trim()
+            decisions_text: $('#narrative_decisions').val().trim(),
+            sections: sections
         };
 
-        set_loading('#do_narrative_save', true);
+        set_loading('#do_writeup_save', true);
 
-        ApiDataSvc.apiCall('post', 'save_assessment_narrative', values, function (data) {
+        ApiDataSvc.apiCall('post', 'save_assessment_writeup', values, function (data) {
 
             var obj = JSON.parse(data);
 
-            set_loading('#do_narrative_save', false);
+            set_loading('#do_writeup_save', false);
 
             if (obj.success) {
-                toastr.success(obj.message);
-                modal('narrative_modal').hide();
+                show_saved('#writeup_form');
+                refresh_checks();
             } else {
+                refresh_savebar('#writeup_form');
                 toastr.error(obj.message);
             }
         });
@@ -1801,7 +1922,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 
     var assessment_id = <?php echo (int) $this->assessment['id']; ?>;
-    var reports = <?php echo json_encode(ReadyReports::catalog_for('assessment'), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+    var reports = <?php echo json_encode(ReadyReports::catalog_for_assessment($this->features), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
     var FORMAT_NAMES = {
         pdf: "PDF",
         docx: "Word",

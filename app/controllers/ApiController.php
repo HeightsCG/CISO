@@ -2954,8 +2954,6 @@ class ApiController extends Controller {
             $assessment_type,
             $baseline_assessment_id,
             $no_baseline,
-            $this->input('assessment_scope'),
-            $this->input('assessment_method'),
             implode(',', $categories),
             $ssi_reviewed,
             $ssi_reviewed === 1 ? $this->input('ssi_note') : '',
@@ -2971,38 +2969,7 @@ class ApiController extends Controller {
         echo json_encode($response);
     }
 
-    public function save_assessment_narrativeAction(){
-
-        $response = array(
-            'success' => false,
-            'message' => 'Something went wrong'
-        );
-
-        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
-
-        if (!$this->owns_assessment($assessment_id)) {
-            $response['message'] = 'That assessment could not be found';
-            echo json_encode($response);
-            exit;
-        }
-
-        $this->assessments_model->save_narrative(
-            $assessment_id,
-            Session::get('company_id'),
-            $this->input('posture_text'),
-            $this->input('strengths_text'),
-            $this->input('concerns_text'),
-            $this->input('readiness_text'),
-            $this->input('decisions_text'),
-            Session::get('user_id')
-        );
-
-        $response['success'] = true;
-        $response['message'] = 'Narrative saved';
-        echo json_encode($response);
-    }
-
-    public function save_documentAction(){
+    public function save_assessment_writeupAction(){
 
         $response = array(
             'success' => false,
@@ -3021,12 +2988,6 @@ class ApiController extends Controller {
         $sections = FrameworkLibrary::document_sections((string) $assessment['framework_key']);
         $posted = is_array($this->post['sections'] ?? null) ? $this->post['sections'] : array();
 
-        if (count($sections) === 0) {
-            $response['message'] = 'This framework has no governing document';
-            echo json_encode($response);
-            exit;
-        }
-
         foreach ($posted as $key => $body) {
             if (!isset($sections[$key])) {
                 $response['message'] = 'A section is not part of this document';
@@ -3035,19 +2996,41 @@ class ApiController extends Controller {
             }
         }
 
-        foreach ($posted as $key => $body) {
-            $this->assessments_model->save_document_section(
+        $this->assessments_model->begin();
+
+        try {
+            $this->assessments_model->save_writeup(
                 $assessment_id,
-                $key,
-                $sections[$key]['title'],
-                trim(html_entity_decode((string) $body, ENT_QUOTES, 'UTF-8')),
-                $sections[$key]['order'],
+                Session::get('company_id'),
+                $this->input('assessment_scope'),
+                $this->input('assessment_method'),
+                $this->input('posture_text'),
+                $this->input('strengths_text'),
+                $this->input('concerns_text'),
+                $this->input('readiness_text'),
+                $this->input('decisions_text'),
                 Session::get('user_id')
             );
+
+            foreach ($posted as $key => $body) {
+                $this->assessments_model->save_document_section(
+                    $assessment_id,
+                    $key,
+                    $sections[$key]['title'],
+                    trim(html_entity_decode((string) $body, ENT_QUOTES, 'UTF-8')),
+                    $sections[$key]['order'],
+                    Session::get('user_id')
+                );
+            }
+
+            $this->assessments_model->commit();
+        } catch (Throwable $e) {
+            $this->assessments_model->roll_back();
+            throw $e;
         }
 
         $response['success'] = true;
-        $response['message'] = 'Document saved';
+        $response['message'] = 'Write-up saved';
         echo json_encode($response);
     }
 

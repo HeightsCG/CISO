@@ -1600,7 +1600,7 @@ table.data .actions {
 .form-control:focus,
 .form-select:focus {
     color: var(--text-primary);
-    background: var(--surface-app);
+    background-color: var(--surface-app);
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-subtle);
 }
@@ -1658,6 +1658,16 @@ table.data .actions {
     font-family: inherit;
     font-size: var(--fs-body);
     color: var(--text-primary);
+}
+
+select.form-control:not([multiple]):not([size]) {
+    padding-right: 2.25rem;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 .form-control,
@@ -6831,7 +6841,44 @@ table.data tbody tr.item__row.is-selected td {
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-3) var(--space-4);
-    margin-bottom: var(--space-5);
+    margin-bottom: var(--space-4);
+}
+
+.assess__panes {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.assess__panes > .tab-pane.active {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.assess__panes .record__panel {
+    flex-shrink: 0;
+    margin-bottom: 0;
+}
+
+.assess__panes .record__panel.workbench {
+    flex-shrink: 1;
+}
+
+.assess__form {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.settings--single {
+    display: block;
+}
+
+.assess__form .savebar {
+    bottom: 0;
 }
 
 .assess__heading {
@@ -6957,25 +7004,6 @@ table.data tbody tr.item__row.is-selected td {
     .workbench .roster__search {
         flex-basis: 100%;
     }
-}
-
-.page--document {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - var(--topbar-height) - (2 * var(--space-6)));
-}
-
-.page--document .document__panel {
-    display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-    min-height: 0;
-}
-
-.document__scroll {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
 }
 
 .rollup__score {

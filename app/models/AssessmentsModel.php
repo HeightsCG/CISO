@@ -894,8 +894,6 @@ class AssessmentsModel extends Model {
         $assessment_type,
         $baseline_assessment_id,
         $no_baseline,
-        $assessment_scope,
-        $assessment_method,
         $scope_categories,
         $ssi_reviewed,
         $ssi_note,
@@ -914,8 +912,6 @@ class AssessmentsModel extends Model {
             'assessment_type' => $assessment_type,
             'baseline_assessment_id' => $baseline_assessment_id,
             'no_baseline' => $no_baseline,
-            'assessment_scope' => $assessment_scope,
-            'assessment_method' => $assessment_method,
             'scope_categories' => $scope_categories,
             'ssi_reviewed' => $ssi_reviewed,
             'ssi_note' => $ssi_note,
@@ -929,9 +925,11 @@ class AssessmentsModel extends Model {
         return parent::update('assessments', $data, 'id = :id and company_id = :company_id', $where);
     }
 
-    public function save_narrative(
+    public function save_writeup(
         $assessment_id,
         $company_id,
+        $assessment_scope,
+        $assessment_method,
         $posture_text,
         $strengths_text,
         $concerns_text,
@@ -941,6 +939,8 @@ class AssessmentsModel extends Model {
     )
     {
         $data = array(
+            'assessment_scope' => $assessment_scope,
+            'assessment_method' => $assessment_method,
             'posture_text' => $posture_text,
             'strengths_text' => $strengths_text,
             'concerns_text' => $concerns_text,

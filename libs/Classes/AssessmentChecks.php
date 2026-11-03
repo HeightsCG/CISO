@@ -86,7 +86,7 @@ class AssessmentChecks {
         }
 
         if ($assessment['assessment_type'] === 'Final' && (int) $assessment['baseline_assessment_id'] === 0 && (int) $assessment['no_baseline'] === 0) {
-            $issues[] = self::issue('block', 'final_needs_baseline', 'A Final assessment needs a Baseline to compare against, or the "no baseline" box ticked in Details.', array());
+            $issues[] = self::issue('block', 'final_needs_baseline', 'A Final assessment needs a Baseline to compare against, or the "no baseline" box ticked on the Settings tab.', array());
         }
 
         $issues = array_merge($issues, self::project_framework_checks($definition, $assessment, $project));
@@ -116,7 +116,7 @@ class AssessmentChecks {
         }
 
         if (($score['model'] ?? '') === 'maturity' && ((int) ($assessment['tier_governance'] ?? 0) === 0 || (int) ($assessment['tier_management'] ?? 0) === 0)) {
-            $issues[] = self::issue('warn', 'tiers_not_set', 'The current Tiers for governance and management are not set in Details.', array());
+            $issues[] = self::issue('warn', 'tiers_not_set', 'The current Tiers for governance and management are not set on the Settings tab.', array());
         }
 
         return $issues;
