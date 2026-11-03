@@ -7,12 +7,6 @@
                 <h1 class="page__title"><?php echo htmlspecialchars($this->assessment['assessment_name'], ENT_QUOTES, 'UTF-8'); ?></h1>
                 <span class="badge" id="status_badge"><?php echo htmlspecialchars($this->assessment['assessment_status'], ENT_QUOTES, 'UTF-8'); ?></span>
             </div>
-            <div class="assess__meta">
-                <span class="assess__meta-item"><?php echo htmlspecialchars($this->assessment['assessment_type'], ENT_QUOTES, 'UTF-8'); ?></span>
-                <span class="assess__meta-item"><?php echo htmlspecialchars(FrameworkLibrary::display_name($this->assessment['standard_name'], $this->assessment['version']), ENT_QUOTES, 'UTF-8'); ?></span>
-                <span class="assess__meta-item" id="control_count">&nbsp;</span>
-                <span class="assess__meta-item">Evidence vault: <?php echo htmlspecialchars($this->assessment['project_name'], ENT_QUOTES, 'UTF-8'); ?></span>
-            </div>
         </div>
         <div class="page__actions assess__actions-bar">
             <a class="btn btn--secondary" href="/projects/evidence/id/<?php echo (int) $this->assessment['project_id']; ?>/from/assessment/ref/<?php echo (int) $this->assessment['id']; ?>"><i class="fa-regular fa-folder-open"></i> Evidence Vault</a>
@@ -644,7 +638,6 @@ $(document).ready(function () {
         $('#rollup').html(html);
         $('#rollup_bar').css('width', pct + '%');
         $('#rollup_label').text(assessed + ' of ' + total + ' ' + term('controls', 'controls') + ' assessed · ' + pct + '%');
-        $('#control_count').text(total + ' ' + term('controls', 'controls'));
 
         sync_complete(counts['Not Assessed']);
     }

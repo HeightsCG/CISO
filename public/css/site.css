@@ -6829,7 +6829,7 @@ table.data tbody tr.item__row.is-selected td {
 
 .assess__head {
     flex-wrap: wrap;
-    align-items: flex-start;
+    align-items: center;
     gap: var(--space-3) var(--space-4);
     margin-bottom: var(--space-5);
 }
@@ -6863,26 +6863,6 @@ table.data tbody tr.item__row.is-selected td {
     justify-content: center;
     width: var(--control-height);
     padding: 0;
-}
-
-.assess__meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    row-gap: var(--space-1);
-    margin-top: var(--space-1);
-    font-size: var(--fs-meta);
-    color: var(--text-secondary);
-}
-
-.assess__meta-item {
-    white-space: nowrap;
-}
-
-.assess__meta-item + .assess__meta-item::before {
-    content: "\00b7";
-    margin: 0 var(--space-2);
-    color: var(--text-muted);
 }
 
 .workbench .roster__toolbar {
