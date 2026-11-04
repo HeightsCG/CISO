@@ -114,8 +114,8 @@ $(document).ready(function () {
                     obj[i].id,
                     obj[i].project_name,
                     obj[i].client_name,
-                    { sort: obj[i].start_date, display: obj[i].start_date_display },
-                    { sort: obj[i].end_date, display: obj[i].end_date_display },
+                    { sort: obj[i].start_date || '', display: obj[i].end_date_display === '' ? 'Ongoing' : obj[i].start_date_display },
+                    { sort: obj[i].end_date || '9999-12-31', display: obj[i].end_date_display },
                     obj[i].project_status
                 ]);
             }

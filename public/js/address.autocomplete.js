@@ -20,7 +20,7 @@ var AddressAutocomplete = (function () {
             .addClass('addr-suggest')
             .prop('hidden', true);
 
-        input.closest('.field').addClass('addr-field').append(list);
+        input.closest('.field, .form-group').addClass('addr-field').append(list);
 
         input
             .attr('role', 'combobox')
@@ -95,6 +95,10 @@ var AddressAutocomplete = (function () {
                         $('#' + field_id).val(obj.data[key]);
                     }
                 });
+
+                if (typeof options.filled === 'function') {
+                    options.filled(obj.data);
+                }
             });
         }
 

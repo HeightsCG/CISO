@@ -159,6 +159,7 @@ class PlacesService {
                 'state'       => (string) ($address['Region']['Name'] ?? $address['Region']['Code'] ?? ''),
                 'postal_code' => (string) ($address['PostalCode'] ?? ''),
                 'country'     => (string) ($address['Country']['Name'] ?? $address['Country']['Code2'] ?? ''),
+                'country_code' => (string) ($address['Country']['Code2'] ?? ''),
             )
         );
     }

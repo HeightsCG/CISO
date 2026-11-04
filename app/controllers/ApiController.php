@@ -1400,12 +1400,20 @@ class ApiController extends Controller {
             return;
         }
 
-        $website = html_entity_decode((string) ($this->post['website'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $country = $this->input('country');
 
-        if ($website !== '' && !$this->is_web_url($website)) {
-            $response['message'] = 'Enter a valid website address, including https://';
-            echo json_encode($response);
-            return;
+        if ($client_id === 0) {
+
+            $problem = $this->new_client_problem($email, $billing_email, $country);
+
+            if ($problem !== '') {
+                $response['message'] = $problem;
+                echo json_encode($response);
+                return;
+            }
+
+            $found = Regions::find($country);
+            $country = ($found === null ? $country : $found['name']);
         }
 
         if ($client_id > 0) {
@@ -1426,7 +1434,6 @@ class ApiController extends Controller {
                 $this->post['contact_title'],
                 $this->post['contact_email'],
                 $this->post['contact_phone'],
-                $this->post['website'],
                 ($this->post['address_1'] ?? ''),
                 ($this->post['address_2'] ?? ''),
                 $this->post['city'],
@@ -1451,22 +1458,91 @@ class ApiController extends Controller {
             $this->post['contact_name'],
             $this->post['contact_title'],
             $this->post['contact_email'],
-            $this->post['contact_phone'],
-            $this->post['website'],
+            Regions::phone($country, $this->input('contact_phone')),
             ($this->post['address_1'] ?? ''),
             ($this->post['address_2'] ?? ''),
             $this->post['city'],
             $this->post['state'],
             $this->post['postal_code'],
-            $this->post['country'],
+            $country,
             $billing_name,
+            $this->input('billing_title'),
             $billing_email,
+            Regions::phone($country, $this->input('billing_phone')),
             Session::get('user_id')
         );
 
         $response['success'] = true;
         $response['message'] = 'Client added';
         echo json_encode($response);
+    }
+
+    /**
+     * The checks a new client must pass: business email addresses in a valid
+     * format, phone numbers in international format, and a known country and
+     * state. Returns the first problem, or '' when there is none.
+     */
+    private function new_client_problem($email, $billing_email, $country): string
+    {
+        $emails = array(
+            'primary contact' => $email,
+            'billing contact' => $billing_email
+        );
+
+        foreach ($emails as $who => $address) {
+
+            if ($address === '') {
+                continue;
+            }
+
+            if (!EmailRules::is_valid_format($address)) {
+                return 'Enter a valid email address for the '.$who;
+            }
+
+            if (EmailRules::is_free($address)) {
+                return 'Use a business email address for the '.$who.', not a free provider';
+            }
+        }
+
+        $phones = array(
+            'primary contact' => $this->input('contact_phone'),
+            'billing contact' => $this->input('billing_phone')
+        );
+
+        foreach ($phones as $who => $phone) {
+
+            if ($phone === '') {
+                continue;
+            }
+
+            $full = Regions::phone($country, $phone);
+
+            if ($full === '') {
+                return 'Choose a country on the Company step so the '.$who.' phone number gets its country code';
+            }
+
+            if (!EmailRules::is_phone($full)) {
+                return 'Enter a valid phone number for the '.$who;
+            }
+        }
+
+        if ($country === '') {
+            return '';
+        }
+
+        $found = Regions::find($country);
+
+        if ($found === null) {
+            return 'Choose a country from the list';
+        }
+
+        $state = $this->input('state');
+
+        if ($state !== '' && !Regions::is_state($found['name'], $state)) {
+            return 'Choose a state from the list for '.$found['name'];
+        }
+
+        return '';
     }
 
     public function delete_clientAction(){
@@ -2316,6 +2392,12 @@ class ApiController extends Controller {
             return strtoupper($country);
         }
 
+        $found = Regions::find($country);
+
+        if ($found !== null) {
+            return $found['iso3'];
+        }
+
         $map = array(
             'switzerland' => 'CHE',
             'united states' => 'USA',
@@ -2361,9 +2443,10 @@ class ApiController extends Controller {
         if ($project_id === 0) {
             $this->refuse_unless_plan_allows('projects', $this->projects_model->count_projects(Session::get('company_id')), 'projects');
         }
-        $description = $this->input('description');
+        $description = RichText::clean($this->input('description'));
         $start_date = $this->input('start_date');
         $end_date = $this->input('end_date');
+        $schedule = $this->input('schedule');
 
         if ($project_name === '') {
             $response['message'] = 'Project name is required';
@@ -2371,18 +2454,30 @@ class ApiController extends Controller {
             exit;
         }
 
-        foreach (array('start_date' => $start_date, 'end_date' => $end_date) as $label => $value) {
-            if ($value === '' || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
-                $response['message'] = 'Enter a valid '.str_replace('_', ' ', $label);
+        /* Ongoing projects have no dates. The assistant sends no schedule, so
+           a project with neither date is ongoing too. */
+        $ongoing = ($schedule === 'Ongoing' || ($schedule === '' && $start_date === '' && $end_date === ''));
+
+        if ($ongoing) {
+            $start_date = null;
+            $end_date = null;
+        }
+
+        if (!$ongoing) {
+
+            foreach (array('start_date' => $start_date, 'end_date' => $end_date) as $label => $value) {
+                if ($value === '' || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
+                    $response['message'] = 'Enter a valid '.str_replace('_', ' ', $label);
+                    echo json_encode($response);
+                    exit;
+                }
+            }
+
+            if ($end_date < $start_date) {
+                $response['message'] = 'The end date cannot fall before the start date';
                 echo json_encode($response);
                 exit;
             }
-        }
-
-        if ($end_date < $start_date) {
-            $response['message'] = 'The end date cannot fall before the start date';
-            echo json_encode($response);
-            exit;
         }
 
         if ($client_id > 0) {

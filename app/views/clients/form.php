@@ -8,14 +8,10 @@
             <div class="panel__body">
                 <div class="record__group">
                     <h2 class="record__group-title">Company</h2>
-                    <div class="form-row">
+                    <div class="form-row form-row--single">
                         <div class="field">
                             <label for="company_name">Company Name <abbr title="required">*</abbr></label>
                             <input type="text" id="company_name" placeholder="Helvetic Regional Airways" value="<?php echo ($this->client['company_name'] === null ? '' : htmlspecialchars($this->client['company_name'], ENT_QUOTES, 'UTF-8')); ?>">
-                        </div>
-                        <div class="field">
-                            <label for="website">Website</label>
-                            <input type="text" id="website" placeholder="https://example.com" autocapitalize="none" spellcheck="false" value="<?php echo ($this->client['website'] === null ? '' : htmlspecialchars($this->client['website'], ENT_QUOTES, 'UTF-8')); ?>">
                         </div>
                     </div>
                 </div>
@@ -105,7 +101,7 @@ $(document).ready(function () {
     var return_url = "<?php echo (Main::get_param('from') === 'detail' ? '/clients/detail/id/'.((int) Main::get_param('id')) : '/clients'); ?>";
 
     var fields = [
-        'company_name', 'website', 'address_1', 'address_2', 'city', 'state',
+        'company_name', 'address_1', 'address_2', 'city', 'state',
         'postal_code', 'country', 'contact_name', 'contact_title', 'contact_email', 'contact_phone',
         'billing_name', 'billing_email'
     ];
@@ -151,11 +147,6 @@ $(document).ready(function () {
 
         if (values.billing_email !== '' && !/^[^@\s]+@[^@\s.]+(\.[^@\s.]+)+$/.test(values.billing_email)) {
             $('#billing_email').addClass('is-invalid');
-            errors++;
-        }
-
-        if (values.website !== '' && !/^https?:\/\/.+/i.test(values.website)) {
-            $('#website').addClass('is-invalid');
             errors++;
         }
 

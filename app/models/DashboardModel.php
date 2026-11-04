@@ -170,36 +170,76 @@ class DashboardModel extends Model {
         return parent::select($sql, $where);
     }
 
-    /** Open projects already past their end date, or reaching it within 30 days. */
+    /**
+     * Open projects that are late or falling behind. Late: past the end date and
+     * not complete. Behind: the share of controls assessed trails the share of
+     * the project's time already used by more than ten points, so a project that
+     * is on pace never appears however close its end date is.
+     */
     public function attention($company_id)
     {
         $where = array(
-            'company_id' => $company_id
+            'company_id'       => $company_id,
+            'progress_company' => $company_id
         );
         $sql = "SELECT
-                    p.id,
-                    p.project_name,
-                    p.end_date,
-                    DATE_FORMAT(p.end_date, df.sql_format) AS end_date_display,
-                    DATEDIFF(p.end_date, CURDATE()) AS days_left,
-                    cl.company_name AS client_name
+                    t.id,
+                    t.project_name,
+                    t.client_name,
+                    t.days_left,
+                    t.assessment_count,
+                    ROUND(t.assessed_pct) AS assessed_pct,
+                    ROUND(t.elapsed_pct) AS elapsed_pct
                 FROM
-                    projects p
-                    JOIN companies co ON co.id = p.company_id
-                    JOIN date_formats df ON df.id = co.date_format_id
-                    LEFT JOIN clients cl ON cl.id = p.client_id and cl.deleted = 0
+                    (
+                        SELECT
+                            p.id,
+                            p.project_name,
+                            cl.company_name AS client_name,
+                            DATEDIFF(p.end_date, CURDATE()) AS days_left,
+                            COALESCE(pr.assessment_count, 0) AS assessment_count,
+                            CASE
+                                WHEN COALESCE(pr.item_count, 0) = 0 THEN 0
+                                ELSE pr.assessed_count / pr.item_count * 100
+                            END AS assessed_pct,
+                            LEAST(100, GREATEST(0,
+                                DATEDIFF(CURDATE(), COALESCE(p.start_date, DATE(p.date_created)))
+                                / GREATEST(DATEDIFF(p.end_date, COALESCE(p.start_date, DATE(p.date_created))), 1) * 100
+                            )) AS elapsed_pct
+                        FROM
+                            projects p
+                            LEFT JOIN clients cl ON cl.id = p.client_id and cl.deleted = 0
+                            LEFT JOIN (
+                                SELECT
+                                    a.project_id,
+                                    COUNT(DISTINCT a.id) AS assessment_count,
+                                    COUNT(ai.id) AS item_count,
+                                    SUM(CASE WHEN ai.item_result <> 'Not Assessed' THEN 1 ELSE 0 END) AS assessed_count
+                                FROM
+                                    assessments a
+                                    LEFT JOIN assessment_items ai ON ai.assessment_id = a.id and ai.deleted = 0 and ai.control_kind = 'control'
+                                WHERE
+                                    a.company_id = :progress_company
+                                    and
+                                    a.deleted = 0
+                                GROUP BY
+                                    a.project_id
+                            ) pr ON pr.project_id = p.id
+                        WHERE
+                            p.company_id = :company_id
+                            and
+                            p.deleted = 0
+                            and
+                            p.project_status <> 'Complete'
+                            and
+                            p.end_date is not null
+                    ) t
                 WHERE
-                    p.company_id = :company_id
-                    and
-                    p.deleted = 0
-                    and
-                    p.project_status <> 'Complete'
-                    and
-                    p.end_date is not null
-                    and
-                    p.end_date <= DATE_ADD(CURDATE(), INTERVAL 30 DAY)
+                    t.days_left < 0
+                    or
+                    t.assessed_pct + 10 < t.elapsed_pct
                 ORDER BY
-                    p.end_date";
+                    t.days_left";
         return parent::select($sql, $where);
     }
 

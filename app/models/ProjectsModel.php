@@ -16,8 +16,8 @@ class ProjectsModel extends Model {
                     p.description,
                     p.start_date,
                     p.end_date,
-                    DATE_FORMAT(p.start_date, df.sql_format) AS start_date_display,
-                    DATE_FORMAT(p.end_date, df.sql_format) AS end_date_display,
+                    IFNULL(DATE_FORMAT(p.start_date, df.sql_format), '') AS start_date_display,
+                    IFNULL(DATE_FORMAT(p.end_date, df.sql_format), '') AS end_date_display,
                     p.project_status,
                     p.client_id,
                     cl.company_name AS client_name,
@@ -54,8 +54,8 @@ class ProjectsModel extends Model {
                     p.description,
                     p.start_date,
                     p.end_date,
-                    DATE_FORMAT(p.start_date, df.sql_format) AS start_date_display,
-                    DATE_FORMAT(p.end_date, df.sql_format) AS end_date_display,
+                    IFNULL(DATE_FORMAT(p.start_date, df.sql_format), '') AS start_date_display,
+                    IFNULL(DATE_FORMAT(p.end_date, df.sql_format), '') AS end_date_display,
                     p.project_status,
                     (SELECT COUNT(*)
                         FROM assessments a
@@ -109,8 +109,8 @@ class ProjectsModel extends Model {
                     p.id,
                     p.project_name,
                     p.description,
-                    DATE_FORMAT(p.start_date, df.sql_format) AS start_date_display,
-                    DATE_FORMAT(p.end_date, df.sql_format) AS end_date_display,
+                    IFNULL(DATE_FORMAT(p.start_date, df.sql_format), '') AS start_date_display,
+                    IFNULL(DATE_FORMAT(p.end_date, df.sql_format), '') AS end_date_display,
                     p.project_status
                 FROM
                     projects p
@@ -148,8 +148,8 @@ class ProjectsModel extends Model {
         $sql = "SELECT
                     p.*,
                     cl.company_name AS client_name,
-                    DATE_FORMAT(p.start_date, df.sql_format) AS start_date_display,
-                    DATE_FORMAT(p.end_date, df.sql_format) AS end_date_display
+                    IFNULL(DATE_FORMAT(p.start_date, df.sql_format), '') AS start_date_display,
+                    IFNULL(DATE_FORMAT(p.end_date, df.sql_format), '') AS end_date_display
                 FROM
                     projects p
                     JOIN companies co ON co.id = p.company_id

@@ -4400,71 +4400,6 @@ table.data--light td.pick__col-attach {
     color: var(--text-secondary);
 }
 
-/* A single bar split into result segments, with a legend beneath. Built from the
-   same colour tokens as the result badges so the bar and the badges agree. */
-
-.stack {
-    display: flex;
-    height: 14px;
-    overflow: hidden;
-    background: var(--surface-inset);
-    border-radius: var(--radius);
-}
-
-.stack__seg {
-    height: 100%;
-}
-
-.stack__seg.is-ok {
-    background: var(--ok);
-}
-
-.stack__seg.is-partial {
-    background: var(--high);
-}
-
-.stack__seg.is-gap {
-    background: var(--critical);
-}
-
-.stack__seg.is-na {
-    background: var(--info);
-}
-
-.stack__seg.is-none {
-    background: var(--border-strong);
-}
-
-.stackkey {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2) var(--space-5);
-    margin-top: var(--space-3);
-    padding: 0;
-    list-style: none;
-}
-
-.stackkey__item {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-2);
-    font-size: var(--fs-meta);
-}
-
-.stackkey__n {
-    font-weight: var(--fw-semibold);
-    font-variant-numeric: tabular-nums;
-    color: var(--text-primary);
-}
-
-.stackkey__label {
-    color: var(--text-secondary);
-}
-
-.stackkey__pct {
-    color: var(--text-muted);
-}
-
 .metric {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto auto;
@@ -4525,40 +4460,41 @@ table.data--light td.pick__col-attach {
 }
 
 #dash .dashgrid {
+    display: grid;
     flex: 1 1 auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
     min-height: 0;
+    margin-top: var(--space-4);
+    overflow: hidden;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-panel);
 }
 
-/* The grid column is a flex column that may shrink, and the panel fills it. As a
-   block with height:100% against an auto-height column the percentage resolved
-   to nothing, so the panel took its content height and pushed the document past
-   the window. height:100% rather than stretch alone, because .row wraps and a
-   wrapped flex line takes the height of its tallest item regardless of how far
-   the row itself has shrunk. */
-.dashgrid > [class*="col-"] {
+.dashcol {
     display: flex;
     flex-direction: column;
-    height: 100%;
     min-height: 0;
+    background: var(--surface-app);
 }
 
-.dashgrid .panel {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-    min-height: 0;
-}
-
-/* Panel heads differ in height - one carries a filter, one has no note - so they
-   are levelled, or the three lists start at three different places. */
-.dashgrid .panel__head {
+.dashcol .panel__head {
     min-height: 60px;
 }
 
-.dashgrid .panel__body {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
+.dashcol .dashscroll {
+    padding: var(--space-3) var(--space-4) var(--space-4);
+}
+
+.dashgrid .proj.rowlink {
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
+}
+
+.dashgrid .proj + .proj {
+    margin-top: 0;
 }
 
 /* Each list takes whatever is left inside its own panel. */
@@ -4571,7 +4507,7 @@ table.data--light td.pick__col-attach {
 
 .kpi {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1px;
     margin: 0;
     background: var(--border);
@@ -4620,17 +4556,6 @@ table.data--light td.pick__col-attach {
     color: var(--text-muted);
 }
 
-.summary .panel__body {
-    border-top: 1px solid var(--border);
-}
-
-.posture__head {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-4);
-    margin-bottom: var(--space-3);
-}
-
 /* Overdue work leads the working area when it exists and is absent when it does
    not, so the page never holds an empty container waiting for bad news. */
 
@@ -4664,7 +4589,82 @@ table.data--light td.pick__col-attach {
    grid is named here instead of inheriting the three-column default. */
 
 .attention .metric {
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto auto auto;
+}
+
+.attention__why {
+    font-size: var(--fs-meta);
+    color: var(--text-secondary);
+}
+
+.rowlink,
+.metric.rowlink,
+.proj.rowlink,
+.asmt.rowlink,
+.proj__head.rowlink,
+.dashgrid .metric.rowlink {
+    position: relative;
+    margin-left: calc(var(--space-4) * -1);
+    margin-right: calc(var(--space-4) * -1);
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+}
+
+.asmt.rowlink {
+    margin-left: 0;
+    padding-left: var(--space-3);
+}
+
+.rowlink {
+    cursor: pointer;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.rowlink:hover {
+    background-color: var(--accent-subtle);
+    box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.rowlink:hover + .metric,
+.rowlink:hover + .rowlink {
+    border-top-color: transparent;
+}
+
+.rowlink__a,
+.rowlink__a:hover,
+.rowlink__a:focus {
+    color: inherit;
+    text-decoration: none;
+}
+
+.rowlink__a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+
+.rowlink__a:focus-visible {
+    outline: none;
+}
+
+.rowlink:has(> * .rowlink__a:focus-visible, > .rowlink__a:focus-visible) {
+    background-color: var(--accent-subtle);
+    box-shadow: inset 3px 0 0 var(--accent), inset 0 0 0 2px var(--accent);
+}
+
+.rowlink .rowlink {
+    z-index: 1;
+}
+
+.rowlink__go {
+    font-size: 12px;
+    color: var(--text-muted);
+    transition: transform 0.15s ease;
+}
+
+.rowlink:hover > .rowlink__go {
+    color: var(--accent);
+    transform: translateX(2px);
 }
 
 .attention .metric__value {
@@ -4760,6 +4760,7 @@ table.data--light td.pick__col-attach {
 
     #dash .dashgrid {
         flex: 0 1 auto;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .dashscroll {
@@ -5101,7 +5102,7 @@ table.data.lines .num .form-control {
    the date that falls out of it. The count is fixed, so the track count is too -
    a four-column grid wrapped the last cell onto a row of its own. */
 .masthead--form {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .masthead--form label {
@@ -7998,4 +7999,106 @@ table.data--light.reports__table {
     .land__photo {
         padding: 80px 0;
     }
+}
+
+.wizard__steps {
+    display: flex;
+    gap: var(--space-6);
+    margin: 0;
+    padding: var(--space-4);
+    list-style: none;
+    border-bottom: 1px solid var(--border);
+}
+
+.wizard__step {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-weight: var(--fw-medium);
+    color: var(--text-muted);
+}
+
+.wizard__num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-semibold);
+    color: var(--text-secondary);
+    background: var(--surface-sunken);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+}
+
+.wizard__step.is-current {
+    color: var(--text-primary);
+}
+
+.wizard__step.is-current .wizard__num {
+    color: var(--text-inverse);
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.wizard__step.is-done {
+    color: var(--text-secondary);
+}
+
+.wizard__step.is-done .wizard__num {
+    color: var(--ok);
+    background: var(--ok-bg);
+    border-color: var(--ok-border);
+}
+
+.wizard label abbr {
+    color: var(--critical);
+    text-decoration: none;
+    border-bottom: 0;
+    cursor: default;
+    margin-left: 2px;
+}
+.iti--field {
+    display: block;
+    width: 100%;
+}
+
+.rich-editor.ql-container.ql-snow {
+    height: auto;
+    min-height: 140px;
+    border: 1px solid var(--border);
+    border-radius: 0 0 var(--radius) var(--radius);
+    background: var(--surface-app);
+    font-family: inherit;
+    font-size: var(--fs-body);
+}
+
+.ql-toolbar.ql-snow {
+    border: 1px solid var(--border);
+    border-bottom: 0;
+    border-radius: var(--radius) var(--radius) 0 0;
+    font-family: inherit;
+}
+
+.rich-editor .ql-editor {
+    min-height: 140px;
+    padding: var(--space-3) var(--space-4);
+    color: var(--text-primary);
+}
+
+.rich-editor .ql-editor.ql-blank::before {
+    font-style: normal;
+    left: var(--space-4);
+    color: var(--text-secondary);
+}
+
+.rich-text p,
+.rich-text ul,
+.rich-text ol {
+    margin-bottom: var(--space-2);
+}
+
+.rich-text > :last-child {
+    margin-bottom: 0;
 }

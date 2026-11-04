@@ -7,7 +7,7 @@
             <div class="client__meta">
                 <span class="badge <?php echo ($this->project['project_status'] === 'Complete' ? 'badge--inactive' : 'badge--active'); ?>"><?php echo htmlspecialchars($this->project['project_status'], ENT_QUOTES, 'UTF-8'); ?></span>
                 <span class="client__segment"><?php echo ($this->project['client_name'] === null ? 'No client assigned' : htmlspecialchars($this->project['client_name'], ENT_QUOTES, 'UTF-8')); ?></span>
-                <span class="client__segment"><?php echo htmlspecialchars($this->project['start_date_display'], ENT_QUOTES, 'UTF-8'); ?> &ndash; <?php echo htmlspecialchars($this->project['end_date_display'], ENT_QUOTES, 'UTF-8'); ?></span>
+                <span class="client__segment"><?php echo ($this->project['end_date_display'] === '' ? 'Ongoing' : htmlspecialchars($this->project['start_date_display'], ENT_QUOTES, 'UTF-8').' &ndash; '.htmlspecialchars($this->project['end_date_display'], ENT_QUOTES, 'UTF-8')); ?></span>
             </div>
         </div>
         <div class="page__actions">
@@ -63,12 +63,12 @@
                         <dd><?php echo ($this->project['client_name'] === null ? '<span class="roster__none">&mdash;</span>' : htmlspecialchars($this->project['client_name'], ENT_QUOTES, 'UTF-8')); ?></dd>
                         <dt>Status</dt>
                         <dd><?php echo htmlspecialchars($this->project['project_status'], ENT_QUOTES, 'UTF-8'); ?></dd>
-                        <dt>Start</dt>
-                        <dd><?php echo htmlspecialchars($this->project['start_date_display'], ENT_QUOTES, 'UTF-8'); ?></dd>
-                        <dt>End</dt>
-                        <dd><?php echo htmlspecialchars($this->project['end_date_display'], ENT_QUOTES, 'UTF-8'); ?></dd>
+                        <dt>Schedule</dt>
+                        <dd><?php echo ($this->project['end_date_display'] === '' ? 'Ongoing' : htmlspecialchars($this->project['start_date_display'], ENT_QUOTES, 'UTF-8').' &ndash; '.htmlspecialchars($this->project['end_date_display'], ENT_QUOTES, 'UTF-8')); ?></dd>
+                        <?php if ($this->project['description'] !== '') { ?>
                         <dt>Description</dt>
-                        <dd><?php echo ($this->project['description'] === '' ? '<span class="roster__none">&mdash;</span>' : nl2br(htmlspecialchars($this->project['description'], ENT_QUOTES, 'UTF-8'))); ?></dd>
+                        <dd class="rich-text"><?php echo RichText::show($this->project['description']); ?></dd>
+                        <?php } ?>
                     </dl>
                 </div>
             </div>

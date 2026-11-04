@@ -7,7 +7,7 @@
             <div class="client__meta">
                 <span class="badge <?php echo ($this->project['project_status'] === 'Complete' ? 'badge--inactive' : 'badge--active'); ?>"><?php echo htmlspecialchars($this->project['project_status'], ENT_QUOTES, 'UTF-8'); ?></span>
                 <span class="client__segment"><?php echo htmlspecialchars($this->client['company_name'], ENT_QUOTES, 'UTF-8'); ?></span>
-                <span class="client__segment"><?php echo htmlspecialchars($this->project['start_date_display'], ENT_QUOTES, 'UTF-8'); ?> &ndash; <?php echo htmlspecialchars($this->project['end_date_display'], ENT_QUOTES, 'UTF-8'); ?></span>
+                <span class="client__segment"><?php echo ($this->project['end_date_display'] === '' ? 'Ongoing' : htmlspecialchars($this->project['start_date_display'], ENT_QUOTES, 'UTF-8').' &ndash; '.htmlspecialchars($this->project['end_date_display'], ENT_QUOTES, 'UTF-8')); ?></span>
             </div>
         </div>
         <div class="page__actions">
@@ -49,7 +49,7 @@
             <h2 class="panel__title">About this project</h2>
         </div>
         <div class="panel__body">
-            <p class="assess__text"><?php echo nl2br(htmlspecialchars($this->project['description'], ENT_QUOTES, 'UTF-8')); ?></p>
+            <div class="assess__text rich-text"><?php echo RichText::show($this->project['description']); ?></div>
         </div>
     </div>
     <?php } ?>

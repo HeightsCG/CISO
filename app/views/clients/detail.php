@@ -63,8 +63,6 @@
                         <dd><?php echo ($this->client['contact_email'] === '' ? '<span class="roster__none">&mdash;</span>' : '<a href="mailto:'.htmlspecialchars($this->client['contact_email'], ENT_QUOTES, 'UTF-8').'">'.htmlspecialchars($this->client['contact_email'], ENT_QUOTES, 'UTF-8').'</a>'); ?></dd>
                         <dt>Phone</dt>
                         <dd><?php echo ($this->client['contact_phone'] === '' ? '<span class="roster__none">&mdash;</span>' : htmlspecialchars($this->client['contact_phone'], ENT_QUOTES, 'UTF-8')); ?></dd>
-                        <dt>Website</dt>
-                        <dd><?php echo ($this->client['website'] === '' ? '<span class="roster__none">&mdash;</span>' : '<a href="'.htmlspecialchars($this->client['website'], ENT_QUOTES, 'UTF-8').'" target="_blank" rel="noopener noreferrer">'.htmlspecialchars($this->client['website'], ENT_QUOTES, 'UTF-8').'</a>'); ?></dd>
                     </dl>
                 </div>
             </div>
@@ -147,9 +145,9 @@ $(document).ready(function () {
             var done = parseInt(assessments[i].assessed_count, 10);
             var pct = size_of(done, total);
 
-            html += '<li class="asmt">'
+            html += '<li class="asmt rowlink">'
                 + '<span class="asmt__label">'
-                + '<a class="asmt__name" href="/projects/assessment/id/' + assessments[i].id + '">'
+                + '<a class="asmt__name rowlink__a" href="/projects/assessment/id/' + assessments[i].id + '">'
                 + esc(assessments[i].assessment_name) + '</a>'
                 + '<span class="asmt__standard">' + esc(assessments[i].short_code)
                 + (assessments[i].version === '' ? '' : ' \u00b7 ' + esc(assessments[i].version)) + '</span>'
@@ -186,8 +184,8 @@ $(document).ready(function () {
             }
 
             html += '<li class="proj">'
-                + '<div class="proj__head">'
-                + '<a class="proj__name" href="/projects/detail/id/' + projects[i].id + '">' + esc(projects[i].project_name) + '</a>'
+                + '<div class="proj__head rowlink">'
+                + '<a class="proj__name rowlink__a" href="/projects/detail/id/' + projects[i].id + '">' + esc(projects[i].project_name) + '</a>'
                 + '<span class="proj__meta">' + meta.join(' \u00b7 ') + '</span>'
                 + '<span class="badge ' + (projects[i].project_status === 'Complete' ? 'badge--inactive' : 'badge--active') + '">'
                 + esc(projects[i].project_status) + '</span>'

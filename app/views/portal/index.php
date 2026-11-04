@@ -196,7 +196,7 @@ $(document).ready(function () {
                     obj[i].project_name,
                     total > 0 ? Math.round(done / total * 100) : 0,
                     parseInt(obj[i].evidence_count, 10),
-                    { sort: obj[i].end_date, display: obj[i].end_date_display },
+                    { sort: obj[i].end_date || '9999-12-31', display: obj[i].end_date_display === '' ? 'Ongoing' : obj[i].end_date_display },
                     obj[i].project_status,
                     done,
                     total

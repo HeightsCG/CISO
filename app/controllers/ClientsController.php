@@ -30,6 +30,19 @@ class ClientsController extends Controller {
         $this->view->render();
     }
 
+    public function addAction(){
+
+        $room = Plans::room('clients', $this->clients_model->count_clients(Session::get('company_id')));
+
+        if (!$room['allowed']) {
+            Errors::access_denied();
+            return;
+        }
+
+        $this->view->countries = Regions::countries();
+        $this->view->render();
+    }
+
     public function formAction(){
 
         $client_id = Main::get_param('id');

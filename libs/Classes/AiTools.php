@@ -322,7 +322,6 @@ class AiTools {
                 'contact_title' => $text('Main contact job title'),
                 'contact_email' => $text('Main contact email'),
                 'contact_phone' => $text('Main contact phone'),
-                'website' => $text('Website, starting with https://'),
                 'address_1' => $text('Street address'),
                 'address_2' => $text('Street address, second line'),
                 'city' => $text('City'),
@@ -342,7 +341,7 @@ class AiTools {
                 'client_id' => $id('Client the project belongs to'),
                 'project_name' => $text('Project name'),
                 'description' => $text('Project description'),
-                'start_date' => $text('Start date, YYYY-MM-DD'),
+                'start_date' => $text('Start date, YYYY-MM-DD; leave both dates blank for an ongoing project'),
                 'end_date' => $text('End date, YYYY-MM-DD')
             ), array()),
             'delete_project' => $tool('staff', true, 'Delete a project with its assessments.', array(
@@ -1046,7 +1045,6 @@ class AiTools {
             'contact_title' => 'Contact title',
             'contact_email' => 'Contact email',
             'contact_phone' => 'Contact phone',
-            'website' => 'Website',
             'address_1' => 'Address',
             'address_2' => 'Address line 2',
             'city' => 'City',

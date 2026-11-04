@@ -1159,7 +1159,7 @@ class ReadyReports {
                     ? 'No gaps have been recorded among the assessed controls.'
                     : 'We identified '.($high + $medium).' gap'.($high + $medium === 1 ? '' : 's').': '.$high.' rated high (controls not implemented) and '.$medium.' rated medium (controls partially implemented). '.($high + $medium === 1 ? 'It is' : 'Each is').' described in Section 3 with a recommendation.')
                 .($counts['Not Assessed'] > 0 ? ' '.$counts['Not Assessed'].' controls have not been assessed yet and are not reflected in the findings.' : ''),
-            'background_text' => self::plain($project['description']),
+            'background_text' => RichText::plain($project['description']),
             'scope_text' => 'The assessment covered '.$total.' controls in '.implode(' and ', array_unique($standards)).', grouped into the areas below.',
             'out_of_scope_text' => '',
             'approach_text' => 'Each control was reviewed and assigned a result: implemented, partially implemented, not implemented or not applicable, supported by evidence held in the project\'s evidence vault and the assessor\'s findings.',
