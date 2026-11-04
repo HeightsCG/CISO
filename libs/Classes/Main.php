@@ -89,6 +89,7 @@ class Main {
         $name        = self::site_name();
         $description = 'Aviation cybersecurity governance, centralized. Manage risk, compliance, evidence, and executive oversight from one secure platform.';
         $card        = $base.'/images/og-card.png?v='.(int) @filemtime(self::app_path().'/public/images/og-card.png');
+        $card_alt    = 'CISO.aero: Cybersecurity governance for aviation. EASA Part-IS, TSA, CMMC, NIST and more, assessed in one platform.';
 
         $tags = array(
             '<link rel="icon" href="/favicon.ico" sizes="any">',
@@ -99,18 +100,20 @@ class Main {
             '<meta name="description" content="'.self::attr($description).'">',
             '<meta property="og:type" content="website">',
             '<meta property="og:site_name" content="'.self::attr($name).'">',
-            '<meta property="og:title" content="'.self::attr($name).'">',
+            '<meta property="og:title" content="'.self::attr($name).' | Aviation cybersecurity governance">',
             '<meta property="og:description" content="'.self::attr($description).'">',
             '<meta property="og:url" content="'.self::attr($base.'/').'">',
             '<meta property="og:image" content="'.self::attr($card).'">',
             '<meta property="og:image:type" content="image/png">',
             '<meta property="og:image:width" content="1200">',
             '<meta property="og:image:height" content="630">',
-            '<meta property="og:image:alt" content="'.self::attr($name).'">',
+            '<meta property="og:image:alt" content="'.self::attr($card_alt).'">',
+            '<meta property="og:locale" content="en_US">',
             '<meta name="twitter:card" content="summary_large_image">',
-            '<meta name="twitter:title" content="'.self::attr($name).'">',
+            '<meta name="twitter:title" content="'.self::attr($name).' | Aviation cybersecurity governance">',
             '<meta name="twitter:description" content="'.self::attr($description).'">',
-            '<meta name="twitter:image" content="'.self::attr($card).'">'
+            '<meta name="twitter:image" content="'.self::attr($card).'">',
+            '<meta name="twitter:image:alt" content="'.self::attr($card_alt).'">'
         );
 
         return implode("\n", $tags)."\n";
