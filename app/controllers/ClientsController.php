@@ -48,17 +48,8 @@ class ClientsController extends Controller {
         $client_id = Main::get_param('id');
 
         if (empty($client_id)) {
-
-            $room = Plans::room('clients', $this->clients_model->count_clients(Session::get('company_id')));
-
-            if (!$room['allowed']) {
-                Errors::access_denied();
-                return;
-            }
-
-            $this->view->client = null;
-            $this->view->render();
-            return;
+            header('Location: /clients/add');
+            exit;
         }
 
         $client = $this->clients_model->get_client($client_id, Session::get('company_id'));
@@ -68,7 +59,18 @@ class ClientsController extends Controller {
             return;
         }
 
+        $values = array();
+
+        foreach (array('company_name', 'address_1', 'address_2', 'city', 'state', 'postal_code', 'country', 'contact_name', 'contact_title', 'contact_email', 'contact_phone', 'billing_name', 'billing_title', 'billing_email', 'billing_phone') as $key) {
+            $values[$key] = html_entity_decode((string) ($client[0][$key] ?? ''), ENT_QUOTES, 'UTF-8');
+        }
+
+        $found = Regions::find($values['country']);
+        $values['country'] = ($found === null ? '' : $found['name']);
+
         $this->view->client = $client[0];
+        $this->view->values = $values;
+        $this->view->countries = Regions::countries();
         $this->view->render();
     }
 

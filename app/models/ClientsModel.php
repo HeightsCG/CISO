@@ -159,7 +159,9 @@ class ClientsModel extends Model {
         $postal_code,
         $country,
         $billing_name,
+        $billing_title,
         $billing_email,
+        $billing_phone,
         $updated_by
     )
     {
@@ -180,7 +182,9 @@ class ClientsModel extends Model {
             'postal_code' => $postal_code,
             'country' => $country,
             'billing_name' => $billing_name,
+            'billing_title' => $billing_title,
             'billing_email' => $billing_email,
+            'billing_phone' => $billing_phone,
             'updated_by' => $updated_by,
             'date_updated' => date('Y-m-d H:i:s')
         );

@@ -7,7 +7,7 @@
         </div>
         <div class="page__actions">
             <a class="btn btn--primary" href="/clients/form/id/<?php echo (int) $this->client['id']; ?>/from/detail"><i class="fa-regular fa-pen"></i> Edit</a>
-            <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete</button>
+            <button type="button" class="btn btn--destructive" id="do_delete_open" aria-label="Delete client"><i class="fa-regular fa-trash"></i></button>
         </div>
     </div>
 

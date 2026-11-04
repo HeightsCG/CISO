@@ -1402,19 +1402,18 @@ class ApiController extends Controller {
 
         $country = $this->input('country');
 
-        if ($client_id === 0) {
+        $problem = $this->client_problem($email, $billing_email, $country);
 
-            $problem = $this->new_client_problem($email, $billing_email, $country);
-
-            if ($problem !== '') {
-                $response['message'] = $problem;
-                echo json_encode($response);
-                return;
-            }
-
-            $found = Regions::find($country);
-            $country = ($found === null ? $country : $found['name']);
+        if ($problem !== '') {
+            $response['message'] = $problem;
+            echo json_encode($response);
+            return;
         }
+
+        $found = Regions::find($country);
+        $country = ($found === null ? $country : $found['name']);
+        $contact_phone = Regions::phone($country, $this->input('contact_phone'));
+        $billing_phone = Regions::phone($country, $this->input('billing_phone'));
 
         if ($client_id > 0) {
 
@@ -1433,15 +1432,17 @@ class ApiController extends Controller {
                 $this->post['contact_name'],
                 $this->post['contact_title'],
                 $this->post['contact_email'],
-                $this->post['contact_phone'],
+                $contact_phone,
                 ($this->post['address_1'] ?? ''),
                 ($this->post['address_2'] ?? ''),
                 $this->post['city'],
                 $this->post['state'],
                 $this->post['postal_code'],
-                $this->post['country'],
+                $country,
                 $billing_name,
+                $this->input('billing_title'),
                 $billing_email,
+                $billing_phone,
                 Session::get('user_id')
             );
 
@@ -1458,7 +1459,7 @@ class ApiController extends Controller {
             $this->post['contact_name'],
             $this->post['contact_title'],
             $this->post['contact_email'],
-            Regions::phone($country, $this->input('contact_phone')),
+            $contact_phone,
             ($this->post['address_1'] ?? ''),
             ($this->post['address_2'] ?? ''),
             $this->post['city'],
@@ -1468,7 +1469,7 @@ class ApiController extends Controller {
             $billing_name,
             $this->input('billing_title'),
             $billing_email,
-            Regions::phone($country, $this->input('billing_phone')),
+            $billing_phone,
             Session::get('user_id')
         );
 
@@ -1478,11 +1479,11 @@ class ApiController extends Controller {
     }
 
     /**
-     * The checks a new client must pass: business email addresses in a valid
+     * The checks a client must pass on add and edit: business email addresses in a valid
      * format, phone numbers in international format, and a known country and
      * state. Returns the first problem, or '' when there is none.
      */
-    private function new_client_problem($email, $billing_email, $country): string
+    private function client_problem($email, $billing_email, $country): string
     {
         $emails = array(
             'primary contact' => $email,

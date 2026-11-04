@@ -329,7 +329,9 @@ class AiTools {
                 'postal_code' => $text('Postal code'),
                 'country' => $text('Country'),
                 'billing_name' => $text('Billing contact name'),
-                'billing_email' => $text('Billing contact email')
+                'billing_title' => $text('Billing contact job title'),
+                'billing_email' => $text('Billing contact email'),
+                'billing_phone' => $text('Billing contact phone')
             ), array()),
             'delete_client' => $tool('staff', true, 'Delete a client.', array(
                 'client_id' => $id('Client id')
@@ -1052,7 +1054,9 @@ class AiTools {
             'postal_code' => 'Postal code',
             'country' => 'Country',
             'billing_name' => 'Billing contact',
-            'billing_email' => 'Billing email'
+            'billing_title' => 'Billing contact title',
+            'billing_email' => 'Billing email',
+            'billing_phone' => 'Billing phone'
         );
 
         $client_id = (int) ($input['client_id'] ?? 0);

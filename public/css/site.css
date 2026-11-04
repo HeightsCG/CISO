@@ -8052,7 +8052,8 @@ table.data--light.reports__table {
     border-color: var(--ok-border);
 }
 
-.wizard label abbr {
+.wizard label abbr,
+.form-group > label abbr {
     color: var(--critical);
     text-decoration: none;
     border-bottom: 0;
@@ -8101,4 +8102,8 @@ table.data--light.reports__table {
 
 .rich-text > :last-child {
     margin-bottom: 0;
+}
+
+.client-edit__group {
+    margin-top: var(--space-6);
 }
