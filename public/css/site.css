@@ -7341,11 +7341,20 @@ table.data--light.reports__table {
 }
 
 .land__nav {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 10;
+    z-index: 1030;
+    border-bottom: 1px solid transparent;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.land__nav.is-stuck {
+    background-color: rgba(16, 27, 43, 0.92);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
 }
 
 .land__nav-inner {
@@ -7353,10 +7362,27 @@ table.data--light.reports__table {
     align-items: center;
     gap: 40px;
     height: 84px;
+    transition: height 0.2s ease;
+}
+
+.land__nav.is-stuck .land__nav-inner {
+    height: 64px;
+}
+
+.land [id] {
+    scroll-margin-top: 64px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .land__nav,
+    .land__nav-inner {
+        transition: none;
+    }
 }
 
 .land__brand img {
     display: block;
+    width: auto;
     height: 30px;
 }
 
@@ -7392,6 +7418,33 @@ table.data--light.reports__table {
 
 .land__nav-cta:hover {
     border-color: #FFFFFF;
+}
+
+.land__nav-cta {
+    max-width: 0;
+    margin-left: -40px;
+    padding: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    border-width: 0;
+    transition: max-width 0.3s ease, margin-left 0.3s ease, padding 0.3s ease, border-width 0.3s ease, opacity 0.2s ease 0.1s, visibility 0.3s ease;
+}
+
+.land__nav.is-past-form .land__nav-cta {
+    max-width: 120px;
+    margin-left: 0;
+    padding: 0 18px;
+    visibility: visible;
+    opacity: 1;
+    border-width: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .land__nav-cta {
+        transition: none;
+    }
 }
 
 .land__hero {
@@ -7863,6 +7916,7 @@ table.data--light.reports__table {
 }
 
 .land__footer-inner img {
+    width: auto;
     height: 24px;
     margin-right: auto;
 }

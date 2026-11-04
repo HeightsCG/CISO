@@ -116,6 +116,124 @@ class Main {
         return implode("\n", $tags)."\n";
     }
 
+    /**
+     * Search and AI-crawler tags for the public landing page. Signed-out
+     * visitors get the landing page on every URL, so only the root is
+     * indexable and every other path points its canonical at the root.
+     */
+    public static function landing_meta(): string
+    {
+        $base   = self::get_base_domain();
+        $name   = self::site_name();
+        $home   = $base.'/';
+        $robots = 'noindex, follow';
+
+        if (self::get_url() === array()) {
+            $robots = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
+        }
+
+        $frameworks = array(
+            'EASA Part-IS',
+            'TSA Aviation Cybersecurity',
+            'CMMC 2.0',
+            'NIST CSF 2.0',
+            'NIST SP 800-171',
+            'NIST SP 800-53',
+            'ISO/IEC 27001',
+            'SOC 2',
+            'PCI DSS 4.0.1',
+            'FedRAMP',
+            'HIPAA Security Rule',
+            'NYDFS 500',
+            'FTC Safeguards Rule'
+        );
+
+        $graph = array(
+            '@context' => 'https://schema.org',
+            '@graph'   => array(
+                array(
+                    '@type'        => 'Organization',
+                    '@id'          => $home.'#organization',
+                    'name'         => $name,
+                    'url'          => $home,
+                    'logo'         => $base.'/images/icon-512.png',
+                    'email'        => self::config('global', 'support_email'),
+                    'description'  => 'CISO.aero is a cybersecurity governance, risk and compliance platform built for aviation: airlines, airports, MROs, design and production organisations and their suppliers.',
+                    'knowsAbout'   => array_merge(
+                        array(
+                            'Aviation cybersecurity',
+                            'Cybersecurity governance, risk and compliance',
+                            'Cybersecurity assessments',
+                            'Compliance evidence management'
+                        ),
+                        $frameworks
+                    )
+                ),
+                array(
+                    '@type'      => 'WebSite',
+                    '@id'        => $home.'#website',
+                    'name'       => $name,
+                    'url'        => $home,
+                    'inLanguage' => 'en',
+                    'publisher'  => array(
+                        '@id' => $home.'#organization'
+                    )
+                ),
+                array(
+                    '@type'               => 'SoftwareApplication',
+                    '@id'                 => $home.'#software',
+                    'name'                => $name,
+                    'url'                 => $home,
+                    'applicationCategory' => 'BusinessApplication',
+                    'applicationSubCategory' => 'Governance, risk and compliance (GRC)',
+                    'operatingSystem'     => 'Web browser',
+                    'image'               => $base.'/images/og-card.png',
+                    'description'         => 'Assess airlines, airports, MROs and their suppliers against EASA Part-IS, TSA, CMMC, NIST and more. Collect evidence once, map it across frameworks, and generate PDF, Word and Excel reports for leadership.',
+                    'audience'            => array(
+                        '@type'        => 'BusinessAudience',
+                        'audienceType' => 'Aviation cybersecurity consultants, CISOs and compliance teams'
+                    ),
+                    'featureList'         => array(
+                        'Control assessments scored from met, not met and not applicable points of focus',
+                        'Evidence vault with evidence reused across frameworks',
+                        'Control mappings between frameworks',
+                        'Results, gap analysis, statement of applicability, remediation plan and executive summary reports',
+                        'PDF, Word and Excel report downloads',
+                        'Client portal for the organizations being assessed',
+                        'Role-based access, account lockout and password-age policies'
+                    ),
+                    'publisher'           => array(
+                        '@id' => $home.'#organization'
+                    )
+                ),
+                array(
+                    '@type'       => 'WebPage',
+                    '@id'         => $home.'#webpage',
+                    'url'         => $home,
+                    'name'        => $name.' | Aviation cybersecurity governance',
+                    'inLanguage'  => 'en',
+                    'isPartOf'    => array(
+                        '@id' => $home.'#website'
+                    ),
+                    'about'       => array(
+                        '@id' => $home.'#software'
+                    ),
+                    'primaryImageOfPage' => $base.'/images/cover-wing.jpg'
+                )
+            )
+        );
+
+        $tags = array(
+            '<meta name="robots" content="'.self::attr($robots).'">',
+            '<link rel="canonical" href="'.self::attr($home).'">',
+            '<link rel="alternate" type="text/markdown" title="'.self::attr($name).' summary for AI assistants" href="/llms.txt">',
+            '<link rel="sitemap" type="application/xml" href="/sitemap.xml">',
+            '<script type="application/ld+json">'.json_encode($graph, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG).'</script>'
+        );
+
+        return implode("\n", $tags)."\n";
+    }
+
     private static function attr(string $value): string
     {
         return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');

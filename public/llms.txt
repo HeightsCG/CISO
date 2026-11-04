@@ -1,0 +1,46 @@
+# CISO.aero
+
+> CISO.aero is a cybersecurity governance, risk and compliance (GRC) platform built for aviation. Consultants and in-house security teams use it to assess airlines, airports, MROs, design and production organisations and their suppliers against EASA Part-IS, TSA, CMMC, NIST and other frameworks, collect evidence once and reuse it across frameworks, and issue reports for leadership.
+
+CISO.aero is a private, sign-in-only web application. The public site is the home page at https://ciso.aero/. Contact: support@ciso.aero.
+
+## What it does
+
+- Control assessments: every requirement is broken into plain-English points of focus that the assessor marks met, not met or not applicable. The result for each control is calculated from those answers, so scoring is consistent between assessors.
+- Evidence vault: policies, configuration exports and other evidence are uploaded once per project, attached to the controls they prove, and reused across every framework the client is held to.
+- Framework mappings: controls are mapped between frameworks, so work done for one assessment carries into the next.
+- Reports: results, gap analysis, statement of applicability, remediation plan and executive summary, generated from the live assessment and downloadable as PDF, Word or Excel.
+- Client portal: each organization being assessed gets its own portal and sees only its own data.
+- Security: role-based access, account lockout and password-age policies per organization, one-way password hashing, encrypted connections and logged administrative access.
+
+## Who it is for
+
+- Aviation cybersecurity consultants running assessments for multiple clients
+- CISOs and compliance teams at airlines, airports, maintenance (MRO), design and production organisations
+- Aviation suppliers that must show compliance to their customers
+
+## Frameworks supported
+
+- EASA Part-IS (Commission Regulations (EU) 2022/1645 and 2023/203)
+- TSA aviation cybersecurity requirements
+- CMMC 2.0
+- NIST Cybersecurity Framework (CSF) 2.0
+- NIST SP 800-171
+- NIST SP 800-53
+- ISO/IEC 27001
+- SOC 2
+- PCI DSS 4.0.1
+- FedRAMP
+- HIPAA Security Rule
+- NYDFS 23 NYCRR 500
+- FTC Safeguards Rule
+
+## How an engagement runs
+
+1. Set up the client: create the project, choose the frameworks that apply, and invite the client's team to their portal.
+2. Assess and collect evidence: work through each control, mark its points of focus, and attach evidence from the vault.
+3. Report and follow through: issue the reports, agree remediation with leadership, and reassess against the baseline.
+
+## Links
+
+- [Home page](https://ciso.aero/): product overview and sign-in

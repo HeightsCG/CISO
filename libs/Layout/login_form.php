@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <?php echo CSRF::meta(); ?>
 <?php echo Main::head_meta(); ?>
-<title><?php echo Main::site_name(); ?> | Aviation cybersecurity governance</title>
+<?php echo Main::landing_meta(); ?>
+<title><?php echo Main::site_name(); ?> | Aviation cybersecurity governance and compliance platform</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -133,6 +134,15 @@ $(document).ready(function () {
         }
     });
 
+    function stick_nav() {
+        var card = document.querySelector(".land__card");
+        $(".land__nav").toggleClass("is-stuck", window.scrollY > 24);
+        $(".land__nav").toggleClass("is-past-form", card.getBoundingClientRect().bottom < 64);
+    }
+
+    $(window).on("scroll", stick_nav);
+    stick_nav();
+
     $('[data-action="sign-in"]').click(function () {
         $("#forgot_view").prop("hidden", true);
         $("#login_view").prop("hidden", false);
@@ -153,7 +163,7 @@ $(document).ready(function () {
 
 <header class="land__nav">
     <div class="land__wrap land__nav-inner">
-        <a class="land__brand" href="/"><img src="/images/logo-dark.png" alt="CISO.aero"></a>
+        <a class="land__brand" href="/"><img src="/images/logo-dark.png" alt="CISO.aero" width="640" height="154"></a>
         <nav class="land__links" aria-label="Sections">
             <a href="#platform">Platform</a>
             <a href="#frameworks">Frameworks</a>
@@ -164,8 +174,10 @@ $(document).ready(function () {
     </div>
 </header>
 
+<main>
+
 <section class="land__hero">
-    <img class="land__hero-img" src="/images/cover-wing.jpg" alt="">
+    <img class="land__hero-img" src="/images/cover-wing.jpg" alt="Aircraft wing above the clouds" width="1800" height="1201" fetchpriority="high">
     <div class="land__wrap land__hero-inner">
         <div class="land__hero-copy">
             <h1 class="land__title">Cybersecurity governance for aviation.</h1>
@@ -273,7 +285,7 @@ $(document).ready(function () {
 </section>
 
 <section class="land__photo" id="aviation">
-    <img class="land__photo-img" src="/images/cover-airplane.jpg" alt="">
+    <img class="land__photo-img" src="/images/cover-airplane.jpg" alt="Commercial airliner" width="1800" height="1200" loading="lazy" decoding="async">
     <div class="land__wrap land__photo-inner">
         <div class="land__photo-copy">
             <h2 class="land__h2">Made for the flight line, not just the server room</h2>
@@ -303,7 +315,7 @@ $(document).ready(function () {
 </section>
 
 <section class="land__photo land__photo--dark" id="security">
-    <img class="land__photo-img" src="/images/cover-engine.jpg" alt="">
+    <img class="land__photo-img" src="/images/cover-engine.jpg" alt="Jet engine" width="1800" height="1026" loading="lazy" decoding="async">
     <div class="land__wrap land__photo-inner">
         <div class="land__photo-copy">
             <h2 class="land__h2">Your clients' findings stay theirs</h2>
@@ -324,9 +336,11 @@ $(document).ready(function () {
     </div>
 </section>
 
+</main>
+
 <footer class="land__footer">
     <div class="land__wrap land__footer-inner">
-        <img src="/images/logo-dark.png" alt="CISO.aero">
+        <img src="/images/logo-dark.png" alt="CISO.aero" width="640" height="154" loading="lazy">
         <span>&copy; 2026 CISO.aero</span>
         <button type="button" class="land__footer-link" data-bs-toggle="modal" data-bs-target="#privacy_modal">Privacy</button>
         <button type="button" class="land__footer-link" data-bs-toggle="modal" data-bs-target="#terms_modal">Terms of use</button>
