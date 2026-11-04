@@ -1,8 +1,8 @@
 <?php
 /**
  * The joins the ready-made reports need that no screen does: evidence titles
- * per control for an assessment, and controls per evidence file for a client.
- * Both are scoped to the company.
+ * per control for an assessment, and controls per evidence file. All are
+ * scoped to the company.
  */
 class ReadyReportsModel extends Model {
 
@@ -35,6 +35,61 @@ class ReadyReportsModel extends Model {
                     a.company_id = :company_id
                 ORDER BY
                     e.evidence_title";
+        return parent::select($sql, $where);
+    }
+
+    /** Every evidence link of one assessment, against the control or objective it was attached to. */
+    public function evidence_by_item($assessment_id, $company_id)
+    {
+        $where = array(
+            'assessment_id' => $assessment_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    el.assessment_item_id,
+                    e.id AS evidence_id,
+                    e.evidence_title,
+                    e.description,
+                    e.file_name,
+                    e.file_type,
+                    e.date_created,
+                    CONCAT(u.first_name, ' ', u.last_name) AS uploaded_by_name
+                FROM
+                    evidence_links el
+                    JOIN evidence e ON e.id = el.evidence_id and e.deleted = 0
+                    JOIN assessment_items ai ON ai.id = el.assessment_item_id and ai.deleted = 0
+                    JOIN assessments a ON a.id = ai.assessment_id and a.deleted = 0
+                    LEFT JOIN user_accounts u ON u.user_id = e.uploaded_by
+                WHERE
+                    a.id = :assessment_id
+                    and
+                    a.company_id = :company_id
+                ORDER BY
+                    e.evidence_title";
+        return parent::select($sql, $where);
+    }
+
+    /** Controls and objectives of one assessment that each evidence file supports. */
+    public function assessment_evidence_controls($assessment_id, $company_id)
+    {
+        $where = array(
+            'assessment_id' => $assessment_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    el.evidence_id,
+                    ai.control_identifier
+                FROM
+                    evidence_links el
+                    JOIN assessment_items ai ON ai.id = el.assessment_item_id and ai.deleted = 0
+                    JOIN assessments a ON a.id = ai.assessment_id and a.deleted = 0
+                WHERE
+                    a.id = :assessment_id
+                    and
+                    a.company_id = :company_id
+                ORDER BY
+                    ai.sort_order,
+                    ai.control_identifier";
         return parent::select($sql, $where);
     }
 

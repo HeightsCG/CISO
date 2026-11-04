@@ -6024,6 +6024,191 @@ class ApiController extends Controller {
         exit;
     }
 
+    /* ---------------------------------------------------- report narratives */
+
+    /** Every AI narrative section of an assessment with its state: missing, current or stale. */
+    public function report_narrative_sectionsAction(){
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+        $analysis = $this->narrative_analysis($assessment_id);
+
+        $rows = (new ReportNarrativesModel())->load_narratives($assessment_id, Session::get('company_id'));
+        $sections = array();
+
+        foreach (ReportNarratives::states($analysis, $rows) as $state) {
+            $sections[] = $this->narrative_section($state);
+        }
+
+        echo json_encode(array(
+            'success' => true,
+            'message' => 'ok',
+            'configured' => AiAssistant::configured(),
+            'sections' => $sections
+        ));
+        exit;
+    }
+
+    /** Write one section with the AI service; unchanged inputs reuse the stored text without a call. */
+    public function report_narrative_generateAction(){
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+        $section_key = $this->input('section_key');
+        $this->narrative_analysis($assessment_id);
+        $this->refuse_unless_ai_configured();
+
+        set_time_limit(900);
+
+        $result = (new ReportAI())->generate($assessment_id, Session::get('company_id'), $section_key, (int) Session::get('user_id'));
+
+        if (!$result['success']) {
+            echo json_encode($result);
+            exit;
+        }
+
+        echo json_encode(array(
+            'success' => true,
+            'message' => 'ok',
+            'cached' => $result['cached'],
+            'section' => $this->narrative_state($assessment_id, $section_key)
+        ));
+        exit;
+    }
+
+    /** Store an assessor's edit of a section; it must keep the generated shape. */
+    public function report_narrative_saveAction(){
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+        $section_key = $this->input('section_key');
+        $this->narrative_analysis($assessment_id);
+
+        $state = $this->narrative_state($assessment_id, $section_key);
+
+        if ($state === null || $state['state'] === 'missing') {
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'Generate this section before editing it'
+            ));
+            exit;
+        }
+
+        $content = json_decode($this->input('content'), true);
+        $errors = is_array($content) ? ReportAI::shape_errors(ReportAI::kind($section_key), $content) : array(
+            'The content is not valid JSON'
+        );
+
+        if (count($errors) > 0) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'The edited section does not have the expected shape: '.implode('; ', array_slice($errors, 0, 3))
+            ));
+            exit;
+        }
+
+        (new ReportNarrativesModel())->save_edit(
+            $assessment_id,
+            Session::get('company_id'),
+            $section_key,
+            json_encode($content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            Session::get('user_id')
+        );
+
+        echo json_encode(array(
+            'success' => true,
+            'message' => 'ok',
+            'section' => $this->narrative_state($assessment_id, $section_key)
+        ));
+        exit;
+    }
+
+    /** Approve or reject a section, or send it back to draft. */
+    public function report_narrative_statusAction(){
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+        $section_key = $this->input('section_key');
+        $narrative_status = $this->input('narrative_status');
+        $this->narrative_analysis($assessment_id);
+
+        if (!in_array($narrative_status, array(
+            'Draft',
+            'Approved',
+            'Rejected'
+        ), true)) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'Choose Draft, Approved or Rejected'
+            ));
+            exit;
+        }
+
+        $state = $this->narrative_state($assessment_id, $section_key);
+
+        if ($state === null || $state['state'] === 'missing') {
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'Generate this section first'
+            ));
+            exit;
+        }
+
+        (new ReportNarrativesModel())->set_narrative_status(
+            $assessment_id,
+            Session::get('company_id'),
+            $section_key,
+            $narrative_status,
+            Session::get('user_id')
+        );
+
+        echo json_encode(array(
+            'success' => true,
+            'message' => 'ok',
+            'section' => $this->narrative_state($assessment_id, $section_key)
+        ));
+        exit;
+    }
+
+    /** The analysis behind the narratives, refusing anyone but staff of the owning company. */
+    private function narrative_analysis(int $assessment_id): array
+    {
+        $analysis = null;
+
+        if (Session::get('user_type') === 'staff' && $this->owns_assessment($assessment_id)) {
+            $analysis = (new ReportAnalysis($assessment_id, (int) Session::get('company_id')))->build();
+        }
+
+        if ($analysis === null) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'That assessment could not be found'
+            ));
+            exit;
+        }
+
+        return $analysis;
+    }
+
+    private function narrative_state(int $assessment_id, string $section_key): ?array
+    {
+        $analysis = (new ReportAnalysis($assessment_id, (int) Session::get('company_id')))->build();
+        $rows = (new ReportNarrativesModel())->load_narratives($assessment_id, Session::get('company_id'));
+        $states = ReportNarratives::states($analysis, $rows);
+
+        return isset($states[$section_key]) ? $this->narrative_section($states[$section_key]) : null;
+    }
+
+    private function narrative_section(array $state): array
+    {
+        return array(
+            'section_key' => $state['section_key'],
+            'label' => $state['label'],
+            'state' => $state['state'],
+            'narrative_status' => $state['narrative_status'],
+            'edited' => $state['edited'],
+            'generated' => $state['generated'],
+            'rejected' => $state['rejected'],
+            'content' => $state['content']
+        );
+    }
+
     /* ------------------------------------------------------------ assistant */
 
     public function ai_conversationsAction(){

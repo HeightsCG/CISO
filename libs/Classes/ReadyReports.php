@@ -18,8 +18,19 @@ class ReadyReports {
         'executive_summary' => 'Executive Summary|assessment|pdf,docx|A short summary for leadership: score, progress, results charts, strongest and weakest areas, and top gaps.',
         'statement_of_applicability' => 'Statement of Applicability|assessment|pdf,docx,xlsx|Each control marked applicable or not, with implementation status, justification and supporting evidence.',
         'remediation_plan' => 'Remediation Plan|assessment|pdf,docx,xlsx|Gaps turned into a prioritized action list.',
-        'risk_assessment' => 'Risk Assessment Report|client|pdf,docx|The client deliverable across all of the client\'s assessments: executive summary, results by area, rated findings for every gap, and sign-off.',
-        'evidence_register' => 'Evidence Register|client|pdf,docx,xlsx|Every evidence file in the client\'s vault and the controls it supports, plus controls still without evidence.'
+        'risk_assessment' => 'Risk Assessment Report|assessment|pdf,docx|The client deliverable: executive summary, results by area, rated findings for every gap, and sign-off.',
+        'evidence_register' => 'Evidence Register|assessment|pdf,docx,xlsx|Every evidence file supporting this assessment and the controls it supports, plus controls still without evidence.'
+    );
+
+    /** Report key => its builder class (a ReportBuilder); reports without one use the methods below. */
+    const BUILDERS = array(
+        'executive_summary' => 'ReportExecutiveSummary',
+        'risk_assessment' => 'ReportRiskAssessment',
+        'gap_analysis' => 'ReportGapAnalysis',
+        'remediation_plan' => 'ReportRemediationPlan',
+        'evidence_register' => 'ReportEvidenceRegister',
+        'statement_of_applicability' => 'ReportStatementOfApplicability',
+        'assessment_results' => 'ReportAssessmentResults'
     );
 
     const RESULTS = array(
@@ -67,8 +78,7 @@ class ReadyReports {
         );
 
         $scope_names = array(
-            'assessment' => 'One assessment',
-            'client' => 'One client'
+            'assessment' => 'One assessment'
         );
 
         foreach (self::TYPES as $key => $spec) {
@@ -121,8 +131,14 @@ class ReadyReports {
      * The file for one report, or array('error' => ...). $target_id is an
      * assessment or client id depending on the report.
      */
-    public function render(string $type, int $target_id, string $format): array
+    public function render(string $type, int $target_id, string $format, array $options = array()): array
     {
+        if ((int) ini_get('memory_limit') !== -1 && (int) ini_get('memory_limit') < 512) {
+            ini_set('memory_limit', '512M');
+        }
+
+        set_time_limit(180);
+
         $spec = self::spec($type);
 
         if ($spec === null) {
@@ -131,6 +147,27 @@ class ReadyReports {
 
         if (!in_array($format, $spec['formats'], true)) {
             return self::fail('That report is not available in that format');
+        }
+
+        $builder_class = self::BUILDERS[$type] ?? null;
+
+        if ($builder_class !== null && class_exists($builder_class)) {
+            $built = (new $builder_class($target_id, (int) $this->company_id, $this->company, $options))->build();
+
+            if (isset($built['error'])) {
+                return $built;
+            }
+
+            if ($format === 'xlsx') {
+                return array(
+                    'bytes' => XlsxWriter::build($built['sheets'], ltrim($this->brand(), '#')),
+                    'file_name' => preg_replace('/[^A-Za-z0-9 ,.&()\'-]/', '', $built['doc']['file_base']).'.xlsx',
+                    'extension' => 'xlsx',
+                    'content_type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                );
+            }
+
+            return ReportRenderer::document($built['doc'], $format);
         }
 
         if ($type === 'risk_assessment') {
@@ -189,6 +226,14 @@ class ReadyReports {
             $families[$family]['counts'][$result]++;
         }
 
+        $objectives = array();
+
+        foreach ($this->assessments_model->load_items($assessment_id, $this->company_id) as $row) {
+            if ($row['control_kind'] === 'objective') {
+                $objectives[$row['parent_identifier']][] = $row;
+            }
+        }
+
         $evidence = array();
 
         foreach ($this->ready_model->item_evidence($assessment_id, $this->company_id) as $link) {
@@ -201,6 +246,7 @@ class ReadyReports {
             'client' => self::plain($assessment['client_name'] ?? ''),
             'standard' => self::plain($assessment['standard_name']),
             'items' => $items,
+            'objectives' => $objectives,
             'counts' => $counts,
             'families' => $families,
             'evidence' => $evidence,
@@ -224,7 +270,7 @@ class ReadyReports {
 
     private function cover(array $a, string $title): array
     {
-        return array(
+        $rows = array(
             'Report date' => date('F j, Y'),
             'Assessment' => $a['name'],
             'Client' => $a['client'],
@@ -232,6 +278,96 @@ class ReadyReports {
             'Status' => self::plain($a['assessment']['assessment_status']),
             'Prepared by' => self::plain($this->company['company_name'] ?? '')
         );
+
+        if (strcasecmp($a['name'], $a['standard']) === 0) {
+            unset($rows['Assessment']);
+        }
+
+        return $rows;
+    }
+
+    /** "the X assessment", adding "against Y" only when the standard is not already the assessment's name. */
+    private static function subject(array $a): string
+    {
+        return 'the '.$a['name'].' assessment'.(strcasecmp($a['name'], $a['standard']) === 0 ? '' : ' against '.$a['standard']);
+    }
+
+    /** The objectives of a control that are not met, only partially met, or not answered yet. */
+    private static function open_objectives(array $a, array $item): array
+    {
+        return array_values(array_filter($a['objectives'][$item['control_identifier']] ?? array(), function ($objective) {
+            return in_array($objective['item_result'], array(
+                'Not Implemented',
+                'Partially Implemented',
+                'Not Assessed'
+            ), true);
+        }));
+    }
+
+    /** The open objectives as short ids grouped by state, for narrow report tables. */
+    private static function action_short(array $a, array $item): string
+    {
+        $open = self::open_objectives($a, $item);
+
+        if (count($open) === 0) {
+            return self::action($a, $item);
+        }
+
+        $groups = array(
+            'Not Implemented' => array(),
+            'Partially Implemented' => array(),
+            'Not Assessed' => array()
+        );
+
+        foreach ($open as $objective) {
+            $id = (string) $objective['control_identifier'];
+            $parent = (string) $item['control_identifier'];
+            $groups[$objective['item_result']][] = strpos($id, $parent) === 0 ? ltrim(substr($id, strlen($parent)), '-.') : $id;
+        }
+
+        $labels = array(
+            'Not Implemented' => 'Not met',
+            'Partially Implemented' => 'Partially met',
+            'Not Assessed' => 'Not assessed yet'
+        );
+        $parts = array();
+
+        foreach ($groups as $state => $ids) {
+            if (count($ids) > 0) {
+                $parts[] = $labels[$state].': '.implode(', ', $ids);
+            }
+        }
+
+        return implode('. ', $parts).'.';
+    }
+
+    /** What to do about a gap: the open objectives by name, or a plain instruction when the control has none. */
+    private static function action(array $a, array $item): string
+    {
+        $open = self::open_objectives($a, $item);
+
+        if (count($open) === 0) {
+            return $item['item_result'] === 'Not Implemented'
+                ? 'Put this control in place.'
+                : 'Complete the parts of this control that are not yet in place.';
+        }
+
+        $parts = array();
+
+        foreach ($open as $objective) {
+            $id = (string) $objective['control_identifier'];
+            $parent = (string) $item['control_identifier'];
+            $short = strpos($id, $parent) === 0 ? ltrim(substr($id, strlen($parent)), '-.') : $id;
+            $text = self::plain($objective['control_title'] !== '' ? $objective['control_title'] : $objective['description']);
+            $states = array(
+                'Not Implemented' => 'not met',
+                'Partially Implemented' => 'partially met',
+                'Not Assessed' => 'not assessed yet'
+            );
+            $parts[] = $short.' '.ucfirst(rtrim($text, '.')).' ('.$states[$objective['item_result']].')';
+        }
+
+        return 'Address '.implode('; ', $parts).'.';
     }
 
     private function doc(array $a, string $title, array $blocks): array
@@ -335,7 +471,7 @@ class ReadyReports {
 
         $blocks = array(
             self::h1('Summary'),
-            self::text('This report records the results of the '.$a['name'].' assessment against '.$a['standard'].($a['client'] !== '' ? ' for '.$a['client'] : '').'. '
+            self::text('This report records the results of '.self::subject($a).($a['client'] !== '' ? ' for '.$a['client'] : '').'. '
                 .$a['assessed'].' of '.$a['total'].' controls have been assessed.'),
             $this->overview_stats($a),
             self::score_note(),
@@ -534,18 +670,23 @@ class ReadyReports {
             foreach ($gaps as $family => $items) {
                 $rows = array();
                 foreach ($items as $item) {
+                    $all = count($a['objectives'][$item['control_identifier']] ?? array());
+                    $open = $all > 0 ? count(self::open_objectives($a, $item)).' of '.$all : '';
                     $rows[] = array(
                         self::priority($item['item_result']),
                         self::plain($item['control_identifier']),
                         self::plain($item['control_title']),
-                        $item['item_result']
+                        $item['item_result'],
+                        $open
                     );
                     $sheet_rows[] = array(
                         self::priority($item['item_result']),
                         $family,
                         self::plain($item['control_identifier']),
                         self::plain($item['control_title']),
-                        $item['item_result']
+                        $item['item_result'],
+                        $open,
+                        self::action($a, $item)
                     );
                 }
                 $blocks[] = self::h2($family);
@@ -553,12 +694,14 @@ class ReadyReports {
                     'Priority',
                     'ID',
                     'Control',
-                    'Result'
+                    'Result',
+                    'Open points'
                 ), array(
-                    12,
-                    14,
-                    52,
-                    22
+                    11,
+                    13,
+                    42,
+                    20,
+                    14
                 ), $rows, true);
             }
         }
@@ -573,14 +716,18 @@ class ReadyReports {
                         'Family',
                         'Identifier',
                         'Control',
-                        'Result'
+                        'Result',
+                        'Open points',
+                        'What to fix'
                     ),
                     'widths' => array(
                         10,
                         24,
                         14,
                         50,
-                        22
+                        22,
+                        12,
+                        80
                     ),
                     'rows' => $sheet_rows
                 )
@@ -660,24 +807,42 @@ class ReadyReports {
             );
         }
 
-        $priority = array();
+        $ranked = array();
         foreach ($a['items'] as $item) {
-            if ($item['item_result'] === 'Not Implemented' && count($priority) < 10) {
-                $priority[] = array(
-                    self::plain($item['control_identifier']),
-                    self::plain($item['control_title'])
-                );
+            if (!in_array($item['item_result'], array(
+                'Not Implemented',
+                'Partially Implemented'
+            ), true)) {
+                continue;
             }
+            $all = count($a['objectives'][$item['control_identifier']] ?? array());
+            $open = count(self::open_objectives($a, $item));
+            $ranked[] = array(
+                'rank' => ($item['item_result'] === 'Not Implemented' ? 2 : 1) + ($all > 0 ? $open / $all : 0),
+                'row' => array(
+                    self::plain($item['control_identifier']),
+                    self::plain($item['control_title']),
+                    $item['item_result']
+                )
+            );
         }
+
+        usort($ranked, function ($x, $y) {
+            return $y['rank'] <=> $x['rank'];
+        });
+
+        $priority = array_column(array_slice($ranked, 0, 10), 'row');
 
         if (count($priority) > 0) {
             $blocks[] = self::h2('Priority gaps');
             $blocks[] = ReportRenderer::table_block(array(
                 'ID',
-                'Control'
+                'Control',
+                'Result'
             ), array(
                 14,
-                86
+                60,
+                26
             ), $priority, true);
         }
 
@@ -744,12 +909,12 @@ class ReadyReports {
                 'Justification',
                 'Evidence'
             ), array(
-                11,
-                27,
+                10,
+                26,
                 8,
-                14,
-                23,
-                17
+                20,
+                20,
+                16
             ), $rows, true);
         }
 
@@ -813,13 +978,13 @@ class ReadyReports {
             $rows = array();
             foreach ($gaps as $family => $items) {
                 foreach ($items as $item) {
-                    $action = 'Implement the control as described in '.$a['standard'].'.';
+                    $action = self::action($a, $item);
                     $rows[] = array(
                         self::priority($item['item_result']),
                         self::plain($item['control_identifier']),
                         self::plain($item['control_title']),
                         $item['item_result'],
-                        $action
+                        self::action_short($a, $item)
                     );
                     $sheet_rows[] = array(
                         self::priority($item['item_result']),
@@ -848,11 +1013,11 @@ class ReadyReports {
                 'Current result',
                 'Action'
             ), array(
+                9,
                 10,
-                12,
-                29,
-                15,
-                34
+                26,
+                19,
+                36
             ), $rows, true);
         } else {
             $blocks[] = self::text('No remediation actions are needed yet: no controls are recorded as not implemented or partially implemented.');
@@ -903,15 +1068,19 @@ class ReadyReports {
      * likelihood 3, impact 3, Medium), and each control family becomes a
      * domain rated from its compliance score.
      */
-    private function risk_assessment(int $client_id): array
+    private function risk_assessment(int $assessment_id): array
     {
-        $rows = $this->clients_model->get_client($client_id, $this->company_id);
+        $assessment_rows = $this->assessments_model->get_assessment($assessment_id, $this->company_id);
+
+        if (count($assessment_rows) !== 1) {
+            return self::fail('That assessment could not be found');
+        }
+
+        $rows = $this->clients_model->get_client((int) $assessment_rows[0]['client_id'], $this->company_id);
 
         if (count($rows) !== 1) {
             return self::fail('That client could not be found');
         }
-
-        $assessment_rows = $this->assessments_model->client_assessments($client_id, $this->company_id);
 
         $client = $rows[0];
         $client_name = self::plain($client['company_name'] ?? '');
@@ -969,11 +1138,12 @@ class ReadyReports {
                         'domain_id' => $domain_id,
                         'finding_ref' => 'F-'.str_pad((string) $number, 2, '0', STR_PAD_LEFT),
                         'finding_title' => self::plain($item['control_identifier']).' '.rtrim(self::plain($item['control_title']), '. ').' ('.strtolower($item['item_result']).')',
-                        'observation' => 'Assessed as '.strtolower($item['item_result']).' during the '.$a['name'].' assessment ('.self::plain($item['control_identifier']).').',
+                        'observation' => 'Assessed as '.strtolower($item['item_result']).' during '.self::subject($a).' ('.self::plain($item['control_identifier']).').'
+                            .(count(self::open_objectives($a, $item)) > 0 ? ' '.count(self::open_objectives($a, $item)).' of '.count($a['objectives'][$item['control_identifier']]).' points are not fully met.' : ''),
                         'risk_text' => $high
                             ? 'Without this control, the organization is exposed to the threats it is designed to address.'
                             : 'The control is only partly in place, so the protection it is meant to give is incomplete.',
-                        'recommendation' => $high ? 'Put this control in place in full.' : 'Complete the implementation of this control.',
+                        'recommendation' => self::action($a, $item),
                         'likelihood' => $high ? 4 : 3,
                         'impact' => $high ? 4 : 3,
                         'score' => $high ? 16 : 9,
@@ -1155,31 +1325,30 @@ class ReadyReports {
         return 'Unsatisfactory';
     }
 
-    private function build_evidence_register(int $client_id): array
+    private function build_evidence_register(int $assessment_id): array
     {
-        $rows = $this->clients_model->get_client($client_id, $this->company_id);
+        $a = $this->assessment($assessment_id);
 
-        if (count($rows) !== 1) {
-            return self::fail('That client could not be found');
+        if ($a === null) {
+            return self::fail('That assessment could not be found');
         }
 
-        $client = self::plain($rows[0]['company_name'] ?? '');
-        $files = $this->evidence_model->load_evidence($client_id, $this->company_id);
+        $client = $a['client'];
         $controls = array();
 
-        foreach ($this->ready_model->evidence_controls($client_id, $this->company_id) as $link) {
+        foreach ($this->ready_model->assessment_evidence_controls($assessment_id, $this->company_id) as $link) {
             $controls[(int) $link['evidence_id']][] = self::plain($link['control_identifier']);
         }
 
+        $files = array_values(array_filter($this->evidence_model->load_evidence((int) $a['assessment']['client_id'], $this->company_id), function ($file) use ($controls) {
+            return isset($controls[(int) $file['id']]);
+        }));
+
         $rows = array();
         $sheet_rows = array();
-        $linked = 0;
 
         foreach ($files as $file) {
             $supports = array_values(array_unique($controls[(int) $file['id']] ?? array()));
-            if (count($supports) > 0) {
-                $linked++;
-            }
             $rows[] = array(
                 self::plain($file['evidence_title']),
                 self::plain($file['file_name']),
@@ -1200,47 +1369,31 @@ class ReadyReports {
             );
         }
 
-        $missing_blocks = array();
+        $missing = array();
         $missing_rows = array();
 
-        foreach ($this->assessments_model->client_assessments($client_id, $this->company_id) as $assessment) {
-            $rows_missing = array();
-            foreach ($this->assessments_model->load_controls((int) $assessment['id'], $this->company_id) as $item) {
-                if ((int) $item['evidence_total'] === 0 && $item['item_result'] !== 'Not Applicable') {
-                    $rows_missing[] = array(
-                        self::plain($item['control_identifier']),
-                        self::plain($item['control_title']),
-                        $item['item_result']
-                    );
-                    $missing_rows[] = array(
-                        self::plain($assessment['assessment_name']),
-                        self::plain($item['control_identifier']),
-                        self::plain($item['control_title']),
-                        $item['item_result']
-                    );
-                }
-            }
-            if (count($rows_missing) > 0) {
-                $missing_blocks[] = self::h2(self::plain($assessment['assessment_name']));
-                $missing_blocks[] = ReportRenderer::table_block(array(
-                    'ID',
-                    'Control',
-                    'Result'
-                ), array(
-                    16,
-                    62,
-                    22
-                ), $rows_missing, true);
+        foreach ($a['items'] as $item) {
+            if ((int) $item['evidence_total'] === 0 && $item['item_result'] !== 'Not Applicable') {
+                $missing[] = array(
+                    self::plain($item['control_identifier']),
+                    self::plain($item['control_title']),
+                    $item['item_result']
+                );
+                $missing_rows[] = array(
+                    self::plain($item['control_identifier']),
+                    self::plain($item['control_title']),
+                    $item['item_result']
+                );
             }
         }
 
         $blocks = array(
             self::h1('Summary'),
-            self::text('This register lists the '.count($files).' evidence files held for '.$client.', the controls each one supports, and the applicable controls that do not yet have evidence.'),
+            self::text('This register lists the '.count($files).' evidence file'.(count($files) === 1 ? '' : 's').' supporting '.self::subject($a).($client !== '' ? ' for '.$client : '').', the controls and objectives each one supports, and the applicable controls that do not yet have evidence.'),
             self::stats(array(
                 'Evidence files' => (string) count($files),
-                'Linked to controls' => (string) $linked,
-                'Not linked' => (string) (count($files) - $linked),
+                'Controls' => (string) $a['total'],
+                'Controls with evidence' => (string) ($a['total'] - $a['counts']['Not Applicable'] - count($missing_rows)),
                 'Controls without evidence' => (string) count($missing_rows)
             )),
             self::h1('Evidence files')
@@ -1263,29 +1416,24 @@ class ReadyReports {
                 10
             ), $rows, true);
         } else {
-            $blocks[] = self::text('No evidence files have been added for this client yet.');
+            $blocks[] = self::text('No evidence has been attached to this assessment yet.');
         }
 
-        if (count($missing_blocks) > 0) {
+        if (count($missing) > 0) {
             $blocks[] = self::h1('Controls without evidence');
-            $blocks = array_merge($blocks, $missing_blocks);
+            $blocks[] = ReportRenderer::table_block(array(
+                'ID',
+                'Control',
+                'Result'
+            ), array(
+                16,
+                62,
+                22
+            ), $missing, true);
         }
 
         return array(
-            'doc' => array(
-                'title' => 'Evidence Register',
-                'client' => $client,
-                'prepared_for' => $client,
-                'company' => $this->company,
-                'cover_rows' => array(
-                    'Report date' => date('F j, Y'),
-                    'Client' => $client,
-                    'Prepared by' => self::plain($this->company['company_name'] ?? '')
-                ),
-                'confidential' => true,
-                'blocks' => $blocks,
-                'file_base' => $client.' - Evidence Register'
-            ),
+            'doc' => $this->doc($a, 'Evidence Register', $blocks),
             'sheets' => array(
                 array(
                     'name' => 'Evidence',
@@ -1314,13 +1462,11 @@ class ReadyReports {
                 array(
                     'name' => 'Controls without evidence',
                     'head' => array(
-                        'Assessment',
                         'Identifier',
                         'Control',
                         'Result'
                     ),
                     'widths' => array(
-                        30,
                         14,
                         60,
                         20

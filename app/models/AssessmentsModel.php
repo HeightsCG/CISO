@@ -451,6 +451,14 @@ class AssessmentsModel extends Model {
                     ai.partial_credit,
                     ai.applicability,
                     ai.applicability_justification,
+                    ai.notes,
+                    ai.gap_description,
+                    ai.business_impact,
+                    ai.risk_rating,
+                    ai.recommendation,
+                    ai.owner_name,
+                    ai.target_date,
+                    ai.implementation_description,
                     COUNT(el.id) AS evidence_count
                 FROM
                     assessment_items ai
@@ -473,7 +481,6 @@ class AssessmentsModel extends Model {
         return parent::select($sql, $where);
     }
 
-    /** Control rows only (no assessment objectives), for summaries and exports. */
     /**
      * Control rows, each with open_objectives (how many of its objectives are
      * still unanswered) and evidence_total (evidence on the control plus on
