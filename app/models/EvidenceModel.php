@@ -5,11 +5,11 @@ class EvidenceModel extends Model {
         parent::__construct();
     }
 
-    /** The project's vault: every piece of evidence with how widely it is reused. */
-    public function load_evidence($project_id, $company_id)
+    /** The client's vault: every piece of evidence with how widely it is reused. */
+    public function load_evidence($client_id, $company_id)
     {
         $where = array(
-            'project_id' => $project_id,
+            'client_id' => $client_id,
             'company_id' => $company_id
         );
         $sql = "SELECT
@@ -32,7 +32,7 @@ class EvidenceModel extends Model {
                     LEFT JOIN user_accounts u ON u.user_id = e.uploaded_by
                     LEFT JOIN evidence_links el ON el.evidence_id = e.id
                 WHERE
-                    e.project_id = :project_id
+                    e.client_id = :client_id
                     and
                     e.company_id = :company_id
                     and
@@ -59,11 +59,11 @@ class EvidenceModel extends Model {
     /**
      * Paged, filtered vault lookup for the evidence picker.
      *
-     * The vault is per project but can still run to thousands of files, so the
+     * The vault is per client but can still run to thousands of files, so the
      * filtering and the slicing both happen in SQL - the browser never receives
      * more than one page.
      */
-    public function search_evidence($project_id, $company_id, $term, $limit, $offset, $sort = 'date_created', $dir = 'desc', $folder_id = null)
+    public function search_evidence($client_id, $company_id, $term, $limit, $offset, $sort = 'date_created', $dir = 'desc', $folder_id = null)
     {
         $limit = max(1, min(200, (int) $limit));
         $offset = max(0, (int) $offset);
@@ -81,7 +81,7 @@ class EvidenceModel extends Model {
         $direction = (strtolower($dir) === 'asc') ? 'ASC' : 'DESC';
 
         $where = array(
-            'project_id' => $project_id,
+            'client_id' => $client_id,
             'company_id' => $company_id
         );
 
@@ -117,7 +117,7 @@ class EvidenceModel extends Model {
                     JOIN date_formats df ON df.id = co.date_format_id
                     LEFT JOIN evidence_links el ON el.evidence_id = e.id
                 WHERE
-                    e.project_id = :project_id
+                    e.client_id = :client_id
                     and
                     e.company_id = :company_id
                     and
@@ -138,10 +138,10 @@ class EvidenceModel extends Model {
         return parent::select($sql, $where);
     }
 
-    public function count_evidence($project_id, $company_id, $term, $folder_id = null)
+    public function count_evidence($client_id, $company_id, $term, $folder_id = null)
     {
         $where = array(
-            'project_id' => $project_id,
+            'client_id' => $client_id,
             'company_id' => $company_id
         );
 
@@ -161,7 +161,7 @@ class EvidenceModel extends Model {
 
         $sql = "SELECT COUNT(*) AS total
                 FROM evidence e
-                WHERE e.project_id = :project_id
+                WHERE e.client_id = :client_id
                     and e.company_id = :company_id
                     and e.deleted = 0
                     ".$filter;
@@ -180,13 +180,11 @@ class EvidenceModel extends Model {
         $sql = "SELECT
                     e.*,
                     DATE_FORMAT(e.date_created, df.sql_format) AS date_created_display,
-                    pr.project_name,
                     CONCAT(u.first_name, ' ', u.last_name) AS uploaded_by_name
                 FROM
                     evidence e
                     JOIN companies co ON co.id = e.company_id
                     JOIN date_formats df ON df.id = co.date_format_id
-                    LEFT JOIN projects pr ON pr.id = e.project_id
                     LEFT JOIN user_accounts u ON u.user_id = e.uploaded_by
                 WHERE
                     e.id = :id
@@ -199,7 +197,7 @@ class EvidenceModel extends Model {
 
     public function add_evidence(
         $company_id,
-        $project_id,
+        $client_id,
         $folder_id,
         $evidence_title,
         $description,
@@ -212,7 +210,7 @@ class EvidenceModel extends Model {
     {
         $data = array(
             'company_id' => $company_id,
-            'project_id' => $project_id,
+            'client_id' => $client_id,
             'folder_id' => $folder_id,
             'evidence_title' => $evidence_title,
             'description' => $description,
@@ -333,15 +331,12 @@ class EvidenceModel extends Model {
                     a.id AS assessment_id,
                     a.assessment_name,
                     a.standard_name,
-                    a.short_code,
-                    p.id AS project_id,
-                    p.project_name
+                    a.short_code
                 FROM
                     evidence_links el
                     JOIN evidence e ON e.id = el.evidence_id
                     JOIN assessment_items ai ON ai.id = el.assessment_item_id
                     JOIN assessments a ON a.id = ai.assessment_id
-                    JOIN projects p ON p.id = a.project_id
                 WHERE
                     el.evidence_id = :evidence_id
                     and
@@ -355,7 +350,6 @@ class EvidenceModel extends Model {
                     and
                     a.deleted = 0
                 ORDER BY
-                    p.project_name,
                     a.assessment_name,
                     ai.family,
                     ai.sort_order";
@@ -365,7 +359,7 @@ class EvidenceModel extends Model {
     /**
      * Both sides are re-checked against the session's org before a link is made:
      * the evidence and the item must belong to the same company, and the evidence
-     * to the same project as the item's assessment.
+     * to the same client as the item's assessment.
      */
     public function link_evidence($evidence_id, $item_id, $company_id, $created_by)
     {
@@ -374,11 +368,10 @@ class EvidenceModel extends Model {
              FROM evidence e
                 JOIN assessment_items ai ON ai.id = :item_id
                 JOIN assessments a ON a.id = ai.assessment_id
-                JOIN projects p ON p.id = a.project_id
              WHERE e.id = :evidence_id
                 and e.company_id = :company_id
                 and a.company_id = :company_id2
-                and e.project_id = p.id
+                and e.client_id = a.client_id
                 and e.deleted = 0
                 and ai.deleted = 0
                 and a.deleted = 0",
@@ -445,16 +438,14 @@ class EvidenceModel extends Model {
 
     /* ------------------------------------------------------------- folders */
 
-    /** The whole tree for one project, with a file count against each folder. */
     /**
      * Vault folders for the client portal. The file count joins evidence so a
      * folder holding only private files reads as empty rather than advertising
      * files the client cannot open.
      */
-    public function portal_folders($project_id, $client_id, $company_id)
+    public function portal_folders($client_id, $company_id)
     {
         $where = array(
-            'project_id' => $project_id,
             'client_id' => $client_id,
             'company_id' => $company_id
         );
@@ -469,17 +460,12 @@ class EvidenceModel extends Model {
                         and e.evidence_private = 0) AS file_count
                 FROM
                     evidence_folders f
-                    JOIN projects p ON p.id = f.project_id
                 WHERE
-                    f.project_id = :project_id
-                    and
-                    p.client_id = :client_id
+                    f.client_id = :client_id
                     and
                     f.company_id = :company_id
                     and
                     f.deleted = 0
-                    and
-                    p.deleted = 0
                 ORDER BY
                     f.folder_name";
         return parent::select($sql, $where);
@@ -490,10 +476,9 @@ class EvidenceModel extends Model {
      * uploaded_by comes back so the view can offer replace and delete only on the
      * caller's own files - the server re-checks that regardless.
      */
-    public function portal_evidence($project_id, $client_id, $company_id)
+    public function portal_evidence($client_id, $company_id)
     {
         $where = array(
-            'project_id' => $project_id,
             'client_id' => $client_id,
             'company_id' => $company_id
         );
@@ -512,22 +497,17 @@ class EvidenceModel extends Model {
                         WHERE el.evidence_id = e.id) AS link_count
                 FROM
                     evidence e
-                    JOIN projects p ON p.id = e.project_id
                     JOIN companies co ON co.id = e.company_id
                     JOIN date_formats df ON df.id = co.date_format_id
                     LEFT JOIN user_accounts u ON u.user_id = e.uploaded_by
                 WHERE
-                    e.project_id = :project_id
-                    and
-                    p.client_id = :client_id
+                    e.client_id = :client_id
                     and
                     e.company_id = :company_id
                     and
                     e.evidence_private = 0
                     and
                     e.deleted = 0
-                    and
-                    p.deleted = 0
                 ORDER BY
                     e.date_created DESC,
                     e.id DESC";
@@ -554,17 +534,16 @@ class EvidenceModel extends Model {
                     JOIN evidence e ON e.id = el.evidence_id
                     JOIN assessment_items ai ON ai.id = el.assessment_item_id
                     JOIN assessments a ON a.id = ai.assessment_id
-                    JOIN projects p ON p.id = a.project_id
                     JOIN companies co ON co.id = e.company_id
                     JOIN date_formats df ON df.id = co.date_format_id
                 WHERE
                     el.assessment_item_id = :item_id
                     and
-                    p.client_id = :client_id
+                    a.client_id = :client_id
                     and
                     e.company_id = :company_id
                     and
-                    e.project_id = p.id
+                    e.client_id = a.client_id
                     and
                     e.evidence_private = 0
                     and
@@ -573,17 +552,15 @@ class EvidenceModel extends Model {
                     ai.deleted = 0
                     and
                     a.deleted = 0
-                    and
-                    p.deleted = 0
                 ORDER BY
                     e.evidence_title";
         return parent::select($sql, $where);
     }
 
-    public function load_folders($project_id, $company_id)
+    public function load_folders($client_id, $company_id)
     {
         $where = array(
-            'project_id' => $project_id,
+            'client_id' => $client_id,
             'company_id' => $company_id
         );
         $sql = "SELECT
@@ -594,7 +571,7 @@ class EvidenceModel extends Model {
                 FROM
                     evidence_folders f
                 WHERE
-                    f.project_id = :project_id
+                    f.client_id = :client_id
                     and
                     f.company_id = :company_id
                     and
@@ -613,7 +590,7 @@ class EvidenceModel extends Model {
         $sql = "SELECT
                     f.id,
                     f.company_id,
-                    f.project_id,
+                    f.client_id,
                     f.parent_id,
                     f.folder_name
                 FROM
@@ -628,12 +605,12 @@ class EvidenceModel extends Model {
     }
 
     /** Two folders cannot share a name under the same parent. */
-    public function check_folder_name($project_id, $parent_id, $folder_name, $exclude_folder_id = 0)
+    public function check_folder_name($client_id, $parent_id, $folder_name, $exclude_folder_id = 0)
     {
         $where_text = '';
 
         $where = array(
-            'project_id' => $project_id,
+            'client_id' => $client_id,
             'parent_id' => $parent_id,
             'folder_name' => $folder_name
         );
@@ -648,7 +625,7 @@ class EvidenceModel extends Model {
                 FROM
                     evidence_folders f
                 WHERE
-                    f.project_id = :project_id
+                    f.client_id = :client_id
                     and
                     f.parent_id = :parent_id
                     and
@@ -658,11 +635,11 @@ class EvidenceModel extends Model {
         return parent::select($sql, $where);
     }
 
-    public function add_folder($company_id, $project_id, $parent_id, $folder_name, $created_by)
+    public function add_folder($company_id, $client_id, $parent_id, $folder_name, $created_by)
     {
         $data = array(
             'company_id' => $company_id,
-            'project_id' => $project_id,
+            'client_id' => $client_id,
             'parent_id' => $parent_id,
             'folder_name' => $folder_name,
             'created_by' => $created_by,
@@ -704,7 +681,7 @@ class EvidenceModel extends Model {
 
         $ids = array((int) $folder_id);
         $frontier = array((int) $folder_id);
-        $all = $this->load_folders($folder[0]['project_id'], $company_id);
+        $all = $this->load_folders($folder[0]['client_id'], $company_id);
 
         while (count($frontier) > 0) {
 

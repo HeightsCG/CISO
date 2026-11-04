@@ -1,18 +1,24 @@
 <div class="page">
 
-    <a class="page__back" href="/billing"><i class="fa-regular fa-arrow-left"></i> Back to Billing</a>
-
-    <div class="page__head">
-        <div>
-            <h1 class="page__title"><?php echo ($this->subscription === null ? 'New Subscription' : 'Edit Draft'); ?></h1>
+    <header class="headline">
+        <div class="headline__text">
+            <h1 class="headline__title"><?php echo ($this->subscription === null ? 'New Subscription' : 'Edit Draft'); ?></h1>
+            <p class="headline__sub">
+                <span class="headline__status is-muted">Draft</span>
+            </p>
         </div>
-        <div class="page__actions">
-            <span class="badge badge--prospect">Draft</span>
+        <div class="headline__actions">
+            <a class="btn btn--secondary btn--pill" href="<?php echo ($this->client_id > 0 ? '/clients/detail/id/'.$this->client_id : '/clients'); ?>"><i class="fa-regular fa-chevron-left"></i> Back</a>
             <?php if ($this->subscription !== null) { ?>
-            <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete</button>
+            <div class="dropdown">
+                <button type="button" class="btn btn--round" data-bs-toggle="dropdown" aria-expanded="false" aria-label="More actions"><i class="fa-regular fa-ellipsis"></i></button>
+                <ul class="dropdown-menu dropdown-menu-end headline__menu">
+                    <li><button type="button" class="dropdown-item headline__danger" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete Subscription</button></li>
+                </ul>
+            </div>
             <?php } ?>
         </div>
-    </div>
+    </header>
 
     <div class="invoice-main">
 
@@ -22,12 +28,6 @@
                     <label for="client_id">Bill to</label>
                     <select class="form-control" id="client_id">
                         <option value="0">Select a client</option>
-                    </select>
-                </div>
-                <div class="masthead__cell">
-                    <label for="project_id">Project</label>
-                    <select class="form-control" id="project_id">
-                        <option value="0">No project</option>
                     </select>
                 </div>
                 <div class="masthead__cell">
@@ -89,7 +89,7 @@
                     <p class="commit__text" id="cadence_text">This bills the client automatically until it is cancelled.</p>
                 </div>
                 <div class="commit__actions">
-                    <a class="btn btn--secondary" href="/billing">Cancel</a>
+                    <a class="btn btn--secondary" href="<?php echo ($this->client_id > 0 ? '/clients/detail/id/'.$this->client_id : '/clients'); ?>">Cancel</a>
                     <button type="button" id="do_save" class="btn btn--primary">Save</button>
                 </div>
             </div>
@@ -122,8 +122,7 @@
 $(document).ready(function () {
 
     var subscription_id = <?php echo ($this->subscription === null ? 0 : (int) $this->subscription['id']); ?>;
-    var selected_client = <?php echo ($this->subscription === null ? 0 : (int) $this->subscription['client_id']); ?>;
-    var selected_project = <?php echo ($this->subscription === null ? 0 : (int) $this->subscription['project_id']); ?>;
+    var selected_client = <?php echo (int) $this->client_id; ?>;
     var currency = "<?php echo htmlspecialchars(strtoupper($this->subscription === null ? ($this->company['default_currency'] ?? 'usd') : $this->subscription['currency']), ENT_QUOTES, 'UTF-8'); ?>";
 
     function to_cents(raw) {
@@ -198,27 +197,6 @@ $(document).ready(function () {
 
     $('#billing_interval').change(recalculate);
 
-    $('#client_id').change(function () {
-        selected_project = 0;
-        load_projects($(this).val());
-    });
-
-    function load_projects(client_id) {
-        $('#project_id').html('<option value="0">No project</option>');
-        if (parseInt(client_id, 10) === 0) {
-            return;
-        }
-        ApiDataSvc.apiCall('post', 'load_client_projects', { client_id: client_id }, function (data) {
-            var obj = JSON.parse(data);
-            for (var i = 0; i < obj.length; i++) {
-                $('#project_id').append('<option value="' + obj[i].id + '">' + esc(obj[i].project_name) + '</option>');
-            }
-            if (selected_project > 0) {
-                $('#project_id').val(selected_project);
-            }
-        });
-    }
-
     function load_clients() {
         ApiDataSvc.apiCall('post', 'load_clients', {}, function (data) {
             var obj = JSON.parse(data);
@@ -227,7 +205,6 @@ $(document).ready(function () {
             }
             if (selected_client > 0) {
                 $('#client_id').val(selected_client);
-                load_projects(selected_client);
             }
         });
     }
@@ -264,7 +241,6 @@ $(document).ready(function () {
         var values = {
             subscription_id: subscription_id,
             client_id: $('#client_id').val(),
-            project_id: $('#project_id').val(),
             subscription_name: $('#subscription_name').val().trim(),
             unit_amount: $('#unit_amount').val().trim(),
             quantity: $('#quantity').val().trim(),
@@ -304,7 +280,7 @@ $(document).ready(function () {
             set_loading('#do_delete', false);
 
             if (obj.success) {
-                window.location.href = '/billing';
+                window.location.href = '/clients/detail/id/' + <?php echo (int) $this->client_id; ?>;
             } else {
                 modal('delete_modal').hide();
                 toastr.error(obj.message);

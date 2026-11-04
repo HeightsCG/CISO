@@ -1,30 +1,46 @@
 <div class="page">
-    <a class="page__back" href="/billing"><i class="fa-regular fa-arrow-left"></i> Back to Billing</a>
-
-    <div class="page__head">
-        <div>
-            <h1 class="page__title"><?php echo ($this->invoice['invoice_number'] === '' ? 'Draft Invoice' : htmlspecialchars($this->invoice['invoice_number'], ENT_QUOTES, 'UTF-8')); ?></h1>
-            <div class="invoice-ident">
-                <span class="invoice-ident__client"><?php echo htmlspecialchars($this->invoice['client_name'], ENT_QUOTES, 'UTF-8'); ?></span>
-            </div>
+    <header class="headline">
+        <div class="headline__text">
+            <h1 class="headline__title"><?php echo ($this->invoice['invoice_number'] === '' ? 'Invoice' : htmlspecialchars($this->invoice['invoice_number'], ENT_QUOTES, 'UTF-8')); ?></h1>
+            <p class="headline__sub">
+                <span><?php echo htmlspecialchars($this->invoice['client_name'], ENT_QUOTES, 'UTF-8'); ?></span>
+            </p>
         </div>
-        <div class="page__actions">
-            <?php if ($this->invoice['hosted_invoice_url'] !== '') { ?>
-            <a class="btn btn--secondary" href="/billing/pdf/id/<?php echo (int) $this->invoice['id']; ?>" target="_blank" rel="noopener noreferrer"><i class="fa-regular fa-file-pdf"></i> View PDF</a>
+        <div class="headline__actions">
+            <a class="btn btn--secondary btn--pill" href="/clients/detail/id/<?php echo (int) $this->invoice['client_id']; ?>"><i class="fa-regular fa-chevron-left"></i> Back</a>
+            <?php if ($this->invoice['invoice_status'] === 'Draft') { ?>
+            <button type="button" class="btn btn--primary btn--pill" id="do_send_open"><i class="fa-regular fa-paper-plane"></i> Send Invoice</button>
             <?php } ?>
             <?php if (in_array($this->invoice['invoice_status'], array('Open', 'Uncollectible'), true)) { ?>
-            <button type="button" class="btn btn--destructive" id="do_void_open"><i class="fa-regular fa-ban"></i> Void</button>
-            <button type="button" class="btn btn--primary" id="do_send_open"><i class="fa-regular fa-paper-plane"></i> Resend Invoice</button>
+            <button type="button" class="btn btn--primary btn--pill" id="do_send_open"><i class="fa-regular fa-paper-plane"></i> Resend</button>
             <?php } ?>
-            <?php if (in_array($this->invoice['invoice_status'], array('Draft', 'Void'), true)) { ?>
-            <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete</button>
-            <?php } ?>
-            <?php if ($this->invoice['invoice_status'] === 'Draft') { ?>
-            <a class="btn btn--secondary" href="/billing/form/id/<?php echo (int) $this->invoice['id']; ?>"><i class="fa-regular fa-pen"></i> Edit Draft</a>
-            <button type="button" class="btn btn--primary" id="do_send_open"><i class="fa-regular fa-paper-plane"></i> Send Invoice</button>
+            <?php if ($this->invoice['hosted_invoice_url'] !== '' || in_array($this->invoice['invoice_status'], array('Draft', 'Open', 'Uncollectible', 'Void'), true)) { ?>
+            <div class="dropdown">
+                <button type="button" class="btn btn--round" data-bs-toggle="dropdown" aria-expanded="false" aria-label="More actions"><i class="fa-regular fa-ellipsis"></i></button>
+                <ul class="dropdown-menu dropdown-menu-end headline__menu">
+                    <?php if ($this->invoice['invoice_status'] === 'Draft') { ?>
+                    <li><a class="dropdown-item" href="/billing/form/id/<?php echo (int) $this->invoice['id']; ?>"><i class="fa-regular fa-pen"></i> Edit Draft</a></li>
+                    <?php } ?>
+                    <?php if ($this->invoice['hosted_invoice_url'] !== '') { ?>
+                    <li><a class="dropdown-item" href="/billing/pdf/id/<?php echo (int) $this->invoice['id']; ?>" target="_blank" rel="noopener noreferrer"><i class="fa-regular fa-file-pdf"></i> View PDF</a></li>
+                    <?php } ?>
+                    <?php if (in_array($this->invoice['invoice_status'], array('Open', 'Uncollectible'), true)) { ?>
+                    <?php if ($this->invoice['hosted_invoice_url'] !== '') { ?>
+                    <li><hr class="dropdown-divider"></li>
+                    <?php } ?>
+                    <li><button type="button" class="dropdown-item headline__danger" id="do_void_open"><i class="fa-regular fa-ban"></i> Void Invoice</button></li>
+                    <?php } ?>
+                    <?php if (in_array($this->invoice['invoice_status'], array('Draft', 'Void'), true)) { ?>
+                    <?php if ($this->invoice['invoice_status'] === 'Draft' || $this->invoice['hosted_invoice_url'] !== '') { ?>
+                    <li><hr class="dropdown-divider"></li>
+                    <?php } ?>
+                    <li><button type="button" class="dropdown-item headline__danger" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete Invoice</button></li>
+                    <?php } ?>
+                </ul>
+            </div>
             <?php } ?>
         </div>
-    </div>
+    </header>
 
     <?php if ($this->invoice['invoice_status'] === 'Finalizing') { ?>
     <div class="alert alert--critical" role="status">
@@ -49,7 +65,7 @@
             <div class="masthead masthead--invoice<?php echo ($this->invoice['invoice_status'] === 'Draft' ? '' : ' masthead--has-status'); ?>">
                 <div class="masthead__cell">
                     <span class="lbl">Bill to</span>
-                    <div class="masthead__value"><a href="/clients/detail/id/<?php echo (int) $this->invoice['client_id']; ?>"><?php echo htmlspecialchars($this->invoice['client_name'], ENT_QUOTES, 'UTF-8'); ?></a></div>
+                    <div class="masthead__value"><?php echo htmlspecialchars($this->invoice['client_name'], ENT_QUOTES, 'UTF-8'); ?></div>
                     <div class="masthead__sub">
                         <?php echo ($this->invoice['client_address_1'] === '' ? '' : htmlspecialchars($this->invoice['client_address_1'], ENT_QUOTES, 'UTF-8').'<br>'); ?>
                         <?php echo ($this->invoice['client_address_2'] === '' ? '' : htmlspecialchars($this->invoice['client_address_2'], ENT_QUOTES, 'UTF-8').'<br>'); ?>
@@ -63,19 +79,10 @@
                     <div class="masthead__value"><?php echo (trim($this->invoice['client_billing_name']) !== '' ? htmlspecialchars($this->invoice['client_billing_name'], ENT_QUOTES, 'UTF-8') : htmlspecialchars($this->invoice['client_contact_name'], ENT_QUOTES, 'UTF-8')); ?></div>
                     <?php } ?>
                     <div class="masthead__sub">
-                        <?php echo (trim($this->invoice['client_billing_email']) !== '' ? htmlspecialchars($this->invoice['client_billing_email'], ENT_QUOTES, 'UTF-8') : (trim($this->invoice['client_contact_email']) !== '' ? '<a href="mailto:'.htmlspecialchars($this->invoice['client_contact_email'], ENT_QUOTES, 'UTF-8').'">'.htmlspecialchars($this->invoice['client_contact_email'], ENT_QUOTES, 'UTF-8').'</a>' : '<span class="billto__warn">No email on file</span>')); ?>
+                        <?php echo (trim($this->invoice['client_billing_email']) !== '' ? htmlspecialchars($this->invoice['client_billing_email'], ENT_QUOTES, 'UTF-8') : (trim($this->invoice['client_contact_email']) !== '' ? htmlspecialchars($this->invoice['client_contact_email'], ENT_QUOTES, 'UTF-8') : '<span class="billto__warn">No email on file</span>')); ?>
                         <?php echo (trim($this->invoice['client_contact_phone']) === '' ? '' : '<br>'.htmlspecialchars($this->invoice['client_contact_phone'], ENT_QUOTES, 'UTF-8')); ?>
                     </div>
                 </div>
-                <?php if ($this->invoice['project_name'] !== null) { ?>
-                <div class="masthead__cell">
-                    <span class="lbl">Project</span>
-                    <div class="masthead__value"><a href="/projects/detail/id/<?php echo (int) $this->invoice['project_id']; ?>"><?php echo htmlspecialchars($this->invoice['project_name'], ENT_QUOTES, 'UTF-8'); ?></a></div>
-                    <?php if ($this->invoice['invoice_origin'] === 'Subscription') { ?>
-                    <div class="masthead__sub">Subscription</div>
-                    <?php } ?>
-                </div>
-                <?php } ?>
                 <?php if ($this->invoice['invoice_status'] !== 'Draft') { ?>
                 <div class="masthead__cell">
                     <span class="lbl">Status</span>
@@ -91,7 +98,6 @@
                 <div class="masthead__cell">
                     <span class="lbl">Issued</span>
                     <div class="masthead__value"><?php echo htmlspecialchars($this->invoice['finalized_display'], ENT_QUOTES, 'UTF-8'); ?></div>
-                    <div class="masthead__sub">Created <?php echo htmlspecialchars($this->invoice['date_created_display'], ENT_QUOTES, 'UTF-8'); ?></div>
                 </div>
                 <?php } ?>
                 <?php if ($this->invoice['due_date'] !== null) { ?>
@@ -163,7 +169,7 @@
                             <td class="num ledger__amount"><?php echo htmlspecialchars(Money::figure($this->invoice['amount_paid_cents']), ENT_QUOTES, 'UTF-8'); ?></td>
                         </tr>
                         <tr class="ledger__foot-total">
-                            <td colspan="6" class="ledger__foot-label">Outstanding <?php echo htmlspecialchars(strtoupper($this->invoice['currency']), ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td colspan="6" class="ledger__foot-label">Balance</td>
                             <td class="num ledger__amount"><?php echo htmlspecialchars(Money::figure($this->invoice['invoice_status'] === 'Void' ? 0 : $this->invoice['amount_due_cents']), ENT_QUOTES, 'UTF-8'); ?></td>
                         </tr>
                     </tfoot>
@@ -306,7 +312,7 @@ $(document).ready(function () {
             set_loading('#do_delete', false);
 
             if (obj.success) {
-                window.location.href = '/billing';
+                window.location.href = '/clients/detail/id/<?php echo (int) $this->invoice['client_id']; ?>';
             } else {
                 modal('delete_modal').hide();
                 toastr.error(obj.message);
@@ -326,7 +332,7 @@ $(document).ready(function () {
 
             if (obj.success) {
                 toastr.success(obj.message);
-                window.location.reload();
+                window.top.location.reload();
             } else {
                 modal('send_modal').hide();
                 toastr.error(obj.message);
@@ -346,7 +352,7 @@ $(document).ready(function () {
 
             if (obj.success) {
                 toastr.success(obj.message);
-                window.location.reload();
+                window.top.location.reload();
             } else {
                 modal('void_modal').hide();
                 toastr.error(obj.message);

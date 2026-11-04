@@ -1,10 +1,12 @@
 <div class="page page--list">
-    <div class="page__head">
-        <div>
-            <h1 class="page__title">Standards</h1>
+    <header class="headline">
+        <div class="headline__text">
+            <h1 class="headline__title">Standards</h1>
         </div>
-        <a class="btn btn--primary" href="/standards/form"><i class="fa-regular fa-plus"></i> Add Standard</a>
-    </div>
+        <div class="headline__actions">
+            <a class="btn btn--primary btn--add" href="/standards/form" aria-label="New standard" title="New standard"><i class="fa-regular fa-plus"></i></a>
+        </div>
+    </header>
 
     <div class="panel">
         <div class="panel__head roster__toolbar">

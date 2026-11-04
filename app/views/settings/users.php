@@ -1,10 +1,10 @@
 <?php if (!$this->users_allowed) { ?>
 <div class="page">
-    <div class="page__head">
-        <div>
-            <h1 class="page__title">Users</h1>
+    <header class="headline">
+        <div class="headline__text">
+            <h1 class="headline__title">Users</h1>
         </div>
-    </div>
+    </header>
 
     <div class="panel">
         <div class="panel__body">
@@ -51,12 +51,14 @@
 </div>
 <?php } else { ?>
 <div class="page page--list">
-    <div class="page__head">
-        <div>
-            <h1 class="page__title">Users</h1>
+    <header class="headline">
+        <div class="headline__text">
+            <h1 class="headline__title">Users</h1>
         </div>
-        <button type="button" class="btn btn--primary" id="add"><i class="fa-regular fa-plus"></i> Add User</button>
-    </div>
+        <div class="headline__actions">
+            <button type="button" class="btn btn--primary btn--add" id="add" aria-label="New user" title="New user"><i class="fa-regular fa-plus"></i></button>
+        </div>
+    </header>
 
     <div class="panel">
         <div class="panel__head roster__toolbar">
@@ -147,7 +149,7 @@
                     <div class="col-md-12 form-group">
                         <label for="client_id">Client <abbr title="required">*</abbr></label>
                         <select class="form-control" id="client_id"></select>
-                        <p class="import__hint">They will see only this client's projects, assessments and evidence.</p>
+                        <p class="import__hint">They will see only this client's assessments and evidence.</p>
                     </div>
                 </div>
             </div>

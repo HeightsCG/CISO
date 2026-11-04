@@ -1,13 +1,15 @@
 <div class="page page--list">
-    <div class="page__head">
-        <div>
-            <h1 class="page__title">User Accounts</h1>
-            <div class="client__meta">
-                <span class="client__segment" id="roster_summary">&nbsp;</span>
-            </div>
+    <header class="headline">
+        <div class="headline__text">
+            <h1 class="headline__title">User Accounts</h1>
+            <p class="headline__sub">
+                <span id="roster_summary">&nbsp;</span>
+            </p>
         </div>
-        <button type="button" class="btn btn--primary" id="add"><i class="fa-regular fa-plus"></i> Add User</button>
-    </div>
+        <div class="headline__actions">
+            <button type="button" class="btn btn--primary btn--add" id="add" aria-label="New user" title="New user"><i class="fa-regular fa-plus"></i></button>
+        </div>
+    </header>
 
     <div class="panel">
         <div class="panel__head roster__toolbar">

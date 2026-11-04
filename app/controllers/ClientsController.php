@@ -4,16 +4,21 @@ class ClientsController extends Controller {
     public $protected = 1;
     public $clients_model;
     public $evidence_model;
+    public $companies_model;
+    public $assessments_model;
 
 
     public function __construct(){
         parent::__construct();
         $this->clients_model = new ClientsModel();
         $this->evidence_model = new EvidenceModel();
+        $this->companies_model = new CompaniesModel();
+        $this->assessments_model = new AssessmentsModel();
     }
 
     public function indexAction(){
         $this->view->room = Plans::room('clients', $this->clients_model->count_clients(Session::get('company_id')));
+        $this->view->countries = Regions::countries();
         $this->view->render();
     }
 
@@ -26,55 +31,49 @@ class ClientsController extends Controller {
             return;
         }
 
+        $contacts = array();
+
+        foreach (array('primary' => 'contact', 'billing' => 'billing') as $which => $prefix) {
+            $contacts[$which] = array(
+                'name' => html_entity_decode((string) $client[0][$prefix.'_name'], ENT_QUOTES, 'UTF-8'),
+                'title' => html_entity_decode((string) $client[0][$prefix.'_title'], ENT_QUOTES, 'UTF-8'),
+                'email' => html_entity_decode((string) $client[0][$prefix.'_email'], ENT_QUOTES, 'UTF-8'),
+                'phone' => html_entity_decode((string) $client[0][$prefix.'_phone'], ENT_QUOTES, 'UTF-8')
+            );
+        }
+
+        $found = Regions::find(html_entity_decode((string) $client[0]['country'], ENT_QUOTES, 'UTF-8'));
+
         $this->view->client = $client[0];
+        $this->view->client_id = (int) $client[0]['id'];
+        $this->view->invoice = null;
+        $this->view->items = array();
+        $this->view->invoice_in_modal = true;
+        $company = $this->companies_model->get_company(Session::get('company_id'));
+        $this->view->company = (is_array($company) && count($company) === 1 ? $company[0] : array());
+        $this->view->contacts = $contacts;
+        $this->view->address = array(
+            'address_1' => html_entity_decode((string) $client[0]['address_1'], ENT_QUOTES, 'UTF-8'),
+            'address_2' => html_entity_decode((string) $client[0]['address_2'], ENT_QUOTES, 'UTF-8'),
+            'city' => html_entity_decode((string) $client[0]['city'], ENT_QUOTES, 'UTF-8'),
+            'state' => html_entity_decode((string) $client[0]['state'], ENT_QUOTES, 'UTF-8'),
+            'postal_code' => html_entity_decode((string) $client[0]['postal_code'], ENT_QUOTES, 'UTF-8'),
+            'country' => ($found === null ? '' : $found['name'])
+        );
+        $this->view->countries = Regions::countries();
+        $this->view->country_code = ($found === null ? 'us' : strtolower($found['code']));
+        $this->view->room = Plans::room(
+            'assessments_per_client',
+            $this->assessments_model->count_assessments($client[0]['id'], Session::get('company_id'))
+        );
         $this->view->render();
     }
 
+    /* Adding a client happens in a popup on the clients list. */
     public function addAction(){
-
-        $room = Plans::room('clients', $this->clients_model->count_clients(Session::get('company_id')));
-
-        if (!$room['allowed']) {
-            Errors::access_denied();
-            return;
-        }
-
-        $this->view->countries = Regions::countries();
-        $this->view->render();
+        header('Location: /clients');
+        exit;
     }
-
-    public function formAction(){
-
-        $client_id = Main::get_param('id');
-
-        if (empty($client_id)) {
-            header('Location: /clients/add');
-            exit;
-        }
-
-        $client = $this->clients_model->get_client($client_id, Session::get('company_id'));
-
-        if (!is_array($client) || count($client) !== 1) {
-            Errors::page_not_found();
-            return;
-        }
-
-        $values = array();
-
-        foreach (array('company_name', 'address_1', 'address_2', 'city', 'state', 'postal_code', 'country', 'contact_name', 'contact_title', 'contact_email', 'contact_phone', 'billing_name', 'billing_title', 'billing_email', 'billing_phone') as $key) {
-            $values[$key] = html_entity_decode((string) ($client[0][$key] ?? ''), ENT_QUOTES, 'UTF-8');
-        }
-
-        $found = Regions::find($values['country']);
-        $values['country'] = ($found === null ? '' : $found['name']);
-
-        $this->view->client = $client[0];
-        $this->view->values = $values;
-        $this->view->countries = Regions::countries();
-        $this->view->render();
-    }
-
-
 
     /** Paged, filtered vault lookup - the picker never pulls the whole vault. */
 

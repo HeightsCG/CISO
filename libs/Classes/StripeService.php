@@ -1287,7 +1287,7 @@ class StripeService {
      * what makes Stripe email the client a hosted payment page rather than trying
      * to charge a stored card, which is the whole shape of this feature.
      */
-    public static function create_invoice($account_id, $customer_id, $currency, $footer, $due_days, $due_date, $company_id, $invoice_id, $client_id, $project_id, $replaces = ''): array
+    public static function create_invoice($account_id, $customer_id, $currency, $footer, $due_days, $due_date, $company_id, $invoice_id, $client_id, $replaces = '', $number = ''): array
     {
         if (!self::configured() || !self::has_account($account_id, 'invoice create')) {
             return array();
@@ -1305,7 +1305,6 @@ class StripeService {
                 'app'              => 'ciso',
                 'company_id'       => (string) $company_id,
                 'client_id'        => (string) $client_id,
-                'project_id'       => (string) $project_id,
                 'local_invoice_id' => (string) $invoice_id
             )
         );
@@ -1323,6 +1322,10 @@ class StripeService {
 
         if (self::text($footer) !== '') {
             $params['footer'] = self::text($footer);
+        }
+
+        if ((string) $number !== '') {
+            $params['number'] = (string) $number;
         }
 
         try {
@@ -1488,7 +1491,7 @@ class StripeService {
      * Stripe emails each renewal with a payment page and chases it, rather than
      * charging a card the client has never been asked to authorise.
      */
-    public static function create_connected_subscription($account_id, $customer_id, $price_id, $quantity, $due_days, $start_date, $company_id, $subscription_id, $client_id, $project_id): array
+    public static function create_connected_subscription($account_id, $customer_id, $price_id, $quantity, $due_days, $start_date, $company_id, $subscription_id, $client_id): array
     {
         if (!self::configured() || !self::has_account($account_id, 'subscription create')) {
             return array();
@@ -1503,8 +1506,7 @@ class StripeService {
                 'app'             => 'ciso',
                 'company_id'      => (string) $company_id,
                 'subscription_id' => (string) $subscription_id,
-                'client_id'       => (string) $client_id,
-                'project_id'      => (string) $project_id
+                'client_id'       => (string) $client_id
             )
         );
 

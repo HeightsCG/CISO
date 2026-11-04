@@ -16,15 +16,6 @@
     <div class="dashgrid">
         <section class="dashcol">
             <div class="panel__head">
-                <h2 class="panel__title">Projects</h2>
-            </div>
-            <div class="dashscroll">
-                <ul class="projlist" id="project_list"></ul>
-                <p class="controls__empty" id="project_empty">Loading&hellip;</p>
-            </div>
-        </section>
-        <section class="dashcol">
-            <div class="panel__head">
                 <h2 class="panel__title">Clients</h2>
             </div>
             <div class="dashscroll">
@@ -56,7 +47,6 @@ $(document).ready(function () {
     ];
 
     var data = {};
-    var progress = {};
 
     function pct_of(done, total) {
         return total > 0 ? Math.round(done / total * 100) : 0;
@@ -86,17 +76,12 @@ $(document).ready(function () {
             + '</li>';
     }
 
-    /**
-     * The three figures a consultant acts on. Gaps are an exception, so they carry
-     * a tone and an icon once non-zero and stay quiet at zero.
-     */
     function render_kpis() {
 
         var t = data.totals;
         var counts = counts_by_result();
         var statuses = counts_by_status();
         var clients = num(t.client_count);
-        var projects = num(t.project_count);
         var assessments = num(t.assessment_count);
         var gaps = counts['Not Implemented'];
         var pipeline = [];
@@ -121,9 +106,9 @@ $(document).ready(function () {
                 gaps > 0 ? 'is-gap' : ''
             )
             + kpi(
-                'Open Projects',
-                num(t.open_project_count),
-                'of ' + projects + ' · ' + clients + (clients === 1 ? ' client' : ' clients'),
+                'Open Assessments',
+                num(t.open_assessment_count),
+                'of ' + assessments + ' · ' + clients + (clients === 1 ? ' client' : ' clients'),
                 ''
             )
             + kpi(
@@ -174,7 +159,7 @@ $(document).ready(function () {
             }
 
             html += metric(
-                '<a class="rowlink__a" href="/projects/assessment/id/' + a.id + '">' + esc(a.assessment_name) + '</a>',
+                '<a class="rowlink__a" href="/assessments/detail/id/' + a.id + '">' + esc(a.assessment_name) + '</a>',
                 sub.join(' · '),
                 total === 0 ? null : pct_of(done, total),
                 total === 0 ? '<span class="roster__none">no controls</span>' : pct_of(done, total) + '%'
@@ -183,7 +168,7 @@ $(document).ready(function () {
 
         $('#assessments').html(html);
         $('#assessments_empty').prop('hidden', data.assessments.length > 0)
-            .text('No assessments yet. Open a project and start one against a standard.');
+            .text('No assessments yet.');
     }
 
     function counts_by_status() {
@@ -210,7 +195,6 @@ $(document).ready(function () {
             var c = data.clients[i];
             var sub = [];
 
-            sub.push(num(c.project_count) + (num(c.project_count) === 1 ? ' project' : ' projects'));
             sub.push(num(c.assessment_count) + (num(c.assessment_count) === 1 ? ' assessment' : ' assessments'));
             sub.push(num(c.evidence_count) + ' files');
 
@@ -224,7 +208,7 @@ $(document).ready(function () {
 
         $('#clients').html(html);
         $('#clients_empty').prop('hidden', data.clients.length > 0)
-            .text('No clients yet. Add one to start a project against it.');
+            .text('No clients yet.');
     }
 
     function render_attention() {
@@ -240,13 +224,11 @@ $(document).ready(function () {
                 ? Math.abs(days) + (Math.abs(days) === 1 ? ' day overdue' : ' days overdue')
                 : (days === 0 ? 'due today' : 'due in ' + days + (days === 1 ? ' day' : ' days'));
 
-            var why = num(a.assessment_count) === 0
-                ? 'No assessments started'
-                : num(a.assessed_pct) + '% assessed' + (days < 0 ? '' : ' with ' + num(a.elapsed_pct) + '% of the time used');
+            var why = num(a.assessed_pct) + '% assessed' + (days < 0 ? '' : ' with ' + num(a.elapsed_pct) + '% of the time used');
 
             html += '<li class="metric rowlink">'
-                + '<span class="metric__label"><a class="rowlink__a" href="/projects/detail/id/' + a.id + '">' + esc(a.project_name) + '</a>'
-                + '<span class="metric__sub">' + (a.client_name === null ? 'No client assigned' : esc(a.client_name)) + '</span></span>'
+                + '<span class="metric__label"><a class="rowlink__a" href="/assessments/detail/id/' + a.id + '">' + esc(a.assessment_name) + '</a>'
+                + (a.client_name ? '<span class="metric__sub">' + esc(a.client_name) + '</span>' : '') + '</span>'
                 + '<span class="attention__why">' + why + '</span>'
                 + '<span class="badge ' + tone + '">' + when + '</span>'
                 + '<i class="fa-regular fa-chevron-right rowlink__go" aria-hidden="true"></i>'
@@ -258,62 +240,15 @@ $(document).ready(function () {
         $('#dash').toggleClass('has-attention', data.attention.length > 0);
     }
 
-    function render_projects() {
-
-        var html = '';
-        var shown = 0;
-
-        for (var i = 0; i < data.projects.length; i++) {
-
-            var project = data.projects[i];
-
-            if (project.project_status === 'Complete') {
-                continue;
-            }
-
-            shown++;
-
-            var row = progress[project.id];
-            var count = row ? num(row.assessment_count) : 0;
-            var meta = [];
-
-            meta.push(project.client_name === null ? 'No client assigned' : esc(project.client_name));
-            meta.push(count + (count === 1 ? ' assessment' : ' assessments'));
-
-            if (project.end_date_display !== '') {
-                meta.push('ends ' + esc(project.end_date_display));
-            }
-
-            html += '<li class="proj rowlink">'
-                + '<div class="proj__head">'
-                + '<a class="proj__name rowlink__a" href="/projects/detail/id/' + project.id + '">' + esc(project.project_name) + '</a>'
-                + '<span class="proj__meta">' + meta.join(' · ') + '</span>'
-                + '<span class="badge ' + (project.project_status === 'Complete' ? 'badge--inactive' : 'badge--active') + '">'
-                + esc(project.project_status) + '</span>'
-                + '</div>'
-                + '</li>';
-        }
-
-        $('#project_list').html(html).prop('hidden', shown === 0);
-        $('#project_empty').prop('hidden', shown > 0).text(data.projects.length === 0
-            ? 'No projects yet. Add a client, then start a project to begin tracking compliance.'
-            : 'No open projects.');
-    }
-
     function load(){
         ApiDataSvc.apiCall('post', 'load_dashboard', {}, function (payload) {
 
             data = JSON.parse(payload);
 
-            for (var i = 0; i < data.progress.length; i++) {
-                progress[data.progress[i].project_id] = data.progress[i];
-            }
-
             render_attention();
             render_kpis();
             render_assessments();
             render_clients();
-            render_projects();
         });
     }
 

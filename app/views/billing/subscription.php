@@ -4,25 +4,33 @@ $is_live  = in_array($this->subscription['subscription_status'], array('Active',
 $ending   = ((int) $this->subscription['cancel_at_period_end'] === 1);
 ?>
 <div class="page">
-    <a class="page__back" href="/billing"><i class="fa-regular fa-arrow-left"></i> Back to Billing</a>
-
-    <div class="page__head">
-        <div>
-            <h1 class="page__title"><?php echo htmlspecialchars($this->subscription['subscription_name'], ENT_QUOTES, 'UTF-8'); ?></h1>
-            <div class="invoice-ident">
-                <span class="invoice-ident__client"><?php echo htmlspecialchars($this->subscription['client_name'], ENT_QUOTES, 'UTF-8'); ?></span>
-            </div>
+    <header class="headline">
+        <div class="headline__text">
+            <h1 class="headline__title"><?php echo htmlspecialchars($this->subscription['subscription_name'], ENT_QUOTES, 'UTF-8'); ?></h1>
+            <p class="headline__sub">
+                <span><?php echo htmlspecialchars($this->subscription['client_name'], ENT_QUOTES, 'UTF-8'); ?></span>
+            </p>
         </div>
-        <div class="page__actions">
+        <div class="headline__actions">
+            <a class="btn btn--secondary btn--pill" href="/clients/detail/id/<?php echo (int) $this->subscription['client_id']; ?>"><i class="fa-regular fa-chevron-left"></i> Back</a>
             <?php if ($is_draft) { ?>
-            <a class="btn btn--secondary" href="/billing/subscriptionform/id/<?php echo (int) $this->subscription['id']; ?>"><i class="fa-regular fa-pen"></i> Edit Draft</a>
-            <button type="button" class="btn btn--primary" id="do_activate_open"><i class="fa-regular fa-play"></i> Start Subscription</button>
+            <button type="button" class="btn btn--primary btn--pill" id="do_activate_open"><i class="fa-regular fa-play"></i> Start Subscription</button>
             <?php } ?>
-            <?php if ($is_live && !$ending) { ?>
-            <button type="button" class="btn btn--destructive" id="do_cancel_open"><i class="fa-regular fa-ban"></i> Cancel Subscription</button>
+            <?php if ($is_draft || ($is_live && !$ending)) { ?>
+            <div class="dropdown">
+                <button type="button" class="btn btn--round" data-bs-toggle="dropdown" aria-expanded="false" aria-label="More actions"><i class="fa-regular fa-ellipsis"></i></button>
+                <ul class="dropdown-menu dropdown-menu-end headline__menu">
+                    <?php if ($is_draft) { ?>
+                    <li><a class="dropdown-item" href="/billing/subscriptionform/id/<?php echo (int) $this->subscription['id']; ?>"><i class="fa-regular fa-pen"></i> Edit Draft</a></li>
+                    <?php } ?>
+                    <?php if ($is_live && !$ending) { ?>
+                    <li><button type="button" class="dropdown-item headline__danger" id="do_cancel_open"><i class="fa-regular fa-ban"></i> Cancel Subscription</button></li>
+                    <?php } ?>
+                </ul>
+            </div>
             <?php } ?>
         </div>
-    </div>
+    </header>
 
     <?php if ($this->subscription['provision_state'] === 'Failed' && $this->subscription['provision_error'] !== '') { ?>
     <div class="alert alert--warn" role="status">
@@ -58,12 +66,6 @@ $ending   = ((int) $this->subscription['cancel_at_period_end'] === 1);
                     <div class="masthead__sub"><?php echo htmlspecialchars($to, ENT_QUOTES, 'UTF-8'); ?></div>
                     <?php } ?>
                 </div>
-                <?php if ($this->subscription['project_name'] !== null) { ?>
-                <div class="masthead__cell">
-                    <span class="lbl">Project</span>
-                    <div class="masthead__value"><a href="/projects/detail/id/<?php echo (int) $this->subscription['project_id']; ?>"><?php echo htmlspecialchars($this->subscription['project_name'], ENT_QUOTES, 'UTF-8'); ?></a></div>
-                </div>
-                <?php } ?>
                 <div class="masthead__cell">
                     <span class="lbl">Status</span>
                     <div class="masthead__value"><span class="badge <?php echo ($this->subscription['subscription_status_display'] === 'Active' ? 'badge--active' : ($this->subscription['subscription_status_display'] === 'Past Due' || $this->subscription['subscription_status_display'] === 'Unpaid' ? 'badge--critical' : ($this->subscription['subscription_status_display'] === 'Cancelled' ? 'badge--inactive' : 'badge--prospect'))); ?>"><?php echo htmlspecialchars($this->subscription['subscription_status_display'], ENT_QUOTES, 'UTF-8'); ?></span></div>

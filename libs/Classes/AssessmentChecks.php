@@ -15,21 +15,15 @@ class AssessmentChecks {
 
     /**
      * @param array      $definition framework definition, or null for standards not built from one
-     * @param array      $assessment assessments row (with project_name, client_name)
-     * @param array      $project    projects row (project_name, description)
+     * @param array      $assessment assessments row (with client_name)
      * @param array      $controls   control rows of the assessment
      * @param array|null $score      AssessmentScore::score() result, when there is a definition
      */
-    public static function run(?array $definition, array $assessment, array $project, array $controls, ?array $score): array
+    public static function run(?array $definition, array $assessment, array $controls, ?array $score): array
     {
         $issues = array();
-        $out_of_scope = $score['out_of_scope_families'] ?? array();
-        $in_scope = array_values(array_filter($controls, function ($control) use ($out_of_scope) {
-            return !in_array($control['family'], $out_of_scope, true);
-        }));
-
-        $unassessed = array_values(array_filter($in_scope, function ($control) {
-            return $control['item_result'] === 'Not Assessed' && ($control['applicability'] ?? 'Applicable') !== 'Excluded';
+        $unassessed = array_values(array_filter($controls, function ($control) {
+            return ($control['item_result'] === 'Not Assessed' || (int) ($control['open_objectives'] ?? 0) > 0) && ($control['applicability'] ?? 'Applicable') !== 'Excluded';
         }));
 
         if (count($unassessed) > 0) {
@@ -42,15 +36,11 @@ class AssessmentChecks {
             }
         }
 
-        if ($assessment['assessment_type'] === 'Final' && (int) $assessment['baseline_assessment_id'] === 0 && (int) $assessment['no_baseline'] === 0) {
-            $issues[] = self::issue('block', 'final_needs_baseline', 'A Final assessment needs a Baseline to compare against, or the "no baseline" box ticked on the Settings tab.', array());
-        }
-
         if ($definition !== null) {
-            $issues = array_merge($issues, self::framework_checks($definition, $assessment, $project, $score));
+            $issues = array_merge($issues, self::framework_checks($definition, $assessment, $score));
         }
 
-        return array_merge($issues, self::writing_checks($definition, $assessment, $project, $controls));
+        return array_merge($issues, self::writing_checks($definition, $assessment, $controls));
     }
 
     public static function blocking(array $issues): array
@@ -60,7 +50,7 @@ class AssessmentChecks {
         }));
     }
 
-    private static function framework_checks(array $definition, array $assessment, array $project, ?array $score): array
+    private static function framework_checks(array $definition, array $assessment, ?array $score): array
     {
         $issues = array();
 
@@ -70,19 +60,14 @@ class AssessmentChecks {
             }
         }
 
-        if (($score['model'] ?? '') === 'maturity' && ((int) ($assessment['tier_governance'] ?? 0) === 0 || (int) ($assessment['tier_management'] ?? 0) === 0)) {
-            $issues[] = self::issue('warn', 'tiers_not_set', 'The current Tiers for governance and management are not set on the Settings tab.', array());
-        }
-
         return $issues;
     }
 
-    private static function writing_checks(?array $definition, array $assessment, array $project, array $controls): array
+    private static function writing_checks(?array $definition, array $assessment, array $controls): array
     {
         $issues = array();
         $extra = array(
             (string) ($assessment['client_name'] ?? ''),
-            (string) $project['project_name'],
             (string) $assessment['assessment_name']
         );
 

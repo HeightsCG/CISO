@@ -1,12 +1,9 @@
 <div class="page page--list">
-    <div class="page__head">
-        <div>
-            <h1 class="page__title">Invoices</h1>
-            <div class="client__meta">
-                <span class="client__segment"><?php echo htmlspecialchars($this->client['company_name'], ENT_QUOTES, 'UTF-8'); ?></span>
-            </div>
+    <header class="headline">
+        <div class="headline__text">
+            <h1 class="headline__title">Invoices</h1>
         </div>
-    </div>
+    </header>
 
     <div class="panel">
         <div class="panel__head roster__toolbar">
@@ -19,7 +16,6 @@
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Invoice</th>
-                            <th scope="col">Project</th>
                             <th scope="col">Issued</th>
                             <th scope="col">Due</th>
                             <th scope="col">Amount</th>
@@ -36,13 +32,6 @@
 
 <script>
 $(document).ready(function () {
-
-    function dash(data) {
-        if (!data) {
-            return '<span class="roster__none">&mdash;</span>';
-        }
-        return esc(data);
-    }
 
     function status_badge(data, type) {
         if (type !== 'display') {
@@ -68,7 +57,7 @@ $(document).ready(function () {
             return '';
         }
         var html = '<button type="button" class="btn btn--tertiary btn--sm" data-action="pdf" data-id="' + row[0] + '">Invoice</button>';
-        if (row[6] !== 'Paid' && row[6] !== 'Void' && row[6] !== 'Written Off') {
+        if (row[5] !== 'Paid' && row[5] !== 'Void' && row[5] !== 'Written Off') {
             html += ' <button type="button" class="btn btn--tertiary btn--sm" data-action="pay" data-id="' + row[0] + '">Pay</button>';
         }
         return html;
@@ -80,41 +69,35 @@ $(document).ready(function () {
         scrollY: "520px",
         scrollCollapse: true,
         deferRender: true,
-        order: [[3, 'desc']],
+        order: [[2, 'desc']],
         columnDefs: [
             {
                 targets: 0,
                 visible: false
             },{
                 targets: 1,
-                width: '16%'
+                width: '24%'
             },{
-                targets: 2,
-                width: '22%',
-                render: {
-                    display: dash
-                }
-            },{
-                targets: [3, 4],
-                width: '13%',
+                targets: [2, 3],
+                width: '16%',
                 render: {
                     _: 'sort',
                     display: 'display'
                 }
             },{
-                targets: 5,
-                width: '14%',
+                targets: 4,
+                width: '16%',
                 className: 'num',
                 render: {
                     _: 'sort',
                     display: 'display'
                 }
             },{
-                targets: 6,
-                width: '14%',
+                targets: 5,
+                width: '16%',
                 render: status_badge
             },{
-                targets: 7,
+                targets: 6,
                 width: '12%',
                 className: 'actions',
                 orderable: false,
@@ -166,7 +149,6 @@ $(document).ready(function () {
                 table.row.add([
                     obj[i].id,
                     obj[i].invoice_number,
-                    obj[i].project_name,
                     { sort: obj[i].due_date === null ? '' : obj[i].due_date, display: obj[i].issued_display === null ? '' : obj[i].issued_display },
                     { sort: obj[i].due_date === null ? '' : obj[i].due_date, display: obj[i].due_date === null ? '' : obj[i].due_date_display },
                     { sort: parseInt(obj[i].total_cents, 10), display: obj[i].total_display },

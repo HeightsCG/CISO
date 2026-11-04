@@ -1,9 +1,9 @@
 <div class="page">
-    <div class="page__head">
-        <div>
-            <h1 class="page__title">Settings</h1>
+    <header class="headline">
+        <div class="headline__text">
+            <h1 class="headline__title">Settings</h1>
         </div>
-    </div>
+    </header>
     <div class="settings">
 
         <nav class="nav nav-pills flex-column submenu" role="tablist" aria-label="Settings">
@@ -316,7 +316,7 @@
                     </div>
                 </section>
                 <div class="savebar" id="security_savebar">
-                    <span class="savebar__status" id="security_status" aria-live="polite">Loading settings&hellip;</span>
+                    <span class="savebar__status" id="security_status" aria-live="polite"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Loading settings&hellip;</span>
                     <span class="savebar__actions">
                         <button type="button" id="do_security_save" class="btn btn--primary" disabled>Save  hanges</button>
                     </span>
@@ -362,7 +362,7 @@
                 </section>
             </div>
             <div class="savebar" id="savebar">
-                <span class="savebar__status" id="savebar_text" aria-live="polite">Loading settings&hellip;</span>
+                <span class="savebar__status" id="savebar_text" aria-live="polite"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Loading settings&hellip;</span>
                 <span class="savebar__actions">
                     <button type="button" id="do_save" class="btn btn--primary" disabled>Save Changes</button>
                 </span>

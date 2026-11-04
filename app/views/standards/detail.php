@@ -1,22 +1,27 @@
 <div class="page">
-    <a class="page__back" href="/standards"><i class="fa-regular fa-arrow-left"></i> Back to Standards</a>
-
-    <div class="page__head">
-        <div>
-            <h1 class="page__title"><?php echo htmlspecialchars($this->standard['standard_name'], ENT_QUOTES, 'UTF-8'); ?></h1>
-            <div class="client__meta">
-                <span class="badge <?php echo ($this->standard['standard_status'] === 'Archived' ? 'badge--inactive' : 'badge--active'); ?>"><?php echo htmlspecialchars($this->standard['standard_status'], ENT_QUOTES, 'UTF-8'); ?></span>
-                <span class="client__segment"><?php echo ($this->standard['short_code'] === '' ? 'No code' : htmlspecialchars($this->standard['short_code'], ENT_QUOTES, 'UTF-8')); ?></span>
-                <span class="client__segment"><?php echo ($this->standard['version'] === '' ? 'No version' : htmlspecialchars($this->standard['version'], ENT_QUOTES, 'UTF-8')); ?></span>
-                <span class="client__segment" id="control_count"><?php echo (int) $this->standard['control_count']; ?> controls</span>
+    <header class="headline">
+        <div class="headline__text">
+            <h1 class="headline__title"><?php echo htmlspecialchars($this->standard['standard_name'], ENT_QUOTES, 'UTF-8'); ?></h1>
+            <p class="headline__sub">
+                <span class="headline__status <?php echo ($this->standard['standard_status'] === 'Archived' ? 'is-muted' : 'is-ok'); ?>"><?php echo htmlspecialchars($this->standard['standard_status'], ENT_QUOTES, 'UTF-8'); ?></span>
+                <?php echo ($this->standard['short_code'] === '' ? '' : '<span>'.htmlspecialchars($this->standard['short_code'], ENT_QUOTES, 'UTF-8').'</span>'); ?>
+                <?php echo ($this->standard['version'] === '' ? '' : '<span>'.htmlspecialchars($this->standard['version'], ENT_QUOTES, 'UTF-8').'</span>'); ?>
+                <span id="control_count"><?php echo (int) $this->standard['control_count']; ?> controls</span>
+            </p>
+        </div>
+        <div class="headline__actions">
+            <a class="btn btn--secondary btn--pill" href="/standards"><i class="fa-regular fa-chevron-left"></i> Back</a>
+            <div class="dropdown">
+                <button type="button" class="btn btn--round" data-bs-toggle="dropdown" aria-expanded="false" aria-label="More actions"><i class="fa-regular fa-ellipsis"></i></button>
+                <ul class="dropdown-menu dropdown-menu-end headline__menu">
+                    <li><a class="dropdown-item" href="/standards/form/id/<?php echo (int) $this->standard['id']; ?>"><i class="fa-regular fa-pen"></i> Edit Standard</a></li>
+                    <li><button type="button" class="dropdown-item" id="do_duplicate_open"><i class="fa-regular fa-copy"></i> Duplicate</button></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><button type="button" class="dropdown-item headline__danger" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete Standard</button></li>
+                </ul>
             </div>
         </div>
-        <div class="page__actions">
-            <a class="btn btn--primary" href="/standards/form/id/<?php echo (int) $this->standard['id']; ?>"><i class="fa-regular fa-pen"></i> Edit</a>
-            <button type="button" class="btn btn--secondary" id="do_duplicate_open"><i class="fa-regular fa-copy"></i> Duplicate</button>
-            <button type="button" class="btn btn--destructive" id="do_delete_open"><i class="fa-regular fa-trash"></i> Delete</button>
-        </div>
-    </div>
+    </header>
 
     <?php echo ($this->standard['description'] === '' ? '' : '<div class="panel record__panel"><div class="panel__body"><p class="standard__description">'.nl2br(htmlspecialchars($this->standard['description'], ENT_QUOTES, 'UTF-8')).'</p></div></div>'); ?>
 
@@ -25,7 +30,7 @@
             <input type="search" id="control_search" class="input roster__search" placeholder="Search by identifier or title..." autocomplete="off" spellcheck="false">
             <div class="roster__filters">
                 <button type="button" class="btn btn--secondary" id="do_import_open"><i class="fa-regular fa-file-arrow-up"></i> Import CSV</button>
-                <button type="button" class="btn btn--primary" id="do_control_add"><i class="fa-regular fa-plus"></i> Add Control</button>
+                <button type="button" class="btn btn--icon" id="do_control_add" aria-label="Add control" title="Add control"><i class="fa-regular fa-plus"></i></button>
             </div>
         </div>
         <div class="panel__body panel__body--flush">
@@ -41,7 +46,7 @@
                     <tbody id="controls_body"></tbody>
                 </table>
             </div>
-            <p class="controls__empty" id="controls_empty">Loading controls&hellip;</p>
+            <p class="controls__empty" id="controls_empty"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Loading controls&hellip;</p>
         </div>
     </div>
 </div>

@@ -32,23 +32,17 @@ class ClientsModel extends Model {
                     DATE_FORMAT(c.date_created, df.sql_format) AS date_created_display,
                     DATE_FORMAT(c.date_updated, df.sql_format) AS date_updated_display,
                     (SELECT COUNT(*)
-                        FROM projects p
-                        WHERE p.client_id = c.id
-                        and p.company_id = c.company_id
-                        and p.deleted = 0) AS project_count,
-                    (SELECT COUNT(*)
-                        FROM projects p
-                        WHERE p.client_id = c.id
-                        and p.company_id = c.company_id
-                        and p.project_status <> 'Complete'
-                        and p.deleted = 0) AS open_project_count,
+                        FROM assessments a
+                        WHERE a.client_id = c.id
+                        and a.company_id = c.company_id
+                        and a.assessment_status <> 'Complete'
+                        and (a.end_date is null or a.end_date >= CURDATE())
+                        and a.deleted = 0) AS open_assessment_count,
                     (SELECT COUNT(*)
                         FROM assessments a
-                        JOIN projects p ON p.id = a.project_id
-                        WHERE p.client_id = c.id
-                        and p.company_id = c.company_id
-                        and a.deleted = 0
-                        and p.deleted = 0) AS assessment_count
+                        WHERE a.client_id = c.id
+                        and a.company_id = c.company_id
+                        and a.deleted = 0) AS assessment_count
                 FROM
                     clients c
                     JOIN companies co ON co.id = c.company_id
@@ -188,6 +182,77 @@ class ClientsModel extends Model {
             'updated_by' => $updated_by,
             'date_updated' => date('Y-m-d H:i:s')
         );
+        return parent::update('clients', $data, 'id = :id and company_id = :company_id', $where);
+    }
+
+    public function update_company_name($client_id, $company_id, $company_name, $updated_by)
+    {
+        $where = array(
+            'id' => $client_id,
+            'company_id' => $company_id
+        );
+        $data = array(
+            'company_name' => $company_name,
+            'updated_by' => $updated_by,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+
+        return parent::update('clients', $data, 'id = :id and company_id = :company_id', $where);
+    }
+
+    public function update_address($client_id, $company_id, $address_1, $address_2, $city, $state, $postal_code, $country, $updated_by)
+    {
+        $where = array(
+            'id' => $client_id,
+            'company_id' => $company_id
+        );
+        $data = array(
+            'address_1' => $address_1,
+            'address_2' => $address_2,
+            'city' => $city,
+            'state' => $state,
+            'postal_code' => $postal_code,
+            'country' => $country,
+            'updated_by' => $updated_by,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+
+        return parent::update('clients', $data, 'id = :id and company_id = :company_id', $where);
+    }
+
+    public function update_primary_contact($client_id, $company_id, $contact_name, $contact_title, $contact_email, $contact_phone, $updated_by)
+    {
+        $where = array(
+            'id' => $client_id,
+            'company_id' => $company_id
+        );
+        $data = array(
+            'contact_name' => $contact_name,
+            'contact_title' => $contact_title,
+            'contact_email' => $contact_email,
+            'contact_phone' => $contact_phone,
+            'updated_by' => $updated_by,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+
+        return parent::update('clients', $data, 'id = :id and company_id = :company_id', $where);
+    }
+
+    public function update_billing_contact($client_id, $company_id, $billing_name, $billing_title, $billing_email, $billing_phone, $updated_by)
+    {
+        $where = array(
+            'id' => $client_id,
+            'company_id' => $company_id
+        );
+        $data = array(
+            'billing_name' => $billing_name,
+            'billing_title' => $billing_title,
+            'billing_email' => $billing_email,
+            'billing_phone' => $billing_phone,
+            'updated_by' => $updated_by,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+
         return parent::update('clients', $data, 'id = :id and company_id = :company_id', $where);
     }
 

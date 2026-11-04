@@ -9,10 +9,6 @@ $(function () {
     var ACTION_ENDPOINTS = [
         "save_client",
         "delete_client",
-        "save_project",
-        "delete_project",
-        "save_project_user",
-        "delete_project_user",
         "create_assessment",
         "save_assessment",
         "delete_assessment",
@@ -50,14 +46,7 @@ $(function () {
         "delete_subscription",
         "portal_link_evidence",
         "portal_unlink_evidence",
-        "portal_delete_evidence",
-        "report_create",
-        "report_save_details",
-        "report_save_row",
-        "report_delete_row",
-        "report_save_csf",
-        "report_issue",
-        "report_finalise"
+        "portal_delete_evidence"
     ];
 
     var conversation_id = parseInt(window.localStorage.getItem("assist_conversation") || "0", 10);
@@ -579,7 +568,7 @@ $(function () {
     }
 
     function format(text) {
-        return esc(text).replace(/(^|[\s(])(\/(?:clients|projects|standards|portal|billing|settings)(?:\/[a-z_]+)?(?:\/id\/\d+)?)(?=$|[\s).,;:])/g, function (match, lead, path) {
+        return esc(text).replace(/(^|[\s(])(\/(?:clients|assessments|standards|portal|billing|settings)(?:\/[a-z_]+)?(?:\/id\/\d+)?)(?=$|[\s).,;:])/g, function (match, lead, path) {
             return lead + '<a href="' + path + '">' + path + '</a>';
         });
     }

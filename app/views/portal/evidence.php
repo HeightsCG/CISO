@@ -1,18 +1,13 @@
 <div class="page">
-    <a class="page__back" href="/portal/project/id/<?php echo (int) $this->project['id']; ?>"><i class="fa-regular fa-arrow-left"></i> Back to <?php echo htmlspecialchars($this->project['project_name'], ENT_QUOTES, 'UTF-8'); ?></a>
-
-    <div class="page__head">
-        <div>
-            <h1 class="page__title">Evidence</h1>
-            <div class="client__meta">
-                <span class="client__segment"><?php echo htmlspecialchars($this->project['project_name'], ENT_QUOTES, 'UTF-8'); ?></span>
-                <span class="client__segment" id="vault_count">&nbsp;</span>
-            </div>
+    <header class="headline">
+        <div class="headline__text">
+            <h1 class="headline__title">Evidence</h1>
         </div>
-        <div class="page__actions">
-            <button type="button" class="btn btn--primary" id="do_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload Evidence</button>
+        <div class="headline__actions">
+            <a class="btn btn--secondary btn--pill" href="/portal"><i class="fa-regular fa-chevron-left"></i> Back</a>
+            <button type="button" class="btn btn--primary btn--pill" id="do_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload Evidence</button>
         </div>
-    </div>
+    </header>
 
     <div class="vault">
         <aside class="vault__tree">
@@ -102,7 +97,6 @@
 <script>
 $(document).ready(function () {
 
-    var project_id = <?php echo (int) $this->project['id']; ?>;
     var my_user_id = <?php echo (int) Session::get('user_id'); ?>;
     var folders = [];
     var evidence = [];
@@ -163,7 +157,7 @@ $(document).ready(function () {
             }
         }
 
-        return 'This project';
+        return 'All Evidence';
     }
 
     function tree_branch(parent_id, depth) {
@@ -244,13 +238,10 @@ $(document).ready(function () {
         $('#evidence_body').html(html);
         $('#evidence_table').toggle(rows.length > 0);
         $('#evidence_empty').prop('hidden', rows.length > 0).text(evidence.length === 0
-            ? 'No evidence has been collected for this project yet.'
+            ? 'No evidence has been collected yet.'
             : ($('#evidence_search').val().trim() === ''
                 ? folder_name_of(selected_folder) + ' has no evidence yet.'
                 : 'No files match your search.'));
-
-        $('#vault_count').text(folders.length + (folders.length === 1 ? ' folder' : ' folders')
-            + ' · ' + evidence.length + (evidence.length === 1 ? ' file' : ' files'));
     }
 
     $('#folder_tree').on('click', '.vault__link', function () {
@@ -333,7 +324,6 @@ $(document).ready(function () {
 
         var form_data = new FormData();
 
-        form_data.append('project_id', project_id);
         form_data.append('folder_id', selected_folder);
         form_data.append('evidence_title', $('#evidence_title').val().trim());
         form_data.append('description', $('#evidence_description').val().trim());
@@ -376,13 +366,13 @@ $(document).ready(function () {
 
     function load(){
 
-        ApiDataSvc.apiCall('post', 'portal_folders', { project_id: project_id }, function (data) {
+        ApiDataSvc.apiCall('post', 'portal_folders', {}, function (data) {
             folders = JSON.parse(data);
             render_tree();
             render();
         });
 
-        ApiDataSvc.apiCall('post', 'portal_evidence', { project_id: project_id }, function (data) {
+        ApiDataSvc.apiCall('post', 'portal_evidence', {}, function (data) {
             evidence = JSON.parse(data);
             render_tree();
             render();

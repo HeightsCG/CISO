@@ -10,7 +10,7 @@
             </button>
         </div>
         <div class="assist__messages" id="assist_messages">
-            <p class="assist__empty" id="assist_empty"><?php echo Session::get('user_type') === 'portal' ? 'Ask about your projects, assessments, evidence and invoices, or attach a file to discuss.' : 'Ask about your clients, projects, assessments and evidence, ask for changes, or attach a file to discuss.'; ?></p>
+            <p class="assist__empty" id="assist_empty"><?php echo Session::get('user_type') === 'portal' ? 'Ask about your assessments, evidence and invoices, or attach a file to discuss.' : 'Ask about your clients, assessments and evidence, ask for changes, or attach a file to discuss.'; ?></p>
         </div>
         <div class="assist__composer">
             <div class="assist__files" id="assist_files"></div>

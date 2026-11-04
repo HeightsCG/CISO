@@ -48,7 +48,6 @@ class SubscriptionsModel extends Model {
         $sql = "SELECT
                     s.id,
                     s.client_id,
-                    s.project_id,
                     s.subscription_name,
                     s.subscription_status,
                     s.cancel_at_period_end,
@@ -59,7 +58,6 @@ class SubscriptionsModel extends Model {
                     s.current_period_end,
                     s.date_created,
                     c.company_name AS client_name,
-                    p.project_name,
                     ".$this->money_columns().",
                     ".$this->status_case()." AS subscription_status_display,
                     DATE_FORMAT(s.date_created, df.sql_format) AS date_created_display,
@@ -69,7 +67,6 @@ class SubscriptionsModel extends Model {
                     JOIN companies co ON co.id = s.company_id
                     JOIN date_formats df ON df.id = co.date_format_id
                     JOIN clients c ON c.id = s.client_id
-                    LEFT JOIN projects p ON p.id = s.project_id and p.deleted = 0
                 WHERE
                     s.company_id = :company_id
                     and
@@ -94,7 +91,6 @@ class SubscriptionsModel extends Model {
                     c.billing_name AS client_billing_name,
                     c.billing_email AS client_billing_email,
                     c.stripe_customer_id AS client_stripe_customer_id,
-                    p.project_name,
                     ".$this->money_columns().",
                     ".$this->status_case()." AS subscription_status_display,
                     DATE_FORMAT(s.date_created, df.sql_format) AS date_created_display,
@@ -105,7 +101,6 @@ class SubscriptionsModel extends Model {
                     JOIN companies co ON co.id = s.company_id
                     JOIN date_formats df ON df.id = co.date_format_id
                     JOIN clients c ON c.id = s.client_id
-                    LEFT JOIN projects p ON p.id = s.project_id and p.deleted = 0
                 WHERE
                     s.id = :id
                     and
@@ -115,14 +110,13 @@ class SubscriptionsModel extends Model {
         return parent::select($sql, $where);
     }
 
-    public function add_subscription($company_id, $client_id, $project_id, $subscription_name, $currency, $unit_amount_cents, $quantity, $billing_interval, $due_days, $start_date, $created_by)
+    public function add_subscription($company_id, $client_id, $subscription_name, $currency, $unit_amount_cents, $quantity, $billing_interval, $due_days, $start_date, $created_by)
     {
         $now = date('Y-m-d H:i:s');
 
         $data = array(
             'company_id'          => $company_id,
             'client_id'           => $client_id,
-            'project_id'          => $project_id,
             'subscription_name'   => $subscription_name,
             'subscription_status' => 'Draft',
             'currency'            => $currency,
@@ -146,7 +140,7 @@ class SubscriptionsModel extends Model {
      * fixed against a live billing cycle, and rewriting the row here would leave
      * the two describing different money.
      */
-    public function update_subscription($subscription_id, $company_id, $client_id, $project_id, $subscription_name, $unit_amount_cents, $quantity, $billing_interval, $due_days, $start_date, $updated_by)
+    public function update_subscription($subscription_id, $company_id, $client_id, $subscription_name, $unit_amount_cents, $quantity, $billing_interval, $due_days, $start_date, $updated_by)
     {
         $where = array(
             'id'         => $subscription_id,
@@ -154,7 +148,6 @@ class SubscriptionsModel extends Model {
         );
         $data = array(
             'client_id'         => $client_id,
-            'project_id'        => $project_id,
             'subscription_name' => $subscription_name,
             'unit_amount_cents' => $unit_amount_cents,
             'quantity'          => $quantity,
@@ -251,7 +244,7 @@ class SubscriptionsModel extends Model {
         $where = array(
             'stripe_subscription_id' => $stripe_subscription_id
         );
-        $sql = "SELECT id, company_id, client_id, project_id, currency, stripe_account_id, stripe_event_created
+        $sql = "SELECT id, company_id, client_id, currency, stripe_account_id, stripe_event_created
                 FROM subscriptions
                 WHERE stripe_subscription_id = :stripe_subscription_id and deleted = 0";
 

@@ -8,11 +8,11 @@ use PhpOffice\PhpWord\Element\Footer;
 use PhpOffice\PhpWord\Element\Header;
 
 /**
- * Draws an assembled report (see ReportBuilder::assemble) as a PDF or a Word
+ * Draws a risk assessment report (see ReadyReports) as a PDF or a Word
  * document. Both follow the same structure as the consultancy's sample risk
  * assessment: cover, document control, contents, executive summary,
- * background and scope, results by domain with findings, risk register,
- * ongoing review, management acknowledgment and appendices. Sections with
+ * background and scope, results by domain with findings, ongoing review,
+ * management acknowledgment and appendices. Sections with
  * nothing in them are left out rather than printed empty.
  *
  * The consultancy's own logo and brand colour are used, so each tenant's
@@ -94,13 +94,13 @@ class ReportRenderer {
     {
         $narrative = ReportNarrative::for_risk_report($r);
 
-        if ((int) $r['report']['id'] === 0 && count($narrative['finding_text']) > 0) {
+        if (count($narrative['finding_text']) > 0) {
             $r = self::apply_finding_text($r, $narrative['finding_text']);
         }
 
         $outline = self::outline($r, $narrative);
         $client = $outline['client'];
-        $title = ReportBuilder::plain($r['report']['report_title']);
+        $title = self::plain($r['report']['report_title']);
 
         $blocks = self::front_blocks($r);
         $blocks[] = array(
@@ -124,7 +124,7 @@ class ReportRenderer {
         );
     }
 
-    /** Document control, distribution and assessment team, as ordinary blocks. */
+    /** Document control, as ordinary blocks. */
     private static function front_blocks(array $r): array
     {
         $blocks = array(
@@ -134,84 +134,10 @@ class ReportRenderer {
             )
         );
 
-        if (count($r['versions']) > 0) {
-            $rows = array();
-            foreach ($r['versions'] as $version) {
-                $rows[] = array(
-                    $version['version_label'],
-                    self::date($version['version_date']),
-                    ReportBuilder::plain($version['version_note']),
-                    ReportBuilder::plain($version['version_author'])
-                );
-            }
-            $blocks[] = self::table_block(array(
-                'Version',
-                'Date',
-                'Description',
-                'Author'
-            ), array(
-                12,
-                18,
-                46,
-                24
-            ), $rows);
-        } else {
-            $blocks[] = array(
-                'kind' => 'text',
-                'value' => 'Version '.$r['report']['report_version'].', '.$r['report']['report_stage'].'.'
-            );
-        }
-
-        if (count($r['distribution']) > 0) {
-            $rows = array();
-            foreach ($r['distribution'] as $person) {
-                $rows[] = array(
-                    ReportBuilder::plain($person['person_name']),
-                    ReportBuilder::plain($person['person_title']),
-                    ReportBuilder::plain($person['organisation'])
-                );
-            }
-            $blocks[] = array(
-                'kind' => 'h2',
-                'value' => 'Distribution'
-            );
-            $blocks[] = self::table_block(array(
-                'Name',
-                'Title',
-                'Organization'
-            ), array(
-                32,
-                34,
-                34
-            ), $rows);
-        }
-
-        if (count($r['team']) > 0) {
-            $rows = array();
-            foreach ($r['team'] as $person) {
-                $rows[] = array(
-                    ReportBuilder::plain($person['person_title']),
-                    ReportBuilder::plain($person['person_name']),
-                    ReportBuilder::plain($person['organisation']),
-                    ReportBuilder::plain($person['responsibility'])
-                );
-            }
-            $blocks[] = array(
-                'kind' => 'h2',
-                'value' => 'Assessment team'
-            );
-            $blocks[] = self::table_block(array(
-                'Role',
-                'Name',
-                'Organization',
-                'Responsibility'
-            ), array(
-                26,
-                22,
-                22,
-                30
-            ), $rows);
-        }
+        $blocks[] = array(
+            'kind' => 'text',
+            'value' => 'Version '.$r['report']['report_version'].', '.$r['report']['report_stage'].'.'
+        );
 
         return $blocks;
     }
@@ -270,7 +196,7 @@ class ReportRenderer {
     private static function outline(array $r, array $narrative): array
     {
         $report = $r['report'];
-        $client = ReportBuilder::plain($r['client']['company_name'] ?? '');
+        $client = self::plain($r['client']['company_name'] ?? '');
         $out = array();
         $number = 0;
         $contents = array();
@@ -290,8 +216,8 @@ class ReportRenderer {
         };
 
         $text = function ($value) use ($add) {
-            if (ReportBuilder::plain($value) !== '') {
-                $add('text', ReportBuilder::plain($value));
+            if (self::plain($value) !== '') {
+                $add('text', self::plain($value));
             }
         };
 
@@ -314,14 +240,14 @@ class ReportRenderer {
             'areas' => count($r['domains'])
         ));
 
-        if (ReportBuilder::plain($report['purpose_text']) !== '') {
+        if (self::plain($report['purpose_text']) !== '') {
             $add('h2', $s.'.'.(++$sub).' Purpose');
             $text($report['purpose_text']);
         }
 
-        $picture = ReportBuilder::plain($report['conclusion_text']) !== '' ? $report['conclusion_text'] : $narrative['executive_summary'];
+        $picture = self::plain($report['conclusion_text']) !== '' ? $report['conclusion_text'] : $narrative['executive_summary'];
 
-        if (ReportBuilder::plain($picture) !== '') {
+        if (self::plain($picture) !== '') {
             $add('h2', $s.'.'.(++$sub).' Overall picture');
             $text($picture);
         }
@@ -342,7 +268,7 @@ class ReportRenderer {
             $rows = array();
             foreach ($r['domains'] as $domain) {
                 $rows[] = array(
-                    ReportBuilder::plain($domain['domain_name']),
+                    self::plain($domain['domain_name']),
                     (string) $domain['counts']['High'],
                     (string) $domain['counts']['Medium'],
                     (string) $domain['counts']['Low'],
@@ -376,45 +302,13 @@ class ReportRenderer {
             ));
         }
 
-        $csf_rows = array();
-        foreach ($r['csf'] as $row) {
-            if ($row['current_tier'] !== null || $row['target_tier'] !== null || ReportBuilder::plain($row['main_gaps']) !== '') {
-                $csf_rows[] = array(
-                    $row['csf_function'],
-                    self::tier($row['current_tier']),
-                    self::tier($row['target_tier']),
-                    ReportBuilder::plain($row['main_gaps'])
-                );
-            }
-        }
-
-        if (count($csf_rows) > 0) {
-            $add('h2', $s.'.'.(++$sub).' NIST CSF 2.0 profile');
-            $add('table', array(
-                'head' => array(
-                    'Function',
-                    'Current tier',
-                    'Target tier',
-                    'Main gaps'
-                ),
-                'widths' => array(
-                    15,
-                    19,
-                    19,
-                    47
-                ),
-                'rows' => $csf_rows
-            ));
-            $add('note', 'Tiers: 1 Partial, 2 Risk Informed, 3 Repeatable, 4 Adaptive. Target tiers were agreed with management and reflect the organization\'s size and risk.');
-        }
-
         if (count($r['findings_ranked']) > 0) {
             $add('h2', $s.'.'.(++$sub).' Summary of findings');
             $rows = array();
             foreach ($r['findings_ranked'] as $finding) {
                 $rows[] = array(
                     $finding['finding_ref'],
-                    ReportBuilder::plain($finding['finding_title']),
+                    self::plain($finding['finding_title']),
                     $finding['rating'],
                     $finding['response_status'] === 'Pending' ? '' : $finding['response_status'],
                     self::date($finding['target_date'])
@@ -442,7 +336,7 @@ class ReportRenderer {
         $s = $section('Background, scope and approach');
         $sub = 0;
 
-        if (ReportBuilder::plain($report['background_text']) !== '') {
+        if (self::plain($report['background_text']) !== '') {
             $add('h2', $s.'.'.(++$sub).' Background');
             $text($report['background_text']);
         }
@@ -454,9 +348,9 @@ class ReportRenderer {
             $rows = array();
             foreach ($r['domains'] as $domain) {
                 $rows[] = array(
-                    ReportBuilder::plain($domain['domain_name']),
-                    ReportBuilder::plain($domain['areas_reviewed']),
-                    ReportBuilder::plain($domain['csf_refs'])
+                    self::plain($domain['domain_name']),
+                    self::plain($domain['areas_reviewed']),
+                    self::plain($domain['csf_refs'])
                 );
             }
             $add('table', array(
@@ -476,17 +370,17 @@ class ReportRenderer {
 
         $text($report['out_of_scope_text']);
 
-        if (ReportBuilder::plain($report['approach_text']) !== '') {
+        if (self::plain($report['approach_text']) !== '') {
             $add('h2', $s.'.'.(++$sub).' Approach');
             $text($report['approach_text']);
         }
 
-        if (ReportBuilder::plain($report['methodology_text']) !== '') {
+        if (self::plain($report['methodology_text']) !== '') {
             $add('h2', $s.'.'.(++$sub).' Rating methodology');
             $text($report['methodology_text']);
         }
 
-        if (ReportBuilder::plain($report['limitations_text']) !== '') {
+        if (self::plain($report['limitations_text']) !== '') {
             $add('h2', $s.'.'.(++$sub).' Limitations and responsibilities');
             $text($report['limitations_text']);
         }
@@ -497,15 +391,6 @@ class ReportRenderer {
 
         $domains = $r['domains'];
 
-        if (count($r['unassigned_findings']) > 0) {
-            $domains[] = array(
-                'domain_name' => 'Other findings',
-                'domain_rating' => null,
-                'domain_summary' => '',
-                'findings' => $r['unassigned_findings']
-            );
-        }
-
         $commentary = array();
 
         foreach ($narrative['domain_commentary'] as $item) {
@@ -514,7 +399,7 @@ class ReportRenderer {
 
         foreach ($domains as $domain) {
             $sub++;
-            $contents[] = '     '.$s.'.'.$sub.'  '.ReportBuilder::plain($domain['domain_name']);
+            $contents[] = '     '.$s.'.'.$sub.'  '.self::plain($domain['domain_name']);
 
             $counts = array(
                 'High' => 0,
@@ -526,14 +411,14 @@ class ReportRenderer {
             }
 
             $add('domain_head', array(
-                'title' => $s.'.'.$sub.' '.ReportBuilder::plain($domain['domain_name']),
+                'title' => $s.'.'.$sub.' '.self::plain($domain['domain_name']),
                 'rating' => $domain['domain_rating'] ?? null,
                 'counts' => $counts
             ));
 
-            $written = ReportBuilder::plain($domain['domain_summary'] ?? '');
+            $written = self::plain($domain['domain_summary'] ?? '');
             $ai = $commentary[(int) ($domain['id'] ?? 0)] ?? '';
-            $summary = ((int) $report['id'] === 0 && $ai !== '') || $written === '' ? $ai : $written;
+            $summary = $ai !== '' || $written === '' ? $ai : $written;
 
             if ($summary !== '') {
                 $add('text', $summary);
@@ -544,53 +429,6 @@ class ReportRenderer {
             foreach ($domain['findings'] as $finding) {
                 $add('finding', self::finding_block($finding));
             }
-        }
-
-        if (count($r['risks']) > 0) {
-            $s = $section('Risk register');
-            $add('text', 'The register records each identified risk, its domain, the threats that give rise to it, its rating and the treatment decision.'.(count($r['threats']) > 0 ? ' Threat references are listed in the threat analysis appendix.' : ''));
-            $names = array();
-            foreach ($r['domains'] as $domain) {
-                $names[(int) $domain['id']] = ReportBuilder::plain($domain['domain_name']);
-            }
-            $rows = array();
-            foreach ($r['risks_ranked'] as $risk) {
-                $rows[] = array(
-                    $risk['risk_ref'],
-                    ReportBuilder::plain($risk['risk_text']),
-                    $names[(int) $risk['domain_id']] ?? '',
-                    ReportBuilder::plain($risk['threat_refs']),
-                    (string) $risk['likelihood'],
-                    (string) $risk['impact'],
-                    (string) $risk['score'],
-                    ReportBuilder::plain($risk['treatment'])
-                );
-            }
-            $add('table', array(
-                'head' => array(
-                    'Ref.',
-                    'Risk',
-                    'Domain',
-                    'Threats',
-                    'L',
-                    'I',
-                    'Score',
-                    'Treatment'
-                ),
-                'widths' => array(
-                    7,
-                    29,
-                    14,
-                    10,
-                    5,
-                    5,
-                    8,
-                    22
-                ),
-                'rows' => $rows,
-                'small' => true
-            ));
-            $add('note', 'L = likelihood, I = impact, each rated 1 to 5. Ratings: High 15 to 25, Medium 8 to 14, Low 1 to 7.');
         }
 
         if (count($narrative['roadmap']) > 0) {
@@ -606,12 +444,12 @@ class ReportRenderer {
             $add('roadmap', $phases);
         }
 
-        if (ReportBuilder::plain($narrative['conclusion']) !== '') {
+        if (self::plain($narrative['conclusion']) !== '') {
             $section('Conclusion');
             $text($narrative['conclusion']);
         }
 
-        if (ReportBuilder::plain($report['review_text']) !== '') {
+        if (self::plain($report['review_text']) !== '') {
             $section('Ongoing review');
             $text($report['review_text']);
         }
@@ -619,74 +457,14 @@ class ReportRenderer {
         $section('Management acknowledgment');
         $add('text', 'I have reviewed this risk assessment, including the findings, the treatment decisions and the remediation dates set out above.');
         $add('signature', array(
-            'name' => ReportBuilder::plain($report['signoff_name']),
-            'title' => ReportBuilder::plain($report['signoff_title'])
+            'name' => self::plain($report['signoff_name']),
+            'title' => self::plain($report['signoff_title'])
         ));
 
         $appendix = 0;
         $letter = function () use (&$appendix) {
             return chr(65 + $appendix++);
         };
-
-        if (count($r['xrefs']) > 0) {
-            $l = $letter();
-            $contents[] = $l.'  Appendix '.$l.'. Regulatory cross-reference';
-            $add('h1', 'Appendix '.$l.'. Regulatory cross-reference');
-            $rows = array();
-            foreach ($r['xrefs'] as $xref) {
-                $rows[] = array(
-                    ReportBuilder::plain($xref['xref_section']),
-                    ReportBuilder::plain($xref['requirement']),
-                    ReportBuilder::plain($xref['where_addressed'])
-                );
-            }
-            $add('table', array(
-                'head' => array(
-                    'Section',
-                    'Requirement',
-                    'Where addressed'
-                ),
-                'widths' => array(
-                    18,
-                    55,
-                    27
-                ),
-                'rows' => $rows
-            ));
-        }
-
-        if (count($r['assets']) > 0) {
-            $l = $letter();
-            $contents[] = $l.'  Appendix '.$l.'. Systems and data inventory';
-            $add('h1', 'Appendix '.$l.'. Systems and data inventory');
-            $rows = array();
-            foreach ($r['assets'] as $asset) {
-                $rows[] = array(
-                    ReportBuilder::plain($asset['asset_name']),
-                    ReportBuilder::plain($asset['asset_kind']),
-                    ReportBuilder::plain($asset['asset_owner']),
-                    ReportBuilder::plain($asset['data_held']),
-                    $asset['sensitivity']
-                );
-            }
-            $add('table', array(
-                'head' => array(
-                    'System or service',
-                    'Type',
-                    'Owner',
-                    'Sensitive information held',
-                    'Sensitivity'
-                ),
-                'widths' => array(
-                    24,
-                    14,
-                    17,
-                    32,
-                    13
-                ),
-                'rows' => $rows
-            ));
-        }
 
         if (count($r['threats']) > 0) {
             $l = $letter();
@@ -696,9 +474,9 @@ class ReportRenderer {
             foreach ($r['threats'] as $threat) {
                 $rows[] = array(
                     $threat['threat_ref'],
-                    ReportBuilder::plain($threat['threat_name']),
-                    ReportBuilder::plain($threat['threat_description']),
-                    ReportBuilder::plain($threat['parties_affected'])
+                    self::plain($threat['threat_name']),
+                    self::plain($threat['threat_description']),
+                    self::plain($threat['parties_affected'])
                 );
             }
             $add('table', array(
@@ -718,39 +496,6 @@ class ReportRenderer {
             ));
         }
 
-        if (count($r['scan_rows']) > 0 || ReportBuilder::plain($report['scan_text']) !== '') {
-            $l = $letter();
-            $contents[] = $l.'  Appendix '.$l.'. External vulnerability scan summary';
-            $add('h1', 'Appendix '.$l.'. External vulnerability scan summary');
-            $text($report['scan_text']);
-            if (count($r['scan_rows']) > 0) {
-                $rows = array();
-                foreach ($r['scan_rows'] as $scan) {
-                    $rows[] = array(
-                        $scan['scan_rating'],
-                        (string) $scan['issue_count'],
-                        ReportBuilder::plain($scan['scan_summary']),
-                        ReportBuilder::plain($scan['disposition'])
-                    );
-                }
-                $add('table', array(
-                    'head' => array(
-                        'Rating',
-                        'Issues',
-                        'Summary',
-                        'Disposition'
-                    ),
-                    'widths' => array(
-                        12,
-                        10,
-                        50,
-                        28
-                    ),
-                    'rows' => $rows
-                ));
-            }
-        }
-
         if (count($r['findings']) > 0) {
             $l = $letter();
             $contents[] = $l.'  Appendix '.$l.'. NIST CSF 2.0 mapping of findings';
@@ -759,9 +504,9 @@ class ReportRenderer {
             foreach ($r['findings'] as $finding) {
                 $rows[] = array(
                     $finding['finding_ref'],
-                    ReportBuilder::plain($finding['finding_title']),
+                    self::plain($finding['finding_title']),
                     self::csf_functions($finding['csf_refs']),
-                    ReportBuilder::plain($finding['csf_refs'])
+                    self::plain($finding['csf_refs'])
                 );
             }
             $add('table', array(
@@ -796,33 +541,28 @@ class ReportRenderer {
             'Observation' => $finding['observation'],
             'Risk' => $finding['risk_text'],
             'Recommendation' => $finding['recommendation'],
-            'Management response' => ($finding['response_status'] === 'Pending' ? '' : $finding['response_status'].'. ').ReportBuilder::plain($finding['management_response']),
-            'Owner / target' => trim(ReportBuilder::plain($finding['response_owner']).($finding['target_date'] ? ' / '.self::date($finding['target_date']) : ''), ' /'),
+            'Management response' => ($finding['response_status'] === 'Pending' ? '' : $finding['response_status'].'. ').self::plain($finding['management_response']),
+            'Owner / target' => trim(self::plain($finding['response_owner']).($finding['target_date'] ? ' / '.self::date($finding['target_date']) : ''), ' /'),
             'NIST CSF 2.0' => $finding['csf_refs']
         );
 
         foreach ($pairs as $label => $value) {
-            if (ReportBuilder::plain($value) !== '') {
+            if (self::plain($value) !== '') {
                 $rows[] = array(
                     $label,
-                    ReportBuilder::plain($value)
+                    self::plain($value)
                 );
             }
         }
 
         return array(
             'ref' => $finding['finding_ref'],
-            'title' => trim($finding['finding_ref'].' '.ReportBuilder::plain($finding['finding_title'])),
-            'heading' => ReportBuilder::plain($finding['finding_title']),
+            'title' => trim($finding['finding_ref'].' '.self::plain($finding['finding_title'])),
+            'heading' => self::plain($finding['finding_title']),
             'severity' => $finding['rating'],
             'rating' => $finding['rating'].' ('.$finding['score'].')',
             'rows' => $rows
         );
-    }
-
-    private static function tier($tier): string
-    {
-        return $tier === null ? '' : (int) $tier.' '.(ReportBuilder::TIERS[(int) $tier] ?? '');
     }
 
     private static function csf_functions(string $refs): string
@@ -836,6 +576,11 @@ class ReportRenderer {
         }
 
         return implode(', ', $found);
+    }
+
+    public static function plain($value): string
+    {
+        return trim(html_entity_decode((string) $value, ENT_QUOTES, 'UTF-8'));
     }
 
     private static function date($value): string
@@ -862,12 +607,8 @@ class ReportRenderer {
             $rows['Assessment period'] = date('F j', strtotime($report['period_start'])).' to '.self::date($report['period_end']);
         }
 
-        if (ReportBuilder::plain($report['regulatory_reference']) !== '') {
-            $rows['Regulatory reference'] = ReportBuilder::plain($report['regulatory_reference']);
-        }
-
         $rows['Version'] = $report['report_version'];
-        $rows['Prepared by'] = ReportBuilder::plain($r['company']['company_name'] ?? '');
+        $rows['Prepared by'] = self::plain($r['company']['company_name'] ?? '');
 
         return $rows;
     }
@@ -920,7 +661,7 @@ class ReportRenderer {
         $brand = self::brand($doc['company']);
         $accent = self::accent($doc['company']);
         $logo = self::logo($doc['company']);
-        $firm = ReportBuilder::plain($doc['company']['company_name'] ?? '');
+        $firm = self::plain($doc['company']['company_name'] ?? '');
         $title = $doc['title'];
         $e = function ($value) {
             return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
@@ -1305,7 +1046,7 @@ class ReportRenderer {
         Settings::setOutputEscapingEnabled(true);
 
         $brand = ltrim(self::brand($doc['company']), '#');
-        $firm = ReportBuilder::plain($doc['company']['company_name'] ?? '');
+        $firm = self::plain($doc['company']['company_name'] ?? '');
         $title = $doc['title'];
 
         $word = new PhpWord();

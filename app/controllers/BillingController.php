@@ -137,26 +137,11 @@ class BillingController extends Controller {
         return $company;
     }
 
+    /* Billing lives on each client's page now; old links land on the clients list. */
     public function indexAction(){
 
-        if (!$this->refuse_unless_company_admin()) {
-            return;
-        }
-
-        $company = $this->company();
-
-        /* A free account is shown what billing does rather than a locked door -
-           this page is where the case for subscribing is made. Every action
-           behind it still refuses, so the offer is not a way in. */
-        $this->view->billing_allowed = $this->billing_included($company);
-
-        if (!$this->view->billing_allowed) {
-            $this->view->render();
-            return;
-        }
-
-        $this->view->company = $this->ensure_platform_customer($company);
-        $this->view->render();
+        header('Location: /clients');
+        exit;
     }
 
     /**
@@ -174,6 +159,7 @@ class BillingController extends Controller {
 
         if (empty($invoice_id)) {
             $this->view->invoice = null;
+            $this->view->client_id = (int) Main::get_param('client');
             $this->view->items = array();
             $this->view->company = $this->company();
             $this->view->render();
@@ -188,6 +174,7 @@ class BillingController extends Controller {
         }
 
         $this->view->invoice = $invoice[0];
+        $this->view->client_id = (int) $invoice[0]['client_id'];
         $this->view->items = $this->invoices_model->get_invoice_items($invoice[0]['id']);
         $this->view->company = $this->company();
         $this->view->render();
@@ -250,13 +237,10 @@ class BillingController extends Controller {
 
     /* ------------------------------------------------------- subscriptions */
 
-    /**
-     * Subscriptions live on the Billing page beside the invoices they produce,
-     * so this address is kept only so existing links do not break.
-     */
+    /* Kept so existing links do not break. */
     public function subscriptionsAction(){
 
-        header('Location: /billing');
+        header('Location: /clients');
         exit;
     }
 
@@ -275,6 +259,7 @@ class BillingController extends Controller {
 
         if (empty($subscription_id)) {
             $this->view->subscription = null;
+            $this->view->client_id = (int) Main::get_param('client');
             $this->view->company = $this->company();
             $this->view->render();
             return;
@@ -288,6 +273,7 @@ class BillingController extends Controller {
         }
 
         $this->view->subscription = $subscription[0];
+        $this->view->client_id = (int) $subscription[0]['client_id'];
         $this->view->company = $this->company();
         $this->view->render();
     }

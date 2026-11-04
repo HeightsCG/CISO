@@ -13,8 +13,7 @@ class Plans {
                 'billing' => true,
                 'limits'  => array(
                     'clients'                 => null,
-                    'projects'                => null,
-                    'assessments_per_project' => null,
+                    'assessments_per_client'  => null,
                     'users'                   => null
                 )
             ),
@@ -24,8 +23,7 @@ class Plans {
                 'billing' => true,
                 'limits'  => array(
                     'clients'                 => 5,
-                    'projects'                => 5,
-                    'assessments_per_project' => 2,
+                    'assessments_per_client'  => 2,
                     'users'                   => null
                 )
             ),
@@ -38,8 +36,7 @@ class Plans {
                 'billing' => false,
                 'limits'  => array(
                     'clients'                 => 1,
-                    'projects'                => 1,
-                    'assessments_per_project' => 1,
+                    'assessments_per_client'  => 1,
                     'users'                   => 1
                 )
             )
@@ -160,8 +157,7 @@ class Plans {
 
         return $catalog[$plan_name]['limits'] ?? array(
             'clients'                 => 0,
-            'projects'                => 0,
-            'assessments_per_project' => 0,
+            'assessments_per_client'  => 0,
             'users'                   => 0
         );
     }
@@ -183,8 +179,7 @@ class Plans {
     {
         $labels = array(
             'clients'                 => 'client',
-            'projects'                => 'project',
-            'assessments_per_project' => 'assessment per project',
+            'assessments_per_client'  => 'assessment per client',
             'users'                   => 'user'
         );
 

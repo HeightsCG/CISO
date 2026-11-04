@@ -38,6 +38,11 @@ function apiCall(type, endpoint, body, success, callFail) {
 
     var request = $.post(url, body, success);
 
+    page_loading(1);
+    request.always(function () {
+        page_loading(-1);
+    });
+
     request.fail(function (xhr, status) {
         if (status === 'abort') {
             return;
@@ -55,6 +60,25 @@ function apiCall(type, endpoint, body, success, callFail) {
     });
 
     return request;
+}
+
+var page_loading_count = 0;
+
+function page_loading(change) {
+
+    var bar = document.getElementById('page_loading');
+
+    if (bar === null) {
+        bar = document.createElement('div');
+        bar.id = 'page_loading';
+        bar.className = 'page-loading';
+        bar.setAttribute('role', 'progressbar');
+        bar.setAttribute('aria-label', 'Loading');
+        document.body.appendChild(bar);
+    }
+
+    page_loading_count = Math.max(0, page_loading_count + change);
+    bar.classList.toggle('is-active', page_loading_count > 0);
 }
 
 function answered_with_json(xhr) {

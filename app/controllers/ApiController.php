@@ -19,14 +19,12 @@ class ApiController extends Controller {
     public $notifications_model;
     public $companies_model;
     public $clients_model;
-    public $projects_model;
     public $assessments_model;
     public $evidence_model;
     public $standards_model;
     public $dashboard_model;
     public $invoices_model;
     public $subscriptions_model;
-    public $reports_model;
 
     public function __construct(){
         parent::__construct();
@@ -35,13 +33,11 @@ class ApiController extends Controller {
         $this->subscriptions_model = new SubscriptionsModel();
         $this->companies_model = new CompaniesModel();
         $this->clients_model = new ClientsModel();
-        $this->projects_model = new ProjectsModel();
         $this->assessments_model = new AssessmentsModel();
         $this->standards_model = new StandardsModel();
         $this->evidence_model = new EvidenceModel();
         $this->dashboard_model = new DashboardModel();
         $this->invoices_model = new InvoicesModel();
-        $this->reports_model = new ReportsModel();
     }
 
     public function loginAction(){
@@ -860,8 +856,9 @@ class ApiController extends Controller {
         echo json_encode($data);
     }
 
-    public function load_projectsAction(){
-        $data = $this->projects_model->load_projects(Session::get('company_id'));
+    /** Every live assessment in the organisation, for the Assessments list. */
+    public function load_all_assessmentsAction(){
+        $data = $this->assessments_model->load_all_assessments(Session::get('company_id'));
         echo json_encode($data);
     }
 
@@ -870,53 +867,36 @@ class ApiController extends Controller {
      * caller's entitlement, so accepting it as a parameter would let any signed-in
      * client name someone else's.
      */
-    public function portal_projectsAction(){
+    public function portal_assessmentsAction(){
 
         if (Session::get('user_type') !== 'portal') {
             echo json_encode(array());
             exit;
         }
 
-        $data = $this->projects_model->client_projects(Session::get('client_id'), Session::get('company_id'));
-        echo json_encode($data);
-    }
-
-    public function portal_assessmentsAction(){
-
-        $project_id = (int) ($this->post['project_id'] ?? 0);
-
-        if (!$this->client_owns_project($project_id)) {
-            echo json_encode(array());
-            exit;
-        }
-
-        $data = $this->assessments_model->load_assessments($project_id, Session::get('company_id'));
+        $data = $this->assessments_model->client_assessments(Session::get('client_id'), Session::get('company_id'));
         echo json_encode($data);
     }
 
     public function portal_foldersAction(){
 
-        $project_id = (int) ($this->post['project_id'] ?? 0);
-
-        if (!$this->client_owns_project($project_id)) {
+        if (Session::get('user_type') !== 'portal') {
             echo json_encode(array());
             exit;
         }
 
-        $data = $this->evidence_model->portal_folders($project_id, Session::get('client_id'), Session::get('company_id'));
+        $data = $this->evidence_model->portal_folders(Session::get('client_id'), Session::get('company_id'));
         echo json_encode($data);
     }
 
     public function portal_evidenceAction(){
 
-        $project_id = (int) ($this->post['project_id'] ?? 0);
-
-        if (!$this->client_owns_project($project_id)) {
+        if (Session::get('user_type') !== 'portal') {
             echo json_encode(array());
             exit;
         }
 
-        $data = $this->evidence_model->portal_evidence($project_id, Session::get('client_id'), Session::get('company_id'));
+        $data = $this->evidence_model->portal_evidence(Session::get('client_id'), Session::get('company_id'));
         echo json_encode($data);
     }
 
@@ -956,8 +936,7 @@ class ApiController extends Controller {
 
     /**
      * One vault row the calling client is entitled to see, or null. Reached by id
-     * then re-checked against the client's own project, because evidence carries a
-     * company id but no client id.
+     * within the organisation, then re-checked against the caller's own client.
      */
     private function portal_evidence_row($evidence_id)
     {
@@ -975,7 +954,7 @@ class ApiController extends Controller {
             return null;
         }
 
-        if (!$this->client_owns_project($evidence[0]['project_id'])) {
+        if ((int) $evidence[0]['client_id'] !== (int) Session::get('client_id')) {
             return null;
         }
 
@@ -1102,8 +1081,8 @@ class ApiController extends Controller {
     }
 
     /**
-     * One control the calling client is entitled to. get_item already joins up to
-     * projects and returns client_id, so the check needs no extra query - and its
+     * One control the calling client is entitled to. get_item returns the
+     * assessment's client_id, so the check needs no extra query - and its
      * ai.* includes notes, which stays server-side.
      */
     private function portal_item_row($item_id)
@@ -1126,20 +1105,21 @@ class ApiController extends Controller {
     }
 
     /**
-     * The portal's way in to the shared upload. owns_project inside it only proves
-     * the project belongs to this organisation, which every client's project does,
-     * so the narrower client test happens here first.
+     * The portal's way in to the shared upload. The client is taken from the
+     * session and written over whatever was posted, so a client can only ever
+     * upload into its own vault.
      */
     public function portal_upload_evidenceAction(){
 
-        if (!$this->client_owns_project((int) ($this->post['project_id'] ?? 0))) {
+        if (Session::get('user_type') !== 'portal' || empty(Session::get('client_id'))) {
             echo json_encode(array(
                 'success' => false,
-                'message' => 'That project could not be found'
+                'message' => 'That client could not be found'
             ));
             exit;
         }
 
+        $this->post['client_id'] = (int) Session::get('client_id');
         $this->upload_evidenceAction();
     }
 
@@ -1159,44 +1139,6 @@ class ApiController extends Controller {
         echo json_encode($data);
     }
 
-    /**
-     * Every portal action that names a project id passes through here, so the
-     * entitlement is expressed once. Mirrors owns_project() but on the client
-     * rather than the organisation.
-     */
-    private function client_owns_project($project_id): bool
-    {
-        if (Session::get('user_type') !== 'portal' || empty($project_id)) {
-            return false;
-        }
-
-        $project = $this->projects_model->client_project(
-            $project_id,
-            Session::get('client_id'),
-            Session::get('company_id')
-        );
-
-        return is_array($project) && count($project) === 1;
-    }
-
-
-    /**
-     * One client's projects for the client record page. Reuses the same scoped
-     * query the portal uses, so staff and the client see the same set.
-     */
-    public function load_client_projectsAction(){
-
-        $client_id = (int) ($this->post['client_id'] ?? 0);
-
-        if (!$this->owns_client($client_id)) {
-            echo json_encode(array());
-            exit;
-        }
-
-        $data = $this->projects_model->client_projects($client_id, Session::get('company_id'));
-        echo json_encode($data);
-    }
-
     public function load_client_assessmentsAction(){
 
         $client_id = (int) ($this->post['client_id'] ?? 0);
@@ -1211,8 +1153,8 @@ class ApiController extends Controller {
     }
 
     /**
-     * Everything the dashboard draws, in one request. Six grouped queries rather
-     * than one per client or per project, so the page cost does not grow with the
+     * Everything the dashboard draws, in one request. Grouped queries rather than
+     * one per client or per assessment, so the page cost does not grow with the
      * size of the organisation.
      */
     public function load_dashboardAction(){
@@ -1226,9 +1168,7 @@ class ApiController extends Controller {
             'assessment_status' => $this->dashboard_model->assessment_status($company_id),
             'assessments' => $this->dashboard_model->assessments($company_id),
             'clients' => $this->dashboard_model->by_client($company_id),
-            'attention' => $this->dashboard_model->attention($company_id),
-            'projects' => $this->projects_model->load_projects($company_id),
-            'progress' => $this->assessments_model->project_progress($company_id)
+            'attention' => $this->dashboard_model->attention($company_id)
         );
 
         echo json_encode($response);
@@ -1456,15 +1396,15 @@ class ApiController extends Controller {
         $response['client_id'] = $this->clients_model->add_client(
             $company_id,
             $this->post['company_name'],
-            $this->post['contact_name'],
-            $this->post['contact_title'],
-            $this->post['contact_email'],
+            ($this->post['contact_name'] ?? ''),
+            ($this->post['contact_title'] ?? ''),
+            ($this->post['contact_email'] ?? ''),
             $contact_phone,
             ($this->post['address_1'] ?? ''),
             ($this->post['address_2'] ?? ''),
-            $this->post['city'],
-            $this->post['state'],
-            $this->post['postal_code'],
+            ($this->post['city'] ?? ''),
+            ($this->post['state'] ?? ''),
+            ($this->post['postal_code'] ?? ''),
             $country,
             $billing_name,
             $this->input('billing_title'),
@@ -1544,6 +1484,152 @@ class ApiController extends Controller {
         }
 
         return '';
+    }
+
+    /** A client's company name, edited from the client page. */
+    public function save_client_nameAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $client_id = (int) ($this->post['client_id'] ?? 0);
+        $company_id = Session::get('company_id');
+        $name = $this->input('company_name');
+
+        $client = $this->clients_model->get_client($client_id, $company_id);
+
+        if (!is_array($client) || count($client) !== 1) {
+            $response['message'] = 'That client could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        if ($name === '') {
+            $response['message'] = 'Enter the company name';
+            echo json_encode($response);
+            return;
+        }
+
+        $this->clients_model->update_company_name($client_id, $company_id, $name, Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'Client renamed';
+        echo json_encode($response);
+    }
+
+    /** A client's address, edited from the client page. */
+    public function save_client_addressAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $client_id = (int) ($this->post['client_id'] ?? 0);
+        $company_id = Session::get('company_id');
+        $country = $this->input('country');
+        $state = $this->input('state');
+
+        $client = $this->clients_model->get_client($client_id, $company_id);
+
+        if (!is_array($client) || count($client) !== 1) {
+            $response['message'] = 'That client could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        $found = Regions::find($country);
+
+        if ($country !== '' && $found === null) {
+            $response['message'] = 'Choose a country from the list';
+            echo json_encode($response);
+            return;
+        }
+
+        if ($state !== '' && ($found === null || !Regions::is_state($found['name'], $state))) {
+            $response['message'] = 'Choose a state from the list';
+            echo json_encode($response);
+            return;
+        }
+
+        $this->clients_model->update_address(
+            $client_id,
+            $company_id,
+            $this->input('address_1'),
+            $this->input('address_2'),
+            $this->input('city'),
+            $state,
+            $this->input('postal_code'),
+            ($found === null ? '' : $found['name']),
+            Session::get('user_id')
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'Address saved';
+        echo json_encode($response);
+    }
+
+    /** One contact on a client, primary or billing, edited from the client page. */
+    public function save_client_contactAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $client_id = (int) ($this->post['client_id'] ?? 0);
+        $company_id = Session::get('company_id');
+        $which = $this->input('contact');
+        $email = $this->input('email');
+        $phone = $this->input('phone');
+
+        if ($which !== 'primary' && $which !== 'billing') {
+            echo json_encode($response);
+            return;
+        }
+
+        $client = $this->clients_model->get_client($client_id, $company_id);
+
+        if (!is_array($client) || count($client) !== 1) {
+            $response['message'] = 'That client could not be found';
+            echo json_encode($response);
+            return;
+        }
+
+        if ($email !== '' && !EmailRules::is_valid_format($email)) {
+            $response['message'] = 'Enter a valid email address';
+            echo json_encode($response);
+            return;
+        }
+
+        if ($email !== '' && EmailRules::is_free($email)) {
+            $response['message'] = 'Use a business email address, not a free provider';
+            echo json_encode($response);
+            return;
+        }
+
+        if ($phone !== '') {
+
+            $phone = Regions::phone(html_entity_decode((string) $client[0]['country'], ENT_QUOTES, 'UTF-8'), $phone);
+
+            if ($phone === '' || !EmailRules::is_phone($phone)) {
+                $response['message'] = 'Enter a valid phone number';
+                echo json_encode($response);
+                return;
+            }
+        }
+
+        if ($which === 'primary') {
+            $this->clients_model->update_primary_contact($client_id, $company_id, $this->input('name'), $this->input('title'), $email, $phone, Session::get('user_id'));
+        } else {
+            $this->clients_model->update_billing_contact($client_id, $company_id, $this->input('name'), $this->input('title'), $email, $phone, Session::get('user_id'));
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Contact saved';
+        echo json_encode($response);
     }
 
     public function delete_clientAction(){
@@ -1626,14 +1712,6 @@ class ApiController extends Controller {
 
         $this->assessments_model->set_assessment_status($assessment_id, Session::get('company_id'), 'Complete', Session::get('user_id'));
 
-        $assessment = $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'));
-
-        $response['project_status'] = $this->projects_model->sync_project_status(
-            $assessment[0]['project_id'],
-            Session::get('company_id'),
-            Session::get('user_id')
-        );
-
         $response['success'] = true;
         $response['message'] = 'Assessment complete';
         $response['assessment_status'] = 'Complete';
@@ -1645,12 +1723,11 @@ class ApiController extends Controller {
     {
         $definition = FrameworkLibrary::get((string) $assessment['framework_key']);
         $controls = $this->assessments_model->load_controls((int) $assessment['id'], Session::get('company_id'));
-        $project = $this->projects_model->get_project($assessment['project_id'], Session::get('company_id'))[0];
         $score = $definition === null ? null : AssessmentScore::score($definition, $assessment, $controls);
 
         return array(
             'score' => $score,
-            'issues' => AssessmentChecks::run($definition, $assessment, $project, $controls, $score)
+            'issues' => AssessmentChecks::run($definition, $assessment, $controls, $score)
         );
     }
 
@@ -1674,127 +1751,6 @@ class ApiController extends Controller {
             'score' => $review['score'],
             'issues' => $review['issues']
         ));
-    }
-
-    public function load_project_usersAction(){
-
-        $project = $this->projects_model->get_project($this->post['project_id'], Session::get('company_id'));
-
-        if (count($project) !== 1) {
-            echo json_encode(array());
-            exit;
-        }
-
-        echo json_encode($this->projects_model->load_project_users($this->post['project_id'], Session::get('company_id')));
-    }
-
-    public function load_available_usersAction(){
-
-        $project = $this->projects_model->get_project($this->post['project_id'], Session::get('company_id'));
-
-        if (count($project) !== 1) {
-            echo json_encode(array());
-            exit;
-        }
-
-        echo json_encode($this->projects_model->available_users($this->post['project_id'], Session::get('company_id')));
-    }
-
-    public function save_project_userAction(){
-
-        $response = array(
-            'success' => false,
-            'message' => 'Something went wrong'
-        );
-
-        $company_id = Session::get('company_id');
-
-        $project_roles = array(
-            'Project Lead',
-            'Lead Assessor',
-            'Assessor',
-            'Reviewer',
-            'Contributor',
-            'Observer'
-        );
-
-        if (!in_array($this->post['project_role'], $project_roles)) {
-            $response['message'] = 'Choose a project role';
-            echo json_encode($response);
-            exit;
-        }
-
-        if ($this->post['id'] > 0) {
-
-            $project_user = $this->projects_model->get_project_user($this->post['id'], $company_id);
-
-            if (count($project_user) !== 1) {
-                $response['message'] = 'That team member could not be found';
-                echo json_encode($response);
-                exit;
-            }
-
-            $this->projects_model->update_project_user($this->post['id'], $company_id, $this->post['project_role'], Session::get('user_id'));
-
-            $response['success'] = true;
-            $response['message'] = 'Project role updated';
-            echo json_encode($response);
-            exit;
-        }
-
-        $project = $this->projects_model->get_project($this->post['project_id'], $company_id);
-
-        if (count($project) !== 1) {
-            $response['message'] = 'That project could not be found';
-            echo json_encode($response);
-            exit;
-        }
-
-        if (count($this->user_model->get_company_user($this->post['user_id'], $company_id)) !== 1) {
-            $response['message'] = 'That user could not be found';
-            echo json_encode($response);
-            exit;
-        }
-
-        if (count($this->projects_model->check_project_user($this->post['project_id'], $this->post['user_id'])) > 0) {
-            $response['message'] = 'They are already on this project';
-            echo json_encode($response);
-            exit;
-        }
-
-        $this->projects_model->add_project_user(
-            $company_id,
-            $this->post['project_id'],
-            $this->post['user_id'],
-            $this->post['project_role'],
-            Session::get('user_id')
-        );
-
-        $response['success'] = true;
-        $response['message'] = 'User added to the project';
-        echo json_encode($response);
-    }
-
-    public function delete_project_userAction(){
-
-        $response = array(
-            'success' => false,
-            'message' => 'Something went wrong'
-        );
-
-        $company_id = Session::get('company_id');
-
-        if (count($this->projects_model->get_project_user($this->post['id'], $company_id)) !== 1) {
-            $response['message'] = 'That team member could not be found';
-            echo json_encode($response);
-            exit;
-        }
-
-        $this->projects_model->delete_project_user($this->post['id'], $company_id, Session::get('user_id'));
-
-        $response['success'] = true;
-        $response['message'] = 'User removed from the project';
-        echo json_encode($response);
     }
 
     public function load_usersAction(){
@@ -2430,138 +2386,44 @@ class ApiController extends Controller {
 
 
 
-    public function save_projectAction(){
-
-        $response = array(
-            'success' => false,
-            'message' => 'Something went wrong'
-        );
-
-        $project_id = (int) ($this->post['project_id'] ?? 0);
-        $client_id = (int) ($this->post['client_id'] ?? 0);
-        $project_name = $this->input('project_name');
-
-        if ($project_id === 0) {
-            $this->refuse_unless_plan_allows('projects', $this->projects_model->count_projects(Session::get('company_id')), 'projects');
-        }
-        $description = RichText::clean($this->input('description'));
-        $start_date = $this->input('start_date');
-        $end_date = $this->input('end_date');
-        $schedule = $this->input('schedule');
-
-        if ($project_name === '') {
-            $response['message'] = 'Project name is required';
-            echo json_encode($response);
-            exit;
-        }
-
-        /* Ongoing projects have no dates. The assistant sends no schedule, so
-           a project with neither date is ongoing too. */
+    /**
+     * The start and end dates an assessment is saved with. Ongoing means no dates;
+     * a caller that sends no schedule and no dates (the assistant) is ongoing too.
+     * Fixed dates need both, in order. Exits with the reason when they are not.
+     */
+    private function assessment_dates($schedule, $start_date, $end_date): array
+    {
         $ongoing = ($schedule === 'Ongoing' || ($schedule === '' && $start_date === '' && $end_date === ''));
 
         if ($ongoing) {
-            $start_date = null;
-            $end_date = null;
-        }
-
-        if (!$ongoing) {
-
-            foreach (array('start_date' => $start_date, 'end_date' => $end_date) as $label => $value) {
-                if ($value === '' || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
-                    $response['message'] = 'Enter a valid '.str_replace('_', ' ', $label);
-                    echo json_encode($response);
-                    exit;
-                }
-            }
-
-            if ($end_date < $start_date) {
-                $response['message'] = 'The end date cannot fall before the start date';
-                echo json_encode($response);
-                exit;
-            }
-        }
-
-        if ($client_id > 0) {
-
-            $client = $this->clients_model->get_client($client_id, Session::get('company_id'));
-
-            if (!is_array($client) || count($client) !== 1) {
-                $response['message'] = 'That client could not be found';
-                echo json_encode($response);
-                exit;
-            }
-        }
-
-        $company_id = Session::get('company_id');
-        $user_id = Session::get('user_id');
-        if ($project_id === 0) {
-
-            $new_id = $this->projects_model->add_project(
-                $company_id, $client_id, $project_name, $description,
-                $start_date, $end_date, $user_id
+            return array(
+                'start_date' => null,
+                'end_date' => null
             );
+        }
 
-            $response['success'] = true;
-            $response['message'] = 'Project created';
-            $response['project_id'] = (int) $new_id;
-            echo json_encode($response);
+        foreach (array('start_date' => $start_date, 'end_date' => $end_date) as $label => $value) {
+            if ($value === '' || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => 'Enter a valid '.str_replace('_', ' ', $label)
+                ));
+                exit;
+            }
+        }
+
+        if ($end_date < $start_date) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'The end date cannot fall before the start date'
+            ));
             exit;
         }
 
-        if (!$this->owns_project($project_id)) {
-            $response['message'] = 'That project could not be found';
-            echo json_encode($response);
-            exit;
-        }
-
-        $this->projects_model->update_project(
-            $project_id, $company_id, $client_id, $project_name, $description,
-            $start_date, $end_date, $user_id
+        return array(
+            'start_date' => $start_date,
+            'end_date' => $end_date
         );
-
-        $response['success'] = true;
-        $response['message'] = 'Project updated';
-        $response['project_id'] = $project_id;
-        echo json_encode($response);
-    }
-
-    public function delete_projectAction(){
-
-        $response = array(
-            'success' => false,
-            'message' => 'Something went wrong'
-        );
-
-        $project_id = (int) ($this->post['project_id'] ?? 0);
-
-        if (!$this->owns_project($project_id)) {
-            $response['message'] = 'That project could not be found';
-            echo json_encode($response);
-            exit;
-        }
-
-        $assessments = $this->assessments_model->load_assessments($project_id, Session::get('company_id'));
-
-        $this->projects_model->delete_project($project_id, Session::get('company_id'), Session::get('user_id'));
-
-        $response['success'] = true;
-        $response['message'] = 'Project deleted'
-            .(count($assessments) > 0
-                ? ', '.count($assessments).' '.(count($assessments) === 1 ? 'assessment' : 'assessments').' removed'
-                : '');
-        echo json_encode($response);
-    }
-
-    public function load_assessmentsAction(){
-
-        $project_id = (int) ($this->post['project_id'] ?? 0);
-
-        if (!$this->owns_project($project_id)) {
-            echo json_encode(array());
-            exit;
-        }
-
-        echo json_encode($this->assessments_model->load_assessments($project_id, Session::get('company_id')));
     }
 
     public function load_active_standardsAction(){
@@ -2575,22 +2437,22 @@ class ApiController extends Controller {
             'message' => 'Something went wrong'
         );
 
-        $project_id = (int) ($this->post['project_id'] ?? 0);
+        $client_id = (int) ($this->post['client_id'] ?? 0);
         $standard_id = (int) ($this->post['standard_id'] ?? 0);
         $assessment_name = $this->input('assessment_name');
 
-        if (!$this->owns_project($project_id)) {
-            $response['message'] = 'That project could not be found';
+        if (!$this->owns_client($client_id)) {
+            $response['message'] = 'That client could not be found';
             echo json_encode($response);
             exit;
         }
 
         /* Counted after ownership is proven, so the count can never be taken
-           against a project belonging to another company. */
+           against a client belonging to another company. */
         $this->refuse_unless_plan_allows(
-            'assessments_per_project',
-            $this->assessments_model->count_assessments($project_id, Session::get('company_id')),
-            'assessments per project'
+            'assessments_per_client',
+            $this->assessments_model->count_assessments($client_id, Session::get('company_id')),
+            'assessments per client'
         );
 
         if ($assessment_name === '') {
@@ -2605,11 +2467,15 @@ class ApiController extends Controller {
             exit;
         }
 
+        $dates = $this->assessment_dates($this->input('schedule'), $this->input('start_date'), $this->input('end_date'));
+
         $assessment_id = $this->assessments_model->create_assessment(
-            $project_id,
+            $client_id,
             Session::get('company_id'),
             $standard_id,
             $assessment_name,
+            $dates['start_date'],
+            $dates['end_date'],
             Session::get('user_id')
         );
 
@@ -2647,12 +2513,29 @@ class ApiController extends Controller {
             exit;
         }
 
+        $schedule = $this->input('schedule');
+        $dates = null;
+
+        if ($schedule !== '') {
+            $dates = $this->assessment_dates($schedule, $this->input('start_date'), $this->input('end_date'));
+        }
+
         $this->assessments_model->update_assessment(
             $assessment_id,
             Session::get('company_id'),
             $assessment_name,
             Session::get('user_id')
         );
+
+        if ($dates !== null) {
+            $this->assessments_model->set_schedule(
+                $assessment_id,
+                Session::get('company_id'),
+                $dates['start_date'],
+                $dates['end_date'],
+                Session::get('user_id')
+            );
+        }
 
         $response['success'] = true;
         $response['message'] = 'Assessment updated';
@@ -2726,6 +2609,7 @@ class ApiController extends Controller {
         $objective_allowed = array(
             'Not Assessed',
             'Implemented',
+            'Partially Implemented',
             'Not Implemented',
             'Not Applicable'
         );
@@ -2809,12 +2693,6 @@ class ApiController extends Controller {
             Session::get('user_id')
         );
 
-        $this->projects_model->sync_project_status(
-            $assessment[0]['project_id'],
-            Session::get('company_id'),
-            Session::get('user_id')
-        );
-
         $response['success'] = true;
         $response['item_result'] = $item_result;
         $response['message'] = 'Control saved';
@@ -2826,7 +2704,7 @@ class ApiController extends Controller {
     {
         $response = array(
             'success' => false,
-            'message' => 'Choose Implemented, Not Implemented or Not Applicable for an objective'
+            'message' => 'Choose Met, Partially Met, Not Met or Not Applicable for an objective'
         );
 
         if (!in_array($item_result, $allowed, true)) {
@@ -2851,14 +2729,13 @@ class ApiController extends Controller {
 
         $assessment = $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'));
         $response['assessment_status'] = $this->assessments_model->sync_assessment_status($assessment_id, Session::get('company_id'), Session::get('user_id'));
-        $this->projects_model->sync_project_status($assessment[0]['project_id'], Session::get('company_id'), Session::get('user_id'));
         $response['success'] = true;
         $response['message'] = 'Objective saved';
         echo json_encode($response);
         exit;
     }
 
-    public function load_baselinesAction(){
+    public function load_compare_optionsAction(){
 
         $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
 
@@ -2867,7 +2744,39 @@ class ApiController extends Controller {
             exit;
         }
 
-        echo json_encode($this->assessments_model->baseline_options($assessment_id, Session::get('company_id')));
+        echo json_encode($this->assessments_model->compare_options($assessment_id, Session::get('company_id')));
+    }
+
+    public function load_compare_resultsAction(){
+
+        $response = array(
+            'assessment_name' => '',
+            'results' => array()
+        );
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+
+        if (!$this->owns_assessment($assessment_id)) {
+            echo json_encode($response);
+            exit;
+        }
+
+        $assessment = $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'))[0];
+        $compare_id = (int) $assessment['compare_assessment_id'];
+        $options = array_column($this->assessments_model->compare_options($assessment_id, Session::get('company_id')), 'assessment_name', 'id');
+
+        if ($compare_id === 0 || !array_key_exists($compare_id, $options)) {
+            echo json_encode($response);
+            exit;
+        }
+
+        $response['assessment_name'] = $options[$compare_id];
+
+        foreach ($this->assessments_model->control_results($compare_id, Session::get('company_id')) as $row) {
+            $response['results'][$row['control_identifier']] = $row['item_result'];
+        }
+
+        echo json_encode((object) $response);
     }
 
     public function save_assessment_detailsAction(){
@@ -2885,71 +2794,26 @@ class ApiController extends Controller {
             exit;
         }
 
-        $assessment = $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'))[0];
-        $definition = FrameworkLibrary::get((string) $assessment['framework_key']);
-        $assessment_type = $this->input('assessment_type');
-        $baseline_assessment_id = (int) ($this->post['baseline_assessment_id'] ?? 0);
-        $no_baseline = ($this->post['no_baseline'] ?? '') === '1' ? 1 : 0;
+        $compare_assessment_id = (int) ($this->post['compare_assessment_id'] ?? 0);
 
-        if (!in_array($assessment_type, array('Baseline', 'Interim', 'Final'), true)) {
-            $response['message'] = 'Choose a valid assessment type';
-            echo json_encode($response);
-            exit;
-        }
+        if ($compare_assessment_id > 0) {
+            $options = array_map('intval', array_column($this->assessments_model->compare_options($assessment_id, Session::get('company_id')), 'id'));
 
-        if ($assessment_type === 'Baseline') {
-            $baseline_assessment_id = 0;
-            $no_baseline = 0;
-        } elseif ($baseline_assessment_id > 0) {
-            $options = array_map('intval', array_column($this->assessments_model->baseline_options($assessment_id, Session::get('company_id')), 'id'));
-
-            if (!in_array($baseline_assessment_id, $options, true)) {
-                $response['message'] = 'That baseline assessment is not available';
+            if (!in_array($compare_assessment_id, $options, true)) {
+                $response['message'] = 'That assessment cannot be compared against';
                 echo json_encode($response);
                 exit;
-            }
-
-            $no_baseline = 0;
-        }
-
-        $categories = array();
-        $optional = array();
-
-        foreach ($definition['rules'] ?? array() as $rule) {
-            if (($rule['id'] ?? '') === 'category_scope') {
-                $optional = array_keys($rule['optional']);
-            }
-        }
-
-        foreach ((array) ($this->post['scope_categories'] ?? array()) as $category) {
-            $category = html_entity_decode((string) $category, ENT_QUOTES, 'UTF-8');
-
-            if (in_array($category, $optional, true)) {
-                $categories[] = $category;
             }
         }
 
         $ssi_reviewed = ($this->post['ssi_reviewed'] ?? '') === '1' ? 1 : 0;
-        $levels = ($definition['scoring']['model'] ?? '') === 'maturity' ? array_map('intval', array_column($definition['scoring']['levels'], 'level')) : array();
-        $tier = function (string $key) use ($levels) {
-            $value = (int) ($this->post[$key] ?? 0);
-
-            return in_array($value, $levels, true) ? $value : 0;
-        };
 
         $this->assessments_model->save_details(
             $assessment_id,
             Session::get('company_id'),
-            $assessment_type,
-            $baseline_assessment_id,
-            $no_baseline,
-            implode(',', $categories),
+            $compare_assessment_id,
             $ssi_reviewed,
             $ssi_reviewed === 1 ? $this->input('ssi_note') : '',
-            $tier('tier_governance'),
-            $tier('tier_management'),
-            $tier('target_tier_governance'),
-            $tier('target_tier_management'),
             Session::get('user_id')
         );
 
@@ -3437,14 +3301,14 @@ class ApiController extends Controller {
 
     public function load_foldersAction(){
 
-        $project_id = (int) ($this->post['project_id'] ?? 0);
+        $client_id = (int) ($this->post['client_id'] ?? 0);
 
-        if (!$this->owns_project($project_id)) {
+        if (!$this->owns_client($client_id)) {
             echo json_encode(array());
             exit;
         }
 
-        echo json_encode($this->evidence_model->load_folders($project_id, Session::get('company_id')));
+        echo json_encode($this->evidence_model->load_folders($client_id, Session::get('company_id')));
     }
 
     public function save_folderAction(){
@@ -3455,13 +3319,13 @@ class ApiController extends Controller {
         );
 
         $folder_id = (int) ($this->post['folder_id'] ?? 0);
-        $project_id = (int) ($this->post['project_id'] ?? 0);
+        $client_id = (int) ($this->post['client_id'] ?? 0);
         $parent_id = (int) ($this->post['parent_id'] ?? 0);
         $folder_name = $this->input('folder_name');
         $company_id = Session::get('company_id');
 
-        if (!$this->owns_project($project_id)) {
-            $response['message'] = 'That project could not be found';
+        if (!$this->owns_client($client_id)) {
+            $response['message'] = 'That client could not be found';
             echo json_encode($response);
             exit;
         }
@@ -3476,14 +3340,14 @@ class ApiController extends Controller {
 
             $parent = $this->evidence_model->get_folder($parent_id, $company_id);
 
-            if (count($parent) !== 1 || (int) $parent[0]['project_id'] !== $project_id) {
+            if (count($parent) !== 1 || (int) $parent[0]['client_id'] !== $client_id) {
                 $response['message'] = 'That parent folder could not be found';
                 echo json_encode($response);
                 exit;
             }
         }
 
-        if (count($this->evidence_model->check_folder_name($project_id, $parent_id, $folder_name, $folder_id)) > 0) {
+        if (count($this->evidence_model->check_folder_name($client_id, $parent_id, $folder_name, $folder_id)) > 0) {
             $response['message'] = 'A folder with that name is already here';
             echo json_encode($response);
             exit;
@@ -3514,7 +3378,7 @@ class ApiController extends Controller {
             exit;
         }
 
-        $response['folder_id'] = (int) $this->evidence_model->add_folder($company_id, $project_id, $parent_id, $folder_name, Session::get('user_id'));
+        $response['folder_id'] = (int) $this->evidence_model->add_folder($company_id, $client_id, $parent_id, $folder_name, Session::get('user_id'));
         $response['success'] = true;
         $response['message'] = 'Folder created';
         echo json_encode($response);
@@ -3568,7 +3432,7 @@ class ApiController extends Controller {
 
             $folder = $this->evidence_model->get_folder($folder_id, $company_id);
 
-            if (count($folder) !== 1 || (int) $folder[0]['project_id'] !== (int) $evidence[0]['project_id']) {
+            if (count($folder) !== 1 || (int) $folder[0]['client_id'] !== (int) $evidence[0]['client_id']) {
                 $response['message'] = 'That folder could not be found';
                 echo json_encode($response);
                 exit;
@@ -3584,21 +3448,21 @@ class ApiController extends Controller {
 
     public function load_evidenceAction(){
 
-        $project_id = (int) ($this->post['project_id'] ?? 0);
+        $client_id = (int) ($this->post['client_id'] ?? 0);
 
-        if (!$this->owns_project($project_id)) {
+        if (!$this->owns_client($client_id)) {
             echo json_encode(array());
             exit;
         }
 
-        echo json_encode($this->evidence_model->load_evidence($project_id, Session::get('company_id')));
+        echo json_encode($this->evidence_model->load_evidence($client_id, Session::get('company_id')));
     }
 
     public function search_evidenceAction(){
 
-        $project_id = (int) ($this->post['project_id'] ?? 0);
+        $client_id = (int) ($this->post['client_id'] ?? 0);
 
-        if (!$this->owns_project($project_id)) {
+        if (!$this->owns_client($client_id)) {
             echo json_encode(array('total' => 0, 'rows' => array()));
             exit;
         }
@@ -3614,11 +3478,11 @@ class ApiController extends Controller {
         // the first page and carried by the client for the rest. Re-counting on
         // every scroll page doubled the work for a number that never moved.
         $response = array(
-            'rows' => $this->evidence_model->search_evidence($project_id, Session::get('company_id'), $term, $limit, $offset, $sort, $dir, $folder_id)
+            'rows' => $this->evidence_model->search_evidence($client_id, Session::get('company_id'), $term, $limit, $offset, $sort, $dir, $folder_id)
         );
 
         if ($offset === 0) {
-            $response['total'] = $this->evidence_model->count_evidence($project_id, Session::get('company_id'), $term, $folder_id);
+            $response['total'] = $this->evidence_model->count_evidence($client_id, Session::get('company_id'), $term, $folder_id);
         }
 
         echo json_encode($response);
@@ -3631,13 +3495,13 @@ class ApiController extends Controller {
             'message' => 'Something went wrong'
         );
 
-        $project_id = (int) ($this->post['project_id'] ?? 0);
+        $client_id = (int) ($this->post['client_id'] ?? 0);
         $folder_id = (int) ($this->post['folder_id'] ?? 0);
         $evidence_title = $this->input('evidence_title');
         $description = $this->input('description');
 
-        if (!$this->owns_project($project_id)) {
-            $response['message'] = 'That project could not be found';
+        if (!$this->owns_client($client_id)) {
+            $response['message'] = 'That client could not be found';
             echo json_encode($response);
             exit;
         }
@@ -3652,7 +3516,7 @@ class ApiController extends Controller {
 
             $folder = $this->evidence_model->get_folder($folder_id, Session::get('company_id'));
 
-            if (count($folder) !== 1 || (int) $folder[0]['project_id'] !== $project_id) {
+            if (count($folder) !== 1 || (int) $folder[0]['client_id'] !== $client_id) {
                 $response['message'] = 'That folder could not be found';
                 echo json_encode($response);
                 exit;
@@ -3674,7 +3538,7 @@ class ApiController extends Controller {
         }
 
         $this->store_evidence_file(
-            $project_id,
+            $client_id,
             $folder_id,
             $evidence_title,
             $description,
@@ -3689,7 +3553,7 @@ class ApiController extends Controller {
      * was uploaded on the vault screen or filed from the assistant. Echoes the
      * response and exits like the actions it serves.
      */
-    private function store_evidence_file($project_id, $folder_id, $evidence_title, $description, $tmp_name, $original_name, $file_size){
+    private function store_evidence_file($client_id, $folder_id, $evidence_title, $description, $tmp_name, $original_name, $file_size){
 
         $response = array(
             'success' => false,
@@ -3734,9 +3598,9 @@ class ApiController extends Controller {
             }
         }
 
-        // Private, and keyed by company then project so a stray key can never be
+        // Private, and keyed by company then client so a stray key can never be
         // read across orgs even if the bucket policy is loosened later.
-        $key = 'evidence/'.Session::get('company_id').'/'.$project_id.'/'
+        $key = 'evidence/'.Session::get('company_id').'/'.$client_id.'/'
             .bin2hex(random_bytes(12)).'.'.$extension;
 
         if (!S3Service::put_private($key, $tmp_name, $content_type)) {
@@ -3747,7 +3611,7 @@ class ApiController extends Controller {
 
         $evidence_id = $this->evidence_model->add_evidence(
             Session::get('company_id'),
-            $project_id,
+            $client_id,
             $folder_id,
             $evidence_title,
             $description,
@@ -3914,17 +3778,6 @@ class ApiController extends Controller {
         }
 
         return trim(html_entity_decode((string) $this->post[$key], ENT_QUOTES, 'UTF-8'));
-    }
-
-    private function owns_project($project_id): bool
-    {
-        if (empty($project_id)) {
-            return false;
-        }
-
-        $project = $this->projects_model->get_project($project_id, Session::get('company_id'));
-
-        return is_array($project) && count($project) === 1;
     }
 
     private function owns_assessment($assessment_id): bool
@@ -4586,7 +4439,7 @@ class ApiController extends Controller {
             $to_email,
             html_entity_decode((string) $to_name, ENT_QUOTES, 'UTF-8'),
             html_entity_decode((string) ((is_array($company) && count($company) === 1) ? $company[0]['company_name'] : Main::site_name()), ENT_QUOTES, 'UTF-8'),
-            ($invoice['invoice_number'] === '' ? 'Draft' : $invoice['invoice_number']),
+            (string) $invoice['invoice_number'],
             $invoice['amount_due_display'],
             (string) ($invoice['due_date_display'] ?? ''),
             $pay_url,
@@ -4855,30 +4708,12 @@ class ApiController extends Controller {
         $company_id      = Session::get('company_id');
         $subscription_id = (int) ($this->post['subscription_id'] ?? 0);
         $client_id       = (int) ($this->post['client_id'] ?? 0);
-        $project_id      = (int) ($this->post['project_id'] ?? 0);
         $name            = $this->input('subscription_name');
 
         if (!$this->owns_client($client_id)) {
             $response['message'] = 'That client could not be found';
             echo json_encode($response);
             return;
-        }
-
-        if ($project_id > 0) {
-
-            if (!$this->owns_project($project_id)) {
-                $response['message'] = 'That project could not be found';
-                echo json_encode($response);
-                return;
-            }
-
-            $project = $this->projects_model->get_project($project_id, $company_id);
-
-            if ((int) $project[0]['client_id'] !== $client_id) {
-                $response['message'] = 'That project belongs to a different client';
-                echo json_encode($response);
-                return;
-            }
         }
 
         if ($name === '') {
@@ -4947,11 +4782,11 @@ class ApiController extends Controller {
                 return;
             }
 
-            $this->subscriptions_model->update_subscription($subscription_id, $company_id, $client_id, $project_id, $name, $unit_amount, $quantity, $interval, $due_days, $start_date, Session::get('user_id'));
+            $this->subscriptions_model->update_subscription($subscription_id, $company_id, $client_id, $name, $unit_amount, $quantity, $interval, $due_days, $start_date, Session::get('user_id'));
 
         } else {
 
-            $subscription_id = (int) $this->subscriptions_model->add_subscription($company_id, $client_id, $project_id, $name, $currency, $unit_amount, $quantity, $interval, $due_days, $start_date, Session::get('user_id'));
+            $subscription_id = (int) $this->subscriptions_model->add_subscription($company_id, $client_id, $name, $currency, $unit_amount, $quantity, $interval, $due_days, $start_date, Session::get('user_id'));
         }
 
         $response['success'] = true;
@@ -5079,8 +4914,7 @@ class ApiController extends Controller {
                 $subscription['start_date'],
                 $company_id,
                 $subscription_id,
-                $subscription['client_id'],
-                $subscription['project_id']
+                $subscription['client_id']
             );
 
             if (empty($stripe['id'])) {
@@ -5277,7 +5111,6 @@ class ApiController extends Controller {
         $company_id = Session::get('company_id');
         $invoice_id = (int) ($this->post['invoice_id'] ?? 0);
         $client_id  = (int) ($this->post['client_id'] ?? 0);
-        $project_id = (int) ($this->post['project_id'] ?? 0);
         $due_days   = (int) ($this->post['due_days'] ?? 30);
 
         if (!$this->owns_client($client_id)) {
@@ -5287,23 +5120,6 @@ class ApiController extends Controller {
         }
 
         $client = $this->clients_model->get_client($client_id, $company_id);
-
-        if ($project_id > 0) {
-
-            if (!$this->owns_project($project_id)) {
-                $response['message'] = 'That project could not be found';
-                echo json_encode($response);
-                return;
-            }
-
-            $project = $this->projects_model->get_project($project_id, $company_id);
-
-            if ((int) $project[0]['client_id'] !== $client_id) {
-                $response['message'] = 'That project belongs to a different client';
-                echo json_encode($response);
-                return;
-            }
-        }
 
         /**
          * Terms and a due date are two ways of saying the same thing. Either may be
@@ -5461,11 +5277,11 @@ class ApiController extends Controller {
                 return;
             }
 
-            $this->invoices_model->update_invoice($invoice_id, $company_id, $client_id, $project_id, $currency, $footer, $due_days, $due_date, Session::get('user_id'));
+            $this->invoices_model->update_invoice($invoice_id, $company_id, $client_id, $currency, $footer, $due_days, $due_date, Session::get('user_id'));
 
         } else {
 
-            $invoice_id = (int) $this->invoices_model->add_invoice($company_id, $client_id, $project_id, $currency, $footer, $due_days, $due_date, Session::get('user_id'));
+            $invoice_id = (int) $this->invoices_model->add_invoice($company_id, $client_id, $currency, $footer, $due_days, $due_date, Session::get('user_id'));
         }
 
         if ($this->invoices_model->save_invoice_lines($invoice_id, $clean, Session::get('user_id')) === false) {
@@ -5697,8 +5513,8 @@ class ApiController extends Controller {
                     $company_id,
                     $invoice_id,
                     $invoice['client_id'],
-                    $invoice['project_id'],
-                    $create_key
+                    $create_key,
+                    $this->invoices_model->ensure_invoice_number($invoice_id, $company_id)
                 );
 
                 if (empty($draft['id'])) {
@@ -6157,318 +5973,6 @@ class ApiController extends Controller {
 
     /* --------------------------------------------------------------- reports */
 
-    public function report_loadAction(){
-
-        $project_id = (int) ($this->post['project_id'] ?? 0);
-
-        if (!$this->owns_project($project_id)) {
-            echo json_encode(array(
-                'success' => false,
-                'message' => 'That project could not be found'
-            ));
-            exit;
-        }
-
-        $rows = $this->reports_model->get_report_by_project($project_id, Session::get('company_id'));
-
-        $response = array(
-            'success' => true,
-            'message' => 'ok',
-            'report' => count($rows) === 1 ? (new ReportBuilder())->assemble($rows[0]) : null
-        );
-
-        echo json_encode($response);
-        exit;
-    }
-
-    public function report_createAction(){
-
-        $response = array(
-            'success' => false,
-            'message' => 'Something went wrong'
-        );
-
-        $project_id = (int) ($this->post['project_id'] ?? 0);
-
-        if (!$this->owns_project($project_id)) {
-            $response['message'] = 'That project could not be found';
-            echo json_encode($response);
-            exit;
-        }
-
-        $rows = $this->reports_model->get_report_by_project($project_id, Session::get('company_id'));
-
-        $response['success'] = true;
-        $response['message'] = count($rows) === 1 ? 'This project already has a report' : 'Report started';
-        $response['report_id'] = count($rows) === 1 ? (int) $rows[0]['id'] : (new ReportBuilder())->create($project_id);
-        echo json_encode($response);
-        exit;
-    }
-
-    public function report_save_detailsAction(){
-
-        $report = $this->owned_report();
-
-        $response = array(
-            'success' => false,
-            'message' => 'Something went wrong'
-        );
-
-        $builder = new ReportBuilder();
-        $checked = $builder->clean(ReportBuilder::DETAIL_FIELDS, $this->merged_details($report), (int) $report['id']);
-
-        if (isset($checked['error'])) {
-            $response['message'] = $checked['error'];
-            $response['field'] = $checked['field'];
-            echo json_encode($response);
-            exit;
-        }
-
-        $this->reports_model->update_report_details((int) $report['id'], ...array_merge(array_values($checked['values']), array(
-            Session::get('user_id')
-        )));
-
-        $response['success'] = true;
-        $response['message'] = 'Report saved';
-        echo json_encode($response);
-        exit;
-    }
-
-    public function report_save_rowAction(){
-
-        $report = $this->owned_report();
-        $section = (string) ($this->post['section'] ?? '');
-
-        $response = array(
-            'success' => false,
-            'message' => 'Something went wrong'
-        );
-
-        if (!isset(ReportBuilder::SECTIONS[$section])) {
-            $response['message'] = 'That part of the report could not be found';
-            echo json_encode($response);
-            exit;
-        }
-
-        $row_id = (int) ($this->post['id'] ?? 0);
-        $posted = $this->post;
-
-        /* A risk can name its finding by reference, so the assistant can link a
-           risk to a finding created earlier in the same batch. */
-        if ($section === 'risk' && empty($posted['finding_id']) && !empty($posted['link_finding_ref'])) {
-            foreach ($this->reports_model->load_findings((int) $report['id']) as $finding) {
-                if (strcasecmp($finding['finding_ref'], $this->input('link_finding_ref')) === 0) {
-                    $posted['finding_id'] = (string) $finding['id'];
-                }
-            }
-        }
-
-        if ($row_id > 0) {
-            $current = $this->reports_model->{'get_'.$section}($row_id, (int) $report['id']);
-            if (count($current) === 1) {
-                foreach (array_keys(ReportBuilder::SECTIONS[$section]) as $field) {
-                    if (!array_key_exists($field, $posted)) {
-                        $posted[$field] = (string) ($current[0][$field] ?? '');
-                    }
-                }
-            }
-        }
-
-        $result = (new ReportBuilder())->save_row($section, (int) $report['id'], $row_id, $posted);
-
-        if (isset($result['error'])) {
-            $response['message'] = $result['error'];
-            $response['field'] = $result['field'] ?? '';
-            echo json_encode($response);
-            exit;
-        }
-
-        $response['success'] = true;
-        $response['message'] = 'Saved';
-        $response['id'] = $result['id'];
-        echo json_encode($response);
-        exit;
-    }
-
-    public function report_delete_rowAction(){
-
-        $report = $this->owned_report();
-        $section = (string) ($this->post['section'] ?? '');
-
-        $response = array(
-            'success' => false,
-            'message' => 'Something went wrong'
-        );
-
-        if (!isset(ReportBuilder::SECTIONS[$section])) {
-            $response['message'] = 'That part of the report could not be found';
-            echo json_encode($response);
-            exit;
-        }
-
-        if ($this->reports_model->delete_section_row($section, (int) ($this->post['id'] ?? 0), (int) $report['id']) !== 1) {
-            $response['message'] = 'That entry could not be found';
-            echo json_encode($response);
-            exit;
-        }
-
-        $response['success'] = true;
-        $response['message'] = 'Removed';
-        echo json_encode($response);
-        exit;
-    }
-
-    public function report_save_csfAction(){
-
-        $report = $this->owned_report();
-
-        $response = array(
-            'success' => false,
-            'message' => 'Something went wrong'
-        );
-
-        $function = (string) ($this->post['csf_function'] ?? '');
-        $current = (int) ($this->post['current_tier'] ?? 0);
-        $target = (int) ($this->post['target_tier'] ?? 0);
-
-        if (!in_array($function, ReportBuilder::CSF_FUNCTIONS, true)) {
-            $response['message'] = 'Choose a CSF function';
-            echo json_encode($response);
-            exit;
-        }
-
-        if ($current < 0 || $current > 4 || $target < 0 || $target > 4) {
-            $response['message'] = 'Tiers run from 1 to 4';
-            echo json_encode($response);
-            exit;
-        }
-
-        $this->reports_model->save_csf(
-            (int) $report['id'],
-            $function,
-            $current === 0 ? null : $current,
-            $target === 0 ? null : $target,
-            mb_substr($this->input('main_gaps'), 0, 1000)
-        );
-
-        $response['success'] = true;
-        $response['message'] = 'Saved';
-        echo json_encode($response);
-        exit;
-    }
-
-    /**
-     * Send the draft findings to the client for their responses. The version in
-     * force is recorded in document control; the client's portal users can then
-     * see and answer the findings.
-     */
-    public function report_issueAction(){
-
-        $report = $this->owned_report();
-
-        $response = array(
-            'success' => false,
-            'message' => 'Something went wrong'
-        );
-
-        if ($report['report_stage'] !== 'Draft') {
-            $response['message'] = 'Only a draft can be issued for response';
-            echo json_encode($response);
-            exit;
-        }
-
-        if (count($this->reports_model->load_findings((int) $report['id'])) === 0) {
-            $response['message'] = 'Add at least one finding before issuing the report';
-            echo json_encode($response);
-            exit;
-        }
-
-        $this->record_version($report, $report['report_version'], 'Draft findings issued to management for response');
-        $this->reports_model->set_stage((int) $report['id'], 'Issued for response', $report['report_version'], Session::get('user_id'));
-
-        $response['success'] = true;
-        $response['message'] = 'Issued to the client for response';
-        echo json_encode($response);
-        exit;
-    }
-
-    public function report_finaliseAction(){
-
-        $report = $this->owned_report();
-
-        $response = array(
-            'success' => false,
-            'message' => 'Something went wrong'
-        );
-
-        if ($report['report_stage'] === 'Final') {
-            $response['message'] = 'This report is already final';
-            echo json_encode($response);
-            exit;
-        }
-
-        $parts = explode('.', $report['report_version']);
-        $version = (int) $parts[0] < 1 ? '1.0' : ((int) $parts[0]).'.'.((int) ($parts[1] ?? 0) + 1);
-
-        $this->record_version($report, $version, 'Final report after quality review');
-        $this->reports_model->set_stage((int) $report['id'], 'Final', $version, Session::get('user_id'));
-
-        $response['success'] = true;
-        $response['message'] = 'Report finalised as version '.$version;
-        echo json_encode($response);
-        exit;
-    }
-
-    /** Reopen for changes. The next version number is reserved for the revision. */
-    public function report_reopenAction(){
-
-        $report = $this->owned_report();
-
-        $parts = explode('.', $report['report_version']);
-        $version = ((int) $parts[0]).'.'.((int) ($parts[1] ?? 0) + 1);
-
-        $this->reports_model->set_stage((int) $report['id'], 'Draft', $version, Session::get('user_id'));
-
-        $response = array(
-            'success' => true,
-            'message' => 'Back in draft as version '.$version
-        );
-
-        echo json_encode($response);
-        exit;
-    }
-
-    public function report_downloadAction(){
-
-        $report = $this->owned_report();
-        $this->send_report_file($report, (string) ($this->post['format'] ?? 'pdf'));
-    }
-
-    public function report_save_to_vaultAction(){
-
-        $report = $this->owned_report();
-        $format = ($this->post['format'] ?? 'pdf') === 'docx' ? 'docx' : 'pdf';
-        $assembled = (new ReportBuilder())->assemble($report);
-        $file = ReportRenderer::render($assembled, $format);
-
-        $tmp_name = tempnam(sys_get_temp_dir(), 'rpt');
-        file_put_contents($tmp_name, $file['bytes']);
-
-        register_shutdown_function(function () use ($tmp_name) {
-            @unlink($tmp_name);
-        });
-
-        $this->store_evidence_file(
-            (int) $report['project_id'],
-            0,
-            ReportBuilder::plain($report['report_title']).' v'.$report['report_version'],
-            'Generated from the report builder on '.date('j F Y'),
-            $tmp_name,
-            $file['file_name'],
-            strlen($file['bytes'])
-        );
-    }
-
     /** A ready-made report, generated from the data and stored for a short-lived download link. */
     public function ready_report_downloadAction(){
 
@@ -6483,9 +5987,19 @@ class ApiController extends Controller {
             exit;
         }
 
+        $report_type = (string) ($this->post['report_type'] ?? '');
+        $spec = ReadyReports::spec($report_type);
+        $scope = (string) ($this->post['scope'] ?? ($spec['scope'] ?? ''));
+
+        if ($spec === null || $scope !== $spec['scope']) {
+            $response['message'] = 'That report could not be found';
+            echo json_encode($response);
+            exit;
+        }
+
         $file = (new ReadyReports())->render(
-            (string) ($this->post['report_type'] ?? ''),
-            (int) ($this->post['target_id'] ?? 0),
+            $report_type,
+            (int) ($this->post['id'] ?? ($this->post['target_id'] ?? 0)),
             (string) ($this->post['format'] ?? 'pdf')
         );
 
@@ -6496,192 +6010,6 @@ class ApiController extends Controller {
         }
 
         $key = 'reports/'.Session::get('company_id').'/ready/'.bin2hex(random_bytes(10)).'.'.$file['extension'];
-
-        if (!S3Service::put_private_bytes($key, $file['bytes'], $file['content_type'])) {
-            $response['message'] = 'The report could not be stored for download';
-            echo json_encode($response);
-            exit;
-        }
-
-        $response['success'] = true;
-        $response['message'] = 'ok';
-        $response['url'] = S3Service::presigned_get_url($key, 300, $file['file_name']);
-        echo json_encode($response);
-        exit;
-    }
-
-    public function portal_report_loadAction(){
-
-        $project_id = (int) ($this->post['project_id'] ?? 0);
-        $report = $this->portal_report($project_id);
-
-        if ($report === null) {
-            echo json_encode(array(
-                'success' => true,
-                'message' => 'ok',
-                'report' => null
-            ));
-            exit;
-        }
-
-        $assembled = (new ReportBuilder())->assemble($report);
-
-        $response = array(
-            'success' => true,
-            'message' => 'ok',
-            'report' => array(
-                'report_title' => ReportBuilder::plain($report['report_title']),
-                'report_stage' => $report['report_stage'],
-                'report_version' => $report['report_version'],
-                'can_respond' => $report['report_stage'] === 'Issued for response',
-                'domains' => array_map(function ($domain) {
-                    return array(
-                        'id' => (int) $domain['id'],
-                        'domain_name' => $domain['domain_name']
-                    );
-                }, $assembled['domains']),
-                'findings' => $assembled['findings_ranked']
-            )
-        );
-
-        echo json_encode($response);
-        exit;
-    }
-
-    public function portal_report_respondAction(){
-
-        $response = array(
-            'success' => false,
-            'message' => 'Something went wrong'
-        );
-
-        $finding_id = (int) ($this->post['finding_id'] ?? 0);
-        $report = $this->portal_report((int) ($this->post['project_id'] ?? 0));
-
-        if ($report === null || $report['report_stage'] !== 'Issued for response') {
-            $response['message'] = 'This report is not open for responses';
-            echo json_encode($response);
-            exit;
-        }
-
-        if (count($this->reports_model->get_finding($finding_id, (int) $report['id'])) !== 1) {
-            $response['message'] = 'That finding could not be found';
-            echo json_encode($response);
-            exit;
-        }
-
-        $status = $this->input('response_status');
-        $target_date = $this->input('target_date');
-
-        if (!in_array($status, array_slice(ReportBuilder::RESPONSES, 1), true)) {
-            $response['message'] = 'Choose Agreed, Partially agreed or Not agreed';
-            $response['field'] = 'response_status';
-            echo json_encode($response);
-            exit;
-        }
-
-        if ($target_date !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $target_date)) {
-            $response['message'] = 'Enter a valid target date';
-            $response['field'] = 'target_date';
-            echo json_encode($response);
-            exit;
-        }
-
-        $this->reports_model->respond_to_finding(
-            $finding_id,
-            (int) $report['id'],
-            $status,
-            mb_substr($this->input('management_response'), 0, 20000),
-            mb_substr($this->input('response_owner'), 0, 255),
-            $target_date === '' ? null : $target_date,
-            Session::get('user_id')
-        );
-
-        $response['success'] = true;
-        $response['message'] = 'Response saved';
-        echo json_encode($response);
-        exit;
-    }
-
-    public function portal_report_downloadAction(){
-
-        $report = $this->portal_report((int) ($this->post['project_id'] ?? 0));
-
-        if ($report === null || $report['report_stage'] !== 'Final') {
-            echo json_encode(array(
-                'success' => false,
-                'message' => 'The final report is not available yet'
-            ));
-            exit;
-        }
-
-        $this->send_report_file($report, 'pdf');
-    }
-
-    /** The calling client's report for one of their projects, once it has been issued. */
-    private function portal_report($project_id)
-    {
-        if (!$this->client_owns_project($project_id)) {
-            return null;
-        }
-
-        $rows = $this->reports_model->get_report_by_project($project_id, Session::get('company_id'));
-
-        if (count($rows) !== 1 || $rows[0]['report_stage'] === 'Draft') {
-            return null;
-        }
-
-        return $rows[0];
-    }
-
-    private function owned_report(): array
-    {
-        $rows = $this->reports_model->get_report((int) ($this->post['report_id'] ?? 0), Session::get('company_id'));
-
-        if (Session::get('user_type') !== 'staff' || count($rows) !== 1) {
-            echo json_encode(array(
-                'success' => false,
-                'message' => 'That report could not be found'
-            ));
-            exit;
-        }
-
-        return $rows[0];
-    }
-
-    /** Detail fields not posted keep their stored values, so a partial save never blanks the rest. */
-    private function merged_details(array $report): array
-    {
-        $posted = array();
-
-        foreach (array_keys(ReportBuilder::DETAIL_FIELDS) as $field) {
-            $posted[$field] = array_key_exists($field, $this->post) ? $this->post[$field] : (string) ($report[$field] ?? '');
-        }
-
-        return $posted;
-    }
-
-    private function record_version(array $report, string $label, string $note): void
-    {
-        $this->reports_model->add_version(
-            (int) $report['id'],
-            $label,
-            date('Y-m-d'),
-            $note,
-            trim(Session::get('first_name').' '.Session::get('last_name')),
-            $this->reports_model->next_sort_order('version', (int) $report['id'])
-        );
-    }
-
-    private function send_report_file(array $report, string $format): void
-    {
-        $response = array(
-            'success' => false,
-            'message' => 'Something went wrong'
-        );
-
-        $file = ReportRenderer::render((new ReportBuilder())->assemble($report), $format === 'docx' ? 'docx' : 'pdf');
-        $key = 'reports/'.Session::get('company_id').'/'.(int) $report['id'].'/'.bin2hex(random_bytes(8)).'.'.$file['extension'];
 
         if (!S3Service::put_private_bytes($key, $file['bytes'], $file['content_type'])) {
             $response['message'] = 'The report could not be stored for download';
@@ -6813,10 +6141,10 @@ class ApiController extends Controller {
     }
 
     /**
-     * File a chat attachment or a generated report into a project's evidence
-     * vault. Called by the browser once the person confirms, so the same project
+     * File a chat attachment or a generated report into a client's evidence
+     * vault. Called by the browser once the person confirms, so the same client
      * and folder checks as the vault upload apply, and the portal is held to its
-     * own client's projects.
+     * own client.
      */
     public function ai_file_evidenceAction(){
 
@@ -6825,17 +6153,17 @@ class ApiController extends Controller {
             'message' => 'Something went wrong'
         );
 
-        $project_id = (int) ($this->post['project_id'] ?? 0);
+        $client_id = (int) ($this->post['client_id'] ?? 0);
         $folder_id = (int) ($this->post['folder_id'] ?? 0);
         $evidence_title = $this->input('evidence_title');
         $description = $this->input('description');
 
-        $allowed = Session::get('user_type') === 'portal'
-            ? $this->client_owns_project($project_id)
-            : $this->owns_project($project_id);
+        if (Session::get('user_type') === 'portal') {
+            $client_id = (int) Session::get('client_id');
+        }
 
-        if (!$allowed) {
-            $response['message'] = 'That project could not be found';
+        if (!$this->owns_client($client_id)) {
+            $response['message'] = 'That client could not be found';
             echo json_encode($response);
             exit;
         }
@@ -6850,7 +6178,7 @@ class ApiController extends Controller {
 
             $folder = $this->evidence_model->get_folder($folder_id, Session::get('company_id'));
 
-            if (count($folder) !== 1 || (int) $folder[0]['project_id'] !== $project_id) {
+            if (count($folder) !== 1 || (int) $folder[0]['client_id'] !== $client_id) {
                 $response['message'] = 'That folder could not be found';
                 echo json_encode($response);
                 exit;
@@ -6880,7 +6208,7 @@ class ApiController extends Controller {
         });
 
         $this->store_evidence_file(
-            $project_id,
+            $client_id,
             $folder_id,
             $evidence_title,
             $description,

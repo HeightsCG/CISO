@@ -11,15 +11,15 @@
  */
 class ReadyReports {
 
-    /** key => name|scope|formats|description. Scope is assessment or project. */
+    /** key => name|scope|formats|description. Scope is assessment or client. */
     const TYPES = array(
         'assessment_results' => 'Assessment Results Report|assessment|pdf,docx,xlsx|Scorecard, results by family, and every control with its result and evidence.',
         'gap_analysis' => 'Gap Analysis|assessment|pdf,docx,xlsx|Only the controls not implemented or partially implemented, by family, with a priority.',
         'executive_summary' => 'Executive Summary|assessment|pdf,docx|A short summary for leadership: score, progress, results charts, strongest and weakest areas, and top gaps.',
         'statement_of_applicability' => 'Statement of Applicability|assessment|pdf,docx,xlsx|Each control marked applicable or not, with implementation status, justification and supporting evidence.',
-        'remediation_plan' => 'Remediation Plan|assessment|pdf,docx,xlsx|Gaps turned into a prioritized action list, including report findings with their owners and target dates.',
-        'risk_assessment' => 'Risk Assessment Report|project|pdf,docx|The client deliverable: executive summary, results by area, rated findings for every gap, and sign-off. Uses your edited report when one exists.',
-        'evidence_register' => 'Evidence Register|project|pdf,docx,xlsx|Every evidence file in the project and the controls it supports, plus controls still without evidence.'
+        'remediation_plan' => 'Remediation Plan|assessment|pdf,docx,xlsx|Gaps turned into a prioritized action list.',
+        'risk_assessment' => 'Risk Assessment Report|client|pdf,docx|The client deliverable across all of the client\'s assessments: executive summary, results by area, rated findings for every gap, and sign-off.',
+        'evidence_register' => 'Evidence Register|client|pdf,docx,xlsx|Every evidence file in the client\'s vault and the controls it supports, plus controls still without evidence.'
     );
 
     const RESULTS = array(
@@ -41,9 +41,8 @@ class ReadyReports {
     private $company_id;
     private $company;
     private $assessments_model;
-    private $projects_model;
+    private $clients_model;
     private $evidence_model;
-    private $reports_model;
     private $ready_model;
 
     public function __construct()
@@ -51,9 +50,8 @@ class ReadyReports {
         $this->company_id = Session::get('company_id');
         $this->company = (new CompaniesModel())->get_company($this->company_id)[0] ?? array();
         $this->assessments_model = new AssessmentsModel();
-        $this->projects_model = new ProjectsModel();
+        $this->clients_model = new ClientsModel();
         $this->evidence_model = new EvidenceModel();
-        $this->reports_model = new ReportsModel();
         $this->ready_model = new ReadyReportsModel();
     }
 
@@ -70,7 +68,7 @@ class ReadyReports {
 
         $scope_names = array(
             'assessment' => 'One assessment',
-            'project' => 'One project'
+            'client' => 'One client'
         );
 
         foreach (self::TYPES as $key => $spec) {
@@ -94,7 +92,7 @@ class ReadyReports {
         return $list;
     }
 
-    /** The report types that cover one assessment, or one project. */
+    /** The report types that cover one assessment, or one client. */
     public static function catalog_for(string $scope): array
     {
         $list = array();
@@ -121,7 +119,7 @@ class ReadyReports {
 
     /**
      * The file for one report, or array('error' => ...). $target_id is an
-     * assessment or project id depending on the report.
+     * assessment or client id depending on the report.
      */
     public function render(string $type, int $target_id, string $format): array
     {
@@ -201,7 +199,6 @@ class ReadyReports {
             'assessment' => $assessment,
             'name' => self::plain($assessment['assessment_name']),
             'client' => self::plain($assessment['client_name'] ?? ''),
-            'project' => self::plain($assessment['project_name']),
             'standard' => self::plain($assessment['standard_name']),
             'items' => $items,
             'counts' => $counts,
@@ -230,7 +227,7 @@ class ReadyReports {
         return array(
             'Report date' => date('F j, Y'),
             'Assessment' => $a['name'],
-            'Project' => $a['project'],
+            'Client' => $a['client'],
             'Standard' => $a['standard'],
             'Status' => self::plain($a['assessment']['assessment_status']),
             'Prepared by' => self::plain($this->company['company_name'] ?? '')
@@ -684,48 +681,10 @@ class ReadyReports {
             ), $priority, true);
         }
 
-        $findings = $this->report_findings((int) $a['assessment']['project_id']);
-
-        if (count($findings) > 0) {
-            $rows = array();
-            foreach (array_slice($findings, 0, 8) as $finding) {
-                $rows[] = array(
-                    $finding['finding_ref'],
-                    self::plain($finding['finding_title']),
-                    $finding['rating'].' ('.$finding['score'].')',
-                    $finding['response_status'] === 'Pending' ? '' : $finding['response_status']
-                );
-            }
-            $blocks[] = self::h2('Key findings');
-            $blocks[] = ReportRenderer::table_block(array(
-                'Ref.',
-                'Finding',
-                'Rating',
-                'Response'
-            ), array(
-                9,
-                57,
-                16,
-                18
-            ), $rows);
-        }
-
         return array(
             'doc' => $this->doc($a, 'Executive Summary', $blocks),
             'sheets' => array()
         );
-    }
-
-    /** Findings from the project's report builder, highest score first, when a report exists. */
-    private function report_findings(int $project_id): array
-    {
-        $report = $this->reports_model->get_report_by_project($project_id, $this->company_id);
-
-        if (count($report) !== 1) {
-            return array();
-        }
-
-        return (new ReportBuilder())->assemble($report[0])['findings_ranked'];
     }
 
     private function build_statement_of_applicability(int $id): array
@@ -832,9 +791,6 @@ class ReadyReports {
         }
 
         $gaps = self::gaps($a);
-        $findings = array_values(array_filter($this->report_findings((int) $a['assessment']['project_id']), function ($finding) {
-            return $finding['rating'] !== 'Low' || $finding['response_status'] !== 'Not agreed';
-        }));
 
         $actions = 0;
         foreach ($gaps as $items) {
@@ -843,52 +799,13 @@ class ReadyReports {
 
         $blocks = array(
             self::h1('Summary'),
-            self::text('This plan lists the actions needed to close the gaps found in the '.$a['name'].' assessment, highest priority first. '
-                .(count($findings) > 0 ? 'It starts with the findings from the risk assessment report, which carry agreed owners and target dates, followed by' : 'It lists').' the control-level actions from the assessment.'),
+            self::text('This plan lists the actions needed to close the gaps found in the '.$a['name'].' assessment, highest priority first.'),
             self::stats(array(
-                'Report findings' => (string) count($findings),
                 'Control actions' => (string) $actions,
                 'High priority' => (string) $a['counts']['Not Implemented'],
                 'Medium priority' => (string) $a['counts']['Partially Implemented']
             ))
         );
-
-        $finding_rows = array();
-
-        if (count($findings) > 0) {
-            $rows = array();
-            foreach ($findings as $finding) {
-                $row = array(
-                    $finding['finding_ref'],
-                    self::plain($finding['finding_title']),
-                    $finding['rating'],
-                    self::plain($finding['recommendation']),
-                    self::plain($finding['response_owner']),
-                    self::date($finding['target_date']),
-                    $finding['response_status'] === 'Pending' ? '' : $finding['response_status']
-                );
-                $rows[] = $row;
-                $finding_rows[] = $row;
-            }
-            $blocks[] = self::h1('Actions from report findings');
-            $blocks[] = ReportRenderer::table_block(array(
-                'Ref.',
-                'Finding',
-                'Rating',
-                'Recommended action',
-                'Owner',
-                'Target',
-                'Response'
-            ), array(
-                7,
-                22,
-                8,
-                29,
-                12,
-                11,
-                11
-            ), $rows, true);
-        }
 
         $sheet_rows = array();
 
@@ -937,7 +854,7 @@ class ReadyReports {
                 15,
                 34
             ), $rows, true);
-        } elseif (count($findings) === 0) {
+        } else {
             $blocks[] = self::text('No remediation actions are needed yet: no controls are recorded as not implemented or partially implemented.');
         }
 
@@ -970,64 +887,33 @@ class ReadyReports {
             )
         );
 
-        if (count($finding_rows) > 0) {
-            array_unshift($sheets, array(
-                'name' => 'Report findings',
-                'head' => array(
-                    'Ref.',
-                    'Finding',
-                    'Rating',
-                    'Recommended action',
-                    'Owner',
-                    'Target date',
-                    'Response'
-                ),
-                'widths' => array(
-                    8,
-                    45,
-                    10,
-                    60,
-                    20,
-                    16,
-                    16
-                ),
-                'rows' => $finding_rows
-            ));
-        }
-
         return array(
             'doc' => $this->doc($a, 'Remediation Plan', $blocks),
             'sheets' => $sheets
         );
     }
 
-    /* -------------------------------------------------------------- project */
+    /* --------------------------------------------------------------- client */
 
     /**
-     * The risk assessment for a project. When the report builder has a report
-     * for it, that report is used as edited. Otherwise one is put together
-     * from the project's assessments: each control not implemented or only
-     * partially implemented becomes a finding, rated by a fixed rule that the
-     * report states (not implemented: likelihood 4, impact 4, High; partially
-     * implemented: likelihood 3, impact 3, Medium), and each control family
-     * becomes a domain rated from its compliance score.
+     * The risk assessment for a client, put together from all of the client's
+     * assessments: each control not implemented or only partially implemented
+     * becomes a finding, rated by a fixed rule that the report states (not
+     * implemented: likelihood 4, impact 4, High; partially implemented:
+     * likelihood 3, impact 3, Medium), and each control family becomes a
+     * domain rated from its compliance score.
      */
-    private function risk_assessment(int $project_id): array
+    private function risk_assessment(int $client_id): array
     {
-        $rows = $this->projects_model->get_project($project_id, $this->company_id);
+        $rows = $this->clients_model->get_client($client_id, $this->company_id);
 
         if (count($rows) !== 1) {
-            return self::fail('That project could not be found');
+            return self::fail('That client could not be found');
         }
 
-        $saved = $this->reports_model->get_report_by_project($project_id, $this->company_id);
+        $assessment_rows = $this->assessments_model->client_assessments($client_id, $this->company_id);
 
-        if (count($saved) === 1) {
-            return (new ReportBuilder())->assemble($saved[0]);
-        }
-
-        $project = $rows[0];
-        $client = (new ClientsModel())->get_client($project['client_id'], $this->company_id)[0] ?? array();
+        $client = $rows[0];
         $client_name = self::plain($client['company_name'] ?? '');
         $firm = self::plain($this->company['company_name'] ?? '');
 
@@ -1037,8 +923,9 @@ class ReadyReports {
         $counts = array_fill_keys(self::RESULTS, 0);
         $number = 0;
 
-        $assessment_rows = $this->assessments_model->load_assessments($project_id, $this->company_id);
         $several = count($assessment_rows) > 1;
+        $period_start = null;
+        $period_end = null;
 
         foreach ($assessment_rows as $row) {
 
@@ -1046,6 +933,14 @@ class ReadyReports {
 
             if ($a === null) {
                 continue;
+            }
+
+            if ($row['start_date'] !== null && ($period_start === null || $row['start_date'] < $period_start)) {
+                $period_start = $row['start_date'];
+            }
+
+            if ($row['end_date'] !== null && ($period_end === null || $row['end_date'] > $period_end)) {
+                $period_end = $row['end_date'];
             }
 
             $standards[] = $a['standard'];
@@ -1117,7 +1012,7 @@ class ReadyReports {
         }
 
         if (count($standards) === 0) {
-            return self::fail('This project has no assessments to report on yet');
+            return self::fail('This client has no assessments to report on yet');
         }
 
         $ranked = $findings;
@@ -1132,7 +1027,7 @@ class ReadyReports {
         $medium = $counts['Partially Implemented'];
 
         $threats = array();
-        foreach (ReportBuilder::default_threats() as $index => $threat) {
+        foreach (self::default_threats() as $index => $threat) {
             $threats[] = array(
                 'threat_ref' => 'T'.($index + 1),
                 'threat_name' => $threat[0],
@@ -1142,14 +1037,10 @@ class ReadyReports {
         }
 
         $report = array(
-            'id' => 0,
-            'company_id' => $this->company_id,
-            'project_id' => $project_id,
             'report_title' => 'Cybersecurity Risk Assessment',
             'report_date' => date('Y-m-d'),
-            'period_start' => $project['start_date'],
-            'period_end' => $project['end_date'],
-            'regulatory_reference' => '',
+            'period_start' => $period_start,
+            'period_end' => $period_end,
             'report_version' => '1.0',
             'report_stage' => 'Final',
             'purpose_text' => ($client_name !== '' ? $client_name : 'The client').' engaged '.$firm.' to assess its cybersecurity controls against '.implode(' and ', array_unique($standards)).'. This report identifies and prioritizes the gaps found so they can be addressed.',
@@ -1159,44 +1050,88 @@ class ReadyReports {
                     ? 'No gaps have been recorded among the assessed controls.'
                     : 'We identified '.($high + $medium).' gap'.($high + $medium === 1 ? '' : 's').': '.$high.' rated high (controls not implemented) and '.$medium.' rated medium (controls partially implemented). '.($high + $medium === 1 ? 'It is' : 'Each is').' described in Section 3 with a recommendation.')
                 .($counts['Not Assessed'] > 0 ? ' '.$counts['Not Assessed'].' controls have not been assessed yet and are not reflected in the findings.' : ''),
-            'background_text' => RichText::plain($project['description']),
+            'background_text' => '',
             'scope_text' => 'The assessment covered '.$total.' controls in '.implode(' and ', array_unique($standards)).', grouped into the areas below.',
             'out_of_scope_text' => '',
-            'approach_text' => 'Each control was reviewed and assigned a result: implemented, partially implemented, not implemented or not applicable, supported by evidence held in the project\'s evidence vault and the assessor\'s findings.',
+            'approach_text' => 'Each control was reviewed and assigned a result: implemented, partially implemented, not implemented or not applicable, supported by evidence held in the client\'s evidence vault and the assessor\'s findings.',
             'methodology_text' => 'Each control not implemented or only partially implemented is reported as a finding. Findings for controls not implemented are rated likelihood 4 and impact 4, a score of 16 (High). Findings for controls partially implemented are rated likelihood 3 and impact 3, a score of 9 (Medium). '
                 ."\n\n".'Each area is rated from its compliance score, in which implemented controls count in full and partially implemented controls count half: 85% or more is Satisfactory, 60% or more Satisfactory with exceptions, 30% or more Needs improvement, and below 30% Unsatisfactory.',
-            'limitations_text' => ReportBuilder::default_limitations($firm),
+            'limitations_text' => self::default_limitations($firm),
             'review_text' => 'This assessment should be reviewed and updated at least annually, and sooner after any significant change to the business or its technology.',
-            'scan_text' => '',
             'signoff_name' => self::plain($client['contact_name'] ?? ''),
             'signoff_title' => self::plain($client['contact_title'] ?? '')
         );
 
         return array(
             'report' => $report,
-            'project' => $project,
             'client' => $client,
             'company' => $this->company,
-            'versions' => array(),
-            'distribution' => array(),
-            'team' => array(),
             'domains' => $domains,
             'findings' => $findings,
             'findings_ranked' => $ranked,
-            'unassigned_findings' => array(),
             'totals' => array(
                 'High' => $high,
                 'Medium' => $medium,
                 'Low' => 0
             ),
-            'risks' => array(),
-            'risks_ranked' => array(),
-            'threats' => $threats,
-            'assets' => array(),
-            'csf' => array(),
-            'scan_rows' => array(),
-            'xrefs' => array()
+            'threats' => $threats
         );
+    }
+
+    private static function default_threats(): array
+    {
+        return array(
+            array(
+                'Credential theft and account takeover',
+                'Phishing or reused passwords give an attacker control of a user account',
+                'Clients, firm, regulators'
+            ),
+            array(
+                'Ransomware',
+                'Malicious software encrypts data and systems, often after deleting backups',
+                'Firm, clients, counterparties'
+            ),
+            array(
+                'Exploitation of unpatched or exposed systems',
+                'Attackers use known flaws in internet-facing or internal systems to gain access',
+                'Firm, clients'
+            ),
+            array(
+                'Third-party compromise',
+                'A service provider holding sensitive data is breached',
+                'Clients, firm'
+            ),
+            array(
+                'Lost or stolen device',
+                'A device containing sensitive data leaves the firm\'s control',
+                'Clients'
+            ),
+            array(
+                'Insider misuse',
+                'Current or former staff access data without a business need',
+                'Clients, firm'
+            ),
+            array(
+                'Malicious or over-permissioned applications',
+                'A connected application reads or exports data beyond what it needs',
+                'Clients, firm'
+            ),
+            array(
+                'Service disruption',
+                'Failure of a key system, provider or internet connection',
+                'Firm, clients'
+            )
+        );
+    }
+
+    private static function default_limitations(string $firm): string
+    {
+        return 'This assessment reflects conditions observed during fieldwork and is based on information and access provided by management and its service providers. '
+            .'It is not an audit, and '.$firm.' does not express an opinion on the effectiveness of internal controls or on compliance with any regulation. '
+            .'Conditions may change after the date of this report, and controls that are effective today may become less effective over time.'
+            ."\n\n"
+            .'Management is responsible for the design and operation of the cybersecurity program, for deciding how each risk is treated, and for the accuracy of the information it provided. '
+            .$firm.'\'s procedures were limited to those described in this report and were not designed to detect fraud or every weakness that may exist.';
     }
 
     private static function domain_rating($score)
@@ -1220,21 +1155,19 @@ class ReadyReports {
         return 'Unsatisfactory';
     }
 
-    private function build_evidence_register(int $project_id): array
+    private function build_evidence_register(int $client_id): array
     {
-        $project = $this->projects_model->get_project($project_id, $this->company_id);
+        $rows = $this->clients_model->get_client($client_id, $this->company_id);
 
-        if (count($project) !== 1) {
-            return self::fail('That project could not be found');
+        if (count($rows) !== 1) {
+            return self::fail('That client could not be found');
         }
 
-        $project = $project[0];
-        $client = self::plain($project['client_name'] ?? '');
-        $name = self::plain($project['project_name']);
-        $files = $this->evidence_model->load_evidence($project_id, $this->company_id);
+        $client = self::plain($rows[0]['company_name'] ?? '');
+        $files = $this->evidence_model->load_evidence($client_id, $this->company_id);
         $controls = array();
 
-        foreach ($this->ready_model->evidence_controls($project_id, $this->company_id) as $link) {
+        foreach ($this->ready_model->evidence_controls($client_id, $this->company_id) as $link) {
             $controls[(int) $link['evidence_id']][] = self::plain($link['control_identifier']);
         }
 
@@ -1270,10 +1203,10 @@ class ReadyReports {
         $missing_blocks = array();
         $missing_rows = array();
 
-        foreach ($this->assessments_model->load_assessments($project_id, $this->company_id) as $assessment) {
+        foreach ($this->assessments_model->client_assessments($client_id, $this->company_id) as $assessment) {
             $rows_missing = array();
             foreach ($this->assessments_model->load_controls((int) $assessment['id'], $this->company_id) as $item) {
-                if ((int) $item['evidence_count'] === 0 && $item['item_result'] !== 'Not Applicable') {
+                if ((int) $item['evidence_total'] === 0 && $item['item_result'] !== 'Not Applicable') {
                     $rows_missing[] = array(
                         self::plain($item['control_identifier']),
                         self::plain($item['control_title']),
@@ -1303,7 +1236,7 @@ class ReadyReports {
 
         $blocks = array(
             self::h1('Summary'),
-            self::text('This register lists the '.count($files).' evidence files held for '.$name.($client !== '' ? ' ('.$client.')' : '').', the controls each one supports, and the applicable controls that do not yet have evidence.'),
+            self::text('This register lists the '.count($files).' evidence files held for '.$client.', the controls each one supports, and the applicable controls that do not yet have evidence.'),
             self::stats(array(
                 'Evidence files' => (string) count($files),
                 'Linked to controls' => (string) $linked,
@@ -1330,7 +1263,7 @@ class ReadyReports {
                 10
             ), $rows, true);
         } else {
-            $blocks[] = self::text('No evidence files have been added to this project yet.');
+            $blocks[] = self::text('No evidence files have been added for this client yet.');
         }
 
         if (count($missing_blocks) > 0) {
@@ -1346,12 +1279,12 @@ class ReadyReports {
                 'company' => $this->company,
                 'cover_rows' => array(
                     'Report date' => date('F j, Y'),
-                    'Project' => $name,
+                    'Client' => $client,
                     'Prepared by' => self::plain($this->company['company_name'] ?? '')
                 ),
                 'confidential' => true,
                 'blocks' => $blocks,
-                'file_base' => ($client !== '' ? $client.' - ' : '').'Evidence Register - '.$name
+                'file_base' => $client.' - Evidence Register'
             ),
             'sheets' => array(
                 array(

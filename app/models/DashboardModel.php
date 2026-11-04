@@ -17,26 +17,24 @@ class DashboardModel extends Model {
             'c3' => $company_id,
             'c4' => $company_id,
             'c5' => $company_id,
-            'c6' => $company_id,
-            'c7' => $company_id
+            'c6' => $company_id
         );
         $sql = "SELECT
                     (SELECT COUNT(*) FROM clients c
                         WHERE c.company_id = :c1 and c.deleted = 0) AS client_count,
-                    (SELECT COUNT(*) FROM projects p
-                        WHERE p.company_id = :c2 and p.deleted = 0) AS project_count,
-                    (SELECT COUNT(*) FROM projects p
-                        WHERE p.company_id = :c3 and p.deleted = 0
-                        and p.project_status <> 'Complete') AS open_project_count,
                     (SELECT COUNT(*) FROM assessments a
-                        WHERE a.company_id = :c4 and a.deleted = 0) AS assessment_count,
+                        WHERE a.company_id = :c2 and a.deleted = 0) AS assessment_count,
+                    (SELECT COUNT(*) FROM assessments a
+                        WHERE a.company_id = :c3 and a.deleted = 0
+                        and a.assessment_status <> 'Complete'
+                        and (a.end_date is null or a.end_date >= CURDATE())) AS open_assessment_count,
                     (SELECT COUNT(*) FROM evidence e
-                        WHERE e.company_id = :c5 and e.deleted = 0) AS evidence_count,
+                        WHERE e.company_id = :c4 and e.deleted = 0) AS evidence_count,
                     (SELECT COUNT(*) FROM evidence e
-                        WHERE e.company_id = :c6 and e.deleted = 0
+                        WHERE e.company_id = :c5 and e.deleted = 0
                         and e.evidence_private = 1) AS private_count,
                     (SELECT COUNT(*) FROM standards s
-                        WHERE s.company_id = :c7 and s.deleted = 0) AS standard_count";
+                        WHERE s.company_id = :c6 and s.deleted = 0) AS standard_count";
         return parent::select($sql, $where);
     }
 
@@ -96,19 +94,17 @@ class DashboardModel extends Model {
         );
         $sql = "SELECT
                     a.id,
-                    a.project_id,
+                    a.client_id,
                     a.assessment_name,
                     a.short_code,
                     a.assessment_status,
-                    p.project_name,
                     cl.company_name AS client_name,
                     COUNT(ai.id) AS item_count,
                     SUM(CASE WHEN ai.item_result <> 'Not Assessed' THEN 1 ELSE 0 END) AS assessed_count,
                     SUM(CASE WHEN ai.item_result = 'Not Implemented' THEN 1 ELSE 0 END) AS gap_count
                 FROM
                     assessments a
-                    JOIN projects p ON p.id = a.project_id and p.deleted = 0
-                    LEFT JOIN clients cl ON cl.id = p.client_id and cl.deleted = 0
+                    JOIN clients cl ON cl.id = a.client_id and cl.deleted = 0
                     LEFT JOIN assessment_items ai ON ai.assessment_id = a.id and ai.deleted = 0 and ai.control_kind = 'control'
                 WHERE
                     a.company_id = :company_id
@@ -116,11 +112,10 @@ class DashboardModel extends Model {
                     a.deleted = 0
                 GROUP BY
                     a.id,
-                    a.project_id,
+                    a.client_id,
                     a.assessment_name,
                     a.short_code,
                     a.assessment_status,
-                    p.project_name,
                     cl.company_name
                 ORDER BY
                     assessed_count / GREATEST(COUNT(ai.id), 1),
@@ -141,22 +136,18 @@ class DashboardModel extends Model {
         $sql = "SELECT
                     c.id,
                     c.company_name,
-                    COUNT(DISTINCT p.id) AS project_count,
                     COUNT(DISTINCT a.id) AS assessment_count,
                     COUNT(ai.id) AS item_count,
                     SUM(CASE WHEN ai.item_result <> 'Not Assessed' THEN 1 ELSE 0 END) AS assessed_count,
                     SUM(CASE WHEN ai.item_result = 'Not Implemented' THEN 1 ELSE 0 END) AS gap_count,
                     (SELECT COUNT(*)
                         FROM evidence e
-                        JOIN projects ep ON ep.id = e.project_id
-                        WHERE ep.client_id = c.id
+                        WHERE e.client_id = c.id
                         and e.company_id = :company_id2
-                        and e.deleted = 0
-                        and ep.deleted = 0) AS evidence_count
+                        and e.deleted = 0) AS evidence_count
                 FROM
                     clients c
-                    LEFT JOIN projects p ON p.client_id = c.id and p.deleted = 0
-                    LEFT JOIN assessments a ON a.project_id = p.id and a.deleted = 0
+                    LEFT JOIN assessments a ON a.client_id = c.id and a.company_id = c.company_id and a.deleted = 0
                     LEFT JOIN assessment_items ai ON ai.assessment_id = a.id and ai.deleted = 0 and ai.control_kind = 'control'
                 WHERE
                     c.company_id = :company_id
@@ -171,73 +162,69 @@ class DashboardModel extends Model {
     }
 
     /**
-     * Open projects that are late or falling behind. Late: past the end date and
-     * not complete. Behind: the share of controls assessed trails the share of
-     * the project's time already used by more than ten points, so a project that
-     * is on pace never appears however close its end date is.
+     * Dated assessments that are late or falling behind. Late: past the end date
+     * and not complete. Behind: the share of controls assessed trails the share
+     * of the assessment's time already used by more than ten points, so an
+     * assessment that is on pace never appears however close its end date is.
      */
     public function attention($company_id)
     {
         $where = array(
-            'company_id'       => $company_id,
-            'progress_company' => $company_id
+            'company_id' => $company_id
         );
         $sql = "SELECT
                     t.id,
-                    t.project_name,
+                    t.assessment_name,
+                    t.client_id,
                     t.client_name,
                     t.days_left,
-                    t.assessment_count,
                     ROUND(t.assessed_pct) AS assessed_pct,
                     ROUND(t.elapsed_pct) AS elapsed_pct
                 FROM
                     (
                         SELECT
-                            p.id,
-                            p.project_name,
+                            a.id,
+                            a.assessment_name,
+                            a.client_id,
                             cl.company_name AS client_name,
-                            DATEDIFF(p.end_date, CURDATE()) AS days_left,
-                            COALESCE(pr.assessment_count, 0) AS assessment_count,
+                            DATEDIFF(a.end_date, CURDATE()) AS days_left,
                             CASE
-                                WHEN COALESCE(pr.item_count, 0) = 0 THEN 0
-                                ELSE pr.assessed_count / pr.item_count * 100
+                                WHEN COUNT(ai.id) = 0 THEN 0
+                                ELSE SUM(CASE WHEN ai.item_result <> 'Not Assessed' THEN 1 ELSE 0 END) / COUNT(ai.id) * 100
                             END AS assessed_pct,
                             LEAST(100, GREATEST(0,
-                                DATEDIFF(CURDATE(), COALESCE(p.start_date, DATE(p.date_created)))
-                                / GREATEST(DATEDIFF(p.end_date, COALESCE(p.start_date, DATE(p.date_created))), 1) * 100
+                                DATEDIFF(CURDATE(), COALESCE(a.start_date, DATE(a.date_created)))
+                                / GREATEST(DATEDIFF(a.end_date, COALESCE(a.start_date, DATE(a.date_created))), 1) * 100
                             )) AS elapsed_pct
                         FROM
-                            projects p
-                            LEFT JOIN clients cl ON cl.id = p.client_id and cl.deleted = 0
-                            LEFT JOIN (
-                                SELECT
-                                    a.project_id,
-                                    COUNT(DISTINCT a.id) AS assessment_count,
-                                    COUNT(ai.id) AS item_count,
-                                    SUM(CASE WHEN ai.item_result <> 'Not Assessed' THEN 1 ELSE 0 END) AS assessed_count
-                                FROM
-                                    assessments a
-                                    LEFT JOIN assessment_items ai ON ai.assessment_id = a.id and ai.deleted = 0 and ai.control_kind = 'control'
-                                WHERE
-                                    a.company_id = :progress_company
-                                    and
-                                    a.deleted = 0
-                                GROUP BY
-                                    a.project_id
-                            ) pr ON pr.project_id = p.id
+                            assessments a
+                            JOIN clients cl ON cl.id = a.client_id and cl.deleted = 0
+                            LEFT JOIN assessment_items ai ON ai.assessment_id = a.id and ai.deleted = 0 and ai.control_kind = 'control'
                         WHERE
-                            p.company_id = :company_id
+                            a.company_id = :company_id
                             and
-                            p.deleted = 0
+                            a.deleted = 0
                             and
-                            p.project_status <> 'Complete'
+                            a.assessment_status <> 'Complete'
                             and
-                            p.end_date is not null
+                            a.end_date is not null
+                        GROUP BY
+                            a.id,
+                            a.assessment_name,
+                            a.client_id,
+                            cl.company_name,
+                            a.end_date,
+                            a.start_date,
+                            a.date_created
                     ) t
                 WHERE
-                    t.days_left < 0
-                    or
-                    t.assessed_pct + 10 < t.elapsed_pct
+                    t.assessed_pct < 100
+                    and
+                    (
+                        t.days_left < 0
+                        or
+                        t.assessed_pct + 10 < t.elapsed_pct
+                    )
                 ORDER BY
                     t.days_left";
         return parent::select($sql, $where);

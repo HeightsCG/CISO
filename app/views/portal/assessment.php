@@ -1,19 +1,13 @@
 <div class="page">
-    <a class="page__back" href="/portal/project/id/<?php echo (int) $this->assessment['project_id']; ?>"><i class="fa-regular fa-arrow-left"></i> Back to <?php echo htmlspecialchars($this->assessment['project_name'], ENT_QUOTES, 'UTF-8'); ?></a>
-
-    <div class="page__head">
-        <div>
-            <h1 class="page__title"><?php echo htmlspecialchars($this->assessment['assessment_name'], ENT_QUOTES, 'UTF-8'); ?></h1>
-            <div class="client__meta">
-                <span class="badge <?php echo ($this->assessment['assessment_status'] === 'Complete' ? 'badge--active' : ($this->assessment['assessment_status'] === 'In Progress' ? 'badge--onboarding' : 'badge--inactive')); ?>"><?php echo htmlspecialchars($this->assessment['assessment_status'], ENT_QUOTES, 'UTF-8'); ?></span>
-                <span class="client__segment"><?php echo htmlspecialchars(FrameworkLibrary::display_name($this->assessment['standard_name'], $this->assessment['version']), ENT_QUOTES, 'UTF-8'); ?></span>
-                <span class="client__segment"><?php echo htmlspecialchars($this->assessment['short_code'], ENT_QUOTES, 'UTF-8'); ?></span>
-            </div>
+    <header class="headline">
+        <div class="headline__text">
+            <h1 class="headline__title"><?php echo htmlspecialchars($this->assessment['assessment_name'], ENT_QUOTES, 'UTF-8'); ?></h1>
         </div>
-        <div class="page__actions">
-            <a class="btn btn--secondary" href="/portal/evidence/id/<?php echo (int) $this->assessment['project_id']; ?>"><i class="fa-regular fa-folder-open"></i> Evidence</a>
+        <div class="headline__actions">
+            <a class="btn btn--secondary btn--pill" href="/portal"><i class="fa-regular fa-chevron-left"></i> Back</a>
+            <a class="btn btn--secondary btn--pill" href="/portal/evidence"><i class="fa-regular fa-folder-open"></i> Evidence</a>
         </div>
-    </div>
+    </header>
 
     <div class="panel record__panel">
         <div class="panel__body">
@@ -60,7 +54,7 @@
                     <tbody id="items_body"></tbody>
                 </table>
             </div>
-            <p class="controls__empty" id="items_empty">Loading controls&hellip;</p>
+            <p class="controls__empty" id="items_empty"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Loading controls&hellip;</p>
         </div>
     </div>
 </div>
@@ -132,7 +126,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="import__hint">Saved to your project evidence and attached to <strong id="upload_for"></strong>. Documents, images and archives up to 25MB.</p>
+                <p class="import__hint">Saved to your evidence and attached to <strong id="upload_for"></strong>. Documents, images and archives up to 25MB.</p>
                 <div class="row mb-4">
                     <div class="col-md-12 form-group">
                         <label for="evidence_title">Title <abbr title="required">*</abbr></label>
@@ -164,7 +158,6 @@
 $(document).ready(function () {
 
     var assessment_id = <?php echo (int) $this->assessment['id']; ?>;
-    var project_id = <?php echo (int) $this->assessment['project_id']; ?>;
     var items = [];
     var vault = [];
     var current_item = null;
@@ -481,7 +474,7 @@ $(document).ready(function () {
 
     $('#do_attach_open').click(function () {
         $('#attach_search').val('');
-        ApiDataSvc.apiCall('post', 'portal_evidence', { project_id: project_id }, function (data) {
+        ApiDataSvc.apiCall('post', 'portal_evidence', {}, function (data) {
             vault = JSON.parse(data);
             render_attach();
             modal('portal_attach_modal').show();
@@ -540,7 +533,6 @@ $(document).ready(function () {
 
         var form_data = new FormData();
 
-        form_data.append('project_id', project_id);
         form_data.append('folder_id', 0);
         form_data.append('evidence_title', $('#evidence_title').val().trim());
         form_data.append('description', $('#evidence_description').val().trim());

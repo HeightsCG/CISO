@@ -19,13 +19,12 @@ class AssessmentScore {
 
     /**
      * @param array $definition the built framework definition
-     * @param array $assessment the assessments row (scope_categories, tier fields)
+     * @param array $assessment the assessments row row
      * @param array $controls   assessment_items rows of kind 'control'
      */
     public static function score(array $definition, array $assessment, array $controls): array
     {
         $rules = self::rules($definition);
-        $out_of_scope = self::out_of_scope_families($rules, (string) ($assessment['scope_categories'] ?? ''));
         $partial_value = self::partial_value($rules);
         $counts = array(
             self::MET => 0,
@@ -39,7 +38,7 @@ class AssessmentScore {
         $excluded = 0;
 
         foreach ($controls as $control) {
-            if (($control['applicability'] ?? 'Applicable') === 'Excluded' || in_array($control['family'], $out_of_scope, true)) {
+            if (($control['applicability'] ?? 'Applicable') === 'Excluded') {
                 $excluded++;
                 continue;
             }
@@ -80,11 +79,9 @@ class AssessmentScore {
             'in_scope' => count($in_scope),
             'applicable' => $applicable,
             'excluded' => $excluded,
-            'out_of_scope_families' => $out_of_scope,
             'percentage' => self::percent($counts[self::MET] + $partial_value * $counts[self::PARTIAL], $applicable),
             'families' => array_values($families),
             'points' => null,
-            'maturity' => null,
             'gates' => self::gates($rules, $in_scope),
             'plan' => null,
             'outcome' => null
@@ -92,10 +89,6 @@ class AssessmentScore {
 
         if ($score['model'] === 'points') {
             $score['points'] = self::points($definition, $in_scope);
-        }
-
-        if ($score['model'] === 'maturity') {
-            $score['maturity'] = self::maturity($definition, $assessment);
         }
 
         $score['plan'] = self::plan($rules, $in_scope);
@@ -118,23 +111,6 @@ class AssessmentScore {
     private static function percent(float $numerator, int $denominator): float
     {
         return $denominator === 0 ? 0.0 : round($numerator / $denominator * 100, 1);
-    }
-
-    /** Families left out because their optional category is not in scope (SOC 2 category_scope). */
-    private static function out_of_scope_families(array $rules, string $selected): array
-    {
-        $chosen = array_filter(explode(',', $selected));
-        $out = array();
-
-        foreach ($rules['applicability'] ?? array() as $rule) {
-            foreach ($rule['optional'] ?? array() as $family => $code) {
-                if (!in_array($family, $chosen, true)) {
-                    $out[] = $family;
-                }
-            }
-        }
-
-        return $out;
     }
 
     /** What a partially met control counts for in a percentage score, from a partial_credit rule with a value. */
@@ -187,33 +163,6 @@ class AssessmentScore {
             'score' => $maximum - $total,
             'deducted' => $total,
             'deductions' => $deductions
-        );
-    }
-
-    /** Maturity model (CSF): tiers are set by the consultant, never computed. */
-    private static function maturity(array $definition, array $assessment): array
-    {
-        $labels = array();
-
-        foreach ($definition['scoring']['levels'] as $level) {
-            $labels[(int) $level['level']] = $level['label'];
-        }
-
-        $tier = function (string $field) use ($assessment, $labels) {
-            $value = (int) ($assessment[$field] ?? 0);
-
-            return array(
-                'level' => $value,
-                'label' => $labels[$value] ?? ''
-            );
-        };
-
-        return array(
-            'levels' => $labels,
-            'governance' => $tier('tier_governance'),
-            'management' => $tier('tier_management'),
-            'target_governance' => $tier('target_tier_governance'),
-            'target_management' => $tier('target_tier_management')
         );
     }
 

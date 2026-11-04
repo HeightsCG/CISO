@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>if (window.self !== window.top) { document.documentElement.classList.add("is-embed"); }</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <?php echo CSRF::meta(); ?>
@@ -31,6 +32,8 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
 
 <script>
 $(document).ready(function () {
@@ -50,12 +53,12 @@ $(document).ready(function () {
 });
 </script>
 </head>
-<body>
+<body class="app">
 
 <div class="shell<?php echo (AiAssistant::configured() && Session::get('ai_panel_open') !== 0) ? ' has-assist' : ''; ?>" id="shell">
     <aside class="shell__nav" id="shell_nav">
         <div class="shell__brand">
-            <img class="shell__logo" src="/images/logo-dark.png" alt="CISO.aero">
+            <img class="shell__logo" src="/images/logo-light.png" alt="CISO.aero">
         </div>
         <nav class="shell__menu" aria-label="Primary">
             <div class="shell__group">
@@ -63,7 +66,7 @@ $(document).ready(function () {
                 <?php if (Session::get('user_type') === 'portal') { ?>
                 <a class="shell__link<?php echo ($this->controller == 'portal' && $this->method != 'invoices') ? ' is-active' : ''; ?>" href="/portal">
                     <i class="fa-thin fa-house"></i>
-                    <span>My Projects</span>
+                    <span>Your Assessments</span>
                 </a>
                 <a class="shell__link<?php echo ($this->controller == 'portal' && $this->method == 'invoices') ? ' is-active' : ''; ?>" href="/portal/invoices">
                     <i class="fa-thin fa-file-invoice-dollar"></i>
@@ -78,16 +81,10 @@ $(document).ready(function () {
                     <i class="fa-thin fa-shield-halved"></i>
                     <span>Clients</span>
                 </a>
-                <a class="shell__link<?php echo $this->controller == 'projects' ? ' is-active' : ''; ?>" href="/projects">
-                    <i class="fa-thin fa-project-diagram"></i>
-                    <span>Projects</span>
+                <a class="shell__link<?php echo $this->controller == 'assessments' ? ' is-active' : ''; ?>" href="/assessments">
+                    <i class="fa-thin fa-clipboard-check"></i>
+                    <span>Assessments</span>
                 </a>
-                <?php if ((int) Session::get('role_id') === 1) { ?>
-                <a class="shell__link<?php echo $this->controller == 'billing' ? ' is-active' : ''; ?>" href="/billing">
-                    <i class="fa-thin fa-file-invoice-dollar"></i>
-                    <span>Billing</span>
-                </a>
-                <?php } ?>
                 <?php if (Session::get('global_admin') === 1) { ?>
                 <a class="shell__link<?php echo $this->controller == 'standards' ? ' is-active' : ''; ?>" href="/standards">
                     <i class="fa-thin fa-gear"></i>
@@ -108,6 +105,7 @@ $(document).ready(function () {
             <button type="button" class="shell__nav-toggle" id="nav_toggle" aria-label="Toggle navigation">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
             </button>
+            <?php echo Crumbs::html($this); ?>
             <div class="shell__topbar-spacer"></div>
             <?php if (AiAssistant::configured()) { ?>
             <button type="button" class="shell__assist-toggle" id="assist_toggle" aria-label="Show or hide the assistant">

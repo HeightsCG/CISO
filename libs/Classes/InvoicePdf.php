@@ -272,10 +272,6 @@ class InvoicePdf {
 
         $facts['Terms'] = (int) $invoice['due_days'] === 0 ? 'Due on receipt' : 'Net '.(int) $invoice['due_days'];
 
-        if ((string) ($invoice['project_name'] ?? '') !== '') {
-            $facts['Project'] = self::plain($invoice['project_name']);
-        }
-
         $html = '';
 
         foreach ($facts as $label => $value) {

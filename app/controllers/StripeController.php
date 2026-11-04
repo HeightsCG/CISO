@@ -243,7 +243,6 @@ class StripeController extends Controller {
         return $this->invoices_model->add_subscription_invoice(
             $subscription['company_id'],
             $subscription['client_id'],
-            $subscription['project_id'],
             $subscription['id'],
             $subscription['currency'],
             (string) ($object['id'] ?? ''),

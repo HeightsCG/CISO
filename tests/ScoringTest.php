@@ -153,15 +153,6 @@ return array(
         Assert::same(87.5, $s['percentage'], '100 met (3 of the 13 gaps are excluded) + 0.5 x 10 partial, over 120');
     },
 
-    'SOC 2: only the common criteria are in scope until a category is chosen' => function () use ($controls, $score) {
-        $common = $score('soc2', $controls('soc2', 'Implemented'));
-        $availability = $score('soc2', $controls('soc2', 'Implemented'), array(
-            'scope_categories' => 'Availability'
-        ));
-        Assert::same(33, $common['in_scope'], 'common criteria');
-        Assert::same(36, $availability['in_scope'], 'common criteria plus A1.1 to A1.3');
-    },
-
     'PCI DSS: compliant only with every applicable requirement in place' => function () use ($controls, $score) {
         $all = $score('pci-dss-4', $controls('pci-dss-4', 'Implemented', array('12.5.2.1' => 'Not Applicable')));
         $one = $score('pci-dss-4', $controls('pci-dss-4', 'Implemented', array('8.4.2' => 'Not Implemented')));
@@ -171,16 +162,8 @@ return array(
         Assert::same(99.6, $one['percentage'], '249 of 250');
     },
 
-    'CSF 2.0: tiers come from the consultant, never from the results' => function () use ($controls, $score) {
-        $s = $score('nist-csf-2', $controls('nist-csf-2', 'Not Implemented'), array(
-            'tier_governance' => 2,
-            'tier_management' => 3,
-            'target_tier_governance' => 3,
-            'target_tier_management' => 4
-        ));
-        Assert::same('Risk Informed', $s['maturity']['governance']['label'], 'governance tier');
-        Assert::same('Repeatable', $s['maturity']['management']['label'], 'management tier');
-        Assert::same('Adaptive', $s['maturity']['target_management']['label'], 'target');
+    'CSF 2.0: nothing achieved scores zero' => function () use ($controls, $score) {
+        $s = $score('nist-csf-2', $controls('nist-csf-2', 'Not Implemented'));
         Assert::same(0.0, $s['percentage'], 'nothing achieved');
     },
 

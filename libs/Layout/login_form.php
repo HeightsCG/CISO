@@ -260,7 +260,7 @@ $(document).ready(function () {
         <div class="land__feature land__feature--flip">
             <div class="land__feature-copy">
                 <h3 class="land__h3">Evidence once, credited everywhere</h3>
-                <p>Upload a policy or a configuration export to the project vault, attach it to the controls it proves, and reuse it across every framework the client is held to. Controls are mapped between frameworks, so work done for one assessment carries into the next.</p>
+                <p>Upload a policy or a configuration export to the client's evidence vault, attach it to the controls it proves, and reuse it across every framework the client is held to. Controls are mapped between frameworks, so work done for one assessment carries into the next.</p>
             </div>
             <div class="land__mock" aria-hidden="true">
                 <div class="mock__file"><span class="mock__file-name">Information Security Policy v4.pdf</span><span class="mock__tags"><span>CC1.1</span><span>IS.I.OR.200</span><span>3.12.1</span></span></div>
@@ -300,7 +300,7 @@ $(document).ready(function () {
         <ol class="land__steps">
             <li>
                 <h3 class="land__h3">Set up the client</h3>
-                <p>Create the project, choose the frameworks that apply, and invite the client's team to their own portal.</p>
+                <p>Add the client, choose the frameworks that apply, and invite the client's team to their own portal.</p>
             </li>
             <li>
                 <h3 class="land__h3">Assess and collect evidence</h3>

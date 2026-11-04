@@ -1,11 +1,12 @@
 <div class="page">
-    <a class="page__back" href="<?php echo ($this->standard === null ? '/standards' : '/standards/detail/id/'.((int) $this->standard['id'])); ?>"><i class="fa-regular fa-arrow-left"></i> <?php echo ($this->standard === null ? 'Back to Standards' : 'Back to Standard'); ?></a>
-
-    <div class="page__head">
-        <div>
-            <h1 class="page__title"><?php echo ($this->standard === null ? 'Add Standard' : 'Edit Standard'); ?></h1>
+    <header class="headline">
+        <div class="headline__text">
+            <h1 class="headline__title"><?php echo ($this->standard === null ? 'Add Standard' : 'Edit Standard'); ?></h1>
         </div>
-    </div>
+        <div class="headline__actions">
+            <a class="btn btn--secondary btn--pill" href="<?php echo ($this->standard === null ? '/standards' : '/standards/detail/id/'.((int) $this->standard['id'])); ?>"><i class="fa-regular fa-chevron-left"></i> Back</a>
+        </div>
+    </header>
 
     <div class="panel">
         <div class="panel__body">

@@ -15,11 +15,11 @@ $has_sub = count($this->subscription) > 0 && in_array(($this->subscription['stat
 $ending  = !empty($this->subscription['cancel_at_period_end']);
 ?>
 <div class="page">
-    <div class="page__head">
-        <div>
-            <h1 class="page__title">CISO.aero Subscription</h1>
+    <header class="headline">
+        <div class="headline__text">
+            <h1 class="headline__title">CISO.aero Subscription</h1>
         </div>
-    </div>
+    </header>
 
     <?php if (!$this->configured) { ?>
     <div class="alert alert--warn" role="status">
@@ -122,7 +122,7 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
                     <button class="subtabs__link" id="tab_txn_btn" data-bs-toggle="pill" data-bs-target="#tab_txn" type="button" role="tab" aria-controls="tab_txn" aria-selected="false">Transaction History</button>
                     <button class="subtabs__link" id="tab_inv_btn" data-bs-toggle="pill" data-bs-target="#tab_inv" type="button" role="tab" aria-controls="tab_inv" aria-selected="false">Invoices</button>
                 </nav>
-                <button type="button" class="btn btn--secondary btn--sm" id="do_add_card"><i class="fa-regular fa-plus"></i> Add Card</button>
+                <button type="button" class="btn btn--icon" id="do_add_card" aria-label="Add card" title="Add card"><i class="fa-regular fa-plus"></i></button>
             </div>
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="tab_cards" role="tabpanel" aria-labelledby="tab_cards_btn">
@@ -272,7 +272,7 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
             </div>
             <div class="modal-body">
                 <p>Stop this subscription from renewing?</p>
-                <p class="import__hint">The current plan continues to the end of the period already paid for, which is not refunded or credited. The free account then applies: 1 client, 1 project, 1 assessment, and no billing. It can be resumed at any point before then.</p>
+                <p class="import__hint">The current plan continues to the end of the period already paid for, which is not refunded or credited. The free account then applies: 1 client, 1 assessment, and no billing. It can be resumed at any point before then.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Keep Subscription</button>
@@ -310,7 +310,7 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
             </div>
             <div class="modal-body">
                 <p>End this subscription immediately rather than at the close of the period?</p>
-                <p class="import__hint">The free account applies straight away: 1 client, 1 project, 1 assessment, and no billing. The rest of the period already paid for is forfeited - it is not refunded or credited.</p>
+                <p class="import__hint">The free account applies straight away: 1 client, 1 assessment, and no billing. The rest of the period already paid for is forfeited - it is not refunded or credited.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Keep Until Period Ends</button>

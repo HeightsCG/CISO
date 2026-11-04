@@ -40,7 +40,7 @@ class ReportNarrative {
         $messages = array();
 
         foreach (array_slice($r['findings_ranked'], 0, 4) as $finding) {
-            $messages[] = 'Address '.$finding['finding_ref'].', rated '.strtolower($finding['rating']).': '.ReportBuilder::plain($finding['finding_title']).'.';
+            $messages[] = 'Address '.$finding['finding_ref'].', rated '.strtolower($finding['rating']).': '.ReportRenderer::plain($finding['finding_title']).'.';
         }
 
         if (count($messages) === 0) {
@@ -57,8 +57,8 @@ class ReportNarrative {
         foreach ($r['findings_ranked'] as $finding) {
             $roadmap[] = array(
                 'phase' => $phase_for[$finding['rating']],
-                'title' => ReportBuilder::plain($finding['finding_title']),
-                'detail' => ReportBuilder::plain($finding['recommendation']),
+                'title' => ReportRenderer::plain($finding['finding_title']),
+                'detail' => ReportRenderer::plain($finding['recommendation']),
                 'refs' => array(
                     $finding['finding_ref']
                 )

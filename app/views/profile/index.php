@@ -1,10 +1,12 @@
 <div class="page">
-    <div class="page__head">
-        <div>
-            <h1 class="page__title">My Profile</h1>
-            <p class="page__desc">Your account details and password.</p>
+    <header class="headline">
+        <div class="headline__text">
+            <h1 class="headline__title">My Profile</h1>
+            <p class="headline__sub">
+                <span>Your account details and password.</span>
+            </p>
         </div>
-    </div>
+    </header>
     <div class="page__grid">
         <div class="page__col">
             <div class="panel">

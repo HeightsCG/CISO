@@ -58,21 +58,13 @@ class FrameworkLibrary {
     {
         $definition = self::get($key);
         $features = array(
-            'categories' => array(),
             'ssi_field' => null,
             'notice' => '',
-            'tiers' => array(),
             'partial_labels' => array()
         );
 
         if ($definition === null) {
             return $features;
-        }
-
-        foreach ($definition['rules'] as $rule) {
-            if (($rule['id'] ?? '') === 'category_scope') {
-                $features['categories'] = array_keys($rule['optional']);
-            }
         }
 
         foreach ($definition['fields'] ?? array() as $field) {
@@ -86,12 +78,6 @@ class FrameworkLibrary {
         foreach ($definition['rules'] as $rule) {
             foreach (($rule['type'] ?? '') === 'partial_credit' ? ($rule['controls'] ?? array()) : array() as $id => $control) {
                 $features['partial_labels'][$id] = (string) ($control['partial_label'] ?? '');
-            }
-        }
-
-        if ($definition['scoring']['model'] === 'maturity') {
-            foreach ($definition['scoring']['levels'] as $level) {
-                $features['tiers'][(int) $level['level']] = $level['label'];
             }
         }
 

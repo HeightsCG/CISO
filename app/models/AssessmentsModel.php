@@ -6,107 +6,92 @@ class AssessmentsModel extends Model {
     }
 
     /**
-     * How many assessments this project already carries, for the plan gate. The
-     * limit is per project, so it is counted within the project rather than
-     * across the company.
+     * How many assessments this client already carries, for the plan gate. The
+     * limit is per client, so it is counted within the client rather than across
+     * the company.
      */
-    public function count_assessments($project_id, $company_id)
+    public function count_assessments($client_id, $company_id)
     {
         $where = array(
-            'project_id' => $project_id,
+            'client_id' => $client_id,
             'company_id' => $company_id
         );
-        $sql = "SELECT COUNT(*) AS total FROM assessments WHERE project_id = :project_id and company_id = :company_id and deleted = 0";
+        $sql = "SELECT COUNT(*) AS total FROM assessments WHERE client_id = :client_id and company_id = :company_id and deleted = 0";
         $rows = parent::select($sql, $where);
 
         return (int) ($rows[0]['total'] ?? 0);
     }
 
-    public function load_assessments($project_id, $company_id)
+    /** Every live assessment in the organisation, newest first, for the Assessments list. */
+    public function load_all_assessments($company_id)
     {
         $where = array(
-            'project_id' => $project_id,
             'company_id' => $company_id
         );
-        $sql = "SELECT
-                    a.id,
-                    a.assessment_name,
-                    a.standard_name,
-                    a.short_code,
-                    a.version,
-                    a.assessment_status,
-                    a.date_created,
-                    DATE_FORMAT(a.date_created, df.sql_format) AS date_created_display,
-                    COUNT(ai.id) AS item_count,
-                    SUM(CASE WHEN ai.item_result <> 'Not Assessed' THEN 1 ELSE 0 END) AS assessed_count
-                FROM
-                    assessments a
-                    JOIN companies co ON co.id = a.company_id
-                    JOIN date_formats df ON df.id = co.date_format_id
-                    LEFT JOIN assessment_items ai ON ai.assessment_id = a.id and ai.deleted = 0 and ai.control_kind = 'control'
-                WHERE
-                    a.project_id = :project_id
-                    and
-                    a.company_id = :company_id
-                    and
-                    a.deleted = 0
-                GROUP BY
-                    a.id,
-                    a.assessment_name,
-                    a.standard_name,
-                    a.short_code,
-                    a.version,
-                    a.assessment_status,
-                    a.date_created,
-                    df.sql_format
-                ORDER BY
-                    a.date_created DESC,
-                    a.id DESC";
-        return parent::select($sql, $where);
+        return parent::select($this->list_sql(''), $where);
     }
 
-    /**
-     * Every assessment across one client's projects, in a single query so the
-     * client record does not fan out into one request per project.
-     */
+    /** One client's live assessments, in the same row shape as load_all_assessments. */
     public function client_assessments($client_id, $company_id)
     {
         $where = array(
             'client_id' => $client_id,
             'company_id' => $company_id
         );
-        $sql = "SELECT
+        return parent::select($this->list_sql('and a.client_id = :client_id'), $where);
+    }
+
+    public function load_client_assessments($client_id, $company_id)
+    {
+        return $this->client_assessments($client_id, $company_id);
+    }
+
+    private function list_sql($client_filter)
+    {
+        return "SELECT
                     a.id,
-                    a.project_id,
                     a.assessment_name,
+                    a.assessment_status,
+                    a.client_id,
+                    cl.company_name AS client_name,
+                    a.standard_name,
                     a.short_code,
                     a.version,
-                    a.assessment_status,
+                    a.start_date,
+                    a.end_date,
+                    IFNULL(DATE_FORMAT(a.start_date, df.sql_format), '') AS start_date_display,
+                    IFNULL(DATE_FORMAT(a.end_date, df.sql_format), '') AS end_date_display,
+                    a.date_created,
+                    DATE_FORMAT(a.date_created, df.sql_format) AS date_created_display,
                     COUNT(ai.id) AS item_count,
-                    SUM(CASE WHEN ai.item_result <> 'Not Assessed' THEN 1 ELSE 0 END) AS assessed_count
+                    IFNULL(SUM(CASE WHEN ai.item_result <> 'Not Assessed' THEN 1 ELSE 0 END), 0) AS assessed_count
                 FROM
                     assessments a
-                    JOIN projects p ON p.id = a.project_id
+                    JOIN clients cl ON cl.id = a.client_id and cl.company_id = a.company_id and cl.deleted = 0
+                    JOIN companies co ON co.id = a.company_id
+                    JOIN date_formats df ON df.id = co.date_format_id
                     LEFT JOIN assessment_items ai ON ai.assessment_id = a.id and ai.deleted = 0 and ai.control_kind = 'control'
                 WHERE
-                    p.client_id = :client_id
-                    and
                     a.company_id = :company_id
                     and
                     a.deleted = 0
-                    and
-                    p.deleted = 0
+                    " . $client_filter . "
                 GROUP BY
                     a.id,
-                    a.project_id,
                     a.assessment_name,
+                    a.assessment_status,
+                    a.client_id,
+                    cl.company_name,
+                    a.standard_name,
                     a.short_code,
                     a.version,
-                    a.assessment_status
+                    a.start_date,
+                    a.end_date,
+                    a.date_created,
+                    df.sql_format
                 ORDER BY
                     a.date_created DESC,
                     a.id DESC";
-        return parent::select($sql, $where);
     }
 
     public function client_assessment($assessment_id, $client_id, $company_id)
@@ -118,26 +103,28 @@ class AssessmentsModel extends Model {
         );
         $sql = "SELECT
                     a.id,
-                    a.project_id,
+                    a.client_id,
                     a.assessment_name,
                     a.standard_name,
                     a.short_code,
                     a.version,
                     a.assessment_status,
-                    p.project_name
+                    a.start_date,
+                    a.end_date,
+                    IFNULL(DATE_FORMAT(a.start_date, df.sql_format), '') AS start_date_display,
+                    IFNULL(DATE_FORMAT(a.end_date, df.sql_format), '') AS end_date_display
                 FROM
                     assessments a
-                    JOIN projects p ON p.id = a.project_id
+                    JOIN companies co ON co.id = a.company_id
+                    JOIN date_formats df ON df.id = co.date_format_id
                 WHERE
                     a.id = :id
                     and
-                    p.client_id = :client_id
+                    a.client_id = :client_id
                     and
                     a.company_id = :company_id
                     and
-                    a.deleted = 0
-                    and
-                    p.deleted = 0";
+                    a.deleted = 0";
         return parent::select($sql, $where);
     }
 
@@ -166,11 +153,10 @@ class AssessmentsModel extends Model {
                 FROM
                     assessment_items ai
                     JOIN assessments a ON a.id = ai.assessment_id
-                    JOIN projects p ON p.id = a.project_id
                 WHERE
                     ai.assessment_id = :assessment_id
                     and
-                    p.client_id = :client_id
+                    a.client_id = :client_id
                     and
                     a.company_id = :company_id
                     and
@@ -179,8 +165,6 @@ class AssessmentsModel extends Model {
                     ai.control_kind = 'control'
                     and
                     a.deleted = 0
-                    and
-                    p.deleted = 0
                 ORDER BY
                     ai.family,
                     ai.sort_order,
@@ -196,9 +180,9 @@ class AssessmentsModel extends Model {
         );
         $sql = "SELECT
                     a.*,
-                    p.project_name,
-                    p.client_id,
                     c.company_name AS client_name,
+                    IFNULL(DATE_FORMAT(a.start_date, df.sql_format), '') AS start_date_display,
+                    IFNULL(DATE_FORMAT(a.end_date, df.sql_format), '') AS end_date_display,
                     (
                         SELECT COUNT(ai.id)
                         FROM assessment_items ai
@@ -206,8 +190,9 @@ class AssessmentsModel extends Model {
                     ) AS item_count
                 FROM
                     assessments a
-                    JOIN projects p ON p.id = a.project_id
-                    LEFT JOIN clients c ON c.id = p.client_id and c.deleted = 0
+                    JOIN companies co ON co.id = a.company_id
+                    JOIN date_formats df ON df.id = co.date_format_id
+                    LEFT JOIN clients c ON c.id = a.client_id and c.deleted = 0
                 WHERE
                     a.id = :id
                     and
@@ -217,7 +202,15 @@ class AssessmentsModel extends Model {
         return parent::select($sql, $where);
     }
 
-    public function create_assessment($project_id, $company_id, $standard_id, $assessment_name, $created_by)
+    public function create_assessment(
+        $client_id,
+        $company_id,
+        $standard_id,
+        $assessment_name,
+        $start_date,
+        $end_date,
+        $created_by
+    )
     {
         $standard = $this->assessment_standard($standard_id, $company_id);
 
@@ -233,7 +226,7 @@ class AssessmentsModel extends Model {
 
         $data = array(
             'company_id' => $company_id,
-            'project_id' => $project_id,
+            'client_id' => $client_id,
             'standard_id' => $standard_id,
             'standard_name' => $standard[0]['standard_name'],
             'short_code' => $standard[0]['short_code'],
@@ -241,6 +234,8 @@ class AssessmentsModel extends Model {
             'framework_key' => $standard[0]['framework_key'],
             'assessment_name' => $assessment_name,
             'assessment_status' => 'Planned',
+            'start_date' => $start_date,
+            'end_date' => $end_date,
             'created_by' => $created_by,
             'updated_by' => $created_by,
             'date_created' => date('Y-m-d H:i:s'),
@@ -385,6 +380,22 @@ class AssessmentsModel extends Model {
         return parent::update('assessments', $data, 'id = :id and company_id = :company_id', $where);
     }
 
+    /** Sets the assessment's dates; both null means it runs ongoing. */
+    public function set_schedule($assessment_id, $company_id, $start_date, $end_date, $updated_by)
+    {
+        $where = array(
+            'id' => $assessment_id,
+            'company_id' => $company_id
+        );
+        $data = array(
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'updated_by' => $updated_by,
+            'date_updated' => date('Y-m-d H:i:s')
+        );
+        return parent::update('assessments', $data, 'id = :id and company_id = :company_id', $where);
+    }
+
     public function delete_assessment($assessment_id, $company_id, $updated_by)
     {
         $where = array(
@@ -463,11 +474,40 @@ class AssessmentsModel extends Model {
     }
 
     /** Control rows only (no assessment objectives), for summaries and exports. */
+    /**
+     * Control rows, each with open_objectives (how many of its objectives are
+     * still unanswered) and evidence_total (evidence on the control plus on
+     * its objectives).
+     */
     public function load_controls($assessment_id, $company_id)
     {
-        return array_values(array_filter($this->load_items($assessment_id, $company_id), function ($item) {
-            return $item['control_kind'] === 'control';
-        }));
+        $items = $this->load_items($assessment_id, $company_id);
+        $open = array();
+        $evidence = array();
+
+        foreach ($items as $item) {
+            if ($item['control_kind'] !== 'objective') {
+                continue;
+            }
+
+            if ($item['item_result'] === 'Not Assessed') {
+                $open[$item['parent_identifier']] = ($open[$item['parent_identifier']] ?? 0) + 1;
+            }
+
+            $evidence[$item['parent_identifier']] = ($evidence[$item['parent_identifier']] ?? 0) + (int) $item['evidence_count'];
+        }
+
+        $controls = array();
+
+        foreach ($items as $item) {
+            if ($item['control_kind'] === 'control') {
+                $item['open_objectives'] = $open[$item['control_identifier']] ?? 0;
+                $item['evidence_total'] = (int) $item['evidence_count'] + ($evidence[$item['control_identifier']] ?? 0);
+                $controls[] = $item;
+            }
+        }
+
+        return $controls;
     }
 
     public function get_item($item_id, $company_id)
@@ -480,11 +520,10 @@ class AssessmentsModel extends Model {
                     ai.*,
                     a.company_id,
                     a.assessment_name,
-                    p.client_id
+                    a.client_id
                 FROM
                     assessment_items ai
                     JOIN assessments a ON a.id = ai.assessment_id
-                    JOIN projects p ON p.id = a.project_id
                 WHERE
                     ai.id = :id
                     and
@@ -521,6 +560,44 @@ class AssessmentsModel extends Model {
         return (int) $rows[0]['unassessed'];
     }
 
+    /** Controls not yet fully answered: still Not Assessed, or with an objective left unanswered. */
+    public function incomplete_count($assessment_id, $company_id)
+    {
+        $where = array(
+            'assessment_id' => $assessment_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    COUNT(*) AS incomplete
+                FROM
+                    assessment_items ai
+                    JOIN assessments a ON a.id = ai.assessment_id
+                WHERE
+                    ai.assessment_id = :assessment_id
+                    and
+                    a.company_id = :company_id
+                    and
+                    ai.deleted = 0
+                    and
+                    ai.control_kind = 'control'
+                    and
+                    (
+                        ai.item_result = 'Not Assessed'
+                        or
+                        EXISTS (
+                            SELECT 1
+                            FROM assessment_items o
+                            WHERE o.assessment_id = ai.assessment_id
+                                and o.parent_identifier = ai.control_identifier
+                                and o.control_kind = 'objective'
+                                and o.deleted = 0
+                                and o.item_result = 'Not Assessed'
+                        )
+                    )";
+        $rows = parent::select($sql, $where);
+        return (int) $rows[0]['incomplete'];
+    }
+
     public function set_assessment_status($assessment_id, $company_id, $assessment_status, $updated_by)
     {
         $where = array(
@@ -547,7 +624,7 @@ class AssessmentsModel extends Model {
         $unassessed = $this->unassessed_count($assessment_id, $company_id);
         $status = ($unassessed === (int) $assessment[0]['item_count'] ? 'Planned' : 'In Progress');
 
-        if ($current === 'Complete' && $unassessed === 0) {
+        if ($current === 'Complete' && $this->incomplete_count($assessment_id, $company_id) === 0) {
             return $current;
         }
 
@@ -602,10 +679,16 @@ class AssessmentsModel extends Model {
                     assessment_items ai
                     JOIN assessments a ON a.id = ai.assessment_id
                     LEFT JOIN (
-                        SELECT el.assessment_item_id, COUNT(*) AS link_count
+                        SELECT
+                            x.assessment_id,
+                            IF(x.control_kind = 'objective', x.parent_identifier, x.control_identifier) AS control_identifier,
+                            COUNT(*) AS link_count
                         FROM evidence_links el
-                        GROUP BY el.assessment_item_id
-                    ) ev ON ev.assessment_item_id = ai.id
+                        JOIN assessment_items x ON x.id = el.assessment_item_id and x.deleted = 0
+                        GROUP BY
+                            x.assessment_id,
+                            IF(x.control_kind = 'objective', x.parent_identifier, x.control_identifier)
+                    ) ev ON ev.assessment_id = ai.assessment_id and ev.control_identifier = ai.control_identifier
                 WHERE
                     ai.assessment_id = :assessment_id
                     and
@@ -618,28 +701,6 @@ class AssessmentsModel extends Model {
                     ai.family
                 ORDER BY
                     ai.family";
-        return parent::select($sql, $where);
-    }
-
-    public function project_progress($company_id)
-    {
-        $where = array(
-            'company_id' => $company_id
-        );
-        $sql = "SELECT
-                    a.project_id,
-                    COUNT(DISTINCT a.id) AS assessment_count,
-                    COUNT(ai.id) AS item_count,
-                    SUM(CASE WHEN ai.item_result <> 'Not Assessed' THEN 1 ELSE 0 END) AS assessed_count
-                FROM
-                    assessments a
-                    LEFT JOIN assessment_items ai ON ai.assessment_id = a.id and ai.deleted = 0 and ai.control_kind = 'control'
-                WHERE
-                    a.company_id = :company_id
-                    and
-                    a.deleted = 0
-                GROUP BY
-                    a.project_id";
         return parent::select($sql, $where);
     }
 
@@ -729,58 +790,48 @@ class AssessmentsModel extends Model {
     }
 
     /**
-     * A control with objectives is Implemented only when every objective is met
-     * (objectives marked not applicable count as met); Not Applicable when all
-     * are not applicable; Not Implemented when none is met; Partially
-     * Implemented otherwise. While any objective is unanswered the control is
-     * Not Assessed.
+     * A control with objectives is Not Applicable when every objective is; among
+     * the rest it is Implemented when all are met, Not Implemented when none is
+     * met or partially met, and Partially Implemented otherwise. With none
+     * answered it is Not Assessed; with only some answered it is Partially
+     * Implemented until the rest are.
      */
     public static function result_from_objectives(array $results): string
     {
-        if (count($results) === 0 || in_array('Not Assessed', $results, true)) {
+        $counts = array_count_values($results);
+
+        if (count($results) === 0 || ($counts['Not Assessed'] ?? 0) === count($results)) {
             return 'Not Assessed';
         }
 
-        $counts = array_count_values($results);
-        $met = $counts['Implemented'] ?? 0;
-        $not_met = $counts['Not Implemented'] ?? 0;
+        if (($counts['Not Assessed'] ?? 0) > 0) {
+            return 'Partially Implemented';
+        }
 
-        if ($met === 0 && $not_met === 0) {
+        $applicable = count($results) - ($counts['Not Applicable'] ?? 0);
+
+        if ($applicable === 0) {
             return 'Not Applicable';
         }
 
-        if ($not_met === 0) {
+        if (($counts['Implemented'] ?? 0) === $applicable) {
             return 'Implemented';
         }
 
-        return $met === 0 ? 'Not Implemented' : 'Partially Implemented';
+        return ($counts['Not Implemented'] ?? 0) === $applicable ? 'Not Implemented' : 'Partially Implemented';
     }
 
     public function save_details(
         $assessment_id,
         $company_id,
-        $assessment_type,
-        $baseline_assessment_id,
-        $no_baseline,
-        $scope_categories,
+        $compare_assessment_id,
         $ssi_reviewed,
         $ssi_note,
-        $tier_governance,
-        $tier_management,
-        $target_tier_governance,
-        $target_tier_management,
         $updated_by
     )
     {
         $data = array(
-            'tier_governance' => $tier_governance,
-            'tier_management' => $tier_management,
-            'target_tier_governance' => $target_tier_governance,
-            'target_tier_management' => $target_tier_management,
-            'assessment_type' => $assessment_type,
-            'baseline_assessment_id' => $baseline_assessment_id,
-            'no_baseline' => $no_baseline,
-            'scope_categories' => $scope_categories,
+            'compare_assessment_id' => $compare_assessment_id,
             'ssi_reviewed' => $ssi_reviewed,
             'ssi_note' => $ssi_note,
             'updated_by' => $updated_by,
@@ -793,8 +844,8 @@ class AssessmentsModel extends Model {
         return parent::update('assessments', $data, 'id = :id and company_id = :company_id', $where);
     }
 
-    /** Baseline assessments for the same client and framework that this one can be compared against. */
-    public function baseline_options($assessment_id, $company_id)
+    /** Other assessments of the same client and standard that this one can be compared against, oldest first. */
+    public function compare_options($assessment_id, $company_id)
     {
         $where = array(
             'assessment_id' => $assessment_id,
@@ -804,13 +855,12 @@ class AssessmentsModel extends Model {
         $sql = "SELECT
                     b.id,
                     b.assessment_name,
-                    bp.project_name,
-                    DATE_FORMAT(b.date_created, '%Y-%m-%d') AS created_on
+                    DATE_FORMAT(b.date_created, df.sql_format) AS created_on
                 FROM
                     assessments a
-                    JOIN projects p ON p.id = a.project_id
-                    JOIN projects bp ON bp.client_id = p.client_id and bp.company_id = p.company_id and bp.deleted = 0
-                    JOIN assessments b ON b.project_id = bp.id and b.deleted = 0
+                    JOIN assessments b ON b.client_id = a.client_id and b.company_id = a.company_id and b.deleted = 0
+                    JOIN companies co ON co.id = a.company_id
+                    JOIN date_formats df ON df.id = co.date_format_id
                 WHERE
                     a.id = :assessment_id
                     and
@@ -818,13 +868,38 @@ class AssessmentsModel extends Model {
                     and
                     b.id <> :self_id
                     and
-                    b.assessment_type = 'Baseline'
-                    and
                     b.framework_key = a.framework_key
                     and
                     a.framework_key <> ''
                 ORDER BY
-                    b.date_created desc";
+                    b.date_created asc,
+                    b.id asc";
+        return parent::select($sql, $where);
+    }
+
+    /** Control results of one assessment, keyed for comparison by control identifier. */
+    public function control_results($assessment_id, $company_id)
+    {
+        $where = array(
+            'assessment_id' => $assessment_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    ai.control_identifier,
+                    ai.item_result
+                FROM
+                    assessment_items ai
+                    JOIN assessments a ON a.id = ai.assessment_id
+                WHERE
+                    ai.assessment_id = :assessment_id
+                    and
+                    a.company_id = :company_id
+                    and
+                    ai.control_kind = 'control'
+                    and
+                    ai.deleted = 0
+                    and
+                    a.deleted = 0";
         return parent::select($sql, $where);
     }
 

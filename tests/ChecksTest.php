@@ -10,11 +10,8 @@ require_once ROOT.'/libs/Classes/AssessmentChecks.php';
 $assessment = function (array $fields = array()) {
     return array_merge(array(
         'assessment_name' => 'Baseline',
-        'assessment_type' => 'Baseline',
-        'baseline_assessment_id' => 0,
-        'no_baseline' => 0,
+        'compare_assessment_id' => 0,
         'client_name' => 'Geneva Ground Services',
-        'scope_categories' => '',
         'standard_id' => 132,
         'standard_name' => 'CMMC Level 2',
         'version' => '32 CFR Part 170',
@@ -53,22 +50,13 @@ return array(
             $control('AC.L2-3.1.2', 'Not Implemented'),
             $control('AC.L2-3.1.3', 'Partially Implemented')
         );
-        $issues = AssessmentChecks::run(null, $assessment(), array('project_name' => 'CMMC readiness'), $controls, null);
+        $issues = AssessmentChecks::run(null, $assessment(), $controls, null);
         Assert::same(array('unassessed'), $codes($issues, 'block'), 'blocking checks');
         Assert::same(array(), $codes($issues, 'warn'), 'no warnings');
     },
 
-    'a Final needs a baseline or the no-baseline flag' => function () use ($assessment, $codes) {
-        $without = AssessmentChecks::run(null, $assessment(array('assessment_type' => 'Final')), array('project_name' => 'x'), array(), null);
-        $flagged = AssessmentChecks::run(null, $assessment(array('assessment_type' => 'Final', 'no_baseline' => 1)), array('project_name' => 'x'), array(), null);
-        $linked = AssessmentChecks::run(null, $assessment(array('assessment_type' => 'Final', 'baseline_assessment_id' => 901)), array('project_name' => 'x'), array(), null);
-        Assert::same(array('final_needs_baseline'), $codes($without, 'block'), 'without');
-        Assert::same(array(), $codes($flagged, 'block'), 'no-baseline flag');
-        Assert::same(array(), $codes($linked, 'block'), 'baseline linked');
-    },
-
     'spelling and repeated words warn but never block' => function () use ($assessment, $control, $codes) {
-        $issues = AssessmentChecks::run(null, $assessment(), array('project_name' => 'Part-IS Implementation'), array(
+        $issues = AssessmentChecks::run(null, $assessment(), array(
             $control('AC.L2-3.1.1', 'Not Applicable', array(
                 'applicability' => 'Excluded',
                 'applicability_justification' => 'Geneva Ground Services has has a recieved policy set, and MFA is enforced for every organisation user.'
@@ -80,7 +68,7 @@ return array(
     },
 
     'an excluded control without a justification blocks' => function () use ($assessment, $control, $codes) {
-        $issues = AssessmentChecks::run(null, $assessment(), array('project_name' => 'x'), array(
+        $issues = AssessmentChecks::run(null, $assessment(), array(
             $control('A.5.1', 'Not Applicable', array(
                 'applicability' => 'Excluded'
             ))

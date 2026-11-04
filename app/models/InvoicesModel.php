@@ -50,7 +50,6 @@ class InvoicesModel extends Model {
         $sql = "SELECT
                     i.id,
                     i.client_id,
-                    i.project_id,
                     i.subscription_id,
                     i.invoice_origin,
                     i.invoice_status,
@@ -64,7 +63,6 @@ class InvoicesModel extends Model {
                     i.due_date,
                     i.date_created,
                     c.company_name AS client_name,
-                    p.project_name,
                     ".$this->money_columns().",
                     ".$this->status_case()." AS invoice_status_display,
                     DATE_FORMAT(i.date_created, df.sql_format) AS date_created_display,
@@ -74,7 +72,6 @@ class InvoicesModel extends Model {
                     JOIN companies co ON co.id = i.company_id
                     JOIN date_formats df ON df.id = co.date_format_id
                     JOIN clients c ON c.id = i.client_id
-                    LEFT JOIN projects p ON p.id = i.project_id and p.deleted = 0
                 WHERE
                     i.company_id = :company_id
                     and
@@ -93,7 +90,6 @@ class InvoicesModel extends Model {
         );
         $sql = "SELECT
                     i.id,
-                    i.project_id,
                     i.subscription_id,
                     i.invoice_origin,
                     i.invoice_status,
@@ -103,8 +99,8 @@ class InvoicesModel extends Model {
                     i.total_cents,
                     i.amount_due_cents,
                     i.due_date,
+                    i.due_days,
                     i.date_created,
-                    p.project_name,
                     ".$this->money_columns().",
                     ".$this->status_case()." AS invoice_status_display,
                     DATE_FORMAT(i.date_created, df.sql_format) AS date_created_display,
@@ -113,7 +109,6 @@ class InvoicesModel extends Model {
                     invoices i
                     JOIN companies co ON co.id = i.company_id
                     JOIN date_formats df ON df.id = co.date_format_id
-                    LEFT JOIN projects p ON p.id = i.project_id and p.deleted = 0
                 WHERE
                     i.client_id = :client_id
                     and
@@ -146,7 +141,6 @@ class InvoicesModel extends Model {
                     i.total_cents,
                     i.amount_due_cents,
                     i.due_date,
-                    p.project_name,
                     ".$this->money_columns().",
                     ".$this->status_case()." AS invoice_status_display,
                     DATE_FORMAT(i.finalized_at, df.sql_format) AS issued_display,
@@ -155,7 +149,6 @@ class InvoicesModel extends Model {
                     invoices i
                     JOIN companies co ON co.id = i.company_id
                     JOIN date_formats df ON df.id = co.date_format_id
-                    LEFT JOIN projects p ON p.id = i.project_id and p.deleted = 0
                 WHERE
                     i.client_id = :client_id
                     and
@@ -192,7 +185,6 @@ class InvoicesModel extends Model {
                     c.country AS client_country,
                     c.stripe_customer_id AS client_stripe_customer_id,
                     c.stripe_livemode AS client_stripe_livemode,
-                    p.project_name,
                     ".$this->money_columns().",
                     ".$this->status_case()." AS invoice_status_display,
                     DATE_FORMAT(i.date_created, df.sql_format) AS date_created_display,
@@ -203,7 +195,6 @@ class InvoicesModel extends Model {
                     JOIN companies co ON co.id = i.company_id
                     JOIN date_formats df ON df.id = co.date_format_id
                     JOIN clients c ON c.id = i.client_id
-                    LEFT JOIN projects p ON p.id = i.project_id and p.deleted = 0
                 WHERE
                     i.id = :id
                     and
@@ -253,7 +244,7 @@ class InvoicesModel extends Model {
      * duplicate anyway, but a webhook delivered twice should be a no-op rather
      * than a caught exception.
      */
-    public function add_subscription_invoice($company_id, $client_id, $project_id, $subscription_id, $currency, $stripe_invoice_id, $account_id, $customer_id, $livemode)
+    public function add_subscription_invoice($company_id, $client_id, $subscription_id, $currency, $stripe_invoice_id, $account_id, $customer_id, $livemode)
     {
         $existing = parent::select(
             "SELECT id FROM invoices WHERE stripe_invoice_id = :stripe_invoice_id",
@@ -269,8 +260,8 @@ class InvoicesModel extends Model {
         return (int) parent::insert('invoices', array(
             'company_id'         => $company_id,
             'client_id'          => $client_id,
-            'project_id'         => $project_id,
             'subscription_id'    => $subscription_id,
+            'invoice_number'     => $this->next_invoice_number($company_id),
             'invoice_origin'     => 'Subscription',
             'invoice_status'     => 'Open',
             'currency'           => $currency,
@@ -288,12 +279,61 @@ class InvoicesModel extends Model {
         ));
     }
 
-    public function add_invoice($company_id, $client_id, $project_id, $currency, $invoice_footer, $due_days, $due_date, $created_by)
+    /**
+     * The company's next invoice number, INV-00001 onwards. Numbers are ours and
+     * are given out when an invoice is created; Stripe is handed the same number
+     * when the invoice is sent.
+     */
+    public function next_invoice_number($company_id): string
+    {
+        $where = array(
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    MAX(CAST(SUBSTRING(invoice_number, 5) AS UNSIGNED)) AS last_number
+                FROM
+                    invoices
+                WHERE
+                    company_id = :company_id
+                    and
+                    invoice_number LIKE 'INV-%'";
+        $rows = parent::select($sql, $where);
+
+        return 'INV-'.str_pad((string) (((int) ($rows[0]['last_number'] ?? 0)) + 1), 5, '0', STR_PAD_LEFT);
+    }
+
+    /** Gives a numberless invoice (an older draft, or one Stripe raised) our next number. */
+    public function ensure_invoice_number($invoice_id, $company_id): string
+    {
+        $where = array(
+            'id' => $invoice_id,
+            'company_id' => $company_id
+        );
+        $rows = parent::select("SELECT invoice_number FROM invoices WHERE id = :id and company_id = :company_id", $where);
+
+        if (!is_array($rows) || count($rows) !== 1) {
+            return '';
+        }
+
+        if ((string) $rows[0]['invoice_number'] !== '') {
+            return (string) $rows[0]['invoice_number'];
+        }
+
+        $number = $this->next_invoice_number($company_id);
+        $data = array(
+            'invoice_number' => $number
+        );
+        parent::update('invoices', $data, 'id = :id and company_id = :company_id', $where);
+
+        return $number;
+    }
+
+    public function add_invoice($company_id, $client_id, $currency, $invoice_footer, $due_days, $due_date, $created_by)
     {
         $data = array(
             'company_id'     => $company_id,
+            'invoice_number' => $this->next_invoice_number($company_id),
             'client_id'      => $client_id,
-            'project_id'     => $project_id,
             'currency'       => $currency,
             'invoice_footer' => $invoice_footer,
             'due_days'       => $due_days,
@@ -308,7 +348,7 @@ class InvoicesModel extends Model {
         return parent::insert('invoices', $data);
     }
 
-    public function update_invoice($invoice_id, $company_id, $client_id, $project_id, $currency, $invoice_footer, $due_days, $due_date, $updated_by)
+    public function update_invoice($invoice_id, $company_id, $client_id, $currency, $invoice_footer, $due_days, $due_date, $updated_by)
     {
         $where = array(
             'id'         => $invoice_id,
@@ -316,7 +356,6 @@ class InvoicesModel extends Model {
         );
         $data = array(
             'client_id'      => $client_id,
-            'project_id'     => $project_id,
             'currency'       => $currency,
             'invoice_footer' => $invoice_footer,
             'due_days'       => $due_days,
@@ -502,7 +541,6 @@ class InvoicesModel extends Model {
 
         $data = array(
             'invoice_status'    => $status,
-            'invoice_number'    => (string) ($stripe['number'] ?? ''),
             'currency'          => (string) ($stripe['currency'] ?? 'usd'),
             'subtotal_cents'    => (int) ($stripe['total'] ?? 0) + $discount,
             'discount_cents'    => $discount,
@@ -739,7 +777,6 @@ class InvoicesModel extends Model {
                     id,
                     company_id,
                     client_id,
-                    project_id,
                     subscription_id,
                     invoice_status,
                     payment_state,

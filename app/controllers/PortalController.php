@@ -4,13 +4,11 @@ class PortalController extends Controller {
     public $protected = 1;
 
     public $clients_model;
-    public $projects_model;
     public $assessments_model;
 
     public function __construct(){
         parent::__construct();
         $this->clients_model = new ClientsModel();
-        $this->projects_model = new ProjectsModel();
         $this->assessments_model = new AssessmentsModel();
     }
 
@@ -40,62 +38,6 @@ class PortalController extends Controller {
         $this->view->render();
     }
 
-    public function projectAction(){
-
-        $client = $this->client();
-
-        if ($client === null) {
-            $this->refuse();
-            return;
-        }
-
-        $project = $this->projects_model->client_project(Main::get_param('id'), $client['id'], Session::get('company_id'));
-
-        if (!is_array($project) || count($project) !== 1) {
-            Errors::page_not_found();
-            return;
-        }
-
-        $this->view->client = $client;
-        $this->view->project = $project[0];
-        $this->view->report_stage = $this->report_stage($project[0]['id']);
-        $this->view->render();
-    }
-
-    public function reportAction(){
-
-        $client = $this->client();
-
-        if ($client === null) {
-            $this->refuse();
-            return;
-        }
-
-        $project = $this->projects_model->client_project(Main::get_param('id'), $client['id'], Session::get('company_id'));
-
-        if (!is_array($project) || count($project) !== 1 || $this->report_stage($project[0]['id']) === '') {
-            Errors::page_not_found();
-            return;
-        }
-
-        $this->view->client = $client;
-        $this->view->project = $project[0];
-        $this->view->render();
-    }
-
-    /** The stage of the project's report when the client may see it, otherwise ''. */
-    private function report_stage($project_id): string
-    {
-        $reports_model = new ReportsModel();
-        $rows = $reports_model->get_report_by_project($project_id, Session::get('company_id'));
-
-        if (count($rows) !== 1 || $rows[0]['report_stage'] === 'Draft') {
-            return '';
-        }
-
-        return $rows[0]['report_stage'];
-    }
-
     public function evidenceAction(){
 
         $client = $this->client();
@@ -105,15 +47,7 @@ class PortalController extends Controller {
             return;
         }
 
-        $project = $this->projects_model->client_project(Main::get_param('id'), $client['id'], Session::get('company_id'));
-
-        if (!is_array($project) || count($project) !== 1) {
-            Errors::page_not_found();
-            return;
-        }
-
         $this->view->client = $client;
-        $this->view->project = $project[0];
         $this->view->render();
     }
 

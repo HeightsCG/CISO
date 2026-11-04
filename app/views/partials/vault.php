@@ -10,7 +10,7 @@
     <section class="vault__files" id="drop_zone">
         <div class="vault__toolbar">
             <input type="search" id="evidence_search" class="input vault__search" placeholder="Search title or file name..." autocomplete="off" spellcheck="false">
-            <select id="type_filter" class="form-select vault__filter">
+            <select id="type_filter" class="form-select vault__filter" data-width="170px">
                 <option value="">All types</option>
                 <option value="document">Documents</option>
                 <option value="image">Images</option>
@@ -18,6 +18,7 @@
                 <option value="other">Other</option>
             </select>
             <button type="button" class="btn btn--primary" id="do_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload</button>
+            <input type="file" id="evidence_file" multiple hidden>
         </div>
         <table class="data data--light" id="evidence_table">
             <thead>
@@ -34,42 +35,6 @@
         <p class="vault__empty" id="evidence_empty" hidden></p>
         <div class="vault__drop" id="drop_hint" hidden><i class="fa-regular fa-arrow-up-from-bracket"></i> Drop to upload into <strong id="drop_folder"></strong></div>
     </section>
-</div>
-
-<div class="modal fade" data-bs-backdrop="static" id="upload_modal" tabindex="-1" aria-labelledby="upload_modal_title" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="upload_modal_title">Upload Evidence</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p class="import__hint">Saved into <strong id="upload_folder"></strong>. Documents, images and archives up to 25MB.</p>
-                <div class="row mb-4">
-                    <div class="col-md-12 form-group">
-                        <label for="evidence_title">Title <abbr title="required">*</abbr></label>
-                        <input type="text" class="form-control" id="evidence_title" placeholder="Information security policy, signed">
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-12 form-group">
-                        <label for="evidence_description">Description</label>
-                        <textarea class="form-control" id="evidence_description" rows="3" placeholder="What this shows and where it came from."></textarea>
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-12 form-group">
-                        <label for="evidence_file">File <abbr title="required">*</abbr></label>
-                        <input type="file" class="form-control" id="evidence_file">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="do_upload" class="btn btn--primary">Upload Evidence</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="modal fade" data-bs-backdrop="static" id="folder_modal" tabindex="-1" aria-labelledby="folder_modal_title" aria-hidden="true">
@@ -194,7 +159,7 @@
 <script>
 $(document).ready(function () {
 
-    var project_id = <?php echo (int) $this->project['id']; ?>;
+    var client_id = <?php echo (int) $this->vault_client_id; ?>;
     var evidence = [];
     var folders = [];
     var selected_folder = 0;
@@ -381,7 +346,7 @@ $(document).ready(function () {
                 + '<td class="vault__col-date">' + esc(e.date_created_display) + '</td>'
                 + '<td class="vault__col-links">' + (links > 0
                     ? '<span class="dropdown"><button type="button" class="chip" data-bs-toggle="dropdown" aria-expanded="false" data-action="links" data-id="' + e.id + '">' + links + '</button>'
-                        + '<div class="dropdown-menu dropdown-menu-end links__menu"><p class="links__note">Loading&hellip;</p></div></span>'
+                        + '<div class="dropdown-menu dropdown-menu-end links__menu"><p class="links__note"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Loading&hellip;</p></div></span>'
                     : '<span class="chip chip--empty">0</span>') + '</td>'
                 + '<td class="controls__actions"><span class="dropdown vault__menu">'
                 + '<button type="button" class="btn btn--tertiary btn--sm" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Evidence actions"><i class="fa-regular fa-ellipsis"></i></button>'
@@ -431,7 +396,7 @@ $(document).ready(function () {
     }
 
     function load() {
-        ApiDataSvc.apiCall('post', 'load_evidence', { project_id: project_id }, function (data) {
+        ApiDataSvc.apiCall('post', 'load_evidence', { client_id: client_id }, function (data) {
             evidence = JSON.parse(data);
             render_tree();
             render();
@@ -439,7 +404,7 @@ $(document).ready(function () {
     }
 
     function load_folders() {
-        ApiDataSvc.apiCall('post', 'load_folders', { project_id: project_id }, function (data) {
+        ApiDataSvc.apiCall('post', 'load_folders', { client_id: client_id }, function (data) {
 
             folders = JSON.parse(data);
 
@@ -538,7 +503,7 @@ $(document).ready(function () {
 
         var values = {
             folder_id: $('#folder_id').val(),
-            project_id: project_id,
+            client_id: client_id,
             parent_id: $('#folder_parent_id').val(),
             folder_name: $('#folder_name').val().trim()
         };
@@ -609,7 +574,7 @@ $(document).ready(function () {
             var html = '';
 
             for (var i = 0; i < list.length; i++) {
-                html += '<a class="links__item" href="/projects/assessment/id/' + list[i].assessment_id + '">'
+                html += '<a class="links__item" href="/assessments/detail/id/' + list[i].assessment_id + '">'
                     + '<span class="links__id">' + esc(list[i].control_identifier) + '</span>'
                     + '<span class="links__title">' + esc(list[i].control_title) + '</span>'
                     + '<span class="links__meta">' + esc(list[i].assessment_name) + ' · ' + esc(list[i].short_code) + '</span></a>';
@@ -864,71 +829,84 @@ $(document).ready(function () {
         }
     });
 
-    function open_upload() {
-        $('#upload_folder').text(folder_name_of(selected_folder));
-        $('#evidence_title, #evidence_description').val('').removeClass('is-invalid');
-        $('#evidence_file').val('').removeClass('is-invalid');
-        modal('upload_modal').show();
+    function upload_title(name) {
+
+        var at = String(name).lastIndexOf('.');
+
+        return (at > 0 ? String(name).slice(0, at) : String(name)).replace(/[_-]+/g, ' ').trim();
     }
 
-    $('#do_upload_open').click(open_upload);
+    function upload_files(files) {
 
-    function upload(file, title, description) {
+        var uploaded = 0;
+        var index = 0;
 
-        var form_data = new FormData();
+        if (files.length === 0) {
+            return;
+        }
 
-        form_data.append('project_id', project_id);
-        form_data.append('folder_id', selected_folder);
-        form_data.append('evidence_title', title);
-        form_data.append('description', description);
-        form_data.append('evidence_file', file);
-        form_data.append('csrf_token', $('meta[name="csrf-token"]').attr('content'));
+        set_loading('#do_upload_open', true);
 
-        set_loading('#do_upload', true);
+        function next() {
 
-        $.ajax({
-            url: '/api/upload_evidence',
-            type: 'POST',
-            data: form_data,
-            processData: false,
-            contentType: false,
-            success: function (data) {
+            if (index >= files.length) {
+                set_loading('#do_upload_open', false);
 
-                var obj = JSON.parse(data);
-
-                set_loading('#do_upload', false);
-
-                if (obj.success) {
-                    toastr.success(obj.message);
-                    modal('upload_modal').hide();
-                    load();
-                    load_folders();
-                } else {
-                    toastr.error(obj.message);
+                if (uploaded > 0) {
+                    toastr.success(uploaded === 1 ? 'Evidence uploaded' : uploaded + ' files uploaded');
                 }
-            },
-            error: function () {
-                set_loading('#do_upload', false);
-                toastr.error('That file could not be uploaded.');
+
+                load();
+                load_folders();
+                return;
             }
-        });
+
+            var file = files[index];
+            var form_data = new FormData();
+
+            index++;
+
+            form_data.append('client_id', client_id);
+            form_data.append('folder_id', selected_folder);
+            form_data.append('evidence_title', upload_title(file.name));
+            form_data.append('description', '');
+            form_data.append('evidence_file', file);
+            form_data.append('csrf_token', $('meta[name="csrf-token"]').attr('content'));
+
+            $.ajax({
+                url: '/api/upload_evidence',
+                type: 'POST',
+                data: form_data,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+
+                    var obj = JSON.parse(data);
+
+                    if (obj.success) {
+                        uploaded++;
+                    } else {
+                        toastr.error(file.name + ': ' + obj.message);
+                    }
+
+                    next();
+                },
+                error: function () {
+                    toastr.error(file.name + ' could not be uploaded.');
+                    next();
+                }
+            });
+        }
+
+        next();
     }
 
-    $('#do_upload').click(function () {
+    $('#do_upload_open').click(function () {
+        $('#evidence_file').val('').trigger('click');
+    });
 
-        if ($('#evidence_title').val().trim() === '') {
-            $('#evidence_title').addClass('is-invalid').focus();
-            toastr.error('Evidence title is required');
-            return;
-        }
-
-        if (!$('#evidence_file')[0].files[0]) {
-            $('#evidence_file').addClass('is-invalid');
-            toastr.error('Choose a file to upload');
-            return;
-        }
-
-        upload($('#evidence_file')[0].files[0], $('#evidence_title').val().trim(), $('#evidence_description').val().trim());
+    $('#evidence_file').on('change', function () {
+        upload_files(Array.prototype.slice.call(this.files || []));
     });
 
     var drag_depth = 0;
@@ -971,11 +949,7 @@ $(document).ready(function () {
         e.preventDefault();
         end_drag();
 
-        var file = e.originalEvent.dataTransfer.files[0];
-
-        if (file) {
-            upload(file, file.name, '');
-        }
+        upload_files(Array.prototype.slice.call(e.originalEvent.dataTransfer.files || []));
     });
 
     load();

@@ -26,13 +26,9 @@ class AiTools {
         'Not Applicable'
     );
 
-    const PROJECT_ROLES = array(
-        'Project Lead',
-        'Lead Assessor',
-        'Assessor',
-        'Reviewer',
-        'Contributor',
-        'Observer'
+    const SCHEDULES = array(
+        'Fixed dates',
+        'Ongoing'
     );
 
     const DROPPED_COLUMNS = array(
@@ -60,7 +56,6 @@ class AiTools {
     private $conversation_id;
     private $ai_model;
     private $clients_model;
-    private $projects_model;
     private $assessments_model;
     private $evidence_model;
     private $standards_model;
@@ -69,14 +64,12 @@ class AiTools {
     private $dashboard_model;
     private $companies_model;
     private $users_model;
-    private $reports_model;
 
     public function __construct($conversation_id)
     {
         $this->conversation_id = (int) $conversation_id;
         $this->ai_model = new AiModel();
         $this->clients_model = new ClientsModel();
-        $this->projects_model = new ProjectsModel();
         $this->assessments_model = new AssessmentsModel();
         $this->evidence_model = new EvidenceModel();
         $this->standards_model = new StandardsModel();
@@ -85,7 +78,6 @@ class AiTools {
         $this->dashboard_model = new DashboardModel();
         $this->companies_model = new CompaniesModel();
         $this->users_model = new UsersModel();
-        $this->reports_model = new ReportsModel();
     }
 
     public function is_portal(): bool
@@ -208,7 +200,7 @@ class AiTools {
 
         $file_to_vault = array(
             'file_name' => $text('Exact name of a file attached to, or created in, this conversation'),
-            'project_id' => $id('Project whose evidence vault receives the file'),
+            'client_id' => $id('Client whose evidence vault receives the file; a client portal user always files into their own vault'),
             'folder_id' => $id('Folder in that vault; omit for the top level'),
             'evidence_title' => $text('Title for the evidence record'),
             'description' => $text('Description for the evidence record')
@@ -236,22 +228,13 @@ class AiTools {
 
         return array(
 
-            'list_projects' => $tool('portal', false, 'The person\'s own projects.', array(), array()),
-            'list_assessments' => $tool('portal', false, 'Assessments in one of the person\'s projects, with progress.', array(
-                'project_id' => $id('Project id')
-            ), array(
-                'project_id'
-            )),
+            'list_assessments' => $tool('portal', false, 'The person\'s own assessments, with progress and dates.', array(), array()),
             'list_assessment_controls' => $tool('any', false, 'Every control in an assessment with its result (and, for staff, notes and evidence count).', array(
                 'assessment_id' => $id('Assessment id')
             ), array(
                 'assessment_id'
             )),
-            'list_evidence' => $tool('portal', false, 'Evidence files and folders shared with the person for a project.', array(
-                'project_id' => $id('Project id')
-            ), array(
-                'project_id'
-            )),
+            'list_evidence' => $tool('portal', false, 'Evidence files and folders shared with the person in their evidence vault.', array(), array()),
             'get_control_evidence' => $tool('any', false, 'Evidence files attached to one assessment control.', array(
                 'item_id' => $id('Assessment control (item) id')
             ), array(
@@ -259,29 +242,26 @@ class AiTools {
             )),
             'list_my_invoices' => $tool('portal', false, 'The person\'s invoices and their payment state.', array(), array()),
 
-            'get_overview' => $tool('staff', false, 'Dashboard figures: totals, assessment status, results, project progress and items needing attention.', array(), array()),
+            'get_overview' => $tool('staff', false, 'Dashboard figures: totals, assessment status, results, assessments and items needing attention.', array(), array()),
             'list_clients' => $tool('staff', false, 'All clients with contact details.', array(), array()),
-            'get_client' => $tool('staff', false, 'One client with its projects and assessments.', array(
+            'get_client' => $tool('staff', false, 'One client with its assessments and evidence folders.', array(
                 'client_id' => $id('Client id')
             ), array(
                 'client_id'
             )),
-            'list_all_projects' => $tool('staff', false, 'All projects with client, dates and status.', array(), array()),
-            'get_project' => $tool('staff', false, 'One project with its assessments, evidence folders and team.', array(
-                'project_id' => $id('Project id')
-            ), array(
-                'project_id'
-            )),
+            'list_all_assessments' => $tool('staff', false, 'Assessments with client, standard, status, progress and dates: all of them, or one client\'s when client_id is given.', array(
+                'client_id' => $id('Client id; omit for every client')
+            ), array()),
             'get_assessment_results' => $tool('staff', false, 'Result totals for an assessment, overall and by control family. Use for reports.', array(
                 'assessment_id' => $id('Assessment id')
             ), array(
                 'assessment_id'
             )),
-            'search_evidence' => $tool('staff', false, 'Evidence files in a project, optionally filtered by words in the title, description or file name.', array(
-                'project_id' => $id('Project id'),
+            'search_evidence' => $tool('staff', false, 'Evidence files in a client\'s evidence vault, optionally filtered by words in the title, description or file name.', array(
+                'client_id' => $id('Client id'),
                 'term' => $text('Words to match; omit for all files')
             ), array(
-                'project_id'
+                'client_id'
             )),
             'get_evidence_links' => $tool('staff', false, 'The assessment controls one evidence file is attached to.', array(
                 'evidence_id' => $id('Evidence id')
@@ -293,16 +273,6 @@ class AiTools {
                 'standard_id' => $id('Standard id')
             ), array(
                 'standard_id'
-            )),
-            'list_project_candidates' => $tool('staff', false, 'Staff who can be added to a project team.', array(
-                'project_id' => $id('Project id')
-            ), array(
-                'project_id'
-            )),
-            'get_report' => $tool('staff', false, 'The client deliverable report for a project, with every section: details and narrative, domains, findings with scores and ratings, risks, threats, systems inventory, CSF profile, scan summary, cross-references, people and versions. Returns report null when none has been started.', array(
-                'project_id' => $id('Project id')
-            ), array(
-                'project_id'
             )),
             'list_users' => $tool('admin', false, 'All user accounts in the organisation, staff and client portal.', array(), array()),
             'list_roles' => $tool('admin', false, 'The user roles and their ids.', array(), array()),
@@ -338,47 +308,27 @@ class AiTools {
             ), array(
                 'client_id'
             )),
-            'save_project' => $tool('staff', true, 'Add a project (omit project_id) or change one (give project_id and only the fields to change).', array(
-                'project_id' => $id('Project id when changing an existing project'),
-                'client_id' => $id('Client the project belongs to'),
-                'project_name' => $text('Project name'),
-                'description' => $text('Project description'),
-                'start_date' => $text('Start date, YYYY-MM-DD; leave both dates blank for an ongoing project'),
-                'end_date' => $text('End date, YYYY-MM-DD')
-            ), array()),
-            'delete_project' => $tool('staff', true, 'Delete a project with its assessments.', array(
-                'project_id' => $id('Project id')
-            ), array(
-                'project_id'
-            )),
-            'save_project_member' => $tool('staff', true, 'Add a staff member to a project team (give project_id and user_id) or change a member\'s role (give member_id).', array(
-                'member_id' => $id('Team membership id when changing a role'),
-                'project_id' => $id('Project id when adding'),
-                'user_id' => $id('Staff user id when adding'),
-                'project_role' => $choice(self::PROJECT_ROLES, 'Role on the project')
-            ), array(
-                'project_role'
-            )),
-            'remove_project_member' => $tool('staff', true, 'Remove someone from a project team.', array(
-                'member_id' => $id('Team membership id')
-            ), array(
-                'member_id'
-            )),
-            'create_assessment' => $tool('staff', true, 'Start an assessment of a project against a standard.', array(
-                'project_id' => $id('Project id'),
+            'create_assessment' => $tool('staff', true, 'Start an assessment of a client against a standard. Fixed dates need a start and end date; an ongoing assessment has neither.', array(
+                'client_id' => $id('Client id'),
                 'standard_id' => $id('Standard id'),
-                'assessment_name' => $text('Assessment name')
+                'assessment_name' => $text('Assessment name'),
+                'schedule' => $choice(self::SCHEDULES, 'Fixed dates or Ongoing'),
+                'start_date' => $text('Start date, YYYY-MM-DD; for Fixed dates'),
+                'end_date' => $text('End date, YYYY-MM-DD; for Fixed dates')
             ), array(
-                'project_id',
+                'client_id',
                 'standard_id',
-                'assessment_name'
+                'assessment_name',
+                'schedule'
             )),
-            'rename_assessment' => $tool('staff', true, 'Rename an assessment.', array(
+            'update_assessment' => $tool('staff', true, 'Rename an assessment or change its schedule and dates. Give only what changes; give schedule to change dates.', array(
                 'assessment_id' => $id('Assessment id'),
-                'assessment_name' => $text('New name')
+                'assessment_name' => $text('New name'),
+                'schedule' => $choice(self::SCHEDULES, 'Fixed dates or Ongoing'),
+                'start_date' => $text('Start date, YYYY-MM-DD; for Fixed dates'),
+                'end_date' => $text('End date, YYYY-MM-DD; for Fixed dates')
             ), array(
-                'assessment_id',
-                'assessment_name'
+                'assessment_id'
             )),
             'delete_assessment' => $tool('staff', true, 'Delete an assessment.', array(
                 'assessment_id' => $id('Assessment id')
@@ -418,17 +368,16 @@ class AiTools {
             ), array(
                 'links'
             )),
-            'save_file_to_evidence' => $tool('any', true, 'File a document attached to this conversation, or a report you created, into a project\'s evidence vault.', $file_to_vault, array(
+            'save_file_to_evidence' => $tool('any', true, 'File a document attached to this conversation, or a report you created, into a client\'s evidence vault.', $file_to_vault, array(
                 'file_name',
-                'project_id',
                 'evidence_title'
             )),
-            'create_folder' => $tool('staff', true, 'Create a folder in a project\'s evidence vault.', array(
-                'project_id' => $id('Project id'),
+            'create_folder' => $tool('staff', true, 'Create a folder in a client\'s evidence vault.', array(
+                'client_id' => $id('Client id'),
                 'folder_name' => $text('Folder name'),
                 'parent_id' => $id('Parent folder id; omit for the top level')
             ), array(
-                'project_id',
+                'client_id',
                 'folder_name'
             )),
             'rename_folder' => $tool('staff', true, 'Rename an evidence folder.', array(
@@ -443,7 +392,7 @@ class AiTools {
             ), array(
                 'folder_id'
             )),
-            'move_evidence' => $tool('staff', true, 'Move an evidence file to another folder in the same project.', array(
+            'move_evidence' => $tool('staff', true, 'Move an evidence file to another folder in the same client\'s vault.', array(
                 'evidence_id' => $id('Evidence id'),
                 'folder_id' => $id('Destination folder id; 0 for the top level')
             ), array(
@@ -524,94 +473,6 @@ class AiTools {
                 'user_email' => $text('Email')
             ), array()),
 
-            'start_report' => $tool('staff', true, 'Start the client deliverable report for a project. It begins with the standard domains, common threats, assessment team and methodology wording.', array(
-                'project_id' => $id('Project id')
-            ), array(
-                'project_id'
-            )),
-            'save_report_details' => $tool('staff', true, 'Change a report\'s details and narrative. Give only the fields to change. Narrative fields are plain text; blank lines separate paragraphs and lines starting with "- " become bullet lists.', array(
-                'project_id' => $id('Project id'),
-                'report_title' => $text('Title, e.g. Cybersecurity Risk Assessment'),
-                'report_date' => $text('Report date, YYYY-MM-DD'),
-                'period_start' => $text('Fieldwork start, YYYY-MM-DD'),
-                'period_end' => $text('Fieldwork end, YYYY-MM-DD'),
-                'regulatory_reference' => $text('Regulation the assessment addresses, e.g. NYDFS 23 NYCRR Part 500, Sections 500.1(p) and 500.9'),
-                'purpose_text' => $text('Executive summary: purpose'),
-                'conclusion_text' => $text('Executive summary: overall conclusion'),
-                'background_text' => $text('Background on the client'),
-                'scope_text' => $text('Scope'),
-                'out_of_scope_text' => $text('What was out of scope'),
-                'approach_text' => $text('Approach and fieldwork performed'),
-                'methodology_text' => $text('Rating methodology'),
-                'limitations_text' => $text('Limitations and responsibilities'),
-                'review_text' => $text('Ongoing review'),
-                'scan_text' => $text('Introduction to the vulnerability scan appendix'),
-                'signoff_name' => $text('Name of the client signer for the acknowledgment'),
-                'signoff_title' => $text('Title of the client signer')
-            ), array(
-                'project_id'
-            )),
-            'save_report_rows' => $tool('staff', true, 'Add or change rows in one section of a project\'s report, many at once. Give id only to change an existing row; omitted fields keep their values. Fields by section - domain: domain_name, areas_reviewed, csf_refs, domain_rating (Satisfactory, Satisfactory with exceptions, Needs improvement, Unsatisfactory), domain_summary. finding: domain_id, finding_ref (leave blank to number automatically), finding_title, observation, risk_text, recommendation, likelihood (1-5), impact (1-5), csf_refs, response_status (Pending, Agreed, Partially agreed, Not agreed), management_response, response_owner, target_date (YYYY-MM-DD). risk: domain_id, finding_id or link_finding_ref (e.g. F-03), risk_ref, risk_text, threat_refs (e.g. T1, T2), likelihood, impact, treatment. threat: threat_ref, threat_name, threat_description, parties_affected. asset: asset_name, asset_kind, asset_owner, data_held, sensitivity (High, Medium, Low). scan_row: scan_rating (Critical, High, Medium, Low), issue_count, scan_summary, disposition. xref: xref_section, requirement, where_addressed. version: version_label, version_date, version_note, version_author. person: person_kind (distribution or team), person_name, person_title, organisation, responsibility.', array(
-                'project_id' => $id('Project id'),
-                'section' => $choice(array_keys(ReportBuilder::SECTIONS), 'Report section'),
-                'rows' => array(
-                    'type' => 'array',
-                    'description' => 'Rows to add or change, as objects of the section\'s fields',
-                    'items' => array(
-                        'type' => 'object'
-                    )
-                )
-            ), array(
-                'project_id',
-                'section',
-                'rows'
-            )),
-            'delete_report_rows' => $tool('staff', true, 'Remove rows from one section of a project\'s report.', array(
-                'project_id' => $id('Project id'),
-                'section' => $choice(array_keys(ReportBuilder::SECTIONS), 'Report section'),
-                'ids' => array(
-                    'type' => 'array',
-                    'items' => array(
-                        'type' => 'integer'
-                    )
-                )
-            ), array(
-                'project_id',
-                'section',
-                'ids'
-            )),
-            'save_csf_profile' => $tool('staff', true, 'Set the NIST CSF 2.0 current and target tiers (1 Partial, 2 Risk Informed, 3 Repeatable, 4 Adaptive) and main gaps for one or more functions in a project\'s report.', array(
-                'project_id' => $id('Project id'),
-                'functions' => array(
-                    'type' => 'array',
-                    'items' => array(
-                        'type' => 'object',
-                        'properties' => array(
-                            'csf_function' => $choice(ReportBuilder::CSF_FUNCTIONS, 'Function'),
-                            'current_tier' => $id('Current tier 1-4'),
-                            'target_tier' => $id('Target tier 1-4'),
-                            'main_gaps' => $text('Main gaps, citing finding references')
-                        ),
-                        'required' => array(
-                            'csf_function'
-                        )
-                    )
-                )
-            ), array(
-                'project_id',
-                'functions'
-            )),
-            'issue_report' => $tool('staff', true, 'Issue a draft report to the client so their portal users can respond to the findings.', array(
-                'project_id' => $id('Project id')
-            ), array(
-                'project_id'
-            )),
-            'finalise_report' => $tool('staff', true, 'Make the report final. The client can then download the PDF from the portal.', array(
-                'project_id' => $id('Project id')
-            ), array(
-                'project_id'
-            )),
-
             'save_user' => $tool('admin', true, 'Add a user (omit user_id; they are emailed an invite) or change one (give user_id and only the fields to change). Portal users belong to a client.', array(
                 'user_id' => $id('User id when changing'),
                 'first_name' => $text('First name'),
@@ -664,7 +525,6 @@ class AiTools {
             'save_invoice' => $tool('admin', true, 'Create a draft invoice (omit invoice_id) or change a draft (give invoice_id; lines replace all existing lines when given).', array(
                 'invoice_id' => $id('Draft invoice id when changing'),
                 'client_id' => $id('Client billed'),
-                'project_id' => $id('Project the invoice is for; optional'),
                 'due_date' => $text('Due date, YYYY-MM-DD'),
                 'invoice_footer' => $text('Footer text'),
                 'lines' => $invoice_lines
@@ -696,7 +556,6 @@ class AiTools {
             'save_subscription' => $tool('admin', true, 'Create a draft recurring subscription (omit subscription_id) or change a draft.', array(
                 'subscription_id' => $id('Draft subscription id when changing'),
                 'client_id' => $id('Client billed'),
-                'project_id' => $id('Project; optional'),
                 'subscription_name' => $text('Name shown on invoices'),
                 'unit_amount' => $text('Price per period, e.g. "1500.00"'),
                 'quantity' => $id('Quantity'),
@@ -744,7 +603,7 @@ class AiTools {
                 'assessment_status' => self::rows($this->dashboard_model->assessment_status($company_id)),
                 'results' => self::rows($this->dashboard_model->result_totals($company_id)),
                 'by_client' => self::rows($this->dashboard_model->by_client($company_id)),
-                'project_progress' => self::rows($this->assessments_model->project_progress($company_id)),
+                'assessments' => self::rows($this->dashboard_model->assessments($company_id)),
                 'needs_attention' => self::rows($this->dashboard_model->attention($company_id))
             );
         }
@@ -761,27 +620,20 @@ class AiTools {
             }
             return array(
                 'client' => self::rows($client)[0],
-                'projects' => self::rows($this->projects_model->client_projects($client_id, $company_id)),
-                'assessments' => self::rows($this->assessments_model->client_assessments($client_id, $company_id))
+                'assessments' => self::rows($this->assessments_model->load_client_assessments($client_id, $company_id)),
+                'evidence_folders' => self::rows($this->evidence_model->load_folders($client_id, $company_id))
             );
         }
 
-        if ($name === 'list_all_projects') {
-            return self::rows($this->projects_model->load_projects($company_id));
-        }
-
-        if ($name === 'get_project') {
-            $project_id = (int) ($input['project_id'] ?? 0);
-            $project = $this->projects_model->get_project($project_id, $company_id);
-            if (count($project) !== 1) {
+        if ($name === 'list_all_assessments') {
+            $client_id = (int) ($input['client_id'] ?? 0);
+            if ($client_id === 0) {
+                return self::rows($this->assessments_model->load_all_assessments($company_id));
+            }
+            if (count($this->clients_model->get_client($client_id, $company_id)) !== 1) {
                 return null;
             }
-            return array(
-                'project' => self::rows($project)[0],
-                'assessments' => self::rows($this->assessments_model->load_assessments($project_id, $company_id)),
-                'evidence_folders' => self::rows($this->evidence_model->load_folders($project_id, $company_id)),
-                'team' => self::rows($this->projects_model->load_project_users($project_id, $company_id))
-            );
+            return self::rows($this->assessments_model->load_client_assessments($client_id, $company_id));
         }
 
         if ($name === 'list_assessment_controls') {
@@ -814,11 +666,11 @@ class AiTools {
         }
 
         if ($name === 'search_evidence') {
-            $project_id = (int) ($input['project_id'] ?? 0);
-            if (count($this->projects_model->get_project($project_id, $company_id)) !== 1) {
+            $client_id = (int) ($input['client_id'] ?? 0);
+            if (count($this->clients_model->get_client($client_id, $company_id)) !== 1) {
                 return null;
             }
-            return self::rows($this->evidence_model->search_evidence($project_id, $company_id, trim((string) ($input['term'] ?? '')), 200, 0));
+            return self::rows($this->evidence_model->search_evidence($client_id, $company_id, trim((string) ($input['term'] ?? '')), 200, 0));
         }
 
         if ($name === 'get_evidence_links') {
@@ -839,35 +691,6 @@ class AiTools {
                 return null;
             }
             return self::rows($this->standards_model->load_controls($standard_id, $company_id));
-        }
-
-        if ($name === 'list_project_candidates') {
-            $project_id = (int) ($input['project_id'] ?? 0);
-            if (count($this->projects_model->get_project($project_id, $company_id)) !== 1) {
-                return null;
-            }
-            return self::rows($this->projects_model->available_users($project_id, $company_id));
-        }
-
-        if ($name === 'get_report') {
-            $project_id = (int) ($input['project_id'] ?? 0);
-            if (count($this->projects_model->get_project($project_id, $company_id)) !== 1) {
-                return null;
-            }
-            $report = $this->first($this->reports_model->get_report_by_project($project_id, $company_id));
-            if ($report === null) {
-                return array(
-                    'report' => null,
-                    'note' => 'No report has been started for this project. Use start_report.'
-                );
-            }
-            $assembled = (new ReportBuilder())->assemble($report);
-            unset($assembled['company'], $assembled['project'], $assembled['client'], $assembled['findings_ranked'], $assembled['risks_ranked'], $assembled['unassigned_findings']);
-            foreach ($assembled['domains'] as $index => $domain) {
-                $assembled['domains'][$index]['finding_refs'] = array_column($domain['findings'], 'finding_ref');
-                unset($assembled['domains'][$index]['findings']);
-            }
-            return $assembled;
         }
 
         if (!$this->is_admin()) {
@@ -919,25 +742,18 @@ class AiTools {
         $company_id = Session::get('company_id');
         $client_id = Session::get('client_id');
 
-        if ($name === 'list_projects') {
-            return self::rows($this->projects_model->client_projects($client_id, $company_id));
+        if ($name === 'list_assessments') {
+            return self::rows($this->assessments_model->load_client_assessments($client_id, $company_id));
         }
 
         if ($name === 'list_my_invoices') {
             return self::rows($this->invoices_model->portal_invoices($client_id, $company_id));
         }
 
-        if ($name === 'list_assessments' || $name === 'list_evidence') {
-            $project_id = (int) ($input['project_id'] ?? 0);
-            if (!$this->client_owns_project($project_id)) {
-                return null;
-            }
-            if ($name === 'list_assessments') {
-                return self::rows($this->assessments_model->load_assessments($project_id, $company_id));
-            }
+        if ($name === 'list_evidence') {
             return array(
-                'folders' => self::rows($this->evidence_model->portal_folders($project_id, $client_id, $company_id)),
-                'files' => self::rows($this->evidence_model->portal_evidence($project_id, $client_id, $company_id))
+                'folders' => self::rows($this->evidence_model->portal_folders($client_id, $company_id)),
+                'files' => self::rows($this->evidence_model->portal_evidence($client_id, $company_id))
             );
         }
 
@@ -960,11 +776,6 @@ class AiTools {
         return null;
     }
 
-    private function client_owns_project($project_id): bool
-    {
-        return count($this->projects_model->client_project((int) $project_id, Session::get('client_id'), Session::get('company_id'))) === 1;
-    }
-
     private function portal_item($item_id)
     {
         $item = $this->assessments_model->get_item((int) $item_id, Session::get('company_id'));
@@ -976,12 +787,12 @@ class AiTools {
         return $item[0];
     }
 
-    /** Evidence a portal user may see: in their own project and not private. */
+    /** Evidence a portal user may see: in their own client's vault and not private. */
     private function portal_evidence($evidence_id)
     {
         $evidence = $this->evidence_model->get_evidence((int) $evidence_id, Session::get('company_id'));
 
-        if (count($evidence) !== 1 || (int) $evidence[0]['evidence_private'] === 1 || !$this->client_owns_project($evidence[0]['project_id'])) {
+        if (count($evidence) !== 1 || (int) $evidence[0]['evidence_private'] === 1 || (int) $evidence[0]['client_id'] !== (int) Session::get('client_id')) {
             return null;
         }
 
@@ -1094,154 +905,49 @@ class AiTools {
         ));
     }
 
-    private function propose_save_project(array $input): array
-    {
-        $company_id = Session::get('company_id');
-        $project_id = (int) ($input['project_id'] ?? 0);
-        $current = array();
-
-        if ($project_id > 0) {
-            $current = $this->first($this->projects_model->get_project($project_id, $company_id));
-            if ($current === null) {
-                return self::fail('Project '.$project_id.' was not found.');
-            }
-            $current['start_date'] = substr((string) $current['start_date'], 0, 10);
-            $current['end_date'] = substr((string) $current['end_date'], 0, 10);
-        }
-
-        $labels = array(
-            'project_name' => 'Name',
-            'description' => 'Description',
-            'start_date' => 'Start',
-            'end_date' => 'End'
-        );
-
-        $params = $this->merge($labels, $input, $current);
-        $params['project_id'] = $project_id;
-        $params['client_id'] = (int) ($input['client_id'] ?? ($current['client_id'] ?? 0));
-
-        $client = $this->first($this->clients_model->get_client($params['client_id'], $company_id));
-
-        if ($client === null) {
-            return self::fail('Give the client_id of an existing client.');
-        }
-
-        $fields = array(
-            'Client' => self::plain($client['company_name'])
-        );
-
-        $summary = $project_id > 0
-            ? 'Update project "'.self::plain($current['project_name']).'"'
-            : 'Add project "'.$params['project_name'].'"';
-
-        return self::proposal($summary, 'save_project', $params, array_merge($fields, $this->changed_fields($labels, $input, $params, $project_id === 0)));
-    }
-
-    private function propose_delete_project(array $input): array
-    {
-        $project = $this->first($this->projects_model->get_project((int) ($input['project_id'] ?? 0), Session::get('company_id')));
-
-        if ($project === null) {
-            return self::fail('That project was not found.');
-        }
-
-        return self::proposal('Delete project "'.self::plain($project['project_name']).'"', 'delete_project', array(
-            'project_id' => (int) $project['id']
-        ), array(
-            'Project' => self::plain($project['project_name']),
-            'Note' => 'Its assessments are deleted with it.'
-        ));
-    }
-
-    private function propose_save_project_member(array $input): array
-    {
-        $company_id = Session::get('company_id');
-        $member_id = (int) ($input['member_id'] ?? 0);
-        $role = (string) ($input['project_role'] ?? '');
-
-        if (!in_array($role, self::PROJECT_ROLES, true)) {
-            return self::fail('project_role must be one of: '.implode(', ', self::PROJECT_ROLES));
-        }
-
-        if ($member_id > 0) {
-            $member = $this->first($this->projects_model->get_project_user($member_id, $company_id));
-            if ($member === null) {
-                return self::fail('That team member was not found.');
-            }
-            $params = array(
-                'id' => $member_id,
-                'project_id' => (int) $member['project_id'],
-                'user_id' => (int) $member['user_id'],
-                'project_role' => $role
-            );
-            return self::proposal('Change project role to '.$role, 'save_project_user', $params, array(
-                'Member' => $this->person_name($member['user_id']),
-                'Role' => $role
-            ));
-        }
-
-        $project = $this->first($this->projects_model->get_project((int) ($input['project_id'] ?? 0), $company_id));
-        $user = $this->first($this->users_model->get_company_user((int) ($input['user_id'] ?? 0), $company_id));
-
-        if ($project === null || $user === null) {
-            return self::fail('Give the project_id of an existing project and the user_id of a staff member.');
-        }
-
-        $params = array(
-            'id' => 0,
-            'project_id' => (int) $project['id'],
-            'user_id' => (int) $user['user_id'],
-            'project_role' => $role
-        );
-
-        return self::proposal('Add '.self::plain($user['first_name'].' '.$user['last_name']).' to "'.self::plain($project['project_name']).'"', 'save_project_user', $params, array(
-            'Project' => self::plain($project['project_name']),
-            'Person' => self::plain($user['first_name'].' '.$user['last_name']),
-            'Role' => $role
-        ));
-    }
-
-    private function propose_remove_project_member(array $input): array
-    {
-        $member = $this->first($this->projects_model->get_project_user((int) ($input['member_id'] ?? 0), Session::get('company_id')));
-
-        if ($member === null) {
-            return self::fail('That team member was not found.');
-        }
-
-        $person = $this->person_name($member['user_id']);
-
-        return self::proposal('Remove '.$person.' from the project team', 'delete_project_user', array(
-            'id' => (int) $member['id']
-        ), array(
-            'Member' => $person
-        ));
-    }
-
     private function propose_create_assessment(array $input): array
     {
         $company_id = Session::get('company_id');
-        $project = $this->first($this->projects_model->get_project((int) ($input['project_id'] ?? 0), $company_id));
+        $client = $this->first($this->clients_model->get_client((int) ($input['client_id'] ?? 0), $company_id));
         $standard = $this->first($this->standards_model->get_standard((int) ($input['standard_id'] ?? 0), $company_id));
 
-        if ($project === null || $standard === null) {
-            return self::fail('That project or standard was not found.');
+        if ($client === null || $standard === null) {
+            return self::fail('That client or standard was not found.');
         }
 
+        $schedule = (string) ($input['schedule'] ?? '');
+
+        if (!in_array($schedule, self::SCHEDULES, true)) {
+            return self::fail('schedule must be one of: '.implode(', ', self::SCHEDULES));
+        }
+
+        $fixed = $schedule === 'Fixed dates';
+
         $params = array(
-            'project_id' => (int) $project['id'],
+            'client_id' => (int) $client['id'],
             'standard_id' => (int) $standard['id'],
-            'assessment_name' => trim((string) ($input['assessment_name'] ?? ''))
+            'assessment_name' => trim((string) ($input['assessment_name'] ?? '')),
+            'schedule' => $schedule,
+            'start_date' => $fixed ? trim((string) ($input['start_date'] ?? '')) : '',
+            'end_date' => $fixed ? trim((string) ($input['end_date'] ?? '')) : ''
         );
 
-        return self::proposal('Start assessment "'.$params['assessment_name'].'"', 'create_assessment', $params, array(
-            'Project' => self::plain($project['project_name']),
+        $fields = array(
+            'Client' => self::plain($client['company_name']),
             'Standard' => self::plain($standard['standard_name']),
-            'Name' => $params['assessment_name']
-        ));
+            'Name' => $params['assessment_name'],
+            'Schedule' => $schedule
+        );
+
+        if ($fixed) {
+            $fields['Start'] = $params['start_date'];
+            $fields['End'] = $params['end_date'];
+        }
+
+        return self::proposal('Start assessment "'.$params['assessment_name'].'"', 'create_assessment', $params, $fields);
     }
 
-    private function propose_rename_assessment(array $input): array
+    private function propose_update_assessment(array $input): array
     {
         $assessment = $this->assessment($input);
 
@@ -1249,15 +955,45 @@ class AiTools {
             return self::fail('That assessment was not found.');
         }
 
-        $name = trim((string) ($input['assessment_name'] ?? ''));
+        $current_name = self::plain($assessment['assessment_name']);
+        $name = array_key_exists('assessment_name', $input) ? trim((string) $input['assessment_name']) : $current_name;
 
-        return self::proposal('Rename "'.self::plain($assessment['assessment_name']).'"', 'save_assessment', array(
+        $params = array(
             'assessment_id' => (int) $assessment['id'],
             'assessment_name' => $name
-        ), array(
-            'From' => self::plain($assessment['assessment_name']),
-            'To' => $name
-        ));
+        );
+
+        $fields = array();
+
+        if ($name !== $current_name) {
+            $fields['Name'] = $name;
+        }
+
+        if (array_key_exists('schedule', $input)) {
+
+            $schedule = (string) $input['schedule'];
+
+            if (!in_array($schedule, self::SCHEDULES, true)) {
+                return self::fail('schedule must be one of: '.implode(', ', self::SCHEDULES));
+            }
+
+            $fixed = $schedule === 'Fixed dates';
+            $params['schedule'] = $schedule;
+            $params['start_date'] = $fixed ? trim((string) ($input['start_date'] ?? substr((string) ($assessment['start_date'] ?? ''), 0, 10))) : '';
+            $params['end_date'] = $fixed ? trim((string) ($input['end_date'] ?? substr((string) ($assessment['end_date'] ?? ''), 0, 10))) : '';
+            $fields['Schedule'] = $schedule;
+
+            if ($fixed) {
+                $fields['Start'] = $params['start_date'];
+                $fields['End'] = $params['end_date'];
+            }
+        }
+
+        if (count($fields) === 0) {
+            return self::fail('Give a new name, or a schedule with its dates.');
+        }
+
+        return self::proposal('Update assessment "'.$current_name.'"', 'save_assessment', $params, $fields);
     }
 
     private function propose_delete_assessment(array $input): array
@@ -1398,23 +1134,16 @@ class AiTools {
             return self::fail('No file named "'.(string) ($input['file_name'] ?? '').'" is in this conversation.');
         }
 
-        $project_id = (int) ($input['project_id'] ?? 0);
+        $client_id = $this->is_portal() ? (int) Session::get('client_id') : (int) ($input['client_id'] ?? 0);
+        $client = $this->first($this->clients_model->get_client($client_id, Session::get('company_id')));
 
-        if ($this->is_portal()) {
-            $project = $this->client_owns_project($project_id)
-                ? $this->first($this->projects_model->get_project($project_id, Session::get('company_id')))
-                : null;
-        } else {
-            $project = $this->first($this->projects_model->get_project($project_id, Session::get('company_id')));
-        }
-
-        if ($project === null) {
-            return self::fail('That project was not found.');
+        if ($client === null) {
+            return self::fail('Give the client_id of an existing client.');
         }
 
         $params = array(
             'attachment_id' => (int) $file['id'],
-            'project_id' => $project_id,
+            'client_id' => $client_id,
             'folder_id' => (int) ($input['folder_id'] ?? 0),
             'evidence_title' => trim((string) ($input['evidence_title'] ?? '')),
             'description' => trim((string) ($input['description'] ?? ''))
@@ -1422,15 +1151,15 @@ class AiTools {
 
         $fields = array(
             'File' => $file['file_name'],
-            'Project' => self::plain($project['project_name']),
+            'Client' => self::plain($client['company_name']),
             'Title' => $params['evidence_title'],
             'Description' => $params['description']
         );
 
         if ($params['folder_id'] > 0) {
             $folder = $this->first($this->evidence_model->get_folder($params['folder_id'], Session::get('company_id')));
-            if ($folder === null || (int) $folder['project_id'] !== $project_id) {
-                return self::fail('That folder is not in that project.');
+            if ($folder === null || (int) $folder['client_id'] !== $client_id) {
+                return self::fail('That folder is not in that client\'s evidence vault.');
             }
             $fields['Folder'] = self::plain($folder['folder_name']);
         }
@@ -1440,21 +1169,21 @@ class AiTools {
 
     private function propose_create_folder(array $input): array
     {
-        $project = $this->first($this->projects_model->get_project((int) ($input['project_id'] ?? 0), Session::get('company_id')));
+        $client = $this->first($this->clients_model->get_client((int) ($input['client_id'] ?? 0), Session::get('company_id')));
 
-        if ($project === null) {
-            return self::fail('That project was not found.');
+        if ($client === null) {
+            return self::fail('That client was not found.');
         }
 
         $params = array(
             'folder_id' => 0,
-            'project_id' => (int) $project['id'],
+            'client_id' => (int) $client['id'],
             'parent_id' => (int) ($input['parent_id'] ?? 0),
             'folder_name' => trim((string) ($input['folder_name'] ?? ''))
         );
 
         return self::proposal('Create folder "'.$params['folder_name'].'"', 'save_folder', $params, array(
-            'Project' => self::plain($project['project_name']),
+            'Client' => self::plain($client['company_name']),
             'Folder' => $params['folder_name']
         ));
     }
@@ -1471,7 +1200,7 @@ class AiTools {
 
         return self::proposal('Rename folder "'.self::plain($folder['folder_name']).'"', 'save_folder', array(
             'folder_id' => (int) $folder['id'],
-            'project_id' => (int) $folder['project_id'],
+            'client_id' => (int) $folder['client_id'],
             'parent_id' => (int) $folder['parent_id'],
             'folder_name' => $name
         ), array(
@@ -1508,8 +1237,8 @@ class AiTools {
 
         if ($folder_id > 0) {
             $folder = $this->first($this->evidence_model->get_folder($folder_id, Session::get('company_id')));
-            if ($folder === null || (int) $folder['project_id'] !== (int) $evidence['project_id']) {
-                return self::fail('That folder is not in the same project.');
+            if ($folder === null || (int) $folder['client_id'] !== (int) $evidence['client_id']) {
+                return self::fail('That folder is not in the same client\'s evidence vault.');
             }
             $destination = self::plain($folder['folder_name']);
         }
@@ -1743,313 +1472,6 @@ class AiTools {
         return self::proposal('Update your profile', 'save_profile', $params, $this->changed_fields($labels, $input, $params, false));
     }
 
-    /** The report for a project in this company, or null. */
-    private function project_report(array $input)
-    {
-        $project = $this->first($this->projects_model->get_project((int) ($input['project_id'] ?? 0), Session::get('company_id')));
-
-        if ($project === null) {
-            return null;
-        }
-
-        $report = $this->first($this->reports_model->get_report_by_project((int) $project['id'], Session::get('company_id')));
-
-        if ($report !== null) {
-            $report['project_name'] = self::plain($project['project_name']);
-        }
-
-        return $report;
-    }
-
-    private function propose_start_report(array $input): array
-    {
-        $project = $this->first($this->projects_model->get_project((int) ($input['project_id'] ?? 0), Session::get('company_id')));
-
-        if ($project === null) {
-            return self::fail('That project was not found.');
-        }
-
-        if ($this->project_report($input) !== null) {
-            return self::fail('This project already has a report. Use get_report.');
-        }
-
-        return self::proposal('Start the report for "'.self::plain($project['project_name']).'"', 'report_create', array(
-            'project_id' => (int) $project['id']
-        ), array(
-            'Project' => self::plain($project['project_name'])
-        ));
-    }
-
-    private function propose_save_report_details(array $input): array
-    {
-        $report = $this->project_report($input);
-
-        if ($report === null) {
-            return self::fail('That project has no report yet. Use start_report first.');
-        }
-
-        $params = array(
-            'report_id' => (int) $report['id']
-        );
-        $fields = array();
-
-        foreach (array_keys(ReportBuilder::DETAIL_FIELDS) as $key) {
-            if (array_key_exists($key, $input)) {
-                $params[$key] = trim((string) $input[$key]);
-                $fields[ucfirst(str_replace('_', ' ', preg_replace('/_text$/', '', $key)))] = mb_strimwidth($params[$key], 0, 400, '...');
-            }
-        }
-
-        if (count($fields) === 0) {
-            return self::fail('Give at least one report field to change.');
-        }
-
-        return self::batch('Update the report for "'.$report['project_name'].'"', array(
-            array(
-                'endpoint' => 'report_save_details',
-                'params' => $params
-            )
-        ), $fields);
-    }
-
-    private function propose_save_report_rows(array $input): array
-    {
-        $report = $this->project_report($input);
-        $section = (string) ($input['section'] ?? '');
-        $rows = is_array($input['rows'] ?? null) ? $input['rows'] : array();
-
-        if ($report === null) {
-            return self::fail('That project has no report yet. Use start_report first.');
-        }
-
-        if (!isset(ReportBuilder::SECTIONS[$section])) {
-            return self::fail('section must be one of: '.implode(', ', array_keys(ReportBuilder::SECTIONS)));
-        }
-
-        if (count($rows) === 0 || count($rows) > 200) {
-            return self::fail('Give between 1 and 200 rows.');
-        }
-
-        $allowed = array_keys(ReportBuilder::SECTIONS[$section]);
-
-        if ($section === 'risk') {
-            $allowed[] = 'link_finding_ref';
-        }
-
-        $calls = array();
-        $fields = array();
-
-        foreach ($rows as $row) {
-
-            if (!is_array($row)) {
-                return self::fail('Each row must be an object of fields.');
-            }
-
-            $row_id = (int) ($row['id'] ?? 0);
-
-            if ($row_id > 0 && count($this->reports_model->{'get_'.$section}($row_id, (int) $report['id'])) !== 1) {
-                return self::fail('Row '.$row_id.' is not in this report\'s '.$section.' section.');
-            }
-
-            $params = array(
-                'report_id' => (int) $report['id'],
-                'section' => $section,
-                'id' => $row_id
-            );
-
-            foreach ($row as $key => $value) {
-                if (in_array($key, $allowed, true)) {
-                    $params[$key] = is_bool($value) ? ($value ? '1' : '0') : trim((string) $value);
-                }
-            }
-
-            $calls[] = array(
-                'endpoint' => 'report_save_row',
-                'params' => $params
-            );
-
-            $fields[] = array(
-                'label' => ($row_id > 0 ? 'Change ' : 'Add ').self::row_label($section, $params),
-                'value' => self::row_summary($section, $params)
-            );
-        }
-
-        return array(
-            'summary' => 'Save '.count($calls).' '.str_replace('_', ' ', $section).(count($calls) === 1 ? '' : 's').' in the report for "'.$report['project_name'].'"',
-            'calls' => $calls,
-            'fields' => $fields
-        );
-    }
-
-    private static function row_label(string $section, array $params): string
-    {
-        $keys = array(
-            'finding' => 'finding_ref',
-            'risk' => 'risk_ref',
-            'threat' => 'threat_ref',
-            'domain' => 'domain_name',
-            'asset' => 'asset_name',
-            'scan_row' => 'scan_rating',
-            'xref' => 'xref_section',
-            'version' => 'version_label',
-            'person' => 'person_name'
-        );
-
-        $label = (string) ($params[$keys[$section]] ?? '');
-
-        return $label !== '' ? $label : str_replace('_', ' ', $section);
-    }
-
-    private static function row_summary(string $section, array $params): string
-    {
-        $keys = array(
-            'finding' => 'finding_title',
-            'risk' => 'risk_text',
-            'threat' => 'threat_name',
-            'domain' => 'domain_rating',
-            'asset' => 'data_held',
-            'scan_row' => 'scan_summary',
-            'xref' => 'requirement',
-            'version' => 'version_note',
-            'person' => 'person_title'
-        );
-
-        $text = (string) ($params[$keys[$section]] ?? '');
-
-        if (isset($params['likelihood'], $params['impact'])) {
-            $score = (int) $params['likelihood'] * (int) $params['impact'];
-            $text .= ($text === '' ? '' : ' - ').ReportBuilder::rating($score).' ('.$score.')';
-        }
-
-        return mb_strimwidth($text, 0, 300, '...');
-    }
-
-    private function propose_delete_report_rows(array $input): array
-    {
-        $report = $this->project_report($input);
-        $section = (string) ($input['section'] ?? '');
-        $ids = is_array($input['ids'] ?? null) ? $input['ids'] : array();
-
-        if ($report === null || !isset(ReportBuilder::SECTIONS[$section]) || count($ids) === 0) {
-            return self::fail('Give a project with a report, a section and the ids to remove.');
-        }
-
-        $calls = array();
-        $fields = array();
-
-        foreach ($ids as $id) {
-            $row = $this->first($this->reports_model->{'get_'.$section}((int) $id, (int) $report['id']));
-            if ($row === null) {
-                return self::fail('Row '.(int) $id.' is not in this report\'s '.$section.' section.');
-            }
-            $calls[] = array(
-                'endpoint' => 'report_delete_row',
-                'params' => array(
-                    'report_id' => (int) $report['id'],
-                    'section' => $section,
-                    'id' => (int) $id
-                )
-            );
-            $fields[] = array(
-                'label' => 'Remove '.self::row_label($section, $row),
-                'value' => self::row_summary($section, $row)
-            );
-        }
-
-        return array(
-            'summary' => 'Remove '.count($calls).' '.str_replace('_', ' ', $section).(count($calls) === 1 ? '' : 's').' from the report',
-            'calls' => $calls,
-            'fields' => $fields
-        );
-    }
-
-    private function propose_save_csf_profile(array $input): array
-    {
-        $report = $this->project_report($input);
-        $rows = is_array($input['functions'] ?? null) ? $input['functions'] : array();
-
-        if ($report === null) {
-            return self::fail('That project has no report yet. Use start_report first.');
-        }
-
-        $current = array();
-
-        foreach ($this->reports_model->load_csf((int) $report['id']) as $row) {
-            $current[$row['csf_function']] = $row;
-        }
-
-        $calls = array();
-        $fields = array();
-
-        foreach ($rows as $row) {
-
-            $function = (string) ($row['csf_function'] ?? '');
-
-            if (!in_array($function, ReportBuilder::CSF_FUNCTIONS, true)) {
-                return self::fail('csf_function must be one of: '.implode(', ', ReportBuilder::CSF_FUNCTIONS));
-            }
-
-            $params = array(
-                'report_id' => (int) $report['id'],
-                'csf_function' => $function,
-                'current_tier' => (int) ($row['current_tier'] ?? ($current[$function]['current_tier'] ?? 0)),
-                'target_tier' => (int) ($row['target_tier'] ?? ($current[$function]['target_tier'] ?? 0)),
-                'main_gaps' => (string) ($row['main_gaps'] ?? ($current[$function]['main_gaps'] ?? ''))
-            );
-
-            $calls[] = array(
-                'endpoint' => 'report_save_csf',
-                'params' => $params
-            );
-
-            $fields[] = array(
-                'label' => $function,
-                'value' => 'Tier '.$params['current_tier'].' now, '.$params['target_tier'].' target'.($params['main_gaps'] !== '' ? ' - '.$params['main_gaps'] : '')
-            );
-        }
-
-        if (count($calls) === 0) {
-            return self::fail('Give at least one CSF function.');
-        }
-
-        return array(
-            'summary' => 'Set the NIST CSF 2.0 profile in the report for "'.$report['project_name'].'"',
-            'calls' => $calls,
-            'fields' => $fields
-        );
-    }
-
-    private function propose_issue_report(array $input): array
-    {
-        $report = $this->project_report($input);
-
-        if ($report === null) {
-            return self::fail('That project has no report yet.');
-        }
-
-        return self::proposal('Issue the report for "'.$report['project_name'].'" to the client for response', 'report_issue', array(
-            'report_id' => (int) $report['id']
-        ), array(
-            'Version' => $report['report_version'],
-            'Effect' => 'The client\'s portal users can see and respond to the findings'
-        ));
-    }
-
-    private function propose_finalise_report(array $input): array
-    {
-        $report = $this->project_report($input);
-
-        if ($report === null) {
-            return self::fail('That project has no report yet.');
-        }
-
-        return self::proposal('Finalise the report for "'.$report['project_name'].'"', 'report_finalise', array(
-            'report_id' => (int) $report['id']
-        ), array(
-            'Effect' => 'Becomes the final version; the client can download the PDF'
-        ));
-    }
-
     private function propose_save_user(array $input): array
     {
         $labels = array(
@@ -2269,7 +1691,6 @@ class AiTools {
         $params = array(
             'invoice_id' => $invoice_id,
             'client_id' => $client_id,
-            'project_id' => (int) ($input['project_id'] ?? ($current['project_id'] ?? 0)),
             'due_date' => (string) ($input['due_date'] ?? substr((string) ($current['due_date'] ?? ''), 0, 10)),
             'due_days' => (int) ($current['due_days'] ?? 30),
             'invoice_footer' => (string) ($input['invoice_footer'] ?? self::plain($current['invoice_footer'] ?? '')),
@@ -2368,7 +1789,6 @@ class AiTools {
         $params = $this->merge($labels, $input, $current);
         $params['subscription_id'] = $subscription_id;
         $params['client_id'] = (int) ($input['client_id'] ?? ($current['client_id'] ?? 0));
-        $params['project_id'] = (int) ($input['project_id'] ?? ($current['project_id'] ?? 0));
         $params['quantity'] = (int) ($input['quantity'] ?? $current['quantity']);
         $params['due_days'] = (int) ($input['due_days'] ?? $current['due_days']);
 
@@ -2435,13 +1855,6 @@ class AiTools {
         }
 
         return $user;
-    }
-
-    private function person_name($user_id): string
-    {
-        $user = $this->first($this->users_model->get_company_user((int) $user_id, Session::get('company_id')));
-
-        return $user === null ? 'User '.(int) $user_id : self::plain($user['first_name'].' '.$user['last_name']);
     }
 
     private function first($rows)
