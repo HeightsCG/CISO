@@ -6743,6 +6743,17 @@ table.data.ledger .ledger__amount {
     margin-top: var(--space-3);
 }
 
+.workbench__links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    margin-top: var(--space-3);
+}
+
+.workbench__links .workbench__guidance {
+    margin-top: 0;
+}
+
 .workbench__guidance-toggle {
     display: inline-flex;
     align-items: center;

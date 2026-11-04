@@ -80,12 +80,15 @@
                                 <div class="assess__control-head workbench__head">
                                     <p class="assess__eyebrow"><span class="assess__id" id="item_identifier"></span> <span class="assess__sep" aria-hidden="true">&middot;</span> <span class="assess__family" id="item_family"></span></p>
                                     <h3 class="assess__title" id="item_title"></h3>
-                                    <div class="dropdown workbench__guidance" id="item_guidance_wrap">
-                                        <button type="button" class="workbench__guidance-toggle" id="item_guidance_toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false"><i class="fa-regular fa-circle-info"></i> Assessment guidance</button>
-                                        <div class="dropdown-menu workbench__guidance-menu">
-                                            <p class="assess__text workbench__requirement" id="item_description"></p>
-                                            <ul class="workbench__guidance-list" id="item_guidance"></ul>
+                                    <div class="workbench__links">
+                                        <div class="dropdown workbench__guidance" id="item_guidance_wrap">
+                                            <button type="button" class="workbench__guidance-toggle" id="item_guidance_toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false"><i class="fa-regular fa-circle-info"></i> Assessment guidance</button>
+                                            <div class="dropdown-menu workbench__guidance-menu">
+                                                <p class="assess__text workbench__requirement" id="item_description"></p>
+                                                <ul class="workbench__guidance-list" id="item_guidance"></ul>
+                                            </div>
                                         </div>
+                                        <button type="button" class="workbench__guidance-toggle" id="do_evidence_open"><i class="fa-regular fa-paperclip"></i> Evidence <span class="subtabs__count" id="evidence_count"></span></button>
                                     </div>
                                 </div>
 
@@ -125,14 +128,6 @@
                                     </div>
                                 </div>
 
-                                <div class="workbench__section">
-                                    <h3 class="record__group-title">Evidence</h3>
-                                    <ul class="evidence__list" id="item_evidence"></ul>
-                                    <div class="assess__actions">
-                                        <button type="button" class="btn btn--secondary btn--sm" id="do_attach_open"><i class="fa-regular fa-link"></i> Attach from Vault</button>
-                                        <button type="button" class="btn btn--secondary btn--sm" id="do_item_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload New</button>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </section>
@@ -277,6 +272,24 @@
                         </div>
                     </section>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="item_evidence_modal" tabindex="-1" aria-labelledby="item_evidence_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="item_evidence_modal_title">Evidence</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="evidence__list" id="item_evidence"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" id="do_attach_open"><i class="fa-regular fa-link"></i> Attach from Vault</button>
+                <button type="button" class="btn btn--primary" id="do_item_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload New</button>
             </div>
         </div>
     </div>
@@ -1134,6 +1147,11 @@ $(document).ready(function () {
     $('#item_objectives, #item_result').on('click', '.segmented__btn', save_item);
     $('#item_applicability, #item_justification, #item_partial_credit').on('change', save_item);
 
+    $('#do_evidence_open').click(function () {
+        $('#item_evidence_modal_title').text('Evidence for ' + current_item.control_identifier);
+        modal('item_evidence_modal').show();
+    });
+
     function load_item_evidence() {
 
         if (!current_item) {
@@ -1155,6 +1173,7 @@ $(document).ready(function () {
             }
 
             $('#item_evidence').html(html === '' ? '<li class="evidence__none">No evidence attached to this control yet.</li>' : html);
+            $('#evidence_count').text(list.length > 0 ? list.length : '');
         });
     }
 
