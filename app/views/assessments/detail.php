@@ -2,7 +2,8 @@
 
     <div class="assess__tabsbar">
         <nav class="subtabs" role="tablist" aria-label="Assessment">
-            <button class="subtabs__link active" id="tab_controls_btn" data-bs-toggle="pill" data-bs-target="#tab_controls" type="button" role="tab" aria-controls="tab_controls" aria-selected="true">Controls</button>
+            <button class="subtabs__link active" id="tab_dashboard_btn" data-bs-toggle="pill" data-bs-target="#tab_dashboard" type="button" role="tab" aria-controls="tab_dashboard" aria-selected="true">Dashboard</button>
+            <button class="subtabs__link" id="tab_controls_btn" data-bs-toggle="pill" data-bs-target="#tab_controls" type="button" role="tab" aria-controls="tab_controls" aria-selected="false">Controls</button>
             <button class="subtabs__link" id="tab_vault_btn" data-bs-toggle="pill" data-bs-target="#tab_vault" type="button" role="tab" aria-controls="tab_vault" aria-selected="false">Evidence Vault</button>
             <button class="subtabs__link" id="tab_reports_btn" data-bs-toggle="pill" data-bs-target="#tab_reports" type="button" role="tab" aria-controls="tab_reports" aria-selected="false">Reports</button>
             <button class="subtabs__link" id="tab_settings_btn" data-bs-toggle="pill" data-bs-target="#tab_settings" type="button" role="tab" aria-controls="tab_settings" aria-selected="false">Settings</button>
@@ -10,7 +11,10 @@
     </div>
 
     <div class="tab-content assess__panes">
-        <div class="tab-pane show active" id="tab_controls" role="tabpanel" aria-labelledby="tab_controls_btn">
+        <div class="tab-pane show active" id="tab_dashboard" role="tabpanel" aria-labelledby="tab_dashboard_btn">
+
+        </div>
+        <div class="tab-pane" id="tab_controls" role="tabpanel" aria-labelledby="tab_controls_btn">
             <div class="assess__progress assess__progress--wide" id="score_row" hidden>
                 <span class="assess__progress-count" id="rollup_label"></span>
                 <div class="assess__bar" id="rollup_bar"></div>
@@ -108,8 +112,7 @@
                                     </div>
 
                                     <div class="form-group mb-4" id="result_group">
-                                        <label id="item_result_label">Result</label>
-                                        <div class="segmented segmented--wrap" id="item_result" role="group" aria-labelledby="item_result_label">
+                                        <div class="segmented segmented--wrap" id="item_result" role="group" aria-label="Result">
                                             <button type="button" class="segmented__btn" data-value="Not Assessed" aria-pressed="false">Not Assessed</button>
                                             <button type="button" class="segmented__btn" data-value="Implemented" aria-pressed="false">Implemented</button>
                                             <button type="button" class="segmented__btn" data-value="Partially Implemented" aria-pressed="false">Partially</button>
@@ -1258,7 +1261,9 @@ $(document).ready(function () {
                 refresh_checks();
 
                 if (!current_item) {
-                    var first = $('#items_body .item__row:visible').first();
+                    var first = $('#items_body .item__row').filter(function () {
+                        return this.style.display !== 'none';
+                    }).first();
 
                     if (first.length > 0) {
                         open_item(first.attr('data-id'));
