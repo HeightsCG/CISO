@@ -185,7 +185,7 @@ class ReportGapAnalysis extends ReportBuilder
         );
 
         if ($a['score'] !== null) {
-            $blocks[] = self::note('Implementation score: '.$a['score'].'%. '.$a['score_method']['method'].($a['score_method']['points'] !== null ? ' '.$a['score_method']['points']['sentence'] : '').($a['score_method']['outcome'] !== null ? ' '.$a['score_method']['outcome']['sentence'] : ''));
+            $blocks[] = self::note('Implementation score: '.$this->score_text().'. '.$a['score_method']['method'].($a['score_method']['points'] !== null ? ' '.$a['score_method']['points']['sentence'] : '').($a['score_method']['outcome'] !== null ? ' '.$a['score_method']['outcome']['sentence'] : ''));
         }
 
         $blocks = array_merge($blocks, $this->family_table());
@@ -257,7 +257,7 @@ class ReportGapAnalysis extends ReportBuilder
                 $row[] = (string) $family['counts']['Not Assessed'];
             }
             $row[] = (string) $open;
-            $row[] = $family['score'] !== null ? $family['score'].'%' : 'Not scored';
+            $row[] = $family['score'] !== null ? $family['score'].'%' : 'Not yet scored';
             $rows[] = $row;
             $totals['open'] += $open;
         }
@@ -298,7 +298,7 @@ class ReportGapAnalysis extends ReportBuilder
         $total_row[] = (string) $totals['open'];
         $head[] = 'Score';
         $widths[] = 9;
-        $total_row[] = $this->a['score'] !== null ? $this->a['score'].'%' : 'Not scored';
+        $total_row[] = $this->a['score'] !== null ? $this->a['score'].'%' : 'Not yet scored';
         $rows[] = $total_row;
 
         $sum = array_sum($widths);

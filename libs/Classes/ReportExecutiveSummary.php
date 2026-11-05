@@ -290,12 +290,7 @@ class ReportExecutiveSummary extends ReportBuilder
         $priorities = $this->priority_counts();
 
         $metrics = array(
-            array(
-                'value' => $a['score'] === null ? 'Not scored' : $a['score'].'%',
-                'label' => 'Implementation score',
-                'sub' => 'Internal index, not a compliance opinion',
-                'tone' => 'brand'
-            )
+            $this->score_metric('Internal index, not a compliance opinion')
         );
         $metrics = array_merge($metrics, $this->framework_score_metrics());
 
@@ -303,7 +298,7 @@ class ReportExecutiveSummary extends ReportBuilder
             $metrics[] = array(
                 'value' => $a['assessed'].' of '.$a['total'],
                 'label' => ucfirst($this->term('controls')).' assessed',
-                'sub' => self::pct($a['assessed'], $a['total']).' complete; the rest count against the score until assessed',
+                'sub' => self::pct($a['assessed'], $a['total']).' complete; the rest are left out of the score until assessed',
                 'tone' => 'warning'
             );
         }

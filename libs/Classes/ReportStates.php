@@ -81,7 +81,11 @@ class ReportStates
         )));
     }
 
-    /** The recorded results a Final document stands on. */
+    /**
+     * The recorded results a Final document stands on, and the scoring method
+     * that produced its figures: a method change marks the Final as changed,
+     * so new calculations only appear in a newly issued version.
+     */
     public static function facts(array $analysis): array
     {
         $controls = array();
@@ -113,7 +117,13 @@ class ReportStates
             'standard' => $analysis['standard'] ?? '',
             'period' => $analysis['period'] ?? '',
             'assessor' => $analysis['assessor'] ?? array(),
-            'controls' => $controls
+            'controls' => $controls,
+            'scoring' => array(
+                'method' => $analysis['scoring']['method'] ?? '',
+                'model' => $analysis['scoring']['model'] ?? '',
+                'partial_value' => $analysis['scoring']['partial_value'] ?? null,
+                'basis' => $analysis['score_method']['method'] ?? ''
+            )
         );
     }
 

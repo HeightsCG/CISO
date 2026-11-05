@@ -1202,9 +1202,9 @@ class ReportAnalysis
      * percentage rounded to a whole number, exactly as the assessment
      * dashboard rounds it. Null while no applicable control has a result.
      */
-    public static function score(array $counts, float $percentage): ?int
+    public static function score(array $counts, ?float $percentage): ?int
     {
-        if ($counts['Implemented'] + $counts['Partially Implemented'] + $counts['Not Implemented'] === 0) {
+        if ($percentage === null || $counts['Implemented'] + $counts['Partially Implemented'] + $counts['Not Implemented'] === 0) {
             return null;
         }
 
@@ -1297,13 +1297,13 @@ class ReportAnalysis
         } else {
             $method .= ucfirst($partial).' '.$t['controls'].' receive no credit: the '.$name.' framework definition sets no partial credit value for this score.';
         }
-        $method .= ' Not applicable and excluded '.$t['controls'].' are left out; '.$t['controls'].' not yet assessed count as not '.$met.' until they are assessed.';
+        $method .= ' Not applicable and excluded '.$t['controls'].' are left out, and '.$t['controls'].' not yet assessed are left out until they are assessed, so the score is provisional while the assessment is incomplete; assessment completion is reported separately.';
         $method .= ' It is an internal implementation index, not an audit opinion, attestation, certification or compliance determination under '.$name.'.';
 
         $formula = $partial_value > 0
-            ? '('.$c['Implemented'].' '.$met.' + '.self::number($partial_value).' × '.$c['Partially Implemented'].' '.$partial.') ÷ '.$scoring['applicable'].' applicable '.$t['controls']
-            : $c['Implemented'].' '.$met.' ÷ '.$scoring['applicable'].' applicable '.$t['controls'];
-        $formula .= ' = '.self::number($scoring['percentage']).'%';
+            ? '('.$c['Implemented'].' '.$met.' + '.self::number($partial_value).' × '.$c['Partially Implemented'].' '.$partial.') ÷ '.$scoring['scored'].' assessed applicable '.$t['controls']
+            : $c['Implemented'].' '.$met.' ÷ '.$scoring['scored'].' assessed applicable '.$t['controls'];
+        $formula .= $scoring['percentage'] === null ? ': not yet scored' : ' = '.self::number($scoring['percentage']).'%';
 
         $points = null;
         if ($scoring['points'] !== null) {

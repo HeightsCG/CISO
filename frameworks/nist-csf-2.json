@@ -131,7 +131,8 @@
         {
             "id": "extent_achieved",
             "type": "partial_credit",
-            "summary": "The Current Profile records how, or to what extent, each outcome is achieved, so an outcome can be partially achieved.",
+            "value": 0.5,
+            "summary": "The Current Profile records how, or to what extent, each outcome is achieved, so an outcome can be partially achieved. In the internal implementation index a partially achieved outcome counts as half. This is an HCG convention: the CSF itself defines no score.",
             "source": "cswp29",
             "cite": "NIST CSWP 29, section 3.1",
             "quote": "A Current Profile specifies the Core outcomes that an organization is currently achieving (or attempting to achieve) and characterizes how or to what extent each outcome is being achieved."

@@ -182,7 +182,9 @@
         {
             "id": "vdr_supersedes_poam",
             "type": "plan_handling",
-            "summary": "The POA&M timeframes above come from FedRAMP legacy documentation (reference only since 24 June 2026). FedRAMP's Vulnerability Detection and Response rules are mandatory from 7 December 2026 and set their own remediation timeframes; check the current FedRAMP rules for the offering.",
+            "effective_date": "2026-12-07",
+            "grace_period_end": "2027-03-07",
+            "summary": "The POA&M timeframes above come from FedRAMP legacy documentation (reference only since 24 June 2026). FedRAMP's Vulnerability Detection and Response rules are mandatory from 7 December 2026, with a grace period to 7 March 2027 under a corrective action plan, and set their own remediation timeframes; check the current FedRAMP rules for the offering.",
             "cite": "FedRAMP Notice 0014 (June 2026)"
         }
     ],

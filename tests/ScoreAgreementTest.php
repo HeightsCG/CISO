@@ -88,7 +88,7 @@ return array(
         $agree($not_met, 'all not met');
     },
 
-    'SOC 2: not applicable leaves the denominator; unassessed counts as not met' => function () use ($rows, $both, $agree) {
+    'SOC 2: not applicable and unassessed criteria leave the denominator; nothing assessed is not yet scored' => function () use ($rows, $both, $agree) {
         $na = $both('soc2', $rows('soc2', function ($i) {
             return $i % 2 === 0 ? 'Not Applicable' : 'Implemented';
         }));
@@ -99,7 +99,7 @@ return array(
         $none = $both('soc2', $rows('soc2', function () {
             return 'Not Assessed';
         }));
-        Assert::same(0.0, $none['service']['percentage'], 'nothing assessed');
+        Assert::same(null, $none['service']['percentage'], 'nothing assessed is not yet scored');
         Assert::same(null, $none['report']['score'], 'reports show no score until something is assessed');
         $agree($none, 'nothing assessed');
 
@@ -107,7 +107,8 @@ return array(
             return $i < 10 ? 'Implemented' : 'Not Assessed';
         }));
         $applicable = $half['service']['applicable'];
-        Assert::same(round(10 / $applicable * 100, 1), $half['service']['percentage'], 'unassessed criteria stay in the denominator');
+        Assert::same(100.0, $half['service']['percentage'], 'unassessed criteria are left out until assessed');
+        Assert::same($applicable - 10, $half['service']['counts']['Not Assessed'], 'completion is still tracked separately');
         $agree($half, 'partly assessed');
     },
 
@@ -137,7 +138,7 @@ return array(
         Assert::same(50, $partial['report']['score'], 'as printed');
         Assert::same(0, $not_met['report']['score'], 'all not met');
         Assert::same(50.0, $na['service']['percentage'], 'not applicable leaves the denominator');
-        Assert::same(round(10 / $unassessed['service']['applicable'] * 100, 1), $unassessed['service']['percentage'], 'unassessed stays in the denominator');
+        Assert::same(round(10 / $unassessed['service']['scored'] * 100, 1), $unassessed['service']['percentage'], 'unassessed controls are left out of the denominator');
         foreach (array($met, $partial, $not_met, $na, $unassessed) as $n => $pair) {
             $agree($pair, 'ISO case '.$n);
         }
@@ -265,5 +266,70 @@ return array(
             return $issue['category'] === 'cross_report_inconsistency' && strpos($issue['description'], 'Quotes a score') !== false;
         });
         Assert::true(count($flagged) === 0, 'the authoritative figure passes');
+    },
+    'Every percentage partial credit rule states its value; a rule without one is an error, not a silent zero' => function () use ($definition) {
+        foreach (glob(ROOT.'/frameworks/*.json') as $file) {
+            $d = json_decode(file_get_contents($file), true);
+            foreach ($d['rules'] ?? array() as $rule) {
+                if (($rule['type'] ?? '') === 'partial_credit' && !isset($rule['controls'])) {
+                    Assert::true(isset($rule['value']) && is_numeric($rule['value']), basename($file).' '.$rule['id'].' has a value');
+                }
+            }
+        }
+
+        $broken = $definition('soc2');
+        $broken['rules'][] = array(
+            'id' => 'incomplete',
+            'type' => 'partial_credit'
+        );
+        $threw = false;
+        try {
+            AssessmentScore::score($broken, array(), array());
+        } catch (RuntimeException $e) {
+            $threw = true;
+        }
+        Assert::true($threw, 'a partial credit rule without a value is refused');
+    },
+
+    'NIST CSF 2.0: a partially achieved outcome counts half under the explicit rule' => function () use ($rows, $all, $both, $agree) {
+        $partial = $both('nist-csf-2', $rows('nist-csf-2', $all('Partially Implemented')));
+        Assert::same(0.5, $partial['service']['partial_value'], 'explicit value from the definition');
+        Assert::same(50.0, $partial['service']['percentage'], 'all partial counts half');
+        $agree($partial, 'CSF all partial');
+    },
+
+    'CMMC Level 2: partial answers stay as data; the formal points score follows the framework rule' => function () use ($rows, $both) {
+        $pair = $both('cmmc-l2', $rows('cmmc-l2', function ($i) {
+            return $i === 0 ? 'Partially Implemented' : 'Implemented';
+        }));
+        $control_rows = $pair['service'];
+        Assert::same(1, $control_rows['counts']['Partially Implemented'], 'the partial answer is kept');
+        Assert::same(0.0, $control_rows['partial_value'], 'no percentage credit for a partial answer');
+        Assert::true($control_rows['points']['deducted'] > 0, 'the points score deducts the requirement as not met');
+        Assert::same(null, $both('cmmc-l2', $rows('cmmc-l2', function () {
+            return 'Not Assessed';
+        }))['service']['percentage'], 'nothing assessed is not yet scored');
+    },
+
+    'A scoring method change marks an issued Final as changed' => function () {
+        require_once ROOT.'/libs/Classes/ReportStates.php';
+        $analysis = array(
+            'name' => 'A',
+            'controls' => array(),
+            'scoring' => array(
+                'method' => AssessmentScore::METHOD,
+                'model' => 'percentage',
+                'partial_value' => 0.0
+            ),
+            'score_method' => array(
+                'method' => 'basis'
+            )
+        );
+        $changed = $analysis;
+        $changed['scoring']['method'] = 'next';
+        Assert::true(ReportStates::facts($analysis) !== ReportStates::facts($changed), 'method version is part of the Final facts');
+        $changed = $analysis;
+        $changed['scoring']['partial_value'] = 0.5;
+        Assert::true(ReportStates::facts($analysis) !== ReportStates::facts($changed), 'partial credit value is part of the Final facts');
     }
 );

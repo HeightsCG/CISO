@@ -1408,9 +1408,26 @@ $(document).ready(function () {
             }
         }
 
-        var score_value = score.points
-            ? score.points.score + '<span class="adash__of"> / ' + score.points.maximum + '</span>'
-            : Math.round(score.percentage) + '%';
+        var score_value = score.percentage === null ? 'Not yet scored' : Math.round(score.percentage) + '%';
+        var score_lines = [];
+
+        if (score.percentage !== null && !score.complete) {
+            score_lines.push('Provisional | ' + assessed + ' of ' + in_scope + ' assessed');
+        }
+
+        var formal = [];
+
+        if (score.points) {
+            formal.push('Points ' + score.points.score + ' of ' + score.points.maximum);
+        }
+
+        if (outcome_text(score.outcome) !== '') {
+            formal.push(esc(outcome_text(score.outcome)));
+        }
+
+        if (formal.length > 0) {
+            score_lines.push(formal.join(' · '));
+        }
 
         $('#adash_kpis').html(
             dash_kpi(
@@ -1422,7 +1439,7 @@ $(document).ready(function () {
             + dash_kpi(
                 'Score',
                 score_value,
-                esc(outcome_text(score.outcome)),
+                score_lines.join('<br>'),
                 ''
             )
             + dash_kpi(
@@ -1468,7 +1485,7 @@ $(document).ready(function () {
             html += '<li class="adash__family">'
                 + '<span class="adash__family-name" title="' + esc(fam.name) + '">' + esc(fam.name) + '</span>'
                 + '<span class="dash__bar adash__family-bar">' + bar + '</span>'
-                + '<span class="adash__family-pct">' + Math.round(fam.percentage) + '%</span>'
+                + '<span class="adash__family-pct">' + (fam.percentage === null ? 'Not yet scored' : Math.round(fam.percentage) + '%') + '</span>'
                 + '</li>';
         }
 
@@ -1480,7 +1497,7 @@ $(document).ready(function () {
             var gaps_a = (a.counts['Not Implemented'] || 0) + (a.counts['Partially Implemented'] || 0);
             var gaps_b = (b.counts['Not Implemented'] || 0) + (b.counts['Partially Implemented'] || 0);
 
-            return a.percentage - b.percentage || gaps_b - gaps_a;
+            return (a.percentage || 0) - (b.percentage || 0) || gaps_b - gaps_a;
         }).slice(0, 5);
 
         html = '';

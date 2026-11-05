@@ -401,12 +401,7 @@ class ReportRiskAssessment extends ReportBuilder
         $applicable_assessed = $a['assessed'] - $c['Not Applicable'];
 
         if ($a['score'] !== null) {
-            $items[] = array(
-                'value' => $a['score'].'%',
-                'label' => 'Implementation score',
-                'sub' => $a['assessed'] < $a['total'] ? 'Provisional · not an opinion' : 'Not a compliance opinion',
-                'tone' => 'brand'
-            );
+            $items[] = $this->score_metric('Not a compliance opinion');
         }
         $items = array_merge($items, $this->framework_score_metrics());
 
@@ -900,7 +895,7 @@ class ReportRiskAssessment extends ReportBuilder
                     $assessed === $total ? 'All '.$total : $assessed.' of '.$total,
                     (string) $family['counts']['Implemented'],
                     (string) $family['counts']['Not Applicable'],
-                    $family['score'] !== null ? $family['score'].'%' : 'Not scored'
+                    $family['score'] !== null ? $family['score'].'%' : 'Not yet scored'
                 );
             }
             $blocks[] = self::text('No gaps were recorded among the assessed '.$this->term('controls').' of these '.$this->term('families').'.');

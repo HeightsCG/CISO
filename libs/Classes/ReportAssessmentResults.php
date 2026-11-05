@@ -114,12 +114,7 @@ class ReportAssessmentResults extends ReportBuilder
         }));
 
         $metrics = array(
-            array(
-                'value' => $a['score'] === null ? 'Not scored' : $a['score'].'%',
-                'label' => 'Implementation score',
-                'sub' => 'See the scoring method',
-                'tone' => 'brand'
-            )
+            $this->score_metric('See the scoring method')
         );
         $metrics = array_merge($metrics, $this->framework_score_metrics(), array(
             array(

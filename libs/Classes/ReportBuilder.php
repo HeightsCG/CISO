@@ -199,6 +199,41 @@ abstract class ReportBuilder
      * results support, both as AssessmentScore works them out. Empty for
      * frameworks with neither.
      */
+    /**
+     * The implementation score as one line: "80% Provisional | 5 of 106
+     * assessed" while controls remain unassessed, "80%" when complete, and
+     * "Not yet scored" before any result.
+     */
+    protected function score_text(): string
+    {
+        $a = $this->a;
+
+        if ($a['score'] === null) {
+            return 'Not yet scored';
+        }
+
+        return $a['score'].'%'.($a['assessed'] < $a['total'] ? ' '.$this->provisional_line() : '');
+    }
+
+    /** "Provisional | 5 of 106 assessed", from the recorded counts. */
+    protected function provisional_line(): string
+    {
+        return 'Provisional | '.$this->a['assessed'].' of '.$this->a['total'].' assessed';
+    }
+
+    /** The implementation score metric tile; $complete_sub is the sub-line once every control is assessed. */
+    protected function score_metric(string $complete_sub): array
+    {
+        $a = $this->a;
+
+        return array(
+            'value' => $a['score'] === null ? 'Not yet scored' : $a['score'].'%',
+            'label' => 'Implementation score',
+            'sub' => $a['score'] !== null && $a['assessed'] < $a['total'] ? $this->provisional_line() : $complete_sub,
+            'tone' => 'brand'
+        );
+    }
+
     protected function framework_score_metrics(): array
     {
         $method = $this->a['score_method'];

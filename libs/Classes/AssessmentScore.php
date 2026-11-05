@@ -11,6 +11,9 @@
  */
 class AssessmentScore {
 
+    /** Version of the scoring method; part of the Final digest so a method change is never applied to an issued Final. */
+    const METHOD = '2026-11-27';
+
     const MET = 'Implemented';
     const PARTIAL = 'Partially Implemented';
     const NOT_MET = 'Not Implemented';
@@ -68,19 +71,25 @@ class AssessmentScore {
 
         foreach ($families as $name => $family) {
             $family_applicable = array_sum($family['counts']) - $family['counts'][self::NA];
+            $family_scored = $family_applicable - $family['counts'][self::NOT_ASSESSED];
             $families[$name]['applicable'] = $family_applicable;
-            $families[$name]['percentage'] = self::percent($family['counts'][self::MET] + $partial_value * $family['counts'][self::PARTIAL], $family_applicable);
+            $families[$name]['scored'] = $family_scored;
+            $families[$name]['percentage'] = self::percent($family['counts'][self::MET] + $partial_value * $family['counts'][self::PARTIAL], $family_scored);
         }
+
+        $scored = $applicable - $counts[self::NOT_ASSESSED];
 
         $score = array(
             'model' => $definition['scoring']['model'],
+            'method' => self::METHOD,
             'partial_value' => $partial_value,
             'complete' => $counts[self::NOT_ASSESSED] === 0,
             'counts' => $counts,
             'in_scope' => count($in_scope),
             'applicable' => $applicable,
+            'scored' => $scored,
             'excluded' => $excluded,
-            'percentage' => self::percent($counts[self::MET] + $partial_value * $counts[self::PARTIAL], $applicable),
+            'percentage' => self::percent($counts[self::MET] + $partial_value * $counts[self::PARTIAL], $scored),
             'families' => array_values($families),
             'points' => null,
             'gates' => self::gates($rules, $in_scope),
@@ -109,18 +118,34 @@ class AssessmentScore {
         return $rules;
     }
 
-    private static function percent(float $numerator, int $denominator): float
+    /**
+     * Percentage of the assessed applicable controls; null while none of them
+     * has been assessed, so nothing is scored before there is a result.
+     */
+    private static function percent(float $numerator, int $denominator): ?float
     {
-        return $denominator === 0 ? 0.0 : round($numerator / $denominator * 100, 1);
+        return $denominator <= 0 ? null : round($numerator / $denominator * 100, 1);
     }
 
-    /** What a partially met control counts for in a percentage score, from a partial_credit rule with a value. */
+    /**
+     * What a partially met control counts for in a percentage score. A
+     * framework without a percentage partial_credit rule gives no partial
+     * credit. Rules listing controls are point exceptions for the points
+     * score, not percentage credit. Any other partial_credit rule must state
+     * its value; one without a value is a definition error, not a silent zero.
+     */
     private static function partial_value(array $rules): float
     {
         foreach ($rules['partial_credit'] ?? array() as $rule) {
-            if (isset($rule['value'])) {
-                return (float) $rule['value'];
+            if (isset($rule['controls'])) {
+                continue;
             }
+
+            if (!isset($rule['value']) || !is_numeric($rule['value'])) {
+                throw new RuntimeException('Partial credit rule '.($rule['id'] ?? '').' has no value');
+            }
+
+            return (float) $rule['value'];
         }
 
         return 0.0;
