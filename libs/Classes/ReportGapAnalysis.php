@@ -185,7 +185,7 @@ class ReportGapAnalysis extends ReportBuilder
         );
 
         if ($a['score'] !== null) {
-            $blocks[] = self::note('Implementation score: '.$a['score'].'% (implemented counts in full, partially implemented counts half, over the assessed applicable '.$this->term('controls').'). It measures how fully the '.$this->term('controls').' are in place and is not a compliance opinion or certification result.');
+            $blocks[] = self::note('Implementation score: '.$a['score'].'%. '.$a['score_method']['method'].($a['score_method']['points'] !== null ? ' '.$a['score_method']['points']['sentence'] : '').($a['score_method']['outcome'] !== null ? ' '.$a['score_method']['outcome']['sentence'] : ''));
         }
 
         $blocks = array_merge($blocks, $this->family_table());

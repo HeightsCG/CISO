@@ -1623,7 +1623,8 @@ class ReportRenderer {
 
     /**
      * A finding card. A short card never splits; a long one keeps its header,
-     * the details line and its first section together and lets the rest flow.
+     * the details line and its first detail rows (or its first section)
+     * together and lets the rest flow.
      */
     private static function pdf_finding(array $block, callable $e, string $held): string
     {
@@ -1653,10 +1654,14 @@ class ReportRenderer {
         }
 
         $body = array();
+        $split = $length > self::FINDING_WHOLE_CHARS ? self::finding_lead_rows($rows) : count($rows);
 
-        if (count($rows) > 0) {
+        foreach (array_filter(array(
+            array_slice($rows, 0, $split),
+            array_slice($rows, $split)
+        )) as $part) {
             $table = '<table class="rows">';
-            foreach ($rows as $row) {
+            foreach ($part as $row) {
                 $table .= '<tr><td class="label">'.$e($row[0]).'</td><td>'.nl2br($e($row[1])).'</td></tr>';
             }
             $body[] = $table.'</table>';
@@ -1716,6 +1721,26 @@ class ReportRenderer {
 
         return '<div style="page-break-inside:avoid">'.$held.'<div class="fcard top'.$spacing.'"'.$id.$style.'>'.$head.$lead.'</div></div>'
             .'<div class="fcard rest'.$spacing.'"'.$style.'>'.implode('', $body).'</div>';
+    }
+
+    /**
+     * How many of a long card's detail rows stay with its header: rows up to
+     * FINDING_LEAD_CHARS of text, at least one. The rest flow and split
+     * between rows, so a card's top never grows to nearly a page and a card
+     * that runs a line past a page does not push the next card to a new one.
+     */
+    private static function finding_lead_rows(array $rows): int
+    {
+        $length = 0;
+
+        foreach ($rows as $index => $row) {
+            $length += self::text_length($row[1]);
+            if ($length >= self::FINDING_LEAD_CHARS) {
+                return $index + 1;
+            }
+        }
+
+        return count($rows);
     }
 
     /**

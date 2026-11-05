@@ -179,7 +179,7 @@
             "type": "deadline",
             "days": 180,
             "from": "Conditional status date",
-            "summary": "Every POA&M item must be closed and confirmed by a DCMA DIBCAC closeout assessment within 180 days, or Conditional status expires.",
+            "summary": "Every POA&M item must be closed and confirmed by a DCMA DIBCAC POA&M closeout assessment within 180 days of the Conditional CMMC Status Date, or Conditional status expires.",
             "source": "cfr170",
             "cite": "32 CFR 170.21(b)",
             "quote": "The closing of a POA&M must be confirmed by a POA&M closeout assessment within 180-days of the Conditional CMMC Status Date"
@@ -219,6 +219,14 @@
             "source": "cfr170",
             "cite": "32 CFR 170.22(b)(4)",
             "quote": "OSCs must annually affirm their CMMC Status of Level 2 (C3PAO) in addition to their CMMC Status of Level 3 (DIBCAC) to maintain eligibility for contracts requiring compliance with Level 3."
+        },
+        {
+            "id": "poam_level2_prerequisite",
+            "type": "plan_handling",
+            "summary": "A Level 3 assessment, and so a Level 3 POA&M, needs a Final Level 2 (C3PAO) status on the Level 3 scope first; a Conditional Level 2 status is not enough.",
+            "source": "cfr170",
+            "cite": "32 CFR 170.18(a)(1)",
+            "quote": "The OSC must achieve a CMMC Status of Final Level 2 (C3PAO) on the Level 3 CMMC Assessment Scope"
         }
     ],
     "deliverables": [

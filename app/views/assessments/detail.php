@@ -12,7 +12,35 @@
 
     <div class="tab-content assess__panes">
         <div class="tab-pane show active" id="tab_dashboard" role="tabpanel" aria-labelledby="tab_dashboard_btn">
-
+            <div class="panel record__panel">
+                <dl class="kpi adash__kpi" id="adash_kpis"></dl>
+            </div>
+            <div class="row gx-4 adash__grid">
+                <div class="col-lg-7 adash__col">
+                    <div class="panel record__panel adash__panel">
+                        <div class="panel__head">
+                            <h2 class="panel__title">Results by Category</h2>
+                        </div>
+                        <div class="panel__body adash__scroll">
+                            <ul class="adash__families" id="adash_families"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 adash__col adash__side">
+                    <div class="panel record__panel adash__panel">
+                        <div class="panel__head">
+                            <h2 class="panel__title">Weakest Categories</h2>
+                        </div>
+                        <div class="panel__body adash__scroll">
+                            <ul class="adash__rows" id="adash_weakest"></ul>
+                            <h3 class="adash__section">POA&amp;M by Remediation Priority</h3>
+                            <ul class="adash__rows" id="adash_poam"></ul>
+                            <h3 class="adash__section">Report Readiness</h3>
+                            <ul class="adash__rows" id="adash_report"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="tab-pane" id="tab_controls" role="tabpanel" aria-labelledby="tab_controls_btn">
             <div class="assess__progress assess__progress--wide" id="score_row" hidden>
@@ -614,7 +642,7 @@
                                 <th scope="col" class="poam__col-id">ID</th>
                                 <th scope="col" class="poam__col-control">Control</th>
                                 <th scope="col">Weakness</th>
-                                <th scope="col" class="poam__col-owner">Owner</th>
+                                <th scope="col" class="poam__col-owner">Responsible Owner</th>
                                 <th scope="col" class="poam__col-date">Scheduled</th>
                                 <th scope="col" class="poam__col-status">Status</th>
                                 <th scope="col" class="poam__col-priority">Remediation Priority</th>
@@ -659,15 +687,11 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4 form-group mb-3">
-                            <label for="poam_owner">Owner</label>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="poam_owner">Responsible Owner</label>
                             <input type="text" class="form-control" id="poam_owner" maxlength="200">
                         </div>
-                        <div class="col-md-4 form-group mb-3">
-                            <label for="poam_resources">Resources</label>
-                            <input type="text" class="form-control" id="poam_resources">
-                        </div>
-                        <div class="col-md-4 form-group mb-3">
+                        <div class="col-md-6 form-group mb-3">
                             <label for="poam_status">Status</label>
                             <select class="form-control" id="poam_status" data-style="form-control">
                                 <option value="Open">Open</option>
@@ -677,18 +701,24 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4 form-group mb-3">
+                        <div class="col-md-6 form-group mb-3">
                             <label for="poam_detection">Detection Date</label>
                             <input type="date" class="form-control" id="poam_detection">
                         </div>
-                        <div class="col-md-4 form-group mb-3">
-                            <label for="poam_scheduled">Scheduled Completion</label>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="poam_scheduled">Scheduled Completion Date</label>
                             <input type="date" class="form-control" id="poam_scheduled">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 form-group mb-3">
+                            <label for="poam_resources">Resources Required</label>
+                            <textarea class="form-control poam__text" id="poam_resources" rows="2"></textarea>
                         </div>
                     </div>
                     <div class="poam__fedramp" id="poam_fedramp" hidden>
                         <div class="row">
-                            <div class="col-md-4 form-group mb-3">
+                            <div class="col-md-6 form-group mb-3">
                                 <label for="poam_risk">Risk Rating</label>
                                 <select class="form-control" id="poam_risk" data-style="form-control">
                                     <option value="">Not set</option>
@@ -698,24 +728,7 @@
                                     <option value="Critical">Critical</option>
                                 </select>
                             </div>
-                            <div class="col-md-4 form-group mb-3">
-                                <label for="poam_vendor_dependency">Vendor Dependency</label>
-                                <select class="form-control" id="poam_vendor_dependency" data-style="form-control">
-                                    <option value="0">No</option>
-                                    <option value="1">Yes</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4 form-group mb-3">
-                                <label for="poam_vendor_checkin">Vendor Check-in</label>
-                                <input type="date" class="form-control" id="poam_vendor_checkin">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-8 form-group mb-3">
-                                <label for="poam_vendor_product">Vendor Product</label>
-                                <input type="text" class="form-control" id="poam_vendor_product" maxlength="200">
-                            </div>
-                            <div class="col-md-4 form-group mb-3">
+                            <div class="col-md-6 form-group mb-3">
                                 <label for="poam_deviation_type">Deviation Type</label>
                                 <select class="form-control" id="poam_deviation_type" data-style="form-control">
                                     <option value="">None</option>
@@ -723,6 +736,25 @@
                                     <option value="False Positive">False Positive</option>
                                     <option value="Operational Requirement">Operational Requirement</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 form-group mb-3">
+                                <label for="poam_vendor_dependency">Vendor Dependency</label>
+                                <select class="form-control" id="poam_vendor_dependency" data-style="form-control">
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group mb-3">
+                                <label for="poam_vendor_checkin">Last Vendor Check-in Date</label>
+                                <input type="date" class="form-control" id="poam_vendor_checkin">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 form-group mb-3">
+                                <label for="poam_vendor_product">Vendor Product</label>
+                                <input type="text" class="form-control" id="poam_vendor_product" maxlength="200">
                             </div>
                         </div>
                         <div class="row">
@@ -1321,7 +1353,208 @@ $(document).ready(function () {
 
         $('#score_row').prop('hidden', false);
         rollup();
+        render_dashboard();
     }
+
+    var dash_poam = {
+        open: 0,
+        overdue: 0
+    };
+
+    var DASH_PARTS = [
+        ['Implemented', 'is-ok'],
+        ['Partially Implemented', 'is-partial'],
+        ['Not Implemented', 'is-gap'],
+        ['Not Applicable', 'is-na'],
+        ['Not Assessed', 'is-none']
+    ];
+
+    function dash_kpi(label, value, sub, tone) {
+        return '<div class="kpi__cell">'
+            + '<dt class="kpi__label">' + label + '</dt>'
+            + '<dd class="kpi__value' + (tone === '' ? '' : ' ' + tone) + '">' + value + '</dd>'
+            + '<dd class="kpi__sub">' + sub + '</dd>'
+            + '</div>';
+    }
+
+    function dash_row(label, value, sub) {
+        return '<li class="adash__row">'
+            + '<span class="adash__row-label">' + label + (sub ? '<span class="adash__row-sub">' + sub + '</span>' : '') + '</span>'
+            + '<span class="adash__row-value">' + value + '</span>'
+            + '</li>';
+    }
+
+    function render_dashboard() {
+
+        if (!review || !review.score) {
+            return;
+        }
+
+        var score = review.score;
+        var counts = score.counts;
+        var in_scope = parseInt(score.in_scope, 10) || 0;
+        var assessed = in_scope - (counts['Not Assessed'] || 0);
+        var gaps = (counts['Not Implemented'] || 0) + (counts['Partially Implemented'] || 0);
+        var scoped = 0;
+        var evidenced = 0;
+
+        for (var i = 0; i < controls.length; i++) {
+            if (!counts_toward_scope(controls[i])) {
+                continue;
+            }
+            scoped++;
+            if (evidence_total(controls[i]) > 0) {
+                evidenced++;
+            }
+        }
+
+        var score_value = score.points
+            ? score.points.score + '<span class="adash__of"> / ' + score.points.maximum + '</span>'
+            : Math.round(score.percentage) + '%';
+
+        $('#adash_kpis').html(
+            dash_kpi(
+                'Progress',
+                (in_scope > 0 ? Math.round(assessed / in_scope * 100) : 0) + '%',
+                assessed + ' of ' + in_scope + ' assessed',
+                ''
+            )
+            + dash_kpi(
+                'Score',
+                score_value,
+                esc(outcome_text(score.outcome)),
+                ''
+            )
+            + dash_kpi(
+                'Gaps',
+                gaps,
+                (counts['Not Implemented'] || 0) + ' not implemented, ' + (counts['Partially Implemented'] || 0) + ' partial',
+                gaps > 0 ? 'is-gap' : ''
+            )
+            + dash_kpi(
+                'Evidence',
+                (scoped > 0 ? Math.round(evidenced / scoped * 100) : 0) + '%',
+                evidenced + ' of ' + scoped + ' with evidence',
+                ''
+            )
+            + dash_kpi(
+                'Open POA&amp;M',
+                dash_poam.open,
+                dash_poam.overdue > 0 ? '<span class="kpi__alert"><i class="fa-regular fa-clock"></i> ' + dash_poam.overdue + ' overdue</span>' : 'none overdue',
+                ''
+            )
+        );
+
+        var families = score.families.slice();
+        var html = '';
+
+        for (var f = 0; f < families.length; f++) {
+
+            var fam = families[f];
+            var total = 0;
+            var bar = '';
+
+            for (var k = 0; k < DASH_PARTS.length; k++) {
+                total += fam.counts[DASH_PARTS[k][0]] || 0;
+            }
+
+            for (var b = 0; b < DASH_PARTS.length; b++) {
+                var n = fam.counts[DASH_PARTS[b][0]] || 0;
+                if (n > 0) {
+                    bar += '<span class="dash__bar-part ' + DASH_PARTS[b][1] + '" style="width:' + (n / total * 100) + '%" title="' + n + ' ' + result_label(DASH_PARTS[b][0]) + '"></span>';
+                }
+            }
+
+            html += '<li class="adash__family">'
+                + '<span class="adash__family-name" title="' + esc(fam.name) + '">' + esc(fam.name) + '</span>'
+                + '<span class="dash__bar adash__family-bar">' + bar + '</span>'
+                + '<span class="adash__family-pct">' + Math.round(fam.percentage) + '%</span>'
+                + '</li>';
+        }
+
+        $('#adash_families').html(html);
+
+        var weakest = families.filter(function (fam) {
+            return (fam.counts['Not Implemented'] || 0) + (fam.counts['Partially Implemented'] || 0) > 0;
+        }).sort(function (a, b) {
+            var gaps_a = (a.counts['Not Implemented'] || 0) + (a.counts['Partially Implemented'] || 0);
+            var gaps_b = (b.counts['Not Implemented'] || 0) + (b.counts['Partially Implemented'] || 0);
+
+            return a.percentage - b.percentage || gaps_b - gaps_a;
+        }).slice(0, 5);
+
+        html = '';
+
+        for (var w = 0; w < weakest.length; w++) {
+            var open = (weakest[w].counts['Not Implemented'] || 0) + (weakest[w].counts['Partially Implemented'] || 0);
+            html += dash_row(esc(weakest[w].name), Math.round(weakest[w].percentage) + '%', open + (open === 1 ? ' gap' : ' gaps'));
+        }
+
+        $('#adash_weakest').html(html === '' ? '<li class="adash__empty">No gaps recorded.</li>' : html);
+    }
+
+    function load_dashboard_extras() {
+
+        ApiDataSvc.apiCall('post', 'poam_summary', { assessment_id: assessment_id }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            if (!obj.success) {
+                return;
+            }
+
+            var by = {};
+            var open = 0;
+            var overdue = 0;
+            var html = '';
+
+            for (var i = 0; i < obj.priorities.length; i++) {
+                by[obj.priorities[i].priority] = obj.priorities[i];
+                open += parseInt(obj.priorities[i].open_count, 10) || 0;
+                overdue += parseInt(obj.priorities[i].overdue_count, 10) || 0;
+            }
+
+            ['High', 'Medium', 'Low'].forEach(function (level) {
+                var row = by[level];
+                if (!row) {
+                    return;
+                }
+                var o = parseInt(row.open_count, 10) || 0;
+                var c = parseInt(row.closed_count, 10) || 0;
+                html += dash_row(level, o + ' open', c + ' closed');
+            });
+
+            $('#adash_poam').html(html === '' ? '<li class="adash__empty">No POA&amp;M items recorded yet.</li>' : html);
+            dash_poam.open = open;
+            dash_poam.overdue = overdue;
+            render_dashboard();
+        });
+
+        ApiDataSvc.apiCall('post', 'report_center', { assessment_id: assessment_id }, function (data) {
+
+            var obj = JSON.parse(data);
+            var n = obj.narratives;
+
+            if (!n || !n.total) {
+                $('#adash_report').html('<li class="adash__empty">No narrative sections.</li>');
+                return;
+            }
+
+            $('#adash_report').html(
+                dash_row('Approved', n.approved + ' of ' + n.total, '')
+                + dash_row('Drafts to review', n.draft + n.rejected, '')
+                + dash_row('Out of date', n.stale, '')
+                + dash_row('Not written', n.missing, '')
+            );
+        });
+    }
+
+    $('#tab_dashboard_btn').on('shown.bs.tab', function () {
+        render_dashboard();
+        load_dashboard_extras();
+    });
+
+    load_dashboard_extras();
 
     function refresh_checks(done) {
         ApiDataSvc.apiCall('post', 'assessment_checks', { assessment_id: assessment_id }, function (data) {
@@ -3583,10 +3816,71 @@ $(document).ready(function () {
         };
     }
 
+    function prepare_report(values, ready, failed, wanted) {
+
+        ApiDataSvc.apiCall('post', 'ready_report_download', values, function (data) {
+
+            var obj = JSON.parse(data);
+
+            if (!obj.success) {
+                failed(obj.message);
+                return;
+            }
+
+            if (obj.url) {
+                ready(obj.url);
+                return;
+            }
+
+            wait_for_report(obj.job_id, ready, failed, wanted);
+        }, function () {
+            failed('');
+        });
+    }
+
+    function wait_for_report(job_id, ready, failed, wanted) {
+
+        setTimeout(function () {
+
+            if (!wanted()) {
+                return;
+            }
+
+            ApiDataSvc.apiCall('post', 'report_job_status', {
+                job_id: job_id
+            }, function (data) {
+
+                var obj = JSON.parse(data);
+
+                if (!obj.success) {
+                    failed(obj.message);
+                    return;
+                }
+
+                if (obj.job.job_status === 'Completed' && obj.download_url) {
+                    ready(obj.download_url);
+                    return;
+                }
+
+                if (is_active(obj.job)) {
+                    wait_for_report(job_id, ready, failed, wanted);
+                    return;
+                }
+
+                failed(obj.job.last_error || '');
+            }, function () {
+                wait_for_report(job_id, ready, failed, wanted);
+            });
+        }, 2000);
+    }
+
+    var preview_request = 0;
+
     $('#tab_reports').on('click', "[data-action='preview_report']", function () {
 
         var button = this;
         var values = report_values(button, 'pdf');
+        var request = ++preview_request;
 
         values.preview = '1';
 
@@ -3596,29 +3890,35 @@ $(document).ready(function () {
         set_loading(button, true);
         modal('report_preview_modal').show();
 
-        ApiDataSvc.apiCall('post', 'ready_report_download', values, function (data) {
+        prepare_report(values, function (url) {
 
-            var obj = JSON.parse(data);
-
-            set_loading(button, false);
-
-            if (!obj.success) {
-                modal('report_preview_modal').hide();
-                toastr.error(obj.message);
+            if (request !== preview_request) {
                 return;
             }
 
+            set_loading(button, false);
+
             $('#report_preview_frame').prop('hidden', false).one('load', function () {
                 $('#report_preview_loading').prop('hidden', true);
-            }).attr('src', obj.url);
-        }, function () {
+            }).attr('src', url);
+        }, function (message) {
+
             set_loading(button, false);
+
+            if (request !== preview_request) {
+                return;
+            }
+
             modal('report_preview_modal').hide();
-            toastr.error('The preview could not be prepared. Try again.');
+            toastr.error(message || 'The preview could not be prepared. Try again.');
+        }, function () {
+            return request === preview_request;
         });
     });
 
     $('#report_preview_modal').on('hidden.bs.modal', function () {
+        preview_request++;
+        set_loading("#tab_reports [data-action='preview_report']", false);
         $('#report_preview_frame').off('load').attr('src', 'about:blank').prop('hidden', true);
     });
 
@@ -3632,22 +3932,19 @@ $(document).ready(function () {
 
         var tab = report_tab(format);
 
-        ApiDataSvc.apiCall('post', 'ready_report_download', values, function (data) {
-
-            var obj = JSON.parse(data);
-
+        prepare_report(values, function (url) {
             set_loading(button, false);
-
-            if (obj.success) {
-                show_report_tab(tab, obj.url);
-            } else {
-                close_report_tab(tab);
-                toastr.error(obj.message);
-            }
-        }, function () {
+            show_report_tab(tab, url);
+        }, function (message) {
             set_loading(button, false);
             close_report_tab(tab);
-            toastr.error('The report could not be prepared. Try again.');
+            toastr.error(message || 'The report could not be prepared. Try again.');
+        }, function () {
+            if (tab && tab.closed) {
+                set_loading(button, false);
+                return false;
+            }
+            return true;
         });
     });
 

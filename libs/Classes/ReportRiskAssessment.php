@@ -195,7 +195,7 @@ class ReportRiskAssessment extends ReportBuilder
                 )
             );
             $unscored = count($a['families']) - count($bars);
-            $blocks[] = self::note('The implementation score counts implemented '.$this->term('controls').' in full and partially implemented '.$this->term('controls').' at half, over the assessed '.$this->term('controls').' that apply. It describes how fully the '.$this->term('controls').' are in place and is not a compliance opinion or certification result.'
+            $blocks[] = self::note($a['score_method']['method']
                 .($unscored > 0 ? ' '.self::count_of($unscored, $this->term('family'), $this->term('families')).' with no assessed '.$this->term('controls').' '.($unscored === 1 ? 'is' : 'are').' not shown.' : ''));
         }
 
@@ -355,7 +355,13 @@ class ReportRiskAssessment extends ReportBuilder
         }
         $p1 .= ucfirst(self::join_list($parts)).'.';
         if ($a['score'] !== null) {
-            $p1 .= ' The resulting implementation score of '.$a['score'].'% measures how fully the assessed '.$this->term('controls').' are in place; it is not a compliance opinion or certification result.';
+            $p1 .= ' The resulting implementation score is '.$a['score'].'%. '.$a['score_method']['method'];
+        }
+        if ($a['score_method']['points'] !== null) {
+            $p1 .= ' '.$a['score_method']['points']['sentence'];
+        }
+        if ($a['score_method']['outcome'] !== null) {
+            $p1 .= ' '.$a['score_method']['outcome']['sentence'];
         }
         $paragraphs[] = $p1;
 
@@ -398,10 +404,11 @@ class ReportRiskAssessment extends ReportBuilder
             $items[] = array(
                 'value' => $a['score'].'%',
                 'label' => 'Implementation score',
-                'sub' => $a['assessed'] < $a['total'] ? 'Over '.$a['assessed'].' assessed · not an opinion' : 'Not a compliance opinion',
+                'sub' => $a['assessed'] < $a['total'] ? 'Provisional · not an opinion' : 'Not a compliance opinion',
                 'tone' => 'brand'
             );
         }
+        $items = array_merge($items, $this->framework_score_metrics());
 
         $items[] = array(
             'value' => $a['assessed'].' of '.$a['total'],
@@ -691,7 +698,7 @@ class ReportRiskAssessment extends ReportBuilder
                     ),
                     array(
                         'Implementation score',
-                        'Implemented '.$this->term('controls').' count in full and partially implemented '.$this->term('controls').' at half, over the assessed '.$this->term('controls').' that apply. Not applicable and unassessed '.$this->term('controls').' are excluded. The score is not a compliance opinion or certification result.'
+                        $this->a['score_method']['method']
                     ),
                     array(
                         ucfirst($this->term('family')).' rating',

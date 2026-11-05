@@ -35,7 +35,6 @@
                         <th scope="col">Framework</th>
                         <th scope="col">Status</th>
                         <th scope="col">Progress</th>
-                        <th scope="col" class="num">Gaps</th>
                     </tr>
                 </thead>
                 <tbody id="assessments_list"></tbody>
@@ -101,9 +100,8 @@ $(document).ready(function () {
                 + '<td><a class="rowlink__a listpage__name" href="/assessments/detail/id/' + row.id + '">' + esc(row.assessment_name) + '</a>'
                 + (row.client_name ? '<span class="listpage__sub">' + esc(row.client_name) + '</span>' : '') + '</td>'
                 + '<td>' + esc(row.short_code || '') + '</td>'
-                + '<td><span class="listpage__status"><span class="rollup__dot ' + state.tone + '"></span>' + state.label + '</span></td>'
+                + '<td><span class="listpage__status" title="' + state.label + '"><span class="rollup__dot ' + state.tone + '"></span><span class="visually-hidden">' + state.label + '</span></span></td>'
                 + '<td><span class="listpage__progress"><span class="progress"><span class="progress__bar" style="width:' + pct + '%"></span></span><span class="listpage__pct">' + pct + '%</span></span></td>'
-                + '<td class="num">' + (parseInt(row.gap_count, 10) || 0).toLocaleString('en-US') + '</td>'
                 + '</tr>';
         }
 

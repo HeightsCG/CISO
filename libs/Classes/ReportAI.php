@@ -584,7 +584,7 @@ PROMPT;
                 'counts' => $c,
                 'gap_total' => $c['Not Implemented'] + $c['Partially Implemented'],
                 'implementation_score' => $analysis['score'],
-                'score_basis' => 'implemented counts in full, partially implemented counts half, over applicable assessed controls',
+                'score_basis' => $analysis['score_method']['method'],
                 'controls_with_evidence' => $analysis['with_evidence'],
                 'evidence_files' => count($analysis['evidence_files'])
             ),
@@ -598,6 +598,12 @@ PROMPT;
                 return $issue[1];
             }, $analysis['readiness'])
         );
+        if ($analysis['score_method']['points'] !== null) {
+            $facts['results']['points_score'] = $analysis['score_method']['points']['sentence'];
+        }
+        if ($analysis['score_method']['outcome'] !== null) {
+            $facts['results']['formal_status'] = $analysis['score_method']['outcome']['sentence'];
+        }
 
         if (count($analysis['assessor']) > 0) {
             $facts['assessor'] = $analysis['assessor'];
@@ -668,7 +674,7 @@ PROMPT;
                 'counts' => $c,
                 'gap_total' => $c['Not Implemented'] + $c['Partially Implemented'],
                 'implementation_score' => $analysis['score'],
-                'scoring_method' => 'Implementation score = (implemented + 0.5 x partially implemented) / (implemented + partially implemented + not implemented), as a percentage; not applicable and not assessed criteria are excluded. It measures recorded implementation, not a compliance opinion.',
+                'scoring_method' => $analysis['score_method']['method'],
                 'controls_with_evidence' => $analysis['with_evidence'],
                 'evidence_files' => count($analysis['evidence_files'])
             ),

@@ -105,7 +105,7 @@ return array(
             Assert::true(strpos($code, 'S3Service::upload_file(') === false && strpos($code, 'S3Service::put_private(') === false, $name.' stores reports only with put_private_bytes');
         }
         Assert::true(strpos($source('libs/Classes/ReportJobs.php'), 'S3Service::put_private_bytes($key, $bytes, \'application/zip\')') !== false, 'packages use put_private_bytes');
-        Assert::true(strpos($report_sources()['ApiController.php (reports)'], 'S3Service::put_private_bytes($key, $file[\'bytes\']') !== false, 'downloads use put_private_bytes');
+        Assert::true(strpos($source('libs/Classes/ReportJobs.php'), 'S3Service::put_private_bytes($key, $file[\'bytes\']') !== false, 'previews and downloads use put_private_bytes');
         Assert::true(stripos($source('libs/Classes/S3Service.php'), 'public-read') === false, 'S3Service never asks for public-read');
     },
 

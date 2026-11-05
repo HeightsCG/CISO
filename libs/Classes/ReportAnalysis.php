@@ -92,6 +92,11 @@ class ReportAnalysis
             $counts[$control['result']]++;
         }
 
+        $control_rows = array_values(array_filter($items, function ($item) {
+            return $item['control_kind'] === 'control';
+        }));
+        $scores = self::scores($definition, $assessment, $control_rows, self::plain($assessment['standard_name']));
+
         $total = count($controls);
         $applicable = $total - $counts['Not Applicable'];
         $assessed = $total - $counts['Not Assessed'];
@@ -118,7 +123,9 @@ class ReportAnalysis
             'total' => $total,
             'applicable' => $applicable,
             'assessed' => $assessed,
-            'score' => self::score($counts),
+            'scoring' => $scores['scoring'],
+            'score' => $scores['score'],
+            'score_method' => $scores['score_method'],
             'with_evidence' => $with_evidence,
             'evidence_files' => array_values($evidence_files),
             'controls' => $controls,
@@ -126,7 +133,7 @@ class ReportAnalysis
         );
 
         $analysis['gaps'] = self::gaps($controls);
-        $analysis['families'] = self::families($controls, $terms);
+        $analysis['families'] = self::families($controls, $terms, $scores['families']);
         $analysis['themes'] = self::themes($analysis['gaps'], $terms);
         $analysis['patterns'] = self::patterns($analysis['gaps'], $terms);
         $analysis['initiatives'] = self::initiatives($analysis['gaps'], $terms);
@@ -405,7 +412,7 @@ class ReportAnalysis
 
     /* ----------------------------------------------------------- families */
 
-    private static function families(array $controls, array $terms): array
+    private static function families(array $controls, array $terms, array $scores): array
     {
         $families = array();
 
@@ -429,7 +436,7 @@ class ReportAnalysis
         }
 
         foreach ($families as $name => $family) {
-            $families[$name]['score'] = self::score($family['counts']);
+            $families[$name]['score'] = $scores[$name] ?? null;
             $families[$name]['gaps'] = array_values(array_filter($family['controls'], function ($control) {
                 return $control['is_gap'];
             }));
@@ -1056,7 +1063,13 @@ class ReportAnalysis
         $p1 .= $a['assessed'].' of '.$a['total'].' '.$t['controls'].' ('.self::pct($a['assessed'], $a['total']).') have been assessed';
         $p1 .= $a['score'] !== null ? ', giving an implementation score of '.$a['score'].'%.' : '.';
         if ($a['score'] !== null) {
-            $p1 .= ' The implementation score measures how fully the assessed '.$t['controls'].' are in place (implemented counts in full, partially implemented counts half); it is not a compliance opinion or certification result.';
+            $p1 .= ' '.$a['score_method']['method'];
+        }
+        if ($a['score_method']['points'] !== null) {
+            $p1 .= ' '.$a['score_method']['points']['sentence'];
+        }
+        if ($a['score_method']['outcome'] !== null) {
+            $p1 .= ' '.$a['score_method']['outcome']['sentence'];
         }
         $overview[] = $p1;
 
@@ -1184,15 +1197,149 @@ class ReportAnalysis
         return $out;
     }
 
-    public static function score(array $counts): ?int
+    /**
+     * The implementation score as the reports print it: AssessmentScore's
+     * percentage rounded to a whole number, exactly as the assessment
+     * dashboard rounds it. Null while no applicable control has a result.
+     */
+    public static function score(array $counts, float $percentage): ?int
     {
-        $applicable = $counts['Implemented'] + $counts['Partially Implemented'] + $counts['Not Implemented'];
-
-        if ($applicable === 0) {
+        if ($counts['Implemented'] + $counts['Partially Implemented'] + $counts['Not Implemented'] === 0) {
             return null;
         }
 
-        return (int) round(100 * ($counts['Implemented'] + 0.5 * $counts['Partially Implemented']) / $applicable);
+        return (int) round($percentage);
+    }
+
+    /**
+     * Every score the reports print, taken from AssessmentScore (the service
+     * the assessment screens and API use) for the same control rows:
+     *   scoring: the AssessmentScore result, score: the overall percentage
+     *   as printed, families: family name (as named in this analysis) =>
+     *   percentage as printed or null, score_method: see score_method().
+     */
+    public static function scores(?array $definition, array $assessment, array $control_rows, string $standard): array
+    {
+        $scoring = AssessmentScore::score(self::scoring_definition($definition), $assessment, $control_rows);
+        $families = array();
+
+        foreach (self::family_scores($scoring, $control_rows) as $name => $family) {
+            $families[$name] = self::score($family['counts'], $family['percentage']);
+        }
+
+        return array(
+            'scoring' => $scoring,
+            'score' => self::score($scoring['counts'], $scoring['percentage']),
+            'families' => $families,
+            'score_method' => self::score_method($definition, $scoring, self::terms($definition), $standard)
+        );
+    }
+
+    /** The definition AssessmentScore scores against; a standard without one is a plain percentage with no rules. */
+    private static function scoring_definition(?array $definition): array
+    {
+        if ($definition !== null && isset($definition['scoring']['model'], $definition['rules'])) {
+            return $definition;
+        }
+
+        return array(
+            'scoring' => array(
+                'model' => 'percentage'
+            ),
+            'rules' => array()
+        );
+    }
+
+    /** AssessmentScore's family results keyed by the family names used in this analysis. */
+    private static function family_scores(array $scoring, array $control_rows): array
+    {
+        $by_name = array();
+        foreach ($scoring['families'] as $family) {
+            $by_name[$family['name']] = $family;
+        }
+
+        $scores = array();
+        foreach ($control_rows as $row) {
+            $name = self::plain($row['family']) !== '' ? self::plain($row['family']) : 'General';
+            $source = $row['family'] === '' ? 'Ungrouped' : $row['family'];
+            if (!isset($scores[$name]) && isset($by_name[$source])) {
+                $scores[$name] = $by_name[$source];
+            }
+        }
+
+        return $scores;
+    }
+
+    /**
+     * How the implementation score is worked out for this framework, from its
+     * definition (scoring model, partial credit rule, result labels,
+     * terminology) and the AssessmentScore result:
+     *   method: the rule in sentences, formula: the arithmetic for this
+     *   assessment, points: the points score line (points model only),
+     *   outcome: the formal status the results support, when the framework
+     *   defines one. Never a rule written for a particular framework.
+     */
+    private static function score_method(?array $definition, array $scoring, array $t, string $standard): array
+    {
+        $labels = array();
+        foreach ($definition['result_scale'] ?? array() as $entry) {
+            $labels[$entry['key']] = strtolower((string) $entry['label']);
+        }
+        $met = $labels['met'] ?? 'implemented';
+        $partial = $labels['partial'] ?? 'partially implemented';
+        $partial_value = (float) $scoring['partial_value'];
+        $c = $scoring['counts'];
+        $name = trim((string) ($definition['name'] ?? '')) !== '' ? (string) $definition['name'] : $standard;
+
+        $method = 'The implementation score is the share of the applicable '.$t['controls'].' in scope that are recorded as '.$met.'. ';
+        if ($partial_value > 0) {
+            $method .= 'A '.$partial.' '.$t['control'].' counts as '.($partial_value == 0.5 ? 'half' : round($partial_value * 100).'%').', under the '.$name.' partial credit rule in the framework definition.';
+        } else {
+            $method .= ucfirst($partial).' '.$t['controls'].' receive no credit: the '.$name.' framework definition sets no partial credit value for this score.';
+        }
+        $method .= ' Not applicable and excluded '.$t['controls'].' are left out; '.$t['controls'].' not yet assessed count as not '.$met.' until they are assessed.';
+        $method .= ' It is an internal implementation index, not an audit opinion, attestation, certification or compliance determination under '.$name.'.';
+
+        $formula = $partial_value > 0
+            ? '('.$c['Implemented'].' '.$met.' + '.self::number($partial_value).' × '.$c['Partially Implemented'].' '.$partial.') ÷ '.$scoring['applicable'].' applicable '.$t['controls']
+            : $c['Implemented'].' '.$met.' ÷ '.$scoring['applicable'].' applicable '.$t['controls'];
+        $formula .= ' = '.self::number($scoring['percentage']).'%';
+
+        $points = null;
+        if ($scoring['points'] !== null) {
+            $label = trim((string) ($definition['terminology']['score'] ?? '')) !== '' ? (string) $definition['terminology']['score'] : 'Points score';
+            $points = array(
+                'label' => ucfirst($label),
+                'score' => $scoring['points']['score'],
+                'maximum' => $scoring['points']['maximum'],
+                'text' => $scoring['points']['score'].' of '.$scoring['points']['maximum'],
+                'sentence' => ucfirst($label).': '.$scoring['points']['score'].' of '.$scoring['points']['maximum'].'. '.trim((string) ($definition['scoring']['summary'] ?? '')).($c['Not Assessed'] > 0 ? ' '.ucfirst($t['controls']).' not yet assessed subtract nothing, so this score is provisional.' : '')
+            );
+        }
+
+        $outcome = null;
+        if ($scoring['outcome'] !== null && $scoring['outcome']['status'] !== 'not_started') {
+            $outcome = array(
+                'status' => $scoring['outcome']['status'],
+                'label' => $scoring['outcome']['label'],
+                'reasons' => $scoring['outcome']['reasons'],
+                'sentence' => 'Formal status the recorded results support: '.$scoring['outcome']['label'].(strpos($scoring['outcome']['status'], 'provisional') === 0 ? ' (provisional until every '.$t['control'].' is assessed)' : '').'. This is separate from the implementation score and from assessment completion.'
+            );
+        }
+
+        return array(
+            'model' => $scoring['model'],
+            'partial_value' => $partial_value,
+            'method' => $method,
+            'formula' => $formula,
+            'points' => $points,
+            'outcome' => $outcome
+        );
+    }
+
+    private static function number(float $value): string
+    {
+        return rtrim(rtrim(number_format($value, 1, '.', ''), '0'), '.');
     }
 
     /**

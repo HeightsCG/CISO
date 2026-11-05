@@ -119,7 +119,9 @@ class ReportAssessmentResults extends ReportBuilder
                 'label' => 'Implementation score',
                 'sub' => 'See the scoring method',
                 'tone' => 'brand'
-            ),
+            )
+        );
+        $metrics = array_merge($metrics, $this->framework_score_metrics(), array(
             array(
                 'value' => $a['assessed'].' of '.$a['total'],
                 'label' => ucfirst($this->term('controls')).' assessed',
@@ -144,7 +146,7 @@ class ReportAssessmentResults extends ReportBuilder
                 'sub' => '',
                 'tone' => 'critical'
             )
-        );
+        ));
 
         foreach (array(
             'Not Applicable' => 'Not applicable',
@@ -154,7 +156,7 @@ class ReportAssessmentResults extends ReportBuilder
                 $metrics[] = array(
                     'value' => (string) $c[$result],
                     'label' => $label,
-                    'sub' => 'Excluded from the score',
+                    'sub' => $result === 'Not Applicable' ? 'Left out of the score' : 'Count against the score until assessed',
                     'tone' => 'neutral'
                 );
             }
@@ -339,7 +341,7 @@ class ReportAssessmentResults extends ReportBuilder
 
         foreach ($this->a['families'] as $name => $family) {
             if ($family['score'] !== null) {
-                $assessed = count($family['controls']) - $family['counts']['Not Assessed'] - $family['counts']['Not Applicable'];
+                $assessed = count($family['controls']) - $family['counts']['Not Applicable'];
                 $bars[] = array(
                     'label' => $name,
                     'value' => $family['score'],
@@ -362,7 +364,7 @@ class ReportAssessmentResults extends ReportBuilder
                     'items' => $bars
                 )
             ),
-            self::note('Score out of 100%; the number of scored '.$this->term('controls').' in each '.$this->term('family').' is shown in brackets.')
+            self::note('Score out of 100%; the number of applicable '.$this->term('controls').' in each '.$this->term('family').' is shown in brackets.')
         );
     }
 
@@ -374,21 +376,28 @@ class ReportAssessmentResults extends ReportBuilder
         $c = $a['counts'];
         $controls = $this->term('controls');
 
-        $text = 'The implementation score is calculated over the '.$controls.' that have been assessed and apply. Implemented counts as 1, Partially Implemented as 0.5 and Not Implemented as 0. Not Applicable '.$controls.' and '.$controls.' not yet assessed are excluded, so the score describes only the assessed part of the framework.';
-        $scored = $c['Implemented'] + $c['Partially Implemented'] + $c['Not Implemented'];
+        $method = $a['score_method'];
+        $text = $method['method'];
 
-        if ($scored > 0) {
-            $text .= "\n\nScore = (Implemented + 0.5 × Partially Implemented) ÷ (Implemented + Partially Implemented + Not Implemented). For this assessment: ("
-                .$c['Implemented'].' + 0.5 × '.$c['Partially Implemented'].') ÷ '.$scored.' = '.$a['score'].'%.';
+        if ($a['score'] !== null) {
+            $text .= "\n\nFor this assessment: ".$method['formula'].', shown as '.$a['score'].'%.';
         } else {
             $text .= "\n\nNo applicable ".$controls.' have been assessed yet, so there is no score.';
+        }
+
+        if ($method['points'] !== null) {
+            $text .= "\n\n".$method['points']['sentence'];
+        }
+
+        if ($method['outcome'] !== null) {
+            $text .= "\n\n".$method['outcome']['sentence'];
         }
 
         if ($this->objective_tally()['total'] > 0) {
             $text .= "\n\nResults for ".$this->term('objectives').' are recorded to show how each '.$this->term('control').' result was reached; the score itself uses the '.$this->term('control').' results.';
         }
 
-        $text .= ' The implementation score measures implementation progress. It is not a compliance opinion, attestation or certification result.';
+        $text .= ' Assessment completion ('.$a['assessed'].' of '.$a['total'].' '.$controls.' assessed) is reported separately from the score.';
 
         $blocks = array(
             self::h2('How results are scored'),
@@ -996,6 +1005,16 @@ class ReportAssessmentResults extends ReportBuilder
                 $family['score'] ?? ''
             );
         }
+        $family_rows[] = array(
+            'Total',
+            $this->a['total'],
+            $this->a['counts']['Implemented'],
+            $this->a['counts']['Partially Implemented'],
+            $this->a['counts']['Not Implemented'],
+            $this->a['counts']['Not Applicable'],
+            $this->a['counts']['Not Assessed'],
+            $this->a['score'] ?? ''
+        );
 
         $sheets[] = array(
             'name' => substr('By '.$this->term('family'), 0, 31),

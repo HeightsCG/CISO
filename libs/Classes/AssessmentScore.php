@@ -74,6 +74,7 @@ class AssessmentScore {
 
         $score = array(
             'model' => $definition['scoring']['model'],
+            'partial_value' => $partial_value,
             'complete' => $counts[self::NOT_ASSESSED] === 0,
             'counts' => $counts,
             'in_scope' => count($in_scope),

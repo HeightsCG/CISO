@@ -134,6 +134,109 @@ class ReportJobsModel extends Model {
         return parent::select($sql, $where);
     }
 
+    /** Today's single-report jobs of an assessment that may still be reused: queued, running or completed. */
+    public function report_jobs_since($assessment_id, $company_id, $since)
+    {
+        $where = array(
+            'assessment_id' => $assessment_id,
+            'company_id' => $company_id,
+            'since' => $since
+        );
+        $sql = "SELECT
+                    id,
+                    job_status,
+                    options,
+                    result_key,
+                    result_name,
+                    date_created
+                FROM
+                    report_jobs
+                WHERE
+                    assessment_id = :assessment_id
+                    and
+                    company_id = :company_id
+                    and
+                    job_type = 'Report'
+                    and
+                    job_status IN ('Queued', 'Running', 'Completed')
+                    and
+                    date_created >= :since
+                    and
+                    deleted = 0
+                ORDER BY
+                    id DESC
+                LIMIT 200";
+        return parent::select($sql, $where);
+    }
+
+    /**
+     * The record state a report stands on beyond the assessment analysis:
+     * the assessment, client and company rows and the client's evidence
+     * library. Any edit moves a date or a count.
+     */
+    public function report_watermark($assessment_id, $company_id)
+    {
+        $where = array(
+            'assessment_id' => $assessment_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    a.date_updated AS assessment_updated,
+                    c.date_updated AS client_updated,
+                    co.date_updated AS company_updated,
+                    (SELECT MAX(ai.date_updated) FROM assessment_items ai WHERE ai.assessment_id = a.id) AS items_updated,
+                    (SELECT COUNT(*) FROM assessment_items ai WHERE ai.assessment_id = a.id and ai.deleted = 0) AS items_count,
+                    (SELECT MAX(e.date_updated) FROM evidence e WHERE e.client_id = a.client_id and e.company_id = a.company_id) AS evidence_updated,
+                    (SELECT COUNT(*) FROM evidence e WHERE e.client_id = a.client_id and e.company_id = a.company_id and e.deleted = 0) AS evidence_count
+                FROM
+                    assessments a
+                    LEFT JOIN clients c ON c.id = a.client_id
+                    LEFT JOIN companies co ON co.id = a.company_id
+                WHERE
+                    a.id = :assessment_id
+                    and
+                    a.company_id = :company_id";
+        return parent::select($sql, $where);
+    }
+
+    /** The POA&M register's state: every change writes history, and items, milestones and evidence links carry dates and ids. */
+    public function poam_watermark($assessment_id, $company_id)
+    {
+        $where = array(
+            'assessment_id' => $assessment_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    a.poam_clock_date,
+                    (SELECT MAX(h.id) FROM poam_history h WHERE h.assessment_id = a.id and h.company_id = a.company_id) AS history_id,
+                    (SELECT COUNT(*) FROM poam_history h WHERE h.assessment_id = a.id and h.company_id = a.company_id) AS history_count,
+                    (SELECT MAX(i.date_updated) FROM poam_items i WHERE i.assessment_id = a.id and i.company_id = a.company_id) AS items_updated,
+                    (SELECT COUNT(*) FROM poam_items i WHERE i.assessment_id = a.id and i.company_id = a.company_id and i.deleted = 0) AS items_count,
+                    (SELECT MAX(m.date_updated) FROM poam_milestones m JOIN poam_items i ON i.id = m.poam_item_id WHERE i.assessment_id = a.id and m.company_id = a.company_id) AS milestones_updated,
+                    (SELECT COUNT(*) FROM poam_milestones m JOIN poam_items i ON i.id = m.poam_item_id WHERE i.assessment_id = a.id and m.company_id = a.company_id and m.deleted = 0) AS milestones_count,
+                    (SELECT MAX(pe.id) FROM poam_evidence pe JOIN poam_items i ON i.id = pe.poam_item_id WHERE i.assessment_id = a.id and pe.company_id = a.company_id) AS evidence_id,
+                    (SELECT COUNT(*) FROM poam_evidence pe JOIN poam_items i ON i.id = pe.poam_item_id WHERE i.assessment_id = a.id and pe.company_id = a.company_id and pe.deleted = 0) AS evidence_count
+                FROM
+                    assessments a
+                WHERE
+                    a.id = :assessment_id
+                    and
+                    a.company_id = :company_id";
+        return parent::select($sql, $where);
+    }
+
+    /** Replace a job's options; the worker records the state its report was rendered from. */
+    public function set_options($job_id, $options)
+    {
+        $data = array(
+            'options' => $options
+        );
+        $where = array(
+            'id' => $job_id
+        );
+        return parent::update('report_jobs', $data, "id = :id", $where);
+    }
+
     public function recent_jobs($company_id, $job_type, $limit)
     {
         $where = array(

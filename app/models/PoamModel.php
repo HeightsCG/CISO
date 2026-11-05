@@ -7,6 +7,58 @@
  */
 class PoamModel extends Model {
 
+    /**
+     * The change_note on every history row a client portal user writes. The
+     * change_source enum has no portal value, so the note is what tells a
+     * client's change from a staff one without a schema change.
+     */
+    const PORTAL_NOTE = 'Changed in the client portal.';
+
+    /** The record columns a portal user is sent; closure, deviation, risk, vendor and internal columns are not. */
+    const PORTAL_ITEM_FIELDS = array(
+        'id',
+        'assessment_id',
+        'poam_ref',
+        'reopened_from_ref',
+        'source_ref',
+        'source_title',
+        'source_family',
+        'source_result',
+        'source_resolved',
+        'weakness',
+        'action',
+        'priority',
+        'owner_name',
+        'resources',
+        'comments',
+        'poam_status',
+        'detection_date',
+        'scheduled_completion_date',
+        'completion_date',
+        'date_closed',
+        'overdue',
+        'milestone_count',
+        'milestones_done',
+        'open_objectives',
+        'closeout_date'
+    );
+
+    /** The history a portal user sees: the fields they can edit, status changes, milestones and record numbering. */
+    const PORTAL_HISTORY_FIELDS = array(
+        'owner_name',
+        'resources',
+        'comments',
+        'poam_status',
+        'milestone_added',
+        'milestone_removed',
+        'milestone_text',
+        'due_date',
+        'completed_date',
+        'milestone_status',
+        'poam_ref',
+        'reopened_as'
+    );
+
     public function __construct(){
         parent::__construct();
     }
@@ -231,6 +283,31 @@ class PoamModel extends Model {
                     pi.deleted = 0
                 ORDER BY
                     pi.poam_seq";
+        return parent::select($sql, $where);
+    }
+
+    /** Open and closed counts per remediation priority, read as stored without a sync. */
+    public function priority_summary($assessment_id, $company_id)
+    {
+        $where = array(
+            'assessment_id' => $assessment_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    COALESCE(NULLIF(p.priority_override, ''), p.source_priority) AS priority,
+                    SUM(p.poam_status <> 'Closed') AS open_count,
+                    SUM(p.poam_status = 'Closed') AS closed_count,
+                    SUM(p.poam_status <> 'Closed' and p.scheduled_completion_date < CURDATE()) AS overdue_count
+                FROM
+                    poam_items p
+                WHERE
+                    p.assessment_id = :assessment_id
+                    and
+                    p.company_id = :company_id
+                    and
+                    p.deleted = 0
+                GROUP BY
+                    COALESCE(NULLIF(p.priority_override, ''), p.source_priority)";
         return parent::select($sql, $where);
     }
 
@@ -529,9 +606,10 @@ class PoamModel extends Model {
     /**
      * Writes the management fields of an open record and one history row per
      * field that changed. Returns the number of fields changed, or false when
-     * the record is gone or closed.
+     * the record is gone or closed. $via_portal marks the history rows as a
+     * client portal change.
      */
-    public function save_item($item_id, $company_id, $owner_name, $resources, $detection_date, $scheduled_completion_date, $completion_date, $poam_status, $comments, $weakness_override, $action_override, $priority_override, $risk_rating, $vendor_dependency, $vendor_product, $vendor_checkin_date, $deviation_type, $deviation_rationale, $change_source, $user_id)
+    public function save_item($item_id, $company_id, $owner_name, $resources, $detection_date, $scheduled_completion_date, $completion_date, $poam_status, $comments, $weakness_override, $action_override, $priority_override, $risk_rating, $vendor_dependency, $vendor_product, $vendor_checkin_date, $deviation_type, $deviation_rationale, $change_source, $user_id, $via_portal = false)
     {
         $now = date('Y-m-d H:i:s');
         $data = array(
@@ -573,7 +651,7 @@ class PoamModel extends Model {
             if (count($set) > 0) {
                 $this->update_columns((int) $item['id'], $set, $user_id, $now);
                 foreach ($set as $field => $value) {
-                    $this->history($item['company_id'], $item['assessment_id'], (int) $item['id'], null, $change_source, $field, $item[$field] ?? null, $value, '', $user_id, $now);
+                    $this->history($item['company_id'], $item['assessment_id'], (int) $item['id'], null, $change_source, $field, $item[$field] ?? null, $value, $via_portal ? self::PORTAL_NOTE : '', $user_id, $now);
                 }
             }
 
@@ -715,7 +793,7 @@ class PoamModel extends Model {
      * Adds ($milestone_id 0) or updates a milestone of an open record, with a
      * history row for each change. Returns the milestone id, or false.
      */
-    public function save_milestone($item_id, $company_id, $milestone_id, $milestone_text, $due_date, $completed_date, $milestone_status, $change_source, $user_id)
+    public function save_milestone($item_id, $company_id, $milestone_id, $milestone_text, $due_date, $completed_date, $milestone_status, $change_source, $user_id, $via_portal = false)
     {
         $now = date('Y-m-d H:i:s');
         $data = array(
@@ -750,7 +828,7 @@ class PoamModel extends Model {
                     'date_updated' => $now,
                     'deleted' => 0
                 )));
-                $this->history($item['company_id'], $item['assessment_id'], (int) $item['id'], $milestone_id, $change_source, 'milestone_added', null, $milestone_text, 'Milestone added.', $user_id, $now);
+                $this->history($item['company_id'], $item['assessment_id'], (int) $item['id'], $milestone_id, $change_source, 'milestone_added', null, $milestone_text, 'Milestone added.'.($via_portal ? ' '.self::PORTAL_NOTE : ''), $user_id, $now);
             } else {
                 $existing = parent::select("SELECT * FROM poam_milestones WHERE id = :id and poam_item_id = :item_id and deleted = 0", array(
                     'id' => $milestone_id,
@@ -774,7 +852,7 @@ class PoamModel extends Model {
                         'milestone_id' => $milestone_id
                     ));
                     foreach ($set as $field => $value) {
-                        $this->history($item['company_id'], $item['assessment_id'], (int) $item['id'], (int) $milestone_id, $change_source, $field, $existing[0][$field] ?? null, $value, 'Milestone updated.', $user_id, $now);
+                        $this->history($item['company_id'], $item['assessment_id'], (int) $item['id'], (int) $milestone_id, $change_source, $field, $existing[0][$field] ?? null, $value, 'Milestone updated.'.($via_portal ? ' '.self::PORTAL_NOTE : ''), $user_id, $now);
                     }
                 }
             }
@@ -789,7 +867,7 @@ class PoamModel extends Model {
     }
 
     /** Removes a milestone of an open record (soft delete, logged); false when not possible. */
-    public function delete_milestone($milestone_id, $company_id, $change_source, $user_id)
+    public function delete_milestone($milestone_id, $company_id, $change_source, $user_id, $via_portal = false)
     {
         $now = date('Y-m-d H:i:s');
         $milestone = $this->get_milestone($milestone_id, $company_id);
@@ -817,7 +895,7 @@ class PoamModel extends Model {
             ));
 
             if ($rows === 1) {
-                $this->history($item['company_id'], $item['assessment_id'], (int) $item['id'], (int) $milestone_id, $change_source, 'milestone_removed', $milestone[0]['milestone_text'], null, 'Milestone removed.', $user_id, $now);
+                $this->history($item['company_id'], $item['assessment_id'], (int) $item['id'], (int) $milestone_id, $change_source, 'milestone_removed', $milestone[0]['milestone_text'], null, 'Milestone removed.'.($via_portal ? ' '.self::PORTAL_NOTE : ''), $user_id, $now);
             }
 
             $this->db->commit();
@@ -943,6 +1021,104 @@ class PoamModel extends Model {
         }
 
         return $rows;
+    }
+
+    /* --------------------------------------------------------------- portal */
+
+    /** Whether a record (from get_item) belongs to the signed-in portal user's own client. */
+    public static function portal_owns(array $item, $user_type, $client_id): bool
+    {
+        if ($user_type !== 'portal' || (int) $client_id <= 0) {
+            return false;
+        }
+
+        return (int) ($item['client_id'] ?? 0) === (int) $client_id;
+    }
+
+    /** A presented record cut down to PORTAL_ITEM_FIELDS. */
+    public static function portal_item(array $item): array
+    {
+        $out = array();
+
+        foreach (self::PORTAL_ITEM_FIELDS as $field) {
+            if (array_key_exists($field, $item)) {
+                $out[$field] = $item[$field];
+            }
+        }
+
+        return $out;
+    }
+
+    /** Milestones without the company and user columns. */
+    public static function portal_milestones(array $rows): array
+    {
+        $out = array();
+
+        foreach ($rows as $row) {
+            $out[] = array(
+                'id' => $row['id'],
+                'poam_item_id' => $row['poam_item_id'],
+                'milestone_text' => $row['milestone_text'],
+                'due_date' => $row['due_date'],
+                'completed_date' => $row['completed_date'],
+                'milestone_status' => $row['milestone_status']
+            );
+        }
+
+        return $out;
+    }
+
+    /** Evidence links of files that are not private, without file names or user columns. */
+    public static function portal_evidence(array $rows): array
+    {
+        $out = array();
+
+        foreach ($rows as $row) {
+            if ((int) ($row['evidence_private'] ?? 1) !== 0) {
+                continue;
+            }
+            $out[] = array(
+                'id' => $row['id'],
+                'poam_item_id' => $row['poam_item_id'],
+                'evidence_id' => $row['evidence_id'],
+                'evidence_role' => $row['evidence_role'],
+                'evidence_title' => $row['evidence_title'],
+                'date_created' => $row['date_created']
+            );
+        }
+
+        return $out;
+    }
+
+    /**
+     * History rows on PORTAL_HISTORY_FIELDS only, without the change note:
+     * closure notes and reasons, overrides, evidence titles (a private file's
+     * included), risk and deviation decisions and reopen reasons stay staff-side.
+     */
+    public static function portal_history(array $rows): array
+    {
+        $out = array();
+
+        foreach ($rows as $row) {
+            if (!in_array((string) $row['field_name'], self::PORTAL_HISTORY_FIELDS, true)) {
+                continue;
+            }
+            $out[] = array(
+                'id' => $row['id'],
+                'poam_item_id' => $row['poam_item_id'],
+                'poam_milestone_id' => $row['poam_milestone_id'],
+                'poam_ref' => $row['poam_ref'] ?? '',
+                'change_source' => $row['change_source'],
+                'field_name' => $row['field_name'],
+                'field_label' => $row['field_label'] ?? '',
+                'old_value' => $row['old_value'],
+                'new_value' => $row['new_value'],
+                'changed_by_name' => $row['changed_by_name'] ?? '',
+                'date_created' => $row['date_created']
+            );
+        }
+
+        return $out;
     }
 
 }

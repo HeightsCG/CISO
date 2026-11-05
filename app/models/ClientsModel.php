@@ -42,15 +42,7 @@ class ClientsModel extends Model {
                         FROM assessments a
                         WHERE a.client_id = c.id
                         and a.company_id = c.company_id
-                        and a.deleted = 0) AS assessment_count,
-                    (SELECT COUNT(*)
-                        FROM assessment_items ai
-                        JOIN assessments a ON a.id = ai.assessment_id and a.deleted = 0
-                        WHERE a.client_id = c.id
-                        and a.company_id = c.company_id
-                        and ai.deleted = 0
-                        and ai.control_kind = 'control'
-                        and ai.item_result IN ('Not Implemented', 'Partially Implemented')) AS gap_count
+                        and a.deleted = 0) AS assessment_count
                 FROM
                     clients c
                     JOIN companies co ON co.id = c.company_id

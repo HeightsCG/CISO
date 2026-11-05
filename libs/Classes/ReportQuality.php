@@ -338,6 +338,7 @@ class ReportQuality
             'recorded' => strtolower(implode("\n", $recorded)),
             'counts' => $analysis['counts'] ?? array(),
             'score' => $analysis['score'] ?? null,
+            'points' => $analysis['score_method']['points']['score'] ?? null,
             'families' => $families,
             'with_evidence' => (int) ($analysis['with_evidence'] ?? 0),
             'ratings' => $ratings,
@@ -1030,9 +1031,10 @@ class ReportQuality
             }
         }
 
-        if (preg_match_all('/\bscore\s+(?:of\s+|is\s+|was\s+|stands at\s+|at\s+)?(\d+)\b|\b(\d+)\s*(?:%|percent)\s+(?:implementation\s+)?score\b/i', $unit['text'], $match, PREG_SET_ORDER)) {
+        if (preg_match_all('/\bscore\s*(?::\s*|of\s+|is\s+|was\s+|stands at\s+|at\s+)?(-?\d+)\b|\b(\d+)\s*(?:%|percent)\s+(?:implementation\s+)?score\b/i', $unit['text'], $match, PREG_SET_ORDER)) {
             $scores = array(
-                $facts['score']
+                $facts['score'],
+                $facts['points'] ?? null
             );
             foreach ($facts['families'] as $row) {
                 $scores[] = $row['score'];
@@ -1040,7 +1042,7 @@ class ReportQuality
             foreach ($match as $hit) {
                 $value = (int) ($hit[1] !== '' ? $hit[1] : $hit[2]);
                 if (!in_array($value, $scores, true)) {
-                    $issues[] = self::issue('High', 'cross_report_inconsistency', $unit, 'Quotes a score of '.$value.', which matches neither the overall implementation score ('.$facts['score'].') nor any family score.', array());
+                    $issues[] = self::issue('High', 'cross_report_inconsistency', $unit, 'Quotes a score of '.$value.', which matches neither the overall implementation score ('.($facts['score'] ?? 'not scored').')'.(($facts['points'] ?? null) !== null ? ', the points score ('.$facts['points'].')' : '').' nor any family score.', array());
                 }
             }
         }

@@ -22,6 +22,13 @@
  * Package: every report rendered (status-aware) into a ZIP built in
  * sys_get_temp_dir(), stored privately in S3 and the temp files removed;
  * the download is a short-lived presigned URL from report_job_status.
+ *
+ * Report: one report in one format for Preview and Download, so no web
+ * request renders a large framework itself. The file is stored privately
+ * like a package. A completed Report job is reused while its fingerprint
+ * (report_fingerprint) still matches; the worker records the fingerprint
+ * taken before and after rendering, and none when the two differ, so a
+ * file is never served for a state it was not rendered from.
  */
 class ReportJobs
 {
@@ -97,6 +104,17 @@ class ReportJobs
     const DRAIN_LIMIT = 10;
 
     const DOWNLOAD_TTL = 300;
+
+    const REPORT = 'Report';
+
+    const REPORT_ACTIVE_LIMIT = 3;
+
+    /** Code and framework definitions a rendered report depends on; a change to any of them invalidates stored reports. */
+    const REPORT_CODE = array(
+        'libs/Classes/*.php',
+        'app/models/*.php',
+        'frameworks/*.json'
+    );
 
     private $model;
     private $generator;
@@ -188,6 +206,190 @@ class ReportJobs
             'message' => 'ok',
             'job_id' => $job_id
         );
+    }
+
+    /**
+     * One report for Preview or Download. Returns success with url when a
+     * stored copy still matches the current state (cache hit), success with
+     * job_id when a matching job is under way or one was queued, or a message.
+     * $detail and $appendices are null when the request leaves them to the
+     * report's defaults.
+     */
+    public static function dispatch_report(int $company_id, int $assessment_id, string $report_type, string $format, ?string $detail, ?bool $appendices, int $user_id): array
+    {
+        $spec = ReadyReports::spec($report_type);
+
+        if ($spec === null || $spec['scope'] !== 'assessment') {
+            return self::refuse('That report could not be found');
+        }
+
+        if (!in_array($format, $spec['formats'], true)) {
+            return self::refuse('That report is not available in that format');
+        }
+
+        $options = self::report_options($report_type, $format, $detail, $appendices);
+        $fingerprint = self::report_fingerprint($company_id, $assessment_id, $options);
+
+        if ($fingerprint === null) {
+            return self::refuse('That assessment could not be found');
+        }
+
+        $model = new ReportJobsModel();
+        $match = self::reusable_report($model->report_jobs_since($assessment_id, $company_id, date('Y-m-d 00:00:00')), $fingerprint);
+
+        if ($match['cached'] !== null) {
+            return array(
+                'success' => true,
+                'message' => 'ok',
+                'url' => S3Service::presigned_get_url($match['cached']['result_key'], self::DOWNLOAD_TTL, (string) $match['cached']['result_name'])
+            );
+        }
+
+        if ($match['active'] !== null) {
+            return array(
+                'success' => true,
+                'message' => 'ok',
+                'job_id' => (int) $match['active']['id']
+            );
+        }
+
+        if ($match['active_count'] >= self::REPORT_ACTIVE_LIMIT) {
+            return self::refuse('Other reports for this assessment are still being prepared. Try again in a moment.');
+        }
+
+        $options['fingerprint'] = $fingerprint;
+
+        $job_id = (int) $model->create_job(
+            $company_id,
+            $assessment_id,
+            self::REPORT,
+            json_encode($options, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            json_encode(array(
+                self::step($report_type, $spec['name'])
+            ), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            1,
+            $user_id
+        );
+
+        if (!self::spawn($job_id)) {
+            error_log('[report-jobs] job '.$job_id.' queued without a worker; the --drain cron entry will run it');
+        }
+
+        return array(
+            'success' => true,
+            'message' => 'ok',
+            'job_id' => $job_id
+        );
+    }
+
+    /** A Report job's options: the report, its format and the detail and appendices asked for (null for the report's default). */
+    public static function report_options(string $report_type, string $format, ?string $detail, ?bool $appendices): array
+    {
+        return array(
+            'report_type' => $report_type,
+            'format' => $format,
+            'detail' => in_array($detail, self::DETAILS, true) ? $detail : null,
+            'appendices' => $appendices
+        );
+    }
+
+    /**
+     * From today's Report jobs (newest first), the completed one stored for
+     * this fingerprint, the queued or running one for it, and how many jobs
+     * are still under way.
+     */
+    public static function reusable_report(array $rows, string $fingerprint): array
+    {
+        $match = array(
+            'cached' => null,
+            'active' => null,
+            'active_count' => 0
+        );
+
+        foreach ($rows as $row) {
+            $options = json_decode((string) $row['options'], true) ?: array();
+            $same = isset($options['fingerprint']) && is_string($options['fingerprint']) && hash_equals($options['fingerprint'], $fingerprint);
+            $active = in_array($row['job_status'], array(
+                'Queued',
+                'Running'
+            ), true);
+
+            if ($active) {
+                $match['active_count']++;
+            }
+            if (!$same) {
+                continue;
+            }
+            if ($active && $match['active'] === null) {
+                $match['active'] = $row;
+            }
+            if ($row['job_status'] === 'Completed' && (string) ($row['result_key'] ?? '') !== '' && $match['cached'] === null) {
+                $match['cached'] = $row;
+            }
+        }
+
+        return $match;
+    }
+
+    /**
+     * Everything a rendered report depends on, hashed: the report options,
+     * the document state (status, version, approval; not the generation
+     * time), the full assessment analysis (less its data cutoff clock time,
+     * which only says when the report was rendered), the narratives (ReportStates
+     * digest of input hashes and text), the assessment, client, company and
+     * evidence records, the POA&M register for the POA&M, the day (reports
+     * show dates and overdue items relative to it) and the report code.
+     * Null when the assessment cannot be read.
+     */
+    public static function report_fingerprint(int $company_id, int $assessment_id, array $options): ?string
+    {
+        $analysis = (new ReportAnalysis($assessment_id, $company_id))->build();
+
+        if ($analysis === null) {
+            return null;
+        }
+
+        $model = new ReportJobsModel();
+        $document = ReportStates::document_options($assessment_id, $company_id);
+        unset($document['generated']);
+        unset($analysis['periods']['cutoff']);
+
+        return self::fingerprint(array(
+            'options' => array(
+                'report_type' => $options['report_type'],
+                'format' => $options['format'],
+                'detail' => $options['detail'],
+                'appendices' => $options['appendices']
+            ),
+            'document' => $document,
+            'analysis' => hash('sha256', serialize($analysis)),
+            'narratives' => ReportStates::digest(ReportStates::narrative_states($analysis, $company_id), $analysis),
+            'records' => $model->report_watermark($assessment_id, $company_id),
+            'poam' => $options['report_type'] === 'poam' ? $model->poam_watermark($assessment_id, $company_id) : null,
+            'day' => date('Y-m-d'),
+            'code' => self::code_version()
+        ));
+    }
+
+    public static function fingerprint(array $parts): string
+    {
+        return hash('sha256', serialize($parts));
+    }
+
+    /** The newest modification time and the count of the files in REPORT_CODE. */
+    public static function code_version(): string
+    {
+        $newest = 0;
+        $count = 0;
+
+        foreach (self::REPORT_CODE as $pattern) {
+            foreach (glob(Main::app_path().'/'.$pattern) ?: array() as $file) {
+                $newest = max($newest, (int) filemtime($file));
+                $count++;
+            }
+        }
+
+        return $newest.':'.$count;
     }
 
     /**
@@ -496,6 +698,10 @@ class ReportJobs
             ), true) ? 0 : 1;
         }
 
+        if (isset($options['beat'])) {
+            return self::keep_beating((int) $options['beat'], (int) ($options['pid'] ?? 0));
+        }
+
         if (isset($options['drain'])) {
             $count = 0;
             foreach ((new ReportJobsModel())->runnable_jobs(self::stale_before(), self::DRAIN_LIMIT) as $row) {
@@ -510,6 +716,49 @@ class ReportJobs
         fwrite(STDERR, 'Usage: php bin/report-worker.php --job=<id> | --drain'."\n");
 
         return 2;
+    }
+
+    /**
+     * Start a helper process that keeps the job's heartbeat fresh while this
+     * worker is alive. A single step can outlast STALE_SECONDS (the Risk
+     * Assessment for NIST 800-53 renders for about five minutes inside
+     * Dompdf, where nothing can beat), and without it the job would look
+     * abandoned and be claimed by a second worker. Needs posix to see the
+     * worker's process; without it jobs beat between steps as before.
+     */
+    private static function start_beater(int $job_id): void
+    {
+        $php = self::php_cli();
+
+        if ($php === null || !function_exists('posix_kill') || !function_exists('exec')) {
+            return;
+        }
+
+        $command = 'APPLICATION_ENV='.escapeshellarg((string) Main::get_environment())
+            .' '.escapeshellarg($php).' '.escapeshellarg(self::worker_script()).' --beat='.$job_id.' --pid='.getmypid()
+            .' < /dev/null >> '.escapeshellarg(self::log_file()).' 2>&1 &';
+
+        $output = array();
+        $code = 0;
+        exec($command, $output, $code);
+    }
+
+    /** The helper's loop: beat while the worker process is alive and the job is still Running. */
+    public static function keep_beating(int $job_id, int $pid): int
+    {
+        if ($job_id <= 0 || $pid <= 0 || !function_exists('posix_kill')) {
+            return 2;
+        }
+
+        $model = new ReportJobsModel();
+        $until = time() + 4 * 3600;
+
+        while (time() < $until && posix_kill($pid, 0) && $model->get_job_status($job_id) === 'Running') {
+            $model->beat($job_id);
+            sleep(self::BEAT_SECONDS);
+        }
+
+        return 0;
     }
 
     public static function stale_before(): string
@@ -554,6 +803,7 @@ class ReportJobs
 
         set_time_limit(0);
         ignore_user_abort(true);
+        self::start_beater($job_id);
 
         $this->job = $job;
         $this->last_beat = time();
@@ -570,6 +820,8 @@ class ReportJobs
         try {
             if ($job['job_type'] === 'Package') {
                 $this->run_package();
+            } elseif ($job['job_type'] === self::REPORT) {
+                $this->run_report();
             } else {
                 $this->run_narratives();
             }
@@ -820,6 +1072,126 @@ class ReportJobs
         }
 
         $this->finish_from_steps($result_key, $result_key !== null ? $result_name : null);
+    }
+
+    /* -------------------------------------------------------------- report */
+
+    private function run_report(): void
+    {
+        $options = $this->options();
+        $assessment_id = (int) $this->job['assessment_id'];
+        $company_id = (int) $this->job['company_id'];
+        $job_id = (int) $this->job['id'];
+        $result_key = null;
+        $result_name = null;
+
+        if (count($this->steps) === 0) {
+            $this->steps[] = self::step((string) ($options['report_type'] ?? 'report'), 'Report');
+        }
+
+        $this->steps[0]['state'] = 'Pending';
+
+        if ($this->cancelled()) {
+            return;
+        }
+
+        $result = $this->run_step(0, function () use ($options, $assessment_id, $company_id, $job_id) {
+            return self::render_single($options, $assessment_id, $company_id, $job_id);
+        });
+
+        if ($result === null) {
+            return;
+        }
+
+        if (!empty($result['success'])) {
+            $options['fingerprint'] = $result['fingerprint'];
+            $this->model->set_options($job_id, json_encode($options, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+            $result_key = $result['key'];
+            $result_name = $result['file_name'];
+            $this->steps[0]['state'] = 'Done';
+            $this->steps[0]['error'] = null;
+        } else {
+            $this->steps[0]['state'] = 'Failed';
+            $this->steps[0]['error'] = $result['message'];
+        }
+
+        $this->save(null);
+
+        if ($result_key === null) {
+            $this->finish('Failed', (string) $result['message'], null, null);
+            return;
+        }
+
+        $this->finish('Completed', null, $result_key, $result_name);
+    }
+
+    /**
+     * Render one report with the current document state and store it
+     * privately. The fingerprint is taken before and after rendering; when
+     * they differ the state moved while the report rendered, and the file
+     * is delivered but recorded with no fingerprint so it is never reused.
+     */
+    private static function render_single(array $options, int $assessment_id, int $company_id, int $job_id): array
+    {
+        $report_type = (string) ($options['report_type'] ?? '');
+        $format = (string) ($options['format'] ?? 'pdf');
+        $before = self::report_fingerprint($company_id, $assessment_id, $options);
+
+        if ($before === null) {
+            return array(
+                'success' => false,
+                'message' => 'That assessment could not be found',
+                'retryable' => false
+            );
+        }
+
+        $render_options = ReportStates::document_options($assessment_id, $company_id);
+
+        if ($options['detail'] ?? null) {
+            $render_options['detail'] = $options['detail'];
+        }
+
+        if (isset($options['appendices']) && is_bool($options['appendices'])) {
+            $render_options['appendices'] = $options['appendices'];
+        }
+
+        $file = (new ReadyReports($company_id))->render($report_type, $assessment_id, $format, $render_options);
+        set_time_limit(0);
+
+        if (isset($file['error'])) {
+            return array(
+                'success' => false,
+                'message' => $file['error'],
+                'retryable' => false
+            );
+        }
+
+        $after = self::report_fingerprint($company_id, $assessment_id, $options);
+
+        if (!S3Service::configured()) {
+            return array(
+                'success' => false,
+                'message' => 'File storage is not configured, so the report cannot be stored',
+                'retryable' => false
+            );
+        }
+
+        $key = 'reports/'.$company_id.'/ready/'.$job_id.'-'.bin2hex(random_bytes(10)).'.'.$file['extension'];
+
+        if (!S3Service::put_private_bytes($key, $file['bytes'], $file['content_type'])) {
+            return array(
+                'success' => false,
+                'message' => 'The report could not be stored for download',
+                'retryable' => true
+            );
+        }
+
+        return array(
+            'success' => true,
+            'key' => $key,
+            'file_name' => $file['file_name'],
+            'fingerprint' => $after !== null && hash_equals($before, $after) ? $before : null
+        );
     }
 
     /** One report in every requested format it offers, written into the job's temp folder. */

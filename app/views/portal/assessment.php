@@ -182,7 +182,7 @@
                                 <th scope="col" class="poam__col-id">ID</th>
                                 <th scope="col" class="poam__col-control">Control</th>
                                 <th scope="col">Weakness</th>
-                                <th scope="col" class="poam__col-owner">Owner</th>
+                                <th scope="col" class="poam__col-owner">Responsible Owner</th>
                                 <th scope="col" class="poam__col-date">Scheduled</th>
                                 <th scope="col" class="poam__col-status">Status</th>
                             </tr>
@@ -225,21 +225,23 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4 form-group mb-3">
-                            <label for="poam_owner">Owner</label>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="poam_owner">Responsible Owner</label>
                             <input type="text" class="form-control" id="poam_owner" maxlength="200">
                         </div>
-                        <div class="col-md-4 form-group mb-3">
-                            <label for="poam_resources">Resources</label>
-                            <input type="text" class="form-control" id="poam_resources">
-                        </div>
-                        <div class="col-md-4 form-group mb-3">
+                        <div class="col-md-6 form-group mb-3">
                             <label for="poam_status">Status</label>
                             <select class="form-control" id="poam_status" data-style="form-control">
                                 <option value="Open">Open</option>
                                 <option value="In Progress">In Progress</option>
                                 <option value="Ready for Validation">Ready for Validation</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 form-group mb-3">
+                            <label for="poam_resources">Resources Required</label>
+                            <textarea class="form-control poam__text" id="poam_resources" rows="2"></textarea>
                         </div>
                     </div>
                     <div class="row">

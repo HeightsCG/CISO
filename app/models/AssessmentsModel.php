@@ -64,8 +64,7 @@ class AssessmentsModel extends Model {
                     a.date_created,
                     DATE_FORMAT(a.date_created, df.sql_format) AS date_created_display,
                     COUNT(ai.id) AS item_count,
-                    IFNULL(SUM(CASE WHEN ai.item_result <> 'Not Assessed' THEN 1 ELSE 0 END), 0) AS assessed_count,
-                    IFNULL(SUM(CASE WHEN ai.item_result IN ('Not Implemented', 'Partially Implemented') THEN 1 ELSE 0 END), 0) AS gap_count
+                    IFNULL(SUM(CASE WHEN ai.item_result <> 'Not Assessed' THEN 1 ELSE 0 END), 0) AS assessed_count
                 FROM
                     assessments a
                     JOIN clients cl ON cl.id = a.client_id and cl.company_id = a.company_id and cl.deleted = 0

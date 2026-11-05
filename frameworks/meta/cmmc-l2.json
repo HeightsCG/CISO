@@ -164,7 +164,8 @@
                 {
                     "control": "SC.L2-3.13.11",
                     "when": "partial",
-                    "weight": 3
+                    "weight": 3,
+                    "condition": "encryption is employed but not FIPS-validated (point value 3)"
                 }
             ],
             "excluded": [
@@ -175,7 +176,7 @@
                 "PE.L2-3.10.4",
                 "PE.L2-3.10.5"
             ],
-            "summary": "Only 1-point requirements may go on a POA&M (plus SC.L2-3.13.11 when encryption is used but not FIPS-validated). Six requirements can never be deferred; they must be closed before assessment.",
+            "summary": "Only 1-point requirements may go on a POA&M, plus SC.L2-3.13.11 when encryption is employed but not FIPS-validated (point value 3). Six requirements can never be on a POA&M; they must be MET at the assessment for Conditional status.",
             "source": "cfr170",
             "cite": "32 CFR 170.21(a)(2)(ii)-(iii)",
             "quote": "None of the security requirements included in the POA&M have a point value of greater than 1"
@@ -185,7 +186,7 @@
             "type": "deadline",
             "days": 180,
             "from": "Conditional status date",
-            "summary": "Every POA&M item must be closed and confirmed by a closeout assessment within 180 days, or Conditional status expires.",
+            "summary": "Every POA&M item must be closed and confirmed by a POA&M closeout assessment within 180 days of the Conditional CMMC Status Date (performed by the OSA for a self-assessment, by a C3PAO for a certification assessment), or Conditional status expires.",
             "source": "cfr170",
             "cite": "32 CFR 170.21(b)",
             "quote": "The closing of a POA&M must be confirmed by a POA&M closeout assessment within 180-days of the Conditional CMMC Status Date"

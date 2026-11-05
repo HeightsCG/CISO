@@ -193,6 +193,38 @@ abstract class ReportBuilder
         return $this->a['terms'][$key] ?? $key;
     }
 
+    /**
+     * Metric tiles for the framework's own measures beside the implementation
+     * score: the points score (points model) and the formal status the
+     * results support, both as AssessmentScore works them out. Empty for
+     * frameworks with neither.
+     */
+    protected function framework_score_metrics(): array
+    {
+        $method = $this->a['score_method'];
+        $metrics = array();
+
+        if ($method['points'] !== null) {
+            $metrics[] = array(
+                'value' => $method['points']['text'],
+                'label' => $method['points']['label'],
+                'sub' => $this->a['counts']['Not Assessed'] > 0 ? 'Provisional until every '.$this->term('control').' is assessed' : 'Framework points score',
+                'tone' => 'brand'
+            );
+        }
+
+        if ($method['outcome'] !== null) {
+            $metrics[] = array(
+                'value' => $method['outcome']['label'],
+                'label' => 'Status supported',
+                'sub' => strpos($method['outcome']['status'], 'provisional') === 0 ? 'Provisional; not a certification decision' : 'Formal outcome; not a certification decision',
+                'tone' => in_array($method['outcome']['status'], array('pass', 'conditional'), true) ? 'positive' : 'warning'
+            );
+        }
+
+        return $metrics;
+    }
+
     /* ------------------------------------------------------------ blocks */
 
     protected static function h1(string $text): array

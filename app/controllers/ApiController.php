@@ -5975,7 +5975,13 @@ class ApiController extends Controller {
 
     /* --------------------------------------------------------------- reports */
 
-    /** A ready-made report, generated from the data and stored for a short-lived download link. */
+    /**
+     * A ready-made report for Preview or Download. Nothing is rendered in
+     * this request: a stored copy that still matches the assessment comes
+     * back as a short-lived url, otherwise a background Report job is queued
+     * (or a matching one reused) and its job_id comes back for
+     * report_job_status.
+     */
     public function ready_report_downloadAction(){
 
         $response = array(
@@ -5994,52 +6000,23 @@ class ApiController extends Controller {
         $scope = (string) ($this->post['scope'] ?? ($spec['scope'] ?? ''));
         $target_id = (int) ($this->post['id'] ?? ($this->post['target_id'] ?? 0));
 
-        if ($spec === null || $scope !== $spec['scope'] || ($scope === 'assessment' && !$this->owns_assessment($target_id))) {
+        if ($spec === null || $scope !== $spec['scope'] || $scope !== 'assessment' || !$this->owns_assessment($target_id)) {
             $response['message'] = 'That report could not be found';
             echo json_encode($response);
             exit;
         }
 
         $preview = (string) ($this->post['preview'] ?? '') === '1';
-        $options = array();
 
-        if ($scope === 'assessment') {
-            $options = ReportStates::document_options($target_id, (int) Session::get('company_id'));
-        }
-
-        if (in_array((string) ($this->post['detail'] ?? ''), ReportJobs::DETAILS, true)) {
-            $options['detail'] = (string) $this->post['detail'];
-        }
-
-        if (isset($this->post['appendices'])) {
-            $options['appendices'] = (string) $this->post['appendices'] !== '0';
-        }
-
-        $file = (new ReadyReports())->render(
-            $report_type,
+        echo json_encode(ReportJobs::dispatch_report(
+            (int) Session::get('company_id'),
             $target_id,
+            $report_type,
             $preview ? 'pdf' : (string) ($this->post['format'] ?? 'pdf'),
-            $options
-        );
-
-        if (isset($file['error'])) {
-            $response['message'] = $file['error'];
-            echo json_encode($response);
-            exit;
-        }
-
-        $key = 'reports/'.Session::get('company_id').'/ready/'.bin2hex(random_bytes(10)).'.'.$file['extension'];
-
-        if (!S3Service::put_private_bytes($key, $file['bytes'], $file['content_type'])) {
-            $response['message'] = 'The report could not be stored for download';
-            echo json_encode($response);
-            exit;
-        }
-
-        $response['success'] = true;
-        $response['message'] = 'ok';
-        $response['url'] = S3Service::presigned_get_url($key, ReportJobs::DOWNLOAD_TTL, $file['file_name']);
-        echo json_encode($response);
+            isset($this->post['detail']) ? (string) $this->post['detail'] : null,
+            isset($this->post['appendices']) ? (string) $this->post['appendices'] !== '0' : null,
+            (int) Session::get('user_id')
+        ));
         exit;
     }
 
@@ -6184,7 +6161,10 @@ class ApiController extends Controller {
             'job' => ReportJobs::payload($job)
         );
 
-        if ($job['job_type'] === 'Package' && $job['job_status'] === 'Completed' && (string) $job['result_key'] !== '') {
+        if (in_array($job['job_type'], array(
+            'Package',
+            ReportJobs::REPORT
+        ), true) && $job['job_status'] === 'Completed' && (string) $job['result_key'] !== '') {
             $response['download_url'] = S3Service::presigned_get_url($job['result_key'], ReportJobs::DOWNLOAD_TTL, (string) $job['result_name']);
         }
 
@@ -6471,6 +6451,19 @@ class ApiController extends Controller {
         $this->refuse_unless_report_staff($assessment_id);
 
         echo json_encode($this->poam_register($assessment_id, false));
+        exit;
+    }
+
+    /** POA&M counts by remediation priority for the assessment dashboard. */
+    public function poam_summaryAction(){
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+        $this->refuse_unless_report_staff($assessment_id);
+
+        echo json_encode(array(
+            'success' => true,
+            'priorities' => $this->poam_model->priority_summary($assessment_id, (int) Session::get('company_id'))
+        ));
         exit;
     }
 
@@ -6800,6 +6793,13 @@ class ApiController extends Controller {
 
         $overview = Poam::overview($items, $this->poam_model->load_milestones(0, $assessment_id, $company_id), $today);
 
+        if ($portal) {
+            $items = array_map(array(
+                'PoamModel',
+                'portal_item'
+            ), $items);
+        }
+
         return array(
             'success' => true,
             'message' => 'ok',
@@ -6829,6 +6829,7 @@ class ApiController extends Controller {
         );
     }
 
+    /** One record for the item modal; a portal user gets the PoamModel portal_* allow-lists only. */
     private function poam_item_payload(array $item, bool $portal): array
     {
         $company_id = (int) Session::get('company_id');
@@ -6836,19 +6837,35 @@ class ApiController extends Controller {
         $presented = Poam::present($item, $rules, $item['poam_clock_date'], date('Y-m-d'));
         unset($presented['source_hash']);
 
+        if ($portal) {
+            return array(
+                'success' => true,
+                'message' => 'ok',
+                'item' => PoamModel::portal_item($presented),
+                'milestones' => PoamModel::portal_milestones($this->poam_model->load_milestones((int) $item['id'], 0, $company_id)),
+                'evidence' => PoamModel::portal_evidence($this->poam_model->load_evidence((int) $item['id'], 0, $company_id, false)),
+                'history' => PoamModel::portal_history($this->poam_history_rows($this->poam_model->load_history((int) $item['id'], 0, $company_id))),
+                'statuses' => Poam::EDITABLE_STATUSES,
+                'milestone_statuses' => Poam::MILESTONE_STATUSES,
+                'editable' => Poam::PORTAL_FIELDS,
+                'can_close' => false,
+                'can_reopen' => false
+            );
+        }
+
         return array(
             'success' => true,
             'message' => 'ok',
             'item' => $presented,
             'control_result' => $this->poam_model->control_result($item['assessment_id'], $item['source_ref']),
             'milestones' => $this->poam_model->load_milestones((int) $item['id'], 0, $company_id),
-            'evidence' => $this->poam_model->load_evidence((int) $item['id'], 0, $company_id, !$portal),
+            'evidence' => $this->poam_model->load_evidence((int) $item['id'], 0, $company_id, true),
             'history' => $this->poam_history_rows($this->poam_model->load_history((int) $item['id'], 0, $company_id)),
             'statuses' => Poam::EDITABLE_STATUSES,
             'milestone_statuses' => Poam::MILESTONE_STATUSES,
-            'editable' => $portal ? Poam::PORTAL_FIELDS : array_keys(Poam::STAFF_FIELDS),
-            'can_close' => !$portal && $item['poam_status'] !== 'Closed',
-            'can_reopen' => !$portal && $item['poam_status'] === 'Closed'
+            'editable' => array_keys(Poam::STAFF_FIELDS),
+            'can_close' => $item['poam_status'] !== 'Closed',
+            'can_reopen' => $item['poam_status'] === 'Closed'
         );
     }
 
@@ -6917,7 +6934,8 @@ class ApiController extends Controller {
             $values['deviation_type'],
             $values['deviation_rationale'],
             'User',
-            (int) Session::get('user_id')
+            (int) Session::get('user_id'),
+            $portal
         );
 
         if ($changed === false) {
@@ -6959,7 +6977,8 @@ class ApiController extends Controller {
             $clean['milestone']['completed_date'],
             $clean['milestone']['milestone_status'],
             'User',
-            (int) Session::get('user_id')
+            (int) Session::get('user_id'),
+            $portal
         );
 
         if ($milestone_id === false) {
@@ -6980,7 +6999,7 @@ class ApiController extends Controller {
             'message' => 'Something went wrong'
         );
 
-        if (!$this->poam_model->delete_milestone($milestone_id, Session::get('company_id'), 'User', (int) Session::get('user_id'))) {
+        if (!$this->poam_model->delete_milestone($milestone_id, Session::get('company_id'), 'User', (int) Session::get('user_id'), $portal)) {
             $this->poam_fail($item['poam_status'] === 'Closed' ? 'This item is closed. Reopen it to make changes.' : 'That milestone could not be found');
         }
 
@@ -7011,7 +7030,7 @@ class ApiController extends Controller {
 
         $rows = $this->poam_model->get_item($item_id, Session::get('company_id'));
 
-        if (count($rows) !== 1 || (int) $rows[0]['client_id'] !== (int) Session::get('client_id') || (int) $rows[0]['client_id'] === 0) {
+        if (count($rows) !== 1 || !PoamModel::portal_owns($rows[0], Session::get('user_type'), Session::get('client_id'))) {
             $this->poam_fail('That item could not be found');
         }
 

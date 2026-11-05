@@ -139,9 +139,9 @@
         {
             "id": "plan_not_substitute",
             "type": "plan_handling",
-            "summary": "A requirement with a plan of action is still scored as not implemented.",
+            "summary": "A requirement not yet implemented is still scored as not implemented while it is on a plan of action; a plan of action earns no points.",
             "source": "dodam",
-            "cite": "DoD Assessment Methodology 1.2.1, section 5",
+            "cite": "DoD Assessment Methodology 1.2.1, section 5.g.ii",
             "quote": "Security requirements not implemented, whether a plan of action is in place or not, will be assessed as 'not implemented."
         },
         {

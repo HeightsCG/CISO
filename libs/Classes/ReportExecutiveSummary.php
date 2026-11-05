@@ -212,7 +212,7 @@ class ReportExecutiveSummary extends ReportBuilder
 
         $basis = array(
             'Counts, the implementation score and evidence coverage are calculated from the answers recorded for each '.$this->term('control').($objective_total > 0 ? ' and '.$this->term('objective') : '').'.',
-            'The implementation score counts implemented '.$this->term('controls').' in full and partially implemented ones at half, over the assessed '.$this->term('controls').' that apply. It measures progress and is not a compliance opinion or certification result.',
+            $a['score_method']['method'],
             'Remediation priority is derived from each gap\'s result, the exposure of its area and the share of '.$this->term('objectives').' still open. It is a planning aid, not an assessed risk rating.',
             'Themes, implications and recommendations interpret the recorded results using general security practice and add no facts about '.$this->client_name().'. Text recorded by the assessor is labelled as such.'
         );
@@ -293,16 +293,17 @@ class ReportExecutiveSummary extends ReportBuilder
             array(
                 'value' => $a['score'] === null ? 'Not scored' : $a['score'].'%',
                 'label' => 'Implementation score',
-                'sub' => 'Progress measure, not a compliance opinion',
+                'sub' => 'Internal index, not a compliance opinion',
                 'tone' => 'brand'
             )
         );
+        $metrics = array_merge($metrics, $this->framework_score_metrics());
 
         if ($a['assessed'] < $a['total']) {
             $metrics[] = array(
                 'value' => $a['assessed'].' of '.$a['total'],
                 'label' => ucfirst($this->term('controls')).' assessed',
-                'sub' => self::pct($a['assessed'], $a['total']).' complete; the rest are excluded from the score',
+                'sub' => self::pct($a['assessed'], $a['total']).' complete; the rest count against the score until assessed',
                 'tone' => 'warning'
             );
         }
@@ -310,7 +311,7 @@ class ReportExecutiveSummary extends ReportBuilder
         $metrics[] = array(
             'value' => (string) $gaps,
             'label' => 'Not fully in place',
-            'sub' => $c['Partially Implemented'].' partial, '.$c['Not Implemented'].' not implemented, of '.$scored.' scored',
+            'sub' => $c['Partially Implemented'].' partial, '.$c['Not Implemented'].' not implemented, of '.$scored.' assessed',
             'tone' => $gaps > 0 ? 'warning' : 'positive'
         );
         $metrics[] = array(

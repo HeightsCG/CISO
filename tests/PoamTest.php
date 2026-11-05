@@ -285,5 +285,188 @@ return array(
         $source = (string) file_get_contents(ROOT.'/libs/Classes/ReportPoam.php');
         Assert::true(strpos($source, 'remediation priority (derived)') !== false || strpos($source, "' remediation priority '") !== false, 'cards say remediation priority (derived)');
         Assert::true(stripos($source, 'more\'') === false && stripos($source, 'and others') === false, 'no truncated reference lists');
+    },
+
+    'unchanged findings never duplicate across repeated syncs' => function () use ($snapshot, $apply) {
+        $snapshots = array(
+            'AC-1' => $snapshot('AC-1', 'Not Implemented'),
+            'AC-2' => $snapshot('AC-2', 'Partially Implemented')
+        );
+        $records = $apply(array(), Poam::plan_sync($snapshots, array(), array()));
+        for ($run = 0; $run < 5; $run++) {
+            $ops = Poam::plan_sync($snapshots, $records, array());
+            Assert::same(array(), $ops, 'run '.$run.' changes nothing');
+            $records = $apply($records, $ops);
+        }
+        Assert::same(2, count($records), 'still one record per finding');
+        $records[0]['source_resolved'] = 1;
+        $ops = Poam::plan_sync($snapshots, $records, array());
+        Assert::same(1, count($ops), 'a finding deficient again clears the flag on its open record');
+        Assert::same('update', $ops[0]['op'], 'no new open item for a finding that already has one');
+    },
+
+    'a recurring finding gets one linked new item and the closed item is left untouched' => function () use ($snapshot, $apply) {
+        $records = $apply(array(), Poam::plan_sync(array(
+            'AC-1' => $snapshot('AC-1', 'Not Implemented')
+        ), array(), array()));
+        $records[0]['poam_status'] = 'Closed';
+        $records[0]['date_closed'] = '2026-11-02 09:00:00';
+        $records[0]['closure_note'] = 'Fixed and verified';
+        $closed = $records[0];
+
+        Assert::same(array(), Poam::plan_sync(array(
+            'AC-1' => $snapshot('AC-1', 'Partially Implemented', array(
+                'updated' => '2026-11-01 08:00:00'
+            ))
+        ), $records, array()), 'a result recorded before the closure does not touch the closed item');
+
+        $recurring = array(
+            'AC-1' => $snapshot('AC-1', 'Not Implemented', array(
+                'updated' => '2026-11-04 09:00:00'
+            ))
+        );
+        $ops = Poam::plan_sync($recurring, $records, array());
+        Assert::same(1, count($ops), 'one new item');
+        Assert::same('insert', $ops[0]['op'], 'inserted, not reopened in place');
+        $records = $apply($records, $ops);
+        Assert::same($closed, $records[0], 'closure note, date and status kept exactly');
+        Assert::same($closed['id'], $records[1]['reopened_from_id'], 'linked to the closed item');
+
+        Assert::same(array(), Poam::plan_sync($recurring, $records, array()), 'the next sync adds nothing: the new item is the open one');
+        foreach (Poam::plan_sync(array(), $records, array(
+            'AC-1' => 'Implemented'
+        )) as $op) {
+            Assert::true($op['record']['id'] !== $closed['id'], 'a closed item is never rewritten');
+            Assert::true(!isset($op['set']['poam_status']), 'never closed automatically');
+        }
+    },
+
+    'a sync never writes a management field or deletes anything' => function () use ($snapshot, $apply) {
+        $records = $apply(array(), Poam::plan_sync(array(
+            'AC-1' => $snapshot('AC-1', 'Not Implemented'),
+            'AC-2' => $snapshot('AC-2', 'Not Implemented')
+        ), array(), array()));
+        $plans = array(
+            Poam::plan_sync(array(
+                'AC-1' => $snapshot('AC-1', 'Partially Implemented', array(
+                    'source_priority' => 'Low',
+                    'source_weakness' => 'Changed'
+                ))
+            ), $records, array(
+                'AC-2' => 'Implemented'
+            )),
+            Poam::plan_sync(array(), $records, array())
+        );
+        $allowed = array_merge(Poam::SNAPSHOT_FIELDS, array(
+            'source_resolved',
+            'source_hash',
+            'source_date_updated'
+        ));
+        foreach ($plans as $ops) {
+            foreach ($ops as $op) {
+                Assert::true(in_array($op['op'], array(
+                    'insert',
+                    'update'
+                ), true), 'only inserts and updates');
+                foreach (array_keys($op['set'] ?? array()) as $field) {
+                    Assert::true(in_array($field, $allowed, true), $field.' is owned by the sync');
+                    Assert::true(!isset(Poam::STAFF_FIELDS[$field]), $field.' is not a management field');
+                }
+            }
+        }
+    },
+
+    'concurrent syncs queue on the assessment lock and the schema refuses a reused id' => function () {
+        $model = (string) file_get_contents(ROOT.'/app/models/PoamModel.php');
+        $sync = substr($model, strpos($model, 'public function sync_items('), 4000);
+        Assert::true(strpos($sync, 'beginTransaction') < strpos($sync, 'lock_assessment(') && strpos($sync, 'lock_assessment(') < strpos($sync, 'all_records(') && strpos($sync, 'all_records(') < strpos($sync, '$planner($records)'), 'the lock is taken before the records are read and planned');
+        Assert::true(strpos($sync, 'rollBack') !== false && strpos($sync, 'commit') !== false, 'all or nothing');
+        $schema = (string) file_get_contents(ROOT.'/sql/2026-11-26-poam.sql');
+        Assert::true(strpos($schema, 'UNIQUE KEY uq_poam_items_seq (assessment_id, poam_seq)') !== false, 'one sequence number per assessment');
+        Assert::true(strpos($schema, 'UNIQUE KEY uq_poam_items_ref (poam_ref)') !== false, 'one reference ever');
+    },
+
+    'the report reads the register once, in one snapshot, and is dated at that snapshot' => function () {
+        $source = (string) file_get_contents(ROOT.'/libs/Classes/ReportPoam.php');
+        $data = substr($source, strpos($source, 'private function data()'), 3000);
+        $start = strpos($data, 'START TRANSACTION WITH CONSISTENT SNAPSHOT, READ ONLY');
+        Assert::true($start !== false && strpos($data, 'Poam::sync(') < $start, 'the snapshot starts after the sync commits');
+        foreach (array(
+            "\$this->options['generated'] = date(",
+            'load_items(',
+            'load_milestones(',
+            'load_evidence(',
+            'load_history(',
+            "exec('COMMIT')"
+        ) as $step) {
+            Assert::true(strpos($data, $step) > $start, $step.' happens inside the snapshot');
+        }
+        Assert::true(strpos($source, 'if ($this->data !== null)') !== false, 'loaded once per build, so the PDF, Word and Excel output of a build share the records');
+        $build = substr($source, strpos($source, 'public function build()'), 300);
+        Assert::true(strpos($build, '$this->data()') < strpos($build, 'parent::build()'), 'loaded before the cover and document control read the date');
+    },
+
+    'framework rules come from the definition and no deadline is universal' => function () {
+        $l2 = Poam::framework_rules('cmmc-l2', FrameworkLibrary::get('cmmc-l2'));
+        Assert::same(180, $l2['closeout_days'], 'CMMC closeout days from 32 CFR 170.21(b)');
+        Assert::true(strpos($l2['statement'], '80%') !== false, 'the 80% minimum score is stated');
+        Assert::true(in_array('threshold', array_column($l2['rules'], 'type'), true), 'the Conditional score threshold is listed with its citation');
+        foreach (array(
+            'cmmc-l1',
+            'nist-800-171-r2',
+            'fedramp-moderate',
+            'easa-part-is-i',
+            'nist-800-53-r5',
+            'soc2'
+        ) as $key) {
+            $rules = Poam::framework_rules($key, FrameworkLibrary::get($key));
+            Assert::same(null, $rules['closeout_days'], $key.' has no closeout deadline');
+            Assert::true(strpos($rules['statement'], '180') === false, $key.' states no 180-day deadline');
+        }
+        $fedramp = Poam::framework_rules('fedramp-moderate', FrameworkLibrary::get('fedramp-moderate'));
+        Assert::same(array(
+            'critical' => 30,
+            'high' => 30,
+            'moderate' => 90,
+            'low' => 180
+        ), $fedramp['days_by_risk'], 'FedRAMP timeframes by risk rating');
+        Assert::true(strpos($fedramp['statement'], 'internal tracking fields, not FedRAMP requirements') !== false, 'internal fields are not presented as FedRAMP requirements');
+        Assert::true(in_array('vdr_supersedes_poam', array_column($fedramp['rules'], 'id'), true), 'the legacy status of the POA&M timeframes is stated');
+        $l3 = Poam::framework_rules('cmmc-l3', FrameworkLibrary::get('cmmc-l3'));
+        Assert::true(in_array('poam_level2_prerequisite', array_column($l3['rules'], 'id'), true), 'Level 3 states the Final Level 2 (C3PAO) prerequisite');
+    },
+
+    'eligibility follows 32 CFR 170.21 and the SPRS note never shows a zero deduction' => function () {
+        $l2 = Poam::framework_rules('cmmc-l2', FrameworkLibrary::get('cmmc-l2'));
+        $scoring = array(
+            'plan' => array(
+                'deferrable' => array(
+                    'SC.L2-3.13.11',
+                    'AC.L2-3.1.8'
+                )
+            )
+        );
+        $note = Poam::eligibility($l2, $scoring, array(
+            'ref' => 'SC.L2-3.13.11'
+        ), 3);
+        Assert::same('eligible', $note['eligibility'], 'partial FIPS encryption is eligible');
+        Assert::true(strpos($note['note'], 'not FIPS-validated') !== false, 'the exception names its condition');
+        Assert::same('not_eligible', Poam::eligibility($l2, $scoring, array(
+            'ref' => 'CA.L2-3.12.4'
+        ), 0)['eligibility'], 'the SSP can never be on a POA&M');
+        Assert::same('not_eligible', Poam::eligibility($l2, $scoring, array(
+            'ref' => 'AC.L2-3.1.1'
+        ), 5)['eligibility'], 'a 5-point requirement is not eligible');
+        Assert::same('not_permitted', Poam::eligibility(Poam::framework_rules('cmmc-l1', FrameworkLibrary::get('cmmc-l1')), $scoring, array(
+            'ref' => 'AC.L1-b.1.i'
+        ), null)['eligibility'], 'no POA&M at Level 1');
+        $sprs = Poam::framework_rules('nist-800-171-r2', FrameworkLibrary::get('nist-800-171-r2'));
+        $zero = Poam::eligibility($sprs, null, array(
+            'ref' => '3.12.4'
+        ), 0)['note'];
+        Assert::true(strpos($zero, 'Deducts 0') === false, 'no zero-point deduction');
+        Assert::true(strpos(Poam::eligibility($sprs, null, array(
+            'ref' => '3.1.1'
+        ), 5)['note'], 'Deducts 5 points') !== false, 'the deduction is shown');
     }
 );

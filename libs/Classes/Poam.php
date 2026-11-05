@@ -206,6 +206,7 @@ class Poam
                 'days_by_risk' => is_array($rule['days_by_risk'] ?? null) ? $rule['days_by_risk'] : array(),
                 'from' => (string) ($rule['from'] ?? ''),
                 'period' => (string) ($rule['period'] ?? ''),
+                'value' => isset($rule['value']) && is_numeric($rule['value']) ? (float) $rule['value'] : null,
                 'raw' => $rule
             );
         }
@@ -237,6 +238,10 @@ class Poam
             'plan_handling'
         ), true)) {
             return true;
+        }
+
+        if ($type === 'threshold') {
+            return $profile === 'conditional' && strpos((string) ($rule['outcome'] ?? ''), 'Conditional') === 0;
         }
 
         if ($type !== 'deadline') {
@@ -306,15 +311,17 @@ class Poam
 
         if ($profile === 'conditional') {
             $days = self::rule_value($rules, 'deadline', 'days', true);
-            return $subject.' allows a POA&M for Conditional status only when every open item is eligible under the deferral rule below. Each item shows its eligibility. Every item must be closed and confirmed by a closeout assessment within '.($days !== null ? $days : 180).' days of the Conditional status date.';
+            $minimum = self::rule_value($rules, 'threshold', 'value', true);
+            $text = $subject.' allows a POA&M for Conditional status only when every open item is eligible under the deferral rule below'.($minimum !== null ? ' and the assessment score is at least '.round($minimum * 100).'% of the maximum' : '').'. Each item shows its eligibility.';
+            return $days !== null ? $text.' Every item must be closed and confirmed by a POA&M closeout assessment within '.$days.' days of the Conditional CMMC Status Date, or the Conditional status expires.' : $text;
         }
 
         if ($profile === 'sprs') {
-            return $subject.' requires a plan of action for requirements not yet implemented, but the plan does not change the score: each item still counts as not implemented, and its SPRS deduction is shown.';
+            return $subject.' requires a plan of action for every requirement not yet implemented, but the plan earns no points: a requirement on the plan is still scored as not implemented, and its SPRS deduction is shown.';
         }
 
         if ($profile === 'fedramp') {
-            return $subject.' requires weaknesses to be tracked in a POA&M and remediated within set timeframes from discovery, by risk rating. The derived deadline is shown only where a risk rating and a detection date have been recorded.';
+            return $subject.' requires weaknesses to be tracked in a POA&M and remediated within timeframes from discovery set by risk rating, as listed below with their source. The derived deadline is shown only where a risk rating and a detection date have been recorded. Remediation priority, remediation initiative, milestone and evidence counts are internal tracking fields, not FedRAMP requirements.';
         }
 
         if ($profile === 'corrective_action') {
@@ -431,7 +438,7 @@ class Poam
             }
             return array(
                 'eligibility' => '',
-                'note' => ($points !== null ? 'Deducts '.$points.' '.($points === 1 ? 'point' : 'points').' from the SPRS score. ' : '').'Still scored as not implemented while on the plan'.($cite !== '' ? ' ('.$cite.')' : '').'.'
+                'note' => ($points !== null && $points > 0 ? 'Deducts '.$points.' '.($points === 1 ? 'point' : 'points').' from the SPRS score. ' : '').($points === 0 ? 'Carries no SPRS point value. ' : '').'Still scored as not implemented while on the plan'.($cite !== '' ? ' ('.$cite.')' : '').'.'
             );
         }
 
@@ -457,7 +464,7 @@ class Poam
             $note = 'Eligible for the POA&M'.$cite.'.';
             foreach ($raw['exceptions'] ?? array() as $exception) {
                 if (($exception['control'] ?? '') === $ref) {
-                    $note = 'Eligible for the POA&M under the exception for '.$ref.' when it is partially met'.$cite.'.';
+                    $note = 'Eligible for the POA&M under the exception for '.$ref.(isset($exception['condition']) ? ' when '.$exception['condition'] : ' when it is partially met').$cite.'.';
                 }
             }
             if ($points !== null) {
@@ -472,20 +479,20 @@ class Poam
         if (in_array($ref, $raw['excluded'] ?? array(), true)) {
             return array(
                 'eligibility' => 'not_eligible',
-                'note' => 'Can never be on a POA&M'.$cite.'; must be met before the assessment.'
+                'note' => 'Can never be on a POA&M'.$cite.'; must be MET at the assessment for Conditional status.'
             );
         }
 
         if (isset($raw['max_weight']) && $points !== null) {
             return array(
                 'eligibility' => 'not_eligible',
-                'note' => 'Point value '.$points.' exceeds the '.(int) $raw['max_weight'].'-point limit for POA&M items'.$cite.'; must be met before the assessment.'
+                'note' => 'Point value '.$points.' exceeds the '.(int) $raw['max_weight'].'-point limit for POA&M items'.$cite.'; must be MET at the assessment for Conditional status.'
             );
         }
 
         return array(
             'eligibility' => 'not_eligible',
-            'note' => 'Not eligible for the POA&M'.$cite.'; must be met before the assessment.'
+            'note' => 'Not eligible for the POA&M'.$cite.'; must be MET at the assessment for Conditional status.'
         );
     }
 
@@ -1000,7 +1007,7 @@ class Poam
     {
         $labels = array(
             'eligible' => 'Eligible for the POA&M',
-            'not_eligible' => 'Not eligible: must be met before assessment',
+            'not_eligible' => 'Not eligible: must be MET at the assessment',
             'not_permitted' => 'POA&M not permitted (internal tracking only)'
         );
 

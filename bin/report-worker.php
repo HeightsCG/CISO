@@ -4,6 +4,8 @@
  * outside public/, with APPLICATION_ENV set as for the web app:
  *   php bin/report-worker.php --job=<id>   run one job (spawned when a job starts)
  *   php bin/report-worker.php --drain      run queued and stalled jobs (cron, every minute)
+ *   php bin/report-worker.php --beat=<id> --pid=<worker pid>
+ *                                          keep a running job's heartbeat (started by the worker)
  */
 if (php_sapi_name() !== 'cli') {
     exit(1);
@@ -47,5 +49,7 @@ date_default_timezone_set($config['global']['timezone'] ?? 'UTC');
 
 exit(ReportJobs::main(getopt('', array(
     'job:',
-    'drain'
+    'drain',
+    'beat:',
+    'pid:'
 ))));

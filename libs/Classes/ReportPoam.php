@@ -46,7 +46,27 @@ class ReportPoam extends ReportBuilder
         return $control;
     }
 
-    /** The synced register, loaded once per build. */
+    /**
+     * Loads the register before anything else is built, so the cover, the
+     * document control and every section show the same records and the same
+     * "as of" moment.
+     */
+    public function build(): array
+    {
+        if ($this->a !== null) {
+            $this->data();
+        }
+
+        return parent::build();
+    }
+
+    /**
+     * The synced register, loaded once per build. After the sync commits,
+     * every record, milestone, evidence link and history row is read in one
+     * read-only consistent snapshot, and the report's "as of" time is the
+     * moment that snapshot was taken; edits saved while the report builds
+     * are not half included.
+     */
     private function data(): array
     {
         if ($this->data !== null) {
@@ -57,16 +77,29 @@ class ReportPoam extends ReportBuilder
         $model = new PoamModel();
         $sync = Poam::sync($assessment_id, $this->company_id, 0, $this->a);
         $rules = Poam::framework_rules((string) $this->a['assessment']['framework_key'], $this->a['definition'] ?? null);
-        $clock = $model->clock_date($assessment_id, $this->company_id);
+
+        $model->db->exec('START TRANSACTION WITH CONSISTENT SNAPSHOT, READ ONLY');
+
+        try {
+            $this->options['generated'] = date('Y-m-d H:i:s');
+            $clock = $model->clock_date($assessment_id, $this->company_id);
+            $rows = $model->load_items($assessment_id, $this->company_id);
+            $milestones = $model->load_milestones(0, $assessment_id, $this->company_id);
+            $evidence = $model->load_evidence(0, $assessment_id, $this->company_id, true);
+            $history = $model->load_history(0, $assessment_id, $this->company_id);
+            $model->db->exec('COMMIT');
+        } catch (Throwable $e) {
+            $model->db->exec('ROLLBACK');
+            throw $e;
+        }
+
         $today = date('Y-m-d', strtotime((string) $this->options['generated']));
         $items = array();
 
-        foreach ($model->load_items($assessment_id, $this->company_id) as $row) {
+        foreach ($rows as $row) {
             $items[] = Poam::present($row, $rules, $clock, $today);
         }
 
-        $milestones = $model->load_milestones(0, $assessment_id, $this->company_id);
-        $evidence = $model->load_evidence(0, $assessment_id, $this->company_id, true);
         $by_item = array();
         $evidence_by_item = array();
 
@@ -107,7 +140,7 @@ class ReportPoam extends ReportBuilder
             'milestones_of' => $by_item,
             'evidence_of' => $evidence_by_item,
             'successor' => $successor,
-            'history' => $model->load_history(0, $assessment_id, $this->company_id),
+            'history' => $history,
             'overview' => Poam::overview($items, $milestones, $today)
         );
 
@@ -323,10 +356,13 @@ class ReportPoam extends ReportBuilder
             $eligible = count(array_filter($d['open'], function ($item) {
                 return $item['source_eligibility'] === 'eligible';
             }));
-            $text = $d['clock'] !== null
-                ? 'Conditional status date: '.Poam::date_label($d['clock']).'. Every open item must be closed and confirmed by a closeout assessment by '.Poam::date_label(date('Y-m-d', strtotime($d['clock'].' +'.(int) $rules['closeout_days'].' days'))).'.'
-                : 'Conditional status date: not recorded. The '.(int) $rules['closeout_days'].'-day closeout deadline cannot be calculated until it is recorded.';
-            $text .= "\n\n".$eligible.' of '.count($d['open']).' open '.(count($d['open']) === 1 ? 'item is' : 'items are').' eligible for the POA&M; '.(count($d['open']) - $eligible).' must be met before the assessment.';
+            $text = '';
+            if ($rules['closeout_days'] !== null) {
+                $text = ($d['clock'] !== null
+                    ? 'Conditional status date: '.Poam::date_label($d['clock']).'. Every open item must be closed and confirmed by a POA&M closeout assessment by '.Poam::date_label(date('Y-m-d', strtotime($d['clock'].' +'.(int) $rules['closeout_days'].' days'))).'.'
+                    : 'Conditional status date: not recorded. The '.(int) $rules['closeout_days'].'-day closeout deadline cannot be calculated until it is recorded.')."\n\n";
+            }
+            $text .= $eligible.' of '.count($d['open']).' open '.(count($d['open']) === 1 ? 'item is' : 'items are').' eligible for the POA&M; '.(count($d['open']) - $eligible).' must be MET at the assessment for Conditional status.';
             $blocks[] = self::text($text);
             $rows = array();
             foreach ($d['open'] as $item) {
@@ -369,13 +405,13 @@ class ReportPoam extends ReportBuilder
             foreach ($rules['days_by_risk'] as $risk => $days) {
                 $rows[] = array(
                     ucfirst((string) $risk),
-                    $days.' days from detection'
+                    $days.' days from discovery'
                 );
             }
             if (count($rows) > 0) {
                 $blocks[] = self::table(array(
                     'Risk rating',
-                    'Remediation timeframe'
+                    'Remediation timeframe (FedRAMP, legacy POA&M guidance)'
                 ), array(
                     40,
                     60
@@ -384,7 +420,7 @@ class ReportPoam extends ReportBuilder
             $rated = count(array_filter($d['open'], function ($item) {
                 return $item['fedramp_deadline'] !== null;
             }));
-            $blocks[] = self::text($rated.' of '.count($d['open']).' open items have both a risk rating and a detection date recorded, so a derived deadline can be shown for them. The remediation priority in this register is not a FedRAMP risk rating.');
+            $blocks[] = self::text($rated.' of '.count($d['open']).' open items have both a risk rating and a detection date recorded, so a derived deadline can be shown for them. The remediation priority in this register is an internal recommendation, not a FedRAMP risk rating, and sets no FedRAMP deadline.');
         }
 
         if ($rules['profile'] === 'corrective_action') {
@@ -424,7 +460,7 @@ class ReportPoam extends ReportBuilder
             'POA&M ID',
             ucfirst($this->term('control')),
             'Remediation priority',
-            'Owner',
+            'Responsible owner',
             'Scheduled completion',
             'Status'
         ), array(
@@ -532,7 +568,7 @@ class ReportPoam extends ReportBuilder
 
         $rows[] = array(
             'Owner and resources',
-            'Owner: '.$item['owner_label']."\nResources: ".$item['resources_label']
+            'Responsible owner: '.$item['owner_label']."\nResources required: ".$item['resources_label']
         );
         $rows[] = array(
             'Dates',
@@ -584,7 +620,7 @@ class ReportPoam extends ReportBuilder
                         $item['poam_status']
                     ),
                     array(
-                        'Owner',
+                        'Responsible owner',
                         $item['owner_label']
                     ),
                     array(
@@ -792,8 +828,8 @@ class ReportPoam extends ReportBuilder
         }
 
         $head = array_merge($head, array(
-            'Owner',
-            'Resources',
+            'Responsible owner',
+            'Resources required',
             'Detection date',
             'Scheduled completion',
             'Completion date',
@@ -908,7 +944,7 @@ class ReportPoam extends ReportBuilder
                     ucfirst($this->term('control')),
                     ucfirst($this->term('control')).' title',
                     'Weakness',
-                    'Owner',
+                    'Responsible owner',
                     'Completion date',
                     'Closed',
                     'Confirmed by',

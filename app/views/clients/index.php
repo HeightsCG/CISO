@@ -23,7 +23,6 @@
                         <th scope="col">Name</th>
                         <th scope="col">Location</th>
                         <th scope="col" class="num">Assessments</th>
-                        <th scope="col" class="num">Gaps</th>
                     </tr>
                 </thead>
                 <tbody id="clients_list"></tbody>
@@ -63,7 +62,6 @@ $(document).ready(function () {
                 + '<td><a class="rowlink__a listpage__name" href="/clients/detail/id/' + clients[i].id + '">' + esc(clients[i].company_name) + '</a></td>'
                 + '<td>' + esc(place) + '</td>'
                 + '<td class="num">' + (parseInt(clients[i].assessment_count, 10) || 0).toLocaleString('en-US') + '</td>'
-                + '<td class="num">' + (parseInt(clients[i].gap_count, 10) || 0).toLocaleString('en-US') + '</td>'
                 + '</tr>';
         }
 

@@ -18,8 +18,18 @@
                     <button type="button" class="btn btn--icon" data-bs-toggle="modal" data-bs-target="#upgrade_modal" aria-label="New assessment" title="New assessment"><i class="fa-regular fa-plus"></i></button>
                     <?php } ?>
                 </div>
-                <div class="panel__body">
-                    <div class="tiles" id="client_assessments_list"></div>
+                <div class="panel__body panel__body--flush">
+                    <table class="data listpage__table" id="client_assessments_table" hidden>
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Framework</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Progress</th>
+                            </tr>
+                        </thead>
+                        <tbody id="client_assessments_list"></tbody>
+                    </table>
                     <p class="tiles__empty" id="client_assessments_empty"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Loading assessments&hellip;</p>
                 </div>
             </div>
@@ -29,8 +39,18 @@
                     <h2 class="panel__title">Invoices</h2>
                     <button type="button" class="btn btn--icon" data-bs-toggle="modal" data-bs-target="#invoice_modal" aria-label="New invoice" title="New invoice"><i class="fa-regular fa-plus"></i></button>
                 </div>
-                <div class="panel__body">
-                    <div class="tiles" id="client_invoices_list"></div>
+                <div class="panel__body panel__body--flush">
+                    <table class="data listpage__table" id="client_invoices_table" hidden>
+                        <thead>
+                            <tr>
+                                <th scope="col">Invoice</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Due</th>
+                                <th scope="col" class="num">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="client_invoices_list"></tbody>
+                    </table>
                     <p class="tiles__empty" id="client_invoices_empty"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Loading invoices&hellip;</p>
                 </div>
             </div>
@@ -537,18 +557,20 @@ $(document).ready(function () {
         return total > 0 ? Math.round(done / total * 100) : 0;
     }
 
-    function status_tone(value) {
-
-        if (value === 'Complete') {
-            return 'badge--active';
+    var STATUS = {
+        'Planned': {
+            label: 'Not Started',
+            tone: 'is-none'
+        },
+        'In Progress': {
+            label: 'In Progress',
+            tone: 'is-partial'
+        },
+        'Complete': {
+            label: 'Complete',
+            tone: 'is-ok'
         }
-
-        if (value === 'In Progress') {
-            return 'badge--onboarding';
-        }
-
-        return 'badge--inactive';
-    }
+    };
 
     function render_assessments(assessments) {
 
@@ -558,18 +580,19 @@ $(document).ready(function () {
 
             var total = parseInt(assessments[i].item_count, 10);
             var done = parseInt(assessments[i].assessed_count, 10);
+            var pct = size_of(done, total);
+            var state = STATUS[assessments[i].assessment_status] || STATUS['Planned'];
 
-            html += '<a class="tile" href="/assessments/detail/id/' + assessments[i].id + '">'
-                + '<span class="tile__top">'
-                + '<span class="tile__title">' + esc(assessments[i].assessment_name) + '</span>'
-                + '<span class="badge ' + status_tone(assessments[i].assessment_status) + '">' + esc(assessments[i].assessment_status) + '</span>'
-                + '</span>'
-                + (assessments[i].short_code ? '<span class="tile__meta">' + esc(assessments[i].short_code) + '</span>' : '')
-                + '<span class="tile__figure">' + size_of(done, total) + '%<span class="tile__figure-label">complete</span></span>'
-                + '</a>';
+            html += '<tr class="rowlink">'
+                + '<td><a class="rowlink__a listpage__name" href="/assessments/detail/id/' + assessments[i].id + '">' + esc(assessments[i].assessment_name) + '</a></td>'
+                + '<td>' + esc(assessments[i].short_code || '') + '</td>'
+                + '<td><span class="listpage__status" title="' + state.label + '"><span class="rollup__dot ' + state.tone + '"></span><span class="visually-hidden">' + state.label + '</span></span></td>'
+                + '<td><span class="listpage__progress"><span class="progress"><span class="progress__bar" style="width:' + pct + '%"></span></span><span class="listpage__pct">' + pct + '%</span></span></td>'
+                + '</tr>';
         }
 
-        $('#client_assessments_list').html(html).prop('hidden', assessments.length === 0);
+        $('#client_assessments_list').html(html);
+        $('#client_assessments_table').prop('hidden', assessments.length === 0);
         $('#client_assessments_empty').prop('hidden', assessments.length > 0).text('No assessments for this client yet.');
     }
 
@@ -615,22 +638,27 @@ $(document).ready(function () {
                     ? (list[i].due_days === null ? '' : (parseInt(list[i].due_days, 10) === 0 ? 'Due on receipt' : 'Net ' + parseInt(list[i].due_days, 10)))
                     : 'Due ' + esc(list[i].due_date_display));
 
-                html += '<button type="button" class="tile" data-id="' + list[i].id + '">'
-                    + '<span class="tile__top">'
-                    + '<span class="tile__title">' + esc(list[i].invoice_number || '') + '</span>'
-                    + '<span class="badge ' + invoice_tone(list[i].invoice_status_display) + '">' + esc(list[i].invoice_status_display) + '</span>'
-                    + '</span>'
-                    + '<span class="tile__meta">' + due + '</span>'
-                    + '<span class="tile__figure">' + esc(list[i].total_display) + '</span>'
-                    + '</button>';
+                html += '<tr class="rowlink" data-id="' + list[i].id + '" tabindex="0">'
+                    + '<td><span class="listpage__name">' + esc(list[i].invoice_number || '') + '</span></td>'
+                    + '<td><span class="badge ' + invoice_tone(list[i].invoice_status_display) + '">' + esc(list[i].invoice_status_display) + '</span></td>'
+                    + '<td>' + due + '</td>'
+                    + '<td class="num">' + esc(list[i].total_display) + '</td>'
+                    + '</tr>';
             }
 
-            $('#client_invoices_list').html(html).prop('hidden', list.length === 0);
+            $('#client_invoices_list').html(html);
+            $('#client_invoices_table').prop('hidden', list.length === 0);
             $('#client_invoices_empty').prop('hidden', list.length > 0).text('No invoices for this client yet.');
         });
     }
 
-    $('#client_invoices_list').on('click', '.tile', function () {
+    $('#client_invoices_list').on('keydown', 'tr', function (event) {
+        if (event.key === 'Enter') {
+            $(this).trigger('click');
+        }
+    });
+
+    $('#client_invoices_list').on('click', 'tr', function () {
         $('#invoice_view_frame').attr('src', '/billing/invoice/id/' + $(this).attr('data-id'));
         bootstrap.Modal.getOrCreateInstance(document.getElementById('invoice_view_modal')).show();
     });

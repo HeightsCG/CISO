@@ -140,7 +140,7 @@
                 "low": 180
             },
             "from": "discovery",
-            "summary": "Critical and High risks must be remediated within 30 days of discovery, Moderate within 90 days and Low within 180 days.",
+            "summary": "Legacy FedRAMP POA&M guidance: Critical and High risks remediated within 30 days of discovery, Moderate within 90 days and Low within 180 days.",
             "source": "fedramppoam",
             "cite": "FedRAMP Playbook, POA&M, Remediation Requirements",
             "quote": "FedRAMP requires Critical and High risks to be remediated within 30 days of discovery, Moderate risks within 90 days of discovery, and Low risks within 180 days of discovery."
@@ -149,8 +149,7 @@
             "id": "vendor_dependency_mitigation",
             "type": "deadline",
             "days": 30,
-            "from": "discovery",
-            "summary": "A High risk that waits on a vendor fix must be mitigated to Moderate with compensating controls within 30 days, and the vendor checked at least monthly.",
+            "summary": "A High risk that waits on a vendor fix must be mitigated to Moderate with compensating controls within 30 days, and the vendor checked at least once a month. Vendor dependencies are not deviation requests.",
             "source": "fedramppoam",
             "cite": "FedRAMP Playbook, POA&M, vendor dependencies",
             "quote": "High-risk VDs must be mitigated to a Moderate level through compensating controls within thirty (30) days."
@@ -179,6 +178,12 @@
             "source": "fedrampbaseline",
             "cite": "FedRAMP Security Controls Baseline, cover sheet",
             "quote": "This is a legacy document that is being replaced by the FedRAMP Consolidated Rules for 2026"
+        },
+        {
+            "id": "vdr_supersedes_poam",
+            "type": "plan_handling",
+            "summary": "The POA&M timeframes above come from FedRAMP legacy documentation (reference only since 24 June 2026). FedRAMP's Vulnerability Detection and Response rules are mandatory from 7 December 2026 and set their own remediation timeframes; check the current FedRAMP rules for the offering.",
+            "cite": "FedRAMP Notice 0014 (June 2026)"
         }
     ],
     "deliverables": [
