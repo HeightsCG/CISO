@@ -1,8 +1,8 @@
 <div class="vault">
     <aside class="vault__tree">
-        <div class="vault__tree-head">
-            <span class="vault__tree-title">Folders</span>
-            <button type="button" class="btn btn--tertiary btn--sm" id="do_folder_add" aria-label="New folder"><i class="fa-regular fa-folder-plus"></i></button>
+        <div class="panel__head">
+            <h2 class="panel__title">Folders</h2>
+            <button type="button" class="btn btn--icon" id="do_folder_add" aria-label="New folder" title="New folder"><i class="fa-regular fa-plus"></i></button>
         </div>
         <ul class="vault__list" id="folder_tree"></ul>
     </aside>

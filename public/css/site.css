@@ -10261,3 +10261,608 @@ body.app .reports__issue-busy {
 body.app .headline {
     margin: 0 0 20px 0;
 }
+
+body.app .reports {
+    overflow-y: auto;
+}
+
+body.app .reports .assess__reports {
+    flex: 0 0 auto;
+    min-height: auto;
+    overflow: visible;
+}
+
+body.app .reports__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 26px;
+    padding: 0 10px;
+    font-size: 13px;
+    font-weight: var(--fw-medium);
+    color: var(--high);
+    background: var(--surface-sunken);
+    border: 0;
+    border-radius: 13px;
+    cursor: pointer;
+}
+
+body.app .reports__pill:hover {
+    background: var(--surface-inset);
+}
+
+body.app .reports__job .btn.btn--sm {
+    flex: 0 0 auto;
+}
+
+body.app .reports__foot {
+    display: flex;
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 24px;
+}
+
+body.app .reports__modal-list {
+    padding: 0;
+}
+
+body.app .reports__modal-list .reports__issues {
+    max-height: none;
+    border-top: 0;
+}
+
+body.app #report_package_modal .reports__job {
+    padding: 16px 0 0;
+}
+
+body.app .reports__panel {
+    flex: 0 0 auto;
+    margin: 0;
+    overflow: visible;
+}
+
+body.app .reports__panel > * + * {
+    border-top: 1px solid var(--border);
+}
+
+body.app .reports__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+body.app .reports__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 56px;
+    padding: 8px 20px;
+}
+
+body.app .reports__row + .reports__row {
+    border-top: 1px solid var(--border);
+}
+
+body.app .reports__name {
+    font-size: 14px;
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+}
+
+body.app .reports__row-actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+}
+
+body.app .reports__row-actions .fa-chevron-down {
+    margin-left: 4px;
+    font-size: 11px;
+}
+
+body.app .reports__panel .reports__job {
+    padding: 14px 20px;
+}
+
+body.app .shell__nav {
+    background: var(--surface-sunken);
+    border-right: 1px solid var(--border);
+}
+
+body.app table.data tbody tr:hover {
+    background: var(--accent-subtle);
+}
+
+body.app .reports {
+    margin: -8px -32px 0;
+    padding: 8px 32px 40px;
+}
+
+body.app .reports__panel .panel__head {
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    border-bottom: 0;
+}
+
+body.app .reports__panel .panel__title {
+    margin: 0 8px 0 0;
+}
+
+body.app .reports__panel .reports__issues {
+    max-height: none;
+    overflow: visible;
+}
+
+body.app .reports__panel[hidden] {
+    display: none;
+}
+
+body.app .reports.reports--split {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 20px;
+}
+
+body.app .reports.reports--split > .reports__panel:only-of-type,
+body.app .reports.reports--split:has(> #report_readiness[hidden]) > #report_ai {
+    grid-column: 1 / -1;
+}
+
+body.app #report_readiness .reports__issue {
+    flex-direction: column;
+    gap: 6px;
+}
+
+body.app #report_readiness .reports__issue .badge {
+    min-width: 0;
+}
+
+body.app #report_readiness .reports__issue {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+body.app #report_readiness .reports__issue .badge {
+    min-width: 72px;
+    justify-content: center;
+}
+
+body.app #report_readiness .reports__issue {
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+body.app .reports.reports--split > .reports__options {
+    grid-column: 1 / -1;
+}
+
+body.app .reports__options .reports__line {
+    justify-content: flex-start;
+    gap: 12px 40px;
+}
+
+body.app .reports__options #do_narratives_rewrite_all {
+    margin-left: auto;
+}
+
+body.app .reports__options .btn[hidden] {
+    display: none;
+}
+
+body.app .reports.reports--split > .panel {
+    margin: 0;
+}
+
+body.app .reports.reports--split {
+    align-content: start;
+}
+
+body.app #report_appendices .segmented__btn {
+    min-width: 72px;
+}
+
+body.app .panel__head,
+body.app .settings .card__head {
+    min-height: 60px;
+    border-bottom: 1px solid var(--border-strong);
+}
+
+body.app .panel__title,
+body.app .settings .card__title {
+    font-size: 17px;
+    font-weight: var(--fw-semibold);
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+}
+
+body.app .reports__panel > .panel__head {
+    border-bottom: 1px solid var(--border-strong);
+}
+
+body.app .reports__panel > .panel__head + * {
+    border-top: 0;
+}
+
+body.app .reports__row + .reports__row,
+body.app #report_readiness .reports__issue + .reports__issue {
+    border-top: 1px solid #E5E5EA;
+}
+
+body.app .reports__panel > .reports__list,
+body.app .reports__panel > .reports__issues {
+    border-top: 0;
+}
+
+body.app .reports__name {
+    font-weight: var(--fw-regular);
+}
+
+body.app table.data tbody td {
+    border-bottom: 1px solid #E5E5EA;
+}
+
+body.app .panel__head,
+body.app .settings .card__head,
+body.app .reports__panel > .panel__head {
+    border-bottom: 2px solid var(--accent);
+}
+
+body.app .panel__title,
+body.app .settings .card__title {
+    font-size: 15px;
+}
+
+body.app .panel__head,
+body.app .settings .card__head,
+body.app .reports__panel > .panel__head {
+    border-bottom: 1px solid transparent;
+    border-image: linear-gradient(90deg, #0071E3 0%, #5AC8FA 100%) 1;
+}
+
+body.app table.data:not(.ledger) tbody td {
+    border-bottom: 1px solid #E5E5EA;
+}
+
+body.app table.data:not(.ledger) tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+body.app .vault__link {
+    padding-right: var(--space-3);
+}
+
+body.app .vault__item:has(.vault__menu):hover .vault__count,
+body.app .vault__item:has(.vault__menu.show) .vault__count {
+    opacity: 0;
+}
+
+body.app .assess__tabsbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border);
+}
+
+body.app .assess__tabsbar .subtabs {
+    align-self: stretch;
+}
+
+body.app .assess__tabsbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+}
+
+body.app .assess__tabsbar-actions [hidden] {
+    display: none;
+}
+
+body.app table.data tbody tr:hover {
+    background: #F3F7FC;
+}
+
+body.app table.data tbody tr.item__row.is-selected td {
+    background: #DCEAFB;
+}
+
+body.app table.data tbody tr.item__row.is-selected td:first-child {
+    box-shadow: inset 3px 0 0 var(--accent);
+}
+
+body.app .subtabs--inner {
+    margin-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border);
+}
+
+body.app .prefs__row[hidden] {
+    display: none;
+}
+
+body.app .reports__version-value {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+body.app .pills {
+    display: flex;
+    gap: 6px;
+    margin-bottom: var(--space-4);
+}
+
+body.app .pills__btn {
+    height: 32px;
+    padding: 0 16px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: var(--fw-medium);
+    color: var(--text-secondary);
+    background: transparent;
+    border: 0;
+    border-radius: 16px;
+    cursor: pointer;
+}
+
+body.app .pills__btn:hover {
+    color: var(--text-primary);
+    background: rgba(0, 0, 0, 0.05);
+}
+
+body.app .pills__btn.active {
+    color: var(--accent);
+    background: var(--accent-subtle);
+}
+
+body.app .prefs__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 56px;
+    padding: 12px 20px;
+    font-family: inherit;
+    font-size: 14px;
+    text-align: left;
+    color: var(--text-primary);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
+body.app .prefs__item + .prefs__item {
+    border-top: 1px solid #E5E5EA;
+}
+
+body.app .prefs__item:hover:not(:disabled) {
+    background: #F3F7FC;
+}
+
+body.app .prefs__item:disabled {
+    cursor: default;
+}
+
+body.app .prefs__item[hidden] {
+    display: none;
+}
+
+body.app .prefs__item-label {
+    flex: 1 1 auto;
+    font-weight: var(--fw-medium);
+}
+
+body.app .prefs__item-value {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+}
+
+body.app .prefs__item-meta {
+    color: var(--text-muted);
+}
+
+body.app .prefs__item-go {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+body.app .prefs__item:hover:not(:disabled) .prefs__item-go {
+    color: var(--accent);
+}
+
+body.app .segmented.prefs__choice {
+    display: flex;
+    width: 100%;
+    height: 40px;
+}
+
+body.app .prefs__choice .segmented__btn {
+    flex: 1 1 0;
+}
+
+body.app .segmented.prefs__choice {
+    align-items: stretch;
+    height: 40px;
+    padding: 3px;
+    gap: 3px;
+}
+
+body.app .prefs__choice .segmented__btn {
+    height: auto;
+    min-height: 0;
+    margin: 0;
+}
+
+body.app .settings .card__head {
+    display: flex;
+    align-items: center;
+    min-height: 60px;
+    padding: 12px 20px;
+}
+
+body.app .settings .card__title,
+body.app .panel__title {
+    margin: 0;
+    line-height: 1.3;
+}
+
+body.app .settings .card__head {
+    padding: 12px 24px;
+}
+
+body.app .prefs__item {
+    padding: 12px 24px;
+}
+
+body.app .review__bar-title {
+    flex: 1 1 auto;
+    align-items: center;
+}
+
+body.app .review__bar-title .review__title {
+    overflow: visible;
+    white-space: normal;
+    text-overflow: clip;
+    line-height: 1.3;
+}
+
+body.app .review__bar-title .badge {
+    flex: 0 0 auto;
+}
+
+body.app .review__bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+}
+
+body.app .review__actions {
+    display: inline-flex;
+    align-self: flex-start;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+body.app .review__action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 34px;
+    padding: 0 16px;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+    background: #FFFFFF;
+    border: 0;
+    cursor: pointer;
+}
+
+body.app .review__action + .review__action {
+    border-left: 1px solid var(--border);
+}
+
+body.app .review__action[hidden] {
+    display: none;
+}
+
+body.app .review__action:hover:not(:disabled) {
+    background: #F3F7FC;
+}
+
+body.app .review__action:disabled {
+    color: var(--text-muted);
+    cursor: default;
+}
+
+body.app .review__action--approve:not(:disabled) {
+    color: var(--accent);
+}
+
+body.app .review__action--reject:not(:disabled) {
+    color: var(--critical);
+}
+
+body.app .review__name {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+}
+
+body.app .review__actions {
+    display: flex;
+    align-self: stretch;
+    width: 100%;
+}
+
+body.app .review__action {
+    flex: 1 1 0;
+    justify-content: center;
+}
+
+body.app .review__object-head {
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+body.app .review__object-ref {
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-size: 13px;
+    font-weight: var(--fw-semibold);
+    color: var(--accent);
+}
+
+body.app .review__object-title {
+    font-size: 14px;
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+}
+
+body.app .review__refs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+body.app .review__ref {
+    display: inline-flex;
+    align-items: center;
+    height: 26px;
+    padding: 0 10px;
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-size: 12px;
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+    background: var(--surface-sunken);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: default;
+}
+
+body.app .review__editor > * > .review__group > .review__object > .review__object-head,
+body.app .review__object > .review__object-head:has(.review__object-ref) {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    min-height: 48px;
+    margin: -12px -14px 12px;
+    padding: 12px 14px;
+    background: #FFFFFF;
+    border-bottom: 1px solid transparent;
+    border-image: linear-gradient(90deg, #0071E3 0%, #5AC8FA 100%) 1;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}

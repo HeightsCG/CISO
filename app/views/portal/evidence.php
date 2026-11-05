@@ -11,8 +11,8 @@
 
     <div class="vault">
         <aside class="vault__tree">
-            <div class="vault__tree-head">
-                <span class="vault__tree-title">Folders</span>
+            <div class="panel__head">
+                <h2 class="panel__title">Folders</h2>
             </div>
             <ul class="vault__list" id="folder_tree"></ul>
         </aside>

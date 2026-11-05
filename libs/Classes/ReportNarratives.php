@@ -22,13 +22,14 @@
 class ReportNarratives
 {
     const FIELD_LABELS = array(
-        'recorded_condition' => 'Recorded condition',
-        'risk_scenarios' => 'Potential exposure',
-        'suggested_approach' => 'Suggested approach',
-        'confirm' => 'To be confirmed',
-        'exposure_overview' => 'Exposure overview',
-        'refs' => 'Refs',
-        'source_refs' => 'Source refs'
+        'recorded_condition' => 'Recorded Condition',
+        'risk_scenarios' => 'Potential Exposure',
+        'suggested_approach' => 'Suggested Approach',
+        'confirm' => 'To Be Confirmed',
+        'exposure_overview' => 'Exposure Overview',
+        'refs' => 'References',
+        'source_refs' => 'Source References',
+        'ref' => 'Reference'
     );
 
     /**
@@ -233,7 +234,7 @@ class ReportNarratives
         foreach ($schema['properties'] ?? array() as $name => $property) {
             $field = array(
                 'path' => $prefix.$name,
-                'label' => self::FIELD_LABELS[$name] ?? ucfirst(str_replace('_', ' ', $name)),
+                'label' => self::FIELD_LABELS[$name] ?? ucwords(str_replace('_', ' ', $name)),
                 'type' => 'text'
             );
 

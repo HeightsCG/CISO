@@ -1,23 +1,13 @@
 <div class="page page--assessment">
 
-    <header class="headline">
-        <div class="headline__text">
-            <h1 class="headline__title"><?php echo htmlspecialchars($this->assessment['assessment_name'], ENT_QUOTES, 'UTF-8'); ?></h1>
-            <p class="headline__sub">
-                <span class="headline__status <?php echo ($this->assessment['assessment_status'] === 'Complete' ? 'is-ok' : ($this->assessment['assessment_status'] === 'In Progress' ? 'is-progress' : 'is-muted')); ?>" id="status_badge"><?php echo htmlspecialchars($this->assessment['assessment_status'], ENT_QUOTES, 'UTF-8'); ?></span>
-            </p>
-        </div>
-        <div class="headline__actions">
-            <button type="button" class="btn btn--primary btn--pill" id="do_complete" disabled><i class="fa-regular fa-circle-check"></i> Mark Complete</button>
-        </div>
-    </header>
-
-    <nav class="subtabs subtabs--page" role="tablist" aria-label="Assessment">
-        <button class="subtabs__link active" id="tab_controls_btn" data-bs-toggle="pill" data-bs-target="#tab_controls" type="button" role="tab" aria-controls="tab_controls" aria-selected="true">Controls</button>
-        <button class="subtabs__link" id="tab_vault_btn" data-bs-toggle="pill" data-bs-target="#tab_vault" type="button" role="tab" aria-controls="tab_vault" aria-selected="false">Evidence Vault</button>
-        <button class="subtabs__link" id="tab_reports_btn" data-bs-toggle="pill" data-bs-target="#tab_reports" type="button" role="tab" aria-controls="tab_reports" aria-selected="false">Reports</button>
-        <button class="subtabs__link" id="tab_settings_btn" data-bs-toggle="pill" data-bs-target="#tab_settings" type="button" role="tab" aria-controls="tab_settings" aria-selected="false">Settings</button>
-    </nav>
+    <div class="assess__tabsbar">
+        <nav class="subtabs" role="tablist" aria-label="Assessment">
+            <button class="subtabs__link active" id="tab_controls_btn" data-bs-toggle="pill" data-bs-target="#tab_controls" type="button" role="tab" aria-controls="tab_controls" aria-selected="true">Controls</button>
+            <button class="subtabs__link" id="tab_vault_btn" data-bs-toggle="pill" data-bs-target="#tab_vault" type="button" role="tab" aria-controls="tab_vault" aria-selected="false">Evidence Vault</button>
+            <button class="subtabs__link" id="tab_reports_btn" data-bs-toggle="pill" data-bs-target="#tab_reports" type="button" role="tab" aria-controls="tab_reports" aria-selected="false">Reports</button>
+            <button class="subtabs__link" id="tab_settings_btn" data-bs-toggle="pill" data-bs-target="#tab_settings" type="button" role="tab" aria-controls="tab_settings" aria-selected="false">Settings</button>
+        </nav>
+    </div>
 
     <div class="tab-content assess__panes">
         <div class="tab-pane show active" id="tab_controls" role="tabpanel" aria-labelledby="tab_controls_btn">
@@ -26,6 +16,10 @@
                 <div class="assess__bar" id="rollup_bar"></div>
                 <span class="compare__summary" id="compare_summary" hidden></span>
                 <span class="assess__progress-outcome" id="score_outcome"></span>
+                <div class="assess__tabsbar-actions">
+                    <span class="headline__status <?php echo ($this->assessment['assessment_status'] === 'Complete' ? 'is-ok' : ($this->assessment['assessment_status'] === 'In Progress' ? 'is-progress' : 'is-muted')); ?>" id="status_badge" hidden><?php echo htmlspecialchars($this->assessment['assessment_status'], ENT_QUOTES, 'UTF-8'); ?></span>
+                    <button type="button" class="btn btn--primary btn--pill" id="do_complete" disabled><i class="fa-regular fa-circle-check"></i> Mark Complete</button>
+                </div>
             </div>
             <div class="panel record__panel workbench">
                 <div class="panel__head roster__toolbar">
@@ -142,117 +136,54 @@
         </div>
 
         <div class="tab-pane" id="tab_reports" role="tabpanel" aria-labelledby="tab_reports_btn">
-            <div class="reports">
-                <section class="panel reports__card reports__bar">
-                    <div class="reports__line">
+            <div class="reports reports--split">
+                <section class="panel reports__panel" id="report_ai">
+                    <div class="panel__head">
                         <div class="reports__field">
-                            <span class="reports__label" id="report_detail_label">Detail</span>
-                            <div class="segmented segmented--switch reports__detail" id="report_detail" role="group" aria-labelledby="report_detail_label">
-                                <button type="button" class="segmented__btn" data-value="executive">Executive</button>
-                                <button type="button" class="segmented__btn is-on" data-value="standard">Standard</button>
-                                <button type="button" class="segmented__btn" data-value="comprehensive">Comprehensive</button>
-                            </div>
-                        </div>
-                        <div class="reports__field">
-                            <span class="reports__label" id="report_formats_label">Formats</span>
-                            <div class="segmented segmented--switch reports__formats-pick" id="report_formats" role="group" aria-labelledby="report_formats_label">
-                                <button type="button" class="segmented__btn is-on" data-value="pdf" aria-pressed="true">PDF</button>
-                                <button type="button" class="segmented__btn is-on" data-value="docx" aria-pressed="true">Word</button>
-                                <button type="button" class="segmented__btn" data-value="xlsx" aria-pressed="false">Excel</button>
-                            </div>
-                        </div>
-                        <div class="reports__field">
-                            <label class="reports__label" for="report_appendices">Appendices</label>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="report_appendices" checked>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="reports__line">
-                        <div class="reports__field">
-                            <label class="reports__label" for="report_status">Status</label>
-                            <div class="reports__status">
-                                <select class="form-control" id="report_status" data-style="form-control" data-container="body" disabled>
-                                    <option value="Draft">Draft</option>
-                                    <option value="In Review">In Review</option>
-                                    <option value="Final">Final</option>
-                                </select>
-                            </div>
-                            <span class="reports__version" id="report_version"></span>
-                            <span class="reports__warn" id="report_changed" hidden><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Changed since final</span>
-                        </div>
-                        <button type="button" class="btn btn--primary" id="do_package"><i class="fa-regular fa-file-zipper"></i> Download Package</button>
-                    </div>
-                    <div class="reports__job" id="package_job" hidden>
-                        <div class="progress"><span class="progress__bar" id="package_bar"></span></div>
-                        <span class="reports__job-label" id="package_label"></span>
-                    </div>
-                </section>
-
-                <section class="panel reports__card reports__readiness" id="report_readiness">
-                    <button type="button" class="reports__readiness-head collapsed" id="report_readiness_toggle" data-bs-toggle="collapse" data-bs-target="#report_readiness_body" aria-expanded="false" aria-controls="report_readiness_body">
-                        <span class="reports__readiness-icon" id="report_readiness_ok" hidden><i class="fa-solid fa-circle-check" aria-hidden="true"></i></span>
-                        <span class="reports__readiness-icon" id="report_readiness_warn"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></span>
-                        <span class="reports__readiness-title" id="report_readiness_title">Report readiness</span>
-                        <span class="reports__chevron" id="report_readiness_chevron"><i class="fa-regular fa-chevron-down" aria-hidden="true"></i></span>
-                    </button>
-                    <div class="collapse" id="report_readiness_body">
-                        <ul class="reports__issues" id="report_readiness_list"></ul>
-                    </div>
-                </section>
-
-                <section class="panel reports__card reports__ai" id="report_ai">
-                    <div class="reports__line">
-                        <div class="reports__field reports__field--grow">
-                            <span class="reports__label">AI narratives</span>
-                            <span class="reports__counts" id="narrative_counts"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i></span>
+                            <h2 class="panel__title">Reports</h2>
                         </div>
                         <div class="reports__actions">
-                            <button type="button" class="btn btn--secondary" id="do_narratives_generate" hidden><i class="fa-regular fa-wand-magic-sparkles"></i> Generate</button>
-                            <button type="button" class="btn btn--secondary" id="do_narratives_review"><i class="fa-regular fa-list-check"></i> Review</button>
+                            <button type="button" class="btn btn--secondary" id="do_narratives_next" disabled><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn--primary" id="do_package_open"><i class="fa-regular fa-file-zipper"></i> Download Package</button>
                         </div>
                     </div>
                     <div class="reports__job" id="narratives_job" hidden>
                         <div class="progress"><span class="progress__bar" id="narratives_bar"></span></div>
                         <span class="reports__job-label" id="narratives_label"></span>
-                        <button type="button" class="btn btn--icon" id="do_narratives_cancel" aria-label="Stop generating" title="Stop generating"><i class="fa-regular fa-stop"></i></button>
+                        <button type="button" class="btn btn--secondary btn--sm" id="do_narratives_cancel"><i class="fa-regular fa-stop"></i> Stop</button>
                     </div>
-                    <ul class="reports__issues" id="narratives_stale_list" hidden></ul>
                     <div class="reports__failed" id="narratives_failed" hidden>
                         <ul class="reports__issues" id="narratives_failed_list"></ul>
                         <button type="button" class="btn btn--secondary btn--sm" id="do_narratives_retry"><i class="fa-regular fa-rotate-right"></i> Retry</button>
                     </div>
+                    <ul class="reports__list">
+                        <?php foreach (ReadyReports::catalog_for('assessment') as $report) { ?>
+                        <li class="reports__row">
+                            <span class="reports__name"><?php echo htmlspecialchars($report['name'], ENT_QUOTES, 'UTF-8'); ?></span>
+                            <span class="reports__row-actions">
+                                <?php if (in_array('pdf', $report['formats'], true)) { ?>
+                                <button type="button" class="btn btn--secondary btn--sm" data-action="preview_report" data-report="<?php echo htmlspecialchars($report['key'], ENT_QUOTES, 'UTF-8'); ?>" data-name="<?php echo htmlspecialchars($report['name'], ENT_QUOTES, 'UTF-8'); ?>">Preview</button>
+                                <?php } ?>
+                                <span class="dropdown">
+                                    <button type="button" class="btn btn--secondary btn--sm" data-bs-toggle="dropdown" aria-expanded="false">Download <i class="fa-regular fa-chevron-down"></i></button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <?php foreach ($report['formats'] as $format) { ?>
+                                        <li><button type="button" class="dropdown-item" data-action="download_report" data-report="<?php echo htmlspecialchars($report['key'], ENT_QUOTES, 'UTF-8'); ?>" data-format="<?php echo htmlspecialchars($format, ENT_QUOTES, 'UTF-8'); ?>"><?php echo $format === 'pdf' ? 'PDF' : ($format === 'docx' ? 'Word' : 'Excel'); ?></button></li>
+                                        <?php } ?>
+                                    </ul>
+                                </span>
+                            </span>
+                        </li>
+                        <?php } ?>
+                    </ul>
                 </section>
 
-                <div class="panel record__panel assess__reports">
-                    <table class="data data--light reports__table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Report</th>
-                                <th scope="col" class="reports__col-download"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach (ReadyReports::catalog_for('assessment') as $report) { ?>
-                            <tr>
-                                <td>
-                                    <span class="roster__name"><?php echo htmlspecialchars($report['name'], ENT_QUOTES, 'UTF-8'); ?></span>
-                                </td>
-                                <td class="reports__col-download">
-                                    <span class="reports__formats">
-                                        <?php if (in_array('pdf', $report['formats'], true)) { ?>
-                                        <button type="button" class="btn btn--tertiary btn--sm" data-action="preview_report" data-report="<?php echo htmlspecialchars($report['key'], ENT_QUOTES, 'UTF-8'); ?>" data-name="<?php echo htmlspecialchars($report['name'], ENT_QUOTES, 'UTF-8'); ?>"><i class="fa-regular fa-eye"></i> Preview</button>
-                                        <?php } ?>
-                                        <?php foreach ($report['formats'] as $format) { ?>
-                                        <button type="button" class="btn btn--secondary btn--sm" data-action="download_report" data-report="<?php echo htmlspecialchars($report['key'], ENT_QUOTES, 'UTF-8'); ?>" data-format="<?php echo htmlspecialchars($format, ENT_QUOTES, 'UTF-8'); ?>"><i class="fa-regular <?php echo $format === 'pdf' ? 'fa-file-pdf' : ($format === 'docx' ? 'fa-file-word' : 'fa-file-excel'); ?>"></i> <?php echo $format === 'pdf' ? 'PDF' : ($format === 'docx' ? 'Word' : 'Excel'); ?></button>
-                                        <?php } ?>
-                                    </span>
-                                </td>
-                            </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
-                </div>
+                <section class="panel reports__panel" id="report_readiness" hidden>
+                    <div class="panel__head">
+                        <h2 class="panel__title">Report Readiness</h2>
+                    </div>
+                    <ul class="reports__issues" id="report_readiness_list"></ul>
+                </section>
             </div>
         </div>
 
@@ -312,6 +243,26 @@
                             </div>
                         </div>
                         <?php } ?>
+                    </section>
+                    <section class="card prefs__group">
+                        <header class="card__head">
+                            <h2 class="card__title">Report Settings</h2>
+                        </header>
+                        <button type="button" class="prefs__item" id="do_detail_open">
+                            <span class="prefs__item-label">Level of Detail</span>
+                            <span class="prefs__item-value" id="report_detail_value">Standard</span>
+                            <i class="fa-regular fa-chevron-right prefs__item-go" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="prefs__item" id="do_appendices_open">
+                            <span class="prefs__item-label">Appendices</span>
+                            <span class="prefs__item-value" id="report_appendices_value">Yes</span>
+                            <i class="fa-regular fa-chevron-right prefs__item-go" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="prefs__item" id="do_status_open" disabled>
+                            <span class="prefs__item-label">Report Status</span>
+                            <span class="prefs__item-value"><span id="report_status_value"></span><span class="reports__warn" id="report_changed" hidden><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Changed since final</span></span>
+                            <i class="fa-regular fa-chevron-right prefs__item-go" aria-hidden="true"></i>
+                        </button>
                     </section>
                     <div class="prefs__actions">
                         <button type="button" class="btn btn--destructive" id="do_assessment_delete_open"><i class="fa-regular fa-trash"></i> Delete Assessment</button>
@@ -374,8 +325,8 @@
                 <p class="pick__label">Files in <span id="pick_client"></span>&rsquo;s evidence vault <span class="pick__count" id="pick_count"></span></p>
                 <div class="vault vault--pick">
                     <aside class="vault__tree">
-                        <div class="vault__tree-head">
-                            <span class="vault__tree-title">Folders</span>
+                        <div class="panel__head">
+                            <h2 class="panel__title">Folders</h2>
                         </div>
                         <ul class="vault__list" id="pick_tree"></ul>
                     </aside>
@@ -443,10 +394,11 @@
                                 <h3 class="review__title" id="narrative_section_title"></h3>
                                 <span id="narrative_section_pill"></span>
                             </div>
-                            <div class="review__bar-actions">
-                                <button type="button" class="btn btn--secondary" id="do_narrative_reject"><i class="fa-regular fa-xmark"></i> Reject Section</button>
-                                <button type="button" class="btn btn--secondary" id="do_narrative_save"><i class="fa-regular fa-floppy-disk"></i> Save Edits</button>
-                                <button type="button" class="btn btn--primary" id="do_narrative_approve"><i class="fa-regular fa-check"></i> Approve Section</button>
+                            <div class="review__actions" role="group" aria-label="Section actions">
+                                <button type="button" class="review__action review__action--approve" id="do_narrative_approve"><i class="fa-regular fa-check"></i> Approve Section</button>
+                                <button type="button" class="review__action" id="do_narrative_save"><i class="fa-regular fa-floppy-disk"></i> Save Edits</button>
+                                <button type="button" class="review__action" id="do_narrative_rewrite" hidden><i class="fa-regular fa-rotate-right"></i> Rewrite Section</button>
+                                <button type="button" class="review__action review__action--reject" id="do_narrative_reject"><i class="fa-regular fa-xmark"></i> Reject Section</button>
                             </div>
                         </div>
                         <section class="review__editor" id="narrative_editor" aria-live="polite">
@@ -456,7 +408,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn--secondary me-auto" id="do_narratives_approve_all_open"><i class="fa-regular fa-check-double"></i> Approve All Current Drafts</button>
+                <button type="button" class="btn btn--secondary" id="do_narratives_approve_all_open"><i class="fa-regular fa-check-double"></i> Approve All Current Drafts</button>
+                <button type="button" class="btn btn--secondary me-auto" id="do_rewrite_open" hidden><i class="fa-regular fa-wand-magic-sparkles"></i> Rewrite All</button>
                 <button type="button" class="btn btn--primary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -493,6 +446,108 @@
                     <p class="preview__loading" id="report_preview_loading"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Preparing preview&hellip;</p>
                     <iframe class="preview__frame" id="report_preview_frame" title="Report preview" hidden></iframe>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="report_detail_modal" tabindex="-1" aria-labelledby="report_detail_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="report_detail_modal_title">Level of Detail</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="segmented segmented--switch prefs__choice" id="report_detail" role="group" aria-labelledby="report_detail_modal_title">
+                    <button type="button" class="segmented__btn" data-value="executive">Executive</button>
+                    <button type="button" class="segmented__btn is-on" data-value="standard">Standard</button>
+                    <button type="button" class="segmented__btn" data-value="comprehensive">Comprehensive</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="report_appendices_modal" tabindex="-1" aria-labelledby="report_appendices_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="report_appendices_modal_title">Appendices</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="segmented segmented--switch prefs__choice" id="report_appendices" role="group" aria-labelledby="report_appendices_modal_title">
+                    <button type="button" class="segmented__btn is-on" data-value="1">Yes</button>
+                    <button type="button" class="segmented__btn" data-value="0">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="report_status_modal" tabindex="-1" aria-labelledby="report_status_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="report_status_modal_title">Report Status</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="segmented segmented--switch prefs__choice" id="report_status_pick" role="group" aria-labelledby="report_status_modal_title">
+                    <button type="button" class="segmented__btn" data-value="Draft">Draft</button>
+                    <button type="button" class="segmented__btn" data-value="In Review">In Review</button>
+                    <button type="button" class="segmented__btn" data-value="Final">Final</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="report_rewrite_modal" tabindex="-1" aria-labelledby="report_rewrite_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="report_rewrite_modal_title">Rewrite All Narratives</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Every AI narrative section is written again from the current answers and goes back to Draft.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn--primary" id="do_narratives_rewrite_all"><i class="fa-regular fa-wand-magic-sparkles"></i> Rewrite All</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="report_package_modal" tabindex="-1" aria-labelledby="report_package_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="report_package_modal_title">Download Package</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body prefs">
+                <div class="row prefs__row">
+                    <span class="col-md-4 prefs__label" id="report_formats_label">Formats</span>
+                    <div class="col-md-8 prefs__control">
+                        <div class="segmented segmented--switch prefs__input reports__formats-pick" id="report_formats" role="group" aria-labelledby="report_formats_label">
+                            <button type="button" class="segmented__btn is-on" data-value="pdf" aria-pressed="true">PDF</button>
+                            <button type="button" class="segmented__btn is-on" data-value="docx" aria-pressed="true">Word</button>
+                            <button type="button" class="segmented__btn" data-value="xlsx" aria-pressed="false">Excel</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="reports__job" id="package_job" hidden>
+                    <div class="progress"><span class="progress__bar" id="package_bar"></span></div>
+                    <span class="reports__job-label" id="package_label"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn--primary" id="do_package"><i class="fa-regular fa-arrow-down-to-line"></i> Download</button>
             </div>
         </div>
     </div>
@@ -578,7 +633,6 @@ $(document).ready(function () {
             assessment_name = values.assessment_name;
             schedule.start = values.start_date;
             schedule.end = values.end_date;
-            $('.headline__title').text(values.assessment_name);
             $('.crumbs__item:last-child span').text(values.assessment_name);
         });
     }
@@ -1160,6 +1214,8 @@ $(document).ready(function () {
         controls = [];
         objectives_of = {};
 
+        var titles = {};
+
         for (var i = 0; i < list.length; i++) {
             if (list[i].control_kind === 'objective') {
                 if (!objectives_of[list[i].parent_identifier]) {
@@ -1170,7 +1226,11 @@ $(document).ready(function () {
             } else {
                 controls.push(list[i]);
             }
+
+            titles[list[i].control_identifier] = list[i].control_title;
         }
+
+        $('#tab_controls').data('titles', titles);
     }
 
     function load(keep_open) {
@@ -2009,16 +2069,35 @@ $(document).ready(function () {
         'Low': 1
     };
 
+    var next = null;
+
     function report_options() {
         return {
             detail: $('#report_detail .segmented__btn.is-on').attr('data-value') || 'standard',
-            appendices: $('#report_appendices').is(':checked')
+            appendices: $('#report_appendices .segmented__btn.is-on').attr('data-value') !== '0'
         };
     }
 
     $('#report_detail').on('click', '.segmented__btn', function () {
         $('#report_detail .segmented__btn').removeClass('is-on');
         $(this).addClass('is-on');
+        $('#report_detail_value').text($(this).text());
+        modal('report_detail_modal').hide();
+    });
+
+    $('#do_detail_open').click(function () {
+        modal('report_detail_modal').show();
+    });
+
+    $('#do_appendices_open').click(function () {
+        modal('report_appendices_modal').show();
+    });
+
+    $('#report_appendices').on('click', '.segmented__btn', function () {
+        $('#report_appendices .segmented__btn').removeClass('is-on');
+        $(this).addClass('is-on');
+        $('#report_appendices_value').text($(this).text());
+        modal('report_appendices_modal').hide();
     });
 
     function report_formats() {
@@ -2061,7 +2140,7 @@ $(document).ready(function () {
         });
     }
 
-    $('#tab_reports_btn').on('shown.bs.tab', function () {
+    $('#tab_reports_btn, #tab_settings_btn').on('shown.bs.tab', function () {
 
         if (center_loaded) {
             return;
@@ -2073,14 +2152,18 @@ $(document).ready(function () {
 
     function render_state(state) {
 
-        var version = state.report_status + ' v' + state.report_version;
+        var version = state.report_version;
 
         if (state.report_status === 'Final' && state.finalized_by_name) {
             version += ' · ' + state.finalized_by_name + (state.finalized_date ? ', ' + state.finalized_date : '');
         }
 
-        $('#report_status').prop('disabled', false).val(state.report_status);
-        $('#report_version').text(version);
+        $('#do_status_open').prop('disabled', false);
+        $('#report_status_value').text(state.report_status);
+        $('#report_status_pick .segmented__btn').each(function () {
+            $(this).toggleClass('is-on', $(this).attr('data-value') === state.report_status);
+        });
+        $('#report_version').text('v' + version);
         $('#report_changed').prop('hidden', !state.changed_since_final);
     }
 
@@ -2100,16 +2183,22 @@ $(document).ready(function () {
         modal('report_blockers_modal').show();
     }
 
-    $('#report_status').on('change', function () {
+    $('#do_status_open').click(function () {
+        modal('report_status_modal').show();
+    });
 
-        var report_status = $(this).val();
+    $('#report_status_pick').on('click', '.segmented__btn', function () {
+
+        var report_status = $(this).attr('data-value');
 
         if (!center || report_status === center.state.report_status) {
+            modal('report_status_modal').hide();
             return;
         }
 
-        $('#report_status').prop('disabled', true);
-        $('#report_version').html('<i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i>');
+        modal('report_status_modal').hide();
+        $('#do_status_open').prop('disabled', true);
+        $('#report_status_value').html('<i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i>');
 
         ApiDataSvc.apiCall('post', 'report_status_set', { assessment_id: assessment_id, report_status: report_status }, function (data) {
 
@@ -2150,64 +2239,70 @@ $(document).ready(function () {
     function render_readiness(list) {
 
         var html = '';
-        var top = '';
+
+        list = list.slice().sort(function (a, b) {
+            return (SEVERITY_RANK[b.severity] || 0) - (SEVERITY_RANK[a.severity] || 0);
+        });
 
         for (var i = 0; i < list.length; i++) {
             html += '<li class="reports__issue"><span class="badge ' + (SEVERITY_CLASS[list[i].severity] || 'badge--inactive') + '">' + esc(list[i].severity) + '</span>'
                 + '<span class="reports__issue-text">' + esc(list[i].message) + '</span></li>';
-
-            if ((SEVERITY_RANK[list[i].severity] || 0) > (SEVERITY_RANK[top] || 0)) {
-                top = list[i].severity;
-            }
         }
 
         $('#report_readiness_list').html(html);
-        $('#report_readiness').attr('data-severity', list.length === 0 ? 'ok' : top.toLowerCase());
-        $('#report_readiness_title').text(list.length === 0 ? 'Ready: no issues found' : 'Report readiness (' + list.length + ')');
-        $('#report_readiness_ok').prop('hidden', list.length > 0);
-        $('#report_readiness_warn').prop('hidden', list.length === 0);
-        $('#report_readiness_chevron').prop('hidden', list.length === 0);
-        $('#report_readiness_toggle').prop('disabled', list.length === 0);
+        $('#report_readiness').prop('hidden', list.length === 0);
+    }
 
-        if (list.length === 0) {
-            bootstrap.Collapse.getOrCreateInstance(document.getElementById('report_readiness_body'), { toggle: false }).hide();
+    function next_action(narratives, ai_configured) {
+
+        var sections = narratives.sections || [];
+        var stale = sections.filter(function (section) {
+            return section.state === 'stale';
+        });
+        var waiting = (narratives.draft || 0) + (narratives.rejected || 0);
+
+        if (ai_configured && (narratives.total === 0 || narratives.missing > 0)) {
+            return {
+                kind: 'generate',
+                label: 'Generate Narratives',
+                icon: 'fa-wand-magic-sparkles'
+            };
         }
+
+        if (ai_configured && stale.length > 0) {
+            return {
+                kind: 'update',
+                label: stale.length === 1 ? 'Update ' + stale[0].label : 'Update ' + stale.length + ' Sections',
+                icon: 'fa-rotate-right',
+                keys: stale.map(function (section) {
+                    return section.section_key;
+                })
+            };
+        }
+
+        if (waiting > 0) {
+            return {
+                kind: 'review',
+                label: 'Review ' + waiting + (waiting === 1 ? ' Draft' : ' Drafts'),
+                icon: 'fa-list-check'
+            };
+        }
+
+        return {
+            kind: 'review',
+            label: 'Review',
+            icon: 'fa-list-check'
+        };
     }
 
     function render_narratives(narratives, ai_configured) {
 
-        var parts = [narratives.approved + ' of ' + narratives.total + ' approved'];
-        var extra = [
-            ['draft', 'draft'],
-            ['stale', 'out of date'],
-            ['missing', 'missing'],
-            ['rejected', 'rejected']
-        ];
+        next = next_action(narratives, ai_configured);
 
-        for (var i = 0; i < extra.length; i++) {
-            if (narratives[extra[i][0]] > 0) {
-                parts.push(narratives[extra[i][0]] + ' ' + extra[i][1]);
-            }
-        }
-
-        $('#narrative_counts').text(parts.join(' · '));
-
-        var stale = (narratives.sections || []).filter(function (section) {
-            return section.state === 'stale';
-        });
-        var html = '';
-
-        for (var s = 0; s < stale.length; s++) {
-            html += '<li class="reports__issue"><span class="badge badge--onboarding">Out of date</span><span class="reports__issue-text"><strong>' + esc(stale[s].label) + '.</strong> ' + esc(stale[s].stale_reason || '') + '</span>'
-                + (rewriting[stale[s].section_key]
-                    ? '<span class="reports__issue-busy"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Rewriting</span>'
-                    : '<button type="button" class="btn btn--secondary btn--sm" data-action="regenerate" data-key="' + esc(stale[s].section_key) + '"><i class="fa-regular fa-rotate-right"></i> Regenerate</button>')
-                + '</li>';
-        }
-
-        $('#narratives_stale_list').html(html).prop('hidden', stale.length === 0);
-        $('#do_narratives_generate').prop('hidden', !ai_configured);
-        $('#do_narratives_review').prop('disabled', narratives.total === 0);
+        $('#do_narratives_next')
+            .html('<i class="fa-regular ' + next.icon + '"></i> ' + esc(next.label))
+            .prop('disabled', next.kind === 'review' && narratives.total === 0);
+        $('#do_rewrite_open').prop('hidden', !ai_configured || narratives.total === 0);
     }
 
     function is_active(job) {
@@ -2260,9 +2355,12 @@ $(document).ready(function () {
             $('#' + type + '_label').text(job_label(job));
         }
 
-        set_loading(type === 'package' ? '#do_package' : '#do_narratives_generate', running);
+        if (type === 'package') {
+            set_loading('#do_package', running);
+        }
 
         if (type === 'narratives') {
+            $('#do_narratives_next').prop('hidden', running);
             render_failed(running ? null : job);
             set_loading('#do_narratives_cancel', false);
         }
@@ -2330,6 +2428,7 @@ $(document).ready(function () {
 
         if (type === 'package') {
             if (obj.job.job_status === 'Completed' && obj.download_url && package_requested) {
+                modal('report_package_modal').hide();
                 window.location.href = obj.download_url;
             } else if (obj.job.job_status === 'Failed' && package_requested) {
                 toastr.error(obj.job.last_error || 'The report package could not be built.');
@@ -2410,14 +2509,53 @@ $(document).ready(function () {
         }
     }
 
-    $(document).on('click', '#narratives_stale_list [data-action="regenerate"], #narrative_editor [data-action="regenerate"]', function () {
+    $(document).on('click', '#narrative_editor [data-action="regenerate"]', function () {
         regenerate_section($(this).attr('data-key'), this);
     });
 
-    $('#do_narratives_generate').click(function () {
+    $('#do_narratives_next').click(function () {
+
+        if (!next) {
+            return;
+        }
+
+        if (next.kind === 'review') {
+            open_review();
+            return;
+        }
+
+        if (next.kind === 'update') {
+            for (var i = 0; i < next.keys.length; i++) {
+                rewriting[next.keys[i]] = true;
+            }
+
+            start_job('narratives', 'Narratives', {
+                mode: 'sections',
+                sections: next.keys,
+                revise: 'none'
+            }, '#do_narratives_next');
+            return;
+        }
+
         start_job('narratives', 'Narratives', {
             mode: 'missing_or_stale'
-        }, '#do_narratives_generate');
+        }, '#do_narratives_next');
+    });
+
+    $('#do_rewrite_open').click(function () {
+        modal('narrative_modal').hide();
+        modal('report_rewrite_modal').show();
+    });
+
+    $('#do_narratives_rewrite_all').click(function () {
+        modal('report_rewrite_modal').hide();
+        start_job('narratives', 'Narratives', {
+            mode: 'all'
+        }, '#do_narratives_next');
+    });
+
+    $('#do_package_open').click(function () {
+        modal('report_package_modal').show();
     });
 
     $('#do_narratives_retry').click(function () {
@@ -2491,9 +2629,11 @@ $(document).ready(function () {
 
     function humanize(key) {
 
-        var text = String(key).replace(/_/g, ' ');
+        var text = String(key).replace(/_/g, ' ').replace(/\brefs\b/g, 'references').replace(/\bref\b/g, 'reference');
 
-        return text.charAt(0).toUpperCase() + text.slice(1);
+        return text.replace(/\b[a-z]/g, function (letter) {
+            return letter.toUpperCase();
+        });
     }
 
     function infer_fields(value, skip_locked) {
@@ -2565,11 +2705,50 @@ $(document).ready(function () {
             + '</div>';
     }
 
+    function control_title(identifier) {
+
+        var titles = $('#tab_controls').data('titles') || {};
+
+        return titles[identifier] || '';
+    }
+
+    function ref_tags(label, value) {
+
+        var list = Array.isArray(value) ? value : [];
+        var html = '';
+
+        for (var i = 0; i < list.length; i++) {
+            html += '<span class="review__ref" title="' + esc(control_title(list[i])) + '">' + esc(list[i]) + '</span>';
+        }
+
+        if (html === '') {
+            return '';
+        }
+
+        return '<div class="form-group review__field"><label>' + esc(label) + '</label><div class="review__refs">' + html + '</div></div>';
+    }
+
+    function object_head(item) {
+
+        var html = '';
+
+        if (typeof item.ref === 'string' && item.ref !== '') {
+            html += '<span class="review__object-ref">' + esc(item.ref) + '</span>'
+                + '<span class="review__object-title">' + esc(control_title(item.ref)) + '</span>';
+        }
+
+        return html + locked_chips(item);
+    }
+
     function locked_chips(item) {
 
         var html = '';
 
         for (var i = 0; i < LOCKED.length; i++) {
+            if (LOCKED[i] === 'ref') {
+                continue;
+            }
+
             if (typeof item[LOCKED[i]] === 'string' && item[LOCKED[i]] !== '') {
                 html += '<span class="badge badge--inactive">' + esc(item[LOCKED[i]]) + '</span>';
             }
@@ -2583,6 +2762,10 @@ $(document).ready(function () {
         var path = base === '' ? field.path : base + '.' + field.path;
         var value = value_at(content, path);
 
+        if (field.type === 'list' && /(^|_)refs$/.test(field.path)) {
+            return ref_tags(field.label, value);
+        }
+
         if (field.type !== 'objects') {
             return textarea(path, field.type, field.label, value);
         }
@@ -2594,15 +2777,19 @@ $(document).ready(function () {
 
             var item_path = path + '.' + i;
             var subs = field.fields && field.fields.length ? field.fields : infer_fields(list[i], true);
-            var chips = locked_chips(list[i]);
+            var chips = object_head(list[i]);
             var inner = '';
 
             for (var s = 0; s < subs.length; s++) {
+                if (LOCKED.indexOf(subs[s].path) !== -1) {
+                    continue;
+                }
+
                 inner += render_field(subs[s], content, item_path);
             }
 
             html += '<div class="review__object">'
-                + '<div class="review__object-head"><span class="review__object-num">' + (i + 1) + '</span>' + chips + '</div>'
+                + (chips === '' ? '' : '<div class="review__object-head">' + chips + '</div>')
                 + inner + '</div>';
         }
 
@@ -2670,7 +2857,17 @@ $(document).ready(function () {
         $('#do_narrative_save').prop('disabled', status === 'Missing' || !dirty);
         $('#do_narrative_approve').prop('disabled', status === 'Missing' || status === 'Out of date' || (status === 'Approved' && !dirty));
         $('#do_narrative_reject').prop('disabled', status === 'Missing' || status === 'Rejected');
+        $('#do_narrative_rewrite').prop('hidden', !center || !center.ai_configured).prop('disabled', !section || !!rewriting[selected_key]);
     }
+
+    $('#do_narrative_rewrite').click(function () {
+
+        if (!selected_key) {
+            return;
+        }
+
+        regenerate_section(selected_key, this);
+    });
 
     function render_editor() {
 
@@ -2788,7 +2985,6 @@ $(document).ready(function () {
         load_sections();
     }
 
-    $('#do_narratives_review').click(open_review);
 
     function save_section(button, done) {
 
@@ -3020,9 +3216,9 @@ $(document).ready(function () {
 
     $('#tab_reports').on('click', "[data-action='download_report']", function () {
 
-        var button = this;
-        var format = $(button).attr('data-format');
-        var values = report_values(button, format);
+        var format = $(this).attr('data-format');
+        var values = report_values(this, format);
+        var button = $(this).closest('.dropdown').find('[data-bs-toggle]')[0] || this;
 
         set_loading(button, true);
 
