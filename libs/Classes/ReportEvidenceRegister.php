@@ -28,7 +28,7 @@ class ReportEvidenceRegister extends ReportBuilder
         $blocks = $this->summary_blocks($evidence);
 
         if (count($evidence) === 0) {
-            return array_merge($blocks, $this->why_blocks(), $this->outstanding_blocks(false));
+            return array_merge($blocks, $this->outstanding_blocks(false));
         }
 
         return array_merge($blocks, $this->register_blocks($evidence), $this->trace_blocks($evidence), $this->outstanding_blocks($this->detail() !== 'executive'));
@@ -64,8 +64,8 @@ class ReportEvidenceRegister extends ReportBuilder
                 $control['result'],
                 count($refs),
                 implode(', ', $refs),
-                count($refs) > 0 ? 'Evidence linked' : 'No evidence linked',
-                count($refs) > 0 ? '' : $this->expected_evidence($control)
+                count($refs) > 0 ? 'Provided; review not recorded' : 'Outstanding',
+                count($refs) > 0 ? '' : implode('; ', $control['suggested_evidence'] ?? array())
             );
         }
 
@@ -105,8 +105,8 @@ class ReportEvidenceRegister extends ReportBuilder
                     'Result',
                     'Evidence items',
                     'Evidence IDs',
-                    'Coverage',
-                    'Evidence that would demonstrate it'
+                    'Evidence status',
+                    'Suggested evidence (not yet provided)'
                 ),
                 'widths' => array(
                     26,
@@ -168,8 +168,8 @@ class ReportEvidenceRegister extends ReportBuilder
         );
 
         if (count($evidence) === 0) {
-            $intro = 'No evidence is linked to the '.$this->a['standard'].' assessment'.$client.'. None of the '.count($applicable).' applicable '.$controls.' is supported by a document, record or file in the system, so every result in this assessment rests on the answers recorded by the assessor alone.'
-                ."\n\n".'This register therefore summarizes coverage and sets out the evidence that remains outstanding, grouped by '.$this->term('family').'. It is replaced by a full evidence listing and traceability matrix once evidence is linked.';
+            $intro = 'No evidence is linked to the '.$this->a['standard'].' assessment'.$client.'. None of the '.count($applicable).' applicable '.$controls.' is supported by a document, record or file in the system, so every recorded result rests on the assessor\'s answers alone and cannot yet be confirmed by a reviewer.'
+                ."\n\n".'This register is therefore limited to the evidence status and the evidence suggested for collection, by '.$this->term('family').'. A full evidence listing and traceability matrix replace it once evidence is linked.';
         } else {
             $intro = count($evidence).' evidence item'.(count($evidence) === 1 ? ' is' : 's are').' linked to the '.$this->a['standard'].' assessment'.$client.', supporting '.$with.' of the '.count($applicable).' applicable '.$controls.' ('.self::share($with, count($applicable)).')'
                 .(count($objectives) > 0 ? ' and '.$objectives_with.' of '.count($objectives).' '.$this->term('objectives') : '').'.'
@@ -185,14 +185,14 @@ class ReportEvidenceRegister extends ReportBuilder
                     'items' => $metrics
                 )
             ),
-            array(
-                'kind' => 'panel',
-                'value' => array(
-                    'title' => 'Uploaded, reviewed and sufficient',
-                    'tone' => 'neutral',
-                    'body' => 'This register records evidence that has been uploaded and linked to the assessment. The system does not record a review status, a validation outcome or assessor comments for individual evidence items. A link therefore shows that an item was submitted in support of a '.$this->term('control').', not that it has been examined or judged sufficient; sufficiency requires confirmation by the assessor.'
-                )
-            ),
+            self::h2('Evidence status'),
+            self::table(array(
+                'Status',
+                'Recorded for this assessment'
+            ), array(
+                24,
+                76
+            ), $this->status_rows($evidence, $with, count($applicable)))
         );
 
         if (count($evidence) > 0) {
@@ -209,15 +209,36 @@ class ReportEvidenceRegister extends ReportBuilder
         return $blocks;
     }
 
-    private function why_blocks(): array
+    /** Provided, reviewed, validated, outstanding and suggested, stating plainly what the system does not record. */
+    private function status_rows(array $evidence, int $with, int $applicable): array
     {
         $controls = $this->term('controls');
+        $outstanding = $applicable - $with;
+        $gaps = count(array_filter($this->applicable(), function ($control) {
+            return $control['evidence_count'] === 0 && $control['is_gap'];
+        }));
 
         return array(
-            self::h1('Why evidence matters'),
-            self::text('Evidence is what allows an assessment result to be relied on by someone other than the person who recorded it. Without it, an "Implemented" result is an assertion: a reviewer, auditor or customer cannot confirm that the '.$this->term('control').' operates as described, or that it operated throughout the period under review.'
-                ."\n\n".'Linking evidence to each '.$this->term('control').' and, where the framework defines them, to individual '.$this->term('objectives').' also shortens any later audit, because the supporting material is already organized against the requirement it demonstrates. Gaps in evidence are often the first sign that a '.$this->term('control').' is informal or depends on one person.'
-                ."\n\n".'Results recorded for '.count($this->applicable()).' applicable '.$controls.' should be treated as unverified until supporting evidence is linked and reviewed.')
+            array(
+                'Provided',
+                count($evidence) === 0 ? 'None. No evidence item is linked to any '.$this->term('control').' or '.$this->term('objective').'.' : count($evidence).' '.(count($evidence) === 1 ? 'item' : 'items').' linked, supporting '.$with.' of '.$applicable.' applicable '.$controls.'.'
+            ),
+            array(
+                'Reviewed',
+                'Not recorded. The system stores no review status or assessor comment for evidence items, so this report cannot show whether any item has been examined.'
+            ),
+            array(
+                'Validated',
+                'Not recorded. No validation outcome is stored, so no item is shown as sufficient; sufficiency requires confirmation by the assessor.'
+            ),
+            array(
+                'Outstanding',
+                $outstanding === 0 ? 'None. Every applicable '.$this->term('control').' has at least one item linked.' : $outstanding.' applicable '.($outstanding === 1 ? $this->term('control').' has' : $controls.' have').' no evidence linked'.($gaps > 0 ? ', '.$gaps.' of them not fully implemented' : '').'.'
+            ),
+            array(
+                'Suggested for collection',
+                $outstanding === 0 ? 'None needed for coverage.' : 'Examples of records that would typically demonstrate the outstanding '.$controls.' are listed under Outstanding evidence. They are suggestions only and are not evidence held.'
+            )
         );
     }
 
@@ -326,7 +347,7 @@ class ReportEvidenceRegister extends ReportBuilder
 
         if (count($by_family) === 0) {
             return array(
-                self::h1('Outstanding evidence requirements'),
+                self::h1('Outstanding evidence'),
                 self::text('Every applicable '.$this->term('control').' has at least one evidence item linked. The remaining step is assessor review of each item for relevance, period coverage and sufficiency.')
             );
         }
@@ -336,34 +357,33 @@ class ReportEvidenceRegister extends ReportBuilder
         foreach ($by_family as $family => $list) {
             $rows[] = array(
                 $family,
-                count($list).': '.implode(', ', array_column($list, 'ref')),
-                implode('; ', $this->typical_deliverables($list))
+                implode(', ', array_column($list, 'ref')),
+                implode('; ', $this->family_suggestions($list)).'.'
             );
         }
 
+        $without = array_sum(array_map('count', $by_family));
+
         $blocks = array(
-            self::h1('Outstanding evidence requirements'),
-            self::text(array_sum(array_map('count', $by_family)).' applicable '.$controls.' across '.count($by_family).' '.$this->term(count($by_family) === 1 ? 'family' : 'families').' have no evidence linked. The table lists, for each '.$this->term('family').', the '.$controls.' concerned and the kinds of evidence that would typically demonstrate them.'),
+            self::h1('Outstanding evidence'),
+            self::text($without.' applicable '.$controls.' across '.count($by_family).' '.$this->term(count($by_family) === 1 ? 'family' : 'families').' have no evidence linked. For each '.$this->term('family').', the table lists those '.$controls.' and examples of evidence suggested for collection, drawn from the wording of the '.$controls.' concerned. The examples are not evidence held; the assessor should confirm what is required, the period it must cover and who will provide it.'),
             self::table(array(
                 ucfirst($this->term('family')),
                 ucfirst($controls).' without evidence',
-                'Evidence that would typically demonstrate them'
+                'Suggested evidence (not yet provided)'
             ), array(
-                22,
-                30,
-                48
-            ), $rows),
-            self::note('The evidence types are derived from the subject matter of each '.$this->term('control').' and are indicative. The assessor should confirm what is required, the period it must cover and who will provide it.')
+                20,
+                28,
+                52
+            ), $rows)
         );
 
-        $without = array_sum(array_map('count', $by_family));
-
         if ($this->detail() !== 'comprehensive' && (!$per_control || $without > count($this->applicable()) / 2)) {
-            $blocks[count($blocks) - 1] = self::note('The evidence types are derived from the subject matter of each '.$this->term('control').' and are indicative; the assessor should confirm what is required, the period it must cover and who will provide it.'.($per_control ? ' The full '.$this->term('control').' list is in the Coverage sheet of the Excel version.' : ''));
+            $blocks[] = self::note('Suggested evidence for each individual '.$this->term('control').' is in the Coverage sheet of the Excel version.');
             return $blocks;
         }
 
-        $blocks[] = self::h2(ucfirst($controls).' without evidence');
+        $blocks[] = self::h2('Suggested evidence by '.$this->term('control'));
 
         foreach ($by_family as $family => $list) {
             $rows = array();
@@ -372,7 +392,7 @@ class ReportEvidenceRegister extends ReportBuilder
                     $control['ref'],
                     $control['title'],
                     $control['result'],
-                    $this->expected_evidence($control)
+                    implode('; ', $control['suggested_evidence'] ?? array()).'.'
                 );
             }
             $blocks[] = self::h3($family);
@@ -380,16 +400,41 @@ class ReportEvidenceRegister extends ReportBuilder
                 'ID',
                 ucfirst($this->term('control')),
                 'Result',
-                'Evidence that would demonstrate it'
+                'Suggested evidence (not yet provided)'
             ), array(
                 11,
-                27,
+                29,
                 16,
-                46
+                44
             ), $rows);
         }
 
         return $blocks;
+    }
+
+    /** The suggested evidence most often proposed for the controls of one family. */
+    private function family_suggestions(array $controls): array
+    {
+        $weight = array();
+        $order = 0;
+
+        foreach ($controls as $control) {
+            foreach (array_values($control['suggested_evidence'] ?? array()) as $rank => $line) {
+                if (!isset($weight[$line])) {
+                    $weight[$line] = array(
+                        0,
+                        $order++
+                    );
+                }
+                $weight[$line][0] += 4 - min($rank, 3);
+            }
+        }
+
+        uasort($weight, function ($x, $y) {
+            return $y[0] <=> $x[0] ?: $x[1] <=> $y[1];
+        });
+
+        return array_slice(array_keys($weight), 0, count($controls) > 3 ? 5 : 4);
     }
 
     /* ------------------------------------------------------------- helpers */

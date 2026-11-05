@@ -411,15 +411,16 @@ class ReportRemediationPlan extends ReportBuilder
             $anchors[] = 'initiative-'.$initiative['id'];
         }
 
-        $table = self::table(array(
+        $head = array(
             'ID',
             'Initiative',
             'Phase',
-            'Priority',
+            'Priority (derived)',
             ucfirst($this->term('controls')),
             'Owner',
             'Target'
-        ), array(
+        );
+        $widths = array(
             7,
             37,
             19,
@@ -427,13 +428,29 @@ class ReportRemediationPlan extends ReportBuilder
             9,
             11,
             8
-        ), $rows);
+        );
+
+        if (!$this->any_recorded('owner') && !$this->any_recorded('target')) {
+            $rows = array_map(function ($row) {
+                return array_slice($row, 0, 5);
+            }, $rows);
+            $head = array_slice($head, 0, 5);
+            $widths = array(
+                8,
+                52,
+                20,
+                10,
+                10
+            );
+        }
+
+        $table = self::table($head, $widths, $rows);
         $table['kind'] = 'register';
         $table['value']['anchors'] = $anchors;
 
         return array(
             self::h1('Prioritized action register'),
-            self::text('All initiatives ordered by proposed implementation priority, then by phase. Select an ID to go to the initiative\'s description.'),
+            self::text('All initiatives ordered by recommended priority, then by phase. Priority is derived from the recorded results and is not an assessed risk rating. Select an ID to go to the initiative\'s description.'),
             $table
         );
     }
@@ -479,13 +496,18 @@ class ReportRemediationPlan extends ReportBuilder
 
         $sections = array();
         $sections[] = array(
-            'Problem addressed',
+            'Deficiencies addressed',
             $this->problem($initiative, $records)
+        );
+
+        $sections[] = array(
+            'Related '.$this->term('controls').' and '.$this->term('objectives'),
+            $this->related($initiative, $records)
         );
 
         $activities = self::relevant($initiative['activities'], $records, 6);
         if (!empty($initiative['remainder'])) {
-            $activities[] = 'Decide for each '.$this->term('control').' listed below whether it belongs in one of the other initiatives or needs its own, and assign an owner.';
+            $activities[] = 'Decide for each '.$this->term('control').' listed above whether it belongs in one of the other initiatives or needs its own, and assign an owner.';
             $activities[] = 'Close the open '.$this->term('objectives').' shown for each, using the detailed analysis in the Gap Analysis report.';
         }
         foreach ($records as $gap) {
@@ -495,14 +517,14 @@ class ReportRemediationPlan extends ReportBuilder
         }
         if (count($activities) > 0) {
             $sections[] = array(
-                'Suggested approach',
+                'Activities',
                 $activities
             );
         }
 
         if (count($initiative['deliverables']) > 0) {
             $sections[] = array(
-                'Expected deliverables',
+                'Deliverables',
                 self::relevant($initiative['deliverables'], $records, 5)
             );
         }
@@ -514,28 +536,48 @@ class ReportRemediationPlan extends ReportBuilder
             );
         }
 
-        $sections[] = array(
-            'Related '.$this->term('controls').' and '.$this->term('objectives'),
-            $this->related($initiative, $records)
-        );
-
-        $sections[] = array(
-            'Priority basis',
-            $this->priority_text($initiative, $records)
-        );
-
         $dependencies = $this->dependencies_line($initiative, $titles, $mutual);
-        if ($dependencies !== '') {
+        $sections[] = array(
+            'Dependencies',
+            $dependencies !== '' ? $dependencies : 'None on other initiatives in this plan; it can start independently.'
+        );
+
+        $sections[] = array(
+            'Recommended priority (derived, not an assessed risk rating)',
+            $initiative['priority'].'. '.$this->priority_text($initiative, $records)
+        );
+
+        if (count($initiative['validation']) > 0) {
             $sections[] = array(
-                'Dependencies',
-                $dependencies
+                'Validation and closure criteria',
+                self::relevant($initiative['validation'], $records, 4)
             );
         }
 
-        $sections[] = array(
-            'Validation requirements',
-            self::relevant($initiative['validation'], $records, 4)
+        $meta = array(
+            array(
+                'Phase',
+                $initiative['phase']
+            ),
+            array(
+                ucfirst($this->term('controls')),
+                (string) count($records)
+            )
         );
+
+        if ($this->any_recorded('owner')) {
+            $meta[] = array(
+                'Owner',
+                $initiative['owner'] ?? 'Unassigned'
+            );
+        }
+
+        if ($this->any_recorded('target')) {
+            $meta[] = array(
+                'Target',
+                ($initiative['target'] ?? null) !== null ? self::date($initiative['target']) : 'Not set'
+            );
+        }
 
         return array(
             'kind' => 'finding',
@@ -543,29 +585,24 @@ class ReportRemediationPlan extends ReportBuilder
                 'ref' => $initiative['id'],
                 'heading' => $initiative['title'],
                 'severity' => $initiative['priority'],
-                'rating' => $initiative['priority'].' priority',
+                'rating' => $initiative['priority'].' priority (derived)',
                 'anchor' => 'initiative-'.$initiative['id'],
-                'meta' => array(
-                    array(
-                        'Phase',
-                        $initiative['phase']
-                    ),
-                    array(
-                        ucfirst($this->term('controls')),
-                        (string) count($records)
-                    ),
-                    array(
-                        'Owner',
-                        $initiative['owner'] ?? 'Unassigned'
-                    ),
-                    array(
-                        'Target',
-                        ($initiative['target'] ?? null) !== null ? self::date($initiative['target']) : 'Not set'
-                    )
-                ),
+                'meta' => $meta,
                 'sections' => $sections
             )
         );
+    }
+
+    /** Whether the assessor recorded an owner or target date (field) for any initiative of the plan. */
+    private function any_recorded(string $field): bool
+    {
+        foreach (self::plan_initiatives($this->a) as $initiative) {
+            if (($initiative[$field] ?? null) !== null) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /* ------------------------------------------------------------ helpers */

@@ -272,7 +272,7 @@ class ReportAssessmentResults extends ReportBuilder
             $a['score'] === null ? '' : $a['score'].'%'
         );
 
-        $table = self::table(array(
+        $head = array(
             ucfirst($this->term('family')),
             ucfirst($this->term('controls')),
             'Implemented',
@@ -281,7 +281,8 @@ class ReportAssessmentResults extends ReportBuilder
             'N/A',
             'Not assessed',
             'Score'
-        ), array(
+        );
+        $widths = array(
             31,
             11,
             11,
@@ -290,13 +291,43 @@ class ReportAssessmentResults extends ReportBuilder
             7,
             11,
             10
-        ), $rows);
+        );
+        $legend = 'Partial: partially implemented. Not impl.: not implemented.';
+
+        foreach (array(
+            6 => 'Not Assessed',
+            5 => 'Not Applicable'
+        ) as $column => $result) {
+            if ($totals[$result] === 0) {
+                $widths[0] += $widths[$column];
+                foreach ($rows as $index => $row) {
+                    array_splice($rows[$index], $column, 1);
+                }
+                array_splice($head, $column, 1);
+                array_splice($widths, $column, 1);
+            }
+        }
+
+        if ($totals['Not Applicable'] > 0) {
+            $legend .= ' N/A: not applicable.';
+        } else {
+            $legend .= ' No '.$this->term('control').' is recorded as not applicable or not yet assessed, so those columns are omitted.';
+            if ($totals['Not Assessed'] > 0) {
+                $legend = 'Partial: partially implemented. Not impl.: not implemented. No '.$this->term('control').' is recorded as not applicable, so that column is omitted.';
+            }
+        }
+
+        if ($totals['Not Assessed'] === 0 && $totals['Not Applicable'] > 0) {
+            $legend .= ' Every '.$this->term('control').' has been assessed, so the not assessed column is omitted.';
+        }
+
+        $table = self::table($head, $widths, $rows);
         $table['value']['total'] = true;
 
         $blocks = array(
             self::h2('Results by '.$this->term('family')),
             $table,
-            self::note('A '.$this->term('family').' with no assessed '.$this->term('controls').' that apply has no score. Partial: partially implemented. Not impl.: not implemented. N/A: not applicable.')
+            self::note('A '.$this->term('family').' with no assessed '.$this->term('controls').' that apply has no score. '.$legend)
         );
 
         return $blocks;
@@ -435,7 +466,8 @@ class ReportAssessmentResults extends ReportBuilder
         $tally = $this->objective_tally();
         $intro = 'Each '.$this->term('control').' that has a recorded result or supporting information is shown with its result, '
             .($tally['total'] > 0 ? 'the result of each of its '.$this->term('objectives').', ' : '')
-            .'linked evidence, any assessor comments and, where it is not fully in place, the related finding. '
+            .($this->a['with_evidence'] > 0 ? 'linked evidence, ' : '').'any assessor comments and, where it is not fully in place, the related finding. '
+            .($this->a['with_evidence'] > 0 ? '' : 'No evidence is linked to any '.$this->term('control').' in this assessment, so evidence is not repeated on each record. ')
             .'Finding references (F-01 and so on) match the numbered findings in the Risk Assessment and Gap Analysis reports. '
             .ucfirst($this->term('controls')).' with nothing recorded yet are listed at the end of their '.$this->term('family').'.';
 
@@ -541,10 +573,12 @@ class ReportAssessmentResults extends ReportBuilder
             );
         }
 
-        $meta[] = array(
-            'Evidence',
-            $control['evidence_count'] === 0 ? 'none linked' : $control['evidence_count'].' '.($control['evidence_count'] === 1 ? 'item' : 'items')
-        );
+        if ($this->a['with_evidence'] > 0) {
+            $meta[] = array(
+                'Evidence',
+                $control['evidence_count'] === 0 ? 'none linked' : $control['evidence_count'].' '.($control['evidence_count'] === 1 ? 'item' : 'items')
+            );
+        }
 
         $finding = $this->findings_by_control()[$control['ref']] ?? null;
         if ($finding !== null) {

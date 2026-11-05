@@ -148,8 +148,9 @@
                         </div>
                     </div>
                     <div class="reports__job" id="narratives_job" hidden>
-                        <div class="progress"><span class="progress__bar" id="narratives_bar"></span></div>
+                        <div class="progress" id="narratives_overall"><span class="progress__bar" id="narratives_bar"></span></div>
                         <span class="reports__job-label" id="narratives_label"></span>
+                        <ul class="reports__steps" id="narratives_steps" hidden></ul>
                         <button type="button" class="btn btn--secondary btn--sm" id="do_narratives_cancel"><i class="fa-regular fa-stop"></i> Stop</button>
                     </div>
                     <div class="reports__failed" id="narratives_failed" hidden>
@@ -675,7 +676,7 @@ $(document).ready(function () {
         },
         {
             value: 'Partially Implemented',
-            label: 'Partially Met',
+            label: 'Partial',
             icon: 'fa-circle-half-stroke'
         },
         {
@@ -685,7 +686,7 @@ $(document).ready(function () {
         },
         {
             value: 'Not Applicable',
-            label: 'Not Applicable',
+            label: 'N/A',
             icon: 'fa-ban'
         }
     ];
@@ -2047,10 +2048,18 @@ $(document).ready(function () {
         narratives: null,
         package: null
     };
+    var tickers = {
+        narratives: null,
+        package: null
+    };
+    var clock_offset = 0;
+    var MAX_STEP_ROWS = 6;
 
     var ACTIVE = ['Queued', 'Running'];
     var LOCKED = ['ref', 'phase', 'kind', 'severity', 'section'];
     var rewriting = {};
+    var last_narratives = null;
+    var last_ai_configured = false;
     var PILL_CLASS = {
         'Approved': 'badge--active',
         'Draft': 'badge--inactive',
@@ -2255,10 +2264,6 @@ $(document).ready(function () {
 
     function next_action(narratives, ai_configured) {
 
-        var sections = narratives.sections || [];
-        var stale = sections.filter(function (section) {
-            return section.state === 'stale';
-        });
         var waiting = (narratives.draft || 0) + (narratives.rejected || 0);
 
         if (ai_configured && (narratives.total === 0 || narratives.missing > 0)) {
@@ -2266,17 +2271,6 @@ $(document).ready(function () {
                 kind: 'generate',
                 label: 'Generate Narratives',
                 icon: 'fa-wand-magic-sparkles'
-            };
-        }
-
-        if (ai_configured && stale.length > 0) {
-            return {
-                kind: 'update',
-                label: stale.length === 1 ? 'Update ' + stale[0].label : 'Update ' + stale.length + ' Sections',
-                icon: 'fa-rotate-right',
-                keys: stale.map(function (section) {
-                    return section.section_key;
-                })
             };
         }
 
@@ -2297,7 +2291,9 @@ $(document).ready(function () {
 
     function render_narratives(narratives, ai_configured) {
 
-        next = next_action(narratives, ai_configured);
+        last_narratives = narratives;
+        last_ai_configured = ai_configured;
+        next = next_action(narratives, ai_configured && !is_active(jobs.narratives));
 
         $('#do_narratives_next')
             .html('<i class="fa-regular ' + next.icon + '"></i> ' + esc(next.label))
@@ -2329,30 +2325,145 @@ $(document).ready(function () {
         }
     }
 
-    function job_label(job) {
+    function server_now() {
+        return Math.floor(Date.now() / 1000) + clock_offset;
+    }
 
-        if (job.job_status === 'Queued' && parseInt(job.done_steps, 10) === 0) {
+    function job_progress(job) {
+
+        var steps = job.steps || [];
+        var total = steps.length || parseInt(job.total_steps, 10) || 0;
+        var done = 0;
+        var part = 0;
+        var step = null;
+
+        for (var i = 0; i < steps.length; i++) {
+            if (['Done', 'Skipped', 'Failed'].indexOf(steps[i].state) !== -1) {
+                done++;
+            } else if (steps[i].state === 'Running' && steps[i].started) {
+                step = steps[i];
+            }
+        }
+
+        if (steps.length === 0) {
+            done = parseInt(job.done_steps, 10) || 0;
+        }
+
+        var elapsed = step ? Math.max(0, server_now() - step.started) : 0;
+
+        if (step && step.expected) {
+            part = Math.min(elapsed / step.expected, 0.95);
+        }
+
+        return {
+            percent: total > 0 ? (done + part) / total * 100 : 0,
+            done: done,
+            total: total,
+            step: step
+        };
+    }
+
+    function job_label(job, progress) {
+
+        if (job.job_status === 'Queued' && progress.done === 0) {
             return 'Queued';
         }
 
-        var label = (parseInt(job.done_steps, 10) || 0) + ' of ' + (parseInt(job.total_steps, 10) || 0);
+        var label = progress.done + ' of ' + progress.total;
 
         return job.current_step ? label + ' · ' + job.current_step : label;
+    }
+
+    function step_status(step) {
+
+        if (step.state === 'Failed') {
+            return {
+                percent: 100,
+                text: 'Failed'
+            };
+        }
+
+        if (step.state !== 'Running' || !step.started) {
+            return {
+                percent: 0,
+                text: 'Queued'
+            };
+        }
+
+        var elapsed = Math.max(0, server_now() - step.started);
+
+        return {
+            percent: step.expected ? Math.min(elapsed / step.expected, 0.95) * 100 : 0,
+            text: 'Writing'
+        };
+    }
+
+    function draw_steps(type, steps) {
+
+        var html = '';
+
+        for (var i = 0; i < steps.length; i++) {
+            if (steps[i].state === 'Done' || steps[i].state === 'Skipped') {
+                continue;
+            }
+
+            var status = step_status(steps[i]);
+
+            html += '<li class="reports__step' + (steps[i].state === 'Failed' ? ' is-failed' : '') + '">'
+                + '<span class="reports__step-name">' + esc(steps[i].label) + '</span>'
+                + '<div class="progress"><span class="progress__bar" style="width: ' + Math.round(status.percent) + '%"></span></div>'
+                + '<span class="reports__step-status">' + esc(status.text) + '</span>'
+                + '</li>';
+        }
+
+        $('#' + type + '_steps').html(html);
+    }
+
+    function draw_job(type) {
+
+        var job = jobs[type];
+
+        if (!is_active(job)) {
+            clearInterval(tickers[type]);
+            tickers[type] = null;
+            return;
+        }
+
+        var steps = job.steps || [];
+        var each = type === 'narratives' && steps.length > 0 && steps.length <= MAX_STEP_ROWS;
+
+        $('#' + type + '_overall, #' + type + '_label').prop('hidden', each);
+        $('#' + type + '_steps').prop('hidden', !each);
+
+        if (each) {
+            draw_steps(type, steps);
+            return;
+        }
+
+        var progress = job_progress(job);
+
+        $('#' + type + '_bar').css('width', Math.round(progress.percent) + '%');
+        $('#' + type + '_label').text(job_label(job, progress));
     }
 
     function render_job(type, job) {
 
         var running = is_active(job);
-        var total = job ? parseInt(job.total_steps, 10) || 0 : 0;
-        var done = job ? parseInt(job.done_steps, 10) || 0 : 0;
 
         jobs[type] = job;
 
         $('#' + type + '_job').prop('hidden', !running);
 
-        if (running) {
-            $('#' + type + '_bar').css('width', (total > 0 ? Math.round(done / total * 100) : 0) + '%');
-            $('#' + type + '_label').text(job_label(job));
+        if (job && job.now) {
+            clock_offset = job.now - Math.floor(Date.now() / 1000);
+        }
+
+        draw_job(type);
+
+        if (running && tickers[type] === null) {
+            tickers[type] = setInterval(function () {
+                draw_job(type);
+            }, 1000);
         }
 
         if (type === 'package') {
@@ -2360,7 +2471,21 @@ $(document).ready(function () {
         }
 
         if (type === 'narratives') {
-            $('#do_narratives_next').prop('hidden', running);
+            var steps = running && job.steps ? job.steps : [];
+
+            for (var k = 0; k < steps.length; k++) {
+                if (steps[k].state === 'Pending' || steps[k].state === 'Running') {
+                    rewriting[steps[k].key] = true;
+                }
+            }
+
+            if ($('#narrative_modal').hasClass('show')) {
+                sync_buttons();
+            }
+
+            if (last_narratives) {
+                render_narratives(last_narratives, last_ai_configured);
+            }
             render_failed(running ? null : job);
             set_loading('#do_narratives_cancel', false);
         }
@@ -2521,19 +2646,6 @@ $(document).ready(function () {
 
         if (next.kind === 'review') {
             open_review();
-            return;
-        }
-
-        if (next.kind === 'update') {
-            for (var i = 0; i < next.keys.length; i++) {
-                rewriting[next.keys[i]] = true;
-            }
-
-            start_job('narratives', 'Narratives', {
-                mode: 'sections',
-                sections: next.keys,
-                revise: 'none'
-            }, '#do_narratives_next');
             return;
         }
 
@@ -2857,7 +2969,12 @@ $(document).ready(function () {
         $('#do_narrative_save').prop('disabled', status === 'Missing' || !dirty);
         $('#do_narrative_approve').prop('disabled', status === 'Missing' || status === 'Out of date' || (status === 'Approved' && !dirty));
         $('#do_narrative_reject').prop('disabled', status === 'Missing' || status === 'Rejected');
-        $('#do_narrative_rewrite').prop('hidden', !center || !center.ai_configured).prop('disabled', !section || !!rewriting[selected_key]);
+        $('#do_narrative_rewrite')
+            .prop('hidden', !center || !center.ai_configured)
+            .prop('disabled', !section || !!rewriting[selected_key])
+            .html(rewriting[selected_key]
+                ? '<i class="fa-regular fa-spinner-third fa-spin"></i> Rewriting Section'
+                : '<i class="fa-regular fa-rotate-right"></i> Rewrite Section');
     }
 
     $('#do_narrative_rewrite').click(function () {
@@ -2893,6 +3010,10 @@ $(document).ready(function () {
                     ? '<p class="review__stale-busy"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Rewriting this section now. It takes a few minutes; you can close this window and keep working.</p>'
                     : '<button type="button" class="btn btn--secondary btn--sm" data-action="regenerate" data-key="' + esc(section.section_key) + '"><i class="fa-regular fa-rotate-right"></i> Regenerate This Section</button>')
                 + '</div>';
+        }
+
+        if (section.state !== 'stale' && rewriting[section.section_key]) {
+            html += '<div class="review__stale"><p class="review__stale-busy"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Rewriting this section now. It takes a few minutes; you can close this window and keep working.</p></div>';
         }
 
         if (section.state === 'missing' || !section.content) {

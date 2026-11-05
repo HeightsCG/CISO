@@ -150,8 +150,22 @@ class ReportJobs
 
         $model = new ReportJobsModel();
 
-        if (count($model->active_job($assessment_id, $company_id, $job_type)) > 0) {
-            return self::refuse('A '.strtolower($job_type).' job is already running for this assessment');
+        $active = $model->active_job($assessment_id, $company_id, $job_type);
+
+        if (count($active) > 0) {
+            if ($job_type !== 'Narratives' || $options['mode'] !== 'sections') {
+                return self::refuse('A '.strtolower($job_type).' job is already running for this assessment');
+            }
+
+            $queued = self::queue_sections($model, (int) $active[0]['id'], $steps);
+
+            if ($queued) {
+                return array(
+                    'success' => true,
+                    'message' => 'ok',
+                    'job_id' => (int) $active[0]['id']
+                );
+            }
         }
 
         $job_id = (int) $model->create_job(
@@ -173,6 +187,41 @@ class ReportJobs
             'message' => 'ok',
             'job_id' => $job_id
         );
+    }
+
+    /**
+     * Add the requested sections to a running narratives job, skipping any it
+     * still has to write. False when that job finished in the meantime.
+     */
+    private static function queue_sections(ReportJobsModel $model, int $job_id, array $steps): bool
+    {
+        $rows = $model->get_job_for_worker($job_id);
+
+        if (count($rows) !== 1) {
+            return false;
+        }
+
+        $waiting = array();
+
+        foreach (json_decode((string) $rows[0]['steps'], true) ?: array() as $step) {
+            if (in_array($step['state'], array(
+                'Pending',
+                'Running'
+            ), true)) {
+                $waiting[] = $step['key'];
+            }
+        }
+
+        $new_steps = array();
+
+        foreach ($steps as $step) {
+            if (!in_array($step['key'], $waiting, true)) {
+                $step['force'] = true;
+                $new_steps[] = $step;
+            }
+        }
+
+        return $model->append_steps($job_id, $new_steps);
     }
 
     /** Options with defaults filled in and everything unknown dropped, or array('error' => ...). */
@@ -525,7 +574,7 @@ class ReportJobs
             }
         } catch (Throwable $e) {
             error_log('[report-jobs] job '.$job_id.' stopped: '.$e->getMessage().' in '.$e->getFile().':'.$e->getLine());
-            $this->finish('Failed', 'The job stopped unexpectedly: '.$e->getMessage(), null, null);
+            $this->finish('Failed', 'The job stopped unexpectedly: '.$e->getMessage(), null, null, true);
         }
 
         $status = (string) $this->model->get_job_status($job_id);
@@ -567,39 +616,40 @@ class ReportJobs
             }
         }
 
-        foreach (array_keys($this->steps) as $index) {
-            if ($this->steps[$index]['state'] !== 'Pending' || self::phase($this->steps[$index]['key']) !== 'sections') {
-                continue;
+        do {
+            for ($index = 0; $index < count($this->steps); $index++) {
+                if ($this->steps[$index]['state'] !== 'Pending' || self::phase($this->steps[$index]['key']) !== 'sections') {
+                    continue;
+                }
+                if ($this->cancelled()) {
+                    return;
+                }
+                $key = $this->steps[$index]['key'];
+                $this->run_section($index, $assessment_id, $company_id, $key, $user_id, $force || !empty($this->steps[$index]['force']), array());
+                if ($key === 'review' && $this->steps[$index]['state'] === 'Done') {
+                    $review_written = true;
+                }
             }
-            if ($this->cancelled()) {
-                return;
-            }
-            $key = $this->steps[$index]['key'];
-            $this->run_section($index, $assessment_id, $company_id, $key, $user_id, $force, array());
-            if ($key === 'review' && $this->steps[$index]['state'] === 'Done') {
-                $review_written = true;
-            }
-        }
 
-        $revise = ($options['revise'] === 'auto' && $review_written) || $options['revise'] === 'stored';
+            $revise = ($options['revise'] === 'auto' && $review_written) || $options['revise'] === 'stored';
 
-        if (!$planned_revision && $revise) {
-            $this->plan_revision($assessment_id, $company_id);
-        }
-
-        foreach (array_keys($this->steps) as $index) {
-            if ($this->steps[$index]['state'] !== 'Pending' || self::phase($this->steps[$index]['key']) !== 'revision') {
-                continue;
+            if (!$planned_revision && $revise) {
+                $planned_revision = true;
+                $this->plan_revision($assessment_id, $company_id);
             }
-            if ($this->cancelled()) {
-                return;
-            }
-            $step = $this->steps[$index];
-            $key = $step['key'] === 'final_review' ? 'review' : substr($step['key'], strpos($step['key'], ':') + 1);
-            $this->run_section($index, $assessment_id, $company_id, $key, $user_id, true, $step['notes'] ?? array());
-        }
 
-        $this->finish_from_steps(null, null);
+            for ($index = 0; $index < count($this->steps); $index++) {
+                if ($this->steps[$index]['state'] !== 'Pending' || self::phase($this->steps[$index]['key']) !== 'revision') {
+                    continue;
+                }
+                if ($this->cancelled()) {
+                    return;
+                }
+                $step = $this->steps[$index];
+                $key = $step['key'] === 'final_review' ? 'review' : substr($step['key'], strpos($step['key'], ':') + 1);
+                $this->run_section($index, $assessment_id, $company_id, $key, $user_id, true, $step['notes'] ?? array());
+            }
+        } while (!$this->finish_from_steps(null, null));
     }
 
     private static function phase(string $key): string
@@ -883,6 +933,7 @@ class ReportJobs
     {
         $this->steps[$index]['state'] = 'Running';
         $this->steps[$index]['error'] = null;
+        $this->steps[$index]['started'] = time();
         $this->save($this->steps[$index]['label']);
 
         $result = self::attempt($work, $this->sleep, function (int $attempt, array $result) use ($index) {
@@ -893,6 +944,7 @@ class ReportJobs
         });
 
         $this->steps[$index]['attempts'] = $result['attempts'];
+        $this->steps[$index]['seconds'] = time() - $this->steps[$index]['started'];
 
         if (!empty($result['cancelled'])) {
             $this->steps[$index]['state'] = 'Pending';
@@ -967,51 +1019,99 @@ class ReportJobs
 
     private function save(?string $current_step): void
     {
-        $done = count(array_filter($this->steps, function ($step) {
-            return in_array($step['state'], array(
-                'Done',
-                'Skipped',
-                'Failed'
-            ), true);
-        }));
-
         $this->last_beat = time();
-        $this->model->save_progress(
+        $this->steps = $this->model->save_progress(
             (int) $this->job['id'],
-            json_encode($this->steps, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
-            count($this->steps),
-            $done,
+            $this->steps,
             $current_step
         );
     }
 
-    private function finish_from_steps(?string $result_key, ?string $result_name): void
+    private function finish_from_steps(?string $result_key, ?string $result_name): bool
     {
         $failed = array_values(array_filter($this->steps, function ($step) {
             return $step['state'] === 'Failed';
         }));
 
         if (count($failed) > 0) {
-            $this->finish('Failed', count($failed).' of '.count($this->steps).' steps failed: '.implode('; ', array_map(function ($step) {
+            return $this->finish('Failed', count($failed).' of '.count($this->steps).' steps failed: '.implode('; ', array_map(function ($step) {
                 return $step['label'].' ('.$step['error'].')';
             }, array_slice($failed, 0, 3))), $result_key, $result_name);
-            return;
         }
 
-        $this->finish('Completed', null, $result_key, $result_name);
+        return $this->finish('Completed', null, $result_key, $result_name);
     }
 
-    private function finish(string $job_status, ?string $last_error, ?string $result_key, ?string $result_name): void
+    /** Returns false when steps were appended meanwhile and still need to run. */
+    private function finish(string $job_status, ?string $last_error, ?string $result_key, ?string $result_name, bool $final = false): bool
     {
         $this->save(null);
-        $this->model->finish_job((int) $this->job['id'], $job_status, $last_error, $result_key, $result_name);
+
+        return $this->model->finish_job((int) $this->job['id'], $job_status, $last_error, $result_key, $result_name, $final ? PHP_INT_MAX : count($this->steps));
     }
 
     /* ----------------------------------------------------------------- api */
 
+    /**
+     * Give each unfinished step the seconds the same step took when it last
+     * finished, so the Reports tab can show how far along a long step is.
+     */
+    private static function with_estimates(array $steps, int $company_id, string $job_type): array
+    {
+        $taken = array();
+
+        foreach ((new ReportJobsModel())->recent_jobs($company_id, $job_type, 20) as $row) {
+            foreach (json_decode((string) $row['steps'], true) ?: array() as $step) {
+                if ($step['state'] === 'Done' && isset($step['seconds']) && !isset($taken[$step['key']])) {
+                    $taken[$step['key']] = (int) $step['seconds'];
+                }
+            }
+        }
+
+        foreach (array_keys($steps) as $index) {
+            if (in_array($steps[$index]['state'], array(
+                'Pending',
+                'Running'
+            ), true)) {
+                $steps[$index]['expected'] = $taken[$steps[$index]['key']] ?? self::default_seconds($steps[$index]['key'], $job_type);
+            }
+        }
+
+        return $steps;
+    }
+
+    private static function default_seconds(string $key, string $job_type): int
+    {
+        if ($job_type === 'Package') {
+            return 20;
+        }
+
+        if (strpos($key, 'domain:') === 0) {
+            return 90;
+        }
+
+        if (in_array($key, array(
+            'review',
+            'final_review'
+        ), true)) {
+            return 300;
+        }
+
+        return 180;
+    }
+
     /** A job row as the Reports tab reads it. */
     public static function payload(array $job): array
     {
+        $steps = json_decode((string) $job['steps'], true) ?: array();
+
+        if (in_array($job['job_status'], array(
+            'Queued',
+            'Running'
+        ), true)) {
+            $steps = self::with_estimates($steps, (int) $job['company_id'], (string) $job['job_type']);
+        }
+
         return array(
             'id' => (int) $job['id'],
             'job_type' => $job['job_type'],
@@ -1019,7 +1119,8 @@ class ReportJobs
             'done_steps' => (int) $job['done_steps'],
             'total_steps' => (int) $job['total_steps'],
             'current_step' => $job['current_step'],
-            'steps' => json_decode((string) $job['steps'], true) ?: array(),
+            'steps' => $steps,
+            'now' => time(),
             'last_error' => $job['last_error'],
             'date_created' => $job['date_created'],
             'date_started' => $job['date_started'],

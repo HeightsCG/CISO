@@ -114,8 +114,17 @@ class ReportRenderer {
     /** A finding card with less text than this never splits across pages. */
     const FINDING_WHOLE_CHARS = 700;
 
+    /** A finding's first section longer than this keeps only its opening paragraph with the card header. */
+    const FINDING_LEAD_CHARS = 400;
+
+    /** Share of a chapter's last page below which the next chapter starts on that page. */
+    const FLOW_FILL = 0.4;
+
     /** Share of the page below which a chapter's last page counts as nearly empty. */
     const TAIL_FILL = 0.3;
+
+    /** Text or key-value blocks this long keep only their opening part with the heading above them. */
+    const SPLIT_LEAD_CHARS = 600;
 
     /** Tables this short never split across pages. */
     const KEEP_WHOLE_ROWS = 6;
@@ -281,6 +290,11 @@ class ReportRenderer {
     private static function prepare(array $doc): array
     {
         $blocks = array_values($doc['blocks']);
+        array_walk_recursive($blocks, function (&$value) {
+            if (is_string($value)) {
+                $value = self::spaces($value);
+            }
+        });
 
         if (!empty($doc['document_control'])) {
             $blocks = array_merge($blocks, self::document_control_blocks($doc['document_control']));
@@ -448,6 +462,15 @@ class ReportRenderer {
                 )
             )
         );
+    }
+
+    /**
+     * Unusual space characters (no-break, narrow no-break, thin and similar)
+     * as plain spaces: the embedded fonts have no glyph for some of them.
+     */
+    private static function spaces(string $text): string
+    {
+        return preg_replace('/[\x{00A0}\x{2000}-\x{200A}\x{202F}\x{205F}\x{3000}]/u', ' ', $text) ?? $text;
     }
 
     private static function stamp($value): string
@@ -1097,17 +1120,28 @@ class ReportRenderer {
 
         $tight = false;
         $run = self::pdf_run($doc, $prepared, array(), $tight);
+        $flow = array_values(array_unique(array_merge(
+            self::pdf_blank_breaks($run['seen'], $run['marks']),
+            self::pdf_tail_flows($run['seen'], $run['marks'])
+        )));
+
+        if (count($flow) > 0) {
+            $doc['flow_marks'] = $flow;
+            $run = self::pdf_run($doc, $prepared, array(), $tight);
+        }
 
         if (self::pdf_short_tail($run['seen'], $run['marks'])) {
             $tight = true;
             $run = self::pdf_run($doc, $prepared, array(), $tight);
-        }
-
-        $blank = self::pdf_blank_breaks($run['seen'], $run['marks']);
-
-        if (count($blank) > 0) {
-            $doc['flow_marks'] = $blank;
-            $run = self::pdf_run($doc, $prepared, array(), $tight);
+            $more = array_diff(array_merge(
+                self::pdf_blank_breaks($run['seen'], $run['marks']),
+                self::pdf_tail_flows($run['seen'], $run['marks'])
+            ), $flow);
+            if (count($more) > 0) {
+                $flow = array_values(array_unique(array_merge($flow, $more)));
+                $doc['flow_marks'] = $flow;
+                $run = self::pdf_run($doc, $prepared, array(), $tight);
+            }
         }
 
         if ($toc) {
@@ -1199,7 +1233,6 @@ class ReportRenderer {
         );
     }
 
-    /** True when a chapter longer than a page ends with only a few lines on its last page. */
     /**
      * Chapters whose forced page break produced an empty page: the previous
      * chapter filled its last page exactly, so its end marker spilled alone
@@ -1221,6 +1254,30 @@ class ReportRenderer {
         return $blank;
     }
 
+    /**
+     * Chapters that follow a chapter ending with only a few lines on its
+     * last page. They start on that page instead of a new one, so a chapter
+     * break never leaves a nearly empty page behind it.
+     */
+    private static function pdf_tail_flows(array $seen, int $marks): array
+    {
+        $flows = array();
+
+        for ($index = 0; $index < $marks - 1; $index++) {
+            $start = $seen['m-start-'.$index] ?? null;
+            $end = $seen['m-end-'.$index] ?? null;
+            if ($start === null || $end === null || $end['page'] <= $start['page']) {
+                continue;
+            }
+            if (($end['y'] - self::PAGE_TOP) / self::PAGE_BODY < self::FLOW_FILL) {
+                $flows[] = $index + 1;
+            }
+        }
+
+        return $flows;
+    }
+
+    /** True when a chapter longer than a page ends with only a few lines on its last page. */
     private static function pdf_short_tail(array $seen, int $marks): bool
     {
         for ($index = 0; $index < $marks; $index++) {
@@ -1303,7 +1360,7 @@ class ReportRenderer {
             .'.dhead table{margin:0;font-family:"Sans"}.dhead td{border:none;padding:0;vertical-align:bottom}'
             .'.dhead .dt{font-weight:bold;font-size:13pt;color:#1d2733}.dhead .dm{text-align:right;font-size:8.5pt;color:#55636f}'
             .'.pill{padding:1.5pt 6pt;font-family:"Sans";font-size:8pt;font-weight:bold;color:#ffffff}'
-            .'.fcard{border:0.5pt solid #d6dce3;padding:9pt 13pt 5pt 13pt;margin:'.($tight ? 8 : 12).'pt 0 '.($tight ? 10 : 14).'pt 0}'
+            .'.fcard{border:0.5pt solid #d6dce3;line-height:'.$serif(1.45).';padding:9pt 13pt 5pt 13pt;margin:'.($tight ? 8 : 12).'pt 0 '.($tight ? 10 : 14).'pt 0}'
             .'.fcard.top{border-bottom:none;padding-bottom:1pt;margin-bottom:0}.fcard.rest{border-top:none;padding-top:1pt;margin-top:0}'
             .'.fcard .fh{margin:0 0 4pt 0;font-family:"Sans"}.fcard .fh td{border:none;padding:0 0 3pt 0;vertical-align:top}'
             .'.fcard .fref{font-size:8.5pt;color:#55636f;letter-spacing:0.5pt}.fcard .ftitle{font-weight:bold;font-size:11.5pt;line-height:'.$sans(1.25).';color:#1d2733}'
@@ -1335,6 +1392,7 @@ class ReportRenderer {
             .'.legend{margin:0 0 14pt 0;font-size:8.5pt;page-break-before:avoid}.legend td{border:none;padding:2pt 10pt 2pt 0;vertical-align:middle}'
             .'.legend .sw{width:8pt}.legend .sw div{width:7pt;height:7pt}.legend .lv{color:#55636f}'
             .'.kv{margin:4pt 0 14pt 0}.kv td{padding:5pt 8pt 5pt 0;border-bottom:0.5pt solid #e4e8ed}.kv tr:first-child td{border-top:0.5pt solid #e4e8ed}'
+            .'.kv.lead{margin-bottom:0}.kv.cont{margin-top:0}.kv.cont tr:first-child td{border-top:none}'
             .'.kv td.k{width:28%;font-weight:bold;color:#344054}.kv td.v{font-family:"Serif";font-size:9.5pt;line-height:'.$serif(1.45).'}.kv td.v p,.kv td.v ul{margin-bottom:3pt}'
             .'.panel{padding:9pt 14pt 4pt 14pt;margin:4pt 0 14pt 0}.panel.whole{page-break-inside:avoid}'
             .'.panel .pt{font-family:"Sans";font-weight:bold;font-size:10.5pt;line-height:'.$sans(1.3).';margin:0 0 4pt 0;page-break-after:avoid}'
@@ -1454,9 +1512,25 @@ class ReportRenderer {
                 continue;
             }
 
+            if ($held !== '' && in_array($kind, array(
+                'text',
+                'kv'
+            ), true)) {
+                $split = self::pdf_split_lead($block, $e, $ctx);
+                if ($split !== null) {
+                    $html .= '<div style="page-break-inside:avoid">'.$held.$split[0].'</div>'.$split[1];
+                    $held = '';
+                    continue;
+                }
+            }
+
             if ($held !== '' && ($small_table || in_array($kind, self::KEEP_WITH_HEADING, true))) {
                 $next = $prepared['blocks'][$position + 1]['kind'] ?? 'h1';
-                $lead_in = in_array($kind, $intro, true) && $next !== 'finding' && !in_array($next, $headings, true);
+                $following = $prepared['blocks'][$position + 1] ?? null;
+                $lead_in = in_array($kind, $intro, true) && in_array($next, array(
+                    'table',
+                    'register'
+                ), true) && count($following['value']['rows'] ?? array()) > self::KEEP_WHOLE_ROWS;
                 $html .= '<div style="page-break-inside:avoid'.($lead_in ? ';page-break-after:avoid' : '').'">'.$held.self::pdf_block($block, $e, $ctx).'</div>';
                 $held = '';
                 continue;
@@ -1474,6 +1548,52 @@ class ReportRenderer {
         return array(
             'html' => $html.$held.'</body></html>',
             'marks' => $marks
+        );
+    }
+
+    /**
+     * A long text or key-value block that follows a heading, as two parts:
+     * the opening paragraph or first row, which stays on the heading's page,
+     * and the remainder, which flows on. Null when the block is short enough
+     * to be kept whole with its heading.
+     */
+    private static function pdf_split_lead(array $block, callable $e, array $ctx): ?array
+    {
+        if ($block['kind'] === 'text') {
+            $chunks = self::chunks($block['value']);
+            if (count($chunks) < 2 || self::text_length($block['value']) < self::SPLIT_LEAD_CHARS) {
+                return null;
+            }
+            return array(
+                self::pdf_chunks(array_slice($chunks, 0, 1), $e),
+                self::pdf_chunks(array_slice($chunks, 1), $e)
+            );
+        }
+
+        $rows = array_values($block['value']['rows'] ?? $block['value']);
+        $length = 0;
+
+        foreach ($rows as $row) {
+            $length += self::text_length($row[1]);
+        }
+
+        if (count($rows) < 3 || $length < self::SPLIT_LEAD_CHARS) {
+            return null;
+        }
+
+        return array(
+            str_replace('<table class="kv">', '<table class="kv lead">', self::pdf_block(array(
+                'kind' => 'kv',
+                'value' => array(
+                    'rows' => array_slice($rows, 0, 1)
+                )
+            ), $e, $ctx)),
+            str_replace('<table class="kv">', '<table class="kv cont">', self::pdf_block(array(
+                'kind' => 'kv',
+                'value' => array(
+                    'rows' => array_slice($rows, 1)
+                )
+            ), $e, $ctx))
         );
     }
 
@@ -1539,7 +1659,7 @@ class ReportRenderer {
 
         $lead = array_shift($body);
 
-        if (count($rows) === 0 && self::text_length($sections[0][1]) > 900) {
+        if (count($rows) === 0 && self::text_length($sections[0][1]) > self::FINDING_LEAD_CHARS) {
             $chunks = self::chunks($sections[0][1]);
             $lead = '<div class="fsec"><div class="fl">'.$e($sections[0][0]).'</div>'.self::pdf_chunks(array_slice($chunks, 0, 1), $e).'</div>';
             if (count($chunks) > 1) {
@@ -1888,7 +2008,7 @@ class ReportRenderer {
             }
             $html .= '<tr'.(count($row_classes) > 0 ? ' class="'.implode(' ', $row_classes).'"' : '').'>';
             foreach (array_values($row) as $col => $cell) {
-                $text = $e($cell);
+                $text = nl2br($e($cell), false);
                 if ($col === $link_col && ($anchors[$index] ?? '') !== '' && $text !== '') {
                     $text = '<a class="ref" href="#'.$e(self::anchor($anchors[$index])).'">'.$text.'</a>';
                 }
@@ -2969,7 +3089,9 @@ class ReportRenderer {
                     )), $paragraph, true);
                     continue;
                 }
-                $container->addText((string) $cell, $font, $paragraph);
+                foreach (preg_split("/\r?\n/", (string) $cell) as $line) {
+                    $container->addText($line, $font, $paragraph);
+                }
             }
         }
 

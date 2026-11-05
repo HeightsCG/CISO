@@ -10866,3 +10866,49 @@ body.app .review__object > .review__object-head:has(.review__object-ref) {
     border-image: linear-gradient(90deg, #0071E3 0%, #5AC8FA 100%) 1;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
+
+body.app .reports__job .progress[hidden],
+body.app .reports__job-label[hidden],
+body.app .reports__steps[hidden] {
+    display: none;
+}
+
+body.app .reports__steps {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+body.app .reports__step {
+    display: grid;
+    grid-template-columns: minmax(140px, 220px) 1fr 70px;
+    align-items: center;
+    gap: 14px;
+}
+
+body.app .reports__step-name {
+    overflow: hidden;
+    font-size: 13px;
+    color: var(--text-primary);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.app .reports__step-status {
+    font-size: 13px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+body.app .reports__step.is-failed .progress__bar {
+    background: var(--critical);
+}
+
+body.app .reports__job:has(.reports__steps:not([hidden])) {
+    align-items: flex-start;
+}

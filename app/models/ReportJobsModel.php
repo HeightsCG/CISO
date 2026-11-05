@@ -134,6 +134,28 @@ class ReportJobsModel extends Model {
         return parent::select($sql, $where);
     }
 
+    public function recent_jobs($company_id, $job_type, $limit)
+    {
+        $where = array(
+            'company_id' => $company_id,
+            'job_type' => $job_type
+        );
+        $sql = "SELECT
+                    steps
+                FROM
+                    report_jobs
+                WHERE
+                    company_id = :company_id
+                    and
+                    job_type = :job_type
+                    and
+                    deleted = 0
+                ORDER BY
+                    id DESC
+                LIMIT ".(int) $limit;
+        return parent::select($sql, $where);
+    }
+
     /** Jobs a drain run should take: Queued ones, and Running ones that stopped beating. */
     public function runnable_jobs($stale_before, $limit)
     {
@@ -178,19 +200,93 @@ class ReportJobsModel extends Model {
         return parent::update('report_jobs', $data, "id = :id and deleted = 0 and (job_status = 'Queued' or (job_status = 'Running' and (heartbeat IS NULL or heartbeat < :stale_before)))", $where);
     }
 
-    public function save_progress($job_id, $steps, $total_steps, $done_steps, $current_step)
+    /**
+     * Save the worker's steps. Steps another request appended since the worker
+     * last read them are kept and returned, so the worker can run them too.
+     */
+    public function save_progress($job_id, $steps, $current_step)
     {
-        $data = array(
-            'steps' => $steps,
-            'total_steps' => $total_steps,
-            'done_steps' => $done_steps,
-            'current_step' => $current_step,
-            'heartbeat' => date('Y-m-d H:i:s')
-        );
-        $where = array(
-            'id' => $job_id
-        );
-        return parent::update('report_jobs', $data, 'id = :id', $where);
+        $this->db->beginTransaction();
+
+        try {
+            $lock = $this->db->prepare("SELECT steps FROM report_jobs WHERE id = :id FOR UPDATE");
+            $lock->execute(array(
+                'id' => $job_id
+            ));
+            $row = $lock->fetch(PDO::FETCH_ASSOC);
+            $stored = $row ? (json_decode((string) $row['steps'], true) ?: array()) : array();
+
+            for ($i = count($steps); $i < count($stored); $i++) {
+                $steps[] = $stored[$i];
+            }
+
+            $done = count(array_filter($steps, function ($step) {
+                return in_array($step['state'], array(
+                    'Done',
+                    'Skipped',
+                    'Failed'
+                ), true);
+            }));
+
+            $update = $this->db->prepare("UPDATE report_jobs SET steps = :steps, total_steps = :total_steps, done_steps = :done_steps, current_step = :current_step, heartbeat = :heartbeat WHERE id = :id");
+            $update->execute(array(
+                'steps' => json_encode($steps, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                'total_steps' => count($steps),
+                'done_steps' => $done,
+                'current_step' => $current_step,
+                'heartbeat' => date('Y-m-d H:i:s'),
+                'id' => $job_id
+            ));
+
+            $this->db->commit();
+        } catch (Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+
+        return $steps;
+    }
+
+    /**
+     * Add steps to a queued or running job. Returns false when the job has
+     * already finished, so the caller starts a new one instead.
+     */
+    public function append_steps($job_id, $new_steps)
+    {
+        $this->db->beginTransaction();
+
+        try {
+            $lock = $this->db->prepare("SELECT steps FROM report_jobs WHERE id = :id and job_status IN ('Queued', 'Running') and deleted = 0 FOR UPDATE");
+            $lock->execute(array(
+                'id' => $job_id
+            ));
+            $row = $lock->fetch(PDO::FETCH_ASSOC);
+
+            if ($row === false) {
+                $this->db->rollBack();
+                return false;
+            }
+
+            $steps = json_decode((string) $row['steps'], true) ?: array();
+
+            foreach ($new_steps as $step) {
+                $steps[] = $step;
+            }
+
+            $update = $this->db->prepare("UPDATE report_jobs SET steps = :steps, total_steps = :total_steps WHERE id = :id");
+            $update->execute(array(
+                'steps' => json_encode($steps, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                'total_steps' => count($steps),
+                'id' => $job_id
+            ));
+
+            $this->db->commit();
+        } catch (Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+
+        return true;
     }
 
     public function beat($job_id)
@@ -204,22 +300,46 @@ class ReportJobsModel extends Model {
         return parent::update('report_jobs', $data, "id = :id and job_status = 'Running'", $where);
     }
 
-    /** Close a running job; a job cancelled meanwhile keeps its Cancelled status. */
-    public function finish_job($job_id, $job_status, $last_error, $result_key, $result_name)
+    /**
+     * Close a running job; a job cancelled meanwhile keeps its Cancelled status.
+     * Returns false without closing when steps were appended after the worker
+     * last saved, so the worker runs them first.
+     */
+    public function finish_job($job_id, $job_status, $last_error, $result_key, $result_name, $total_steps)
     {
-        $data = array(
-            'job_status' => $job_status,
-            'last_error' => $last_error,
-            'result_key' => $result_key,
-            'result_name' => $result_name,
-            'current_step' => null,
-            'heartbeat' => date('Y-m-d H:i:s'),
-            'date_finished' => date('Y-m-d H:i:s')
-        );
-        $where = array(
-            'id' => $job_id
-        );
-        return parent::update('report_jobs', $data, "id = :id and job_status = 'Running'", $where);
+        $this->db->beginTransaction();
+
+        try {
+            $lock = $this->db->prepare("SELECT steps FROM report_jobs WHERE id = :id FOR UPDATE");
+            $lock->execute(array(
+                'id' => $job_id
+            ));
+            $row = $lock->fetch(PDO::FETCH_ASSOC);
+            $stored = $row ? (json_decode((string) $row['steps'], true) ?: array()) : array();
+
+            if (count($stored) > $total_steps) {
+                $this->db->rollBack();
+                return false;
+            }
+
+            $update = $this->db->prepare("UPDATE report_jobs SET job_status = :job_status, last_error = :last_error, result_key = :result_key, result_name = :result_name, current_step = NULL, heartbeat = :heartbeat, date_finished = :date_finished WHERE id = :id and job_status = 'Running'");
+            $update->execute(array(
+                'job_status' => $job_status,
+                'last_error' => $last_error,
+                'result_key' => $result_key,
+                'result_name' => $result_name,
+                'heartbeat' => date('Y-m-d H:i:s'),
+                'date_finished' => date('Y-m-d H:i:s'),
+                'id' => $job_id
+            ));
+
+            $this->db->commit();
+        } catch (Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+
+        return true;
     }
 
     /** Fail a job that never started properly (no worker could run it, or it kept dying). */

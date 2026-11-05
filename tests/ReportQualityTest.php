@@ -341,6 +341,171 @@ return array(
         ), $issues[0]['refs'], 'both requirements are referenced');
     },
 
+    'ratings, schedules, costs and staffing are unsupported unless recorded' => function () use ($analysis, $domain, $categories) {
+        $issues = $categories(ReportQuality::check($analysis(), $domain(array(), array(
+            array(
+                'ref' => 'CC6.1',
+                'recorded_condition' => 'PF01 is recorded as not implemented.',
+                'risk_scenarios' => array(
+                    array(
+                        'scenario' => 'If accounts are not reviewed, this is a high-risk weakness with a high likelihood of misuse.',
+                        'consequence' => 'Access could persist.'
+                    )
+                ),
+                'suggested_approach' => array(
+                    'Consider completing access reviews within thirty days, a quick win.',
+                    'One option is to hire two additional analysts to run the reviews.',
+                    'Consider a quarterly access review signed off by each system owner.'
+                )
+            )
+        ))), 'unsupported_assertion');
+        $text = implode("\n", array_column($issues, 'description'));
+
+        Assert::true(strpos($text, 'a likelihood, impact or risk rating') !== false, 'a rating is flagged');
+        Assert::true(strpos($text, 'a schedule or timeframe ("within thirty days")') !== false, 'a schedule in words is flagged');
+        Assert::true(strpos($text, 'a cost or effort estimate ("quick win")') !== false, 'an effort estimate is flagged');
+        Assert::true(strpos($text, 'a staffing level') !== false, 'staffing is flagged');
+        Assert::true(strpos($text, 'quarterly access review') === false, 'a review frequency without a schedule passes');
+    },
+
+    'an assessor risk rating supports rating language' => function () use ($analysis, $domain, $categories) {
+        $fixture = $analysis();
+        $fixture['controls'][0]['risk_rating'] = 'High';
+        $issues = $categories(ReportQuality::check($fixture, $domain(array(
+            'CC6.1 is rated by the assessor as a high-risk gap.'
+        ))), 'unsupported_assertion');
+
+        Assert::same(0, count($issues), 'the recorded rating passes');
+    },
+
+    'generic To Be Confirmed questions repeated across findings are reported once' => function () use ($analysis, $categories) {
+        $fixture = $analysis();
+        $fixture['controls'][1]['objectives'][] = array(
+            'ref' => 'CC6.2-PF03',
+            'short' => 'PF03',
+            'title' => 'PF03 title',
+            'description' => '',
+            'result' => 'Partially Implemented',
+            'evidence' => array(),
+            'assessor' => array()
+        );
+        $entry = function (string $ref, array $confirm) {
+            return array(
+                'ref' => $ref,
+                'recorded_condition' => 'Recorded as partially implemented.',
+                'confirm' => $confirm
+            );
+        };
+        $sections = array(
+            'domain:Access' => array(
+                'narrative' => array(),
+                'controls' => array(
+                    $entry('CC6.1', array(
+                        'What the partially implemented result for PF02 covers today.'
+                    )),
+                    $entry('CC6.2', array(
+                        'Which elements of PF01 are recorded as in place and which are incomplete.'
+                    )),
+                    $entry('CC6.3', array(
+                        'Which part of the partial PF03 result is missing.'
+                    ))
+                )
+            )
+        );
+        $issues = $categories(ReportQuality::check($fixture, $sections), 'repetition');
+
+        Assert::same(1, count($issues), 'one issue for the section');
+        Assert::same('domain:Access', $issues[0]['section'], 'raised on the section');
+        Assert::same(array(
+            'CC6.1',
+            'CC6.2',
+            'CC6.3'
+        ), $issues[0]['refs'], 'every finding is referenced');
+
+        $sections['domain:Access']['controls'][2]['confirm'] = array(
+            'Whether the role model also governs service accounts used by integrations.'
+        );
+        Assert::same(0, count($categories(ReportQuality::check($fixture, $sections), 'repetition')), 'two generic questions and a specific one pass');
+    },
+
+    'a suggested approach that restates the condition is reported' => function () use ($analysis, $domain, $categories) {
+        $issues = $categories(ReportQuality::check($analysis(), $domain(array(), array(
+            array(
+                'ref' => 'CC6.1',
+                'recorded_condition' => 'Periodic user access reviews (PF01) are recorded as not implemented.',
+                'suggested_approach' => array(
+                    'Consider implementing periodic user access reviews (PF01).',
+                    'Consider addressing the remaining gaps.',
+                    'One option is a quarterly certification in which each system owner confirms every account and role, with removals tracked to closure.'
+                )
+            )
+        ))), 'repetition');
+        $fields = array_column($issues, 'field');
+
+        Assert::same(2, count($issues), 'two restatements, the specific approach passes');
+        Assert::true(in_array('controls.CC6.1.suggested_approach[0]', $fields, true), 'the rephrased condition');
+        Assert::true(in_array('controls.CC6.1.suggested_approach[1]', $fields, true), 'the generic instruction');
+    },
+
+    'narratives that enumerate objective refs are reported' => function () use ($analysis, $categories) {
+        $fixture = $analysis();
+        for ($n = 4; $n <= 9; $n++) {
+            $fixture['controls'][0]['objectives'][] = array(
+                'ref' => 'CC6.1-PF0'.$n,
+                'short' => 'PF0'.$n,
+                'title' => 'PF0'.$n.' title',
+                'description' => '',
+                'result' => 'Partially Implemented',
+                'evidence' => array(),
+                'assessor' => array()
+            );
+        }
+        $issues = $categories(ReportQuality::check($fixture, array(
+            'domain:Access' => array(
+                'narrative' => array(
+                    'CC6.1-PF01, CC6.1-PF02, CC6.1-PF04, CC6.1-PF05, CC6.1-PF06 and CC6.1-PF07 are recorded as open.',
+                    'The open elements concentrate on review and approval steps.'
+                ),
+                'controls' => array()
+            )
+        )), 'repetition');
+
+        Assert::same(1, count($issues), 'the enumerating paragraph only');
+        Assert::same('narrative[0]', $issues[0]['field'], 'the field is identified');
+    },
+
+    'identifiers that are not in the record are reported' => function () use ($analysis, $domain, $categories) {
+        $issues = $categories(ReportQuality::check($analysis(), $domain(array(
+            'CC6.9 is recorded as partially implemented.',
+            'Under CC6.2, PF07 is recorded as not met.',
+            'CC6.1-PF02 and CC6.2-PF01 are recorded as partially implemented; PF02 is open.'
+        ))), 'cross_report_inconsistency');
+        $issues = array_values(array_filter($issues, function ($issue) {
+            return strpos($issue['description'], 'No recorded condition') === false;
+        }));
+        $text = implode("\n", array_column($issues, 'description'));
+
+        Assert::same(2, count($issues), 'the unknown ref and the misplaced objective; the valid sentence passes');
+        Assert::true(strpos($text, 'Cites CC6.9') !== false, 'an unknown requirement ref');
+        Assert::true(strpos($text, 'PF07 is cited under CC6.2') !== false, 'an objective id under the wrong requirement');
+    },
+
+    'objective counts and framework phrases are not misread' => function () use ($analysis, $domain, $categories) {
+        $fixture = $analysis();
+        $fixture['controls'][0]['objectives'][0]['title'] = 'Root cause analysis and recurrence prevention';
+        $issues = ReportQuality::check($fixture, $domain(array(
+            'CC6.1 has three points of focus, with one recorded as not implemented and two as partially implemented.',
+            'CC6.1-PF01 (root cause analysis and recurrence prevention) is recorded as not implemented.'
+        )));
+
+        $counts = array_filter($categories($issues, 'cross_report_inconsistency'), function ($issue) {
+            return strpos($issue['description'], 'does not match the recorded counts') !== false;
+        });
+
+        Assert::same(0, count($counts), 'objective counts are not compared with requirement counts');
+        Assert::same(0, count($categories($issues, 'unsupported_assertion')), 'an objective title in parentheses is not a causal claim');
+    },
+
     'summary counts by severity and category in a stable shape' => function () use ($analysis, $domain) {
         $issues = ReportQuality::check($analysis(), $domain(array(
             'CC6.2 is implemented.',

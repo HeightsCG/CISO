@@ -45,7 +45,10 @@ class ReportKnowledge {
                     array(
                         'key' => $key
                     ),
-                    $topic
+                    $topic,
+                    array(
+                        'evidence' => array_column(self::evidence_catalog()[$key] ?? array(), 'text')
+                    )
                 );
             }
         }
@@ -122,6 +125,99 @@ class ReportKnowledge {
         }
 
         return $best;
+    }
+
+    /**
+     * Suggested evidence for a requirement: examples from its topics (the
+     * first is the primary one), ranked by how many of each example's
+     * keywords appear in the requirement text, then by topic and catalog
+     * order. These are suggestions for future collection, never records
+     * that exist.
+     */
+    public static function suggested_evidence(array $topic_keys, string $text, int $limit = 4): array
+    {
+        $catalog = self::evidence_catalog();
+        $topic_keys = array_values(array_unique($topic_keys));
+        $limit = max(1, $limit);
+
+        if (count($topic_keys) === 0) {
+            $topic_keys[] = self::FALLBACK;
+        }
+
+        $matched = array();
+        $primary_hit = false;
+
+        foreach ($topic_keys as $topic_index => $key) {
+            foreach ($catalog[$key] ?? array() as $item_index => $item) {
+                $hits = 0;
+                foreach ($item['keywords'] as $keyword) {
+                    if (preg_match('/\\b'.preg_quote($keyword, '/').'/i', $text) === 1) {
+                        $hits++;
+                    }
+                }
+                if ($hits === 0) {
+                    continue;
+                }
+                if ($topic_index === 0) {
+                    $primary_hit = true;
+                }
+                $score = 10 * min($hits, 3) - 8 * $topic_index - $item_index;
+                if (!isset($matched[$item['text']]) || $matched[$item['text']] < $score) {
+                    $matched[$item['text']] = $score;
+                }
+            }
+        }
+
+        arsort($matched);
+        $out = array_keys($matched);
+        $defaults = array_column($catalog[$topic_keys[0]] ?? $catalog[self::FALLBACK], 'text');
+
+        if (!$primary_hit && count($defaults) > 0) {
+            array_unshift($out, $defaults[0]);
+        }
+
+        foreach ($defaults as $default) {
+            if (count($out) >= min(2, $limit)) {
+                break;
+            }
+            if (!in_array($default, $out, true)) {
+                $out[] = $default;
+            }
+        }
+
+        return array_slice(array_values(array_unique($out)), 0, $limit);
+    }
+
+    /**
+     * Topic keys for a control and its objectives, the control's own topic
+     * first, then the other topics its objectives map to, most frequent first.
+     */
+    public static function topics_for(array $control, array $objectives = array()): array
+    {
+        $primary = self::topic_for($control, $objectives);
+        $counts = array();
+
+        foreach ($objectives as $objective) {
+            $scores = self::scores(array(
+                'title' => array(
+                    $objective['control_title'] ?? ''
+                ),
+                'description' => array(
+                    $objective['description'] ?? ''
+                )
+            ));
+            arsort($scores);
+            $key = (string) array_key_first($scores);
+            if ($scores[$key] >= 3.0 && $key !== $primary) {
+                $counts[$key] = ($counts[$key] ?? 0) + 1;
+            }
+        }
+
+        arsort($counts);
+
+        return array_merge(array(
+            $primary
+        ), array_keys($counts));
     }
 
     /**
@@ -800,6 +896,1242 @@ class ReportKnowledge {
                 'reporting channel*' => 2,
                 'objectives' => 0.5,
                 'transparency' => 1
+            )
+        );
+    }
+
+    /**
+     * Suggested evidence by topic: records that would typically demonstrate
+     * a control in the topic. Keywords (matched at the start of a word)
+     * rank the examples against the wording of a specific requirement.
+     */
+    private static function evidence_catalog(): array
+    {
+        return array(
+            'governance' => array(
+                array(
+                    'text' => 'Minutes of the last security oversight or board meetings, with decisions and actions recorded',
+                    'keywords' => array(
+                        'board',
+                        'oversight',
+                        'governance',
+                        'meeting',
+                        'independen'
+                    )
+                ),
+                array(
+                    'text' => 'Approved security program charter or terms of reference for the oversight body',
+                    'keywords' => array(
+                        'charter',
+                        'oversight',
+                        'structure',
+                        'terms of reference'
+                    )
+                ),
+                array(
+                    'text' => 'Periodic security status reports or metrics packs presented to leadership',
+                    'keywords' => array(
+                        'report',
+                        'metric',
+                        'performance',
+                        'status'
+                    )
+                ),
+                array(
+                    'text' => 'Signed appointment of the executive accountable for the security program',
+                    'keywords' => array(
+                        'appoint',
+                        'accountab',
+                        'responsib',
+                        'sponsor',
+                        'officer'
+                    )
+                ),
+                array(
+                    'text' => 'Records of external advisors or specialists engaged to support oversight',
+                    'keywords' => array(
+                        'expertise',
+                        'advisor',
+                        'specialist',
+                        'supplement'
+                    )
+                )
+            ),
+            'ethics' => array(
+                array(
+                    'text' => 'Approved code of conduct with its version history',
+                    'keywords' => array(
+                        'conduct',
+                        'ethic',
+                        'integrity',
+                        'standard'
+                    )
+                ),
+                array(
+                    'text' => 'Signed code of conduct acknowledgements for a sample of employees and contractors',
+                    'keywords' => array(
+                        'acknowledg',
+                        'contractor',
+                        'vendor employee',
+                        'adherence'
+                    )
+                ),
+                array(
+                    'text' => 'Whistleblower or ethics reporting channel log showing reports received and closed',
+                    'keywords' => array(
+                        'whistle',
+                        'report',
+                        'hotline',
+                        'concern',
+                        'deviation'
+                    )
+                ),
+                array(
+                    'text' => 'Records of disciplinary cases showing the sanctions process was followed',
+                    'keywords' => array(
+                        'disciplin',
+                        'sanction',
+                        'deviation',
+                        'timely',
+                        'enforce'
+                    )
+                )
+            ),
+            'risk' => array(
+                array(
+                    'text' => 'Current risk register with owners, ratings and treatment decisions',
+                    'keywords' => array(
+                        'risk',
+                        'register',
+                        'treatment',
+                        'identif'
+                    )
+                ),
+                array(
+                    'text' => 'Approved risk assessment methodology with likelihood and impact criteria',
+                    'keywords' => array(
+                        'methodolog',
+                        'criteria',
+                        'toleran',
+                        'objective'
+                    )
+                ),
+                array(
+                    'text' => 'Latest risk assessment report and the management approval of it',
+                    'keywords' => array(
+                        'assess',
+                        'analy',
+                        'significance',
+                        'approv'
+                    )
+                ),
+                array(
+                    'text' => 'Fraud risk assessment covering incentives, pressures and opportunities',
+                    'keywords' => array(
+                        'fraud',
+                        'incentive',
+                        'pressure'
+                    )
+                ),
+                array(
+                    'text' => 'Records of risk reviews triggered by significant changes in the business or technology',
+                    'keywords' => array(
+                        'change',
+                        'significant',
+                        'environment',
+                        'business model'
+                    )
+                ),
+                array(
+                    'text' => 'Risk acceptance records signed by the accountable executive',
+                    'keywords' => array(
+                        'accept',
+                        'toleran',
+                        'residual'
+                    )
+                )
+            ),
+            'policy' => array(
+                array(
+                    'text' => 'Approved policy set with owner, version and approval date for each document',
+                    'keywords' => array(
+                        'policy',
+                        'policies',
+                        'approv',
+                        'version'
+                    )
+                ),
+                array(
+                    'text' => 'Policy review log showing each policy reviewed within its review cycle',
+                    'keywords' => array(
+                        'review',
+                        'periodic',
+                        'update',
+                        'reassess'
+                    )
+                ),
+                array(
+                    'text' => 'Records showing policies were published and communicated to staff',
+                    'keywords' => array(
+                        'communicat',
+                        'publish',
+                        'deploy',
+                        'distribut'
+                    )
+                ),
+                array(
+                    'text' => 'Approved policy exception records with expiry dates',
+                    'keywords' => array(
+                        'exception',
+                        'deviation',
+                        'waiver'
+                    )
+                )
+            ),
+            'roles' => array(
+                array(
+                    'text' => 'Organization chart showing security and control reporting lines',
+                    'keywords' => array(
+                        'structure',
+                        'reporting line',
+                        'organization chart',
+                        'chart'
+                    )
+                ),
+                array(
+                    'text' => 'Security responsibility (RACI) matrix for key controls',
+                    'keywords' => array(
+                        'responsib',
+                        'raci',
+                        'authorit',
+                        'accountab'
+                    )
+                ),
+                array(
+                    'text' => 'Job descriptions that include security responsibilities',
+                    'keywords' => array(
+                        'job description',
+                        'role',
+                        'competen'
+                    )
+                ),
+                array(
+                    'text' => 'Segregation of duties matrix for sensitive functions',
+                    'keywords' => array(
+                        'segregat',
+                        'separation',
+                        'duties',
+                        'incompatible'
+                    )
+                )
+            ),
+            'personnel' => array(
+                array(
+                    'text' => 'Background screening records for a sample of new hires and contractors',
+                    'keywords' => array(
+                        'background',
+                        'screen',
+                        'vetting',
+                        'hire',
+                        'check'
+                    )
+                ),
+                array(
+                    'text' => 'Signed confidentiality or non-disclosure agreements',
+                    'keywords' => array(
+                        'confidential',
+                        'non-disclosure',
+                        'agreement',
+                        'terms'
+                    )
+                ),
+                array(
+                    'text' => 'Onboarding and offboarding checklists completed for a sample of joiners and leavers',
+                    'keywords' => array(
+                        'onboard',
+                        'offboard',
+                        'terminat',
+                        'transfer',
+                        'leaver',
+                        'joiner'
+                    )
+                ),
+                array(
+                    'text' => 'Competence assessments or skills reviews for staff in security roles',
+                    'keywords' => array(
+                        'competen',
+                        'skill',
+                        'technical',
+                        'qualified',
+                        'evaluat'
+                    )
+                ),
+                array(
+                    'text' => 'Performance reviews or objectives that include control responsibilities',
+                    'keywords' => array(
+                        'performance',
+                        'incentive',
+                        'reward',
+                        'accountab'
+                    )
+                )
+            ),
+            'awareness' => array(
+                array(
+                    'text' => 'Security awareness training completion records for all staff in the period',
+                    'keywords' => array(
+                        'awareness',
+                        'training',
+                        'complet'
+                    )
+                ),
+                array(
+                    'text' => 'Training curriculum and materials, including role-based content',
+                    'keywords' => array(
+                        'curriculum',
+                        'role-based',
+                        'content',
+                        'technical training',
+                        'competenc'
+                    )
+                ),
+                array(
+                    'text' => 'Phishing simulation results and follow-up training records',
+                    'keywords' => array(
+                        'phish',
+                        'simulat',
+                        'social engineering'
+                    )
+                ),
+                array(
+                    'text' => 'Insider-threat or privacy training records for staff handling sensitive data',
+                    'keywords' => array(
+                        'insider',
+                        'privacy',
+                        'personal'
+                    )
+                )
+            ),
+            'assets' => array(
+                array(
+                    'text' => 'Current hardware and software asset inventory with owners',
+                    'keywords' => array(
+                        'inventor',
+                        'asset',
+                        'hardware',
+                        'software',
+                        'component'
+                    )
+                ),
+                array(
+                    'text' => 'Data flow diagrams for systems processing sensitive information',
+                    'keywords' => array(
+                        'flow',
+                        'diagram',
+                        'boundar'
+                    )
+                ),
+                array(
+                    'text' => 'Asset classification records showing criticality or sensitivity',
+                    'keywords' => array(
+                        'classif',
+                        'criticality',
+                        'sensitiv'
+                    )
+                ),
+                array(
+                    'text' => 'Records of asset disposal or return when equipment is retired',
+                    'keywords' => array(
+                        'dispos',
+                        'retire',
+                        'return',
+                        'sanitiz'
+                    )
+                )
+            ),
+            'identity' => array(
+                array(
+                    'text' => 'User access request and approval records for a sample of new accounts',
+                    'keywords' => array(
+                        'provision',
+                        'request',
+                        'registration',
+                        'new user',
+                        'authoriz',
+                        'grant'
+                    )
+                ),
+                array(
+                    'text' => 'Leaver records showing access removed within the defined timeframe',
+                    'keywords' => array(
+                        'terminat',
+                        'revok',
+                        'remov',
+                        'leaver',
+                        'deprovision',
+                        'disabl'
+                    )
+                ),
+                array(
+                    'text' => 'User access review records with reviewer sign-off and resulting changes',
+                    'keywords' => array(
+                        'review',
+                        'recertif',
+                        'periodic',
+                        'appropriate'
+                    )
+                ),
+                array(
+                    'text' => 'Authentication configuration showing password and multi-factor settings',
+                    'keywords' => array(
+                        'authenticat',
+                        'password',
+                        'credential',
+                        'multi-factor',
+                        'mfa',
+                        'factor',
+                        'logon',
+                        'identif'
+                    )
+                ),
+                array(
+                    'text' => 'Account inventory reconciled to the HR roster',
+                    'keywords' => array(
+                        'account',
+                        'inventor',
+                        'unique',
+                        'identif',
+                        'shared'
+                    )
+                )
+            ),
+            'privileged' => array(
+                array(
+                    'text' => 'Privileged account inventory with named owners',
+                    'keywords' => array(
+                        'privileg',
+                        'administrat',
+                        'admin',
+                        'elevated'
+                    )
+                ),
+                array(
+                    'text' => 'Privileged access approval and periodic review records',
+                    'keywords' => array(
+                        'approv',
+                        'review',
+                        'least privilege'
+                    )
+                ),
+                array(
+                    'text' => 'Session logs or privileged access management reports for administrative activity',
+                    'keywords' => array(
+                        'session',
+                        'logs',
+                        'monitor',
+                        'audit'
+                    )
+                ),
+                array(
+                    'text' => 'Break-glass or emergency account usage records',
+                    'keywords' => array(
+                        'emergency',
+                        'break-glass',
+                        'shared'
+                    )
+                )
+            ),
+            'access' => array(
+                array(
+                    'text' => 'Access control policy and role-based access matrix',
+                    'keywords' => array(
+                        'role',
+                        'matrix',
+                        'least privilege',
+                        'need to know',
+                        'polic'
+                    )
+                ),
+                array(
+                    'text' => 'Access modification records for staff changing roles',
+                    'keywords' => array(
+                        'modif',
+                        'transfer',
+                        'change',
+                        'role'
+                    )
+                ),
+                array(
+                    'text' => 'Remote access configuration and approval records',
+                    'keywords' => array(
+                        'remote',
+                        'vpn',
+                        'external',
+                        'session'
+                    )
+                ),
+                array(
+                    'text' => 'Session lock and timeout configuration screenshots',
+                    'keywords' => array(
+                        'session',
+                        'lock',
+                        'timeout',
+                        'inactiv'
+                    )
+                ),
+                array(
+                    'text' => 'Wireless and mobile device access configuration records',
+                    'keywords' => array(
+                        'wireless',
+                        'mobile',
+                        'device',
+                        'portable'
+                    )
+                )
+            ),
+            'network' => array(
+                array(
+                    'text' => 'Current network diagram showing zones, boundaries and external connections',
+                    'keywords' => array(
+                        'diagram',
+                        'boundar',
+                        'zone',
+                        'segment',
+                        'architecture'
+                    )
+                ),
+                array(
+                    'text' => 'Firewall and boundary rule sets with the record of their latest review',
+                    'keywords' => array(
+                        'firewall',
+                        'rule',
+                        'boundary',
+                        'perimeter',
+                        'external access',
+                        'access point'
+                    )
+                ),
+                array(
+                    'text' => 'External attack surface or penetration test report with remediation status',
+                    'keywords' => array(
+                        'penetration',
+                        'external',
+                        'threat',
+                        'attack',
+                        'exposure'
+                    )
+                ),
+                array(
+                    'text' => 'Encryption-in-transit configuration for external connections',
+                    'keywords' => array(
+                        'transmi',
+                        'transit',
+                        'encrypt',
+                        'channel',
+                        'tls'
+                    )
+                ),
+                array(
+                    'text' => 'Intrusion detection or prevention alerts and the triage record',
+                    'keywords' => array(
+                        'intrusion',
+                        'detect',
+                        'prevent',
+                        'malicious'
+                    )
+                )
+            ),
+            'data_protection' => array(
+                array(
+                    'text' => 'Data classification standard and a sample of labelled information assets',
+                    'keywords' => array(
+                        'classif',
+                        'label',
+                        'confidential',
+                        'sensitiv',
+                        'identif'
+                    )
+                ),
+                array(
+                    'text' => 'Encryption configuration records for data at rest and in transit',
+                    'keywords' => array(
+                        'encrypt',
+                        'crypto',
+                        'key management',
+                        'transit',
+                        'at rest'
+                    )
+                ),
+                array(
+                    'text' => 'Retention schedule and records of secure destruction or disposal',
+                    'keywords' => array(
+                        'retention',
+                        'retain',
+                        'destr',
+                        'dispos',
+                        'archiv',
+                        'purge'
+                    )
+                ),
+                array(
+                    'text' => 'Processing specifications and input validation checks for key systems',
+                    'keywords' => array(
+                        'processing',
+                        'specification',
+                        'input',
+                        'definition'
+                    )
+                ),
+                array(
+                    'text' => 'Processing reconciliation or error-correction reports',
+                    'keywords' => array(
+                        'complete',
+                        'accura',
+                        'error',
+                        'reconcil',
+                        'correction'
+                    )
+                ),
+                array(
+                    'text' => 'Output distribution records showing delivery to intended recipients',
+                    'keywords' => array(
+                        'output',
+                        'distribut',
+                        'recipient',
+                        'deliver'
+                    )
+                ),
+                array(
+                    'text' => 'Removable media and data transfer handling records',
+                    'keywords' => array(
+                        'removable',
+                        'media',
+                        'transfer',
+                        'portable'
+                    )
+                )
+            ),
+            'privacy' => array(
+                array(
+                    'text' => 'Published privacy notice with its version history and approval',
+                    'keywords' => array(
+                        'notice',
+                        'privacy notice',
+                        'inform'
+                    )
+                ),
+                array(
+                    'text' => 'Consent records and the consent capture mechanism',
+                    'keywords' => array(
+                        'consent',
+                        'choice',
+                        'opt-in',
+                        'opt-out'
+                    )
+                ),
+                array(
+                    'text' => 'Records of processing activities or personal data inventory',
+                    'keywords' => array(
+                        'collect',
+                        'inventor',
+                        'processing',
+                        'personal information',
+                        'purpose'
+                    )
+                ),
+                array(
+                    'text' => 'Data subject request log showing requests received, fulfilled or denied',
+                    'keywords' => array(
+                        'access',
+                        'correction',
+                        'request',
+                        'data subject',
+                        'inquir',
+                        'dispute',
+                        'complaint'
+                    )
+                ),
+                array(
+                    'text' => 'Disclosure and third-party sharing records for personal information',
+                    'keywords' => array(
+                        'disclos',
+                        'third part',
+                        'sharing',
+                        'authoriz'
+                    )
+                ),
+                array(
+                    'text' => 'Breach notification procedure and notification records',
+                    'keywords' => array(
+                        'breach',
+                        'notif'
+                    )
+                ),
+                array(
+                    'text' => 'Retention and disposal records for personal information',
+                    'keywords' => array(
+                        'retention',
+                        'dispos',
+                        'destr'
+                    )
+                )
+            ),
+            'configuration' => array(
+                array(
+                    'text' => 'Approved configuration baselines for each system type',
+                    'keywords' => array(
+                        'baseline',
+                        'configur',
+                        'standard',
+                        'harden'
+                    )
+                ),
+                array(
+                    'text' => 'Configuration compliance scan results against the baselines',
+                    'keywords' => array(
+                        'scan',
+                        'complian',
+                        'drift',
+                        'deviation',
+                        'compar'
+                    )
+                ),
+                array(
+                    'text' => 'Inventory of permitted software and records of unauthorized software removal',
+                    'keywords' => array(
+                        'software',
+                        'unauthorized',
+                        'install',
+                        'permit',
+                        'allow'
+                    )
+                ),
+                array(
+                    'text' => 'Records of disabled or restricted unnecessary ports, protocols and services',
+                    'keywords' => array(
+                        'port',
+                        'protocol',
+                        'service',
+                        'functionality',
+                        'least functionality'
+                    )
+                )
+            ),
+            'vulnerability' => array(
+                array(
+                    'text' => 'Vulnerability scan results for the period, internal and external',
+                    'keywords' => array(
+                        'scan',
+                        'vulnerab',
+                        'identif',
+                        'detect'
+                    )
+                ),
+                array(
+                    'text' => 'Remediation tracking records showing vulnerabilities closed within target timeframes',
+                    'keywords' => array(
+                        'remediat',
+                        'track',
+                        'timeframe',
+                        'patch',
+                        'flaw',
+                        'correct'
+                    )
+                ),
+                array(
+                    'text' => 'Patch deployment reports for servers and endpoints',
+                    'keywords' => array(
+                        'patch',
+                        'update',
+                        'deploy'
+                    )
+                ),
+                array(
+                    'text' => 'Penetration test report and the remediation status of its findings',
+                    'keywords' => array(
+                        'penetration',
+                        'test',
+                        'exploit'
+                    )
+                ),
+                array(
+                    'text' => 'Threat intelligence or security advisory monitoring records',
+                    'keywords' => array(
+                        'threat',
+                        'advisor',
+                        'alert',
+                        'intelligence'
+                    )
+                )
+            ),
+            'endpoint' => array(
+                array(
+                    'text' => 'Endpoint protection deployment and coverage report',
+                    'keywords' => array(
+                        'malware',
+                        'anti-malware',
+                        'antivirus',
+                        'endpoint',
+                        'protection',
+                        'malicious'
+                    )
+                ),
+                array(
+                    'text' => 'Malware detection alerts and the response taken',
+                    'keywords' => array(
+                        'detect',
+                        'alert',
+                        'malicious',
+                        'respon'
+                    )
+                ),
+                array(
+                    'text' => 'Email and web filtering configuration',
+                    'keywords' => array(
+                        'email',
+                        'web',
+                        'filter',
+                        'spam'
+                    )
+                ),
+                array(
+                    'text' => 'Device encryption and mobile device management reports',
+                    'keywords' => array(
+                        'device',
+                        'mobile',
+                        'encrypt',
+                        'laptop'
+                    )
+                ),
+                array(
+                    'text' => 'Records of scanning of media and files introduced from outside',
+                    'keywords' => array(
+                        'scan',
+                        'introduced',
+                        'external',
+                        'media',
+                        'file'
+                    )
+                )
+            ),
+            'change' => array(
+                array(
+                    'text' => 'Change requests with approval, testing and implementation records for a sample of changes',
+                    'keywords' => array(
+                        'change',
+                        'approv',
+                        'authoriz',
+                        'test'
+                    )
+                ),
+                array(
+                    'text' => 'Change advisory or approval board minutes',
+                    'keywords' => array(
+                        'advisory',
+                        'board',
+                        'approv'
+                    )
+                ),
+                array(
+                    'text' => 'Emergency change records with retrospective approval',
+                    'keywords' => array(
+                        'emergency',
+                        'urgent'
+                    )
+                ),
+                array(
+                    'text' => 'Comparison of deployed changes with approved change tickets',
+                    'keywords' => array(
+                        'unauthorized',
+                        'detect',
+                        'compar',
+                        'reconcil',
+                        'track'
+                    )
+                ),
+                array(
+                    'text' => 'Rollback or back-out plans recorded for significant changes',
+                    'keywords' => array(
+                        'rollback',
+                        'back-out',
+                        'recover'
+                    )
+                )
+            ),
+            'sdlc' => array(
+                array(
+                    'text' => 'Secure development lifecycle procedure and coding standards',
+                    'keywords' => array(
+                        'development',
+                        'lifecycle',
+                        'coding',
+                        'design',
+                        'acquisit'
+                    )
+                ),
+                array(
+                    'text' => 'Code review and security testing records for a sample of releases',
+                    'keywords' => array(
+                        'code review',
+                        'testing',
+                        'test',
+                        'review',
+                        'release'
+                    )
+                ),
+                array(
+                    'text' => 'Records of separation between development, test and production',
+                    'keywords' => array(
+                        'environment',
+                        'separat',
+                        'production'
+                    )
+                ),
+                array(
+                    'text' => 'Acquisition or vendor software security requirements and acceptance testing',
+                    'keywords' => array(
+                        'acquisit',
+                        'procure',
+                        'purchas',
+                        'acceptance'
+                    )
+                )
+            ),
+            'logging' => array(
+                array(
+                    'text' => 'Logging standard and the inventory of log sources',
+                    'keywords' => array(
+                        'logging',
+                        'logs',
+                        'log source',
+                        'audit log',
+                        'event'
+                    )
+                ),
+                array(
+                    'text' => 'Samples of security event logs retained for the defined period',
+                    'keywords' => array(
+                        'retention',
+                        'retain',
+                        'review',
+                        'protect'
+                    )
+                ),
+                array(
+                    'text' => 'Alert triage records from monitoring or SIEM tooling',
+                    'keywords' => array(
+                        'monitor',
+                        'alert',
+                        'anomal',
+                        'siem',
+                        'detect',
+                        'analy'
+                    )
+                ),
+                array(
+                    'text' => 'Records of log review and follow-up of anomalies',
+                    'keywords' => array(
+                        'review',
+                        'anomal',
+                        'investigat',
+                        'correlat'
+                    )
+                ),
+                array(
+                    'text' => 'Time synchronization configuration for logged systems',
+                    'keywords' => array(
+                        'time synchron',
+                        'clock',
+                        'synchron'
+                    )
+                )
+            ),
+            'incident' => array(
+                array(
+                    'text' => 'Approved incident response plan and playbooks',
+                    'keywords' => array(
+                        'plan',
+                        'response',
+                        'procedur',
+                        'playbook',
+                        'respond'
+                    )
+                ),
+                array(
+                    'text' => 'Incident register with classification, timeline and closure for each incident',
+                    'keywords' => array(
+                        'register',
+                        'record',
+                        'track',
+                        'classif',
+                        'report'
+                    )
+                ),
+                array(
+                    'text' => 'Incident response exercise or tabletop test records with lessons learned',
+                    'keywords' => array(
+                        'exercise',
+                        'test',
+                        'tabletop',
+                        'lesson',
+                        'evaluat'
+                    )
+                ),
+                array(
+                    'text' => 'Post-incident review reports and the resulting corrective actions',
+                    'keywords' => array(
+                        'review',
+                        'lesson',
+                        'root cause',
+                        'remediat',
+                        'correct'
+                    )
+                ),
+                array(
+                    'text' => 'Notification records to customers, regulators or data subjects where required',
+                    'keywords' => array(
+                        'notif',
+                        'communicat',
+                        'breach',
+                        'external',
+                        'regulator'
+                    )
+                )
+            ),
+            'continuity' => array(
+                array(
+                    'text' => 'Backup job logs and backup schedule for in-scope systems',
+                    'keywords' => array(
+                        'backup',
+                        'back up',
+                        'copies',
+                        'schedule'
+                    )
+                ),
+                array(
+                    'text' => 'Restore test records showing data recovered successfully',
+                    'keywords' => array(
+                        'restor',
+                        'recover',
+                        'integrity',
+                        'test'
+                    )
+                ),
+                array(
+                    'text' => 'Business continuity and disaster recovery plans with recovery objectives',
+                    'keywords' => array(
+                        'continuity',
+                        'disaster',
+                        'recovery plan',
+                        'objective',
+                        'rto',
+                        'rpo'
+                    )
+                ),
+                array(
+                    'text' => 'Disaster recovery test or exercise reports',
+                    'keywords' => array(
+                        'test',
+                        'exercise',
+                        'recovery'
+                    )
+                ),
+                array(
+                    'text' => 'Capacity monitoring reports and forecast reviews',
+                    'keywords' => array(
+                        'capacity',
+                        'demand',
+                        'forecast',
+                        'usage',
+                        'performance'
+                    )
+                ),
+                array(
+                    'text' => 'Environmental protection maintenance records for facilities hosting systems',
+                    'keywords' => array(
+                        'environment',
+                        'power',
+                        'fire',
+                        'temperature',
+                        'infrastructure'
+                    )
+                )
+            ),
+            'third_party' => array(
+                array(
+                    'text' => 'Supplier inventory with risk tiers and named relationship owners',
+                    'keywords' => array(
+                        'supplier',
+                        'vendor',
+                        'inventor',
+                        'tier',
+                        'owner',
+                        'third part'
+                    )
+                ),
+                array(
+                    'text' => 'Supplier due diligence or security assessments before onboarding',
+                    'keywords' => array(
+                        'due diligence',
+                        'assess',
+                        'onboard',
+                        'select'
+                    )
+                ),
+                array(
+                    'text' => 'Contracts showing security, confidentiality and breach notification clauses',
+                    'keywords' => array(
+                        'contract',
+                        'agreement',
+                        'commitment',
+                        'clause',
+                        'terms'
+                    )
+                ),
+                array(
+                    'text' => 'Annual review records of independent assurance reports for critical suppliers',
+                    'keywords' => array(
+                        'review',
+                        'monitor',
+                        'assurance',
+                        'report'
+                    )
+                ),
+                array(
+                    'text' => 'Supplier offboarding records showing access removed and data returned',
+                    'keywords' => array(
+                        'terminat',
+                        'offboard',
+                        'return',
+                        'exit'
+                    )
+                )
+            ),
+            'physical' => array(
+                array(
+                    'text' => 'Badge access lists for secure areas and the record of their periodic review',
+                    'keywords' => array(
+                        'badge',
+                        'access',
+                        'secure area',
+                        'facilit',
+                        'physical'
+                    )
+                ),
+                array(
+                    'text' => 'Visitor logs and escort records',
+                    'keywords' => array(
+                        'visitor',
+                        'escort',
+                        'guest'
+                    )
+                ),
+                array(
+                    'text' => 'Records of physical access removal for leavers',
+                    'keywords' => array(
+                        'remov',
+                        'terminat',
+                        'revok'
+                    )
+                ),
+                array(
+                    'text' => 'CCTV or entry monitoring records for sensitive areas',
+                    'keywords' => array(
+                        'monitor',
+                        'cctv',
+                        'camera',
+                        'surveil'
+                    )
+                ),
+                array(
+                    'text' => 'Environmental control maintenance records such as fire suppression and power',
+                    'keywords' => array(
+                        'environment',
+                        'fire',
+                        'power',
+                        'temperature'
+                    )
+                )
+            ),
+            'control_monitoring' => array(
+                array(
+                    'text' => 'Control testing or internal audit plan for the period',
+                    'keywords' => array(
+                        'plan',
+                        'audit',
+                        'testing',
+                        'evaluat',
+                        'ongoing'
+                    )
+                ),
+                array(
+                    'text' => 'Control assessment or internal audit reports with findings',
+                    'keywords' => array(
+                        'assess',
+                        'report',
+                        'separate evaluation',
+                        'finding'
+                    )
+                ),
+                array(
+                    'text' => 'Deficiency tracker showing owners, target dates and closure',
+                    'keywords' => array(
+                        'deficienc',
+                        'track',
+                        'remediat',
+                        'corrective',
+                        'communicat'
+                    )
+                ),
+                array(
+                    'text' => 'Management review records of control performance',
+                    'keywords' => array(
+                        'review',
+                        'management',
+                        'performance'
+                    )
+                )
+            ),
+            'communication' => array(
+                array(
+                    'text' => 'Internal security communications issued in the period, such as policy change notices',
+                    'keywords' => array(
+                        'internal',
+                        'communicat',
+                        'staff',
+                        'personnel'
+                    )
+                ),
+                array(
+                    'text' => 'System description and customer-facing security commitments',
+                    'keywords' => array(
+                        'system description',
+                        'boundar',
+                        'external',
+                        'customer',
+                        'commitment'
+                    )
+                ),
+                array(
+                    'text' => 'External reporting channel records showing issues received and routed',
+                    'keywords' => array(
+                        'external',
+                        'report',
+                        'channel',
+                        'complaint',
+                        'inquir'
+                    )
+                ),
+                array(
+                    'text' => 'Records showing the information used to operate controls is checked for quality',
+                    'keywords' => array(
+                        'information quality',
+                        'quality',
+                        'relevant',
+                        'accura',
+                        'source'
+                    )
+                )
             )
         );
     }

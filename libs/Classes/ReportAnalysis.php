@@ -204,7 +204,8 @@ class ReportAnalysis
         }
         $all_evidence = array_values(array_unique($all_evidence));
 
-        $topic_key = ReportKnowledge::topic_for($item, $objective_rows);
+        $topic_keys = ReportKnowledge::topics_for($item, $objective_rows);
+        $topic_key = $topic_keys[0];
         $result = in_array($item['item_result'], array(
             'Implemented',
             'Partially Implemented',
@@ -232,6 +233,8 @@ class ReportAnalysis
             'justification' => self::plain($item['applicability_justification']),
             'expectations' => self::expectations((string) $item['guidance']),
             'topic' => $topic_key,
+            'topics' => $topic_keys,
+            'suggested_evidence' => ReportKnowledge::suggested_evidence($topic_keys, self::evidence_text($item, count($open) > 0 ? $open : $objectives)),
             'evidence' => $all_evidence,
             'evidence_count' => count($all_evidence),
             'objectives' => $objectives,
@@ -256,6 +259,22 @@ class ReportAnalysis
         }
 
         return $record;
+    }
+
+    /** The requirement wording that suggested evidence is matched against: the control and the objectives given. */
+    private static function evidence_text(array $item, array $objectives): string
+    {
+        $parts = array(
+            self::plain((string) $item['control_title']),
+            self::plain((string) $item['description'])
+        );
+
+        foreach ($objectives as $objective) {
+            $parts[] = $objective['title'];
+            $parts[] = $objective['description'];
+        }
+
+        return implode(' ', $parts);
     }
 
     private static function assessor_fields(array $row): array
@@ -1116,7 +1135,7 @@ class ReportAnalysis
             return $initiative['owner'] === null;
         }));
         if (count($a['initiatives']) > 0) {
-            $considerations[] = 'Assign an accountable owner and target date to each remediation initiative'.($unowned > 0 ? '; '.($unowned === count($a['initiatives']) ? (count($a['initiatives']) === 1 ? 'it has' : 'none of them has') : $unowned.' of '.count($a['initiatives']).($unowned === 1 ? ' has' : ' have')).' no owner recorded' : '').'.';
+            $considerations[] = 'Assign an accountable owner and target date to each remediation initiative'.($unowned > 0 ? '; '.($unowned === count($a['initiatives']) ? (count($a['initiatives']) === 1 ? 'it has no owner recorded' : 'no initiative has an owner recorded') : $unowned.' of '.count($a['initiatives']).($unowned === 1 ? ' has' : ' have').' no owner recorded') : '').'.';
             $high = count(array_filter($a['initiatives'], function ($initiative) {
                 return $initiative['priority'] === 'High';
             }));

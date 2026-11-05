@@ -282,5 +282,84 @@ return array(
             $top = array_key_first($counts);
             Assert::true($counts[$top] / $total <= 0.35, basename($file).': '.$top.' takes '.$counts[$top].' of '.$total);
         }
+    },
+
+    'Knowledge: every topic has its own suggested evidence examples' => function () {
+        $seen = array();
+
+        foreach (ReportKnowledge::topics() as $key => $topic) {
+            Assert::true(count($topic['evidence']) >= 3 && count($topic['evidence']) <= 8, $key.' has '.count($topic['evidence']).' evidence examples');
+
+            foreach ($topic['evidence'] as $example) {
+                Assert::true(preg_match('/^[A-Z]/', $example) === 1, $key.' evidence does not start with a capital: '.$example);
+                Assert::true(preg_match('/\b(soc ?2|iso|27001|nist|cmmc|pci|hipaa|cui)\b/i', $example) === 0, $key.' evidence names a framework: '.$example);
+                $normal = strtolower($example);
+                Assert::true(!isset($seen[$normal]), '"'.$example.'" appears in '.$key.' and '.($seen[$normal] ?? ''));
+                $seen[$normal] = $key;
+            }
+        }
+    },
+
+    'Knowledge: suggested evidence follows the wording of the requirement' => function () {
+        $termination = ReportKnowledge::suggested_evidence(array(
+            'identity'
+        ), 'Access is removed promptly when employment is terminated.', 3);
+        Assert::same('Leaver records showing access removed within the defined timeframe', $termination[0], 'termination evidence first');
+
+        $backup = ReportKnowledge::suggested_evidence(array(
+            'continuity'
+        ), 'Backups are performed and restoration is tested.', 3);
+        Assert::true(in_array('Backup job logs and backup schedule for in-scope systems', $backup, true), 'backup logs suggested');
+        Assert::true(in_array('Restore test records showing data recovered successfully', $backup, true), 'restore tests suggested');
+
+        $scan = ReportKnowledge::suggested_evidence(array(
+            'vulnerability'
+        ), 'Vulnerability scans are run and identified flaws are remediated.', 2);
+        Assert::same(array(
+            'Vulnerability scan results for the period, internal and external',
+            'Remediation tracking records showing vulnerabilities closed within target timeframes'
+        ), $scan, 'scan and remediation evidence');
+
+        Assert::true($termination !== $backup && $backup !== $scan, 'different requirements get different evidence');
+    },
+
+    'Knowledge: suggested evidence always includes the primary topic and respects the limit' => function () {
+        $examples = ReportKnowledge::suggested_evidence(array(
+            'incident',
+            'continuity'
+        ), 'Unrelated wording with no matching terms at all.', 5);
+        Assert::true(count($examples) >= 1 && count($examples) <= 5, 'count '.count($examples));
+        Assert::true(in_array($examples[0], ReportKnowledge::topic('incident')['evidence'], true), 'primary topic first');
+
+        foreach ($examples as $example) {
+            Assert::true(!in_array($example, ReportKnowledge::topic('continuity')['evidence'], true), 'secondary topic without a keyword match is not suggested');
+        }
+
+        Assert::true(count(ReportKnowledge::suggested_evidence(array(), 'Anything', 1)) === 1, 'falls back to a topic when none is given');
+        Assert::true(count(ReportKnowledge::suggested_evidence(array(
+            'unknown_topic'
+        ), 'Anything', 3)) >= 1, 'unknown topic falls back');
+    },
+
+    'Knowledge: topics_for puts the control topic first and adds objective topics without repeats' => function () {
+        $control = array(
+            'control_title' => 'Incident Response',
+            'description' => 'The entity responds to identified security incidents.',
+            'family' => 'System Operations'
+        );
+        $objectives = array(
+            array(
+                'control_title' => 'Restores operations from backup',
+                'description' => 'Data is restored from backups and recovery is tested.'
+            ),
+            array(
+                'control_title' => 'Contains security incidents',
+                'description' => 'Incidents are contained and resolved.'
+            )
+        );
+        $keys = ReportKnowledge::topics_for($control, $objectives);
+        Assert::same(ReportKnowledge::topic_for($control, $objectives), $keys[0], 'primary topic first');
+        Assert::same(count($keys), count(array_unique($keys)), 'no repeats');
+        Assert::true(in_array('continuity', $keys, true), 'backup objective adds continuity: '.implode(', ', $keys));
     }
 );

@@ -18,6 +18,9 @@ class ReportExecutiveSummary extends ReportBuilder
 
     const RECOMMENDATIONS = 4;
 
+    /** Characters above which a narrative paragraph is divided in two. */
+    const LONG_PARAGRAPH = 700;
+
     private $plan = null;
 
     protected function title(): string
@@ -37,13 +40,13 @@ class ReportExecutiveSummary extends ReportBuilder
     {
         return array_merge(
             $this->overview(),
-            $this->scope(),
             $this->dashboard(),
             $this->key_findings(),
-            $this->strengths(),
             $this->improvements(),
+            $this->strengths(),
             $this->recommendations(),
-            $this->considerations()
+            $this->considerations(),
+            $this->scope()
         );
     }
 
@@ -52,7 +55,7 @@ class ReportExecutiveSummary extends ReportBuilder
     private function overview(): array
     {
         $blocks = array(
-            self::h1('Executive overview')
+            self::h1('Overall assessment')
         );
 
         if (isset($this->a['assessor']['posture_text'])) {
@@ -69,7 +72,7 @@ class ReportExecutiveSummary extends ReportBuilder
         $ai = $this->ai_list('overview');
 
         if ($ai !== null) {
-            $blocks[] = self::text(implode("\n\n", $ai));
+            $blocks[] = self::text(implode("\n\n", self::readable($ai)));
             return $blocks;
         }
 
@@ -100,7 +103,7 @@ class ReportExecutiveSummary extends ReportBuilder
             $paragraphs[] = $priorities;
         }
 
-        $blocks[] = self::text(implode("\n\n", $paragraphs));
+        $blocks[] = self::text(implode("\n\n", self::readable($paragraphs)));
 
         return $blocks;
     }
@@ -150,7 +153,7 @@ class ReportExecutiveSummary extends ReportBuilder
             }));
             $text .= ' The response is consolidated into '.count($initiatives).' remediation '.(count($initiatives) === 1 ? 'initiative' : 'initiatives')
                 .($immediate > 0 ? ', '.$immediate.' of which '.($immediate === 1 ? 'is an immediate priority' : 'are immediate priorities') : '')
-                .(count($initiatives) === 1 ? '; it is set out under Strategic recommendations.' : '; the most significant are set out under Strategic recommendations.');
+                .(count($initiatives) === 1 ? '; it is set out under Priority recommendations.' : '; the most significant are set out under Priority recommendations.');
         }
 
         return $text;
@@ -188,7 +191,7 @@ class ReportExecutiveSummary extends ReportBuilder
                 'Framework',
                 $this->framework_name()
             )
-        ), $this->period_rows(), array(
+        ), array(
             array(
                 'Scope',
                 isset($a['assessor']['assessment_scope'])
@@ -207,15 +210,15 @@ class ReportExecutiveSummary extends ReportBuilder
             )
         ));
 
-        $basis = 'Counts, the implementation score and evidence coverage are calculated from the answers recorded for each '.$this->term('control')
-            .($objective_total > 0 ? ' and '.$this->term('objective') : '').'. '
-            .'Themes, remediation priorities and recommendations are derived from those results using general security practice; they interpret the record and add no facts about '.$this->client_name().'. '
-            .'The implementation score counts implemented '.$this->term('controls').' in full and partially implemented ones at half, over the assessed '.$this->term('controls').' that apply; it measures progress and is not a compliance opinion or certification result. '
-            .'Remediation priority is derived from each gap\'s result, the exposure of its area and the share of '.$this->term('objectives').' still open; it is not an assessed risk rating. '
-            .'Text recorded by the assessor is labelled as such.';
+        $basis = array(
+            'Counts, the implementation score and evidence coverage are calculated from the answers recorded for each '.$this->term('control').($objective_total > 0 ? ' and '.$this->term('objective') : '').'.',
+            'The implementation score counts implemented '.$this->term('controls').' in full and partially implemented ones at half, over the assessed '.$this->term('controls').' that apply. It measures progress and is not a compliance opinion or certification result.',
+            'Remediation priority is derived from each gap\'s result, the exposure of its area and the share of '.$this->term('objectives').' still open. It is a planning aid, not an assessed risk rating.',
+            'Themes, implications and recommendations interpret the recorded results using general security practice and add no facts about '.$this->client_name().'. Text recorded by the assessor is labelled as such.'
+        );
 
         if (isset($a['executive_ai']) || isset($a['patterns_ai']) || isset($a['initiatives_ai'])) {
-            $basis .= ' Some narrative passages were drafted with AI assistance from the same recorded results.';
+            $basis[] = 'Some narrative passages were drafted with AI assistance from the same recorded results.';
         }
 
         $rows[] = array(
@@ -224,8 +227,7 @@ class ReportExecutiveSummary extends ReportBuilder
         );
 
         return array(
-            self::h1('Scope and methodology'),
-            self::text('What was assessed, how, and the basis on which the conclusions in this summary rest.'),
+            self::h1('Scope, basis and limitations'),
             array(
                 'kind' => 'kv',
                 'value' => array(
@@ -286,7 +288,6 @@ class ReportExecutiveSummary extends ReportBuilder
         $gaps = $c['Partially Implemented'] + $c['Not Implemented'];
         $scored = $a['assessed'] - $c['Not Applicable'];
         $priorities = $this->priority_counts();
-        $initiatives = $this->initiatives();
 
         $metrics = array(
             array(
@@ -294,61 +295,36 @@ class ReportExecutiveSummary extends ReportBuilder
                 'label' => 'Implementation score',
                 'sub' => 'Progress measure, not a compliance opinion',
                 'tone' => 'brand'
-            ),
-            array(
-                'value' => $a['assessed'].' of '.$a['total'],
-                'label' => ucfirst($this->term('controls')).' assessed',
-                'sub' => self::pct($a['assessed'], $a['total']).' complete',
-                'tone' => $a['assessed'] === $a['total'] ? 'positive' : 'warning'
-            ),
-            array(
-                'value' => (string) $c['Implemented'],
-                'label' => 'Fully implemented',
-                'sub' => $scored > 0 ? self::pct($c['Implemented'], $scored).' of those scored' : '',
-                'tone' => 'positive'
-            ),
-            array(
-                'value' => (string) $gaps,
-                'label' => 'Not fully in place',
-                'sub' => $c['Partially Implemented'].' partial, '.$c['Not Implemented'].' not implemented',
-                'tone' => $gaps > 0 ? 'warning' : 'positive'
-            ),
-            array(
-                'value' => $scored > 0 ? self::pct($a['with_evidence'], $scored) : '0%',
-                'label' => 'Evidence coverage',
-                'sub' => $a['with_evidence'].' of '.$scored.' with linked evidence',
-                'tone' => $scored > 0 && $a['with_evidence'] * 2 >= $scored ? 'positive' : ($a['with_evidence'] === 0 ? 'critical' : 'warning')
-            ),
-            array(
-                'value' => (string) $priorities['High'],
-                'label' => 'High-priority findings',
-                'sub' => 'Derived; '.$priorities['Medium'].' medium, '.$priorities['Low'].' low',
-                'tone' => $priorities['High'] > 0 ? 'critical' : 'positive'
-            ),
-            array(
-                'value' => (string) count($initiatives),
-                'label' => 'Remediation initiatives',
-                'sub' => 'Consolidated from the gaps',
-                'tone' => 'brand'
             )
         );
 
-        if ($c['Not Assessed'] > 0) {
+        if ($a['assessed'] < $a['total']) {
             $metrics[] = array(
-                'value' => (string) $c['Not Assessed'],
-                'label' => 'Not yet assessed',
-                'sub' => 'Excluded from the score',
-                'tone' => 'neutral'
-            );
-        } elseif ($c['Not Applicable'] > 0) {
-            $metrics[] = array(
-                'value' => (string) $c['Not Applicable'],
-                'label' => 'Not applicable',
-                'sub' => 'Excluded from the score',
-                'tone' => 'neutral'
+                'value' => $a['assessed'].' of '.$a['total'],
+                'label' => ucfirst($this->term('controls')).' assessed',
+                'sub' => self::pct($a['assessed'], $a['total']).' complete; the rest are excluded from the score',
+                'tone' => 'warning'
             );
         }
 
+        $metrics[] = array(
+            'value' => (string) $gaps,
+            'label' => 'Not fully in place',
+            'sub' => $c['Partially Implemented'].' partial, '.$c['Not Implemented'].' not implemented, of '.$scored.' scored',
+            'tone' => $gaps > 0 ? 'warning' : 'positive'
+        );
+        $metrics[] = array(
+            'value' => (string) $priorities['High'],
+            'label' => 'High-priority gaps',
+            'sub' => 'Derived; '.$priorities['Medium'].' medium, '.$priorities['Low'].' low',
+            'tone' => $priorities['High'] > 0 ? 'critical' : 'positive'
+        );
+        $metrics[] = array(
+            'value' => $scored > 0 ? self::pct($a['with_evidence'], $scored) : '0%',
+            'label' => 'Evidence coverage',
+            'sub' => $a['with_evidence'].' of '.$scored.' with linked evidence',
+            'tone' => $scored > 0 && $a['with_evidence'] * 2 >= $scored ? 'positive' : ($a['with_evidence'] === 0 ? 'critical' : 'warning')
+        );
 
         $blocks = array(
             self::h1('Results at a glance'),
@@ -357,8 +333,7 @@ class ReportExecutiveSummary extends ReportBuilder
                 'value' => array(
                     'items' => $metrics
                 )
-            ),
-            self::h2('Distribution of results')
+            )
         );
 
         $segments = array();
@@ -371,55 +346,106 @@ class ReportExecutiveSummary extends ReportBuilder
                 );
             }
         }
-        $blocks[] = array(
-            'kind' => 'stackbar',
-            'value' => array(
-                'segments' => $segments
-            )
-        );
-
-
-        $scored_families = array();
-        foreach ($a['families'] as $name => $family) {
-            if ($family['score'] !== null) {
-                $scored_families[$name] = $family;
-            }
-        }
-
-        $family_title = 'Implementation score by '.$this->term('family');
-
-        if (count($scored_families) >= 3) {
-            uasort($scored_families, function ($x, $y) {
-                return $y['score'] <=> $x['score'];
-            });
-            $bars = array();
-            foreach ($scored_families as $name => $family) {
-                $bars[] = array(
-                    'label' => $name,
-                    'value' => $family['score'],
-                    'max' => 100,
-                    'text' => $family['score'].'%',
-                    'tone' => $family['score'] >= 75 ? 'positive' : ($family['score'] >= 50 ? 'brand' : 'warning')
-                );
-            }
-            $blocks[] = self::h2(ucfirst($family_title));
+        if (count($segments) > 1) {
+            $blocks[] = self::h3('Recorded results');
             $blocks[] = array(
-                'kind' => 'bars',
+                'kind' => 'stackbar',
                 'value' => array(
-                    'items' => $bars
+                    'segments' => $segments
                 )
             );
-        } elseif (count($a['families']) > 1) {
-            $blocks[] = self::h2(ucfirst($family_title));
-            $blocks[] = self::text('Only '.count($scored_families).' of the '.count($a['families']).' '.$this->term('families').' '.(count($scored_families) === 1 ? 'has' : 'have').' scored results so far'
-                .(count($scored_families) > 0 ? ' ('.self::join_list(array_map(function ($name) use ($scored_families) {
-                    return $name.', '.$scored_families[$name]['score'].'%';
-                }, array_keys($scored_families))).')' : '')
-                .'. A comparison across '.$this->term('families').' becomes meaningful once more of the assessment is complete.');
         }
 
+        return array_merge($blocks, $this->family_table());
+    }
 
-        return $blocks;
+    /**
+     * Where the gaps sit: one row per family with its results, score and
+     * high-priority gaps, ordered so the families needing most attention come
+     * first. A table, because the counts behind each score matter more to the
+     * reader than a bar of near-equal lengths.
+     */
+    private function family_table(): array
+    {
+        $a = $this->a;
+
+        $scored = count(array_filter($a['families'], function ($family) {
+            return $family['score'] !== null;
+        }));
+
+        if (count($a['families']) < 2 || $scored < 2) {
+            return array();
+        }
+
+        $high = array();
+        foreach ($a['findings'] as $finding) {
+            if ($finding['priority'] === 'High') {
+                $family = $finding['domain'];
+                $high[$family] = ($high[$family] ?? 0) + 1;
+            }
+        }
+
+        $unassessed = $a['counts']['Not Assessed'] > 0;
+        $names = array_keys($a['families']);
+        usort($names, function ($x, $y) use ($a, $high) {
+            $rank = ($high[$y] ?? 0) <=> ($high[$x] ?? 0);
+            if ($rank !== 0) {
+                return $rank;
+            }
+            $rank = count($a['families'][$y]['gaps']) <=> count($a['families'][$x]['gaps']);
+            if ($rank !== 0) {
+                return $rank;
+            }
+            return ($a['families'][$x]['score'] ?? 101) <=> ($a['families'][$y]['score'] ?? 101);
+        });
+
+        $rows = array();
+        foreach ($names as $name) {
+            $family = $a['families'][$name];
+            $counts = $family['counts'];
+            $row = array(
+                $name,
+                (string) count($family['controls']),
+                (string) $counts['Implemented'],
+                (string) $counts['Partially Implemented'],
+                (string) $counts['Not Implemented']
+            );
+            if ($unassessed) {
+                $row[] = (string) $counts['Not Assessed'];
+            }
+            $row[] = $family['score'] !== null ? $family['score'].'%' : '';
+            $row[] = (string) ($high[$name] ?? 0);
+            $rows[] = $row;
+        }
+
+        $head = array(
+            ucfirst($this->term('family')),
+            ucfirst($this->term('controls')),
+            'Implemented',
+            'Partial',
+            'Not impl.'
+        );
+        $widths = array(
+            36,
+            11,
+            11,
+            9,
+            10
+        );
+        if ($unassessed) {
+            $head[] = 'Not assessed';
+            $widths[] = 10;
+            $widths[0] -= 10;
+        }
+        $head[] = 'Score';
+        $widths[] = 9;
+        $head[] = 'High priority';
+        $widths[] = 14;
+
+        return array(
+            self::h3('Results by '.$this->term('family')),
+            self::table($head, $widths, $rows)
+        );
     }
 
     private function priority_counts(): array
@@ -442,13 +468,16 @@ class ReportExecutiveSummary extends ReportBuilder
     private function key_findings(): array
     {
         $ai = array_slice($this->a['executive_ai']['key_findings'] ?? array(), 0, self::KEY_FINDINGS + 1);
+        $heading = self::h1('Key findings and themes');
 
         if (count($ai) > 0) {
             $blocks = array(
-                self::h1('Key findings')
+                $heading
             );
             foreach ($ai as $entry) {
-                $body = $entry['explanation'];
+                $body = implode("\n\n", self::readable(array(
+                    $entry['explanation']
+                )));
                 if (count($entry['refs'] ?? array()) > 0) {
                     $body .= "\n\nRelated ".$this->term('controls').': '.implode(', ', array_slice($entry['refs'], 0, 6)).(count($entry['refs']) > 6 ? ' and '.(count($entry['refs']) - 6).' more' : '').'.';
                 }
@@ -464,22 +493,46 @@ class ReportExecutiveSummary extends ReportBuilder
             return $blocks;
         }
 
+        $total = count($this->a['findings']);
+        $themes = $this->key_themes();
+
+        if (count($themes) >= 2) {
+            $blocks = array(
+                $heading
+            );
+            $covered = 0;
+            foreach ($themes as $theme) {
+                $covered += count($theme['findings']);
+                $blocks[] = array(
+                    'kind' => 'panel',
+                    'value' => array(
+                        'title' => $theme['name'],
+                        'tone' => $theme['high'] > 0 ? 'critical' : 'warning',
+                        'body' => $this->theme_body($theme)
+                    )
+                );
+            }
+            if ($covered < $total) {
+                $blocks[] = self::note('These themes account for '.$covered.' of the '.$total.' gaps. Every gap is set out individually in the Gap Analysis and Risk Assessment reports.');
+            }
+            return $blocks;
+        }
+
         $selected = $this->select_findings();
 
         if (count($selected) === 0) {
             return array();
         }
 
-        $total = count($this->a['findings']);
         $blocks = array(
-            self::h1('Key findings')
+            $heading
         );
 
         foreach ($selected as $finding) {
             $blocks[] = array(
                 'kind' => 'panel',
                 'value' => array(
-                    'title' => $finding['ref'].'  '.$finding['control']['title'].' ('.$finding['control']['ref'].')',
+                    'title' => $finding['control']['title'].' ('.$finding['control']['ref'].')',
                     'tone' => self::PRIORITY_TONES[$finding['priority']],
                     'body' => $this->finding_body($finding)
                 )
@@ -491,6 +544,114 @@ class ReportExecutiveSummary extends ReportBuilder
         }
 
         return $blocks;
+    }
+
+    /**
+     * The subject-area themes that carry the gaps, as key findings: those
+     * with high-priority gaps first, then the largest.
+     */
+    private function key_themes(): array
+    {
+        $by_ref = array();
+        foreach ($this->a['findings'] as $finding) {
+            $by_ref[$finding['control']['ref']] = $finding;
+        }
+
+        $themes = array();
+        foreach ($this->a['themes'] as $theme) {
+            $findings = array();
+            foreach ($theme['refs'] as $ref) {
+                if (isset($by_ref[$ref])) {
+                    $findings[] = $by_ref[$ref];
+                }
+            }
+            if (count($findings) === 0) {
+                continue;
+            }
+            usort($findings, function ($x, $y) {
+                $rank = ReportAnalysis::PRIORITY_RANK[$y['priority']] <=> ReportAnalysis::PRIORITY_RANK[$x['priority']];
+                if ($rank !== 0) {
+                    return $rank;
+                }
+                return count($y['control']['open']) <=> count($x['control']['open']);
+            });
+            $themes[] = array(
+                'topic' => $theme['topic'],
+                'name' => $theme['name'],
+                'families' => $theme['families'],
+                'findings' => $findings,
+                'high' => count(array_filter($findings, function ($finding) {
+                    return $finding['priority'] === 'High';
+                }))
+            );
+        }
+
+        usort($themes, function ($x, $y) {
+            $rank = $y['high'] <=> $x['high'];
+            return $rank !== 0 ? $rank : count($y['findings']) <=> count($x['findings']);
+        });
+
+        return array_slice($themes, 0, self::KEY_FINDINGS);
+    }
+
+    /** A theme in three short parts: what is recorded, why it matters, how it is addressed. */
+    private function theme_body(array $theme): string
+    {
+        $findings = $theme['findings'];
+        $count = count($findings);
+        $absent = count(array_filter($findings, function ($finding) {
+            return $finding['status'] === 'Not Implemented';
+        }));
+
+        $text = $count.' '.($count === 1 ? $this->term('control').' is' : $this->term('controls').' are').' not fully in place'
+            .(count($theme['families']) <= 2 ? ' in '.self::join_list($theme['families']) : ' across '.count($theme['families']).' '.$this->term('families'))
+            .($absent > 0 ? ', '.($absent === $count ? ($count === 1 ? 'and it is' : 'all of them') : $absent.' of them').' not implemented at all' : ', each partly in place')
+            .'.';
+
+        $named = array();
+        foreach (array_slice($findings, 0, 2) as $finding) {
+            $control = $finding['control'];
+            $all = count($control['objectives']);
+            $open = count($control['open']);
+            $named[] = $control['title'].' ('.$control['ref'].($finding['status'] === 'Not Implemented'
+                ? ', not implemented'
+                : ($all > 0 ? ', '.$open.' of '.$all.' '.$this->term('objectives').' open' : '')).')';
+        }
+        $text .= ' '.($count === 1 ? 'It is ' : 'The most significant are ').self::join_list($named).'.';
+
+        $paragraphs = array(
+            $text
+        );
+
+        $topic = ReportKnowledge::topic($theme['topic']);
+        if (isset($topic['consequences'][0])) {
+            $paragraphs[] = 'Why it matters: '.$topic['consequences'][0];
+        }
+
+        $split = array();
+        foreach (array(
+            'High',
+            'Medium',
+            'Low'
+        ) as $priority) {
+            $n = count(array_filter($findings, function ($finding) use ($priority) {
+                return $finding['priority'] === $priority;
+            }));
+            if ($n > 0) {
+                $split[] = $n.' '.strtolower($priority);
+            }
+        }
+        $ids = array();
+        foreach ($findings as $finding) {
+            foreach (ReportRemediationPlan::initiative_of($this->initiatives())[$finding['control']['ref']] ?? array() as $id) {
+                $ids[$id] = true;
+            }
+        }
+        $ids = array_keys($ids);
+        sort($ids);
+        $paragraphs[count($paragraphs) - 1] .= "\n".'Remediation priority (derived): '.implode(', ', $split).(count($ids) > 0 ? ' · Addressed by '.implode(', ', array_slice($ids, 0, 4)).(count($ids) > 4 ? ' and others' : '') : '');
+
+        return implode("\n\n", $paragraphs);
     }
 
     private function select_findings(): array
@@ -609,6 +770,11 @@ class ReportExecutiveSummary extends ReportBuilder
 
         $ai = $this->ai_list('strengths');
 
+        if ($ai === null && is_array($this->a['executive_ai']['strengths'] ?? null)) {
+            $blocks[] = self::text('The recorded results do not yet support identifying specific strengths. Strengths will be reported once they are supported by assessed results.');
+            return $blocks;
+        }
+
         if ($ai !== null) {
             $blocks[] = array(
                 'kind' => 'panel',
@@ -679,6 +845,13 @@ class ReportExecutiveSummary extends ReportBuilder
 
     /* ------------------------------------------------------- improvements */
 
+    /**
+     * What the results mean for the organization: the stored AI view of the
+     * areas requiring improvement when it exists; otherwise implications
+     * worked out from the record (the character of the gaps, the
+     * consequences in the areas with high-priority gaps, the recurring
+     * weakness and the strength of the evidence base).
+     */
     private function improvements(): array
     {
         $a = $this->a;
@@ -688,7 +861,7 @@ class ReportExecutiveSummary extends ReportBuilder
         }
 
         $blocks = array(
-            self::h1('Areas requiring improvement')
+            self::h1('Organizational implications')
         );
 
         $ai = $this->ai_list('improvements');
@@ -702,72 +875,73 @@ class ReportExecutiveSummary extends ReportBuilder
                     'body' => $ai
                 )
             );
-        } else {
-            if (isset($a['assessor']['concerns_text'])) {
-                $blocks[] = array(
-                    'kind' => 'panel',
-                    'value' => array(
-                        'title' => 'Assessor observation',
-                        'tone' => 'brand',
-                        'body' => $a['assessor']['concerns_text']
-                    )
-                );
-            }
-
-            $concentrated = array();
-            foreach (array_slice($a['themes'], 0, 3) as $theme) {
-                $concentrated[] = $theme['name'].': '.count($theme['refs']).' '.$this->term('controls').' not fully in place'
-                    .(count($theme['families']) > 1 ? ', spanning '.self::join_list($theme['families']) : ', in '.$theme['families'][0]).'.';
-            }
-
-            if (count($concentrated) === 0) {
-                $families = array_filter($a['families'], function ($family) {
-                    return count($family['gaps']) > 0;
-                });
-                uasort($families, function ($x, $y) {
-                    $rank = count($y['gaps']) <=> count($x['gaps']);
-                    return $rank !== 0 ? $rank : ($x['score'] <=> $y['score']);
-                });
-                foreach (array_slice($families, 0, 3, true) as $name => $family) {
-                    $concentrated[] = $name.': '.count($family['gaps']).' of '.count($family['controls']).' '.$this->term('controls').' not fully in place'.($family['score'] !== null ? ' (implementation score '.$family['score'].'%)' : '').'.';
-                }
-            }
-
-            $blocks[] = array(
-                'kind' => 'panel',
-                'value' => array(
-                    'title' => 'Where the gaps concentrate',
-                    'tone' => 'warning',
-                    'body' => $concentrated
-                )
-            );
-        }
-
-        $recurring = array();
-        if ($ai !== null) {
             return $blocks;
         }
-        foreach (array_slice($a['patterns_ai'] ?? array(), 0, 3) as $pattern) {
-            $recurring[] = $pattern['label'].': '.self::first_sentence($pattern['description']);
-        }
-        if (count($recurring) === 0) {
-            foreach (array_slice($a['patterns'], 0, 3) as $pattern) {
-                $recurring[] = $this->pattern_line($pattern);
-            }
-        }
 
-        if (count($recurring) > 0) {
+        if (isset($a['assessor']['concerns_text'])) {
             $blocks[] = array(
                 'kind' => 'panel',
                 'value' => array(
-                    'title' => 'Recurring weaknesses',
-                    'tone' => 'warning',
-                    'body' => $recurring
+                    'title' => 'Assessor observation',
+                    'tone' => 'brand',
+                    'body' => $a['assessor']['concerns_text']
                 )
             );
         }
 
+        $blocks[] = array(
+            'kind' => 'panel',
+            'value' => array(
+                'title' => '',
+                'tone' => 'warning',
+                'body' => $this->implications()
+            )
+        );
+
         return $blocks;
+    }
+
+    private function implications(): array
+    {
+        $a = $this->a;
+        $c = $a['counts'];
+        $lines = array();
+
+        if ($c['Partially Implemented'] >= 3 && $c['Partially Implemented'] >= 3 * $c['Not Implemented']) {
+            $lines[] = 'Most gaps are partial rather than absent, so the work ahead is largely completing, formalizing and evidencing practices that already exist in part, rather than building new capability.';
+        } elseif ($c['Not Implemented'] >= 3 && $c['Not Implemented'] > $c['Partially Implemented']) {
+            $lines[] = 'More '.$this->term('controls').' are absent than partly in place, so parts of the security program still need to be established before they can be refined.';
+        }
+
+        $used = array();
+        foreach ($this->key_themes() as $theme) {
+            if ($theme['high'] === 0 || count($used) >= 2) {
+                continue;
+            }
+            $topic = ReportKnowledge::topic($theme['topic']);
+            $line = $topic['consequences'][1] ?? ($topic['consequences'][0] ?? null);
+            if ($line === null || isset($used[$line])) {
+                continue;
+            }
+            $used[$line] = true;
+            $lines[] = $theme['name'].': '.self::lower_first($line);
+        }
+
+        if (count($a['patterns']) > 0) {
+            $lines[] = 'A weakness recurs across '.$this->term('families').' rather than sitting in one area. '.$this->pattern_line($a['patterns'][0]).' Fixing it once, at its root, closes several gaps together.';
+        }
+
+        $scored = $a['assessed'] - $c['Not Applicable'];
+        if ($scored > 0 && $a['with_evidence'] * 2 < $scored) {
+            $lines[] = 'With '.($a['with_evidence'] === 0 ? 'no evidence' : 'evidence for only '.$a['with_evidence'].' of '.$scored.' '.$this->term('controls')).' linked, '.$this->client_name().' could not yet demonstrate the recorded position to customers, auditors or regulators, including for the '.$this->term('controls').' recorded as implemented.';
+        }
+
+        $caution = $this->coverage_caution();
+        if ($caution !== '') {
+            $lines[] = 'The picture is provisional: '.self::lower_first(self::first_sentence($caution));
+        }
+
+        return $lines;
     }
 
     private function pattern_line(array $pattern): string
@@ -795,7 +969,7 @@ class ReportExecutiveSummary extends ReportBuilder
     {
         $ai = $this->a['executive_ai']['strategic_recommendations'] ?? array();
         $blocks = array(
-            self::h1('Strategic recommendations')
+            self::h1('Priority recommendations')
         );
 
         if (count($ai) > 0) {
@@ -1030,6 +1204,43 @@ class ReportExecutiveSummary extends ReportBuilder
         }
 
         return $files.' evidence '.($files === 1 ? 'file is' : 'files are').' linked, supporting '.$a['with_evidence'].' of '.$scored.' assessed '.$this->term('controls').' ('.self::pct($a['with_evidence'], max(1, $scored)).').';
+    }
+
+    /**
+     * Paragraphs kept to a readable length: one longer than LONG_PARAGRAPH
+     * characters is divided at the sentence boundary nearest its middle.
+     * The wording is unchanged.
+     */
+    private static function readable(array $paragraphs): array
+    {
+        $out = array();
+
+        foreach ($paragraphs as $paragraph) {
+            $paragraph = trim((string) $paragraph);
+            if (mb_strlen($paragraph) <= self::LONG_PARAGRAPH) {
+                $out[] = $paragraph;
+                continue;
+            }
+            $sentences = preg_split('/(?<=[.!?])\s+(?=[A-Z])/', $paragraph);
+            if ($sentences === false || count($sentences) < 4) {
+                $out[] = $paragraph;
+                continue;
+            }
+            $half = mb_strlen($paragraph) / 2;
+            $length = 0;
+            $first = array();
+            foreach ($sentences as $index => $sentence) {
+                if ($index > 0 && $length + mb_strlen($sentence) / 2 > $half) {
+                    break;
+                }
+                $first[] = $sentence;
+                $length += mb_strlen($sentence) + 1;
+            }
+            $out[] = implode(' ', $first);
+            $out[] = implode(' ', array_slice($sentences, count($first)));
+        }
+
+        return $out;
     }
 
     private static function first_sentence(string $text): string

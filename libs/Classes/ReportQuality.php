@@ -10,6 +10,11 @@
  * claim), cross-report consistency (counts, coverage, R-IDs, priorities),
  * repetition (shingle similarity between sentences) and overstatement
  * (absolute language where the related results are partial and unevidenced).
+ * Precision checks: ratings, schedules, costs or staffing the record does not
+ * hold, narratives that enumerate objective refs, generic To Be Confirmed
+ * questions repeated across findings, suggested approaches that restate the
+ * condition, and identifiers not in the record or cited under the wrong
+ * requirement.
  *
  * Every issue: severity (High|Medium|Low), category, section, field,
  * description, refs, source 'rules'.
@@ -27,6 +32,35 @@ class ReportQuality
     const REPEAT_MEDIUM = 0.75;
 
     const MAX_REPETITIONS = 15;
+
+    const REF_LIST_NARRATIVE = 6;
+
+    const REF_LIST_CONDITION = 8;
+
+    const REF_LIST_EXECUTIVE = 5;
+
+    const BOILERPLATE_WORDS = 5;
+
+    const BOILERPLATE_FINDINGS = 3;
+
+    const RESTATED_MAX_WORDS = 8;
+
+    const RESTATED_COVERAGE = 0.8;
+
+    const GENERIC_APPROACH_WORDS = 12;
+
+    const ESTIMATES = array(
+        'a likelihood, impact or risk rating' => '/\b(?:likelihood|probability|impact|severity)\s+(?:is|was|would be|of|rated as|rated|as)\s+(?:(?:very|relatively)\s+)?(?:high|medium|moderate|low|critical|significant|elevated|severe)\b|\b(?:very\s+|relatively\s+)?(?:high|medium|moderate|low|critical|severe|elevated)[- ](?:likelihood|probability|severity|risk\s+rating|risk\s+score|inherent\s+risk|residual\s+risk)\b(?!\s+(?:events?|alerts?|vulnerabilit|incidents?|findings?|issues?|patches?|changes?|logs?))|\b(?:is|are|represents?|poses?|constitutes?)\s+(?:a\s+|an\s+)?(?:high|critical|severe|elevated|medium|moderate|low)[- ]risk\b|\brisk\s+(?:rating|score|level)\s+(?:of|is)\b/i',
+        'a schedule or timeframe' => '/\bwithin\s+(?:the\s+(?:next|first)\s+)?(?:a|an|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirty|sixty|ninety|few|several|\d+)\s+(?:business\s+|working\s+|calendar\s+)?(?:hours?|days?|weeks?|months?|quarters?|years?)\b|\b(?:by|before|no later than)\s+(?:the\s+end\s+of\s+)?(?:(?:the\s+)?(?:first|second|third|fourth|next)\s+quarter|q[1-4]|january|february|march|april|june|july|august|september|october|november|december|year[- ]end|next\s+year)\b|\b(?:one|two|three|four|five|six|nine|twelve|eighteen|thirty|sixty|ninety|\d+)[- ](?:day|week|month|year)\s+(?:timeline|timeframe|time\s+frame|window|plan|programme|program|roadmap|horizon)\b|\b(?:in|over|during)\s+the\s+(?:next|first|coming)\s+(?:few\s+|several\s+|one\s+|two\s+|three\s+|six\s+|twelve\s+|\d+\s+)?(?:weeks?|months?|quarters?|years?)\b/i',
+        'a cost or effort estimate' => '/[$€£]\s?\d|\b\d[\d,.]*\s?(?:k|m)?\s?(?:usd|eur|gbp|dollars|euros|pounds)\b|\b(?:cost|costs|budget|investment|spend)\s+(?:of|is|are|will be|would be|estimated at)\s+(?:approximately\s+|around\s+|roughly\s+|about\s+)?(?:[$€£\d]|low|high|moderate|minimal|significant|modest|small|large)|\b(?:low|minimal|modest|high|significant|moderate)[- ]cost\b|\b(?:low|minimal|modest|high|significant|moderate|limited)[- ]effort\b|\bquick\s+wins?\b|\binexpensive\b/i',
+        'a staffing level' => '/\b(?:\d+|one|two|three|four|five|half)\s+(?:additional\s+|dedicated\s+|new\s+|full[- ]time\s+|part[- ]time\s+)*(?:ftes?|hires|headcount|analysts|engineers)\b|\bftes?\b|\bfull[- ]time\s+equivalents?\b|\b(?:hire|hiring|recruit|recruiting)\s+(?:a|an|one|two|additional|dedicated|new|more)\b|\bheadcount\b|\badditional\s+(?:staff|personnel|employees)\b/i'
+    );
+
+    const GENERIC_CONFIRM = '/\b(?:what|which)\b[^.?]{0,80}\bpartial(?:ly\s+implemented)?\b[^.?]{0,80}\b(?:covers?|covered|in\s+place|incomplete|missing|lacks?)\b|\bwhich\s+(?:elements?|parts?|aspects?)\b[^.?]{0,60}\b(?:in\s+place|incomplete|missing)\b/i';
+
+    const GENERIC_APPROACH = '/\b(?:fully\s+)?(?:implement|implementing|address|addressing|remediate|remediating|close|closing|meet|meeting|satisfy|satisfying|complete|completing)\s+(?:the\s+|all\s+|any\s+)?(?:remaining\s+|open\s+|missing\s+|outstanding\s+|deficient\s+|identified\s+)?(?:control|requirement|criterion|criteria|gaps?|deficienc(?:y|ies)|points?\s+of\s+focus|objectives?|elements?|practices?)\b(?!\s+(?:by|through|with|using|via)\b)/i';
+
+    const STOP_WORDS = 'the and for that this these those which who whom whose its their there than then such each any all both either per into onto over under within without between across through via ref one option consider example instance could may might would should can will where whether when once also other others including include includes recorded implemented partially not met objective objectives requirement requirements control controls criterion criteria point points focus implement implementing implementation establish establishing define defining ensure ensuring document documented documenting formal formally process procedure procedures approach adopt introduce introducing put place are was were been being has have had with from is it as of to in on at by or an a be so do does';
 
     const SEVERITY_RANK = array(
         'High' => 3,
@@ -88,6 +122,7 @@ class ReportQuality
                 $found = self::contradictions($sentence, $unit, $facts);
                 $issues = array_merge($issues, $found);
                 $issues = array_merge($issues, self::assertions($sentence, $unit, $facts));
+                $issues = array_merge($issues, self::estimates($sentence, $unit, $facts));
                 if (count($found) === 0) {
                     $issues = array_merge($issues, self::overstatements($sentence, $unit, $facts));
                 }
@@ -97,6 +132,7 @@ class ReportQuality
 
         $issues = array_merge($issues, self::consistency($sections, $units, $facts));
         $issues = array_merge($issues, self::repetitions($units));
+        $issues = array_merge($issues, self::precision($units, $facts));
 
         return self::sorted(self::unique($issues));
     }
@@ -250,6 +286,39 @@ class ReportQuality
             return strlen($y) <=> strlen($x);
         });
 
+        $ratings = array();
+        $framework = array();
+        $shapes = array();
+        $short_shapes = array();
+        foreach ($analysis['controls'] ?? array() as $control) {
+            if (($control['risk_rating'] ?? null) !== null) {
+                $ratings[$control['ref']] = true;
+            }
+            $framework[] = (string) ($control['title'] ?? '');
+            $framework[] = (string) ($control['description'] ?? '');
+            $shape = self::shape($control['ref']);
+            if ($shape !== null) {
+                $shapes[$shape] = true;
+            }
+            foreach ($control['objectives'] ?? array() as $objective) {
+                $framework[] = (string) ($objective['title'] ?? '');
+                $framework[] = (string) ($objective['description'] ?? '');
+                $shape = self::shape($objective['ref']);
+                if ($shape !== null) {
+                    $shapes[$shape] = true;
+                }
+                $shape = self::shape((string) ($objective['short'] ?? ''));
+                if ($shape !== null && !isset($shapes[$shape])) {
+                    $short_shapes[$shape] = true;
+                }
+            }
+        }
+        foreach (array_keys($short_shapes) as $shape) {
+            if (isset($shapes[$shape])) {
+                unset($short_shapes[$shape]);
+            }
+        }
+
         $families = array();
         foreach ($analysis['families'] ?? array() as $name => $family) {
             $families[$name] = array(
@@ -271,6 +340,10 @@ class ReportQuality
             'score' => $analysis['score'] ?? null,
             'families' => $families,
             'with_evidence' => (int) ($analysis['with_evidence'] ?? 0),
+            'ratings' => $ratings,
+            'framework' => strtolower(implode("\n", $framework)),
+            'shape_pattern' => count($shapes) > 0 ? '(?<![\w.-])((?:'.implode('|', array_keys($shapes)).'))(?![\w-]|\.\d)' : null,
+            'short_shape_pattern' => count($short_shapes) > 0 ? '(?<![\w.-])((?:'.implode('|', array_keys($short_shapes)).'))(?![\w-]|\.\d)' : null,
             'ref_pattern' => count($refs) > 0 ? '(?<![\w-])('.implode('|', array_map(function ($ref) {
                 return preg_quote($ref, '/');
             }, $refs)).')(?![\w-]|\.\d)' : null,
@@ -684,7 +757,7 @@ class ReportQuality
             'what staff currently do' => '/\b(?:staff|employees|personnel|users|administrators|admins|managers|engineers|developers|technicians|contractors)\s+(?:currently\s+|routinely\s+|often\s+|usually\s+|commonly\s+|regularly\s+|still\s+|informally\s+)?(?:use|share|rely on|store|bypass|reuse|log in|send|email|keep|handle|approve|grant|copy|download|access)\b/i',
             'the tools the organization uses' => '/\b(?:the\s+organi[sz]ation|it)\s+(?:currently\s+|already\s+)?(?:uses|relies on|operates|runs|hosts|outsources|depends on|employs|licenses|subscribes to)\b/i',
             'verification that is not recorded' => '/\b(?:assessor|assessment team|we)\s+(?:observed|tested|verified|inspected|reviewed|sampled|confirmed|found|walked through)\b|\b(?:evidence|testing|inspection|sampling)\s+(?:shows?|showed|indicates?|indicated|demonstrates?|confirms?|confirmed)\b|\b(?:was|were|has been|have been)\s+(?:observed|verified|tested|inspected|sampled)\b/i',
-            'a cause' => '/\b(?:due to|stems? from|root cause(?!\s+analys)|as a result of|owing to|attributable to|caused by|reflects? a (?:culture|lack|tendency|reliance))\b/i'
+            'a cause' => '/\b(?:due to|stems? from|root cause(?!\s+(?:analys|determination|identification|investigation|review))|as a result of|owing to|attributable to|caused by|reflects? a (?:culture|lack|tendency|reliance))\b/i'
         );
 
         foreach ($patterns as $label => $pattern) {
@@ -692,6 +765,9 @@ class ReportQuality
                 continue;
             }
             if ($label === 'verification that is not recorded' && $facts['recorded'] !== '' && self::evidence_for($sentence, $unit, $facts) > 0) {
+                continue;
+            }
+            if ($label === 'a cause' && strpos($facts['framework'] ?? '', strtolower(trim($match[0]))) !== false && preg_match('/\(\s*[^()]*'.preg_quote(trim($match[0]), '/').'[^()]*\)/i', $sentence) === 1) {
                 continue;
             }
             $issues[] = self::issue(
@@ -940,14 +1016,17 @@ class ReportQuality
         };
 
         $nouns = '(?:criteria|criterion|controls?|requirements?|clauses?|practices?|safeguards?|subcategor(?:y|ies)|categor(?:y|ies)\s+criteria)';
-        if (preg_match_all('/(?<![\w.\-])'.$number.'\s+(?:of\s+(?:the\s+|its\s+)?(?:\d+|[a-z]+)\s+)?(?:'.$nouns.'\s+)?(?:(?:are|is|were|was)\s+)?(?:(?:recorded|rated|assessed)\s+)?(?:as\s+)?(not implemented|partially implemented|implemented)\b/i', $unit['text'], $match, PREG_SET_ORDER)) {
+        if (preg_match_all('/(?<![\w.\-])'.$number.'\s+(?:of\s+(?:the\s+|its\s+)?(?:\d+|[a-z]+)\s+)?(?:'.$nouns.'\s+)?(?:(?:are|is|were|was)\s+)?(?:(?:recorded|rated|assessed)\s+)?(?:as\s+)?(not implemented|partially implemented|implemented)\b/i', $unit['text'], $match, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
             foreach ($match as $hit) {
-                $value = self::number($hit[1]);
-                $result = ucwords(strtolower($hit[2]));
+                $value = self::number($hit[1][0]);
+                $result = ucwords(strtolower($hit[2][0]));
                 if ($value === null || in_array($value, $allowed($result), true)) {
                     continue;
                 }
-                $issues[] = self::issue('High', 'cross_report_inconsistency', $unit, 'States '.$value.' '.strtolower($result).' ("'.trim($hit[0]).'"), which does not match the recorded counts ('.(int) ($facts['counts'][$result] ?? 0).' overall'.($family !== null ? ', '.(int) ($family['counts'][$result] ?? 0).' in this family' : '').').', array());
+                if (preg_match('/^'.$number.'\s+(?:of\s+\S+\s+\S+\s+)?'.$nouns.'\b/i', $hit[0][0]) !== 1 && preg_match('/\b(?:points?\s+of\s+focus|objectives?|practices?\s+objectives?|elements?)\b[^.;]*$/i', substr($unit['text'], max(0, $hit[0][1] - 120), min(120, $hit[0][1]))) === 1) {
+                    continue;
+                }
+                $issues[] = self::issue('High', 'cross_report_inconsistency', $unit, 'States '.$value.' '.strtolower($result).' ("'.trim($hit[0][0]).'"), which does not match the recorded counts ('.(int) ($facts['counts'][$result] ?? 0).' overall'.($family !== null ? ', '.(int) ($family['counts'][$result] ?? 0).' in this family' : '').').', array());
             }
         }
 
@@ -1095,6 +1174,346 @@ class ReportQuality
         return array_values(array_filter(explode(' ', $text), function ($word) {
             return $word !== '';
         }));
+    }
+
+    /* ---------------------------------------------------------- precision */
+
+    /**
+     * Ratings, schedules, costs and staffing are never part of the recorded
+     * results, so a sentence that states one is unsupported unless the
+     * phrase comes from an assessor field or the framework text.
+     */
+    private static function estimates(string $sentence, array $unit, array $facts): array
+    {
+        if ($unit['role'] === 'confirm') {
+            return array();
+        }
+
+        $issues = array();
+
+        foreach (self::ESTIMATES as $label => $pattern) {
+            if (preg_match($pattern, $sentence, $match) !== 1) {
+                continue;
+            }
+            $phrase = strtolower(trim($match[0]));
+            if (strpos($facts['recorded'], $phrase) !== false || strpos($facts['framework'], $phrase) !== false) {
+                continue;
+            }
+            $refs = self::refs_in($sentence, $unit, $facts);
+            if ($label === 'a likelihood, impact or risk rating' && count(array_intersect_key($facts['ratings'], array_flip($refs))) > 0) {
+                continue;
+            }
+            $issues[] = self::issue(
+                'Medium',
+                'unsupported_assertion',
+                $unit,
+                'States '.$label.' ("'.trim($match[0]).'") that the assessment does not record: "'.self::excerpt($sentence).'". Ratings, schedules, costs and staffing are not part of the recorded results; remove it or leave it to the assessor.',
+                $refs
+            );
+        }
+
+        return $issues;
+    }
+
+    /** Checks on how precisely the text uses the record, rather than what it claims. */
+    private static function precision(array $units, array $facts): array
+    {
+        return array_merge(
+            self::ref_lists($units, $facts),
+            self::boilerplate_confirm($units),
+            self::restated_approach($units),
+            self::unknown_refs($units, $facts)
+        );
+    }
+
+    /**
+     * Interpretive text (family narratives, recorded conditions, executive
+     * prose) that enumerates many objective refs repeats what the findings
+     * and the recorded results already show.
+     */
+    private static function ref_lists(array $units, array $facts): array
+    {
+        $issues = array();
+
+        foreach ($units as $unit) {
+            $limit = self::ref_limit($unit);
+            if ($limit === null) {
+                continue;
+            }
+            $objectives = array();
+            foreach (self::mentions($unit['text'], $unit['ref'], $facts) as $mention) {
+                if (isset($facts['parent'][$mention['ref']])) {
+                    $objectives[$mention['ref']] = true;
+                }
+            }
+            if (count($objectives) < $limit) {
+                continue;
+            }
+            $issues[] = self::issue(
+                'Low',
+                'repetition',
+                $unit,
+                'Lists '.count($objectives).' '.(count($objectives) === 1 ? 'objective' : 'objectives').' by ref ('.implode(', ', array_slice(array_keys($objectives), 0, 4)).' and others), which the recorded results and the findings already show. Describe what the open elements have in common and why it matters instead of enumerating them.',
+                array_keys($objectives)
+            );
+        }
+
+        return $issues;
+    }
+
+    private static function ref_limit(array $unit): ?int
+    {
+        $kind = ReportAI::kind($unit['section']);
+        $field = preg_replace('/\[\d+\]/', '', $unit['field']);
+
+        if ($kind === 'domain') {
+            if ($field === 'narrative') {
+                return self::REF_LIST_NARRATIVE;
+            }
+            if (preg_match('/\.recorded_condition$/', $field) === 1) {
+                return self::REF_LIST_CONDITION;
+            }
+            return null;
+        }
+
+        if ($kind === 'executive' && in_array($field, array(
+            'overview',
+            'exposure_overview',
+            'key_findings.explanation',
+            'strengths',
+            'improvements',
+            'strategic_recommendations.rationale',
+            'management_considerations'
+        ), true)) {
+            return self::REF_LIST_EXECUTIVE;
+        }
+
+        return null;
+    }
+
+    /**
+     * The same To Be Confirmed question asked of several findings in one
+     * section: either a shared opening, or the generic "what does the partial
+     * result cover" question, which belongs only where the answer would
+     * change the finding.
+     */
+    private static function boilerplate_confirm(array $units): array
+    {
+        $openings = array();
+        $generic = array();
+        $first = array();
+
+        foreach ($units as $unit) {
+            if ($unit['role'] !== 'confirm' || $unit['ref'] === null) {
+                continue;
+            }
+            $words = self::words($unit['text']);
+            if (count($words) >= self::BOILERPLATE_WORDS) {
+                $key = $unit['section'].'|'.implode(' ', array_slice($words, 0, self::BOILERPLATE_WORDS));
+                $openings[$key][$unit['ref']] = true;
+                $first[$key] = $first[$key] ?? $unit;
+            }
+            if (preg_match(self::GENERIC_CONFIRM, $unit['text']) === 1) {
+                $generic[$unit['section']][$unit['ref']] = true;
+                $first['#'.$unit['section']] = $first['#'.$unit['section']] ?? $unit;
+            }
+        }
+
+        $issues = array();
+        $flagged = array();
+
+        foreach ($generic as $section => $refs) {
+            if (count($refs) < self::BOILERPLATE_FINDINGS) {
+                continue;
+            }
+            $flagged[$section] = true;
+            $issues[] = self::issue(
+                'Low',
+                'repetition',
+                self::unit_for($section, 'confirm'),
+                count($refs).' findings ask what their partially implemented elements cover ('.implode(', ', array_slice(array_keys($refs), 0, 6)).(count($refs) > 6 ? ' and others' : '').'). Keep a To Be Confirmed item only where the answer would change the finding, the exposure or the approach, and state the specific question.',
+                array_keys($refs)
+            );
+        }
+
+        foreach ($openings as $key => $refs) {
+            $section = substr($key, 0, strpos($key, '|'));
+            if (count($refs) < self::BOILERPLATE_FINDINGS || isset($flagged[$section])) {
+                continue;
+            }
+            $issues[] = self::issue(
+                'Low',
+                'repetition',
+                self::unit_for($section, 'confirm'),
+                'The same To Be Confirmed question is repeated across '.count($refs).' findings ('.implode(', ', array_slice(array_keys($refs), 0, 6)).'): "'.self::excerpt($first[$key]['text'], 100).'". Ask it once where it matters, or make each question specific to its requirement.',
+                array_keys($refs)
+            );
+        }
+
+        return $issues;
+    }
+
+    /**
+     * A suggested approach that only rephrases the recorded condition (its
+     * content words are already in the condition) or tells the reader to
+     * implement the requirement adds no corrective content.
+     */
+    private static function restated_approach(array $units): array
+    {
+        $conditions = array();
+        foreach ($units as $unit) {
+            if ($unit['role'] === 'recorded' && $unit['ref'] !== null && preg_match('/\.recorded_condition$/', $unit['field']) === 1) {
+                $conditions[$unit['section'].'|'.$unit['ref']] = self::content_words($unit['text']);
+            }
+        }
+
+        $issues = array();
+
+        foreach ($units as $unit) {
+            if ($unit['role'] !== 'approach' || $unit['ref'] === null) {
+                continue;
+            }
+            $words = self::content_words($unit['text']);
+            if (count($words) <= self::GENERIC_APPROACH_WORDS && preg_match(self::GENERIC_APPROACH, $unit['text'], $match) === 1) {
+                $issues[] = self::issue(
+                    'Medium',
+                    'repetition',
+                    $unit,
+                    'The suggested approach restates the deficiency instead of correcting it ("'.trim($match[0]).'"): "'.self::excerpt($unit['text']).'". Name the mechanism, artifact or control design that would close the open elements.',
+                    array(
+                        $unit['ref']
+                    )
+                );
+                continue;
+            }
+            $condition = $conditions[$unit['section'].'|'.$unit['ref']] ?? null;
+            if ($condition === null || count($words) === 0 || count($words) > self::RESTATED_MAX_WORDS) {
+                continue;
+            }
+            $covered = count(array_intersect($words, $condition)) / count($words);
+            if ($covered >= self::RESTATED_COVERAGE) {
+                $issues[] = self::issue(
+                    'Low',
+                    'repetition',
+                    $unit,
+                    'The suggested approach repeats the recorded condition in other words ('.(int) round($covered * 100).'% of its content words are already in the condition): "'.self::excerpt($unit['text']).'". Say how the gap would be closed, not what is missing.',
+                    array(
+                        $unit['ref']
+                    )
+                );
+            }
+        }
+
+        return $issues;
+    }
+
+    /** Distinct stemmed content words, without refs, stop words or the vocabulary of results and suggestions. */
+    private static function content_words(string $text): array
+    {
+        $stop = array_flip(explode(' ', self::STOP_WORDS));
+        $out = array();
+
+        foreach (self::words($text) as $word) {
+            if (strlen($word) < 3 || isset($stop[$word]) || ctype_digit($word)) {
+                continue;
+            }
+            $out[preg_replace('/(?:ing|ed|es|s)$/', '', $word)] = true;
+        }
+
+        return array_keys($out);
+    }
+
+    /**
+     * Identifiers that look like the framework's refs but are not in the
+     * record ("CC6.10" where no such requirement exists), and objective ids
+     * written under a requirement they do not belong to.
+     */
+    private static function unknown_refs(array $units, array $facts): array
+    {
+        if ($facts['shape_pattern'] === null) {
+            return array();
+        }
+
+        $issues = array();
+
+        foreach ($units as $unit) {
+            $found = array();
+            if (preg_match_all('/'.$facts['shape_pattern'].'/', $unit['text'], $match, PREG_OFFSET_CAPTURE)) {
+                foreach ($match[1] as $hit) {
+                    $found[$hit[1]] = array(
+                        'token' => $hit[0],
+                        'short' => false
+                    );
+                }
+            }
+            if ($facts['short_shape_pattern'] !== null && preg_match_all('/'.$facts['short_shape_pattern'].'/', $unit['text'], $match, PREG_OFFSET_CAPTURE)) {
+                foreach ($match[1] as $hit) {
+                    $found[$hit[1]] = $found[$hit[1]] ?? array(
+                        'token' => $hit[0],
+                        'short' => true
+                    );
+                }
+            }
+            ksort($found);
+
+            $control = $unit['ref'];
+            $unknown = array();
+            $misplaced = array();
+
+            foreach ($found as $hit) {
+                $token = $hit['token'];
+                if (!$hit['short']) {
+                    if (isset($facts['results'][$token])) {
+                        $control = $facts['parent'][$token] ?? $token;
+                    } else {
+                        $unknown[$token] = true;
+                    }
+                    continue;
+                }
+                if ($control !== null && !isset($facts['short'][strtolower($control).'|'.strtolower($token)])) {
+                    $misplaced[$token] = $control;
+                }
+            }
+
+            if (count($unknown) > 0) {
+                $issues[] = self::issue(
+                    'Medium',
+                    'cross_report_inconsistency',
+                    $unit,
+                    'Cites '.implode(', ', array_keys($unknown)).', which '.(count($unknown) === 1 ? 'is' : 'are').' not in the assessed record: "'.self::excerpt($unit['text']).'". Use the exact refs of the recorded requirements and objectives.',
+                    array()
+                );
+            }
+
+            foreach ($misplaced as $token => $owner) {
+                $issues[] = self::issue(
+                    'Medium',
+                    'cross_report_inconsistency',
+                    $unit,
+                    $token.' is cited under '.$owner.', which has no such objective: "'.self::excerpt($unit['text']).'". Use the full ref of the intended objective.',
+                    array(
+                        $owner
+                    )
+                );
+            }
+        }
+
+        return $issues;
+    }
+
+    /** A ref's identifier shape as a pattern (digit runs generalised), or null when it has no letter or no digit. */
+    private static function shape(string $ref): ?string
+    {
+        if ($ref === '' || preg_match('/[A-Za-z]/', $ref) !== 1 || preg_match('/\d/', $ref) !== 1) {
+            return null;
+        }
+
+        $out = '';
+        foreach (preg_split('/(\d+)/', $ref, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY) as $part) {
+            $out .= ctype_digit($part) ? '\d+' : preg_quote($part, '/');
+        }
+
+        return $out;
     }
 
     /* ------------------------------------------------------------ helpers */

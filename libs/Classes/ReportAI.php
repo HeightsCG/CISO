@@ -22,11 +22,11 @@ use Anthropic\Core\Exceptions\RateLimitException;
 class ReportAI
 {
     const PROMPT_VERSIONS = array(
-        'domain' => '2026-11-26.1',
-        'remediation' => '2026-11-26.1',
-        'patterns' => '2026-11-26.1',
-        'executive' => '2026-11-26.1',
-        'review' => '2026-11-26.1'
+        'domain' => '2026-11-27.1',
+        'remediation' => '2026-11-27.1',
+        'patterns' => '2026-11-27.1',
+        'executive' => '2026-11-27.1',
+        'review' => '2026-11-27.1'
     );
     const MAX_TOKENS = 32000;
     const TIMEOUT = 600;
@@ -82,7 +82,7 @@ FOUR KINDS OF STATEMENT. Every statement you write is exactly one of these, and 
 (a) Recorded condition: only what the recorded results and assessor fields say. Write it in the language of the record: "PF03 (removal of access when employment ends) is recorded as partially met", "the assessor noted ...", "no evidence is linked". You may name what an objective covers so the reader understands it, but attribute the expectation to the requirement ("which requires ...", "covering ...") and the status to the record ("is recorded as ...").
 (b) Potential exposure: risk scenarios that follow from the type of gap, written as possibilities: "If ..., ... could ...", "Where ..., ... may ...". They describe what could happen to any organization with this kind of gap. They are never observed events and never describe the organization's actual systems, data or people.
 (c) Suggested approach: options for closing the gap, phrased as suggestions ("Consider ...", "One option is ...", "For example, ..."). They describe what could be done, never what the organization currently has or does. Refer to generic categories ("the system of record for personnel changes, if one exists", "an identity provider or directory service, where used"), never to a specific client system as if it exists.
-(d) To be confirmed: specific facts the assessor must confirm with the organization before the statements above can be relied on, such as which systems are in scope, whether a process exists informally, or what the partial result covers. Phrase each as an open question of fact ("Whether ...", "Which ...").
+(d) To be confirmed: specific facts the assessor must confirm with the organization before the statements above can be relied on, and whose answer would change them, such as which systems or data are in scope, whether a compensating process exists outside the one assessed, or why two related results appear to conflict. Phrase each as an open question of fact ("Whether ...", "Which ..."). Generic questions that could be asked of any finding are not To be confirmed items; when nothing specific is open, there is none.
 
 PROHIBITED unless the exact fact appears in an assessor field or evidence title:
 - Naming or implying a product, vendor, platform or tool ("the organization uses Microsoft 365", "its Okta tenant", "AWS", "the SIEM").
@@ -99,68 +99,85 @@ PROHIBITED unless the exact fact appears in an assessor field or evidence title:
 
 REQUIRED HEDGING
 - Every scenario sentence contains a condition ("if", "where", "should", "unless") and a modal ("could", "may", "might", "would"). Every consequence uses "could", "may" or "would".
-- Aviation context (flight or maintenance operations, airworthiness and maintenance records, passenger or crew data, safety reporting, operational technology, aviation authority oversight) may appear only as a condition: "Where the organization holds maintenance records, ...". Use it only where it is specific to the requirement, at most once per requirement, and never in a recorded condition.
+- Aviation context (flight or maintenance operations, airworthiness and maintenance records, passenger or crew data, safety reporting, operational technology, aviation authority oversight) may appear only as a condition: "Where the organization holds maintenance records, ...". Use it only where it is specific to the requirement, at most once per section, and never in a recorded condition.
 
 NUMBERS AND RATINGS
-- Do not assign or imply likelihood, impact, severity, risk ratings, priorities, scores, maturity levels, costs, effort, timeframes or deadlines. Those are calculated elsewhere.
+- Do not assign or imply likelihood, impact, severity, risk ratings, priorities, scores, maturity levels, costs, effort, staffing or headcount, timeframes or deadlines, in digits or in words ("within thirty days", "a quick win", "two additional analysts"). Those are calculated or decided elsewhere.
 - Do not write any digit that does not already appear in the FACTS: no durations ("within 72 hours"), counts you computed yourself, percentages, years or version numbers of external standards. Use "promptly", "periodically" or "at a defined frequency". Any figure not found in the FACTS is removed together with its field. When you quote a count, use the exact count from FACTS for the same scope (family counts for a family, overall counts for the assessment).
 
 REFERENCES
 - Cite requirements and objectives only by the exact refs in the FACTS ("ref" values, or an objective's "short" value when writing about its own requirement). Never invent refs, clause numbers or citations to other frameworks.
 - Use the framework's own terminology from FACTS.terms for what it calls a control, an objective and a family.
 
-WRITING
-- Specific beats generic: tie each sentence to the requirement or objectives at hand. Avoid filler such as "it is important to", "robust", "comprehensive", "best practice", "holistic", "leverage", and never explain a requirement by restating its title.
-- Do not reuse the same scenario, approach or sentence across requirements; vary them according to each requirement's purpose. Prefer fewer, sharper statements over more.
+WRITING: PRECISION OVER VOLUME
+- The reader is a security professional or an executive who already has the recorded results in front of them. Beside your text the report prints, for each gap, the requirement's result, every open objective by ref with its result, the evidence count, the assessor fields and the derived priority. Never restate what those already show: do not walk through each objective's status, do not open with the requirement's overall result, do not say "no evidence is linked" or "no assessor notes are recorded" (the report shows that), and do not repeat the requirement's title back as its explanation.
+- Every sentence must add something the record alone does not give: the substance of the deficiency, how the open elements relate, the technical mechanism of an exposure, a concrete corrective design, or a test. Delete a sentence that only frames, introduces or concludes.
+- No generic openings ("This section ...", "The X category is intended to ensure ...", "It is important to ...") and no boilerplate conclusions ("Addressing these gaps will strengthen the overall security posture", "would improve compliance"). Avoid filler such as "robust", "comprehensive", "best practice", "holistic", "leverage", "significant" and "key".
+- Use the precise technical vocabulary of the requirement's security domain (for example: joiner-mover-leaver, least privilege, privileged session, MFA enrollment, log retention and correlation, alert triage, containment, recovery point and recovery time objectives, restore testing, baseline configuration and drift, vulnerability remediation tracking, segregation of duties, lawful basis, retention schedule, data subject request, subprocessors, right to audit). Use it to explain, not to decorate.
+- Do not reuse the same scenario, approach, question or sentence frame across requirements. Where two requirements in a section need the same remedy, state it fully once and refer to it briefly in the other ("the release gate suggested under CC8.1 would also ..."), using only refs in the FACTS.
+- Short paragraphs: at most four sentences. Prefer fewer, sharper statements; an empty list is better than a generic item.
 - Plain text only: no markdown, bullet characters, headings or numbering inside strings. Each array item is one complete sentence or a short group of sentences.
 - US English, formal third person.
+
+POTENTIAL EXPOSURE BY SECURITY DOMAIN. A scenario names the failure mode or threat, the asset or process it reaches, and the consequence, so that it could not be moved to a requirement in another domain by changing the ref. Use the gap's topic and its deficient objectives to choose the mechanism, for example:
+- Identity, authentication, privileged access, provisioning and review: credential theft or reuse, accounts that outlive a role change or departure, privilege accumulation, shared or unattributable administrative actions, lateral movement from one compromised account.
+- Logging and monitoring: events not captured or not reviewed, alerts not triaged, extended attacker dwell time, missing forensic trail for investigation.
+- Incident response: delayed detection-to-containment, uncoordinated decisions, evidence not preserved, notification obligations to customers, regulators or data subjects missed.
+- Business continuity, backup and recovery: unrecoverable or corrupted data, backups that share the failure or ransomware blast radius of production, restores never tested, recovery taking longer than commitments allow.
+- Vulnerability and patch management, secure configuration, malware and endpoint protection: exploitation of known, unremediated vulnerabilities, configuration drift from an approved baseline, unauthorized software or services, exposure of internet-facing systems.
+- Change management and secure development: unauthorized or untested changes reaching production, failed changes without rollback, vulnerabilities introduced through code or configuration changes, segregation-of-duties conflicts between developers and deployers.
+- Network security and data protection: interception of data in transit, exposure of data at rest or in non-production copies, unrestricted external connections, key or secret compromise.
+- Privacy and personal data handling: processing without a documented lawful basis or consent, retention beyond stated purposes, disclosures that cannot be accounted for, data subject requests not met, notice that misrepresents practice.
+- Third-party and supply-chain risk: a supplier or subprocessor compromise reaching the organization's data or services, contracts without security or notification obligations, supplier performance never re-evaluated.
+- Governance, risk, policy, roles, internal audit and control monitoring: risks without an owner or tolerance, inconsistent risk decisions, controls not adapted to threat or business change, deficiencies not escalated or tracked to closure, responsibilities that fall between functions.
+- Personnel, awareness, physical, information and communication: the mechanism specific to the open objectives (for example, unscreened personnel with sensitive access, social engineering, unauthorized physical access, commitments not communicated to the people who must meet them).
 
 SECTION GUIDES
 
 [domain] The FACTS describe one family and its gap requirements (gap_controls). Return:
-- narrative: one or two paragraphs. First the recorded position: what the family is intended to achieve (as the framework's intent), which requirements are recorded as implemented (implemented_controls) and which are gaps, with counts from family_results only, and the state of evidence. Optionally a second paragraph on the potential significance of the gaps taken together, written entirely in conditional language. No statements about the organization's systems, staff or data.
+- narrative: one paragraph, a second only when it adds a different point; under 130 words in total. Interpret the family's recorded results instead of listing them: where in the control life cycle the open elements concentrate (design, operation, review and monitoring, documentation), how a gap in one requirement weakens another, what the implemented requirements and met objectives give remediation to build on, and, conditionally, what the pattern could mean for the organization. Open with the interpretation, not with what the family is intended to achieve. Cite requirement refs where needed; do not list objective refs (the findings show them). Quote a count only when it makes the point, using family_results.
 - controls: exactly one entry per item in gap_controls, in the same order:
   - ref: the gap requirement's ref.
-  - recorded_condition: two to four sentences (under 100 words), strictly the recorded condition: the requirement's result, which objectives are recorded as not met and which as partially met (by short ref, each with a few words on what it covers), met objectives where that clarifies the gap, assessor fields when present ("The assessor noted ..."), and whether evidence is linked. No inference about systems, causes or practices. If the requirement has no objectives, state the result and that the specific deficiency is not recorded.
-  - control_purpose: one or two sentences on what this requirement is intended to achieve, faithful to its description and expectations.
-  - risk_scenarios: two entries (three only when the deficient objectives clearly call for it), each tied to a deficient objective. scenario: one conditional sentence on how the missing or incomplete element could be exploited or fail, generic to the gap type. consequence: the potential operational, security, regulatory or customer consequence, conditional. No ratings.
-  - suggested_approach: two to four options that would close the specific deficient objectives, phrased as suggestions ("Consider ...", "One option is ...", "For example, ..."), each naming the kind of process, artifact or technical control involved. Never "implement the control". Never presume a specific system exists.
-  - confirm: one to three specific facts to confirm with the organization before the condition and approach can be relied on (for example, what the partially met element covers today, which systems are in scope, whether an informal practice exists). Each must be specific to this requirement.
-  - expected_outcome: one sentence describing what an assessor would observe once the gap is closed.
-  - validation_criteria: two or three statements of what an assessor would inspect, sample or test to confirm closure.
+  - recorded_condition: one to three sentences, under 70 words. The substance of the deficiency as recorded: what the not implemented and partially implemented objectives cover, grouped by what they have in common, cited by short ref, with attribution to the record ("is recorded as ..."). Name met objectives only where they bound the gap. Quote or paraphrase assessor fields when present ("The assessor noted ..."). Do not list every objective, do not restate the overall result as the first sentence and do not mention the absence of evidence or notes. If the requirement has no objectives and no assessor text, state that the specific deficiency is not recorded.
+  - control_purpose: one sentence on the security objective the requirement serves, in technical terms, faithful to its description and expectations; not a restatement of its title.
+  - risk_scenarios: one or two entries (three only when the deficient objectives create clearly distinct exposures), each tied to a deficient objective and specific to the requirement's security domain as described above. scenario: one conditional sentence naming the failure mode or threat and what it reaches. consequence: the potential operational, security, regulatory or customer consequence, conditional and concrete. No ratings.
+  - suggested_approach: one to three options that would close the deficient objectives, phrased as suggestions ("Consider ...", "One option is ...", "For example, ..."). Each must add corrective design the recorded condition does not contain: the mechanism or artifact, its trigger or frequency (described without figures, for example "after each release" or "at a defined frequency"), who acts or approves, and the record it leaves. Never "implement the control", "address the gap" or the objective's title preceded by "establish". Never presume a specific system exists. Order them by how directly they close the most consequential open element.
+  - confirm: zero to two questions. Include one only when a specific, open fact would change the recorded condition, the exposure or the approach, for example whether a compensating arrangement exists outside the assessed process, which systems or data categories are in scope, whether the requirement applies to a service the organization does not operate, or why two related results appear to conflict. Never ask generically what a partially implemented element covers or which part is missing. Return an empty list when nothing specific is open.
+  - expected_outcome: one sentence describing the observable end state once the gap is closed, not a restatement of the approach.
+  - validation_criteria: two statements of what an assessor would inspect, sample, re-perform or test to confirm closure of the deficient objectives, each naming the population or artifact and what must be true of it.
   - source_refs: the requirement and objective refs your text relies on.
 - When FACTS.all_gap_controls is present, the family has more gaps than are detailed in gap_controls: write the narrative about the whole family using all_gap_controls, and write controls entries only for the requirements detailed in gap_controls.
 
 [remediation] Consolidate all gap requirements into four to eight remediation initiatives a program manager could run. deterministic_initiatives groups the gaps by topic as a starting point: merge, split or retitle where a different grouping gives more coherent work. Every gap ref must appear in exactly one initiative. For each initiative:
 - title: action-oriented and specific, no numbering.
-- phase: one of FACTS.phases. Immediate priorities for direct-exposure gaps (access, privileged access, monitoring, incident response, vulnerability handling, data protection) and not implemented requirements with high derived priority; Foundational improvements for governance, policy, risk and inventory foundations that other work depends on; Operational control enhancements for operating processes; Program maturity for review cycles, metrics and refinement. Use the derived priority as a guide but do not state it.
-- problem: two or three sentences stating the recorded gaps this initiative addresses: which requirements and objectives are recorded as not met or partially met (by ref and substance), then, conditionally, why they matter together. Recorded condition first; no description of the organization's environment.
-- activities: three to five suggested activities in a sensible order, phrased as work to be done ("Define ...", "Establish ..."), never as a description of current practice.
-- deliverables: two to four tangible artifacts.
-- implementation_considerations: one or two sentences of suggestions on sequencing, ownership and constraints, conditional where they depend on the organization ("Where shift operations apply, ..."). No durations, no presumed systems.
-- validation: two or three statements of how closure will be verified.
+- phase: one of FACTS.phases. Immediate priorities for direct-exposure gaps (access, privileged access, monitoring, incident response, vulnerability handling, backup and recovery, data protection) and not implemented requirements with high derived priority; Foundational improvements for governance, policy, risk and inventory foundations that other work depends on; Operational control enhancements for operating processes; Program maturity for review cycles, metrics and refinement. Use the derived priority as a guide but do not state it.
+- problem: two sentences: the substance of the recorded gaps this initiative closes (by requirement ref and what is open, not an objective-by-objective list), then, conditionally, why they matter together. No description of the organization's environment.
+- activities: three to five activities specific to this initiative's requirements, in a sensible order, phrased as work to be done ("Define ...", "Configure ...", "Test ..."). Never a description of current practice. Do not repeat generic program steps (appoint an owner, write a policy, train staff, review periodically) across initiatives: place each such step only in the initiative where it is substantive.
+- deliverables: two to four tangible artifacts specific to the initiative.
+- implementation_considerations: one or two sentences on sequencing, dependencies, ownership and constraints, conditional where they depend on the organization ("Where shift operations apply, ..."). No durations, costs, staffing levels or presumed systems.
+- validation: two or three closure criteria an assessor could test, naming the artifact or population and what must be true of it.
 - controls: the gap refs covered.
 - points: the open objective refs this initiative closes.
 - depends_on: exact titles of other initiatives in your output that should come first; empty if none.
 
-[patterns] Identify three to six cross-cutting patterns: a recurring kind of recorded result visible in two or more gap requirements, often across families (for example, review or monitoring objectives recorded as partially met across several requirements, documentation objectives recorded as not met, third-party elements recorded as open in several processes). For each: label (short noun phrase describing the recorded pattern, not a diagnosis), kind (governance, technical, operational or documentation), description (two or three sentences: which objectives are recorded with this result, what they have in common, and why addressing them together could be more effective than one by one), refs (the requirement refs, and objective refs, that show the pattern; at least two requirements; every requirement you name in the description must be in refs). Describe what the results have in common, not why they happened: no causal claims ("because", "due to", "stems from", "root cause") unless an assessor field states the cause. Do not restate one family's results as a pattern. themes and keyword_patterns are keyword groupings offered as hints only.
+[patterns] Identify three to six cross-cutting patterns: a recurring kind of recorded result visible in two or more gap requirements, often across families (for example, review or monitoring objectives recorded as partially met across several requirements, documentation objectives recorded as not met, third-party elements recorded as open in several processes). For each: label (short noun phrase describing the recorded pattern, not a diagnosis), kind (governance, technical, operational or documentation), description (two or three sentences: what the open objectives have in common, why addressing them together could be more effective than one by one, and what a shared remedy would look like; cite requirement refs, not long lists of objective refs), refs (the requirement refs, and objective refs, that show the pattern; at least two requirements; every requirement you name in the description must be in refs). Describe what the results have in common, not why they happened: no causal claims ("because", "due to", "stems from", "root cause") unless an assessor field states the cause. Do not restate one family's results as a pattern. themes and keyword_patterns are keyword groupings offered as hints only.
 
-[executive] The executive summary for senior management and the board:
-- overview: two or three paragraphs. First, what was assessed and the overall result in plain language, using the score and counts from FACTS and explaining that the score measures recorded implementation, not certification. Then the shape of the gaps as recorded (not implemented versus partially implemented, where they concentrate, what the recorded results have in common). Then the state of evidence and what it means for reliance on the results. Do not walk through every family.
+[executive] A stand-alone briefing for senior management and the board, who will not read the findings. It explains meaning, priorities and decisions; the Risk Assessment carries exposure detail and the Gap Analysis carries requirement detail. Write in business language, cite few refs in prose (the refs fields carry them) and never list objective refs.
+- overview: two paragraphs, a third only for evidence reliance if not covered. First the overall narrative: what was assessed, the score and counts from FACTS (once), that the score measures recorded implementation and is not certification, and what the result means for the organization's security and readiness in one plain judgment that the record supports. Then the shape of the gaps as recorded (not implemented versus partially implemented, where they concentrate, what they have in common) and what the state of evidence means for reliance on the results. Do not walk through families.
 - exposure_overview: one or two paragraphs for the Risk Assessment's own summary: the potential exposure and consequences that the recorded gaps could create for the organization's operations, data, customers and oversight, grouped by the main exposure areas and written entirely in conditional language. Use different wording from overview; do not repeat counts already given there.
-- key_findings: four to six management-level findings, each with title (a short statement of the recorded issue), explanation (two or three sentences: what is recorded as missing or incomplete, then conditionally why it matters to the business) and refs (supporting gap requirement refs only). Cover the gaps with the highest derived priority.
-- strengths: two to four specific statements of what is recorded as in place, based on implemented requirements and objectives recorded as met; no praise and no inference beyond the record.
-- improvements: two to four statements of the most important areas needing improvement, worded differently from key_findings.
-- strategic_recommendations: three to five, each with title, rationale (why this, why now, what it would enable) and refs. They must align with the initiatives in FACTS.
-- management_considerations: three to five decisions or actions for management (ownership, resourcing, risk acceptance, evidence, follow-up assessment, facts to confirm). No dates or budgets.
+- key_findings: four to six themes, not requirement lists. title: a short statement of the theme. explanation: two or three sentences: what is recorded as missing or incomplete, in substance, then conditionally why it matters to the business and what it implies for the organization (ownership, operations, customer or regulatory commitments). refs: the supporting gap requirement refs. Cover the gaps with the highest derived priority.
+- strengths: zero to three statements of what is recorded as in place that is material to the organization's security, naming the implemented requirements or met objectives and what they make possible. No praise, no inference beyond the record, and no generic statement that partial results contain met elements. Return an empty list when the record does not support a material strength.
+- improvements: two to four organizational implications: the capabilities, management practices or decisions the results point to (for example, accountable ownership of security processes, an evidence discipline that would let results be relied on), each one sentence or two. Do not restate key_findings.
+- strategic_recommendations: three to five priority recommendations aligned with the initiatives in FACTS. title: the action. rationale: why this, why now and what it would enable or de-risk; do not restate the finding. refs: supporting gap requirement refs.
+- management_considerations: three to five decisions or actions only management can take (ownership, resourcing decisions, risk acceptance, evidence, scope confirmation, follow-up assessment). No dates, budgets or staffing levels.
 
 [review] Act as the engagement quality reviewer. FACTS contain the recorded results per requirement and objective, the scoring method, the readiness issues, the assembled AI-written sections, and rule_findings: issues found by deterministic checks. Return issues, each with:
-- severity: High (inconsistent with the recorded results, an unsupported client-specific claim, or a recommendation that does not address its finding), Medium (incomplete coverage, inconsistency between sections, overstatement, misaligned emphasis), Low (repetition, vague wording, style).
-- category: unsupported_assertion (a statement about the organization's systems, tools, vendors, data flows, staff behaviour, causes or verification that the recorded results do not support), contradiction (text that conflicts with a recorded result, for example a partially met objective described as absent), cross_report_inconsistency (counts, priorities, initiative coverage or emphasis that disagree between sections), repetition (the same scenario, approach or paragraph repeated across requirements or sections), overstatement (conclusions stronger than the evidence and results allow, absolute language), other.
+- severity: High (inconsistent with the recorded results, an unsupported client-specific claim, or a recommendation that does not address its finding), Medium (incomplete coverage, inconsistency between sections, overstatement, misaligned emphasis, a suggested approach that only restates the deficiency), Low (repetition, vague or generic wording, restated statuses, style).
+- category: unsupported_assertion (a statement about the organization's systems, tools, vendors, data flows, staff behaviour, causes, verification, ratings, schedules, costs or staffing that the recorded results do not support), contradiction (text that conflicts with a recorded result, for example a partially met objective described as absent), cross_report_inconsistency (counts, refs, priorities, initiative coverage or emphasis that disagree between sections), repetition (the same scenario, approach, question or paragraph repeated across requirements or sections, or text that restates what the record already shows), overstatement (conclusions stronger than the evidence and results allow, absolute language), other.
 - section: the section key, for example "executive" or "domain:Privacy".
 - description: what is wrong, where, and how to fix it, citing refs and quoting the problem words briefly.
 - refs: the requirement or objective refs concerned (may be empty).
-Check every recorded condition against the recorded results, scenarios for hedging, suggested approaches for presumed systems, consistency between sections, completeness (every gap covered by a finding and an initiative), and alignment between findings and recommendations. rule_findings are shown to the assessor separately: do not restate them; use them as leads and report similar problems they missed, or a rule finding you judge to be more serious than its severity. Return an empty list only when there is genuinely nothing to improve.
+Check every recorded condition against the recorded results, scenarios for hedging and for specificity to their security domain, suggested approaches for presumed systems and for corrective content beyond the deficiency, To Be Confirmed items for genuine, specific open questions, family narratives for interpretation rather than repetition of findings, consistency between sections, completeness (every gap covered by a finding and an initiative), and alignment between findings and recommendations. rule_findings are shown to the assessor separately: do not restate them; use them as leads and report similar problems they missed, or a rule finding you judge to be more serious than its severity. Return an empty list only when there is genuinely nothing to improve.
 PROMPT;
 
     private $client;
@@ -503,6 +520,7 @@ PROMPT;
                 'family' => $gap['family'],
                 'result' => $gap['result'],
                 'derived_priority' => $gap['priority'],
+                'topic' => ReportKnowledge::topic($gap['topic'])['name'],
                 'objectives' => count($gap['objectives']),
                 'open_objectives' => array_map(function ($objective) {
                     return array(
@@ -707,12 +725,12 @@ PROMPT;
         switch ($kind) {
             case 'domain':
                 return self::object(array(
-                    'narrative' => self::strings('One to three paragraphs on the family as a whole.'),
+                    'narrative' => self::strings('One or two short paragraphs interpreting the family\'s recorded results.'),
                     'controls' => array(
                         'type' => 'array',
                         'items' => self::object(array(
                             'ref' => self::text_field('The gap requirement ref.'),
-                            'recorded_condition' => self::text_field('Strictly what the recorded results and assessor fields say.'),
+                            'recorded_condition' => self::text_field('The substance of the recorded deficiency, strictly from the recorded results and assessor fields.'),
                             'control_purpose' => self::text_field('What the requirement is intended to achieve.'),
                             'risk_scenarios' => array(
                                 'type' => 'array',
@@ -722,7 +740,7 @@ PROMPT;
                                 ))
                             ),
                             'suggested_approach' => self::strings('Options for closing the deficient objectives, phrased as suggestions.'),
-                            'confirm' => self::strings('Facts to confirm with the organization before relying on the text.'),
+                            'confirm' => self::strings('Specific open facts to confirm with the organization; empty when none.'),
                             'expected_outcome' => self::text_field('What an assessor would observe once remediated.'),
                             'validation_criteria' => self::strings('What an assessor would inspect, sample or test.'),
                             'source_refs' => self::strings('Requirement and objective refs relied on.')
@@ -767,18 +785,18 @@ PROMPT;
                 ));
             case 'executive':
                 return self::object(array(
-                    'overview' => self::strings('Two or three paragraphs on the recorded result.'),
+                    'overview' => self::strings('Two or three paragraphs: the overall narrative of the recorded result.'),
                     'exposure_overview' => self::strings('One or two conditional paragraphs on potential exposure and consequences.'),
                     'key_findings' => array(
                         'type' => 'array',
                         'items' => self::object(array(
                             'title' => self::text_field('Short statement of the issue.'),
-                            'explanation' => self::text_field('What is missing and why it matters.'),
+                            'explanation' => self::text_field('What is recorded as missing, why it matters and what it implies.'),
                             'refs' => self::strings('Supporting requirement refs.')
                         ))
                     ),
-                    'strengths' => self::strings('Specific strengths.'),
-                    'improvements' => self::strings('Most important improvement areas.'),
+                    'strengths' => self::strings('Material strengths supported by the record; may be empty.'),
+                    'improvements' => self::strings('Organizational implications: capabilities and practices the results point to.'),
                     'strategic_recommendations' => array(
                         'type' => 'array',
                         'items' => self::object(array(
@@ -995,7 +1013,7 @@ PROMPT;
             error_log('[report-ai] '.$e->getMessage());
             return self::failure('The AI service could not write this section. Try again.', self::retryable_status($e->status));
         } catch (APIConnectionException $e) {
-            error_log('[report-ai] '.$e->getMessage());
+            error_log('[report-ai] '.$e->getMessage().($e->getPrevious() !== null ? ': '.$e->getPrevious()->getMessage() : ''));
             return self::failure('The AI service could not be reached. Try again.', true);
         } catch (\JsonException $e) {
             error_log('[report-ai] unreadable response: '.$e->getMessage());

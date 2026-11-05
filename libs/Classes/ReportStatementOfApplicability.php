@@ -216,119 +216,136 @@ class ReportStatementOfApplicability extends ReportBuilder
         $show_justification = count(array_filter($this->a['controls'], function ($control) {
             return $control['justification'] !== '' || self::excluded($control);
         })) > 0;
-        $show_evidence = $this->a['with_evidence'] > 0;
+        $show_applicable = count($this->excluded_controls()) > 0;
+        $evidenced = count(array_filter($this->a['controls'], function ($control) {
+            return $control['evidence_count'] > 0;
+        }));
+        $show_evidence = $evidenced > 0 && $evidenced >= count($this->a['controls']) / 2;
+        $inline_evidence = $evidenced > 0 && !$show_evidence;
+        $control = $this->term('control');
         $controls = $this->term('controls');
 
         $notes = array();
 
-        if (!$show_justification) {
-            $notes[] = 'No applicability justification is recorded for any '.$this->term('control').'. Every '.$this->term('control').' is treated as applicable, so the justification column is omitted.';
+        if (!$show_applicable) {
+            $notes[] = 'No '.$control.' is excluded, so every row is applicable and the applicability column is omitted.';
         }
 
-        if (!$show_evidence) {
-            $notes[] = 'No evidence is linked to any '.$this->term('control').', so the evidence column is omitted; see the Evidence Register for outstanding evidence requirements.';
+        if (!$show_justification) {
+            $notes[] = 'No applicability justification is recorded for any '.$control.'; none is required for an applicable '.$control.', so that column is omitted.';
+        } elseif (!$show_applicable) {
+            $notes[] = 'Where a justification is recorded for an applicable '.$control.', it is shown; otherwise the column reads "Not recorded".';
+        }
+
+        if ($evidenced === 0) {
+            $notes[] = 'No evidence is linked to any '.$control.', so the evidence column is omitted; the Evidence Register lists the evidence outstanding.';
+        } elseif ($inline_evidence) {
+            $notes[] = 'Evidence is linked to '.$evidenced.' of '.count($this->a['controls']).' '.$controls.' and is shown with the status of those '.$controls.'; the others have none linked.';
         }
 
         $blocks = array(
             self::h1('Applicability by '.$this->term('family'))
         );
 
-        $blocks[] = self::text('The tables below list every '.$this->term('control').' in '.$this->a['standard'].', grouped by '.$this->term('family').'.'.(count($notes) > 0 ? "\n\n".implode(' ', $notes) : ''));
+        $blocks[] = self::text('The tables below list every '.$control.' in '.$this->a['standard'].', grouped by '.$this->term('family').'.'.(count($notes) > 0 ? "\n\n".implode(' ', $notes) : ''));
 
-        $head = array(
-            'ID',
-            ucfirst($this->term('control')),
-            'Applicable',
-            'Implementation status'
-        );
-        $widths = array(
-            11,
-            47,
-            14,
-            28
+        $columns = array(
+            array(
+                'ID',
+                11,
+                'ref'
+            ),
+            array(
+                ucfirst($control),
+                47,
+                'title'
+            )
         );
 
-        if ($show_justification && $show_evidence) {
-            $head = array(
-                'ID',
-                ucfirst($this->term('control')),
+        if ($show_applicable) {
+            $columns[] = array(
                 'Applicable',
-                'Justification',
-                'Status',
-                'Evidence'
-            );
-            $widths = array(
-                9,
-                25,
                 10,
-                22,
-                14,
-                20
-            );
-        } elseif ($show_justification) {
-            $head = array(
-                'ID',
-                ucfirst($this->term('control')),
-                'Applicable',
-                'Justification',
-                'Implementation status'
-            );
-            $widths = array(
-                10,
-                32,
-                11,
-                27,
-                20
-            );
-        } elseif ($show_evidence) {
-            $head = array(
-                'ID',
-                ucfirst($this->term('control')),
-                'Applicable',
-                'Implementation status',
-                'Evidence'
-            );
-            $widths = array(
-                10,
-                34,
-                11,
-                19,
-                26
+                'applicable'
             );
         }
 
-        $longest = max(array_map(function ($control) {
-            return strlen($control['ref']);
+        if ($show_justification) {
+            $columns[] = array(
+                'Justification',
+                24,
+                'justification'
+            );
+        }
+
+        $columns[] = array(
+            'Implementation status',
+            $inline_evidence ? 26 : 22,
+            'status'
+        );
+
+        if ($show_evidence) {
+            $columns[] = array(
+                'Evidence',
+                20,
+                'evidence'
+            );
+        }
+
+        $longest = max(array_map(function ($item) {
+            return strlen($item['ref']);
         }, $this->a['controls']));
 
         if ($longest > 8) {
-            $widths[0] += 4;
-            $widths[1] -= 4;
+            $columns[0][1] += 4;
         }
+
+        $fixed = 0;
+        foreach ($columns as $index => $column) {
+            if ($index !== 1) {
+                $fixed += $column[1];
+            }
+        }
+        $columns[1][1] = 100 - $fixed;
+
+        $head = array_column($columns, 0);
+        $widths = array_column($columns, 1);
 
         foreach ($this->families() as $family => $list) {
             $rows = array();
-            foreach ($list as $control) {
-                $excluded = self::excluded($control);
-                $row = array(
-                    $control['ref'],
-                    $control['title'],
-                    $excluded ? 'No' : 'Yes'
+            foreach ($list as $item) {
+                $excluded = self::excluded($item);
+                $cells = array(
+                    'ref' => $item['ref'],
+                    'title' => $item['title'],
+                    'applicable' => $excluded ? 'No' : 'Yes',
+                    'justification' => $item['justification'] !== '' ? $item['justification'] : ($excluded ? self::MISSING_JUSTIFICATION : 'Not recorded'),
+                    'status' => ($excluded ? 'Excluded' : $item['result']).($inline_evidence && $item['evidence_count'] > 0 ? '. Evidence: '.$this->evidence_cell($item) : ''),
+                    'evidence' => $this->evidence_cell($item)
                 );
-                if ($show_justification) {
-                    $row[] = $control['justification'] !== '' ? $control['justification'] : ($excluded ? self::MISSING_JUSTIFICATION : 'Applicable by default');
-                }
-                $row[] = $excluded ? 'Excluded' : $control['result'];
-                if ($show_evidence) {
-                    $row[] = $this->evidence_cell($control);
+                $row = array();
+                foreach ($columns as $column) {
+                    $row[] = $cells[$column[2]];
                 }
                 $rows[] = $row;
             }
-            $implemented = count(array_filter($list, function ($control) {
-                return $control['result'] === 'Implemented';
+            $counts = array();
+            foreach (ReadyReports::RESULTS as $result) {
+                $n = count(array_filter($list, function ($item) use ($result) {
+                    return !self::excluded($item) && $item['result'] === $result;
+                }));
+                if ($n > 0) {
+                    $counts[] = $n.' '.strtolower($result);
+                }
+            }
+            $excluded_here = count(array_filter($list, function ($item) {
+                return self::excluded($item);
             }));
+            if ($excluded_here > 0) {
+                $counts[] = $excluded_here.' excluded';
+            }
             $blocks[] = self::h2($family);
-            $blocks[] = self::note(count($list).' '.$this->term(count($list) === 1 ? 'control' : 'controls').', '.$implemented.' implemented.');
+            $blocks[] = self::note(count($list).' '.$this->term(count($list) === 1 ? 'control' : 'controls').': '.implode(', ', $counts).'.');
             $blocks[] = self::table($head, $widths, $rows);
         }
 

@@ -492,8 +492,9 @@ class ReportGapAnalysis extends ReportBuilder
     {
         $blocks = array(
             self::h1('Detailed gap analysis'),
-            self::text('Each gap below is grouped by '.$this->term('family').' and gives the requirement, the current result and deficiency, the '.$this->term('objectives').' that are not fully met against their expected condition, a brief suggested improvement and the evidence needed to show the gap is closed. Exposure, scenarios and suggested approaches are in the Risk Assessment.'
-                .($this->unspecified() ? "\n\n".'Where a '.$this->term('objective').' is recorded as partially met and no assessor note says what is lacking, "What is missing" reads "Part, not specified": the element that is missing has to be confirmed with the control owner before remediation is scoped.' : ''))
+            self::text('Gaps are grouped by '.$this->term('family').'. Each gives the requirement, the recorded result, every '.$this->term('objective').' not fully met against its expected condition and the implementation gap, a recommended improvement and the evidence that would show the gap is closed. Exposure and consequences are interpreted in the Risk Assessment and are not repeated here.'
+                ."\n\n".'Suggested evidence lists examples of records that would typically demonstrate the requirement. They are suggestions for future collection, not evidence held.'
+                .($this->unspecified() ? ' Where '.(preg_match('/^[aeiou]/i', $this->term('objective')) === 1 ? 'an ' : 'a ').$this->term('objective').' is partially met and no assessor note says what is lacking, the missing element is shown as not recorded and has to be confirmed with the control owner before remediation is scoped.' : ''))
         );
 
         foreach ($this->a['families'] as $name => $family) {
@@ -517,22 +518,49 @@ class ReportGapAnalysis extends ReportBuilder
 
             $lead = count($gaps).' of '.count($family['controls']).' '.$this->term('controls').' in this '.$this->term('family').' '.(count($gaps) === 1 ? 'is' : 'are').' not fully implemented';
             if ($all > 0) {
-                $lead .= '; '.$open.' of their '.$all.' '.$this->term('objectives').' are not fully met';
+                $lead .= '; '.$open.' of their '.$all.' '.$this->term('objectives').' '.($open === 1 ? 'is' : 'are').' not fully met';
             }
             $lead .= '.';
             if ($family['counts']['Not Assessed'] > 0) {
                 $lead .= ' '.$family['counts']['Not Assessed'].' '.($family['counts']['Not Assessed'] === 1 ? $this->term('control').' has' : $this->term('controls').' have').' not been assessed.';
             }
 
+            $shared = $this->shared_initiatives($gaps);
+            if (count($shared) > 0) {
+                $names = array();
+                foreach ($shared as $id) {
+                    $names[] = $id.' '.($this->initiative_titles[$id] ?? '');
+                }
+                $lead .= ' '.(count($gaps) === 1 ? 'It is' : 'All are').' addressed in the Remediation Plan by '.self::join_list($names).'.';
+            }
+
             $blocks[] = self::h2($name);
             $blocks[] = self::text($lead);
 
             foreach ($gaps as $gap) {
-                $blocks = array_merge($blocks, $this->gap_blocks($gap));
+                $blocks = array_merge($blocks, $this->gap_blocks($gap, count($shared) > 0));
             }
         }
 
         return $blocks;
+    }
+
+    /** Initiative ids shared by every gap in the list, when every gap has the same ones. */
+    private function shared_initiatives(array $gaps): array
+    {
+        $first = null;
+
+        foreach ($gaps as $gap) {
+            $ids = $this->initiative_of[$gap['ref']] ?? array();
+            sort($ids);
+            if ($first === null) {
+                $first = $ids;
+            } elseif ($ids !== $first) {
+                return array();
+            }
+        }
+
+        return $first ?? array();
     }
 
     /** Whether any partially met objective lacks an assessor note saying what is missing. */
@@ -549,7 +577,7 @@ class ReportGapAnalysis extends ReportBuilder
         return false;
     }
 
-    private function gap_blocks(array $gap): array
+    private function gap_blocks(array $gap, bool $shared = false): array
     {
         $finding = $this->finding_of[$gap['ref']] ?? array();
         $initiatives = $this->initiative_of[$gap['ref']] ?? array();
@@ -582,7 +610,7 @@ class ReportGapAnalysis extends ReportBuilder
                 $finding['ref']
             );
         }
-        if (count($initiatives) > 0) {
+        if (count($initiatives) > 0 && !$shared) {
             $meta[] = array(
                 'Remediation Plan',
                 implode(', ', $initiatives)
@@ -598,17 +626,17 @@ class ReportGapAnalysis extends ReportBuilder
             );
         }
         $sections[] = array(
-            'Identified deficiency',
+            'Recorded result and deficiency',
             $this->deficiency($gap, $finding)
         );
 
         $after = array(
             array(
-                'Suggested improvement',
-                $this->improvement($gap, $finding, $initiatives)
+                'Recommended improvement',
+                $this->improvement($gap, $finding, $shared ? array() : $initiatives)
             ),
             array(
-                'Evidence needed',
+                'Evidence and validation',
                 $this->validation($gap, $finding, $answered)
             )
         );
@@ -693,10 +721,10 @@ class ReportGapAnalysis extends ReportBuilder
         }
 
         $all = count($gap['objectives']);
-        $text = 'Recorded as '.strtolower($gap['result']).'.';
+        $text = '';
 
         if ($all === 0) {
-            $text .= ' No '.$t['objectives'].' are assessed individually for this '.$t['control'];
+            $text = 'Recorded as '.strtolower($gap['result']).'. No '.$t['objectives'].' are assessed individually for this '.$t['control'];
             $text .= count($parts) > 0 ? '.' : ' and no assessor observation is recorded, so the specific shortfall has to be confirmed with the assessor.';
         } else {
             $states = array();
@@ -711,7 +739,7 @@ class ReportGapAnalysis extends ReportBuilder
                     $states[] = $n.' '.$label.($result === 'Implemented' && $n <= 4 ? ' ('.implode(', ', $counts[$result]).')' : '');
                 }
             }
-            $text .= ' Of its '.$all.' '.($all === 1 ? $t['objective'] : $t['objectives']).', '.self::join_list($states).'.';
+            $text = 'Of its '.$all.' '.($all === 1 ? $t['objective'] : $t['objectives']).', '.self::join_list($states).'.';
         }
 
         $parts[] = $text;
@@ -733,22 +761,44 @@ class ReportGapAnalysis extends ReportBuilder
             $rows[] = array(
                 $label,
                 $condition,
-                self::STATE[$objective['result']],
-                $this->missing($objective)
+                $this->implementation_gap($objective)
             );
         }
 
         return self::table(array(
-            ucfirst($this->term('objective')),
+            (count(array_filter($gap['open'], function ($objective) {
+                return $objective['result'] === 'Not Assessed';
+            })) > 0 ? 'Open ' : 'Deficient ').$this->term('objective'),
             'Expected condition',
-            'Recorded answer',
-            'What is missing'
+            'Recorded result and implementation gap'
         ), array(
-            29,
-            47,
-            11,
-            13
+            30,
+            46,
+            24
         ), $rows);
+    }
+
+    /** The recorded answer with what is missing, in one cell. */
+    private function implementation_gap(array $objective): string
+    {
+        $missing = $this->missing($objective);
+        $plain = array(
+            'Entire condition' => 'nothing in place',
+            'Part, not specified' => 'missing element not recorded',
+            'Not yet known' => 'gap not yet known'
+        );
+
+        foreach ($plain as $from => $to) {
+            if (strpos($missing, $from) === 0) {
+                $missing = $to.substr($missing, strlen($from));
+            }
+        }
+
+        if ($objective['result'] === 'Not Assessed' && $missing === 'gap not yet known') {
+            return 'Not yet answered';
+        }
+
+        return self::STATE[$objective['result']].': '.$missing;
     }
 
     private function missing(array $objective): string
@@ -805,10 +855,15 @@ class ReportGapAnalysis extends ReportBuilder
 
         $steps = array();
         if (count($not) > 0) {
-            $steps[] = 'Establish '.(count($not) === 1 ? $not[0] : implode(', ', $not)).', which '.(count($not) === 1 ? 'has' : 'have').' nothing in place.';
+            $steps[] = 'Put in place '.self::join_list($not).', which '.(count($not) === 1 ? 'has' : 'have').' nothing recorded as in place.';
         }
         if (count($partial) > 0) {
-            $steps[] = 'Confirm what is missing from '.implode(', ', $partial).' and complete '.(count($partial) === 1 ? 'it' : 'them').'.';
+            $described = count(array_filter($gap['open'], function ($objective) {
+                return $objective['result'] === 'Partially Implemented' && count($objective['assessor']) > 0;
+            })) > 0;
+            $steps[] = $described
+                ? 'Complete '.self::join_list($partial).' as described in the assessor notes.'
+                : 'Confirm with the control owner what is missing from '.self::join_list($partial).', then complete '.(count($partial) === 1 ? 'it' : 'them').' to the expected condition.';
         }
         if ($unanswered > 0) {
             $steps[] = 'Assess the '.$unanswered.' unanswered '.($unanswered === 1 ? $t['objective'] : $t['objectives']).' to establish the full extent of the gap.';
@@ -825,7 +880,7 @@ class ReportGapAnalysis extends ReportBuilder
             foreach ($initiatives as $id) {
                 $names[] = $id.' '.($this->initiative_titles[$id] ?? '');
             }
-            $parts[] = 'Remediation Plan: '.self::join_list($names).'.';
+            $parts[] = 'Addressed in the Remediation Plan by '.self::join_list($names).'.';
         }
 
         return implode("\n\n", $parts);
@@ -837,20 +892,23 @@ class ReportGapAnalysis extends ReportBuilder
         $parts = array();
 
         if (count($gap['evidence']) > 0) {
-            $parts[] = 'Linked evidence: '.implode('; ', $gap['evidence']).'.';
+            $parts[] = 'Evidence provided (linked, review not recorded): '.implode('; ', $gap['evidence']).'.';
+        }
+
+        $suggested = array_slice($gap['suggested_evidence'] ?? array(), 0, 3);
+        if (count($suggested) > 0) {
+            $parts[] = 'Suggested evidence to collect: '.implode('; ', array_map(function ($line) {
+                return lcfirst($line);
+            }, $suggested)).'.';
         }
 
         if (count($answered) > 0) {
-            $need = 'Evidence showing each open '.$t['objective'].' ('.implode(', ', array_column($answered, 'short')).') meets its expected condition';
+            $parts[] = 'Closed when the evidence shows '.(count($answered) === 1 ? $answered[0]['short'].' meets its' : 'each of '.self::join_list(array_column($answered, 'short')).' meets its').' expected condition and a reassessment records the '.$t['control'].' as implemented.';
         } elseif (count($gap['open']) > 0) {
-            $need = 'Evidence for each '.$t['objective'].' still to be answered ('.implode(', ', array_column($gap['open'], 'short')).'), to support its result when assessed';
+            $parts[] = 'The '.(count($gap['open']) === 1 ? $t['objective'] : $t['objectives']).' still to be answered ('.self::join_list(array_column($gap['open'], 'short')).') need a result before the gap can be closed.';
         } else {
-            $need = 'Evidence showing the '.$t['control'].' is in place as required';
+            $parts[] = 'Closed when the evidence shows the '.$t['control'].' is in place as required and a reassessment records it as implemented.';
         }
-        $any = count(array_filter($this->a['gaps'], function ($other) {
-            return $other['evidence_count'] > 0;
-        })) > 0;
-        $parts[] = $need.($gap['evidence_count'] === 0 && ($any || count($this->a['gaps']) < 3) ? '; nothing is linked yet.' : '.');
 
         return implode("\n\n", $parts);
     }
@@ -922,9 +980,9 @@ class ReportGapAnalysis extends ReportBuilder
                     'Current result',
                     'Open '.$this->term('objectives'),
                     'Requirement and expected condition',
-                    'Identified deficiency',
-                    'Suggested improvement',
-                    'Evidence needed',
+                    'Recorded result and deficiency',
+                    'Recommended improvement',
+                    'Evidence and validation',
                     'Initiative',
                     'Assessed risk'
                 ),
