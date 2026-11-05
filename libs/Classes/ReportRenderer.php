@@ -254,7 +254,7 @@ class ReportRenderer {
         );
 
         foreach ($blocks as $index => $block) {
-            if ($block['kind'] !== 'h1') {
+            if ($block['kind'] !== 'h1' || !empty($block['closing'])) {
                 continue;
             }
             $body = 0;
@@ -281,6 +281,10 @@ class ReportRenderer {
     private static function prepare(array $doc): array
     {
         $blocks = array_values($doc['blocks']);
+
+        if (!empty($doc['document_control'])) {
+            $blocks = array_merge($blocks, self::document_control_blocks($doc['document_control']));
+        }
         $numbered = !empty($doc['numbered']);
         $has_toc = false;
 
@@ -350,6 +354,107 @@ class ReportRenderer {
             'blocks' => $blocks,
             'outline' => $outline
         );
+    }
+
+    /**
+     * The footer's state line on interior pages, e.g. "Draft v0.3 · Generated
+     * 4 Nov 2026 15:42 UTC" or "Final v1.0 · Generated ...". A Final whose
+     * assessment changed since approval reads as Draft.
+     */
+    public static function status_line(array $control): string
+    {
+        $generated = 'Generated '.self::stamp($control['generated'] ?? '');
+
+        if (!empty($control['changed_since_final'])) {
+            return 'Draft · changed since Final v'.$control['report_version'].' · '.$generated;
+        }
+
+        return $control['report_status'].' v'.$control['report_version'].' · '.$generated;
+    }
+
+    /** The closing "Document control" section every report ends with. */
+    private static function document_control_blocks(array $control): array
+    {
+        $status = $control['report_status'];
+        if (!empty($control['changed_since_final'])) {
+            $status = 'Draft (changed since Final v'.$control['report_version'].' was approved)';
+        }
+
+        $rows = array(
+            array(
+                'Assessment reference',
+                '#'.$control['assessment_id'].' · '.$control['assessment_name']
+            )
+        );
+
+        if ((string) ($control['assessment_status'] ?? '') !== '') {
+            $rows[] = array(
+                'Assessment status',
+                (string) $control['assessment_status']
+            );
+        }
+
+        foreach ($control['periods'] ?? array() as $period) {
+            if ((string) $period[1] !== '') {
+                $rows[] = array(
+                    (string) $period[0],
+                    (string) $period[1]
+                );
+            }
+        }
+
+        $rows[] = array(
+            'Report version',
+            (string) $control['report_version']
+        );
+        $rows[] = array(
+            'Report status',
+            $status
+        );
+        $rows[] = array(
+            'Generated',
+            self::stamp($control['generated'] ?? '')
+        );
+
+        if ($control['report_status'] === 'Final' && empty($control['changed_since_final'])) {
+            if ((string) ($control['approved_by'] ?? '') !== '') {
+                $rows[] = array(
+                    'Approved by',
+                    (string) $control['approved_by']
+                );
+            }
+            if (!empty($control['approved_date'])) {
+                $rows[] = array(
+                    'Approved',
+                    self::stamp($control['approved_date'])
+                );
+            }
+        }
+
+        return array(
+            array(
+                'kind' => 'h1',
+                'value' => 'Document control',
+                'numbered' => false,
+                'outline' => false,
+                'anchor' => 'document-control',
+                'closing' => true
+            ),
+            array(
+                'kind' => 'kv',
+                'closing' => true,
+                'value' => array(
+                    'rows' => $rows
+                )
+            )
+        );
+    }
+
+    private static function stamp($value): string
+    {
+        $time = strtotime((string) $value);
+
+        return date('j M Y H:i T', $time !== false ? $time : time());
     }
 
     private static function anchor($value): string
@@ -998,6 +1103,13 @@ class ReportRenderer {
             $run = self::pdf_run($doc, $prepared, array(), $tight);
         }
 
+        $blank = self::pdf_blank_breaks($run['seen'], $run['marks']);
+
+        if (count($blank) > 0) {
+            $doc['flow_marks'] = $blank;
+            $run = self::pdf_run($doc, $prepared, array(), $tight);
+        }
+
         if ($toc) {
             $pages = array();
             foreach ($prepared['outline'] as $entry) {
@@ -1012,8 +1124,9 @@ class ReportRenderer {
         $title = $doc['title'];
         $header = ($doc['client'] !== '' ? $doc['client'].' · ' : '').$title;
         $footer = 'Confidential · '.self::plain($doc['company']['company_name'] ?? '');
+        $status = !empty($doc['document_control']) ? self::status_line($doc['document_control']) : '';
 
-        $dompdf->getCanvas()->page_script(function ($page, $total, $canvas, $metrics) use ($header, $footer) {
+        $dompdf->getCanvas()->page_script(function ($page, $total, $canvas, $metrics) use ($header, $footer, $status) {
             if ($page === 1) {
                 return;
             }
@@ -1029,6 +1142,9 @@ class ReportRenderer {
             $canvas->line(64, 54, $width - 64, 54, $grey, 0.4);
             $canvas->text(64, $canvas->get_height() - 42, $footer, $font, 7.5, $grey);
             $canvas->text($width - 64 - $metrics->getTextWidth($label, $font, 7.5), $canvas->get_height() - 42, $label, $font, 7.5, $grey);
+            if ($status !== '') {
+                $canvas->text(64, $canvas->get_height() - 31, $status, $font, 7, $grey);
+            }
         });
 
         $bytes = $dompdf->output();
@@ -1084,6 +1200,27 @@ class ReportRenderer {
     }
 
     /** True when a chapter longer than a page ends with only a few lines on its last page. */
+    /**
+     * Chapters whose forced page break produced an empty page: the previous
+     * chapter filled its last page exactly, so its end marker spilled alone
+     * onto a new page and the chapter break added another. Those chapters
+     * flow instead and start on the page the marker spilled onto.
+     */
+    private static function pdf_blank_breaks(array $seen, int $marks): array
+    {
+        $blank = array();
+
+        for ($index = 1; $index < $marks; $index++) {
+            $start = $seen['m-start-'.$index] ?? null;
+            $end = $seen['m-end-'.($index - 1)] ?? null;
+            if ($start !== null && $end !== null && $start['page'] === $end['page'] + 1 && $end['y'] <= self::PAGE_TOP + 2) {
+                $blank[] = $index;
+            }
+        }
+
+        return $blank;
+    }
+
     private static function pdf_short_tail(array $seen, int $marks): bool
     {
         for ($index = 0; $index < $marks; $index++) {
@@ -1273,14 +1410,22 @@ class ReportRenderer {
             'domain_head'
         );
 
+        $closed = false;
+
         foreach ($prepared['blocks'] as $position => $block) {
             $kind = $block['kind'];
 
-            if ($kind === 'h1' && ($first || in_array($position, $chapters, true))) {
+            if (!empty($block['closing']) && !$closed && $marks > 0) {
+                $html .= $held.'<div class="mark" id="m-end-'.($marks - 1).'"></div>';
+                $held = '';
+                $closed = true;
+            }
+
+            if ($kind === 'h1' && !$closed && ($first || in_array($position, $chapters, true))) {
                 if (!$first) {
                     $html .= $held.'<div class="mark" id="m-end-'.($marks - 1).'"></div>';
                 }
-                $html .= self::pdf_heading($block, $e, $first ? 'first' : 'chapter').'<div class="mark" id="m-start-'.$marks.'"></div>';
+                $html .= self::pdf_heading($block, $e, $first || in_array($marks, $doc['flow_marks'] ?? array(), true) ? 'first' : 'chapter').'<div class="mark" id="m-start-'.$marks.'"></div>';
                 $marks++;
                 $first = false;
                 $held = '';
@@ -1321,7 +1466,7 @@ class ReportRenderer {
             $held = '';
         }
 
-        if ($marks > 0) {
+        if ($marks > 0 && !$closed) {
             $html .= $held.'<div class="mark" id="m-end-'.($marks - 1).'"></div>';
             $held = '';
         }
@@ -1876,7 +2021,7 @@ class ReportRenderer {
         ));
 
         $word = new PhpWord();
-        $word->getSettings()->setUpdateFields(true);
+        $word->getCompatibility()->setOoxmlVersion(15);
         $word->setDefaultFontName('Georgia');
         $word->setDefaultFontSize(10.5);
         $word->addTitleStyle(1, array(
@@ -1939,6 +2084,11 @@ class ReportRenderer {
         $footer->addPreserveText('Confidential · '.$firm.'          Page {PAGE} of {NUMPAGES}', $grey, array(
             'alignment' => 'right'
         ));
+        if (!empty($doc['document_control'])) {
+            $footer->addText(self::status_line($doc['document_control']), $grey, array(
+                'alignment' => 'right'
+            ));
+        }
 
         $logo = self::logo($doc['company']);
 
@@ -2020,6 +2170,7 @@ class ReportRenderer {
 
         $file = tempnam(sys_get_temp_dir(), 'docx');
         IOFactory::createWriter($word, 'Word2007')->save($file);
+        self::docx_finish($file);
         $bytes = file_get_contents($file);
         @unlink($file);
 
@@ -2028,6 +2179,47 @@ class ReportRenderer {
         }
 
         return $bytes;
+    }
+
+    /**
+     * Two fixes to the saved file. The settings carry no updateFields flag,
+     * so Word opens the report without asking to update fields. PhpWord
+     * writes the contents entries (so the list shows without an update) but
+     * points their page fields at bookmark "<n>" while the headings carry
+     * "_Toc<n>"; they are pointed at the real bookmarks, so Update Field
+     * fills in page numbers instead of "bookmark not defined".
+     */
+    private static function docx_finish(string $file): void
+    {
+        $zip = new ZipArchive();
+
+        if ($zip->open($file) !== true) {
+            return;
+        }
+
+        $fixes = array(
+            'word/document.xml' => array(
+                '/PAGEREF (\d+) /',
+                'PAGEREF _Toc$1 '
+            ),
+            'word/settings.xml' => array(
+                '/<w:updateFields[^>]*\/>/',
+                ''
+            )
+        );
+
+        foreach ($fixes as $part => $fix) {
+            $xml = $zip->getFromName($part);
+            if (!is_string($xml)) {
+                continue;
+            }
+            $fixed = preg_replace($fix[0], $fix[1], $xml);
+            if (is_string($fixed) && $fixed !== $xml) {
+                $zip->addFromString($part, $fixed);
+            }
+        }
+
+        $zip->close();
     }
 
     private static function docx_block($section, array $block, string $brand): void

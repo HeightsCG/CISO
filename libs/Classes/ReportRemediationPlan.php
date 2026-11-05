@@ -495,7 +495,7 @@ class ReportRemediationPlan extends ReportBuilder
         }
         if (count($activities) > 0) {
             $sections[] = array(
-                'Recommended activities',
+                'Suggested approach',
                 $activities
             );
         }
@@ -909,7 +909,7 @@ class ReportRemediationPlan extends ReportBuilder
                     ucfirst($this->term('controls')),
                     'Identifiers',
                     'Problem addressed',
-                    'Recommended activities',
+                    'Suggested approach',
                     'Expected deliverables',
                     'Validation',
                     'Depends on',

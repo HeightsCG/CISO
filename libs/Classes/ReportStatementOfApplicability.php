@@ -100,10 +100,7 @@ class ReportStatementOfApplicability extends ReportBuilder
             );
         }
 
-        $rows[] = array(
-            'Assessment period',
-            $this->a['period']
-        );
+        $rows = array_merge($rows, $this->period_rows());
         $rows[] = array(
             'Scope',
             $this->a['assessor']['assessment_scope'] ?? 'The scope of the assessment (systems, locations, services and organizational units) is not recorded and should be confirmed with the assessor.'

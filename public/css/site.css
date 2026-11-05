@@ -9746,3 +9746,447 @@ body.app .prefs__actions {
     display: flex;
     justify-content: flex-end;
 }
+
+body.app .reports {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+}
+
+body.app .reports__card {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+body.app .reports .assess__reports {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+body.app .reports__line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 24px;
+    min-height: 60px;
+    padding: 12px 20px;
+}
+
+body.app .reports__line + .reports__line {
+    border-top: 1px solid var(--border);
+}
+
+body.app .reports__field {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    min-width: 0;
+}
+
+body.app .reports__field--grow {
+    flex: 1 1 auto;
+}
+
+body.app .reports__label {
+    margin: 0;
+    font-size: 14px;
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+body.app .reports__field .form-switch {
+    margin: 0;
+    min-height: 0;
+    padding-left: 2.5em;
+}
+
+body.app .segmented.segmented--switch.reports__detail {
+    display: flex;
+    height: var(--control-height);
+    border-radius: var(--radius);
+}
+
+body.app .segmented--switch.reports__detail .segmented__btn {
+    min-width: 128px;
+    height: 100%;
+    border-radius: calc(var(--radius) - 2px);
+}
+
+body.app .reports__status {
+    width: 170px;
+}
+
+body.app .reports__status .bootstrap-select > .dropdown-toggle {
+    height: var(--control-height);
+    min-height: var(--control-height);
+}
+
+body.app .reports__version {
+    font-size: 13px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+body.app .reports__warn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: var(--fw-medium);
+    color: var(--high);
+    white-space: nowrap;
+}
+
+body.app .reports__counts {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+body.app .reports__actions {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 8px;
+}
+
+body.app .reports__job {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0 20px 14px;
+}
+
+body.app .reports__job .progress {
+    flex: 1 1 auto;
+}
+
+body.app .reports__job-label {
+    flex: 0 1 auto;
+    max-width: 50%;
+    overflow: hidden;
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.app .reports__job .btn.btn--icon {
+    flex: 0 0 auto;
+}
+
+body.app .reports__readiness-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: var(--fw-medium);
+    text-align: left;
+    color: var(--text-primary);
+    background: transparent;
+    border: 0;
+}
+
+body.app .reports__readiness-head:disabled {
+    cursor: default;
+    opacity: 1;
+}
+
+body.app .reports__readiness-title {
+    flex: 1 1 auto;
+}
+
+body.app .reports__readiness-icon {
+    color: var(--text-muted);
+}
+
+body.app .reports__readiness[data-severity="ok"] .reports__readiness-icon {
+    color: var(--ok);
+}
+
+body.app .reports__readiness[data-severity="high"] .reports__readiness-icon {
+    color: var(--critical);
+}
+
+body.app .reports__readiness[data-severity="medium"] .reports__readiness-icon {
+    color: var(--high);
+}
+
+body.app .reports__readiness[data-severity="low"] .reports__readiness-icon {
+    color: var(--info);
+}
+
+body.app .reports__chevron {
+    color: var(--text-muted);
+    transition: transform var(--transition);
+}
+
+body.app .reports__readiness-head:not(.collapsed) .reports__chevron {
+    transform: rotate(180deg);
+}
+
+body.app .reports__issues {
+    max-height: 188px;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    list-style: none;
+    border-top: 1px solid var(--border);
+}
+
+body.app .reports__issue {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 20px;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--text-primary);
+}
+
+body.app .reports__issue + .reports__issue {
+    border-top: 1px solid var(--border);
+}
+
+body.app .reports__issue .badge {
+    flex: 0 0 auto;
+    min-width: 66px;
+    justify-content: center;
+}
+
+body.app .reports__failed {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-right: 20px;
+    border-top: 1px solid var(--border);
+}
+
+body.app .reports__failed .reports__issues {
+    flex: 1 1 auto;
+    border-top: 0;
+}
+
+body.app .reports__failed .btn {
+    flex: 0 0 auto;
+}
+
+body.app #narrative_modal .modal-dialog,
+body.app #report_preview_modal .modal-dialog {
+    height: calc(100vh - 3.5rem);
+}
+
+body.app #narrative_modal .modal-content,
+body.app #report_preview_modal .modal-content {
+    height: 100%;
+}
+
+body.app #narrative_modal .modal-body,
+body.app #report_preview_modal .modal-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}
+
+body.app .review {
+    display: flex;
+    flex: 1 1 auto;
+    gap: 20px;
+    min-height: 0;
+}
+
+body.app .review__list {
+    flex: 0 0 300px;
+    margin: 0;
+    padding: 4px;
+    overflow-y: auto;
+    list-style: none;
+    background: var(--surface-sunken);
+    border-radius: var(--radius-lg);
+}
+
+body.app .review__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 13.5px;
+    text-align: left;
+    color: var(--text-primary);
+    background: transparent;
+    border: 0;
+    border-radius: var(--radius-lg);
+}
+
+body.app .review__item:hover:not(.is-on) {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+body.app .review__item.is-on {
+    background: var(--surface-app);
+    box-shadow: 0 1px 3px rgba(16, 24, 40, 0.14), 0 0 0 0.5px rgba(16, 24, 40, 0.06);
+}
+
+body.app .review__item:disabled {
+    opacity: 0.6;
+}
+
+body.app .review__name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.app .review__item .badge {
+    flex: 0 0 auto;
+}
+
+body.app .review__editor {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-right: 4px;
+    overflow-y: auto;
+}
+
+body.app .review__head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+body.app .review__title {
+    margin: 0;
+    font-size: 17px;
+    font-weight: var(--fw-semibold);
+}
+
+body.app .review__empty {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+body.app .review__field {
+    margin-bottom: 14px;
+}
+
+body.app .review__field label {
+    margin-bottom: 4px;
+    font-size: 13px;
+    font-weight: var(--fw-medium);
+    color: var(--text-secondary);
+}
+
+body.app .review__text {
+    min-height: var(--control-height);
+    overflow: hidden;
+    line-height: 1.5;
+    resize: none;
+}
+
+body.app .review__group {
+    margin-bottom: 18px;
+}
+
+body.app .review__group-title {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+}
+
+body.app .review__object {
+    margin-bottom: 10px;
+    padding: 12px 14px 2px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+}
+
+body.app .review__object .review__object {
+    background: var(--surface-sunken);
+}
+
+body.app .review__object-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+body.app .review__object-num {
+    font-size: 12px;
+    font-weight: var(--fw-semibold);
+    color: var(--text-muted);
+}
+
+body.app .preview {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+body.app .preview__frame {
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+}
+
+body.app .preview__loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+    background: var(--surface-app);
+}
+
+body.app .preview__loading[hidden] {
+    display: none;
+}
+
+body.app #report_preview_modal .modal-body {
+    padding-bottom: var(--space-5);
+}
+
+body.app .reports__readiness-icon[hidden],
+body.app .reports__chevron[hidden] {
+    display: none;
+}
+
+body.app .reports__chevron {
+    display: inline-flex;
+}
+
+body.app .reports__formats-pick .segmented__btn {
+    min-width: 72px;
+}
+
+body.app .review__stale {
+    margin: 0 0 16px 0;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--text-primary);
+    background: var(--high-bg);
+    border-left: 3px solid var(--high);
+    border-radius: var(--radius);
+}

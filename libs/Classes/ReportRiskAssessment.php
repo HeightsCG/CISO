@@ -59,13 +59,16 @@ class ReportRiskAssessment extends ReportBuilder
         $built = parent::build();
 
         if (isset($built['doc'])) {
-            $built['doc']['file_base'] = ($this->a['client'] !== '' ? $this->a['client'].' - ' : '').$this->title().' v'.self::VERSION;
+            $built['doc']['file_base'] = ($this->a['client'] !== '' ? $this->a['client'].' - ' : '').$this->title().' v'.$this->options['report_version'];
         }
 
         return $built;
     }
 
-    /** The cover rows the risk report has always carried. */
+    /**
+     * The cover rows the risk report has always carried, with assessment
+     * completion and report approval as separate rows.
+     */
     protected function cover_rows(): array
     {
         $assessment = $this->a['assessment'];
@@ -74,10 +77,12 @@ class ReportRiskAssessment extends ReportBuilder
         );
 
         if (!empty($assessment['start_date']) && !empty($assessment['end_date'])) {
-            $rows['Assessment period'] = date('F j', strtotime($assessment['start_date'])).' to '.date('F j, Y', strtotime($assessment['end_date']));
+            $rows['Planned assessment period'] = date('F j', strtotime($assessment['start_date'])).' to '.date('F j, Y', strtotime($assessment['end_date']));
         }
 
-        $rows['Version'] = self::VERSION;
+        $rows['Assessment status'] = ReportAnalysis::plain($assessment['assessment_status'] ?? '');
+        $rows['Report status'] = $this->report_status_text();
+        $rows['Version'] = (string) $this->options['report_version'];
         $rows['Prepared by'] = ReportAnalysis::plain($this->company['company_name'] ?? '');
 
         return $rows;
@@ -122,8 +127,8 @@ class ReportRiskAssessment extends ReportBuilder
         if (isset($a['assessor']['posture_text'])) {
             $paragraphs[] = 'Assessor\'s overall view: '.$a['assessor']['posture_text'];
         }
-        $overview = self::strings($ai['overview'] ?? array());
-        $paragraphs = array_merge($paragraphs, count($overview) > 0 ? $overview : $this->overview());
+        $exposure = self::strings($ai['exposure_overview'] ?? ($a['exposure_overview_ai'] ?? array()));
+        $paragraphs = array_merge($paragraphs, count($exposure) > 0 ? array_slice($exposure, 0, 2) : $this->exposure_summary());
         $blocks[] = self::text(implode("\n\n", $paragraphs));
 
         $blocks[] = $this->summary_metrics();
@@ -198,7 +203,86 @@ class ReportRiskAssessment extends ReportBuilder
         return $blocks;
     }
 
-    /** Deterministic overview paragraphs, used when no stored executive narrative exists. */
+    /**
+     * The exposure the findings describe, used when no stored exposure
+     * overview exists: where the gaps leave the organization exposed, by
+     * remediation priority and subject area, worded as possibilities.
+     */
+    private function exposure_summary(): array
+    {
+        $a = $this->a;
+        $c = $a['counts'];
+        $gap_total = count($a['findings']);
+
+        if ($a['assessed'] === 0) {
+            return $this->overview();
+        }
+
+        if ($gap_total === 0) {
+            return array(
+                'No '.$this->term('control').' among the '.$a['assessed'].' assessed is recorded as not fully in place, so this report identifies no exposure arising from control gaps.'
+            );
+        }
+
+        $p1 = 'The recorded results leave '.self::count_of($gap_total, $this->term('control'), $this->term('controls')).' short of what '.$a['standard'].' expects';
+        $p1 .= $c['Not Implemented'] > 0
+            ? ($c['Partially Implemented'] > 0 ? ': the protection is absent in '.$c['Not Implemented'].' and incomplete in '.$c['Partially Implemented'].'.' : ', and in each the protection is absent.')
+            : ', each partly in place, so the protection they are intended to provide is incomplete rather than absent.';
+        $p1 .= ' Each gap is a point where an event the '.$this->term('control').' is meant to prevent or detect could go unchecked; the findings in this report set out what could follow and are possibilities, not observed events.';
+
+        $high = array_values(array_filter($a['findings'], function ($finding) {
+            return $finding['priority'] === 'High';
+        }));
+        $pool = count($high) > 0 ? $high : $a['findings'];
+        $topics = array();
+        foreach ($pool as $finding) {
+            $key = $finding['control']['topic'];
+            $topics[$key] = ($topics[$key] ?? 0) + 1;
+        }
+        arsort($topics);
+
+        $areas = array();
+        foreach (array_slice($topics, 0, 3, true) as $key => $count) {
+            $areas[] = strtolower(ReportKnowledge::topic($key)['name']).' ('.$count.')';
+        }
+
+        $p2 = count($high) > 0
+            ? 'The greatest exposure lies in the '.self::count_of(count($high), 'high-priority finding', 'high-priority findings').', concentrated in '.self::join_list($areas).'.'
+            : 'No finding carries a high remediation priority; the gaps concentrate in '.self::join_list($areas).'.';
+        $lead = ReportKnowledge::topic((string) array_key_first($topics));
+        if (count($lead['consequences']) > 0) {
+            $p2 .= ' In '.strtolower($lead['name']).', for example: '.self::lower_first($lead['consequences'][0]);
+        }
+        $medium = $this->priority_count('Medium');
+        $low = $this->priority_count('Low');
+        if ($medium + $low > 0) {
+            $p2 .= ' The remaining '.($medium > 0 ? $medium.' medium' : '').($medium > 0 && $low > 0 ? ' and ' : '').($low > 0 ? $low.' low' : '').'-priority findings widen this exposure but are less direct.';
+        }
+
+        return array(
+            $p1,
+            $p2
+        );
+    }
+
+    /** At most $count sentences of $text, so a recorded condition stays brief. */
+    private static function first_sentences(string $text, int $count): string
+    {
+        $parts = preg_split('/(?<=[.!?])\s+(?=[A-Z(])/', $text);
+
+        if ($parts === false || count($parts) <= $count) {
+            return $text;
+        }
+
+        return implode(' ', array_slice($parts, 0, $count));
+    }
+
+    private static function lower_first(string $text): string
+    {
+        return preg_match('/^[A-Z][a-z]/', $text) ? lcfirst($text) : $text;
+    }
+
+    /** Deterministic overview paragraphs, used when nothing has been assessed yet. */
     private function overview(): array
     {
         $a = $this->a;
@@ -324,22 +408,7 @@ class ReportRiskAssessment extends ReportBuilder
     private function key_messages(): array
     {
         $a = $this->a;
-        $ai = self::items($a['executive_ai']['key_findings'] ?? array());
         $messages = array();
-
-        if (count($ai) > 0) {
-            foreach (array_slice($ai, 0, 6) as $item) {
-                $title = rtrim(trim((string) ($item['title'] ?? '')), '.');
-                $explanation = trim((string) ($item['explanation'] ?? ''));
-                if ($title === '' && $explanation === '') {
-                    continue;
-                }
-                $refs = self::strings($item['refs'] ?? array());
-                $messages[] = ($title !== '' ? $title.'. ' : '').$explanation.(count($refs) > 0 ? ' ('.implode(', ', $refs).')' : '');
-            }
-            return $messages;
-        }
-
         $by_ref = $this->findings_by_control();
 
         foreach (array_slice($a['themes'], 0, 3) as $theme) {
@@ -467,13 +536,18 @@ class ReportRiskAssessment extends ReportBuilder
         } else {
             $scope[] = 'A scope statement has not been recorded for this assessment; it should be confirmed with the assessor before the report is issued. The description below is drawn from the assessment data.';
         }
-        $line = 'The assessment covers '.$a['total'].' '.$this->term('controls').' of '.$a['standard'].' in '.self::count_of(count($a['families']), $this->term('family'), $this->term('families'));
-        $line .= $this->period_phrase() !== '' ? ', '.$this->period_phrase().'.' : '.';
+        $line = 'The assessment covers '.$a['total'].' '.$this->term('controls').' of '.$a['standard'].' in '.self::count_of(count($a['families']), $this->term('family'), $this->term('families')).'.';
         if ($c['Not Applicable'] > 0) {
             $line .= ' '.self::count_of($c['Not Applicable'], $this->term('control'), $this->term('controls')).' '.($c['Not Applicable'] === 1 ? 'is' : 'are').' recorded as not applicable.';
         }
         $scope[] = $line;
         $blocks[] = self::text(implode("\n\n", $scope));
+        $blocks[] = array(
+            'kind' => 'kv',
+            'value' => array(
+                'rows' => $this->period_rows()
+            )
+        );
 
         $rows = array();
         foreach ($a['families'] as $name => $family) {
@@ -706,7 +780,7 @@ class ReportRiskAssessment extends ReportBuilder
             }
         }
 
-        $intro = 'Each '.$this->term('family').' with findings is analysed in turn: what it covers, what the results show, its most significant weaknesses and where remediation sits, followed by a card for each finding. Within a card, text attributed to the assessor is recorded fact; the expectations, consequences and corrective actions are interpretation drawn from the framework and general security practice.';
+        $intro = 'Each '.$this->term('family').' with findings is analysed in turn: what it covers, what the results show, its most significant weaknesses and where remediation sits, followed by a card for each finding. Within a card, text attributed to the assessor is recorded fact and the recorded condition restates the recorded answers; potential exposure, suggested approach and validation are interpretation drawn from the framework and general security practice, and items to be confirmed must be checked with the organization before they are relied on.';
         if (count($unassessed) > 0) {
             $controls = 0;
             foreach ($unassessed as $name) {
@@ -731,14 +805,14 @@ class ReportRiskAssessment extends ReportBuilder
         $patterns = $this->patterns();
         if (count($patterns) > 0) {
             $blocks[] = self::h2('Cross-cutting patterns');
-            $blocks[] = self::text('These weaknesses recur across several '.$this->term('controls').' and '.$this->term('families').'. Addressing each once, at its root, closes several findings together.');
+            $blocks[] = self::text('These weaknesses recur across several '.$this->term('controls').' and '.$this->term('families').', so the exposure they create is shared: addressing each once, at its root, reduces several findings together. The Gap Analysis describes each pattern at requirement level.');
             $blocks[] = array(
                 'kind' => 'kv',
                 'value' => array(
                     'rows' => array_map(function ($pattern) {
                         return array(
                             $pattern['label'],
-                            $pattern['text']
+                            self::count_of(count($pattern['refs']), 'reference', 'references').': '.implode(', ', array_slice($pattern['refs'], 0, 10)).(count($pattern['refs']) > 10 ? ' and others' : '').'.'
                         );
                     }, $patterns)
                 )
@@ -1037,7 +1111,6 @@ class ReportRiskAssessment extends ReportBuilder
         $topic = ReportKnowledge::topic($control['topic']);
         $answered_open = $finding['answered_open'];
         $unanswered = $finding['unanswered'];
-        $all = count($control['objectives']);
         $shorts = array_column($answered_open, 'short');
         $uses_ai = false;
         $full = $finding['priority'] === 'High';
@@ -1094,117 +1167,84 @@ class ReportRiskAssessment extends ReportBuilder
 
         $sections = array();
 
-        $observation = array();
+        $recorded = array();
         if (isset($assessor['gap_description'])) {
-            $observation[] = 'Assessor observation: '.$assessor['gap_description'];
+            $recorded[] = 'Assessor observation: '.$assessor['gap_description'];
         }
         if (isset($assessor['notes'])) {
-            $observation[] = 'Assessor note: '.$assessor['notes'];
+            $recorded[] = 'Assessor note: '.$assessor['notes'];
         }
         if (isset($assessor['implementation_description'])) {
-            $observation[] = 'Current implementation, as recorded: '.$assessor['implementation_description'];
+            $recorded[] = 'Current implementation, as recorded: '.$assessor['implementation_description'];
         }
-        $ai_observation = trim((string) ($finding['observation_ai'] ?? ''));
-        if ($ai_observation !== '') {
+        $condition = self::first_sentences(trim((string) ($finding['recorded_condition_ai'] ?? '')), 3);
+        if ($condition !== '') {
             $uses_ai = true;
-            $observation[] = $ai_observation;
-            $observation[] = $this->recorded_line($finding);
+            $recorded[] = $condition;
+            $recorded[] = $this->recorded_line($finding).' Requirement-level detail: Gap Analysis, '.$control['ref'].'.';
         } else {
-            $observation[] = $this->recorded_detail($finding);
+            $recorded[] = $this->recorded_condition($finding);
         }
         $sections[] = array(
-            'Assessment observation',
-            implode("\n\n", $observation)
+            'Recorded condition',
+            implode("\n\n", $recorded)
         );
 
-        $expectations = array();
-        $purpose = trim((string) ($finding['purpose_ai'] ?? ''));
-        if ($purpose !== '') {
-            $uses_ai = true;
-            $expectations[] = $purpose;
-        } elseif ($control['description'] !== '' && self::normal($control['description']) !== self::normal($control['title'])) {
-            $expectations[] = self::sentence($control['description']);
-        }
-        $lines = array();
-        $guidance = $purpose !== '' ? 0 : (count($answered_open) > 0 ? 2 : 4);
-        foreach (array_slice($control['expectations'], 0, $guidance) as $pair) {
-            $lines[] = ($pair[0] !== '' ? $pair[0].': ' : '').$pair[1];
-        }
-        if (count($lines) > 0) {
-            $expectations[] = self::bullets($lines);
-        }
-        if (count($expectations) === 0) {
-            $expectations[] = $topic['purpose'];
-        }
-        $sections[] = array(
-            'Control expectations',
-            implode("\n\n", $expectations)
-        );
-
-        $risk = array();
+        $exposure = array();
         if (isset($assessor['business_impact'])) {
-            $risk[] = 'Business impact, as recorded by the assessor: '.$assessor['business_impact'];
+            $exposure[] = 'Business impact, as recorded by the assessor: '.$assessor['business_impact'];
         }
         $scenarios = array_slice(self::items($finding['risk_scenarios_ai'] ?? array()), 0, $full ? 3 : 2);
         if (count($scenarios) > 0) {
             $uses_ai = true;
-            $risk[] = self::bullets(array_map(function ($pair) {
+            $exposure[] = self::bullets(array_map(function ($pair) {
                 return rtrim($pair['scenario'], '. ').'. '.$pair['consequence'];
             }, $scenarios));
         } else {
-            $risk[] = $this->consequences($finding, $topic);
-        }
-        $considerations = trim((string) ($finding['considerations_ai'] ?? ''));
-        if ($considerations !== '' && $full) {
-            $risk[] = $considerations;
+            $exposure[] = $this->consequences($finding, $topic);
         }
         $sections[] = array(
-            'Risk and potential consequences',
-            implode("\n\n", $risk)
+            'Potential exposure · possible scenarios, not observed events',
+            implode("\n\n", $exposure)
         );
 
-        $actions = array();
-        if (isset($assessor['recommendation'])) {
-            $actions[] = 'Assessor recommendation: '.$assessor['recommendation'];
+        if ((string) ($control['priority_basis'] ?? '') !== '') {
+            $sections[] = array(
+                'Priority basis',
+                $control['priority_basis'].' This is a remediation priority, not an assessed risk rating.'
+            );
         }
-        $ai_actions = array_slice(self::strings($finding['actions_ai'] ?? array()), 0, $full ? 6 : 4);
-        if (count($ai_actions) > 0) {
+
+        $approach = array();
+        if (isset($assessor['recommendation'])) {
+            $approach[] = 'Assessor recommendation: '.$assessor['recommendation'];
+        }
+        $suggested = self::strings($finding['suggested_approach_ai'] ?? array());
+        if (count($suggested) === 0) {
+            $suggested = self::strings($finding['actions_ai'] ?? array());
+        }
+        $suggested = array_slice($suggested, 0, $full ? 3 : 2);
+        if (count($suggested) > 0) {
             $uses_ai = true;
-            $actions[] = self::bullets($ai_actions);
+            $approach[] = self::bullets($suggested);
         } else {
-            $actions[] = $this->corrective_actions($finding, $topic);
+            $approach[] = $this->corrective_actions($finding, $topic);
         }
         if ($unanswered > 0) {
-            $actions[] = 'Complete the assessment of the '.($unanswered === 1 ? 'unanswered '.$this->term('objective') : $unanswered.' unanswered '.$this->term('objectives')).' ('.implode(', ', array_column(array_filter($control['open'], function ($objective) {
+            $approach[] = 'Complete the assessment of the '.($unanswered === 1 ? 'unanswered '.$this->term('objective') : $unanswered.' unanswered '.$this->term('objectives')).' ('.implode(', ', array_column(array_filter($control['open'], function ($objective) {
                 return $objective['result'] === 'Not Assessed';
             }), 'short')).') to confirm the full extent of the gap.';
         }
         $sections[] = array(
-            'Recommended corrective actions',
-            implode("\n\n", $actions)
+            'Suggested approach',
+            implode("\n\n", $approach)
         );
 
-        $outcome = trim((string) ($finding['outcome_ai'] ?? ''));
-        if ($outcome !== '') {
-            $uses_ai = true;
-        } else {
-            $outcome = count($shorts) > 0
-                ? 'Once remediated, '.$control['ref'].' can be re-assessed as implemented, with '.$this->open_refs($shorts).' met and supported by linked evidence.'
-                : 'Once remediated, '.$control['ref'].' can be re-assessed as implemented and supported by linked evidence.';
-            if ($this->fresh($topic['outcome'], $finding['ref'])) {
-                $outcome .= ' '.$topic['outcome'];
-            }
-        }
-        $sections[] = array(
-            'Expected outcome',
-            $outcome
-        );
-
-        $validation = array_slice(self::strings($finding['validation_ai'] ?? array()), 0, $full ? 4 : 2);
+        $validation = array_slice(self::strings($finding['validation_ai'] ?? array()), 0, 2);
         if (count($validation) > 0) {
             $uses_ai = true;
         } else {
-            $validation = $this->pick_fresh($topic['validation'], 2, (int) substr($finding['ref'], 2), $finding['ref']);
+            $validation = $this->pick_fresh($topic['validation'], 1, (int) substr($finding['ref'], 2), $finding['ref']);
             if (count($shorts) > 0) {
                 $validation[] = 'Evidence linked to '.(count($shorts) === 1 ? $shorts[0] : 'each of '.$this->open_refs($shorts)).' shows the condition is met.';
             } elseif (count($validation) === 0) {
@@ -1212,9 +1252,22 @@ class ReportRiskAssessment extends ReportBuilder
             }
         }
         $sections[] = array(
-            'Validation criteria',
+            'Validation',
             self::bullets($validation)
         );
+
+        $confirm = array_slice(self::strings($finding['confirm_ai'] ?? array()), 0, 3);
+        if (count($confirm) > 0) {
+            $uses_ai = true;
+        } else {
+            $confirm = $this->to_confirm($finding);
+        }
+        if (count($confirm) > 0) {
+            $sections[] = array(
+                'To be confirmed',
+                self::bullets($confirm)
+            );
+        }
 
         if (count($control['evidence']) > 0) {
             $sections[] = array(
@@ -1258,47 +1311,61 @@ class ReportRiskAssessment extends ReportBuilder
         );
     }
 
-    /** The recorded condition in full: status and each open objective. */
-    private function recorded_detail(array $finding): string
+    /**
+     * The recorded condition in brief: the result and each open
+     * objective by reference with its one-line title; the Gap Analysis
+     * carries the requirement-level detail.
+     */
+    private function recorded_condition(array $finding): string
     {
         $control = $finding['control'];
         $all = count($control['objectives']);
         $open = $finding['answered_open'];
-        $unanswered = $finding['unanswered'];
         $status = strtolower(self::RESULT_LABELS[$finding['status']]);
+        $pointer = 'Requirement-level detail: Gap Analysis, '.$control['ref'].'.';
 
-        if ($all === 0) {
-            return 'Recorded as '.$status.'. No '.$this->term('objectives').' were assessed individually for this '.$this->term('control').', so the specific deficiency behind the result requires confirmation with the assessor.';
-        }
-
-        $met = array_values(array_filter($control['objectives'], function ($objective) {
-            return $objective['result'] === 'Implemented' || $objective['result'] === 'Not Applicable';
-        }));
-
-        if (count($open) === 0) {
-            $lead = 'Recorded as '.$status.'. No answered '.$this->term('objective').' is recorded as deficient, and '.$unanswered.' of '.$all.' '.($unanswered === 1 ? 'has' : 'have').' not been answered, so the basis for the result needs confirmation with the assessor.';
-            return $lead.(count($met) > 0 ? ' Met: '.implode(', ', array_column($met, 'short')).'.' : '');
-        }
-
-        if ($all === 1) {
-            $lead = 'Recorded as '.$status.'. Its single '.$this->term('objective').' is not fully met:';
-        } elseif (count($open) === $all) {
-            $lead = 'Recorded as '.$status.'. None of its '.$all.' '.$this->term('objectives').' is fully met:';
-        } else {
-            $lead = 'Recorded as '.$status.'. '.count($open).' of its '.$all.' '.$this->term('objectives').' '.(count($open) === 1 ? 'is' : 'are').' not fully met'.($unanswered > 0 ? ' and '.$unanswered.' '.($unanswered === 1 ? 'has' : 'have').' not been answered' : '');
-            $lead .= count($met) > 0 ? ' ('.self::join_list(array_column($met, 'short')).' '.(count($met) === 1 ? 'is' : 'are').' met):' : ':';
+        if ($all === 0 || count($open) === 0 || count($open) > 6) {
+            $line = $all === 0
+                ? 'Recorded as '.$status.'; no '.$this->term('objectives').' were assessed individually.'
+                : $this->recorded_line($finding);
+            return $line.' '.$pointer;
         }
 
         $lines = array();
         foreach ($open as $objective) {
-            $line = $objective['short'].' '.rtrim($objective['title'], '.').' ('.self::OBJECTIVE_STATES[$objective['result']].')';
-            if ($objective['result'] === 'Not Implemented' && $objective['description'] !== '' && self::normal($objective['description']) !== self::normal($objective['title'])) {
-                $line .= ': '.rtrim($objective['description'], '.').'.';
-            }
-            $lines[] = $line;
+            $lines[] = $objective['short'].' '.self::short_title(rtrim($objective['title'], '.')).' ('.self::OBJECTIVE_STATES[$objective['result']].')';
         }
 
-        return $lead."\n".self::bullets($lines);
+        $lead = 'Recorded as '.$status.'; '.(count($open) === $all ? 'none of its '.$all.' '.$this->term('objectives').' is fully met' : count($open).' of '.$all.' '.$this->term('objectives').' not fully met').($finding['unanswered'] > 0 ? ', '.$finding['unanswered'].' not answered' : '').':';
+
+        return $lead."\n".self::bullets($lines)."\n\n".$pointer;
+    }
+
+    /**
+     * Facts to confirm before the finding is relied on, when no stored
+     * list exists: what a partial result without an assessor note lacks,
+     * and the deficiency behind a result with no objectives.
+     */
+    private function to_confirm(array $finding): array
+    {
+        $control = $finding['control'];
+        $lines = array();
+
+        if (count($control['objectives']) === 0 && count($control['assessor']) === 0) {
+            $lines[] = 'Which element of '.$control['ref'].' is missing; no '.$this->term('objectives').' or assessor note record it.';
+        }
+
+        $unspecified = array();
+        foreach ($finding['answered_open'] as $objective) {
+            if ($objective['result'] === 'Partially Implemented' && count($objective['assessor'] ?? array()) === 0) {
+                $unspecified[] = $objective['short'];
+            }
+        }
+        if (count($unspecified) > 0) {
+            $lines[] = 'Which part of '.$this->open_refs($unspecified).' is missing; the partial '.(count($unspecified) === 1 ? 'result carries' : 'results carry').' no assessor note.';
+        }
+
+        return $lines;
     }
 
     /** One compact line of recorded facts, shown under an interpreted observation. */
@@ -1430,31 +1497,6 @@ class ReportRiskAssessment extends ReportBuilder
         );
 
         $blocks[] = self::text('The '.self::count_of(count($this->a['findings']), 'finding is', 'findings are').' consolidated into '.self::count_of(count($initiatives), 'remediation initiative', 'remediation initiatives').', so that related gaps are closed by one piece of work rather than '.$this->term('control').' by '.$this->term('control').'. Initiatives are ordered by phase and then by the highest derived priority among the findings they address. Owners and target dates are shown only where recorded.');
-
-        $strategic = self::items($this->a['executive_ai']['strategic_recommendations'] ?? array());
-        if (count($strategic) > 0) {
-            $blocks[] = self::h2('Strategic recommendations');
-            $rows = array();
-            foreach ($strategic as $item) {
-                $title = trim((string) ($item['title'] ?? ''));
-                $rationale = trim((string) ($item['rationale'] ?? ''));
-                if ($title === '' || $rationale === '') {
-                    continue;
-                }
-                $refs = self::strings($item['refs'] ?? array());
-                $rows[] = array(
-                    $title,
-                    $rationale.(count($refs) > 0 ? ' ('.implode(', ', $refs).')' : '')
-                );
-            }
-            $blocks[] = array(
-                'kind' => 'kv',
-                'value' => array(
-                    'rows' => $rows
-                )
-            );
-            $blocks[] = self::h2('Remediation initiatives');
-        }
 
         $finding_of = array();
         foreach ($this->a['findings'] as $finding) {
@@ -1622,46 +1664,11 @@ class ReportRiskAssessment extends ReportBuilder
             ), $rows);
         }
 
-        $considerations = self::strings($a['executive_ai']['management_considerations'] ?? array());
-        if (count($considerations) === 0) {
-            $considerations = $this->considerations();
-        }
-        if (count($a['findings']) > 0 && count($considerations) > 0) {
-            $blocks[] = self::h3('Matters for management');
-            $blocks[] = self::text(self::bullets($considerations));
+        if (count($a['findings']) > 0) {
+            $blocks[] = self::note('The decisions these findings ask of management (authorizing the initiatives, assigning owners and deciding which risks to accept) are set out in the Executive Summary.');
         }
 
         return $blocks;
-    }
-
-    /** Decisions for management, with initiative counts taken from the remediation plan. */
-    private function considerations(): array
-    {
-        $initiatives = $this->initiatives();
-        $out = array();
-
-        if (count($initiatives) > 0) {
-            $unowned = count(array_filter($initiatives, function ($initiative) {
-                return ($initiative['owner'] ?? null) === null;
-            }));
-            $out[] = 'Assign an accountable owner and target date to each of the '.self::count_of(count($initiatives), 'remediation initiative', 'remediation initiatives')
-                .($unowned === count($initiatives) ? '; none has an owner recorded yet.' : ($unowned > 0 ? '; '.$unowned.' still '.($unowned === 1 ? 'has' : 'have').' no owner recorded.' : '.'));
-            $high = count(array_filter($initiatives, function ($initiative) {
-                return $initiative['priority'] === 'High';
-            }));
-            if ($high > 0) {
-                $out[] = 'Authorize the resources needed for the '.($high === 1 ? 'high-priority initiative' : $high.' high-priority initiatives').' first, and track '.($high === 1 ? 'it' : 'them').' at management level until closed.';
-            }
-        }
-
-        foreach ($this->a['narratives']['considerations'] as $line) {
-            if (strpos($line, 'Assign an accountable owner') === 0 || strpos($line, 'Authorize the resources') === 0) {
-                continue;
-            }
-            $out[] = $line;
-        }
-
-        return $out;
     }
 
     private function acknowledgment(): array

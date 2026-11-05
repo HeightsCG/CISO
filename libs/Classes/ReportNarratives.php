@@ -2,24 +2,45 @@
 /**
  * Lays stored AI narratives over a ReportAnalysis array. Only sections whose
  * stored hash matches the current inputs, and that the assessor has not
- * rejected, are used; everything else keeps the calculated text. Nothing
- * here calls the AI service, so it is safe on every report download.
+ * rejected, are used; everything else keeps the calculated text. A Final
+ * document ($mode 'final') uses only current sections the assessor approved.
+ * Nothing here calls the AI service, so it is safe on every report download.
  *
  * Added keys (deterministic keys are never removed or changed):
- *   findings[*]: observation_ai, purpose_ai, risk_scenarios_ai
- *     (list of {scenario, consequence}), actions_ai, outcome_ai,
- *     validation_ai, considerations_ai, source_refs_ai, ai_status,
- *     initiative_ai
+ *   findings[*]: recorded_condition_ai (what the responses record),
+ *     risk_scenarios_ai (list of conditional {scenario, consequence}),
+ *     suggested_approach_ai (options), confirm_ai (facts to confirm),
+ *     purpose_ai, outcome_ai, validation_ai, source_refs_ai, ai_status,
+ *     initiative_ai; observation_ai and actions_ai remain as aliases of
+ *     recorded_condition_ai and suggested_approach_ai; considerations_ai
+ *     is null (no longer written)
  *   families[*]: narrative_ai
- *   initiatives_ai, patterns_ai, executive_ai, review, narrative_status
+ *   initiatives_ai, patterns_ai, executive_ai (with exposure_overview),
+ *   review, quality (ReportQuality issues on the sections in use),
+ *   narrative_status
  */
 class ReportNarratives
 {
-    /** The analysis with every usable narrative applied and readiness issues for the rest. */
-    public static function apply(array $analysis, int $company_id): array
+    const FIELD_LABELS = array(
+        'recorded_condition' => 'Recorded condition',
+        'risk_scenarios' => 'Potential exposure',
+        'suggested_approach' => 'Suggested approach',
+        'confirm' => 'To be confirmed',
+        'exposure_overview' => 'Exposure overview',
+        'refs' => 'Refs',
+        'source_refs' => 'Source refs'
+    );
+
+    /**
+     * The analysis with every usable narrative applied and readiness issues
+     * for the rest. $mode 'draft' uses current sections that are not
+     * rejected; 'final' uses current sections that are approved.
+     */
+    public static function apply(array $analysis, int $company_id, string $mode = 'draft'): array
     {
         $rows = (new ReportNarrativesModel())->load_narratives((int) $analysis['assessment']['id'], $company_id);
         $states = self::states($analysis, $rows);
+        $in_use = array();
 
         $summary = array(
             'sections' => count($states),
@@ -41,9 +62,10 @@ class ReportNarratives
             }
             $summary[strtolower($state['narrative_status'])]++;
 
-            if (!$state['usable']) {
+            if (!self::usable_in($state, $mode)) {
                 continue;
             }
+            $in_use[$key] = $state['content'];
 
             switch (ReportAI::kind($key)) {
                 case 'domain':
@@ -65,6 +87,7 @@ class ReportNarratives
         }
 
         $analysis['narrative_status'] = $summary;
+        $analysis['quality'] = count($in_use) > 0 ? ReportQuality::check($analysis, $in_use) : array();
 
         if (count($rows) > 0) {
             $analysis['readiness'] = array_merge($analysis['readiness'], self::readiness($analysis, $summary));
@@ -118,14 +141,119 @@ class ReportNarratives
                 'usable' => $is_usable,
                 'narrative_status' => $row['narrative_status'] ?? null,
                 'edited' => $row !== null && $row['edited_content'] !== null,
+                'revised' => $row !== null && ($row['revision_notes'] ?? null) !== null,
                 'generated' => $row['date_updated'] ?? null,
                 'model' => $row['model'] ?? null,
                 'rejected' => $row !== null ? (json_decode((string) $row['rejected_fields'], true) ?: array()) : array(),
-                'content' => $content
+                'content' => $content,
+                'stale_reason' => ''
             );
         }
 
+        foreach ($states as $key => $state) {
+            if ($state['state'] === 'stale') {
+                $states[$key]['stale_reason'] = self::stale_reason($analysis, $states, $key);
+            }
+        }
+
         return $states;
+    }
+
+    /**
+     * Why a stored section no longer matches its inputs, in the reader's
+     * terms: criteria whose answers changed after it was written, sections it
+     * was built from that were rewritten after it, or else a change to the
+     * writing rules or model.
+     */
+    private static function stale_reason(array $analysis, array $states, string $key): string
+    {
+        $written = (string) $states[$key]['generated'];
+        $terms = $analysis['terms'];
+        $when = function (string $value) {
+            return date('M j, H:i', strtotime($value)).' UTC';
+        };
+
+        $changed = array();
+        $family = strpos($key, 'domain:') === 0 ? substr($key, 7) : null;
+        foreach ($analysis['controls'] as $control) {
+            if (($family === null || $control['family'] === $family) && $control['updated'] > $written) {
+                $changed[] = $control['ref'];
+            }
+        }
+
+        $parts = array();
+
+        if (count($changed) > 0) {
+            $parts[] = 'Answers changed after it was written ('.$when($written).') for '.count($changed).' '.(count($changed) === 1 ? $terms['control'] : $terms['controls']).': '.implode(', ', array_slice($changed, 0, 8)).(count($changed) > 8 ? ' and '.(count($changed) - 8).' more' : '').'.';
+        }
+
+        if ($family === null) {
+            $rewritten = array();
+            foreach ($states as $other_key => $other) {
+                if ($other_key !== $key && $other['generated'] !== null && (string) $other['generated'] > $written) {
+                    $rewritten[] = $other['label'];
+                }
+            }
+            if (count($rewritten) > 0) {
+                $parts[] = 'It was built from sections that were rewritten afterwards: '.implode(', ', $rewritten).'.';
+            }
+        }
+
+        if (count($parts) === 0) {
+            $parts[] = 'The writing rules or AI model changed after it was written ('.$when($written).').';
+        }
+
+        return implode(' ', $parts).' Generate rewrites it.';
+    }
+
+    /** Whether a section's text goes into a document of this mode. */
+    public static function usable_in(array $state, string $mode): bool
+    {
+        if (!$state['usable']) {
+            return false;
+        }
+
+        return $mode !== 'final' || $state['narrative_status'] === 'Approved';
+    }
+
+    /**
+     * The editable fields of a section kind for the review screen, read from
+     * the output schema: path, label and type ('text', 'list' of strings, or
+     * 'objects' with their own fields). Enumerated text carries its options.
+     */
+    public static function fields(string $kind): array
+    {
+        return self::schema_fields(ReportAI::schema($kind), '');
+    }
+
+    private static function schema_fields(array $schema, string $prefix): array
+    {
+        $fields = array();
+
+        foreach ($schema['properties'] ?? array() as $name => $property) {
+            $field = array(
+                'path' => $prefix.$name,
+                'label' => self::FIELD_LABELS[$name] ?? ucfirst(str_replace('_', ' ', $name)),
+                'type' => 'text'
+            );
+
+            if (($property['type'] ?? '') === 'array') {
+                if (($property['items']['type'] ?? '') === 'object') {
+                    $field['type'] = 'objects';
+                    $field['fields'] = self::schema_fields($property['items'], '');
+                } else {
+                    $field['type'] = 'list';
+                }
+            }
+
+            if (isset($property['enum'])) {
+                $field['options'] = $property['enum'];
+            }
+
+            $fields[] = $field;
+        }
+
+        return $fields;
     }
 
     private static function apply_domain(array $analysis, string $family, array $content, string $narrative_status): array
@@ -149,13 +277,18 @@ class ReportNarratives
             if ($entry === null || $finding['domain'] !== $family) {
                 continue;
             }
-            $analysis['findings'][$n]['observation_ai'] = self::text($entry['observation'] ?? null);
+            $recorded = self::text($entry['recorded_condition'] ?? ($entry['observation'] ?? null));
+            $approach = self::lines($entry['suggested_approach'] ?? ($entry['recommended_actions'] ?? array()));
+            $analysis['findings'][$n]['recorded_condition_ai'] = $recorded;
+            $analysis['findings'][$n]['observation_ai'] = $recorded;
             $analysis['findings'][$n]['purpose_ai'] = self::text($entry['control_purpose'] ?? null);
             $analysis['findings'][$n]['risk_scenarios_ai'] = self::scenarios($entry['risk_scenarios'] ?? array());
-            $analysis['findings'][$n]['actions_ai'] = self::lines($entry['recommended_actions'] ?? array());
+            $analysis['findings'][$n]['suggested_approach_ai'] = $approach;
+            $analysis['findings'][$n]['actions_ai'] = $approach;
+            $analysis['findings'][$n]['confirm_ai'] = self::lines($entry['confirm'] ?? array());
             $analysis['findings'][$n]['outcome_ai'] = self::text($entry['expected_outcome'] ?? null);
             $analysis['findings'][$n]['validation_ai'] = self::lines($entry['validation_criteria'] ?? array());
-            $analysis['findings'][$n]['considerations_ai'] = self::text($entry['considerations'] ?? null);
+            $analysis['findings'][$n]['considerations_ai'] = null;
             $analysis['findings'][$n]['source_refs_ai'] = self::lines($entry['source_refs'] ?? array()) ?? array();
             $analysis['findings'][$n]['ai_status'] = $narrative_status;
         }
@@ -302,6 +435,16 @@ class ReportNarratives
             $issues[] = array(
                 'Medium',
                 'The narrative quality review raised '.$high.' high-severity '.($high === 1 ? 'issue' : 'issues').' to resolve before issue.'
+            );
+        }
+
+        $rules = count(array_filter($analysis['quality'] ?? array(), function ($issue) {
+            return $issue['severity'] === 'High';
+        }));
+        if ($rules > 0) {
+            $issues[] = array(
+                'Medium',
+                'Automated narrative checks found '.$rules.' high-severity '.($rules === 1 ? 'issue' : 'issues').' (unsupported statements, contradictions or inconsistent figures) to resolve before issue.'
             );
         }
 

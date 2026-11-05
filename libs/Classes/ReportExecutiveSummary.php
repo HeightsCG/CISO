@@ -183,15 +183,12 @@ class ReportExecutiveSummary extends ReportBuilder
         }
         $coverage .= '.';
 
-        $rows = array(
+        $rows = array_merge(array(
             array(
                 'Framework',
                 $this->framework_name()
-            ),
-            array(
-                'Assessment period',
-                $a['period']
-            ),
+            )
+        ), $this->period_rows(), array(
             array(
                 'Scope',
                 isset($a['assessor']['assessment_scope'])
@@ -208,7 +205,7 @@ class ReportExecutiveSummary extends ReportBuilder
                 'Coverage',
                 $coverage.' '.$this->evidence_sentence()
             )
-        );
+        ));
 
         $basis = 'Counts, the implementation score and evidence coverage are calculated from the answers recorded for each '.$this->term('control')
             .($objective_total > 0 ? ' and '.$this->term('objective') : '').'. '
@@ -250,7 +247,7 @@ class ReportExecutiveSummary extends ReportBuilder
     {
         $a = $this->a;
         $lines = array(
-            'Results reflect the position recorded for the assessment period ('.$a['period'].') and may change as '.$this->term('controls').' are implemented or modified.'
+            'Results reflect the responses recorded up to the reporting cutoff and may change as '.$this->term('controls').' are implemented or modified.'
         );
 
         if ($a['counts']['Not Assessed'] > 0) {
@@ -453,7 +450,7 @@ class ReportExecutiveSummary extends ReportBuilder
             foreach ($ai as $entry) {
                 $body = $entry['explanation'];
                 if (count($entry['refs'] ?? array()) > 0) {
-                    $body .= "\n\nRelated ".$this->term('controls').': '.implode(', ', $entry['refs']).'.';
+                    $body .= "\n\nRelated ".$this->term('controls').': '.implode(', ', array_slice($entry['refs'], 0, 6)).(count($entry['refs']) > 6 ? ' and '.(count($entry['refs']) - 6).' more' : '').'.';
                 }
                 $blocks[] = array(
                     'kind' => 'panel',
@@ -572,11 +569,11 @@ class ReportExecutiveSummary extends ReportBuilder
         if (isset($control['assessor']['business_impact'])) {
             $consequence = 'Business impact (as recorded by the assessor): '.$control['assessor']['business_impact'];
         } elseif (isset($finding['risk_scenarios_ai'][0])) {
-            $consequence = 'Why it matters: '.$finding['risk_scenarios_ai'][0]['consequence'];
+            $consequence = 'Potential exposure: '.$finding['risk_scenarios_ai'][0]['consequence'];
         } else {
             $topic = ReportKnowledge::topic($control['topic']);
             if (isset($topic['consequences'][0])) {
-                $consequence = 'Why it matters: '.$topic['consequences'][0];
+                $consequence = 'Potential exposure: '.$topic['consequences'][0];
             }
         }
         if ($consequence !== null) {
@@ -807,7 +804,7 @@ class ReportExecutiveSummary extends ReportBuilder
                 $number++;
                 $body = $entry['rationale'];
                 if (count($entry['refs'] ?? array()) > 0) {
-                    $body .= "\n\nRelated ".$this->term('controls').': '.implode(', ', $entry['refs']).'.';
+                    $body .= "\n\nRelated ".$this->term('controls').': '.implode(', ', array_slice($entry['refs'], 0, 6)).(count($entry['refs']) > 6 ? ' and '.(count($entry['refs']) - 6).' more' : '').'.';
                 }
                 $blocks[] = array(
                     'kind' => 'panel',

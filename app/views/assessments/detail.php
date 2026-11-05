@@ -142,31 +142,117 @@
         </div>
 
         <div class="tab-pane" id="tab_reports" role="tabpanel" aria-labelledby="tab_reports_btn">
-            <div class="panel record__panel assess__reports">
-                <table class="data data--light reports__table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Report</th>
-                            <th scope="col" class="reports__col-download"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach (ReadyReports::catalog_for('assessment') as $report) { ?>
-                        <tr>
-                            <td>
-                                <span class="roster__name"><?php echo htmlspecialchars($report['name'], ENT_QUOTES, 'UTF-8'); ?></span>
-                            </td>
-                            <td class="reports__col-download">
-                                <span class="reports__formats">
-                                    <?php foreach ($report['formats'] as $format) { ?>
-                                    <button type="button" class="btn btn--secondary btn--sm" data-action="download_report" data-report="<?php echo htmlspecialchars($report['key'], ENT_QUOTES, 'UTF-8'); ?>" data-format="<?php echo htmlspecialchars($format, ENT_QUOTES, 'UTF-8'); ?>"><i class="fa-regular <?php echo $format === 'pdf' ? 'fa-file-pdf' : ($format === 'docx' ? 'fa-file-word' : 'fa-file-excel'); ?>"></i> <?php echo $format === 'pdf' ? 'PDF' : ($format === 'docx' ? 'Word' : 'Excel'); ?></button>
-                                    <?php } ?>
-                                </span>
-                            </td>
-                        </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+            <div class="reports">
+                <section class="panel reports__card reports__bar">
+                    <div class="reports__line">
+                        <div class="reports__field">
+                            <span class="reports__label" id="report_detail_label">Detail</span>
+                            <div class="segmented segmented--switch reports__detail" id="report_detail" role="group" aria-labelledby="report_detail_label">
+                                <button type="button" class="segmented__btn" data-value="executive">Executive</button>
+                                <button type="button" class="segmented__btn is-on" data-value="standard">Standard</button>
+                                <button type="button" class="segmented__btn" data-value="comprehensive">Comprehensive</button>
+                            </div>
+                        </div>
+                        <div class="reports__field">
+                            <span class="reports__label" id="report_formats_label">Formats</span>
+                            <div class="segmented segmented--switch reports__formats-pick" id="report_formats" role="group" aria-labelledby="report_formats_label">
+                                <button type="button" class="segmented__btn is-on" data-value="pdf" aria-pressed="true">PDF</button>
+                                <button type="button" class="segmented__btn is-on" data-value="docx" aria-pressed="true">Word</button>
+                                <button type="button" class="segmented__btn is-on" data-value="xlsx" aria-pressed="true">Excel</button>
+                            </div>
+                        </div>
+                        <div class="reports__field">
+                            <label class="reports__label" for="report_appendices">Appendices</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="report_appendices" checked>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="reports__line">
+                        <div class="reports__field">
+                            <label class="reports__label" for="report_status">Status</label>
+                            <div class="reports__status">
+                                <select class="form-control" id="report_status" data-style="form-control" data-container="body" disabled>
+                                    <option value="Draft">Draft</option>
+                                    <option value="In Review">In Review</option>
+                                    <option value="Final">Final</option>
+                                </select>
+                            </div>
+                            <span class="reports__version" id="report_version"></span>
+                            <span class="reports__warn" id="report_changed" hidden><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Changed since final</span>
+                        </div>
+                        <button type="button" class="btn btn--primary" id="do_package"><i class="fa-regular fa-file-zipper"></i> Download Package</button>
+                    </div>
+                    <div class="reports__job" id="package_job" hidden>
+                        <div class="progress"><span class="progress__bar" id="package_bar"></span></div>
+                        <span class="reports__job-label" id="package_label"></span>
+                    </div>
+                </section>
+
+                <section class="panel reports__card reports__readiness" id="report_readiness">
+                    <button type="button" class="reports__readiness-head collapsed" id="report_readiness_toggle" data-bs-toggle="collapse" data-bs-target="#report_readiness_body" aria-expanded="false" aria-controls="report_readiness_body">
+                        <span class="reports__readiness-icon" id="report_readiness_ok" hidden><i class="fa-solid fa-circle-check" aria-hidden="true"></i></span>
+                        <span class="reports__readiness-icon" id="report_readiness_warn"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></span>
+                        <span class="reports__readiness-title" id="report_readiness_title">Report readiness</span>
+                        <span class="reports__chevron" id="report_readiness_chevron"><i class="fa-regular fa-chevron-down" aria-hidden="true"></i></span>
+                    </button>
+                    <div class="collapse" id="report_readiness_body">
+                        <ul class="reports__issues" id="report_readiness_list"></ul>
+                    </div>
+                </section>
+
+                <section class="panel reports__card reports__ai" id="report_ai">
+                    <div class="reports__line">
+                        <div class="reports__field reports__field--grow">
+                            <span class="reports__label">AI narratives</span>
+                            <span class="reports__counts" id="narrative_counts"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i></span>
+                        </div>
+                        <div class="reports__actions">
+                            <button type="button" class="btn btn--secondary" id="do_narratives_generate" hidden><i class="fa-regular fa-wand-magic-sparkles"></i> Generate</button>
+                            <button type="button" class="btn btn--secondary" id="do_narratives_review"><i class="fa-regular fa-list-check"></i> Review</button>
+                        </div>
+                    </div>
+                    <div class="reports__job" id="narratives_job" hidden>
+                        <div class="progress"><span class="progress__bar" id="narratives_bar"></span></div>
+                        <span class="reports__job-label" id="narratives_label"></span>
+                        <button type="button" class="btn btn--icon" id="do_narratives_cancel" aria-label="Stop generating" title="Stop generating"><i class="fa-regular fa-stop"></i></button>
+                    </div>
+                    <ul class="reports__issues" id="narratives_stale_list" hidden></ul>
+                    <div class="reports__failed" id="narratives_failed" hidden>
+                        <ul class="reports__issues" id="narratives_failed_list"></ul>
+                        <button type="button" class="btn btn--secondary btn--sm" id="do_narratives_retry"><i class="fa-regular fa-rotate-right"></i> Retry</button>
+                    </div>
+                </section>
+
+                <div class="panel record__panel assess__reports">
+                    <table class="data data--light reports__table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Report</th>
+                                <th scope="col" class="reports__col-download"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach (ReadyReports::catalog_for('assessment') as $report) { ?>
+                            <tr>
+                                <td>
+                                    <span class="roster__name"><?php echo htmlspecialchars($report['name'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                </td>
+                                <td class="reports__col-download">
+                                    <span class="reports__formats">
+                                        <?php if (in_array('pdf', $report['formats'], true)) { ?>
+                                        <button type="button" class="btn btn--tertiary btn--sm" data-action="preview_report" data-report="<?php echo htmlspecialchars($report['key'], ENT_QUOTES, 'UTF-8'); ?>" data-name="<?php echo htmlspecialchars($report['name'], ENT_QUOTES, 'UTF-8'); ?>"><i class="fa-regular fa-eye"></i> Preview</button>
+                                        <?php } ?>
+                                        <?php foreach ($report['formats'] as $format) { ?>
+                                        <button type="button" class="btn btn--secondary btn--sm" data-action="download_report" data-report="<?php echo htmlspecialchars($report['key'], ENT_QUOTES, 'UTF-8'); ?>" data-format="<?php echo htmlspecialchars($format, ENT_QUOTES, 'UTF-8'); ?>"><i class="fa-regular <?php echo $format === 'pdf' ? 'fa-file-pdf' : ($format === 'docx' ? 'fa-file-word' : 'fa-file-excel'); ?>"></i> <?php echo $format === 'pdf' ? 'PDF' : ($format === 'docx' ? 'Word' : 'Excel'); ?></button>
+                                        <?php } ?>
+                                    </span>
+                                </td>
+                            </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -336,6 +422,84 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" id="do_assessment_delete" class="btn btn--destructive">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop="static" id="narrative_modal" tabindex="-1" aria-labelledby="narrative_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="narrative_modal_title">AI Narratives</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="review">
+                    <ul class="review__list" id="narrative_list"></ul>
+                    <section class="review__editor" id="narrative_editor" aria-live="polite">
+                        <p class="review__empty"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Loading narratives&hellip;</p>
+                    </section>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary me-auto" id="do_narratives_approve_all_open"><i class="fa-regular fa-check-double"></i> Approve All Current Drafts</button>
+                <button type="button" class="btn btn--secondary" id="do_narrative_reject"><i class="fa-regular fa-xmark"></i> Reject</button>
+                <button type="button" class="btn btn--secondary" id="do_narrative_save"><i class="fa-regular fa-floppy-disk"></i> Save Edits</button>
+                <button type="button" class="btn btn--primary" id="do_narrative_approve"><i class="fa-regular fa-check"></i> Approve</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop="static" id="narratives_approve_all_modal" tabindex="-1" aria-labelledby="narratives_approve_all_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="narratives_approve_all_modal_title">Approve All Drafts</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="narratives_approve_all_text"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn--primary" id="do_narratives_approve_all">Approve All</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="report_preview_modal" tabindex="-1" aria-labelledby="report_preview_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="report_preview_modal_title">Preview</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="preview">
+                    <p class="preview__loading" id="report_preview_loading"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Preparing preview&hellip;</p>
+                    <iframe class="preview__frame" id="report_preview_frame" title="Report preview" hidden></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="report_blockers_modal" tabindex="-1" aria-labelledby="report_blockers_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="report_blockers_modal_title">Not Ready for Final</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="checks" id="report_blockers"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn--primary" id="do_blockers_review">Review Narratives</button>
             </div>
         </div>
     </div>
@@ -1796,26 +1960,1033 @@ $(document).ready(function () {
 $(document).ready(function () {
 
     var assessment_id = <?php echo (int) $this->assessment['id']; ?>;
+    var center = null;
+    var center_loaded = false;
+    var sections = [];
+    var selected_key = null;
+    var dirty = false;
+    var field_seq = 0;
+    var package_requested = false;
+    var failed_keys = [];
+    var jobs = {
+        narratives: null,
+        package: null
+    };
+    var timers = {
+        narratives: null,
+        package: null
+    };
 
-    $("#tab_reports").on("click", "[data-action='download_report']", function () {
+    var ACTIVE = ['Queued', 'Running'];
+    var LOCKED = ['ref', 'phase', 'kind', 'severity', 'section'];
+    var PILL_CLASS = {
+        'Approved': 'badge--active',
+        'Draft': 'badge--inactive',
+        'Rejected': 'badge--critical',
+        'Out of date': 'badge--onboarding',
+        'Missing': 'badge--prospect'
+    };
+    var SEVERITY_CLASS = {
+        'High': 'badge--critical',
+        'Medium': 'badge--onboarding',
+        'Low': 'badge--prospect'
+    };
+    var SEVERITY_RANK = {
+        'High': 3,
+        'Medium': 2,
+        'Low': 1
+    };
+
+    function report_options() {
+        return {
+            detail: $('#report_detail .segmented__btn.is-on').attr('data-value') || 'standard',
+            appendices: $('#report_appendices').is(':checked')
+        };
+    }
+
+    $('#report_detail').on('click', '.segmented__btn', function () {
+        $('#report_detail .segmented__btn').removeClass('is-on');
+        $(this).addClass('is-on');
+    });
+
+    function report_formats() {
+        return $('#report_formats .segmented__btn.is-on').map(function () {
+            return $(this).attr('data-value');
+        }).get();
+    }
+
+    $('#report_formats').on('click', '.segmented__btn', function () {
+
+        if ($(this).hasClass('is-on') && report_formats().length === 1) {
+            toastr.error('Choose at least one format.');
+            return;
+        }
+
+        $(this).toggleClass('is-on');
+        $(this).attr('aria-pressed', $(this).hasClass('is-on') ? 'true' : 'false');
+    });
+
+    function load_center(done) {
+
+        ApiDataSvc.apiCall('post', 'report_center', { assessment_id: assessment_id }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            if (!obj.success) {
+                toastr.error(obj.message);
+                return;
+            }
+
+            center = obj;
+            render_state(obj.state);
+            render_readiness(obj.readiness || []);
+            render_narratives(obj.narratives, obj.ai_configured);
+            resume_jobs(obj.jobs || {});
+
+            if (typeof done === 'function') {
+                done();
+            }
+        });
+    }
+
+    $('#tab_reports_btn').on('shown.bs.tab', function () {
+
+        if (center_loaded) {
+            return;
+        }
+
+        center_loaded = true;
+        load_center();
+    });
+
+    function render_state(state) {
+
+        var version = state.report_status + ' v' + state.report_version;
+
+        if (state.report_status === 'Final' && state.finalized_by_name) {
+            version += ' · ' + state.finalized_by_name + (state.finalized_date ? ', ' + state.finalized_date : '');
+        }
+
+        $('#report_status').prop('disabled', false).val(state.report_status);
+        $('#report_version').text(version);
+        $('#report_changed').prop('hidden', !state.changed_since_final);
+    }
+
+    function blocker_text(blocker) {
+        return typeof blocker === 'string' ? blocker : (blocker.message || blocker.label || '');
+    }
+
+    function show_blockers(blockers) {
+
+        var html = '';
+
+        for (var i = 0; i < blockers.length; i++) {
+            html += '<li class="checks__item checks__item--block"><p class="checks__message">' + esc(blocker_text(blockers[i])) + '</p></li>';
+        }
+
+        $('#report_blockers').html(html);
+        modal('report_blockers_modal').show();
+    }
+
+    $('#report_status').on('change', function () {
+
+        var report_status = $(this).val();
+
+        if (!center || report_status === center.state.report_status) {
+            return;
+        }
+
+        $('#report_status').prop('disabled', true);
+        $('#report_version').html('<i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i>');
+
+        ApiDataSvc.apiCall('post', 'report_status_set', { assessment_id: assessment_id, report_status: report_status }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            if (obj.success) {
+                toastr.success(obj.message && obj.message !== 'ok' ? obj.message : 'Report status set to ' + report_status);
+                center.state = obj.state || center.state;
+                render_state(center.state);
+                load_center();
+                return;
+            }
+
+            render_state(center.state);
+
+            var blockers = obj.finalize_blockers || obj.blockers || (obj.state && obj.state.finalize_blockers) || [];
+
+            if (report_status === 'Final' && blockers.length === 0) {
+                blockers = center.state.finalize_blockers || [];
+            }
+
+            if (blockers.length > 0) {
+                show_blockers(blockers);
+            } else {
+                toastr.error(obj.message);
+            }
+        }, function () {
+            render_state(center.state);
+            toastr.error('The report status could not be changed. Try again.');
+        });
+    });
+
+    $('#do_blockers_review').click(function () {
+        modal('report_blockers_modal').hide();
+        open_review();
+    });
+
+    function render_readiness(list) {
+
+        var html = '';
+        var top = '';
+
+        for (var i = 0; i < list.length; i++) {
+            html += '<li class="reports__issue"><span class="badge ' + (SEVERITY_CLASS[list[i].severity] || 'badge--inactive') + '">' + esc(list[i].severity) + '</span>'
+                + '<span class="reports__issue-text">' + esc(list[i].message) + '</span></li>';
+
+            if ((SEVERITY_RANK[list[i].severity] || 0) > (SEVERITY_RANK[top] || 0)) {
+                top = list[i].severity;
+            }
+        }
+
+        $('#report_readiness_list').html(html);
+        $('#report_readiness').attr('data-severity', list.length === 0 ? 'ok' : top.toLowerCase());
+        $('#report_readiness_title').text(list.length === 0 ? 'Ready: no issues found' : 'Report readiness (' + list.length + ')');
+        $('#report_readiness_ok').prop('hidden', list.length > 0);
+        $('#report_readiness_warn').prop('hidden', list.length === 0);
+        $('#report_readiness_chevron').prop('hidden', list.length === 0);
+        $('#report_readiness_toggle').prop('disabled', list.length === 0);
+
+        if (list.length === 0) {
+            bootstrap.Collapse.getOrCreateInstance(document.getElementById('report_readiness_body'), { toggle: false }).hide();
+        }
+    }
+
+    function render_narratives(narratives, ai_configured) {
+
+        var parts = [narratives.approved + ' of ' + narratives.total + ' approved'];
+        var extra = [
+            ['draft', 'draft'],
+            ['stale', 'out of date'],
+            ['missing', 'missing'],
+            ['rejected', 'rejected']
+        ];
+
+        for (var i = 0; i < extra.length; i++) {
+            if (narratives[extra[i][0]] > 0) {
+                parts.push(narratives[extra[i][0]] + ' ' + extra[i][1]);
+            }
+        }
+
+        $('#narrative_counts').text(parts.join(' · '));
+
+        var stale = (narratives.sections || []).filter(function (section) {
+            return section.state === 'stale';
+        });
+        var html = '';
+
+        for (var s = 0; s < stale.length; s++) {
+            html += '<li class="reports__issue"><span class="badge badge--onboarding">Out of date</span><span><strong>' + esc(stale[s].label) + '.</strong> ' + esc(stale[s].stale_reason || '') + '</span></li>';
+        }
+
+        $('#narratives_stale_list').html(html).prop('hidden', stale.length === 0);
+        $('#do_narratives_generate').prop('hidden', !ai_configured);
+        $('#do_narratives_review').prop('disabled', narratives.total === 0);
+    }
+
+    function is_active(job) {
+        return !!job && ACTIVE.indexOf(job.job_status) !== -1;
+    }
+
+    function resume_jobs(latest) {
+
+        var types = ['narratives', 'package'];
+
+        for (var i = 0; i < types.length; i++) {
+
+            var job = latest[types[i]] || null;
+
+            if (timers[types[i]] !== null) {
+                continue;
+            }
+
+            render_job(types[i], job);
+
+            if (is_active(job)) {
+                poll(types[i], job.id);
+            }
+        }
+    }
+
+    function job_label(job) {
+
+        if (job.job_status === 'Queued' && parseInt(job.done_steps, 10) === 0) {
+            return 'Queued';
+        }
+
+        var label = (parseInt(job.done_steps, 10) || 0) + ' of ' + (parseInt(job.total_steps, 10) || 0);
+
+        return job.current_step ? label + ' · ' + job.current_step : label;
+    }
+
+    function render_job(type, job) {
+
+        var running = is_active(job);
+        var total = job ? parseInt(job.total_steps, 10) || 0 : 0;
+        var done = job ? parseInt(job.done_steps, 10) || 0 : 0;
+
+        jobs[type] = job;
+
+        $('#' + type + '_job').prop('hidden', !running);
+
+        if (running) {
+            $('#' + type + '_bar').css('width', (total > 0 ? Math.round(done / total * 100) : 0) + '%');
+            $('#' + type + '_label').text(job_label(job));
+        }
+
+        set_loading(type === 'package' ? '#do_package' : '#do_narratives_generate', running);
+
+        if (type === 'narratives') {
+            render_failed(running ? null : job);
+            set_loading('#do_narratives_cancel', false);
+        }
+    }
+
+    function render_failed(job) {
+
+        var html = '';
+        var steps = job && job.steps ? job.steps : [];
+
+        failed_keys = [];
+
+        if (job && job.job_status === 'Failed') {
+            for (var i = 0; i < steps.length; i++) {
+                if (steps[i].state === 'Failed') {
+                    failed_keys.push(steps[i].key);
+                    html += '<li class="reports__issue"><span class="badge badge--critical">Failed</span>'
+                        + '<span class="reports__issue-text"><strong>' + esc(steps[i].label) + '</strong>' + (steps[i].error ? ' ' + esc(steps[i].error) : '') + '</span></li>';
+                }
+            }
+
+            if (html === '' && job.last_error) {
+                html = '<li class="reports__issue"><span class="badge badge--critical">Failed</span><span class="reports__issue-text">' + esc(job.last_error) + '</span></li>';
+            }
+        }
+
+        $('#narratives_failed_list').html(html);
+        $('#narratives_failed').prop('hidden', html === '');
+        $('#do_narratives_retry').prop('hidden', failed_keys.length === 0);
+        set_loading('#do_narratives_retry', false);
+    }
+
+    function poll(type, job_id) {
+
+        clearTimeout(timers[type]);
+
+        timers[type] = setTimeout(function () {
+            ApiDataSvc.apiCall('post', 'report_job_status', { job_id: job_id }, function (data) {
+
+                var obj = JSON.parse(data);
+
+                if (!obj.success) {
+                    timers[type] = null;
+                    render_job(type, null);
+                    toastr.error(obj.message);
+                    return;
+                }
+
+                render_job(type, obj.job);
+
+                if (is_active(obj.job)) {
+                    poll(type, job_id);
+                    return;
+                }
+
+                timers[type] = null;
+                job_finished(type, obj);
+            }, function () {
+                poll(type, job_id);
+            });
+        }, 3000);
+    }
+
+    function job_finished(type, obj) {
+
+        if (type === 'package') {
+            if (obj.job.job_status === 'Completed' && obj.download_url && package_requested) {
+                window.location.href = obj.download_url;
+            } else if (obj.job.job_status === 'Failed' && package_requested) {
+                toastr.error(obj.job.last_error || 'The report package could not be built.');
+            }
+
+            package_requested = false;
+            return;
+        }
+
+        if (obj.job.job_status === 'Completed') {
+            toastr.success('AI narratives are up to date');
+        } else if (obj.job.job_status === 'Failed') {
+            toastr.error('Some narrative sections could not be written');
+        }
+
+        load_center();
+
+        if ($('#narrative_modal').hasClass('show')) {
+            load_sections();
+        }
+    }
+
+    function start_job(type, job_type, options, button) {
+
+        set_loading(button, true);
+
+        var values = {
+            assessment_id: assessment_id,
+            job_type: job_type,
+            options: JSON.stringify(options)
+        };
+
+        ApiDataSvc.apiCall('post', 'report_job_start', values, function (data) {
+
+            var obj = JSON.parse(data);
+
+            if (!obj.success) {
+                set_loading(button, false);
+
+                if (type === 'package') {
+                    package_requested = false;
+                }
+
+                toastr.error(obj.message);
+                return;
+            }
+
+            set_loading(button, false);
+            render_job(type, {
+                id: obj.job_id,
+                job_type: job_type,
+                job_status: 'Queued',
+                done_steps: 0,
+                total_steps: 0,
+                current_step: '',
+                steps: []
+            });
+            poll(type, obj.job_id);
+        }, function () {
+            set_loading(button, false);
+            load_center();
+        });
+    }
+
+    $('#do_narratives_generate').click(function () {
+        start_job('narratives', 'Narratives', {
+            mode: 'missing_or_stale'
+        }, '#do_narratives_generate');
+    });
+
+    $('#do_narratives_retry').click(function () {
+        start_job('narratives', 'Narratives', {
+            mode: 'sections',
+            sections: failed_keys
+        }, '#do_narratives_retry');
+    });
+
+    $('#do_package').click(function () {
+
+        var options = report_options();
+        var formats = report_formats();
+
+        if (formats.length === 0) {
+            toastr.error('Choose at least one format.');
+            return;
+        }
+
+        package_requested = true;
+        start_job('package', 'Package', {
+            detail: options.detail,
+            appendices: options.appendices,
+            formats: formats
+        }, '#do_package');
+    });
+
+    $('#do_narratives_cancel').click(function () {
+
+        set_loading('#do_narratives_cancel', true);
+        $('#narratives_label').text('Stopping');
+
+        ApiDataSvc.apiCall('post', 'report_job_cancel', {
+            assessment_id: assessment_id,
+            job_type: 'Narratives'
+        }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading('#do_narratives_cancel', false);
+
+            if (obj.success) {
+                toastr.success('Generation stopped');
+            } else {
+                toastr.error(obj.message);
+            }
+
+            load_center();
+        });
+    });
+
+    function pill_status(section) {
+
+        if (section.state === 'missing') {
+            return 'Missing';
+        }
+
+        if (section.state === 'stale') {
+            return 'Out of date';
+        }
+
+        return section.narrative_status || 'Draft';
+    }
+
+    function pill(section) {
+
+        var label = pill_status(section);
+
+        return '<span class="badge ' + (PILL_CLASS[label] || 'badge--inactive') + '">' + esc(label) + '</span>';
+    }
+
+    function humanize(key) {
+
+        var text = String(key).replace(/_/g, ' ');
+
+        return text.charAt(0).toUpperCase() + text.slice(1);
+    }
+
+    function infer_fields(value, skip_locked) {
+
+        var fields = [];
+
+        if (!value || typeof value !== 'object' || Array.isArray(value)) {
+            return fields;
+        }
+
+        Object.keys(value).forEach(function (key) {
+
+            var item = value[key];
+
+            if (skip_locked && LOCKED.indexOf(key) !== -1) {
+                return;
+            }
+
+            fields.push({
+                path: key,
+                label: humanize(key),
+                type: Array.isArray(item)
+                    ? (item.length > 0 && item[0] !== null && typeof item[0] === 'object' ? 'objects' : 'list')
+                    : 'text'
+            });
+        });
+
+        return fields;
+    }
+
+    function value_at(content, path) {
+
+        var parts = String(path).split('.');
+        var value = content;
+
+        for (var i = 0; i < parts.length; i++) {
+            if (value === null || value === undefined) {
+                return undefined;
+            }
+
+            value = value[parts[i]];
+        }
+
+        return value;
+    }
+
+    function set_at(content, path, value) {
+
+        var parts = String(path).split('.');
+        var target = content;
+
+        for (var i = 0; i < parts.length - 1; i++) {
+            target = target[parts[i]];
+        }
+
+        target[parts[parts.length - 1]] = value;
+    }
+
+    function textarea(path, type, label, value) {
+
+        field_seq++;
+
+        var id = 'narrative_field_' + field_seq;
+        var text = type === 'list' ? (Array.isArray(value) ? value.join('\n\n') : '') : (value === null || value === undefined ? '' : String(value));
+
+        return '<div class="form-group review__field">'
+            + '<label for="' + id + '">' + esc(label) + '</label>'
+            + '<textarea class="form-control review__text" id="' + id + '" rows="1" data-path="' + esc(path) + '" data-type="' + type + '">' + esc(text) + '</textarea>'
+            + '</div>';
+    }
+
+    function locked_chips(item) {
+
+        var html = '';
+
+        for (var i = 0; i < LOCKED.length; i++) {
+            if (typeof item[LOCKED[i]] === 'string' && item[LOCKED[i]] !== '') {
+                html += '<span class="badge badge--inactive">' + esc(item[LOCKED[i]]) + '</span>';
+            }
+        }
+
+        return html;
+    }
+
+    function render_field(field, content, base) {
+
+        var path = base === '' ? field.path : base + '.' + field.path;
+        var value = value_at(content, path);
+
+        if (field.type !== 'objects') {
+            return textarea(path, field.type, field.label, value);
+        }
+
+        var list = Array.isArray(value) ? value : [];
+        var html = '';
+
+        for (var i = 0; i < list.length; i++) {
+
+            var item_path = path + '.' + i;
+            var subs = field.fields && field.fields.length ? field.fields : infer_fields(list[i], true);
+            var chips = locked_chips(list[i]);
+            var inner = '';
+
+            for (var s = 0; s < subs.length; s++) {
+                inner += render_field(subs[s], content, item_path);
+            }
+
+            html += '<div class="review__object">'
+                + '<div class="review__object-head"><span class="review__object-num">' + (i + 1) + '</span>' + chips + '</div>'
+                + inner + '</div>';
+        }
+
+        if (html === '') {
+            return '';
+        }
+
+        return '<div class="review__group"><span class="review__group-title">' + esc(field.label) + '</span>' + html + '</div>';
+    }
+
+    function section_of(key) {
+
+        for (var i = 0; i < sections.length; i++) {
+            if (sections[i].section_key === key) {
+                return sections[i];
+            }
+        }
+
+        return null;
+    }
+
+    function autosize(element) {
+
+        if (element.offsetParent === null) {
+            return;
+        }
+
+        element.style.height = 'auto';
+        element.style.height = (element.scrollHeight + 2) + 'px';
+    }
+
+    $('#narrative_modal').on('shown.bs.modal', function () {
+        $('#narrative_editor .review__text').each(function () {
+            autosize(this);
+        });
+    });
+
+    function render_list() {
+
+        var html = '';
+
+        for (var i = 0; i < sections.length; i++) {
+            html += '<li><button type="button" class="review__item' + (sections[i].section_key === selected_key ? ' is-on' : '') + '" data-key="' + esc(sections[i].section_key) + '">'
+                + '<span class="review__name">' + esc(sections[i].label) + '</span>' + pill(sections[i]) + '</button></li>';
+        }
+
+        $('#narrative_list').html(html);
+
+        var drafts = current_drafts().length;
+
+        $('#do_narratives_approve_all_open').prop('disabled', drafts === 0);
+    }
+
+    function current_drafts() {
+        return sections.filter(function (section) {
+            return section.state === 'current' && section.narrative_status === 'Draft';
+        });
+    }
+
+    function sync_buttons() {
+
+        var section = section_of(selected_key);
+        var status = section ? pill_status(section) : 'Missing';
+
+        $('#do_narrative_save').prop('disabled', status === 'Missing' || !dirty);
+        $('#do_narrative_approve').prop('disabled', status === 'Missing' || status === 'Stale' || (status === 'Approved' && !dirty));
+        $('#do_narrative_reject').prop('disabled', status === 'Missing' || status === 'Rejected');
+    }
+
+    function render_editor() {
+
+        var section = section_of(selected_key);
+        var html = '';
+
+        dirty = false;
+
+        if (!section) {
+            $('#narrative_editor').html('<p class="review__empty">No narrative sections for this assessment.</p>');
+            sync_buttons();
+            return;
+        }
+
+        html += '<div class="review__head"><h3 class="review__title">' + esc(section.label) + '</h3>' + pill(section) + '</div>';
+
+        if (section.state === 'stale' && section.stale_reason) {
+            html += '<p class="review__stale">' + esc(section.stale_reason) + '</p>';
+        }
+
+        if (section.state === 'missing' || !section.content) {
+            html += '<p class="review__empty">This section has not been written yet.</p>';
+        } else {
+            var fields = section.fields && section.fields.length ? section.fields : infer_fields(section.content, false);
+
+            for (var i = 0; i < fields.length; i++) {
+                html += render_field(fields[i], section.content, '');
+            }
+        }
+
+        $('#narrative_editor').html(html).scrollTop(0);
+        $('#narrative_editor .review__text').each(function () {
+            autosize(this);
+        });
+        sync_buttons();
+    }
+
+    $('#narrative_editor').on('input', '.review__text', function () {
+        autosize(this);
+        dirty = true;
+        sync_buttons();
+    });
+
+    function edited_content() {
+
+        var section = section_of(selected_key);
+        var content = JSON.parse(JSON.stringify(section.content));
+
+        $('#narrative_editor .review__text').each(function () {
+
+            var value = $(this).val();
+
+            if ($(this).attr('data-type') === 'list') {
+                value = value.split(/\n+/).map(function (line) {
+                    return line.trim();
+                }).filter(function (line) {
+                    return line !== '';
+                });
+            } else {
+                value = value.trim();
+            }
+
+            set_at(content, $(this).attr('data-path'), value);
+        });
+
+        return content;
+    }
+
+    function replace_section(updated) {
+
+        for (var i = 0; i < sections.length; i++) {
+            if (sections[i].section_key === updated.section_key) {
+                updated.fields = updated.fields || sections[i].fields;
+                sections[i] = updated;
+            }
+        }
+    }
+
+    function load_sections() {
+
+        ApiDataSvc.apiCall('post', 'report_narrative_sections', { assessment_id: assessment_id }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            if (!obj.success) {
+                toastr.error(obj.message);
+                return;
+            }
+
+            sections = obj.sections || [];
+
+            if (!section_of(selected_key)) {
+                selected_key = sections.length > 0 ? sections[0].section_key : null;
+            }
+
+            render_list();
+            render_editor();
+        });
+    }
+
+    function open_review() {
+
+        sections = [];
+        $('#narrative_list').empty();
+        $('#narrative_editor').html('<p class="review__empty"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Loading narratives&hellip;</p>');
+        $('#do_narrative_save, #do_narrative_approve, #do_narrative_reject, #do_narratives_approve_all_open').prop('disabled', true);
+        modal('narrative_modal').show();
+        load_sections();
+    }
+
+    $('#do_narratives_review').click(open_review);
+
+    function save_section(button, done) {
+
+        set_loading(button, true);
+
+        var values = {
+            assessment_id: assessment_id,
+            section_key: selected_key,
+            content: JSON.stringify(edited_content())
+        };
+
+        ApiDataSvc.apiCall('post', 'report_narrative_save', values, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading(button, false);
+
+            if (!obj.success) {
+                toastr.error(obj.message);
+                sync_buttons();
+                return;
+            }
+
+            if (obj.section) {
+                replace_section(obj.section);
+            }
+
+            dirty = false;
+            done();
+        }, function () {
+            set_loading(button, false);
+            sync_buttons();
+            toastr.error('The edits could not be saved. Try again.');
+        });
+    }
+
+    function set_status(button, narrative_status) {
+
+        set_loading(button, true);
+
+        var values = {
+            assessment_id: assessment_id,
+            section_key: selected_key,
+            narrative_status: narrative_status
+        };
+
+        ApiDataSvc.apiCall('post', 'report_narrative_status', values, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading(button, false);
+
+            if (!obj.success) {
+                toastr.error(obj.message);
+                sync_buttons();
+                return;
+            }
+
+            if (obj.section) {
+                replace_section(obj.section);
+            }
+
+            render_list();
+            render_editor();
+            load_center();
+        }, function () {
+            set_loading(button, false);
+            sync_buttons();
+            toastr.error('That could not be saved. Try again.');
+        });
+    }
+
+    $('#narrative_list').on('click', '.review__item', function () {
+
+        var key = $(this).attr('data-key');
+
+        if (key === selected_key) {
+            return;
+        }
+
+        if (!dirty) {
+            selected_key = key;
+            render_list();
+            render_editor();
+            return;
+        }
+
+        save_section(this, function () {
+            toastr.success('Edits saved');
+            selected_key = key;
+            render_list();
+            render_editor();
+            load_center();
+        });
+    });
+
+    $('#do_narrative_save').click(function () {
+        save_section('#do_narrative_save', function () {
+            toastr.success('Edits saved');
+            render_list();
+            render_editor();
+            load_center();
+        });
+    });
+
+    $('#do_narrative_approve').click(function () {
+
+        if (!dirty) {
+            set_status('#do_narrative_approve', 'Approved');
+            return;
+        }
+
+        save_section('#do_narrative_approve', function () {
+            set_status('#do_narrative_approve', 'Approved');
+        });
+    });
+
+    $('#do_narrative_reject').click(function () {
+        set_status('#do_narrative_reject', 'Rejected');
+    });
+
+    $('#do_narratives_approve_all_open').click(function () {
+
+        var count = current_drafts().length;
+
+        $('#narratives_approve_all_text').text('Approve ' + count + ' current draft ' + (count === 1 ? 'section' : 'sections') + ' as written? Stale, missing and rejected sections are left as they are.');
+        modal('narratives_approve_all_modal').show();
+    });
+
+    function approve_next(list, index, done) {
+
+        if (index >= list.length) {
+            done();
+            return;
+        }
+
+        var values = {
+            assessment_id: assessment_id,
+            section_key: list[index].section_key,
+            narrative_status: 'Approved'
+        };
+
+        ApiDataSvc.apiCall('post', 'report_narrative_status', values, function (data) {
+
+            var obj = JSON.parse(data);
+
+            if (!obj.success) {
+                toastr.error(list[index].label + ': ' + obj.message);
+            }
+
+            approve_next(list, index + 1, done);
+        }, function () {
+            toastr.error(list[index].label + ' could not be approved.');
+            approve_next(list, index + 1, done);
+        });
+    }
+
+    $('#do_narratives_approve_all').click(function () {
+
+        var list = current_drafts();
+
+        set_loading('#do_narratives_approve_all', true);
+
+        approve_next(list, 0, function () {
+            set_loading('#do_narratives_approve_all', false);
+            modal('narratives_approve_all_modal').hide();
+            toastr.success(list.length === 1 ? 'Section approved' : list.length + ' sections approved');
+            load_sections();
+            load_center();
+        });
+    });
+
+    function report_values(button, format) {
+
+        var options = report_options();
+
+        return {
+            report_type: $(button).attr('data-report'),
+            scope: 'assessment',
+            id: assessment_id,
+            format: format,
+            detail: options.detail,
+            appendices: options.appendices ? '1' : '0'
+        };
+    }
+
+    $('#tab_reports').on('click', "[data-action='preview_report']", function () {
 
         var button = this;
-        var format = $(button).attr("data-format");
+        var values = report_values(button, 'pdf');
 
-        var obj = {
-            report_type: $(button).attr("data-report"),
-            scope: "assessment",
-            id: assessment_id,
-            format: format
-        };
+        values.preview = '1';
+
+        $('#report_preview_modal_title').text($(button).attr('data-name'));
+        $('#report_preview_frame').attr('src', 'about:blank').prop('hidden', true);
+        $('#report_preview_loading').prop('hidden', false);
+        set_loading(button, true);
+        modal('report_preview_modal').show();
+
+        ApiDataSvc.apiCall('post', 'ready_report_download', values, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading(button, false);
+
+            if (!obj.success) {
+                modal('report_preview_modal').hide();
+                toastr.error(obj.message);
+                return;
+            }
+
+            $('#report_preview_frame').prop('hidden', false).one('load', function () {
+                $('#report_preview_loading').prop('hidden', true);
+            }).attr('src', obj.url);
+        }, function () {
+            set_loading(button, false);
+            modal('report_preview_modal').hide();
+            toastr.error('The preview could not be prepared. Try again.');
+        });
+    });
+
+    $('#report_preview_modal').on('hidden.bs.modal', function () {
+        $('#report_preview_frame').off('load').attr('src', 'about:blank').prop('hidden', true);
+    });
+
+    $('#tab_reports').on('click', "[data-action='download_report']", function () {
+
+        var button = this;
+        var format = $(button).attr('data-format');
+        var values = report_values(button, format);
 
         set_loading(button, true);
 
         var tab = report_tab(format);
 
-        ApiDataSvc.apiCall('post', 'ready_report_download', obj, function (data) {
+        ApiDataSvc.apiCall('post', 'ready_report_download', values, function (data) {
+
             var obj = JSON.parse(data);
+
             set_loading(button, false);
+
             if (obj.success) {
                 show_report_tab(tab, obj.url);
             } else {
@@ -1825,7 +2996,7 @@ $(document).ready(function () {
         }, function () {
             set_loading(button, false);
             close_report_tab(tab);
-            toastr.error("The report could not be prepared. Try again.");
+            toastr.error('The report could not be prepared. Try again.');
         });
     });
 

@@ -56,9 +56,10 @@ class ReadyReports {
     private $evidence_model;
     private $ready_model;
 
-    public function __construct()
+    /** $company_id defaults to the signed-in company; the background worker passes it. */
+    public function __construct(?int $company_id = null)
     {
-        $this->company_id = Session::get('company_id');
+        $this->company_id = $company_id ?? Session::get('company_id');
         $this->company = (new CompaniesModel())->get_company($this->company_id)[0] ?? array();
         $this->assessments_model = new AssessmentsModel();
         $this->clients_model = new ClientsModel();
@@ -129,7 +130,9 @@ class ReadyReports {
 
     /**
      * The file for one report, or array('error' => ...). $target_id is an
-     * assessment or client id depending on the report.
+     * assessment or client id depending on the report. $options go to the
+     * report builder: detail, appendices and the document state from
+     * ReportStates::document_options() (status, version, approval).
      */
     public function render(string $type, int $target_id, string $format, array $options = array()): array
     {

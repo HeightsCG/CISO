@@ -459,6 +459,7 @@ class AssessmentsModel extends Model {
                     ai.owner_name,
                     ai.target_date,
                     ai.implementation_description,
+                    ai.date_updated,
                     COUNT(el.id) AS evidence_count
                 FROM
                     assessment_items ai
@@ -882,6 +883,31 @@ class AssessmentsModel extends Model {
                     b.date_created asc,
                     b.id asc";
         return parent::select($sql, $where);
+    }
+
+    /** When answers were first and last recorded for an assessment (answered items only). */
+    public function response_window($assessment_id, $company_id)
+    {
+        $where = array(
+            'assessment_id' => $assessment_id,
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    MIN(ai.date_updated) AS first_response,
+                    MAX(ai.date_updated) AS last_response
+                FROM
+                    assessment_items ai
+                    JOIN assessments a ON a.id = ai.assessment_id
+                WHERE
+                    ai.assessment_id = :assessment_id
+                    and
+                    a.company_id = :company_id
+                    and
+                    ai.deleted = 0
+                    and
+                    ai.item_result <> 'Not Assessed'";
+        $rows = parent::select($sql, $where);
+        return $rows[0] ?? array();
     }
 
     /** Control results of one assessment, keyed for comparison by control identifier. */

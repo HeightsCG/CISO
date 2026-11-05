@@ -110,6 +110,7 @@ class ReportAnalysis
             'client' => self::plain($assessment['client_name'] ?? ''),
             'standard' => self::plain($assessment['standard_name']),
             'period' => self::period($assessment),
+            'periods' => self::periods($assessment, $assessments->response_window($this->assessment_id, $this->company_id)),
             'counts' => $counts,
             'total' => $total,
             'applicable' => $applicable,
@@ -212,9 +213,17 @@ class ReportAnalysis
             'Not Assessed'
         ), true) ? $item['item_result'] : 'Not Assessed';
 
+        $updated = (string) ($item['date_updated'] ?? '');
+        foreach ($objective_rows as $row) {
+            if ((string) ($row['date_updated'] ?? '') > $updated) {
+                $updated = (string) $row['date_updated'];
+            }
+        }
+
         $record = array(
             'id' => (int) $item['id'],
             'ref' => $ref,
+            'updated' => $updated,
             'title' => self::plain($item['control_title']),
             'description' => self::plain($item['description']),
             'family' => self::plain($item['family']) !== '' ? self::plain($item['family']) : 'General',
@@ -1162,6 +1171,30 @@ class ReportAnalysis
         }
 
         return (int) round(100 * ($counts['Implemented'] + 0.5 * $counts['Partially Implemented']) / $applicable);
+    }
+
+    /**
+     * The three dates a reader needs kept apart: the planned assessment
+     * period, the window in which responses were actually recorded, and the
+     * reporting cutoff (results as they stood when the report was generated).
+     */
+    private static function periods(array $assessment, array $window): array
+    {
+        $date = function ($value) {
+            return empty($value) ? '' : date('F j, Y', strtotime((string) $value));
+        };
+
+        $first = $date($window['first_response'] ?? '');
+        $last = $date($window['last_response'] ?? '');
+
+        return array(
+            'planned' => empty($assessment['start_date'])
+                ? 'Ongoing (no fixed period planned)'
+                : (empty($assessment['end_date']) ? 'From '.$date($assessment['start_date']) : $date($assessment['start_date']).' to '.$date($assessment['end_date'])),
+            'responses' => $first === '' ? 'No responses recorded yet' : ($first === $last ? $first : $first.' to '.$last),
+            'cutoff' => date('F j, Y H:i').' UTC',
+            'assessment_status' => self::plain($assessment['assessment_status'] ?? '')
+        );
     }
 
     private static function period(array $assessment): string

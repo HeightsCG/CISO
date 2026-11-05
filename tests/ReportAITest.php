@@ -7,6 +7,7 @@
 require_once ROOT.'/libs/Classes/AiAssistant.php';
 require_once ROOT.'/libs/Classes/ReportAnalysis.php';
 require_once ROOT.'/libs/Classes/ReportAI.php';
+require_once ROOT.'/libs/Classes/ReportQuality.php';
 
 $domain_input = function () {
     return array(
@@ -61,7 +62,7 @@ $domain_input = function () {
 $domain_entry = function (string $ref, array $overrides = array()) {
     return array_merge(array(
         'ref' => $ref,
-        'observation' => 'PF02 is not met: no written code of conduct is in place.',
+        'recorded_condition' => 'PF02 (standards of conduct) is recorded as not met.',
         'control_purpose' => 'The criterion is intended to establish expected behavior.',
         'risk_scenarios' => array(
             array(
@@ -73,14 +74,16 @@ $domain_entry = function (string $ref, array $overrides = array()) {
                 'consequence' => 'The organization could be unable to act on misconduct.'
             )
         ),
-        'recommended_actions' => array(
-            'Publish a code of conduct and obtain staff acknowledgement.'
+        'suggested_approach' => array(
+            'Consider publishing a code of conduct and obtaining staff acknowledgement.'
+        ),
+        'confirm' => array(
+            'Whether conduct expectations exist informally.'
         ),
         'expected_outcome' => 'A code of conduct is published and acknowledged.',
         'validation_criteria' => array(
             'Sample acknowledgements for current staff.'
         ),
-        'considerations' => '',
         'source_refs' => array(
             'CC1.1',
             'PF02'
@@ -166,7 +169,7 @@ return array(
             ),
             'controls' => array(
                 $domain_entry('CC1.1', array(
-                    'observation' => 'PF02 is not met; retrain within 30 days.',
+                    'recorded_condition' => 'PF02 is not met; retrain within 30 days.',
                     'source_refs' => array(
                         'CC1.1',
                         'PF02',
@@ -181,12 +184,12 @@ return array(
         $content = $result['content'];
 
         Assert::same(1, count($content['controls']), 'unknown and repeated refs are dropped');
-        Assert::same(null, $content['controls'][0]['observation'], 'a field with an invented figure is nulled');
+        Assert::same(null, $content['controls'][0]['recorded_condition'], 'a field with an invented figure is nulled');
         Assert::same(array(
             'CC1.1',
             'CC1.1-PF02'
         ), $content['controls'][0]['source_refs'], 'short id repaired, unknown ref dropped');
-        Assert::same(3, count($content['narrative']), 'narrative bounded to three paragraphs');
+        Assert::same(2, count($content['narrative']), 'narrative bounded to two paragraphs');
         Assert::same('The category has two gaps.', $content['narrative'][0], 'markdown stripped');
 
         $log = implode("\n", $result['rejected']);
@@ -420,7 +423,7 @@ return array(
         Assert::same(array(
             'CC6.1'
         ), $result['content']['key_findings'][0]['refs'], 'objective refs fold into their control');
-        Assert::same(5, count($result['content']['strengths']), 'strengths bounded to five');
+        Assert::same(4, count($result['content']['strengths']), 'strengths bounded to four');
     },
 
     'assessor edits must keep the section shape' => function () use ($domain_input, $domain_entry) {
@@ -436,7 +439,7 @@ return array(
         Assert::same(array(), ReportAI::shape_errors('domain', $content), 'validated content fits its schema');
 
         $content['controls'][0]['extra'] = 'x';
-        $content['controls'][0]['recommended_actions'] = 'not a list';
+        $content['controls'][0]['suggested_approach'] = 'not a list';
         $errors = ReportAI::shape_errors('domain', $content);
         Assert::same(2, count($errors), 'an extra key and a wrong type are both reported');
 
@@ -446,11 +449,147 @@ return array(
             'issues' => array(
                 array(
                     'severity' => 'Severe',
+                    'category' => 'other',
                     'section' => 'executive',
-                    'description' => 'x'
+                    'description' => 'x',
+                    'refs' => array()
                 )
             )
         )), 'enums are checked');
+    },
+
+    'scenarios that are not written as possibilities are dropped' => function () use ($domain_input, $domain_entry) {
+        $output = array(
+            'narrative' => array(
+                'Text.'
+            ),
+            'controls' => array(
+                $domain_entry('CC1.1', array(
+                    'risk_scenarios' => array(
+                        array(
+                            'scenario' => 'Staff apply conduct expectations inconsistently.',
+                            'consequence' => 'Misconduct goes unaddressed.'
+                        ),
+                        array(
+                            'scenario' => 'If conduct expectations are unwritten, staff could apply them inconsistently.',
+                            'consequence' => 'Misconduct could go unaddressed.'
+                        )
+                    )
+                ))
+            )
+        );
+        $result = ReportAI::validate('domain', $output, $domain_input());
+
+        Assert::same(1, count($result['content']['controls'][0]['risk_scenarios']), 'the unhedged scenario is dropped');
+        Assert::true(strpos(implode("\n", $result['rejected']), 'not written as a possibility') !== false, 'the drop is recorded');
+        Assert::same(array(
+            'Whether conduct expectations exist informally.'
+        ), $result['content']['controls'][0]['confirm'], 'items to confirm are kept');
+    },
+
+    'product and vendor names absent from the facts are rejected' => function () use ($domain_input, $domain_entry) {
+        $input = $domain_input();
+        $input['gap_controls'][1]['evidence'] = array(
+            'Okta access policy export'
+        );
+        $output = array(
+            'narrative' => array(
+                'The organization stores customer records in Salesforce.',
+                'Access is administered through Okta, as the linked evidence title indicates.'
+            ),
+            'controls' => array(
+                $domain_entry('CC1.1', array(
+                    'suggested_approach' => array(
+                        'Consider configuring conditional access in Azure AD.',
+                        'Consider a periodic review of access.'
+                    )
+                ))
+            )
+        );
+        $result = ReportAI::validate('domain', $output, $input);
+
+        Assert::same(array(
+            'Access is administered through Okta, as the linked evidence title indicates.'
+        ), $result['content']['narrative'], 'a product named in the facts is kept, one that is not is dropped');
+        Assert::same(array(
+            'Consider a periodic review of access.'
+        ), $result['content']['controls'][0]['suggested_approach'], 'an approach naming a product is dropped');
+        Assert::true(strpos(implode("\n", $result['rejected']), 'unsupported product or vendor name "salesforce"') !== false, 'the rejection is recorded');
+    },
+
+    'review issues carry a category and known refs' => function () {
+        $input = array(
+            'gaps' => array(
+                array(
+                    'ref' => 'CC6.1',
+                    'objectives' => array(
+                        array(
+                            'ref' => 'CC6.1-PF01'
+                        )
+                    )
+                )
+            ),
+            'sections' => array(
+                'executive' => array()
+            )
+        );
+        $result = ReportAI::validate('review', array(
+            'issues' => array(
+                array(
+                    'severity' => 'High',
+                    'category' => 'contradiction',
+                    'section' => 'executive',
+                    'description' => 'CC6.1-PF01 is described as absent.',
+                    'refs' => array(
+                        'CC6.1-PF01',
+                        'ZZ9'
+                    )
+                ),
+                array(
+                    'severity' => 'Low',
+                    'category' => 'nonsense',
+                    'section' => 'domain:Nowhere',
+                    'description' => 'Vague.',
+                    'refs' => array()
+                )
+            )
+        ), $input);
+        $issues = $result['content']['issues'];
+
+        Assert::same('contradiction', $issues[0]['category'], 'a known category is kept');
+        Assert::same(array(
+            'CC6.1-PF01'
+        ), $issues[0]['refs'], 'unknown refs are dropped');
+        Assert::same('other', $issues[1]['category'], 'an unknown category becomes other');
+        Assert::same('general', $issues[1]['section'], 'an unknown section becomes general');
+    },
+
+    'the executive summary carries a separate exposure overview' => function () {
+        $result = ReportAI::validate('executive', array(
+            'overview' => array(
+                'The result is recorded.'
+            ),
+            'exposure_overview' => array(
+                'If access gaps persist, data could be exposed.',
+                'Where records are incomplete, oversight may be harder.',
+                'A third paragraph.'
+            ),
+            'key_findings' => array(),
+            'strengths' => array(),
+            'improvements' => array(),
+            'strategic_recommendations' => array(),
+            'management_considerations' => array()
+        ), array());
+
+        Assert::same(2, count($result['content']['exposure_overview']), 'exposure overview bounded to two paragraphs');
+        Assert::same(array(), ReportAI::shape_errors('executive', $result['content']), 'the validated summary fits its schema');
+    },
+
+    'every prompt version was bumped for the precision rework' => function () {
+        foreach (ReportAI::KINDS as $kind) {
+            Assert::true(strcmp(ReportAI::PROMPT_VERSIONS[$kind], '2026-11-26') > 0, $kind.' prompt version is current');
+        }
+        Assert::true(strpos(ReportAI::SYSTEM_PROMPT, 'the organization uses Microsoft 365') !== false, 'the prohibited patterns are spelled out');
     },
 
     'every section schema is strict' => function () {

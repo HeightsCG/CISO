@@ -85,15 +85,12 @@ class ReportAssessmentResults extends ReportBuilder
             $completion .= '; '.$tally['answered'].' of '.$tally['total'].' '.$this->term('objectives').' answered ('.self::pct($tally['answered'], $tally['total']).')';
         }
 
-        $rows = array(
+        $rows = array_merge(array(
             array(
                 'Framework',
                 $this->framework_name()
-            ),
-            array(
-                'Assessment period',
-                $a['period']
-            ),
+            )
+        ), $this->period_rows(), array(
             array(
                 'Scope',
                 isset($a['assessor']['assessment_scope']) ? 'As recorded by the assessor: '.$a['assessor']['assessment_scope'] : 'Not recorded; to be confirmed with the assessor.'
@@ -110,7 +107,7 @@ class ReportAssessmentResults extends ReportBuilder
                 'Evidence',
                 $this->evidence_sentence()
             )
-        );
+        ));
 
         $rows = array_values(array_filter($rows, function ($row) {
             return $row[1] !== '';

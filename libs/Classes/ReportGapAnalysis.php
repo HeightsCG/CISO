@@ -5,7 +5,7 @@
  * navigable gap register, the patterns that recur across the gaps (only
  * those the results support), then each gap by family: the requirement,
  * the current result, the deficiency, each open objective against its
- * expected condition, the recommended improvement, what evidence would
+ * expected condition, a brief suggested improvement, what evidence would
  * close it and its references. Risk and consequences belong to the risk
  * assessment and are not repeated here.
  */
@@ -492,7 +492,7 @@ class ReportGapAnalysis extends ReportBuilder
     {
         $blocks = array(
             self::h1('Detailed gap analysis'),
-            self::text('Each gap below is grouped by '.$this->term('family').' and gives the requirement, the current result and deficiency, the '.$this->term('objectives').' that are not fully met against their expected condition, the recommended improvement and the evidence needed to show the gap is closed.'
+            self::text('Each gap below is grouped by '.$this->term('family').' and gives the requirement, the current result and deficiency, the '.$this->term('objectives').' that are not fully met against their expected condition, a brief suggested improvement and the evidence needed to show the gap is closed. Exposure, scenarios and suggested approaches are in the Risk Assessment.'
                 .($this->unspecified() ? "\n\n".'Where a '.$this->term('objective').' is recorded as partially met and no assessor note says what is lacking, "What is missing" reads "Part, not specified": the element that is missing has to be confirmed with the control owner before remediation is scoped.' : ''))
         );
 
@@ -604,11 +604,11 @@ class ReportGapAnalysis extends ReportBuilder
 
         $after = array(
             array(
-                'Recommended improvement',
+                'Suggested improvement',
                 $this->improvement($gap, $finding, $initiatives)
             ),
             array(
-                'Evidence and validation',
+                'Evidence needed',
                 $this->validation($gap, $finding, $answered)
             )
         );
@@ -741,7 +741,7 @@ class ReportGapAnalysis extends ReportBuilder
         return self::table(array(
             ucfirst($this->term('objective')),
             'Expected condition',
-            'Current answer',
+            'Recorded answer',
             'What is missing'
         ), array(
             29,
@@ -813,19 +813,11 @@ class ReportGapAnalysis extends ReportBuilder
         if ($unanswered > 0) {
             $steps[] = 'Assess the '.$unanswered.' unanswered '.($unanswered === 1 ? $t['objective'] : $t['objectives']).' to establish the full extent of the gap.';
         }
-        if (count($gap['objectives']) === 0) {
+        if (count($gap['objectives']) === 0 || count($gap['open']) === 0) {
             $steps[] = 'Agree with the assessor which elements of the requirement are missing, then put them in place.';
         }
-        $actions = isset($finding['actions_ai']) ? array_slice($finding['actions_ai'], 0, 2) : null;
-        if (count($steps) > 0 && ($actions === null || $unanswered > 0 || count($gap['objectives']) === 0)) {
+        if (count($steps) > 0) {
             $parts[] = implode(' ', $steps);
-        }
-
-        if ($actions === null) {
-            $actions = $this->best(ReportKnowledge::topic($gap['topic'])['activities'], $gap, 2);
-        }
-        if (count($actions) > 0) {
-            $parts[] = self::bullets($actions);
         }
 
         if (count($initiatives) > 0) {
@@ -860,77 +852,10 @@ class ReportGapAnalysis extends ReportBuilder
         })) > 0;
         $parts[] = $need.($gap['evidence_count'] === 0 && ($any || count($this->a['gaps']) < 3) ? '; nothing is linked yet.' : '.');
 
-        $checks = isset($finding['validation_ai']) ? array_slice($finding['validation_ai'], 0, 1) : null;
-        if ($checks === null) {
-            $checks = $this->best(ReportKnowledge::topic($gap['topic'])['validation'], $gap, 1);
-        }
-        if (count($checks) > 0) {
-            $parts[] = self::bullets($checks);
-        }
-
         return implode("\n\n", $parts);
     }
 
     /* ------------------------------------------------------------ helpers */
-
-    /**
-     * The $limit lines from a topic list that share the most words with
-     * this gap's own wording; falls back to the first lines.
-     */
-    private function best(array $lines, array $gap, int $limit): array
-    {
-        $text = $gap['title'].' '.$gap['description'];
-        foreach ($gap['expectations'] as $pair) {
-            $text .= ' '.$pair[0].' '.$pair[1];
-        }
-        foreach ($gap['open'] as $objective) {
-            $text .= ' '.$objective['title'].' '.$objective['description'];
-        }
-        $words = array_flip(self::words($text));
-
-        $scored = array();
-        foreach (array_values($lines) as $index => $line) {
-            $score = 0;
-            foreach (array_unique(self::words($line)) as $word) {
-                if (isset($words[$word])) {
-                    $score++;
-                }
-            }
-            $scored[] = array(
-                'line' => $line,
-                'score' => $score,
-                'index' => $index
-            );
-        }
-
-        usort($scored, function ($x, $y) {
-            return $y['score'] <=> $x['score'] ?: $x['index'] <=> $y['index'];
-        });
-
-        return array_column(array_slice($scored, 0, $limit), 'line');
-    }
-
-    private static function words(string $text): array
-    {
-        preg_match_all('/[a-z]{5,}/', strtolower($text), $match);
-
-        return array_values(array_filter($match[0], function ($word) {
-            return !in_array($word, array(
-                'which',
-                'their',
-                'there',
-                'these',
-                'those',
-                'where',
-                'other',
-                'about',
-                'organization',
-                'entity',
-                'ensure',
-                'information'
-            ), true);
-        }));
-    }
 
     private static function short(string $text, int $length): string
     {
@@ -998,8 +923,8 @@ class ReportGapAnalysis extends ReportBuilder
                     'Open '.$this->term('objectives'),
                     'Requirement and expected condition',
                     'Identified deficiency',
-                    'Recommended improvement',
-                    'Evidence and validation',
+                    'Suggested improvement',
+                    'Evidence needed',
                     'Initiative',
                     'Assessed risk'
                 ),

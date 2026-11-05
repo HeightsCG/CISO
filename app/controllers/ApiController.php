@@ -5990,17 +5990,34 @@ class ApiController extends Controller {
         $report_type = (string) ($this->post['report_type'] ?? '');
         $spec = ReadyReports::spec($report_type);
         $scope = (string) ($this->post['scope'] ?? ($spec['scope'] ?? ''));
+        $target_id = (int) ($this->post['id'] ?? ($this->post['target_id'] ?? 0));
 
-        if ($spec === null || $scope !== $spec['scope']) {
+        if ($spec === null || $scope !== $spec['scope'] || ($scope === 'assessment' && !$this->owns_assessment($target_id))) {
             $response['message'] = 'That report could not be found';
             echo json_encode($response);
             exit;
         }
 
+        $preview = (string) ($this->post['preview'] ?? '') === '1';
+        $options = array();
+
+        if ($scope === 'assessment') {
+            $options = ReportStates::document_options($target_id, (int) Session::get('company_id'));
+        }
+
+        if (in_array((string) ($this->post['detail'] ?? ''), ReportJobs::DETAILS, true)) {
+            $options['detail'] = (string) $this->post['detail'];
+        }
+
+        if (isset($this->post['appendices'])) {
+            $options['appendices'] = (string) $this->post['appendices'] !== '0';
+        }
+
         $file = (new ReadyReports())->render(
             $report_type,
-            (int) ($this->post['id'] ?? ($this->post['target_id'] ?? 0)),
-            (string) ($this->post['format'] ?? 'pdf')
+            $target_id,
+            $preview ? 'pdf' : (string) ($this->post['format'] ?? 'pdf'),
+            $options
         );
 
         if (isset($file['error'])) {
@@ -6019,9 +6036,233 @@ class ApiController extends Controller {
 
         $response['success'] = true;
         $response['message'] = 'ok';
-        $response['url'] = S3Service::presigned_get_url($key, 300, $file['file_name']);
+        $response['url'] = S3Service::presigned_get_url($key, ReportJobs::DOWNLOAD_TTL, $file['file_name']);
         echo json_encode($response);
         exit;
+    }
+
+    /* ------------------------------------------------------ report workflow */
+
+    /** Everything the Reports tab shows: document state, readiness, narratives, latest jobs and the catalog. */
+    public function report_centerAction(){
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+        $analysis = $this->narrative_analysis($assessment_id);
+        $company_id = (int) Session::get('company_id');
+        $states = ReportStates::narrative_states($analysis, $company_id);
+        $applied = ReportNarratives::apply($analysis, $company_id);
+
+        $narratives = array(
+            'total' => count($states),
+            'approved' => 0,
+            'draft' => 0,
+            'stale' => 0,
+            'missing' => 0,
+            'rejected' => 0,
+            'sections' => array()
+        );
+
+        foreach ($states as $state) {
+            if ($state['state'] === 'current') {
+                $narratives[strtolower((string) $state['narrative_status'])]++;
+            } else {
+                $narratives[$state['state']]++;
+            }
+            $narratives['sections'][] = array(
+                'section_key' => $state['section_key'],
+                'label' => $state['label'],
+                'state' => $state['state'],
+                'narrative_status' => $state['narrative_status'],
+                'edited' => $state['edited'],
+                'revised' => $state['revised'],
+                'date_generated' => $state['generated'],
+                'stale_reason' => $state['stale_reason']
+            );
+        }
+
+        $readiness = array();
+        foreach ($applied['readiness'] as $issue) {
+            $readiness[] = array(
+                'severity' => $issue[0],
+                'message' => $issue[1]
+            );
+        }
+
+        $jobs_model = new ReportJobsModel();
+        $jobs = array(
+            'narratives' => null,
+            'package' => null
+        );
+
+        foreach (ReportJobs::TYPES as $job_type) {
+            $rows = $jobs_model->latest_job($assessment_id, $company_id, $job_type);
+            if (count($rows) === 1) {
+                ReportJobs::nudge($rows[0]);
+                $jobs[strtolower($job_type)] = ReportJobs::payload($rows[0]);
+            }
+        }
+
+        $reports = array();
+        foreach (ReadyReports::catalog_for('assessment') as $item) {
+            $reports[] = array(
+                'key' => $item['key'],
+                'name' => $item['name'],
+                'description' => $item['description'],
+                'formats' => $item['formats']
+            );
+        }
+
+        echo json_encode(array(
+            'success' => true,
+            'message' => 'ok',
+            'state' => ReportStates::summary($analysis, $company_id, $states),
+            'readiness' => $readiness,
+            'narratives' => $narratives,
+            'quality' => $this->narrative_quality($states, $applied['quality'] ?? array()),
+            'jobs' => $jobs,
+            'reports' => $reports,
+            'ai_configured' => AiAssistant::configured()
+        ));
+        exit;
+    }
+
+    /**
+     * Narrative quality for the Reports tab: the AI review's issues and the
+     * deterministic rules issues in one shape, {counts:{High,Medium,Low},
+     * categories, sources:{review, rules}, issues:[{severity, category,
+     * section, field, description, refs, source}]}.
+     */
+    private function narrative_quality(array $states, array $rules): array
+    {
+        $review = array();
+
+        if (isset($states['review']) && $states['review']['usable'] && is_array($states['review']['content'])) {
+            $review = ReportQuality::review_issues($states['review']['content']);
+        }
+
+        $summary = ReportQuality::summary(array_merge($review, $rules));
+        $summary['categories'] = (object) $summary['categories'];
+        $summary['sources'] = array(
+            'review' => ReportQuality::summary($review)['counts'],
+            'rules' => ReportQuality::summary($rules)['counts']
+        );
+
+        return $summary;
+    }
+
+    /** Queue a Narratives or Package job; the work runs in the background worker. */
+    public function report_job_startAction(){
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+        $this->refuse_unless_report_staff($assessment_id);
+
+        $options = json_decode($this->input('options'), true);
+
+        $result = ReportJobs::dispatch(
+            (int) Session::get('company_id'),
+            $assessment_id,
+            $this->input('job_type'),
+            is_array($options) ? $options : array(),
+            (int) Session::get('user_id')
+        );
+
+        echo json_encode($result);
+        exit;
+    }
+
+    /** A job's progress; a completed package carries a short-lived download link. */
+    public function report_job_statusAction(){
+
+        $job = $this->report_job((int) ($this->post['job_id'] ?? 0));
+        ReportJobs::nudge($job);
+
+        $response = array(
+            'success' => true,
+            'message' => 'ok',
+            'job' => ReportJobs::payload($job)
+        );
+
+        if ($job['job_type'] === 'Package' && $job['job_status'] === 'Completed' && (string) $job['result_key'] !== '') {
+            $response['download_url'] = S3Service::presigned_get_url($job['result_key'], ReportJobs::DOWNLOAD_TTL, (string) $job['result_name']);
+        }
+
+        echo json_encode($response);
+        exit;
+    }
+
+    /** Stop a queued or running job; a running worker stops after its current step. */
+    /** Stop the assessment's running job of a type (or, without a type, the job given by id). */
+    public function report_job_cancelAction(){
+
+        $model = new ReportJobsModel();
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+        $job_type = $this->input('job_type');
+        $job_id = (int) ($this->post['job_id'] ?? 0);
+
+        if ($assessment_id > 0 && in_array($job_type, ReportJobs::TYPES, true)) {
+            $this->refuse_unless_report_staff($assessment_id);
+            $active = $model->active_job($assessment_id, (int) Session::get('company_id'), $job_type);
+
+            if (count($active) === 0) {
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => 'Nothing is running'
+                ));
+                exit;
+            }
+
+            $job_id = (int) $active[0]['id'];
+        }
+
+        $job = $this->report_job($job_id);
+        $cancelled = $model->cancel_job((int) $job['id'], (int) Session::get('company_id'));
+
+        echo json_encode(array(
+            'success' => $cancelled === 1,
+            'message' => $cancelled === 1 ? 'ok' : 'That job has already finished'
+        ));
+        exit;
+    }
+
+    /** Move the reports to Draft, In Review or Final; Final needs every narrative section current and approved. */
+    public function report_status_setAction(){
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+        $this->refuse_unless_report_staff($assessment_id);
+
+        echo json_encode(ReportStates::set_status(
+            $assessment_id,
+            (int) Session::get('company_id'),
+            (int) Session::get('user_id'),
+            $this->input('report_status')
+        ));
+        exit;
+    }
+
+    private function refuse_unless_report_staff(int $assessment_id): void
+    {
+        if (Session::get('user_type') !== 'staff' || !$this->owns_assessment($assessment_id)) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'That assessment could not be found'
+            ));
+            exit;
+        }
+    }
+
+    private function report_job(int $job_id): array
+    {
+        $rows = (new ReportJobsModel())->get_job($job_id, Session::get('company_id'));
+
+        if (Session::get('user_type') !== 'staff' || count($rows) !== 1 || !$this->owns_assessment((int) $rows[0]['assessment_id'])) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'That job could not be found'
+            ));
+            exit;
+        }
+
+        return $rows[0];
     }
 
     /* ---------------------------------------------------- report narratives */
@@ -6033,10 +6274,12 @@ class ApiController extends Controller {
         $analysis = $this->narrative_analysis($assessment_id);
 
         $rows = (new ReportNarrativesModel())->load_narratives($assessment_id, Session::get('company_id'));
+        $states = ReportNarratives::states($analysis, $rows);
+        $issues = $this->section_issues($analysis, $states);
         $sections = array();
 
-        foreach (ReportNarratives::states($analysis, $rows) as $state) {
-            $sections[] = $this->narrative_section($state);
+        foreach ($states as $state) {
+            $sections[] = $this->narrative_section($state, $issues);
         }
 
         echo json_encode(array(
@@ -6048,7 +6291,7 @@ class ApiController extends Controller {
         exit;
     }
 
-    /** Write one section with the AI service; unchanged inputs reuse the stored text without a call. */
+    /** Rewrite one section: queues a single-section Narratives job and returns its id for polling. */
     public function report_narrative_generateAction(){
 
         $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
@@ -6056,20 +6299,18 @@ class ApiController extends Controller {
         $this->narrative_analysis($assessment_id);
         $this->refuse_unless_ai_configured();
 
-        set_time_limit(900);
-
-        $result = (new ReportAI())->generate($assessment_id, Session::get('company_id'), $section_key, (int) Session::get('user_id'));
-
-        if (!$result['success']) {
-            echo json_encode($result);
-            exit;
-        }
-
-        echo json_encode(array(
-            'success' => true,
-            'message' => 'ok',
-            'cached' => $result['cached'],
-            'section' => $this->narrative_state($assessment_id, $section_key)
+        echo json_encode(ReportJobs::dispatch(
+            (int) Session::get('company_id'),
+            $assessment_id,
+            'Narratives',
+            array(
+                'mode' => 'sections',
+                'sections' => array(
+                    $section_key
+                ),
+                'revise' => 'none'
+            ),
+            (int) Session::get('user_id')
         ));
         exit;
     }
@@ -6192,10 +6433,16 @@ class ApiController extends Controller {
         $rows = (new ReportNarrativesModel())->load_narratives($assessment_id, Session::get('company_id'));
         $states = ReportNarratives::states($analysis, $rows);
 
-        return isset($states[$section_key]) ? $this->narrative_section($states[$section_key]) : null;
+        return isset($states[$section_key]) ? $this->narrative_section($states[$section_key], $this->section_issues($analysis, $states)) : null;
     }
 
-    private function narrative_section(array $state): array
+    /** Review and rules issues on the sections in use, for the review modal. */
+    private function section_issues(array $analysis, array $states): array
+    {
+        return $this->narrative_quality($states, ReportQuality::check($analysis, ReportQuality::usable_sections($states)))['issues'];
+    }
+
+    private function narrative_section(array $state, array $issues): array
     {
         return array(
             'section_key' => $state['section_key'],
@@ -6203,9 +6450,13 @@ class ApiController extends Controller {
             'state' => $state['state'],
             'narrative_status' => $state['narrative_status'],
             'edited' => $state['edited'],
+            'revised' => $state['revised'],
             'generated' => $state['generated'],
+            'stale_reason' => $state['stale_reason'],
             'rejected' => $state['rejected'],
-            'content' => $state['content']
+            'content' => $state['content'],
+            'fields' => ReportNarratives::fields($state['kind']),
+            'issues' => ReportQuality::for_section($issues, $state['section_key'])
         );
     }
 
