@@ -503,6 +503,10 @@ class ReportStatementOfApplicability extends ReportBuilder
             return implode('; ', $control['evidence']);
         }
 
-        return $control['evidence_count'].' items: '.implode('; ', array_slice($control['evidence'], 0, 2)).'; and '.($control['evidence_count'] - 2).' more';
+        if ($control['evidence_count'] > self::INLINE_REFS) {
+            return $control['evidence_count'].' items, each listed under Traceability in the Evidence Register';
+        }
+
+        return $control['evidence_count'].' items: '.implode('; ', $control['evidence']);
     }
 }

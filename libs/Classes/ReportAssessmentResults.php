@@ -792,13 +792,13 @@ class ReportAssessmentResults extends ReportBuilder
                 'Finding',
                 ucfirst($this->term('control')),
                 'Result',
-                'Priority',
+                'Remediation priority',
                 'Initiative'
             ), array(
                 10,
-                52,
+                48,
                 18,
-                10,
+                14,
                 10
             ), $rows);
             $letter++;

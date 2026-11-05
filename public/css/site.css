@@ -4417,35 +4417,6 @@ table.data--light td.pick__col-attach {
     height: calc(100vh - var(--topbar-height) - (2 * var(--space-6)));
 }
 
-#dash .dashgrid {
-    display: grid;
-    flex: 1 1 auto;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1px;
-    min-height: 0;
-    margin-top: var(--space-4);
-    overflow: hidden;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-panel);
-}
-
-.dashcol {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    background: var(--surface-app);
-}
-
-.dashcol .panel__head {
-    min-height: 60px;
-}
-
-.dashcol .dashscroll {
-    padding: var(--space-3) var(--space-4) var(--space-4);
-}
-
 /* Each list takes whatever is left inside its own panel. */
 
 /* The summary region: the figures a consultant acts on, then the distribution
@@ -4548,8 +4519,7 @@ table.data--light td.pick__col-attach {
 
 .rowlink,
 .metric.rowlink,
-.asmt.rowlink,
-.dashgrid .metric.rowlink {
+.asmt.rowlink {
     position: relative;
     margin-left: calc(var(--space-4) * -1);
     margin-right: calc(var(--space-4) * -1);
@@ -4618,58 +4588,6 @@ table.data--light td.pick__col-attach {
     width: auto;
 }
 
-/* A list that ends mid-row reads as broken unless the clip is announced. The two
-   solid gradients scroll with the content and hide the shadows at the ends, so the
-   fade appears only while there is more to reach. */
-
-.dashscroll {
-    flex: 1 1 auto;
-    min-height: 5rem;
-    overflow-y: auto;
-    background:
-        linear-gradient(var(--surface-app) 40%, rgba(255, 255, 255, 0)) center top / 100% 1.5rem no-repeat local,
-        linear-gradient(rgba(255, 255, 255, 0), var(--surface-app) 60%) center bottom / 100% 1.5rem no-repeat local,
-        linear-gradient(rgba(16, 27, 43, 0.14), rgba(255, 255, 255, 0)) center top / 100% 0.5rem no-repeat scroll,
-        linear-gradient(rgba(255, 255, 255, 0), rgba(16, 27, 43, 0.14)) center bottom / 100% 0.5rem no-repeat scroll;
-}
-
-/* Three columns leave far less room than a full-width panel, so the bar and the
-   figure give their width back to the label rather than truncating it. */
-
-.dashgrid .metric {
-    gap: var(--space-3);
-    padding: var(--space-2) 0;
-}
-
-.dashgrid .metric__bar {
-    width: 84px;
-}
-
-.dashgrid .metric__value {
-    width: 68px;
-}
-
-.dashgrid .metric__sub {
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* A row with nothing to plot gives the width back to its label rather than
-   holding an empty 84px gutter open. */
-
-.dashgrid .metric__bar:empty {
-    width: 0;
-}
-
-.dashgrid .asmt {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: var(--space-3);
-}
-
-.dashgrid .asmt__progress {
-    width: 150px;
-}
-
 /* Below the grid breakpoint the panels stack, so a per-panel cap would only
    push the document down. The lists keep their own scroll and the page keeps
    its single scroll context. */
@@ -4686,15 +4604,6 @@ table.data--light td.pick__col-attach {
         height: auto;
     }
 
-    #dash .dashgrid {
-        flex: 0 1 auto;
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .dashscroll {
-        flex: 0 1 auto;
-        max-height: 22rem;
-    }
 }
 
 @media (max-width: 575.98px) {
@@ -4927,8 +4836,6 @@ table.data.lines .num .form-control {
     min-height: calc(100vh - var(--topbar-height) - (2 * var(--space-6)));
 }
 
-
-
 /* The summary is read at a glance and sized by its content, so it stays at the
    top of its column while the document beside it stretches. */
 
@@ -5038,9 +4945,6 @@ table.data.lines .num .form-control {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
-
-
 
 /* The foot carries the money now, so the last row is the balance and is given
    the weight the rail's total used to have. */
@@ -5537,8 +5441,6 @@ table.data.ledger tfoot .ledger__foot-total .ledger__amount {
     display: flex;
     width: 100%;
 }
-
-
 
 #schedule_modal .modal-header {
     align-items: flex-start;
@@ -6122,10 +6024,6 @@ table.data.ledger .ledger__amount {
     color: var(--text-primary);
 }
 
-
-
-
-
 .summary {
     position: sticky;
     top: var(--space-5);
@@ -6134,36 +6032,6 @@ table.data.ledger .ledger__amount {
     border-radius: var(--radius);
     box-shadow: var(--shadow-panel);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .commit {
     padding: var(--space-4) var(--space-5);
@@ -6195,14 +6063,6 @@ table.data.ledger .ledger__amount {
     .summary {
         position: static;
     }
-
-
-
-
-
-
-
-
 
     .masthead {
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -9009,7 +8869,6 @@ body.app .panel__head .btn.btn--icon:hover:not(:disabled) {
     box-shadow: 0 0 0 1px rgba(0, 113, 227, 0.18);
 }
 
-
 body.app #invoice_modal .masthead--form {
     grid-template-columns: repeat(5, minmax(0, 1fr));
 }
@@ -10911,4 +10770,569 @@ body.app .reports__step.is-failed .progress__bar {
 
 body.app .reports__job:has(.reports__steps:not([hidden])) {
     align-items: flex-start;
+}
+
+body.app #poam_modal .modal-dialog {
+    max-width: min(1400px, calc(100vw - 3.5rem));
+    height: calc(100vh - 3.5rem);
+}
+
+body.app #poam_modal .modal-content {
+    height: 100%;
+}
+
+body.app #poam_modal .modal-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding-bottom: var(--space-6);
+    overflow: hidden;
+}
+
+body.app .poam__banner {
+    flex: 0 0 auto;
+    margin-bottom: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    font-size: 13px;
+}
+
+body.app .poam__toolbar {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+}
+
+body.app .poam__search {
+    flex: 1 1 320px;
+    min-width: 0;
+    height: var(--control-height);
+}
+
+body.app .poam__filter {
+    flex: 0 0 220px;
+}
+
+body.app .poam__counts {
+    flex: 0 0 auto;
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+body.app .poam__scroll,
+body.app .poam__pick {
+    flex: 0 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+}
+
+body.app .poam__pick {
+    max-height: 50vh;
+}
+
+body.app .poam__scroll table.data thead th,
+body.app .poam__pick table.data thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+body.app table.data.poam__table {
+    table-layout: fixed;
+}
+
+body.app table.data.poam__table:not(.ledger) thead th,
+body.app table.data.poam__table:not(.ledger) tbody td {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+}
+
+body.app .poam__col-id {
+    width: 135px;
+    white-space: nowrap;
+}
+
+body.app .poam__col-control {
+    width: 120px;
+    white-space: nowrap;
+}
+
+body.app .poam__col-owner {
+    width: 160px;
+}
+
+body.app .poam__col-date {
+    width: 125px;
+    white-space: nowrap;
+}
+
+body.app .poam__col-status {
+    width: 170px;
+}
+
+body.app .poam__col-priority {
+    width: 165px;
+}
+
+body.app .poam__clip {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.app table.data tbody tr.poam__row {
+    margin: 0;
+    padding: 0;
+}
+
+body.app table.data tbody tr.poam__row:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+}
+
+body.app table.data tbody tr.poam__row.is-loading {
+    cursor: progress;
+    opacity: 0.6;
+}
+
+body.app .poam__muted {
+    color: var(--text-muted);
+}
+
+body.app .poam__overdue {
+    color: var(--critical);
+}
+
+body.app .poam__empty {
+    margin: 0;
+    padding: var(--space-6) var(--space-4);
+    font-size: var(--fs-body);
+    color: var(--text-muted);
+}
+
+body.app .poam__head {
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border);
+}
+
+body.app .poam__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+    margin: var(--space-2) 0 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+body.app .poam__meta-item[hidden] {
+    display: none;
+}
+
+body.app .poam__section {
+    padding: var(--space-5) 0;
+}
+
+body.app .poam__section + .poam__section {
+    border-top: 1px solid var(--border);
+}
+
+body.app .poam__section:last-child {
+    padding-bottom: var(--space-2);
+}
+
+body.app .poam__section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+}
+
+body.app .poam__section-head .record__group-title {
+    margin: 0;
+}
+
+body.app textarea.poam__text {
+    height: auto;
+    min-height: 0;
+    resize: vertical;
+}
+
+body.app .poam__none {
+    margin: 0;
+    font-size: var(--fs-body);
+    color: var(--text-muted);
+}
+
+body.app table.data.poam__milestones {
+    table-layout: fixed;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+body.app table.data.poam__milestones:not(.ledger) thead th,
+body.app table.data.poam__milestones:not(.ledger) tbody td {
+    padding: var(--space-2) var(--space-3);
+}
+
+body.app table.data.poam__milestones tbody td:first-child {
+    font-weight: var(--fw-regular);
+    color: var(--text-primary);
+}
+
+body.app table.data.poam__milestones tbody tr:hover {
+    background: transparent;
+}
+
+body.app .poam__ms-text {
+    overflow-wrap: anywhere;
+}
+
+body.app table.data.poam__milestones .poam__ms-date {
+    width: 160px;
+}
+
+body.app table.data.poam__milestones .poam__ms-status {
+    width: 180px;
+}
+
+body.app table.data.poam__milestones .poam__ms-actions {
+    width: 104px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+body.app table.data.poam__milestones .poam__ms-actions .btn + .btn {
+    margin-left: var(--space-1);
+}
+
+body.app .poam__ev {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+body.app .poam__ev-title {
+    overflow: hidden;
+    color: var(--text-primary);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.app .poam__ev-file {
+    overflow: hidden;
+    font-size: 12px;
+    color: var(--text-muted);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+body.app .poam__evidence {
+    margin: 0;
+}
+
+body.app .poam__toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: 100%;
+    padding: 0;
+    font-family: inherit;
+    text-align: left;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
+body.app .poam__toggle .record__group-title {
+    margin: 0;
+}
+
+body.app .poam__count {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+body.app .poam__toggle-go {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text-muted);
+    transition: transform 0.15s ease;
+}
+
+body.app .poam__toggle:not(.collapsed) .poam__toggle-go {
+    transform: rotate(180deg);
+}
+
+body.app .poam__history {
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+body.app .poam__history > li {
+    padding: var(--space-2) var(--space-3);
+}
+
+body.app .poam__history > li + li {
+    border-top: 1px solid var(--border);
+}
+
+body.app .poam__history-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 13px;
+}
+
+body.app .poam__history-when {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+body.app .poam__history-what {
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+}
+
+body.app .poam__history-note {
+    color: var(--text-secondary);
+}
+
+body.app #poam_close_modal .form-check-input.is-invalid + .form-check-label {
+    color: var(--critical);
+}
+
+body.app .poam__ms--edit .flatpickr-wrapper,
+body.app .poam__ms--edit .form-control,
+body.app .poam__ms--edit .bootstrap-select,
+body.app .poam__ms--edit .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+    width: 100% !important;
+}
+
+#dash .kpi {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.kpi__alert {
+    font-weight: var(--fw-medium);
+    color: var(--high);
+}
+
+.kpi__alert i {
+    margin-right: var(--space-1);
+}
+
+#dash .dash__results {
+    flex: 0 0 auto;
+    margin-top: var(--space-4);
+}
+
+.dash__bar {
+    display: flex;
+    height: 12px;
+    overflow: hidden;
+    background: var(--border);
+    border-radius: var(--radius);
+}
+
+.dash__bar-part {
+    height: 100%;
+}
+
+.dash__bar-part.is-ok {
+    background: var(--ok);
+}
+
+.dash__bar-part.is-partial {
+    background: var(--high);
+}
+
+.dash__bar-part.is-gap {
+    background: var(--critical);
+}
+
+.dash__bar-part.is-na {
+    background: var(--info);
+}
+
+.dash__bar-part.is-none {
+    background: var(--border-strong);
+}
+
+.dash__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dash__legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--fs-meta);
+    color: var(--text-secondary);
+}
+
+.dash__legend-count {
+    font-weight: var(--fw-semibold);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+}
+
+.dash__legend-share {
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+}
+
+#dash .dash__lists {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-top: 0;
+    padding-top: var(--space-4);
+}
+
+#dash .dash__col {
+    display: flex;
+    min-height: 0;
+    max-height: 100%;
+}
+
+#dash .dash__panel {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    margin: 0;
+}
+
+#dash .dash__scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+#dash .dash__scroll .metric {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+#dash .dash__scroll .metric__sub {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 991.98px) {
+
+    #dash .kpi {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #dash .dash__col {
+        max-height: 22rem;
+    }
+}
+
+#dash .dash__results .panel__note {
+    align-self: center;
+    margin: 0;
+}
+
+#dash > .record__panel,
+#dash .dash__panel {
+    margin-bottom: 0;
+}
+
+.page--list:has(> .listpage) {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--topbar-height) - (2 * var(--space-6)));
+}
+
+.listpage {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    margin-bottom: 0;
+}
+
+.listpage__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.listpage__table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.listpage__table th.num,
+.listpage__table td.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.listpage__table tbody td:first-child {
+    width: 40%;
+}
+
+.listpage__table tr.rowlink {
+    position: relative;
+}
+
+.listpage__table .rowlink:hover {
+    box-shadow: none;
+}
+
+.listpage__name {
+    display: block;
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+}
+
+.listpage__sub {
+    display: block;
+    margin-top: 2px;
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-regular);
+    color: var(--text-muted);
+}
+
+.listpage__status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    white-space: nowrap;
+}
+
+.listpage__progress {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.listpage__progress .progress {
+    flex: 0 0 120px;
+}
+
+.listpage__pct {
+    min-width: 3ch;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary);
 }

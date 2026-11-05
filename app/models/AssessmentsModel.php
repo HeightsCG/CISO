@@ -64,7 +64,8 @@ class AssessmentsModel extends Model {
                     a.date_created,
                     DATE_FORMAT(a.date_created, df.sql_format) AS date_created_display,
                     COUNT(ai.id) AS item_count,
-                    IFNULL(SUM(CASE WHEN ai.item_result <> 'Not Assessed' THEN 1 ELSE 0 END), 0) AS assessed_count
+                    IFNULL(SUM(CASE WHEN ai.item_result <> 'Not Assessed' THEN 1 ELSE 0 END), 0) AS assessed_count,
+                    IFNULL(SUM(CASE WHEN ai.item_result IN ('Not Implemented', 'Partially Implemented') THEN 1 ELSE 0 END), 0) AS gap_count
                 FROM
                     assessments a
                     JOIN clients cl ON cl.id = a.client_id and cl.company_id = a.company_id and cl.deleted = 0
@@ -451,14 +452,6 @@ class AssessmentsModel extends Model {
                     ai.partial_credit,
                     ai.applicability,
                     ai.applicability_justification,
-                    ai.notes,
-                    ai.gap_description,
-                    ai.business_impact,
-                    ai.risk_rating,
-                    ai.recommendation,
-                    ai.owner_name,
-                    ai.target_date,
-                    ai.implementation_description,
                     ai.date_updated,
                     COUNT(el.id) AS evidence_count
                 FROM

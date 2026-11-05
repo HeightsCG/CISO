@@ -12,12 +12,22 @@
         </div>
     </header>
 
-    <div class="panel">
+    <div class="panel listpage">
         <div class="panel__head roster__toolbar">
             <input type="search" id="client_search" class="input roster__search" placeholder="Search clients" autocomplete="off" spellcheck="false" aria-label="Search clients">
         </div>
-        <div class="panel__body">
-            <div class="tiles" id="clients_list"></div>
+        <div class="panel__body panel__body--flush listpage__body">
+            <table class="data listpage__table" id="clients_table">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Location</th>
+                        <th scope="col" class="num">Assessments</th>
+                        <th scope="col" class="num">Gaps</th>
+                    </tr>
+                </thead>
+                <tbody id="clients_list"></tbody>
+            </table>
             <p class="tiles__empty" id="clients_empty"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Loading clients&hellip;</p>
         </div>
     </div>
@@ -31,10 +41,6 @@
 $(document).ready(function () {
 
     var clients = [];
-
-    function plural(count, one, many) {
-        return count + ' ' + (count === 1 ? one : many);
-    }
 
     function render() {
 
@@ -53,18 +59,18 @@ $(document).ready(function () {
 
             shown++;
 
-            html += '<a class="tile" href="/clients/detail/id/' + clients[i].id + '">'
-                + '<span class="tile__title">' + esc(clients[i].company_name) + '</span>'
-                + (place === '' ? '' : '<span class="tile__meta">' + esc(place) + '</span>')
-                + '<span class="tile__foot">'
-                + '<span>' + plural(parseInt(clients[i].assessment_count, 10), 'assessment', 'assessments') + '</span>'
-                + '</span>'
-                + '</a>';
+            html += '<tr class="rowlink">'
+                + '<td><a class="rowlink__a listpage__name" href="/clients/detail/id/' + clients[i].id + '">' + esc(clients[i].company_name) + '</a></td>'
+                + '<td>' + esc(place) + '</td>'
+                + '<td class="num">' + (parseInt(clients[i].assessment_count, 10) || 0).toLocaleString('en-US') + '</td>'
+                + '<td class="num">' + (parseInt(clients[i].gap_count, 10) || 0).toLocaleString('en-US') + '</td>'
+                + '</tr>';
         }
 
-        $('#clients_list').html(html).prop('hidden', shown === 0);
+        $('#clients_list').html(html);
+        $('#clients_table').prop('hidden', shown === 0);
         $('#clients_empty').prop('hidden', shown > 0).text(clients.length === 0
-            ? 'No clients yet. Add your first client to start building the roster.'
+            ? 'No clients yet.'
             : 'No clients match your search.');
     }
 

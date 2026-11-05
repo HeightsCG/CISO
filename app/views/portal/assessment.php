@@ -6,6 +6,7 @@
         <div class="headline__actions">
             <a class="btn btn--secondary btn--pill" href="/portal"><i class="fa-regular fa-chevron-left"></i> Back</a>
             <a class="btn btn--secondary btn--pill" href="/portal/evidence"><i class="fa-regular fa-folder-open"></i> Evidence</a>
+            <button type="button" class="btn btn--secondary btn--pill" id="do_poam_open"><i class="fa-regular fa-list-check"></i> POA&amp;M</button>
         </div>
     </header>
 
@@ -154,6 +155,129 @@
     </div>
 </div>
 
+<div class="modal fade" data-bs-backdrop="static" id="poam_modal" tabindex="-1" aria-labelledby="poam_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="poam_modal_title">POA&amp;M Register</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="poam__toolbar">
+                    <input type="search" id="poam_search" class="input poam__search" placeholder="Search by ID, control, weakness or owner..." autocomplete="off" spellcheck="false">
+                    <div class="poam__filter">
+                        <select id="poam_status_filter" class="form-select" data-style="form-control" aria-label="Status">
+                            <option value="">All statuses</option>
+                            <option value="Open">Open</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Ready for Validation">Ready for Validation</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="poam__scroll">
+                    <table class="data poam__table" id="poam_table" hidden>
+                        <thead>
+                            <tr>
+                                <th scope="col" class="poam__col-id">ID</th>
+                                <th scope="col" class="poam__col-control">Control</th>
+                                <th scope="col">Weakness</th>
+                                <th scope="col" class="poam__col-owner">Owner</th>
+                                <th scope="col" class="poam__col-date">Scheduled</th>
+                                <th scope="col" class="poam__col-status">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="poam_list"></tbody>
+                    </table>
+                    <p class="poam__empty" id="poam_empty"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Loading items&hellip;</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop="static" id="poam_item_modal" tabindex="-1" aria-labelledby="poam_item_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="poam_item_modal_title">POA&amp;M Item</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="poam__head">
+                    <p class="assess__eyebrow"><span class="assess__id" id="poam_item_control"></span></p>
+                    <h3 class="assess__title" id="poam_item_title"></h3>
+                    <p class="poam__meta">
+                        <span id="poam_item_status"></span>
+                        <span class="poam__meta-item" id="poam_item_priority"></span>
+                    </p>
+                </div>
+
+                <div class="poam__section" id="poam_item_fields">
+                    <div class="row">
+                        <div class="col-md-6 form-group mb-3">
+                            <label>Weakness</label>
+                            <p class="assess__text" id="poam_weakness"></p>
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label>Corrective Action</label>
+                            <p class="assess__text" id="poam_action"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 form-group mb-3">
+                            <label for="poam_owner">Owner</label>
+                            <input type="text" class="form-control" id="poam_owner" maxlength="200">
+                        </div>
+                        <div class="col-md-4 form-group mb-3">
+                            <label for="poam_resources">Resources</label>
+                            <input type="text" class="form-control" id="poam_resources">
+                        </div>
+                        <div class="col-md-4 form-group mb-3">
+                            <label for="poam_status">Status</label>
+                            <select class="form-control" id="poam_status" data-style="form-control">
+                                <option value="Open">Open</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Ready for Validation">Ready for Validation</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="poam_comments">Comments</label>
+                            <textarea class="form-control poam__text" id="poam_comments" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="poam__section">
+                    <div class="poam__section-head">
+                        <h3 class="record__group-title">Milestones</h3>
+                        <button type="button" class="btn btn--secondary btn--sm" id="do_poam_milestone_add"><i class="fa-regular fa-plus"></i> Add Milestone</button>
+                    </div>
+                    <table class="data data--light poam__milestones" id="poam_milestones_table" hidden>
+                        <thead>
+                            <tr>
+                                <th scope="col">Milestone</th>
+                                <th scope="col" class="poam__ms-date">Due</th>
+                                <th scope="col" class="poam__ms-date">Completed</th>
+                                <th scope="col" class="poam__ms-status">Status</th>
+                                <th scope="col" class="poam__ms-actions"><span class="visually-hidden">Actions</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="poam_milestones"></tbody>
+                    </table>
+                    <p class="poam__none" id="poam_milestones_empty">No milestones.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" id="poam_item_dismiss" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn--primary" id="do_poam_save">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 $(document).ready(function () {
 
@@ -186,11 +310,6 @@ $(document).ready(function () {
         { name: 'Not Assessed', dot: 'is-none', badge: 'badge--inactive' }
     ];
 
-    /**
-     * The imported control text opens by restating the title, so the modal would
-     * print the same sentence twice. Only a leading match is removed - the rest of
-     * the description is left exactly as supplied.
-     */
     function description_body(title, description) {
 
         var body = String(description === null ? '' : description).trim();
@@ -586,6 +705,458 @@ $(document).ready(function () {
                 set_loading('#do_upload', false);
                 toastr.error('That file could not be uploaded');
             }
+        });
+    });
+
+    var poam = {
+        items: [],
+        payload: null,
+        changed: false
+    };
+    var POAM_STATUS_CLASS = {
+        'Open': 'badge--prospect',
+        'In Progress': 'badge--onboarding',
+        'Ready for Validation': 'badge--admin',
+        'Closed': 'badge--active'
+    };
+    var POAM_MILESTONE_CLASS = {
+        'Not Started': 'badge--inactive',
+        'In Progress': 'badge--onboarding',
+        'Completed': 'badge--active'
+    };
+
+    function poam_badge(value, classes) {
+        return '<span class="badge ' + (classes[value] || 'badge--inactive') + '">' + esc(value) + '</span>';
+    }
+
+    function poam_date(value) {
+
+        if (!value || String(value).indexOf('0000') === 0) {
+            return '';
+        }
+
+        var parts = String(value).slice(0, 10).split('-');
+        var date = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+
+        return date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+    }
+
+    function poam_set_empty(text, loading) {
+        $('#poam_empty').html(loading ? '<i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> ' + esc(text) : esc(text)).prop('hidden', false);
+    }
+
+    function poam_load() {
+
+        poam_set_empty('Loading items…', true);
+        $('#poam_table').prop('hidden', true);
+
+        ApiDataSvc.apiCall('post', 'portal_poam_list', { assessment_id: assessment_id }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            if (!obj.success) {
+                poam_set_empty(obj.message, false);
+                toastr.error(obj.message);
+                return;
+            }
+
+            poam.items = obj.items;
+            poam_render();
+        }, function () {
+            poam_set_empty('The register could not be loaded.', false);
+        });
+    }
+
+    function poam_visible() {
+
+        var term = $('#poam_search').val().trim().toLowerCase();
+        var status = $('#poam_status_filter').val() || '';
+        var out = [];
+
+        for (var i = 0; i < poam.items.length; i++) {
+
+            var item = poam.items[i];
+            var haystack = [
+                item.poam_ref,
+                item.source_ref,
+                item.source_title,
+                item.weakness,
+                item.owner_name
+            ].join(' ').toLowerCase();
+
+            if (status !== '' && item.poam_status !== status) {
+                continue;
+            }
+
+            if (term !== '' && haystack.indexOf(term) === -1) {
+                continue;
+            }
+
+            out.push(item);
+        }
+
+        return out;
+    }
+
+    function poam_row(item) {
+
+        var owner = item.owner_name ? esc(item.owner_name) : '<span class="poam__muted">Not assigned</span>';
+        var scheduled = item.scheduled_completion_date ? '<span class="' + (item.overdue ? 'poam__overdue' : '') + '">' + esc(poam_date(item.scheduled_completion_date)) + '</span>' : '';
+
+        return '<tr class="rowlink poam__row" tabindex="0" data-id="' + item.id + '">'
+            + '<td class="poam__col-id">' + esc(item.poam_ref) + '</td>'
+            + '<td class="poam__col-control" title="' + esc(item.source_title) + '">' + esc(item.source_ref) + '</td>'
+            + '<td class="poam__clip" title="' + esc(item.weakness) + '">' + esc(item.weakness) + '</td>'
+            + '<td class="poam__col-owner poam__clip">' + owner + '</td>'
+            + '<td class="poam__col-date">' + scheduled + '</td>'
+            + '<td class="poam__col-status">' + poam_badge(item.poam_status, POAM_STATUS_CLASS) + '</td>'
+            + '</tr>';
+    }
+
+    function poam_render() {
+
+        var rows = poam_visible();
+        var html = '';
+
+        for (var i = 0; i < rows.length; i++) {
+            html += poam_row(rows[i]);
+        }
+
+        $('#poam_list').html(html);
+        $('#poam_table').prop('hidden', rows.length === 0);
+
+        if (rows.length > 0) {
+            $('#poam_empty').prop('hidden', true);
+            return;
+        }
+
+        poam_set_empty(poam.items.length === 0 ? 'No POA&M items' : 'No items match.', false);
+    }
+
+    $('#do_poam_open').click(function () {
+        $('#poam_search').val('');
+        $('#poam_status_filter').val('');
+        modal('poam_modal').show();
+        poam_load();
+    });
+
+    $('#poam_search').on('input', function () {
+        poam_render();
+    });
+
+    $('#poam_status_filter').on('change', function () {
+        poam_render();
+    });
+
+    $('#poam_list').on('click', '.poam__row', function () {
+        poam_open_item($(this).attr('data-id'));
+    });
+
+    $('#poam_list').on('keydown', '.poam__row', function (event) {
+
+        if (event.key !== 'Enter') {
+            return;
+        }
+
+        event.preventDefault();
+        poam_open_item($(this).attr('data-id'));
+    });
+
+    $('#poam_item_modal').on('hidden.bs.modal', function () {
+
+        if (!poam.changed) {
+            return;
+        }
+
+        poam.changed = false;
+        poam_load();
+    });
+
+    function poam_open_item(item_id) {
+
+        var row = $('#poam_list .poam__row[data-id="' + item_id + '"]');
+
+        row.addClass('is-loading');
+
+        ApiDataSvc.apiCall('post', 'portal_poam_item_load', { item_id: item_id }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            row.removeClass('is-loading');
+
+            if (!obj.success) {
+                toastr.error(obj.message);
+                return;
+            }
+
+            if (!$('#poam_item_modal').hasClass('show')) {
+                modal('poam_item_modal').show();
+            }
+
+            poam_fill(obj);
+        }, function () {
+            row.removeClass('is-loading');
+        });
+    }
+
+    function poam_reload_item() {
+
+        ApiDataSvc.apiCall('post', 'portal_poam_item_load', { item_id: poam.payload.item.id }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            if (!obj.success) {
+                toastr.error(obj.message);
+                return;
+            }
+
+            poam_fill(obj);
+        });
+    }
+
+    function poam_is_closed() {
+        return poam.payload.item.poam_status === 'Closed';
+    }
+
+    function poam_fill(obj) {
+
+        var item = obj.item;
+
+        poam.payload = obj;
+
+        $('#poam_item_modal_title').text(item.poam_ref);
+        $('#poam_item_control').text(item.source_ref);
+        $('#poam_item_title').text(item.source_title);
+        $('#poam_item_status').html(poam_badge(item.poam_status, POAM_STATUS_CLASS));
+        $('#poam_item_priority').text(item.priority !== '' ? 'Remediation Priority: ' + item.priority : '').prop('hidden', item.priority === '');
+
+        $('#poam_weakness').text(item.weakness).closest('.form-group').prop('hidden', item.weakness === '');
+        $('#poam_action').text(item.action).closest('.form-group').prop('hidden', item.action === '');
+        $('#poam_owner').val(item.owner_name || '');
+        $('#poam_resources').val(item.resources || '');
+        $('#poam_status').val(poam_is_closed() ? 'Open' : item.poam_status);
+        $('#poam_comments').val(item.comments || '');
+
+        $('#poam_item_fields .is-invalid').removeClass('is-invalid');
+        $('#poam_item_fields').find('input, textarea, select').prop('disabled', poam_is_closed());
+        $('#poam_status').closest('.form-group').prop('hidden', poam_is_closed());
+
+        $('#do_poam_save').prop('hidden', poam_is_closed());
+        $('#poam_item_dismiss').text(poam_is_closed() ? 'Close' : 'Cancel');
+        $('#do_poam_milestone_add').prop('hidden', poam_is_closed());
+
+        poam_render_milestones();
+    }
+
+    function poam_value(selector) {
+        return String($(selector).val() || '').trim();
+    }
+
+    $('#do_poam_save').click(function () {
+
+        var button = this;
+        var obj = {
+            item_id: poam.payload.item.id,
+            owner_name: poam_value('#poam_owner'),
+            resources: poam_value('#poam_resources'),
+            poam_status: poam_value('#poam_status'),
+            comments: poam_value('#poam_comments')
+        };
+
+        set_loading(button, true);
+
+        ApiDataSvc.apiCall('post', 'portal_poam_item_save', obj, function (data) {
+
+            var response = JSON.parse(data);
+
+            set_loading(button, false);
+
+            if (!response.success) {
+                toastr.error(response.message);
+                return;
+            }
+
+            toastr.success(response.message);
+            poam.changed = true;
+            poam_reload_item();
+        }, function () {
+            set_loading(button, false);
+        });
+    });
+
+    function poam_milestone_view(milestone) {
+
+        var actions = poam_is_closed() ? '' : '<button type="button" class="btn btn--icon btn--sm" data-action="ms_edit" data-id="' + milestone.id + '" aria-label="Edit milestone" title="Edit"><i class="fa-regular fa-pen"></i></button>'
+            + '<button type="button" class="btn btn--icon btn--sm" data-action="ms_delete" data-id="' + milestone.id + '" aria-label="Delete milestone" title="Delete"><i class="fa-regular fa-trash"></i></button>';
+
+        return '<tr class="poam__ms" data-id="' + milestone.id + '">'
+            + '<td class="poam__ms-text">' + esc(milestone.milestone_text) + '</td>'
+            + '<td class="poam__ms-date">' + esc(poam_date(milestone.due_date)) + '</td>'
+            + '<td class="poam__ms-date">' + esc(poam_date(milestone.completed_date)) + '</td>'
+            + '<td class="poam__ms-status">' + poam_badge(milestone.milestone_status, POAM_MILESTONE_CLASS) + '</td>'
+            + '<td class="poam__ms-actions">' + actions + '</td>'
+            + '</tr>';
+    }
+
+    function poam_milestone_form(milestone) {
+
+        var statuses = poam.payload.milestone_statuses;
+        var options = '';
+
+        for (var i = 0; i < statuses.length; i++) {
+            options += '<option value="' + esc(statuses[i]) + '"' + (statuses[i] === milestone.milestone_status ? ' selected' : '') + '>' + esc(statuses[i]) + '</option>';
+        }
+
+        return '<tr class="poam__ms poam__ms--edit" data-id="' + milestone.id + '">'
+            + '<td class="poam__ms-text"><input type="text" class="form-control" data-field="milestone_text" aria-label="Milestone" maxlength="2000" value="' + esc(milestone.milestone_text) + '"></td>'
+            + '<td class="poam__ms-date"><input type="date" class="form-control" data-field="due_date" aria-label="Due date" placeholder="Due" value="' + esc(milestone.due_date || '') + '"></td>'
+            + '<td class="poam__ms-date"><input type="date" class="form-control" data-field="completed_date" aria-label="Completed date" placeholder="Completed" max="' + esc(new Date().toISOString().slice(0, 10)) + '" value="' + esc(milestone.completed_date || '') + '"></td>'
+            + '<td class="poam__ms-status"><select class="form-control" data-field="milestone_status" data-style="form-control" aria-label="Status">' + options + '</select></td>'
+            + '<td class="poam__ms-actions">'
+            + '<button type="button" class="btn btn--icon btn--sm" data-action="ms_save" data-id="' + milestone.id + '" aria-label="Save milestone" title="Save"><i class="fa-regular fa-check"></i></button>'
+            + '<button type="button" class="btn btn--icon btn--sm" data-action="ms_cancel" aria-label="Cancel" title="Cancel"><i class="fa-regular fa-xmark"></i></button>'
+            + '</td>'
+            + '</tr>';
+    }
+
+    function poam_render_milestones() {
+
+        var list = poam.payload.milestones;
+        var html = '';
+
+        for (var i = 0; i < list.length; i++) {
+            html += poam_milestone_view(list[i]);
+        }
+
+        $('#poam_milestones').html(html);
+        $('#poam_milestones_table').prop('hidden', list.length === 0);
+        $('#poam_milestones_empty').prop('hidden', list.length > 0);
+    }
+
+    function poam_find_milestone(milestone_id) {
+
+        var list = poam.payload.milestones;
+
+        for (var i = 0; i < list.length; i++) {
+            if (parseInt(list[i].id, 10) === parseInt(milestone_id, 10)) {
+                return list[i];
+            }
+        }
+
+        return null;
+    }
+
+    function poam_edit_row(row) {
+        date_pickers(row);
+        row.find('[data-field="milestone_text"]').trigger('focus');
+    }
+
+    $('#do_poam_milestone_add').click(function () {
+
+        poam_render_milestones();
+
+        var row = $(poam_milestone_form({
+            id: 0,
+            milestone_text: '',
+            due_date: '',
+            completed_date: '',
+            milestone_status: 'Not Started'
+        }));
+
+        $('#poam_milestones').append(row);
+        $('#poam_milestones_table').prop('hidden', false);
+        $('#poam_milestones_empty').prop('hidden', true);
+        poam_edit_row(row);
+    });
+
+    $('#poam_milestones').on('click', '[data-action="ms_edit"]', function () {
+
+        poam_render_milestones();
+
+        var milestone = poam_find_milestone($(this).attr('data-id'));
+
+        if (milestone === null) {
+            return;
+        }
+
+        var row = $(poam_milestone_form(milestone));
+
+        $('#poam_milestones .poam__ms[data-id="' + milestone.id + '"]').replaceWith(row);
+        poam_edit_row(row);
+    });
+
+    $('#poam_milestones').on('click', '[data-action="ms_cancel"]', function () {
+        poam_render_milestones();
+    });
+
+    $('#poam_milestones').on('click', '[data-action="ms_save"]', function () {
+
+        var button = this;
+        var row = $(this).closest('.poam__ms');
+        var obj = {
+            item_id: poam.payload.item.id,
+            milestone_id: $(this).attr('data-id'),
+            milestone_text: String(row.find('[data-field="milestone_text"]').val() || '').trim(),
+            due_date: String(row.find('[data-field="due_date"]').val() || '').trim(),
+            completed_date: String(row.find('[data-field="completed_date"]').val() || '').trim(),
+            milestone_status: String(row.find('select[data-field="milestone_status"]').val() || '').trim()
+        };
+
+        row.find('[data-field="milestone_text"]').removeClass('is-invalid');
+
+        if (obj.milestone_text === '') {
+            row.find('[data-field="milestone_text"]').addClass('is-invalid');
+            toastr.error('Describe the milestone');
+            return;
+        }
+
+        set_loading(button, true);
+
+        ApiDataSvc.apiCall('post', 'portal_poam_milestone_save', obj, function (data) {
+
+            var response = JSON.parse(data);
+
+            set_loading(button, false);
+
+            if (!response.success) {
+                toastr.error(response.message);
+                return;
+            }
+
+            toastr.success(response.message);
+            poam.changed = true;
+            poam_reload_item();
+        }, function () {
+            set_loading(button, false);
+        });
+    });
+
+    $('#poam_milestones').on('click', '[data-action="ms_delete"]', function () {
+
+        var button = this;
+
+        set_loading(button, true);
+
+        ApiDataSvc.apiCall('post', 'portal_poam_milestone_delete', { milestone_id: $(this).attr('data-id') }, function (data) {
+
+            var response = JSON.parse(data);
+
+            set_loading(button, false);
+
+            if (!response.success) {
+                toastr.error(response.message);
+                return;
+            }
+
+            toastr.success(response.message);
+            poam.changed = true;
+            poam_reload_item();
+        }, function () {
+            set_loading(button, false);
         });
     });
 

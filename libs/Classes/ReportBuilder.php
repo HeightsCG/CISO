@@ -13,6 +13,9 @@ abstract class ReportBuilder
     /** Rows the cover's detail table holds above the confidentiality notice. */
     const COVER_ROWS = 6;
 
+    /** The most references written inline in a sentence or table cell. */
+    const INLINE_REFS = ReportAnalysis::INLINE_REFS;
+
     protected $a;
     protected $company;
     protected $company_id;

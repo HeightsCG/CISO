@@ -247,7 +247,7 @@ class ReportRiskAssessment extends ReportBuilder
         }
 
         $p2 = count($high) > 0
-            ? 'The greatest exposure lies in the '.self::count_of(count($high), 'high-priority finding', 'high-priority findings').', concentrated in '.self::join_list($areas).'.'
+            ? 'The greatest exposure lies in the '.self::count_of(count($high), 'high-priority remediation finding', 'high-priority remediation findings').', concentrated in '.self::join_list($areas).'.'
             : 'No finding carries a high remediation priority; the gaps concentrate in '.self::join_list($areas).'.';
         $lead = ReportKnowledge::topic((string) array_key_first($topics));
         if (count($lead['consequences']) > 0) {
@@ -256,13 +256,53 @@ class ReportRiskAssessment extends ReportBuilder
         $medium = $this->priority_count('Medium');
         $low = $this->priority_count('Low');
         if ($medium + $low > 0) {
-            $p2 .= ' The remaining '.($medium > 0 ? $medium.' medium' : '').($medium > 0 && $low > 0 ? ' and ' : '').($low > 0 ? $low.' low' : '').'-priority findings widen this exposure but are less direct.';
+            $p2 .= ' The remaining '.($medium > 0 ? $medium.' medium' : '').($medium > 0 && $low > 0 ? ' and ' : '').($low > 0 ? $low.' low' : '').'-priority remediation findings widen this exposure but are less direct.';
         }
 
         return array(
             $p1,
             $p2
         );
+    }
+
+    /**
+     * Prose with each over-long paragraph split at sentence boundaries into
+     * shorter ones, so stored text reads in steps rather than one block.
+     * Bullet lines and short paragraphs are left as they are.
+     */
+    public static function paragraphs(string $text, int $limit = 420, int $target = 300): string
+    {
+        $out = array();
+
+        foreach (preg_split("/\n\s*\n/", trim($text)) as $chunk) {
+            if (strlen($chunk) <= $limit || strpos($chunk, "\n") !== false) {
+                $out[] = $chunk;
+                continue;
+            }
+            $sentences = preg_split('/(?<!\be\.g\.)(?<!\bi\.e\.)(?<!\betc\.)(?<!\bvs\.)(?<!\bNo\.)(?<=[.!?])\s+(?=[A-Z(])/', $chunk);
+            if ($sentences === false || count($sentences) < 2) {
+                $out[] = $chunk;
+                continue;
+            }
+            $groups = array();
+            $current = '';
+            foreach ($sentences as $sentence) {
+                if ($current !== '' && strlen($current) + strlen($sentence) > $target) {
+                    $groups[] = $current;
+                    $current = $sentence;
+                    continue;
+                }
+                $current = $current === '' ? $sentence : $current.' '.$sentence;
+            }
+            if (count($groups) > 0 && strlen($current) < 90) {
+                $groups[count($groups) - 1] .= ' '.$current;
+            } else {
+                $groups[] = $current;
+            }
+            $out[] = implode("\n\n", $groups);
+        }
+
+        return implode("\n\n", $out);
     }
 
     /** At most $count sentences of $text, so a recorded condition stays brief. */
@@ -384,7 +424,7 @@ class ReportRiskAssessment extends ReportBuilder
         $items[] = array(
             'value' => (string) $gap_total,
             'label' => $gap_total === 1 ? 'Finding' : 'Findings',
-            'sub' => count($split) > 0 ? implode(' · ', $split).' priority' : 'No gaps recorded',
+            'sub' => count($split) > 0 ? implode(' · ', $split).' remediation priority' : 'No gaps recorded',
             'tone' => $this->priority_count('High') > 0 ? 'critical' : ($gap_total > 0 ? 'warning' : 'positive')
         );
 
@@ -421,7 +461,7 @@ class ReportRiskAssessment extends ReportBuilder
             $message = ucfirst(strtolower($theme['name'])).': '.count($theme['refs']).' '.$this->term('controls').' are not fully in place'
                 .(count($theme['families']) > 1 ? ' across '.count($theme['families']).' '.$this->term('families') : '');
             if ($lead !== null) {
-                $message .= ', led by '.$lead['control']['ref'].' '.self::short_title($lead['control']['title']).' ('.strtolower(self::RESULT_LABELS[$lead['status']]).', '.strtolower($lead['priority']).' priority)';
+                $message .= ', led by '.$lead['control']['ref'].' '.self::short_title($lead['control']['title']).' ('.strtolower(self::RESULT_LABELS[$lead['status']]).', '.strtolower($lead['priority']).' remediation priority)';
             }
             $messages[] = $message.'.';
         }
@@ -437,9 +477,9 @@ class ReportRiskAssessment extends ReportBuilder
             return !in_array($finding['control']['ref'], $themed, true);
         }));
         if (count($outside) > 0) {
-            $messages[] = 'High-priority gaps outside those areas: '.self::join_list(array_map(function ($finding) {
+            $messages[] = 'High-priority remediation findings outside those areas: '.self::join_list(array_map(function ($finding) {
                 return $finding['control']['ref'].' '.self::short_title($finding['control']['title']);
-            }, array_slice($outside, 0, 4))).(count($outside) > 4 ? ' and '.(count($outside) - 4).' more' : '').'.';
+            }, $outside)).'.';
         } elseif (count($a['themes']) === 0 && count($a['findings']) > 0) {
             $first = $a['findings'][0];
             $messages[] = 'The highest-priority finding is '.$first['ref'].': '.$first['control']['ref'].' '.self::short_title($first['control']['title']).', '.strtolower(self::RESULT_LABELS[$first['status']]).'.';
@@ -722,24 +762,24 @@ class ReportRiskAssessment extends ReportBuilder
             'Finding',
             ucfirst($this->term('family')),
             'Status',
-            'Priority'
+            'Remediation priority'
         );
         $widths = $rated
             ? array(
                 6,
-                31,
+                28,
                 19,
                 20,
-                8,
+                11,
                 8,
                 8
             )
             : array(
                 6,
-                35,
+                32,
                 20,
                 20,
-                9,
+                12,
                 10
             );
         if ($rated) {
@@ -891,7 +931,7 @@ class ReportRiskAssessment extends ReportBuilder
                 return $finding['priority'] === $priority;
             }));
             if ($count > 0) {
-                $counts[$priority.' priority'] = $count;
+                $counts[$priority.'-priority remediation '.($count === 1 ? 'finding' : 'findings')] = $count;
             }
         }
 
@@ -934,7 +974,7 @@ class ReportRiskAssessment extends ReportBuilder
                 'Ref.',
                 ucfirst($this->term('control')),
                 'Status',
-                'Priority'
+                'Remediation priority'
             );
             if ($with_objectives) {
                 $head[] = 'Open';
@@ -946,16 +986,16 @@ class ReportRiskAssessment extends ReportBuilder
                     'widths' => $with_objectives
                         ? array(
                             8,
-                            51,
+                            48,
                             20,
-                            11,
+                            14,
                             10
                         )
                         : array(
                             8,
-                            59,
+                            56,
                             21,
-                            12
+                            15
                         ),
                     'rows' => $rows,
                     'small' => true,
@@ -992,7 +1032,7 @@ class ReportRiskAssessment extends ReportBuilder
 
         $ai = trim((string) ($family['narrative_ai'] ?? ''));
         if ($ai !== '') {
-            $paragraphs[] = $ai;
+            $paragraphs[] = self::paragraphs($ai);
         } else {
             $topics = array();
             foreach ($family['controls'] as $control) {
@@ -1087,7 +1127,7 @@ class ReportRiskAssessment extends ReportBuilder
         foreach ($patterns as $pattern) {
             $hits = array_values(array_intersect($pattern['refs'], $refs));
             if (count($hits) >= 2 || (count($hits) === 1 && $gaps === 1)) {
-                $kinds[] = strtolower($pattern['label']).' ('.self::join_list(array_slice($hits, 0, 3)).(count($hits) > 3 ? ' and others' : '').')';
+                $kinds[] = strtolower($pattern['label']).' ('.self::join_list($hits).')';
             }
         }
         if (count($kinds) > 0) {
@@ -1195,7 +1235,7 @@ class ReportRiskAssessment extends ReportBuilder
             $recorded[] = 'Current implementation, as recorded: '.$assessor['implementation_description'];
         }
         $condition = self::first_sentences(trim((string) ($finding['recorded_condition_ai'] ?? '')), 3);
-        $recorded[] = $condition !== '' ? $condition : $this->recorded_condition($finding);
+        $recorded[] = $condition !== '' ? self::paragraphs($condition) : $this->recorded_condition($finding);
         $sections[] = array(
             'Recorded condition',
             implode("\n\n", $recorded)
@@ -1211,12 +1251,13 @@ class ReportRiskAssessment extends ReportBuilder
 
         $exposure = array();
         if (isset($assessor['business_impact'])) {
-            $exposure[] = 'Business impact, as recorded by the assessor: '.$assessor['business_impact'];
+            $exposure[] = self::paragraphs('Business impact, as recorded by the assessor: '.$assessor['business_impact']);
         }
         $scenarios = array_slice(self::items($finding['risk_scenarios_ai'] ?? array()), 0, $full ? 3 : 2);
         if (count($scenarios) > 0) {
             $exposure[] = self::bullets(array_map(function ($pair) {
-                return rtrim($pair['scenario'], '. ').'. '.$pair['consequence'];
+                $consequence = trim((string) $pair['consequence']);
+                return rtrim($pair['scenario'], '. ').'.'.($consequence !== '' ? "\n  ".$consequence : '');
             }, $scenarios));
         } else {
             $exposure[] = $this->consequences($finding, $topic);
@@ -1260,7 +1301,7 @@ class ReportRiskAssessment extends ReportBuilder
         if ($outcome !== '') {
             $sections[] = array(
                 'Expected outcome',
-                $outcome
+                self::paragraphs($outcome)
             );
         }
 
@@ -1302,7 +1343,7 @@ class ReportRiskAssessment extends ReportBuilder
         if ($response !== '') {
             $sections[] = array(
                 'Management response',
-                $response
+                self::paragraphs($response)
             );
         }
 
@@ -1312,10 +1353,11 @@ class ReportRiskAssessment extends ReportBuilder
                 'ref' => $finding['ref'],
                 'heading' => $control['ref'].' '.self::short_title($control['title']),
                 'severity' => $finding['priority'],
-                'rating' => $finding['risk_rating'] !== null ? 'Assessed risk: '.$finding['risk_rating'] : $finding['priority'].' priority',
+                'rating' => $finding['risk_rating'] !== null ? 'Assessed risk: '.$finding['risk_rating'] : $finding['priority'].' remediation priority',
                 'meta' => $meta,
                 'sections' => $sections,
-                'anchor' => $finding['anchor']
+                'anchor' => $finding['anchor'],
+                'spaced' => true
             )
         );
     }
@@ -1402,13 +1444,13 @@ class ReportRiskAssessment extends ReportBuilder
         }
 
         $parts = array(
-            $control['ref'].(count($own) > 0 ? ' '.implode(', ', array_slice($own, 0, 8)).(count($own) > 8 ? ' and others' : '') : '')
+            $control['ref'].(count($own) > 0 ? ' '.implode(', ', $own) : '')
         );
         if (count($other) > 0) {
-            $parts[] = 'related: '.implode(', ', array_slice($other, 0, 6)).(count($other) > 6 ? ' and others' : '');
+            $parts[] = 'related: '.ReportGapAnalysis::grouped_refs($other, $this->a['controls']);
         }
         if (count($control['evidence']) > 0) {
-            $parts[] = 'linked evidence: '.implode('; ', array_slice($control['evidence'], 0, 5)).(count($control['evidence']) > 5 ? ' and '.(count($control['evidence']) - 5).' more' : '');
+            $parts[] = 'linked evidence: '.implode('; ', $control['evidence']);
         }
 
         return ucfirst(implode(' · ', $parts)).'.';
@@ -1635,14 +1677,14 @@ class ReportRiskAssessment extends ReportBuilder
             'ID',
             'Initiative',
             'Phase',
-            'Priority',
+            'Remediation priority',
             'Findings'
         );
         $widths = array(
             7,
-            35,
+            32,
             19,
-            9,
+            12,
             19
         );
         if ($with_depends) {
@@ -1970,7 +2012,7 @@ class ReportRiskAssessment extends ReportBuilder
             foreach ($ai as $pattern) {
                 $out[] = array(
                     'label' => $pattern['label'],
-                    'text' => $pattern['description'].(count($pattern['refs']) > 0 ? ' ('.implode(', ', array_slice($pattern['refs'], 0, 8)).(count($pattern['refs']) > 8 ? ' and others' : '').')' : ''),
+                    'text' => self::paragraphs($pattern['description']).(count($pattern['refs']) > 0 ? "\n\n".'Involves '.ReportGapAnalysis::grouped_refs($pattern['refs'], $this->a['controls']).'.' : ''),
                     'refs' => $pattern['refs']
                 );
             }

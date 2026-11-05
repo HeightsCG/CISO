@@ -345,14 +345,14 @@ class ReportGapAnalysis extends ReportBuilder
             ucfirst($this->term('family')),
             'Result',
             'Open',
-            'Priority'
+            'Remediation priority'
         ), array(
             11,
-            38,
-            21,
+            35,
+            20,
             13,
             8,
-            9
+            13
         ), $rows);
         $table['kind'] = 'register';
         $table['value']['anchors'] = $anchors;
@@ -410,12 +410,13 @@ class ReportGapAnalysis extends ReportBuilder
 
         $ai = $a['patterns_ai'] ?? array();
         $deficiency = array();
+        $condensed = array();
 
         if (count($ai) > 0) {
             foreach ($ai as $pattern) {
-                $deficiency[] = array(
-                    'title' => $pattern['label'],
-                    'body' => $pattern['description'].(count($pattern['refs']) > 0 ? "\n\nRelated: ".implode(', ', $pattern['refs']).'.' : '')
+                $condensed[] = array(
+                    $pattern['label'],
+                    self::grouped_refs($pattern['refs'], $a['controls'])
                 );
             }
         } else {
@@ -429,16 +430,28 @@ class ReportGapAnalysis extends ReportBuilder
 
         $themes = $a['themes'];
 
-        if (count($gaps) < 3 || (count($nature) === 0 && count($deficiency) === 0 && count($themes) === 0)) {
+        if (count($gaps) < 3 || (count($nature) === 0 && count($deficiency) === 0 && count($condensed) === 0 && count($themes) === 0)) {
             return $blocks;
         }
 
         $blocks[] = self::h1('Common patterns');
-        $blocks[] = self::text('The patterns below recur across several gaps and are supported by the recorded results. Addressing them at their common cause is usually more effective than treating each '.$this->term('control').' separately.');
+        $blocks[] = self::text('The patterns below recur across several gaps and are supported by the recorded results. Addressing them together is usually more effective than treating each '.$this->term('control').' separately.');
 
         if (count($nature) > 0) {
             $blocks[] = self::h2('Nature of the gaps');
             $blocks[] = self::text(implode("\n\n", $nature));
+        }
+
+        if (count($condensed) > 0) {
+            $blocks[] = self::h2('Recurring deficiencies');
+            $blocks[] = self::text('Each pattern below groups open '.$this->term('objectives').' that have recorded results in common, with every '.$this->term('control').' and '.$this->term('objective').' it involves. The analysis of each pattern, the exposure it creates and the shared remedy are set out in the Risk Assessment under Cross-cutting patterns; the open elements are detailed requirement by requirement in the next chapter.');
+            $blocks[] = self::table(array(
+                'Pattern',
+                ucfirst($this->term('controls')).' and '.$this->term('objectives').' involved'
+            ), array(
+                40,
+                60
+            ), $condensed);
         }
 
         if (count($deficiency) > 0) {
@@ -595,7 +608,7 @@ class ReportGapAnalysis extends ReportBuilder
             );
         }
         $meta[] = array(
-            'Priority',
+            'Remediation priority',
             $gap['priority'].' (derived)'
         );
         if ($gap['risk_rating'] !== null) {
@@ -915,6 +928,55 @@ class ReportGapAnalysis extends ReportBuilder
 
     /* ------------------------------------------------------------ helpers */
 
+    /**
+     * A complete list of references with each objective grouped under its
+     * control, e.g. "CC7.3 (PF06, PF07); CC7.4 (PF12); P6.3", in order of
+     * first appearance. References that are neither a control nor one of
+     * its objectives are kept as given.
+     */
+    public static function grouped_refs(array $refs, array $controls): string
+    {
+        $objective_of = array();
+        $known = array();
+
+        foreach ($controls as $control) {
+            $known[$control['ref']] = true;
+            foreach ($control['objectives'] ?? array() as $objective) {
+                $objective_of[$objective['ref']] = array(
+                    $control['ref'],
+                    $objective['short']
+                );
+            }
+        }
+
+        $groups = array();
+
+        foreach ($refs as $ref) {
+            $ref = trim((string) $ref);
+            if ($ref === '') {
+                continue;
+            }
+            if (isset($known[$ref])) {
+                $groups[$ref] = $groups[$ref] ?? array();
+                continue;
+            }
+            if (isset($objective_of[$ref])) {
+                $groups[$objective_of[$ref][0]][] = $objective_of[$ref][1];
+                continue;
+            }
+            $groups[$ref] = $groups[$ref] ?? array();
+        }
+
+        $parts = array();
+
+        foreach ($groups as $ref => $shorts) {
+            $shorts = array_values(array_unique($shorts));
+            $parts[] = $ref.(count($shorts) > 0 ? ' ('.implode(', ', $shorts).')' : '');
+        }
+
+        return implode('; ', $parts);
+    }
+
     private static function short(string $text, int $length): string
     {
         $text = rtrim($text, '.');
@@ -973,7 +1035,7 @@ class ReportGapAnalysis extends ReportBuilder
             array(
                 'name' => 'Gaps',
                 'head' => array(
-                    'Priority',
+                    'Remediation priority',
                     ucfirst($this->term('family')),
                     'Identifier',
                     ucfirst($this->term('control')),

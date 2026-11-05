@@ -8,7 +8,7 @@
         </div>
     </header>
 
-    <div class="panel">
+    <div class="panel listpage">
         <div class="panel__head roster__toolbar">
             <input type="search" id="assessment_search" class="input roster__search" placeholder="Search assessments" autocomplete="off" spellcheck="false" aria-label="Search assessments">
             <div class="roster__filters">
@@ -17,10 +17,29 @@
                         <option value="">All clients</option>
                     </select>
                 </div>
+                <div class="roster__filter">
+                    <select id="status_filter" class="form-select" aria-label="Filter by status">
+                        <option value="">All statuses</option>
+                        <option value="Planned">Not Started</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Complete">Complete</option>
+                    </select>
+                </div>
             </div>
         </div>
-        <div class="panel__body">
-            <div class="tiles" id="assessments_list"></div>
+        <div class="panel__body panel__body--flush listpage__body">
+            <table class="data listpage__table" id="assessments_table">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Framework</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Progress</th>
+                        <th scope="col" class="num">Gaps</th>
+                    </tr>
+                </thead>
+                <tbody id="assessments_list"></tbody>
+            </table>
             <p class="tiles__empty" id="assessments_empty"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Loading assessments&hellip;</p>
         </div>
     </div>
@@ -33,23 +52,26 @@ $(document).ready(function () {
 
     var assessments = [];
 
-    function status_tone(value) {
-
-        if (value === 'Complete') {
-            return 'badge--active';
+    var STATUS = {
+        'Planned': {
+            label: 'Not Started',
+            tone: 'is-none'
+        },
+        'In Progress': {
+            label: 'In Progress',
+            tone: 'is-partial'
+        },
+        'Complete': {
+            label: 'Complete',
+            tone: 'is-ok'
         }
-
-        if (value === 'In Progress') {
-            return 'badge--onboarding';
-        }
-
-        return 'badge--inactive';
-    }
+    };
 
     function render() {
 
         var term = $('#assessment_search').val().trim().toLowerCase();
         var client = $('#client_filter').val() || '';
+        var status = $('#status_filter').val() || '';
         var html = '';
         var shown = 0;
 
@@ -58,8 +80,14 @@ $(document).ready(function () {
             var row = assessments[i];
             var total = parseInt(row.item_count, 10) || 0;
             var done = parseInt(row.assessed_count, 10) || 0;
+            var pct = total > 0 ? Math.round(done / total * 100) : 0;
+            var state = STATUS[row.assessment_status] || STATUS['Planned'];
 
             if (client !== '' && String(row.client_id) !== client) {
+                continue;
+            }
+
+            if (status !== '' && row.assessment_status !== status) {
                 continue;
             }
 
@@ -69,17 +97,18 @@ $(document).ready(function () {
 
             shown++;
 
-            html += '<a class="tile" href="/assessments/detail/id/' + row.id + '">'
-                + '<span class="tile__top">'
-                + '<span class="tile__title">' + esc(row.assessment_name) + '</span>'
-                + '<span class="badge ' + status_tone(row.assessment_status) + '">' + esc(row.assessment_status) + '</span>'
-                + '</span>'
-                + (row.client_name ? '<span class="tile__meta">' + esc(row.client_name) + '</span>' : '')
-                + '<span class="tile__figure">' + (total > 0 ? Math.round(done / total * 100) : 0) + '%<span class="tile__figure-label">complete</span></span>'
-                + '</a>';
+            html += '<tr class="rowlink">'
+                + '<td><a class="rowlink__a listpage__name" href="/assessments/detail/id/' + row.id + '">' + esc(row.assessment_name) + '</a>'
+                + (row.client_name ? '<span class="listpage__sub">' + esc(row.client_name) + '</span>' : '') + '</td>'
+                + '<td>' + esc(row.short_code || '') + '</td>'
+                + '<td><span class="listpage__status"><span class="rollup__dot ' + state.tone + '"></span>' + state.label + '</span></td>'
+                + '<td><span class="listpage__progress"><span class="progress"><span class="progress__bar" style="width:' + pct + '%"></span></span><span class="listpage__pct">' + pct + '%</span></span></td>'
+                + '<td class="num">' + (parseInt(row.gap_count, 10) || 0).toLocaleString('en-US') + '</td>'
+                + '</tr>';
         }
 
-        $('#assessments_list').html(html).prop('hidden', shown === 0);
+        $('#assessments_list').html(html);
+        $('#assessments_table').prop('hidden', shown === 0);
         $('#assessments_empty').prop('hidden', shown > 0).text(assessments.length === 0
             ? 'No assessments yet.'
             : 'No assessments match your search.');
@@ -111,6 +140,7 @@ $(document).ready(function () {
 
     $('#assessment_search').on('input', render);
     $('#client_filter').on('change', render);
+    $('#status_filter').on('change', render);
 
     ApiDataSvc.apiCall('post', 'load_all_assessments', {}, function (data) {
 

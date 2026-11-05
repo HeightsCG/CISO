@@ -38,6 +38,9 @@ class ReportAnalysis
         'Low' => 1
     );
 
+    /** The most references written inline in a sentence; a longer list gets a sentence of its own or a pointer to a complete table. */
+    const INLINE_REFS = 12;
+
     private $assessment_id;
     private $company_id;
 
@@ -614,7 +617,7 @@ class ReportAnalysis
                     'label' => $rule['label'],
                     'points' => $points,
                     'controls' => array_keys($controls),
-                    'sentence' => sprintf($rule['sentence'], $terms['objectives']).' This applies to '.count($points).' '.$terms['objectives'].' across '.count($controls).' '.$terms['controls'].' ('.implode(', ', array_slice(array_keys($controls), 0, 8)).(count($controls) > 8 ? ' and others' : '').').'
+                    'sentence' => sprintf($rule['sentence'], $terms['objectives']).' This applies to '.count($points).' '.$terms['objectives'].' across '.count($controls).' '.$terms['controls'].(count($controls) > self::INLINE_REFS ? '. The '.$terms['controls'].' concerned are '.self::join_list(array_keys($controls)).'.' : ' ('.implode(', ', array_keys($controls)).').')
                 );
             }
         }

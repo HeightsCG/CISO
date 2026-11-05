@@ -25,6 +25,7 @@ class ApiController extends Controller {
     public $dashboard_model;
     public $invoices_model;
     public $subscriptions_model;
+    public $poam_model;
 
     public function __construct(){
         parent::__construct();
@@ -38,6 +39,7 @@ class ApiController extends Controller {
         $this->evidence_model = new EvidenceModel();
         $this->dashboard_model = new DashboardModel();
         $this->invoices_model = new InvoicesModel();
+        $this->poam_model = new PoamModel();
     }
 
     public function loginAction(){
@@ -1166,8 +1168,8 @@ class ApiController extends Controller {
             'totals' => (count($totals) === 1 ? $totals[0] : array()),
             'results' => $this->dashboard_model->result_totals($company_id),
             'assessment_status' => $this->dashboard_model->assessment_status($company_id),
-            'assessments' => $this->dashboard_model->assessments($company_id),
-            'clients' => $this->dashboard_model->by_client($company_id),
+            'poam' => $this->dashboard_model->poam_totals($company_id),
+            'milestones' => $this->dashboard_model->upcoming_milestones($company_id),
             'attention' => $this->dashboard_model->attention($company_id)
         );
 
@@ -6458,6 +6460,584 @@ class ApiController extends Controller {
             'fields' => ReportNarratives::fields($state['kind']),
             'issues' => ReportQuality::for_section($issues, $state['section_key'])
         );
+    }
+
+    /* ------------------------------------------------------------------ poam */
+
+    /** The POA&M register of an assessment, after a sync: records, framework rules, overview counts and the clock date. */
+    public function poam_listAction(){
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+        $this->refuse_unless_report_staff($assessment_id);
+
+        echo json_encode($this->poam_register($assessment_id, false));
+        exit;
+    }
+
+    /** One record with its milestones, evidence and history. */
+    public function poam_item_loadAction(){
+
+        $item = $this->poam_staff_item((int) ($this->post['item_id'] ?? 0));
+
+        echo json_encode($this->poam_item_payload($item, false));
+        exit;
+    }
+
+    /** Saves the posted management fields of an open record; Closed cannot be set here. */
+    public function poam_item_saveAction(){
+
+        $item = $this->poam_staff_item((int) ($this->post['item_id'] ?? 0));
+
+        $this->poam_save($item, false);
+    }
+
+    /** Adds (no milestone_id) or updates a milestone of an open record. */
+    public function poam_milestone_saveAction(){
+
+        $item = $this->poam_staff_item((int) ($this->post['item_id'] ?? 0));
+
+        $this->poam_milestone_save($item, false);
+    }
+
+    public function poam_milestone_deleteAction(){
+
+        $milestone = $this->poam_model->get_milestone((int) ($this->post['milestone_id'] ?? 0), Session::get('company_id'));
+
+        if (count($milestone) !== 1) {
+            $this->poam_fail('That milestone could not be found');
+        }
+
+        $item = $this->poam_staff_item((int) $milestone[0]['poam_item_id']);
+
+        $this->poam_milestone_delete($item, (int) $milestone[0]['id'], false);
+    }
+
+    /** Links a vault file of the assessment's client to a record as Progress or Closure evidence. */
+    public function poam_evidence_linkAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $item = $this->poam_staff_item((int) ($this->post['item_id'] ?? 0));
+        $evidence_role = $this->input('evidence_role');
+
+        if (!in_array($evidence_role, Poam::EVIDENCE_ROLES, true)) {
+            $this->poam_fail('Choose whether this is progress or closure evidence');
+        }
+
+        $evidence = $this->poam_model->client_evidence((int) ($this->post['evidence_id'] ?? 0), $item['client_id'], Session::get('company_id'));
+
+        if (count($evidence) !== 1) {
+            $this->poam_fail('That evidence could not be found');
+        }
+
+        $link_id = $this->poam_model->link_evidence(
+            (int) $item['id'],
+            Session::get('company_id'),
+            (int) $evidence[0]['id'],
+            (string) $evidence[0]['evidence_title'],
+            $evidence_role,
+            (int) Session::get('user_id')
+        );
+
+        if ($link_id === false) {
+            $this->poam_fail('This item is closed. Reopen it to make changes.');
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Evidence linked';
+        $response['link_id'] = $link_id;
+        echo json_encode($response);
+        exit;
+    }
+
+    public function poam_evidence_unlinkAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $link = $this->poam_model->get_evidence_link((int) ($this->post['link_id'] ?? 0), Session::get('company_id'));
+
+        if (count($link) !== 1) {
+            $this->poam_fail('That evidence link could not be found');
+        }
+
+        $this->poam_staff_item((int) $link[0]['poam_item_id']);
+
+        if (!$this->poam_model->unlink_evidence((int) $link[0]['id'], Session::get('company_id'), (int) Session::get('user_id'))) {
+            $this->poam_fail('This item is closed. Reopen it to make changes.');
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Evidence removed';
+        echo json_encode($response);
+        exit;
+    }
+
+    /**
+     * Confirms closure (staff only): a note, closure evidence or a stated
+     * reason, and override_ack when the control is not recorded Implemented.
+     */
+    public function poam_item_closeAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $item = $this->poam_staff_item((int) ($this->post['item_id'] ?? 0));
+        $closure_note = $this->input('closure_note');
+        $closure_reason = $this->input('closure_reason');
+        $override = $this->input('override_ack') === '1';
+        $control_result = $this->poam_model->control_result($item['assessment_id'], $item['source_ref']);
+
+        $error = Poam::closure_error(
+            (string) Session::get('user_type'),
+            (string) $item['poam_status'],
+            $closure_note,
+            $this->poam_model->closure_evidence_count((int) $item['id'], Session::get('company_id')),
+            $closure_reason,
+            $override,
+            $control_result
+        );
+
+        if ($error !== '') {
+            $this->poam_fail($error);
+        }
+
+        if (mb_strlen($closure_note) > 10000 || mb_strlen($closure_reason) > 10000) {
+            $this->poam_fail('The closure note is too long');
+        }
+
+        $closed = $this->poam_model->close_item(
+            (int) $item['id'],
+            Session::get('company_id'),
+            $closure_note,
+            $closure_reason,
+            $control_result,
+            $override && $control_result !== 'Implemented',
+            (int) Session::get('user_id')
+        );
+
+        if (!$closed) {
+            $this->poam_fail('This item is already closed');
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Closure confirmed';
+        echo json_encode($response);
+        exit;
+    }
+
+    /** Reopens a closed record as a new record linked to it (staff only); a reason is required. */
+    public function poam_item_reopenAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $item = $this->poam_staff_item((int) ($this->post['item_id'] ?? 0));
+        $reopen_note = $this->input('reopen_note');
+
+        if ($item['poam_status'] !== 'Closed') {
+            $this->poam_fail('Only a closed item can be reopened');
+        }
+
+        if ($reopen_note === '') {
+            $this->poam_fail('Say why this item is being reopened');
+        }
+
+        $new = $this->poam_model->reopen_item((int) $item['id'], Session::get('company_id'), mb_substr($reopen_note, 0, 400), (int) Session::get('user_id'));
+
+        if ($new === null) {
+            $this->poam_fail('This control already has a newer item');
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Reopened as '.$new['poam_ref'];
+        $response['item_id'] = $new['id'];
+        $response['poam_ref'] = $new['poam_ref'];
+        echo json_encode($response);
+        exit;
+    }
+
+    /** The change history of one record (item_id) or of the whole register (assessment_id). */
+    public function poam_historyAction(){
+
+        $item_id = (int) ($this->post['item_id'] ?? 0);
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+
+        if ($item_id > 0) {
+            $item = $this->poam_staff_item($item_id);
+            $assessment_id = (int) $item['assessment_id'];
+        } else {
+            $this->refuse_unless_report_staff($assessment_id);
+        }
+
+        echo json_encode(array(
+            'success' => true,
+            'message' => 'ok',
+            'history' => $this->poam_history_rows($this->poam_model->load_history($item_id, $assessment_id, Session::get('company_id')))
+        ));
+        exit;
+    }
+
+    /** Records the CMMC Conditional status date the closeout period runs from; empty clears it. */
+    public function poam_clock_saveAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+        $this->refuse_unless_report_staff($assessment_id);
+
+        $assessment = $this->assessments_model->get_assessment($assessment_id, Session::get('company_id'));
+        $poam_clock_date = $this->input('poam_clock_date');
+
+        if (Poam::profile((string) $assessment[0]['framework_key']) !== 'conditional') {
+            $this->poam_fail('The Conditional status date applies to CMMC Level 2 and Level 3 only');
+        }
+
+        if ($poam_clock_date !== '' && !Poam::valid_date($poam_clock_date)) {
+            $this->poam_fail('Enter a valid Conditional status date');
+        }
+
+        if ($poam_clock_date > date('Y-m-d')) {
+            $this->poam_fail('The Conditional status date cannot be in the future');
+        }
+
+        $this->poam_model->save_clock_date($assessment_id, Session::get('company_id'), $poam_clock_date === '' ? null : $poam_clock_date, (int) Session::get('user_id'));
+
+        $response['success'] = true;
+        $response['message'] = 'Saved';
+        $response['poam_clock_date'] = $poam_clock_date;
+        echo json_encode($response);
+        exit;
+    }
+
+    /**
+     * The client's view of their own assessment's register. client_id comes
+     * from the session; close and reopen are not offered.
+     */
+    public function portal_poam_listAction(){
+
+        $assessment_id = (int) ($this->post['assessment_id'] ?? 0);
+        $this->refuse_unless_poam_portal($assessment_id);
+
+        echo json_encode($this->poam_register($assessment_id, true));
+        exit;
+    }
+
+    public function portal_poam_item_loadAction(){
+
+        $item = $this->poam_portal_item((int) ($this->post['item_id'] ?? 0));
+
+        echo json_encode($this->poam_item_payload($item, true));
+        exit;
+    }
+
+    /** A client may update owner, resources, progress status and comments; anything else is refused. */
+    public function portal_poam_item_saveAction(){
+
+        $item = $this->poam_portal_item((int) ($this->post['item_id'] ?? 0));
+
+        $this->poam_save($item, true);
+    }
+
+    public function portal_poam_milestone_saveAction(){
+
+        $item = $this->poam_portal_item((int) ($this->post['item_id'] ?? 0));
+
+        $this->poam_milestone_save($item, true);
+    }
+
+    public function portal_poam_milestone_deleteAction(){
+
+        $milestone = $this->poam_model->get_milestone((int) ($this->post['milestone_id'] ?? 0), Session::get('company_id'));
+
+        if (count($milestone) !== 1) {
+            $this->poam_fail('That milestone could not be found');
+        }
+
+        $item = $this->poam_portal_item((int) $milestone[0]['poam_item_id']);
+
+        $this->poam_milestone_delete($item, (int) $milestone[0]['id'], true);
+    }
+
+    private function poam_register(int $assessment_id, bool $portal): array
+    {
+        $company_id = (int) Session::get('company_id');
+        $analysis = (new ReportAnalysis($assessment_id, $company_id))->build();
+
+        if ($analysis === null) {
+            $this->poam_fail('That assessment could not be found');
+        }
+
+        $analysis = ReportNarratives::apply($analysis, $company_id);
+        $sync = Poam::sync($assessment_id, $company_id, 0, $analysis);
+
+        if (isset($sync['error'])) {
+            $this->poam_fail($sync['error']);
+        }
+
+        $rules = Poam::framework_rules((string) $analysis['assessment']['framework_key'], $analysis['definition']);
+        $clock_date = $this->poam_model->clock_date($assessment_id, $company_id);
+        $today = date('Y-m-d');
+        $items = array();
+
+        foreach ($this->poam_model->load_items($assessment_id, $company_id) as $row) {
+            $item = Poam::present($row, $rules, $clock_date, $today);
+            unset($item['source_hash']);
+            $items[] = $item;
+        }
+
+        $overview = Poam::overview($items, $this->poam_model->load_milestones(0, $assessment_id, $company_id), $today);
+
+        return array(
+            'success' => true,
+            'message' => 'ok',
+            'sync' => $sync,
+            'rules' => array(
+                'profile' => $rules['profile'],
+                'framework_name' => $rules['framework_name'],
+                'banner' => $rules['banner'],
+                'statement' => $rules['statement'],
+                'internal_only' => $rules['internal_only'],
+                'closeout_days' => $rules['closeout_days']
+            ),
+            'clock_date' => $clock_date,
+            'closeout_date' => $rules['profile'] === 'conditional' && $clock_date !== null && $rules['closeout_days'] !== null ? date('Y-m-d', strtotime($clock_date.' +'.(int) $rules['closeout_days'].' days')) : null,
+            'overview' => array(
+                'open' => $overview['open'],
+                'closed' => $overview['closed'],
+                'overdue' => $overview['overdue'],
+                'unassigned' => $overview['unassigned'],
+                'resolved' => $overview['resolved'],
+                'upcoming_milestones' => count($overview['upcoming_milestones']),
+                'overdue_milestones' => count($overview['overdue_milestones'])
+            ),
+            'statuses' => Poam::EDITABLE_STATUSES,
+            'can_close' => !$portal,
+            'items' => $items
+        );
+    }
+
+    private function poam_item_payload(array $item, bool $portal): array
+    {
+        $company_id = (int) Session::get('company_id');
+        $rules = Poam::framework_rules((string) $item['framework_key'], FrameworkLibrary::get((string) $item['framework_key']));
+        $presented = Poam::present($item, $rules, $item['poam_clock_date'], date('Y-m-d'));
+        unset($presented['source_hash']);
+
+        return array(
+            'success' => true,
+            'message' => 'ok',
+            'item' => $presented,
+            'control_result' => $this->poam_model->control_result($item['assessment_id'], $item['source_ref']),
+            'milestones' => $this->poam_model->load_milestones((int) $item['id'], 0, $company_id),
+            'evidence' => $this->poam_model->load_evidence((int) $item['id'], 0, $company_id, !$portal),
+            'history' => $this->poam_history_rows($this->poam_model->load_history((int) $item['id'], 0, $company_id)),
+            'statuses' => Poam::EDITABLE_STATUSES,
+            'milestone_statuses' => Poam::MILESTONE_STATUSES,
+            'editable' => $portal ? Poam::PORTAL_FIELDS : array_keys(Poam::STAFF_FIELDS),
+            'can_close' => !$portal && $item['poam_status'] !== 'Closed',
+            'can_reopen' => !$portal && $item['poam_status'] === 'Closed'
+        );
+    }
+
+    private function poam_history_rows(array $rows): array
+    {
+        $out = array();
+
+        foreach ($rows as $row) {
+            $row['field_label'] = Poam::label((string) $row['field_name']);
+            $out[] = $row;
+        }
+
+        return $out;
+    }
+
+    /** Validates every posted management field (a portal user only PORTAL_FIELDS) and saves the record. */
+    private function poam_save(array $item, bool $portal): void
+    {
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        if ($item['poam_status'] === 'Closed') {
+            $this->poam_fail('This item is closed. Reopen it to make changes.');
+        }
+
+        $today = date('Y-m-d');
+        $values = array();
+
+        foreach (array_keys(Poam::STAFF_FIELDS) as $field) {
+            if (!array_key_exists($field, $this->post)) {
+                $values[$field] = $item[$field];
+                continue;
+            }
+            $clean = Poam::clean_field($field, $this->input($field), $today, $portal);
+            if (isset($clean['error'])) {
+                $this->poam_fail($clean['error']);
+            }
+            $values[$field] = $clean['value'];
+        }
+
+        $order = Poam::date_order_error($values['detection_date'], $values['scheduled_completion_date']);
+
+        if ($order !== '') {
+            $this->poam_fail($order);
+        }
+
+        $changed = $this->poam_model->save_item(
+            (int) $item['id'],
+            Session::get('company_id'),
+            $values['owner_name'],
+            $values['resources'],
+            $values['detection_date'],
+            $values['scheduled_completion_date'],
+            $values['completion_date'],
+            $values['poam_status'],
+            $values['comments'],
+            $values['weakness_override'],
+            $values['action_override'],
+            $values['priority_override'],
+            $values['risk_rating'],
+            $values['vendor_dependency'],
+            $values['vendor_product'],
+            $values['vendor_checkin_date'],
+            $values['deviation_type'],
+            $values['deviation_rationale'],
+            'User',
+            (int) Session::get('user_id')
+        );
+
+        if ($changed === false) {
+            $this->poam_fail('This item is closed. Reopen it to make changes.');
+        }
+
+        $response['success'] = true;
+        $response['message'] = $changed > 0 ? 'Saved' : 'No changes to save';
+        $response['changed'] = $changed;
+        echo json_encode($response);
+        exit;
+    }
+
+    private function poam_milestone_save(array $item, bool $portal): void
+    {
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $clean = Poam::clean_milestone(
+            $this->input('milestone_text'),
+            $this->input('due_date'),
+            $this->input('completed_date'),
+            $this->input('milestone_status'),
+            date('Y-m-d')
+        );
+
+        if (isset($clean['error'])) {
+            $this->poam_fail($clean['error']);
+        }
+
+        $milestone_id = $this->poam_model->save_milestone(
+            (int) $item['id'],
+            Session::get('company_id'),
+            (int) ($this->post['milestone_id'] ?? 0),
+            $clean['milestone']['milestone_text'],
+            $clean['milestone']['due_date'],
+            $clean['milestone']['completed_date'],
+            $clean['milestone']['milestone_status'],
+            'User',
+            (int) Session::get('user_id')
+        );
+
+        if ($milestone_id === false) {
+            $this->poam_fail($item['poam_status'] === 'Closed' ? 'This item is closed. Reopen it to make changes.' : 'That milestone could not be found');
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Milestone saved';
+        $response['milestone_id'] = $milestone_id;
+        echo json_encode($response);
+        exit;
+    }
+
+    private function poam_milestone_delete(array $item, int $milestone_id, bool $portal): void
+    {
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        if (!$this->poam_model->delete_milestone($milestone_id, Session::get('company_id'), 'User', (int) Session::get('user_id'))) {
+            $this->poam_fail($item['poam_status'] === 'Closed' ? 'This item is closed. Reopen it to make changes.' : 'That milestone could not be found');
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Milestone removed';
+        echo json_encode($response);
+        exit;
+    }
+
+    /** A record of the signed-in company, for staff only. */
+    private function poam_staff_item(int $item_id): array
+    {
+        $rows = $this->poam_model->get_item($item_id, Session::get('company_id'));
+
+        if (Session::get('user_type') !== 'staff' || count($rows) !== 1) {
+            $this->poam_fail('That item could not be found');
+        }
+
+        return $rows[0];
+    }
+
+    /** A record of the signed-in client's own assessments, for portal users only. */
+    private function poam_portal_item(int $item_id): array
+    {
+        if (Session::get('user_type') !== 'portal') {
+            $this->poam_fail('That item could not be found');
+        }
+
+        $rows = $this->poam_model->get_item($item_id, Session::get('company_id'));
+
+        if (count($rows) !== 1 || (int) $rows[0]['client_id'] !== (int) Session::get('client_id') || (int) $rows[0]['client_id'] === 0) {
+            $this->poam_fail('That item could not be found');
+        }
+
+        return $rows[0];
+    }
+
+    private function refuse_unless_poam_portal(int $assessment_id): void
+    {
+        if (Session::get('user_type') !== 'portal' || empty(Session::get('client_id'))) {
+            $this->poam_fail('That assessment could not be found');
+        }
+
+        $assessment = $this->assessments_model->client_assessment($assessment_id, Session::get('client_id'), Session::get('company_id'));
+
+        if (!is_array($assessment) || count($assessment) !== 1) {
+            $this->poam_fail('That assessment could not be found');
+        }
+    }
+
+    private function poam_fail(string $message): void
+    {
+        echo json_encode(array(
+            'success' => false,
+            'message' => $message
+        ));
+        exit;
     }
 
     /* ------------------------------------------------------------ assistant */

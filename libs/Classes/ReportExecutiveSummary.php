@@ -135,7 +135,7 @@ class ReportExecutiveSummary extends ReportBuilder
         $text = 'Each gap has been given a remediation priority derived from its result, the exposure of the area it covers and the share of '.$this->term('objectives').' still open; this is a planning aid rather than an assessed risk rating.';
 
         if (count($high) === 0) {
-            $text .= ' None of the '.$total.' '.($total === 1 ? 'gap is' : 'gaps are').' rated high priority.';
+            $text .= ' None of the '.$total.' '.($total === 1 ? 'gap' : 'gaps').' has a high remediation priority.';
         } else {
             $topics = array();
             foreach ($high as $finding) {
@@ -143,7 +143,7 @@ class ReportExecutiveSummary extends ReportBuilder
             }
             arsort($topics);
             $names = array_map('strtolower', array_slice(array_keys($topics), 0, 3));
-            $text .= ' '.count($high).' of the '.$total.' '.($total === 1 ? 'gap is' : 'gaps are').' high priority'.(count($high) > 1 && count($names) > 0 ? ', mostly in '.self::join_list($names) : '').'.';
+            $text .= ' '.count($high).' of the '.$total.' '.($total === 1 ? 'gap has' : 'gaps have').' a high remediation priority'.(count($high) > 1 && count($names) > 0 ? ', mostly in '.self::join_list($names) : '').'.';
         }
 
         $initiatives = $this->initiatives();
@@ -315,8 +315,8 @@ class ReportExecutiveSummary extends ReportBuilder
         );
         $metrics[] = array(
             'value' => (string) $priorities['High'],
-            'label' => 'High-priority gaps',
-            'sub' => 'Derived; '.$priorities['Medium'].' medium, '.$priorities['Low'].' low',
+            'label' => 'High remediation priority',
+            'sub' => 'Gaps, derived; '.$priorities['Medium'].' medium, '.$priorities['Low'].' low',
             'tone' => $priorities['High'] > 0 ? 'critical' : 'positive'
         );
         $metrics[] = array(
@@ -439,7 +439,7 @@ class ReportExecutiveSummary extends ReportBuilder
         }
         $head[] = 'Score';
         $widths[] = 9;
-        $head[] = 'High priority';
+        $head[] = 'High remediation priority';
         $widths[] = 14;
 
         return array(
@@ -479,7 +479,7 @@ class ReportExecutiveSummary extends ReportBuilder
                     $entry['explanation']
                 )));
                 if (count($entry['refs'] ?? array()) > 0) {
-                    $body .= "\n\nRelated ".$this->term('controls').': '.implode(', ', array_slice($entry['refs'], 0, 6)).(count($entry['refs']) > 6 ? ' and '.(count($entry['refs']) - 6).' more' : '').'.';
+                    $body .= "\n\nRelated ".$this->term('controls').': '.implode(', ', $entry['refs']).'.';
                 }
                 $blocks[] = array(
                     'kind' => 'panel',
@@ -649,7 +649,7 @@ class ReportExecutiveSummary extends ReportBuilder
         }
         $ids = array_keys($ids);
         sort($ids);
-        $paragraphs[count($paragraphs) - 1] .= "\n".'Remediation priority (derived): '.implode(', ', $split).(count($ids) > 0 ? ' · Addressed by '.implode(', ', array_slice($ids, 0, 4)).(count($ids) > 4 ? ' and others' : '') : '');
+        $paragraphs[count($paragraphs) - 1] .= "\n".'Remediation priority (derived): '.implode(', ', $split).(count($ids) > 0 ? ' · Addressed by '.implode(', ', $ids) : '');
 
         return implode("\n\n", $paragraphs);
     }
@@ -709,12 +709,16 @@ class ReportExecutiveSummary extends ReportBuilder
                 $missing[] = $line;
                 $length += strlen($line);
             }
-            $first .= ' Not yet in place: '.implode('; ', $missing).(count($answered_open) > count($missing) ? '; and '.(count($answered_open) - count($missing)).' more' : '').'.';
+            $first .= ' Not yet in place: '.implode('; ', $missing).'.';
+            $rest = array_slice($answered_open, count($missing));
+            if (count($rest) > 0) {
+                $first .= ' Also open: '.self::join_list(array_column($rest, 'short')).'.';
+            }
         } elseif ($all > 0 && count($control['open']) > 0) {
             $unanswered = count($control['open']);
             $first .= ': '.($all - $unanswered).' of '.$all.' '.$this->term('objectives').' answered as met or partly met, and '.$unanswered.' not yet answered, so the extent of the gap needs to be confirmed. Still to be assessed: '
                 .self::lower_first(rtrim($control['open'][0]['description'] !== '' ? $control['open'][0]['description'] : $control['open'][0]['title'], '.'))
-                .($unanswered > 1 ? '; and '.($unanswered - 1).' more' : '').'.';
+                .($unanswered > 1 ? '; also '.self::join_list(array_column(array_slice($control['open'], 1), 'short')) : '').'.';
         } else {
             $first .= '.';
             if ($control['description'] !== '' && $control['description'] !== $control['title']) {
@@ -799,12 +803,16 @@ class ReportExecutiveSummary extends ReportBuilder
             return $control['result'] === 'Implemented';
         }));
         if (count($implemented) > 0) {
-            $named = array();
-            foreach (array_slice($implemented, 0, 6) as $control) {
-                $named[] = $control['title'].' ('.$control['ref'].')';
+            $lead = count($implemented).' '.(count($implemented) === 1 ? $this->term('control').' is' : $this->term('controls').' are').' recorded as fully implemented';
+            if (count($implemented) > self::INLINE_REFS) {
+                $lines[] = $lead.'; each is listed with its result in the Assessment Results Report.';
+            } else {
+                $named = array();
+                foreach ($implemented as $control) {
+                    $named[] = $control['title'].' ('.$control['ref'].')';
+                }
+                $lines[] = $lead.': '.self::join_list($named).'.';
             }
-            $lines[] = count($implemented).' '.(count($implemented) === 1 ? $this->term('control').' is' : $this->term('controls').' are').' recorded as fully implemented: '
-                .self::join_list($named).(count($implemented) > 6 ? ' and '.(count($implemented) - 6).' others' : '').'.';
         }
 
         foreach ($a['families'] as $name => $family) {
@@ -978,7 +986,7 @@ class ReportExecutiveSummary extends ReportBuilder
                 $number++;
                 $body = $entry['rationale'];
                 if (count($entry['refs'] ?? array()) > 0) {
-                    $body .= "\n\nRelated ".$this->term('controls').': '.implode(', ', array_slice($entry['refs'], 0, 6)).(count($entry['refs']) > 6 ? ' and '.(count($entry['refs']) - 6).' more' : '').'.';
+                    $body .= "\n\nRelated ".$this->term('controls').': '.implode(', ', $entry['refs']).'.';
                 }
                 $blocks[] = array(
                     'kind' => 'panel',
@@ -1055,7 +1063,7 @@ class ReportExecutiveSummary extends ReportBuilder
         }
 
         $count = count($initiative['controls']);
-        $text = 'Addresses '.$count.' '.($count === 1 ? $this->term('control') : $this->term('controls')).' not fully in place in '.self::join_list(array_slice($families, 0, 3)).(count($families) > 3 ? ' and '.(count($families) - 3).' other '.$this->term('families') : '');
+        $text = 'Addresses '.$count.' '.($count === 1 ? $this->term('control') : $this->term('controls')).' not fully in place in '.self::join_list($families);
         $text .= $count > 2 ? '.' : ': '.self::join_list($named).'.';
 
         $outcome = $initiative['outcome'] ?? null;

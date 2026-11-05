@@ -576,65 +576,6 @@ class ReportEvidenceRegister extends ReportBuilder
         return $bars;
     }
 
-    /** Typical evidence for a group of controls, from the topic knowledge layer. */
-    private function typical_deliverables(array $controls): array
-    {
-        $weight = array();
-
-        foreach ($controls as $control) {
-            $weight[$control['topic']] = ($weight[$control['topic']] ?? 0) + 1;
-        }
-
-        arsort($weight);
-        $out = array();
-
-        foreach (array_keys($weight) as $key) {
-            $topic = ReportKnowledge::topic($key);
-            foreach (array_slice($topic['deliverables'] ?? array(), 0, 2) as $deliverable) {
-                if (!in_array($deliverable, $out, true)) {
-                    $out[] = $deliverable;
-                }
-            }
-            if (count($out) >= 5) {
-                break;
-            }
-        }
-
-        return array_slice($out, 0, 5);
-    }
-
-    /** What would demonstrate one control: its expectation topics, else its objectives, else typical artifacts. */
-    private function expected_evidence(array $control): string
-    {
-        $topics = array();
-
-        foreach ($control['expectations'] as $expectation) {
-            if ($expectation[0] !== '' && !preg_match('/^ex\s*\d+$/i', $expectation[0])) {
-                $topics[] = $expectation[0];
-            }
-        }
-
-        if (count($topics) > 0) {
-            return 'Records showing: '.strtolower(implode('; ', $topics)).'.';
-        }
-
-        if (count($control['objectives']) > 0) {
-            $titles = array_map(function ($objective) {
-                return rtrim($objective['title'], '.');
-            }, array_slice($control['objectives'], 0, 4));
-            return 'Evidence for each '.$this->term('objective').', e.g. '.implode('; ', $titles).(count($control['objectives']) > 4 ? '; and '.(count($control['objectives']) - 4).' more' : '').'.';
-        }
-
-        if (count($control['expectations']) > 0) {
-            $text = rtrim($control['expectations'][0][1], '.');
-            return 'Records showing that the organization does the following: '.(strlen($text) > 220 ? substr($text, 0, strrpos(substr($text, 0, 220), ' ')).'...' : $text).'.';
-        }
-
-        return implode('; ', $this->typical_deliverables(array(
-            $control
-        ))).'.';
-    }
-
     private static function share(int $part, int $whole): string
     {
         if ($part > 0 && $whole > 0 && round(100 * $part / $whole) < 1) {

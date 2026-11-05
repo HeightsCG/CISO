@@ -83,81 +83,57 @@ class DashboardModel extends Model {
     }
 
     /**
-     * Every assessment in flight, with how far the assessing has got and how many
-     * gaps it has turned up. Ordered least-finished first, so the work still to do
-     * is at the top of the list rather than buried under finished assessments.
+     * Open and overdue POA&M items across live assessments. Overdue needs a
+     * scheduled completion date in the past; an item without one is never
+     * counted as overdue.
      */
-    public function assessments($company_id)
+    public function poam_totals($company_id)
     {
         $where = array(
             'company_id' => $company_id
         );
         $sql = "SELECT
-                    a.id,
-                    a.client_id,
-                    a.assessment_name,
-                    a.short_code,
-                    a.assessment_status,
-                    cl.company_name AS client_name,
-                    COUNT(ai.id) AS item_count,
-                    SUM(CASE WHEN ai.item_result <> 'Not Assessed' THEN 1 ELSE 0 END) AS assessed_count,
-                    SUM(CASE WHEN ai.item_result = 'Not Implemented' THEN 1 ELSE 0 END) AS gap_count
+                    SUM(p.poam_status <> 'Closed') AS open_count,
+                    SUM(p.poam_status <> 'Closed' and p.scheduled_completion_date < CURDATE()) AS overdue_count
                 FROM
-                    assessments a
-                    JOIN clients cl ON cl.id = a.client_id and cl.deleted = 0
-                    LEFT JOIN assessment_items ai ON ai.assessment_id = a.id and ai.deleted = 0 and ai.control_kind = 'control'
+                    poam_items p
+                    INNER JOIN assessments a ON a.id = p.assessment_id and a.deleted = 0
                 WHERE
-                    a.company_id = :company_id
+                    p.company_id = :company_id
                     and
-                    a.deleted = 0
-                GROUP BY
-                    a.id,
-                    a.client_id,
-                    a.assessment_name,
-                    a.short_code,
-                    a.assessment_status,
-                    cl.company_name
-                ORDER BY
-                    assessed_count / GREATEST(COUNT(ai.id), 1),
-                    a.assessment_name";
+                    p.deleted = 0";
         return parent::select($sql, $where);
     }
 
-    /**
-     * Per client. The evidence count is a subquery rather than another join, or it
-     * would multiply against the assessment item rows.
-     */
-    public function by_client($company_id)
+    /** Milestones not yet completed that are due today or within the next 30 days. */
+    public function upcoming_milestones($company_id)
     {
         $where = array(
-            'company_id' => $company_id,
-            'company_id2' => $company_id
+            'company_id' => $company_id
         );
         $sql = "SELECT
-                    c.id,
-                    c.company_name,
-                    COUNT(DISTINCT a.id) AS assessment_count,
-                    COUNT(ai.id) AS item_count,
-                    SUM(CASE WHEN ai.item_result <> 'Not Assessed' THEN 1 ELSE 0 END) AS assessed_count,
-                    SUM(CASE WHEN ai.item_result = 'Not Implemented' THEN 1 ELSE 0 END) AS gap_count,
-                    (SELECT COUNT(*)
-                        FROM evidence e
-                        WHERE e.client_id = c.id
-                        and e.company_id = :company_id2
-                        and e.deleted = 0) AS evidence_count
+                    m.id,
+                    m.milestone_text,
+                    m.due_date,
+                    p.poam_ref,
+                    a.id AS assessment_id,
+                    a.assessment_name
                 FROM
-                    clients c
-                    LEFT JOIN assessments a ON a.client_id = c.id and a.company_id = c.company_id and a.deleted = 0
-                    LEFT JOIN assessment_items ai ON ai.assessment_id = a.id and ai.deleted = 0 and ai.control_kind = 'control'
+                    poam_milestones m
+                    INNER JOIN poam_items p ON p.id = m.poam_item_id and p.deleted = 0 and p.poam_status <> 'Closed'
+                    INNER JOIN assessments a ON a.id = p.assessment_id and a.deleted = 0
                 WHERE
-                    c.company_id = :company_id
+                    m.company_id = :company_id
                     and
-                    c.deleted = 0
-                GROUP BY
-                    c.id,
-                    c.company_name
+                    m.deleted = 0
+                    and
+                    m.milestone_status <> 'Completed'
+                    and
+                    m.due_date BETWEEN CURDATE() and CURDATE() + INTERVAL 30 DAY
                 ORDER BY
-                    c.company_name";
+                    m.due_date,
+                    p.poam_ref
+                LIMIT 50";
         return parent::select($sql, $where);
     }
 

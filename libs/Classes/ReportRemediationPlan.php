@@ -12,7 +12,7 @@
 class ReportRemediationPlan extends ReportBuilder
 {
     const PHASE_PURPOSE = array(
-        'Immediate priorities' => 'Absent or high-priority controls in exposed areas, to start first.',
+        'Immediate priorities' => 'Not implemented, or with a high remediation priority in exposed areas, to start first.',
         'Foundational improvements' => 'Governance, policy, role and process foundations that later initiatives build on.',
         'Operational control enhancements' => 'Improvements to day-to-day operating controls, best started once the foundations they rely on are in place.',
         'Program maturity' => 'Activities that keep the program working over time: communication, oversight and continuous improvement.'
@@ -234,8 +234,8 @@ class ReportRemediationPlan extends ReportBuilder
                         ),
                         array(
                             'value' => (string) $high,
-                            'label' => 'High-priority initiatives',
-                            'sub' => 'proposed implementation priority',
+                            'label' => 'High-remediation-priority initiatives',
+                            'sub' => 'derived; not a risk rating',
                             'tone' => $high > 0 ? 'critical' : 'neutral'
                         ),
                         array(
@@ -264,7 +264,7 @@ class ReportRemediationPlan extends ReportBuilder
 
         foreach ($initiatives as $initiative) {
             $parts = array(
-                $initiative['priority'].' priority',
+                $initiative['priority'].' remediation priority',
                 count($initiative['controls']).' '.(count($initiative['controls']) === 1 ? $this->term('control') : $this->term('controls'))
             );
             $after = array_values(array_diff($initiative['depends'], $mutual[$initiative['id']] ?? array()));
@@ -415,16 +415,16 @@ class ReportRemediationPlan extends ReportBuilder
             'ID',
             'Initiative',
             'Phase',
-            'Priority (derived)',
+            'Remediation priority (derived)',
             ucfirst($this->term('controls')),
             'Owner',
             'Target'
         );
         $widths = array(
             7,
-            37,
+            34,
             19,
-            9,
+            12,
             9,
             11,
             8
@@ -437,9 +437,9 @@ class ReportRemediationPlan extends ReportBuilder
             $head = array_slice($head, 0, 5);
             $widths = array(
                 8,
-                52,
+                48,
                 20,
-                10,
+                14,
                 10
             );
         }
@@ -450,7 +450,7 @@ class ReportRemediationPlan extends ReportBuilder
 
         return array(
             self::h1('Prioritized action register'),
-            self::text('All initiatives ordered by recommended priority, then by phase. Priority is derived from the recorded results and is not an assessed risk rating. Select an ID to go to the initiative\'s description.'),
+            self::text('All initiatives ordered by recommended remediation priority, then by phase. Remediation priority is derived from the recorded results and is not an assessed risk rating. Select an ID to go to the initiative\'s description.'),
             $table
         );
     }
@@ -585,7 +585,7 @@ class ReportRemediationPlan extends ReportBuilder
                 'ref' => $initiative['id'],
                 'heading' => $initiative['title'],
                 'severity' => $initiative['priority'],
-                'rating' => $initiative['priority'].' priority (derived)',
+                'rating' => $initiative['priority'].' remediation priority (derived)',
                 'anchor' => 'initiative-'.$initiative['id'],
                 'meta' => $meta,
                 'sections' => $sections
@@ -942,7 +942,7 @@ class ReportRemediationPlan extends ReportBuilder
                     'ID',
                     'Initiative',
                     'Phase',
-                    'Priority',
+                    'Remediation priority (derived)',
                     ucfirst($this->term('controls')),
                     'Identifiers',
                     'Problem addressed',
@@ -958,7 +958,7 @@ class ReportRemediationPlan extends ReportBuilder
                     8,
                     45,
                     28,
-                    10,
+                    16,
                     10,
                     30,
                     60,
@@ -977,7 +977,7 @@ class ReportRemediationPlan extends ReportBuilder
                 'head' => array(
                     'Initiative',
                     'Initiative title',
-                    'Priority',
+                    'Remediation priority (derived)',
                     ucfirst($this->term('family')),
                     'Identifier',
                     ucfirst($this->term('control')),
@@ -991,7 +991,7 @@ class ReportRemediationPlan extends ReportBuilder
                 'widths' => array(
                     10,
                     40,
-                    10,
+                    16,
                     24,
                     14,
                     45,

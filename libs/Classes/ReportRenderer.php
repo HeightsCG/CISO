@@ -117,6 +117,9 @@ class ReportRenderer {
     /** A finding's first section longer than this keeps only its opening paragraph with the card header. */
     const FINDING_LEAD_CHARS = 400;
 
+    /** An opening paragraph longer than this is cut at a sentence so the part kept with the header never fills a page. */
+    const FINDING_LEAD_MAX_CHARS = 900;
+
     /** Share of a chapter's last page below which the next chapter starts on that page. */
     const FLOW_FILL = 0.4;
 
@@ -128,6 +131,9 @@ class ReportRenderer {
 
     /** Tables this short never split across pages. */
     const KEEP_WHOLE_ROWS = 6;
+
+    /** Tables with more text than this split between rows even when they have few rows. */
+    const KEEP_WHOLE_CHARS = 1800;
 
     /** Rows of a longer table kept on the page with its header and heading. */
     const KEEP_LEAD_ROWS = 3;
@@ -510,7 +516,11 @@ class ReportRenderer {
         return $out;
     }
 
-    /** Text into paragraphs, each a list of lines or array('bullets' => list). Arrays of strings are bullets. */
+    /**
+     * Text into paragraphs, each a list of lines or array('bullets' => list).
+     * Arrays of strings are bullets. A line indented by two or more spaces
+     * right after a bullet continues that bullet on a new line.
+     */
     private static function chunks($text): array
     {
         if (is_array($text)) {
@@ -527,6 +537,10 @@ class ReportRenderer {
             $plain = array();
             $bullets = array();
             foreach (preg_split("/\n/", trim($chunk)) as $line) {
+                if (count($bullets) > 0 && preg_match('/^\s{2,}\S/', $line) === 1) {
+                    $bullets[count($bullets) - 1] .= "\n".trim($line);
+                    continue;
+                }
                 if (preg_match('/^\s*[-•]\s+/', $line) === 1) {
                     if (count($plain) > 0) {
                         $out[] = array(
@@ -1369,6 +1383,8 @@ class ReportRenderer {
             .'.fcard .fsec{padding:3pt 0 2pt 0}'
             .'.fcard .fl{font-family:"Sans";font-weight:bold;font-size:7.8pt;letter-spacing:0.8pt;text-transform:uppercase;color:#55636f;margin:0 0 2pt 0;page-break-after:avoid}'
             .'.fcard .fsec p,.fcard .fsec ul{margin-bottom:5pt}'
+            .'.fcard.spaced .fsec{padding:6pt 0 2pt 0}.fcard.spaced .fsec.sep{border-top:0.5pt solid #EEF1F4;margin-top:3pt}'
+            .'.fcard.spaced .fl{margin:0 0 3.5pt 0}.fcard.spaced .fsec p{margin-bottom:6pt}.fcard.spaced .fsec ul{margin-bottom:6pt}.fcard.spaced li{margin-bottom:4.5pt}'
             .'.fcard table.rows{font-family:"Serif";font-size:10pt;line-height:'.$serif(1.45).';margin:0 0 4pt 0}.fcard table.rows td{border:none;border-top:0.5pt solid #EEF1F4;padding:4pt 6pt 4pt 0}'
             .'.fcard td.label{width:26%;font-family:"Sans";font-size:8.5pt;color:#55636f}'
             .'.phase{margin:0 0 12pt 0;border:0.5pt solid #d6dce3}.phase .ph{page-break-after:avoid}'
@@ -1504,7 +1520,7 @@ class ReportRenderer {
             $small_table = in_array($kind, array(
                 'table',
                 'register'
-            ), true) && count($block['value']['rows']) <= self::KEEP_WHOLE_ROWS;
+            ), true) && self::keep_whole($block['value']['rows']);
 
             if ($held !== '' && $kind === 'panel' && self::text_length($block['value']['body'] ?? '') >= 700) {
                 $html .= '<div style="page-break-after:avoid">'.$held.'</div>'.self::pdf_block($block, $e, $ctx);
@@ -1646,33 +1662,111 @@ class ReportRenderer {
             $body[] = $table.'</table>';
         }
 
-        foreach ($sections as $section) {
-            $body[] = '<div class="fsec"><div class="fl">'.$e($section[0]).'</div>'.self::pdf_paragraphs($section[1], $e).'</div>';
+        $spaced = !empty($value['spaced']);
+
+        foreach ($sections as $index => $section) {
+            $body[] = '<div class="fsec'.($spaced && $index > 0 ? ' sep' : '').'"><div class="fl">'.$e($section[0]).'</div>'.self::pdf_paragraphs($section[1], $e).'</div>';
         }
 
         $id = isset($block['anchor']) ? ' id="'.$e($block['anchor']).'"' : '';
         $style = ' style="border-left:4pt solid '.$color.'"';
+        $spacing = $spaced ? ' spaced' : '';
 
         if ($length <= self::FINDING_WHOLE_CHARS || count($body) === 0) {
-            return '<div style="page-break-inside:avoid">'.$held.'<div class="fcard"'.$id.$style.'>'.$head.implode('', $body).'</div></div>';
+            return '<div style="page-break-inside:avoid">'.$held.'<div class="fcard'.$spacing.'"'.$id.$style.'>'.$head.implode('', $body).'</div></div>';
         }
 
         $lead = array_shift($body);
 
+        $keep = true;
+
         if (count($rows) === 0 && self::text_length($sections[0][1]) > self::FINDING_LEAD_CHARS) {
             $chunks = self::chunks($sections[0][1]);
-            $lead = '<div class="fsec"><div class="fl">'.$e($sections[0][0]).'</div>'.self::pdf_chunks(array_slice($chunks, 0, 1), $e).'</div>';
-            if (count($chunks) > 1) {
-                array_unshift($body, '<div class="fsec">'.self::pdf_chunks(array_slice($chunks, 1), $e).'</div>');
+            $first = array_shift($chunks);
+            if (isset($first['lines']) && count($first['lines']) === 1 && strlen($first['lines'][0]) > self::FINDING_LEAD_MAX_CHARS) {
+                $split = self::sentence_split($first['lines'][0], self::FINDING_LEAD_CHARS);
+                if ($split === null) {
+                    $keep = false;
+                } else {
+                    $first = array(
+                        'lines' => array(
+                            $split[0]
+                        )
+                    );
+                    array_unshift($chunks, array(
+                        'lines' => array(
+                            $split[1]
+                        )
+                    ));
+                }
+            }
+            $lead = '<div class="fsec"><div class="fl">'.$e($sections[0][0]).'</div>'.self::pdf_chunks(array($first), $e).'</div>';
+            if (count($chunks) > 0) {
+                array_unshift($body, '<div class="fsec">'.self::pdf_chunks($chunks, $e).'</div>');
             }
         }
 
-        if (count($body) === 0) {
-            return '<div style="page-break-inside:avoid">'.$held.'<div class="fcard top"'.$id.$style.'>'.$head.$lead.'</div></div>';
+        if (!$keep) {
+            return $held.'<div class="fcard'.$spacing.'"'.$id.$style.'>'.$head.$lead.implode('', $body).'</div>';
         }
 
-        return '<div style="page-break-inside:avoid">'.$held.'<div class="fcard top"'.$id.$style.'>'.$head.$lead.'</div></div>'
-            .'<div class="fcard rest"'.$style.'>'.implode('', $body).'</div>';
+        if (count($body) === 0) {
+            return '<div style="page-break-inside:avoid">'.$held.'<div class="fcard top'.$spacing.'"'.$id.$style.'>'.$head.$lead.'</div></div>';
+        }
+
+        return '<div style="page-break-inside:avoid">'.$held.'<div class="fcard top'.$spacing.'"'.$id.$style.'>'.$head.$lead.'</div></div>'
+            .'<div class="fcard rest'.$spacing.'"'.$style.'>'.implode('', $body).'</div>';
+    }
+
+    /**
+     * Whether a table is short enough, in rows and in text, to be kept on
+     * one page; a few very long rows are allowed to split between rows.
+     */
+    private static function keep_whole(array $rows): bool
+    {
+        if (count($rows) > self::KEEP_WHOLE_ROWS) {
+            return false;
+        }
+
+        $length = 0;
+
+        foreach ($rows as $row) {
+            foreach ($row as $cell) {
+                $length += is_scalar($cell) ? strlen((string) $cell) : 0;
+            }
+        }
+
+        return $length <= self::KEEP_WHOLE_CHARS;
+    }
+
+    /**
+     * A paragraph cut at the first sentence boundary at or after $min
+     * characters, as array(opening, remainder), or null when there is none
+     * before the remainder becomes too short to stand alone.
+     */
+    private static function sentence_split(string $text, int $min): ?array
+    {
+        $pattern = '/(?<!\be\.g\.)(?<!\bi\.e\.)(?<!\betc\.)(?<!\bvs\.)(?<!\bNo\.)(?<=[.!?;])\s+(?=[A-Z(])/';
+
+        if (preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE) === false) {
+            return null;
+        }
+
+        foreach ($matches[0] as $match) {
+            $at = $match[1];
+            if ($at < $min) {
+                continue;
+            }
+            if ($at > self::FINDING_LEAD_MAX_CHARS || strlen($text) - $at < 200) {
+                return null;
+            }
+            return array(
+                substr($text, 0, $at),
+                substr($text, $at + strlen($match[0]))
+            );
+        }
+
+        return null;
     }
 
     /**
@@ -1980,7 +2074,9 @@ class ReportRenderer {
             $classes[] = 'small';
         }
 
-        if ($count <= self::KEEP_WHOLE_ROWS) {
+        $whole = self::keep_whole($value['rows']);
+
+        if ($whole) {
             $classes[] = 'whole';
         }
 
@@ -2000,7 +2096,7 @@ class ReportRenderer {
             } elseif ($index % 2 === 1) {
                 $row_classes[] = 'alt';
             }
-            if ($index < self::KEEP_LEAD_ROWS - 1) {
+            if ($index < self::KEEP_LEAD_ROWS - 1 && ($whole || $count > self::KEEP_WHOLE_ROWS)) {
                 $row_classes[] = 'keep';
             }
             if ($index >= $last - 1 && $index >= self::KEEP_LEAD_ROWS + 1) {
@@ -2116,7 +2212,9 @@ class ReportRenderer {
 
         foreach ($chunks as $chunk) {
             if (isset($chunk['bullets'])) {
-                $html .= '<ul><li>'.implode('</li><li>', array_map($e, $chunk['bullets'])).'</li></ul>';
+                $html .= '<ul><li>'.implode('</li><li>', array_map(function ($bullet) use ($e) {
+                    return implode('<br>', array_map($e, explode("\n", $bullet)));
+                }, $chunk['bullets'])).'</li></ul>';
                 continue;
             }
             $html .= '<p>'.implode('<br>', array_map($e, $chunk['lines'])).'</p>';
@@ -3112,7 +3210,17 @@ class ReportRenderer {
         foreach (self::chunks($text) as $chunk) {
             if (isset($chunk['bullets'])) {
                 foreach ($chunk['bullets'] as $bullet) {
-                    $container->addListItem($bullet, 0, $font, null, $paragraph);
+                    if (strpos($bullet, "\n") === false) {
+                        $container->addListItem($bullet, 0, $font, null, $paragraph);
+                        continue;
+                    }
+                    $run = $container->addListItemRun(0, null, $paragraph);
+                    foreach (explode("\n", $bullet) as $index => $line) {
+                        if ($index > 0) {
+                            $run->addTextBreak();
+                        }
+                        $run->addText($line, $font);
+                    }
                 }
                 continue;
             }
@@ -3219,27 +3327,38 @@ class ReportRenderer {
             }
         }
 
-        foreach ($value['sections'] ?? array() as $part) {
+        $spaced = !empty($value['spaced']);
+
+        foreach (array_values($value['sections'] ?? array()) as $index => $part) {
             $table->addRow(null, array(
                 'cantSplit' => self::text_length($part[1]) < 700
             ));
-            $cell = $table->addCell(9600, array(
+            $cell_style = array(
                 'gridSpan' => 2
-            ));
+            );
+            if ($spaced && $index > 0) {
+                $cell_style['borderTopSize'] = 4;
+                $cell_style['borderTopColor'] = 'EEF1F4';
+            }
+            $cell = $table->addCell(9600, $cell_style);
+            $label = array(
+                'keepNext' => true,
+                'spaceAfter' => $spaced ? 60 : 30
+            );
+            if ($spaced) {
+                $label['spaceBefore'] = 100;
+            }
             $cell->addText($part[0], array(
                 'name' => 'Calibri',
                 'size' => 8,
                 'bold' => true,
                 'allCaps' => true,
                 'color' => '55636F'
-            ), array(
-                'keepNext' => true,
-                'spaceAfter' => 30
-            ));
+            ), $label);
             self::docx_paragraphs($cell, $part[1], array(
                 'size' => 10
             ), array(
-                'spaceAfter' => 60,
+                'spaceAfter' => $spaced ? 100 : 60,
                 'lineHeight' => 1.15
             ));
         }

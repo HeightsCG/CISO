@@ -1,37 +1,44 @@
 <div class="page" id="dash">
     <h1 class="visually-hidden">Dashboard</h1>
-    <div class="panel record__panel attention" id="attention_panel" hidden>
-        <div class="panel__head">
-            <h2 class="panel__title"><i class="fa-regular fa-triangle-exclamation"></i> Needs attention</h2>
-        </div>
-        <div class="panel__body attention__body">
-            <ul class="metriclist" id="attention"></ul>
-        </div>
-    </div>
 
     <div class="panel record__panel summary">
         <dl class="kpi" id="kpis"></dl>
     </div>
 
-    <div class="dashgrid">
-        <section class="dashcol">
-            <div class="panel__head">
-                <h2 class="panel__title">Clients</h2>
+    <div class="panel record__panel dash__results">
+        <div class="panel__head">
+            <h2 class="panel__title">Control Results</h2>
+            <span class="panel__note" id="results_total"></span>
+        </div>
+        <div class="panel__body">
+            <div class="dash__bar" id="results_bar"></div>
+            <ul class="dash__legend" id="results_legend"></ul>
+        </div>
+    </div>
+
+    <div class="row gx-4 dash__lists">
+        <div class="col-lg-6 dash__col">
+            <div class="panel record__panel dash__panel">
+                <div class="panel__head">
+                    <h2 class="panel__title">Needs Attention</h2>
+                </div>
+                <div class="panel__body dash__scroll">
+                    <ul class="metriclist" id="attention"></ul>
+                    <p class="controls__empty" id="attention_empty" hidden>No assessments are late or behind.</p>
+                </div>
             </div>
-            <div class="dashscroll">
-                <ul class="metriclist" id="clients"></ul>
-                <p class="controls__empty" id="clients_empty" hidden></p>
+        </div>
+        <div class="col-lg-6 dash__col">
+            <div class="panel record__panel dash__panel">
+                <div class="panel__head">
+                    <h2 class="panel__title">Milestones, Next 30 Days</h2>
+                </div>
+                <div class="panel__body dash__scroll">
+                    <ul class="metriclist dash__milestones" id="milestones"></ul>
+                    <p class="controls__empty" id="milestones_empty" hidden>No POA&amp;M milestones are due in the next 30 days.</p>
+                </div>
             </div>
-        </section>
-        <section class="dashcol">
-            <div class="panel__head">
-                <h2 class="panel__title">Assessments</h2>
-            </div>
-            <div class="dashscroll">
-                <ul class="metriclist" id="assessments"></ul>
-                <p class="controls__empty" id="assessments_empty" hidden></p>
-            </div>
-        </section>
+        </div>
     </div>
 </div>
 
@@ -39,21 +46,49 @@
 $(document).ready(function () {
 
     var RESULTS = [
-        { name: 'Implemented', tone: 'is-ok' },
-        { name: 'Partially Implemented', tone: 'is-partial' },
-        { name: 'Not Implemented', tone: 'is-gap' },
-        { name: 'Not Applicable', tone: 'is-na' },
-        { name: 'Not Assessed', tone: 'is-none' }
+        {
+            name: 'Implemented',
+            label: 'Implemented',
+            tone: 'is-ok'
+        },
+        {
+            name: 'Partially Implemented',
+            label: 'Partial',
+            tone: 'is-partial'
+        },
+        {
+            name: 'Not Implemented',
+            label: 'Not Implemented',
+            tone: 'is-gap'
+        },
+        {
+            name: 'Not Applicable',
+            label: 'N/A',
+            tone: 'is-na'
+        },
+        {
+            name: 'Not Assessed',
+            label: 'Not Assessed',
+            tone: 'is-none'
+        }
     ];
+
+    var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
     var data = {};
 
-    function pct_of(done, total) {
-        return total > 0 ? Math.round(done / total * 100) : 0;
-    }
-
     function num(value) {
         return parseInt(value, 10) || 0;
+    }
+
+    function group(value) {
+        return value.toLocaleString('en-US');
+    }
+
+    function short_date(value) {
+        var parts = String(value).split('-');
+
+        return MONTHS[num(parts[1]) - 1] + ' ' + num(parts[2]);
     }
 
     function kpi(label, value, sub, tone) {
@@ -64,111 +99,48 @@ $(document).ready(function () {
             + '</div>';
     }
 
-    function bar(pct) {
-        return '<span class="progress"><span class="progress__bar" style="width:' + pct + '%"></span></span>';
-    }
-
-    function metric(label, sub, pct, value) {
-        return '<li class="metric' + (label.indexOf('rowlink__a') === -1 ? '' : ' rowlink') + '">'
-            + '<span class="metric__label">' + label + (sub === '' ? '' : '<span class="metric__sub">' + sub + '</span>') + '</span>'
-            + (pct === null ? '' : '<span class="metric__bar">' + bar(pct) + '</span>')
-            + (value === '' ? '' : '<span class="metric__value">' + value + '</span>')
-            + '</li>';
-    }
-
     function render_kpis() {
 
-        var t = data.totals;
-        var counts = counts_by_result();
+        var p = data.poam.length > 0 ? data.poam[0] : {};
         var statuses = counts_by_status();
-        var clients = num(t.client_count);
-        var assessments = num(t.assessment_count);
-        var gaps = counts['Not Implemented'];
-        var pipeline = [];
-
-        if (statuses['In Progress'] > 0) {
-            pipeline.push(statuses['In Progress'] + ' in progress');
-        }
-
-        if (statuses['Complete'] > 0) {
-            pipeline.push(statuses['Complete'] + ' complete');
-        }
-
-        if (statuses['Planned'] > 0) {
-            pipeline.push(statuses['Planned'] + ' planned');
-        }
+        var counts = counts_by_result();
+        var assessed = counts['Implemented'] + counts['Partially Implemented'] + counts['Not Implemented'];
+        var implemented = assessed > 0 ? Math.round(counts['Implemented'] / assessed * 100) : 0;
+        var open_items = num(p.open_count);
+        var overdue = num(p.overdue_count);
 
         $('#kpis').html(
             kpi(
-                'Gaps',
-                (gaps > 0 ? '<i class="fa-regular fa-circle-exclamation"></i>' : '') + gaps,
-                gaps === 1 ? 'control not implemented' : 'controls not implemented',
-                gaps > 0 ? 'is-gap' : ''
-            )
-            + kpi(
-                'Open Assessments',
-                num(t.open_assessment_count),
-                'of ' + assessments + ' · ' + clients + (clients === 1 ? ' client' : ' clients'),
+                'Not Started',
+                group(statuses['Planned']),
+                statuses['Planned'] === 1 ? 'assessment planned' : 'assessments planned',
                 ''
             )
             + kpi(
-                'Assessments',
-                assessments,
-                pipeline.length === 0 ? 'None started' : pipeline.join(' · '),
+                'In Progress',
+                group(statuses['In Progress']),
+                statuses['In Progress'] === 1 ? 'assessment underway' : 'assessments underway',
+                ''
+            )
+            + kpi(
+                'Completed',
+                group(statuses['Complete']),
+                statuses['Complete'] === 1 ? 'assessment complete' : 'assessments complete',
+                ''
+            )
+            + kpi(
+                'Implementation',
+                implemented + '%',
+                'of assessed controls fully implemented',
+                ''
+            )
+            + kpi(
+                'Open POA&amp;M Items',
+                group(open_items),
+                overdue > 0 ? '<span class="kpi__alert"><i class="fa-regular fa-clock"></i> ' + group(overdue) + ' overdue</span>' : 'none overdue',
                 ''
             )
         );
-    }
-
-    function counts_by_result() {
-
-        var counts = {};
-
-        for (var i = 0; i < RESULTS.length; i++) {
-            counts[RESULTS[i].name] = 0;
-        }
-
-        for (var j = 0; j < data.results.length; j++) {
-            counts[data.results[j].item_result] = num(data.results[j].item_count);
-        }
-
-        return counts;
-    }
-
-    function render_assessments() {
-
-        var html = '';
-
-        for (var i = 0; i < data.assessments.length; i++) {
-
-            var a = data.assessments[i];
-            var total = num(a.item_count);
-            var done = num(a.assessed_count);
-            var sub = [];
-
-            if (a.short_code !== null && a.short_code !== '') {
-                sub.push(esc(a.short_code));
-            }
-
-            if (a.client_name !== null) {
-                sub.push(esc(a.client_name));
-            }
-
-            if (num(a.gap_count) > 0) {
-                sub.push(num(a.gap_count) + ' not implemented');
-            }
-
-            html += metric(
-                '<a class="rowlink__a" href="/assessments/detail/id/' + a.id + '">' + esc(a.assessment_name) + '</a>',
-                sub.join(' · '),
-                total === 0 ? null : pct_of(done, total),
-                total === 0 ? '<span class="roster__none">no controls</span>' : pct_of(done, total) + '%'
-            );
-        }
-
-        $('#assessments').html(html);
-        $('#assessments_empty').prop('hidden', data.assessments.length > 0)
-            .text('No assessments yet.');
     }
 
     function counts_by_status() {
@@ -186,29 +158,51 @@ $(document).ready(function () {
         return counts;
     }
 
-    function render_clients() {
+    function counts_by_result() {
 
-        var html = '';
+        var counts = {};
 
-        for (var i = 0; i < data.clients.length; i++) {
-
-            var c = data.clients[i];
-            var sub = [];
-
-            sub.push(num(c.assessment_count) + (num(c.assessment_count) === 1 ? ' assessment' : ' assessments'));
-            sub.push(num(c.evidence_count) + ' files');
-
-            html += metric(
-                '<a class="rowlink__a" href="/clients/detail/id/' + c.id + '">' + esc(c.company_name) + '</a>',
-                sub.join(' · '),
-                null,
-                ''
-            );
+        for (var i = 0; i < RESULTS.length; i++) {
+            counts[RESULTS[i].name] = 0;
         }
 
-        $('#clients').html(html);
-        $('#clients_empty').prop('hidden', data.clients.length > 0)
-            .text('No clients yet.');
+        for (var j = 0; j < data.results.length; j++) {
+            counts[data.results[j].item_result] = num(data.results[j].item_count);
+        }
+
+        return counts;
+    }
+
+    function render_results() {
+
+        var counts = counts_by_result();
+        var total = 0;
+        var bar = '';
+        var legend = '';
+
+        for (var i = 0; i < RESULTS.length; i++) {
+            total += counts[RESULTS[i].name];
+        }
+
+        for (var j = 0; j < RESULTS.length; j++) {
+            var count = counts[RESULTS[j].name];
+            var share = total > 0 ? count / total * 100 : 0;
+
+            if (count > 0) {
+                bar += '<span class="dash__bar-part ' + RESULTS[j].tone + '" style="width:' + share + '%" title="' + group(count) + ' ' + RESULTS[j].label + '"></span>';
+            }
+
+            legend += '<li class="dash__legend-item">'
+                + '<span class="rollup__dot ' + RESULTS[j].tone + '"></span>'
+                + '<span class="dash__legend-label">' + RESULTS[j].label + '</span>'
+                + '<span class="dash__legend-count">' + group(count) + '</span>'
+                + '<span class="dash__legend-share">' + (total > 0 ? Math.round(share) : 0) + '%</span>'
+                + '</li>';
+        }
+
+        $('#results_total').text(group(total) + (total === 1 ? ' control' : ' controls'));
+        $('#results_bar').html(bar);
+        $('#results_legend').html(legend);
     }
 
     function render_attention() {
@@ -223,32 +217,49 @@ $(document).ready(function () {
             var when = days < 0
                 ? Math.abs(days) + (Math.abs(days) === 1 ? ' day overdue' : ' days overdue')
                 : (days === 0 ? 'due today' : 'due in ' + days + (days === 1 ? ' day' : ' days'));
-
-            var why = num(a.assessed_pct) + '% assessed' + (days < 0 ? '' : ' with ' + num(a.elapsed_pct) + '% of the time used');
+            var why = num(a.assessed_pct) + '% assessed' + (days < 0 ? '' : ', ' + num(a.elapsed_pct) + '% of time used');
 
             html += '<li class="metric rowlink">'
                 + '<span class="metric__label"><a class="rowlink__a" href="/assessments/detail/id/' + a.id + '">' + esc(a.assessment_name) + '</a>'
-                + (a.client_name ? '<span class="metric__sub">' + esc(a.client_name) + '</span>' : '') + '</span>'
-                + '<span class="attention__why">' + why + '</span>'
+                + '<span class="metric__sub">' + (a.client_name ? esc(a.client_name) + ' · ' : '') + why + '</span></span>'
                 + '<span class="badge ' + tone + '">' + when + '</span>'
                 + '<i class="fa-regular fa-chevron-right rowlink__go" aria-hidden="true"></i>'
                 + '</li>';
         }
 
         $('#attention').html(html);
-        $('#attention_panel').prop('hidden', data.attention.length === 0);
-        $('#dash').toggleClass('has-attention', data.attention.length > 0);
+        $('#attention_empty').prop('hidden', data.attention.length > 0);
     }
 
-    function load(){
+    function render_milestones() {
+
+        var html = '';
+
+        for (var i = 0; i < data.milestones.length; i++) {
+
+            var m = data.milestones[i];
+
+            html += '<li class="metric rowlink">'
+                + '<span class="metric__label"><a class="rowlink__a" href="/assessments/detail/id/' + m.assessment_id + '">' + esc(m.milestone_text) + '</a>'
+                + '<span class="metric__sub">' + esc(m.poam_ref) + ' · ' + esc(m.assessment_name) + '</span></span>'
+                + '<span class="badge badge--onboarding">' + short_date(m.due_date) + '</span>'
+                + '<i class="fa-regular fa-chevron-right rowlink__go" aria-hidden="true"></i>'
+                + '</li>';
+        }
+
+        $('#milestones').html(html);
+        $('#milestones_empty').prop('hidden', data.milestones.length > 0);
+    }
+
+    function load() {
         ApiDataSvc.apiCall('post', 'load_dashboard', {}, function (payload) {
 
             data = JSON.parse(payload);
 
-            render_attention();
             render_kpis();
-            render_assessments();
-            render_clients();
+            render_results();
+            render_attention();
+            render_milestones();
         });
     }
 

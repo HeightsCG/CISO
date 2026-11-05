@@ -59,6 +59,7 @@ class ReportJobs
         'risk_assessment',
         'gap_analysis',
         'remediation_plan',
+        'poam',
         'assessment_results',
         'statement_of_applicability',
         'evidence_register'

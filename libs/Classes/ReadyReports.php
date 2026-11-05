@@ -12,12 +12,15 @@
 class ReadyReports {
 
     /** key => name|scope|formats|description. Scope is assessment or client. */
+    const MEMORY_MB = 2048;
+
     const TYPES = array(
         'assessment_results' => 'Assessment Results Report|assessment|pdf,docx,xlsx|Scorecard, results by family, and every control with its result and evidence.',
         'gap_analysis' => 'Gap Analysis|assessment|pdf,docx,xlsx|Only the controls not implemented or partially implemented, by family, with a priority.',
         'executive_summary' => 'Executive Summary|assessment|pdf,docx|A short summary for leadership: score, progress, results charts, strongest and weakest areas, and top gaps.',
         'statement_of_applicability' => 'Statement of Applicability|assessment|pdf,docx,xlsx|Each control marked applicable or not, with implementation status, justification and supporting evidence.',
         'remediation_plan' => 'Remediation Plan|assessment|pdf,docx,xlsx|Gaps turned into a prioritized action list.',
+        'poam' => 'Plan of Action and Milestones|assessment|pdf,docx,xlsx|A living register of every deficient control with owner, dates, milestones, evidence and closure, kept in step with the results.',
         'risk_assessment' => 'Risk Assessment Report|assessment|pdf,docx|The client deliverable: executive summary, results by area, rated findings for every gap, and sign-off.',
         'evidence_register' => 'Evidence Register|assessment|pdf,docx,xlsx|Every evidence file supporting this assessment and the controls it supports, plus controls still without evidence.'
     );
@@ -28,6 +31,7 @@ class ReadyReports {
         'risk_assessment' => 'ReportRiskAssessment',
         'gap_analysis' => 'ReportGapAnalysis',
         'remediation_plan' => 'ReportRemediationPlan',
+        'poam' => 'ReportPoam',
         'evidence_register' => 'ReportEvidenceRegister',
         'statement_of_applicability' => 'ReportStatementOfApplicability',
         'assessment_results' => 'ReportAssessmentResults'
@@ -129,6 +133,31 @@ class ReadyReports {
     }
 
     /**
+     * PHP memory_limit in megabytes; -1 (no limit) counts as unlimited.
+     */
+    private static function megabytes(string $limit): int
+    {
+        $limit = trim($limit);
+
+        if ($limit === '' || $limit === '-1') {
+            return PHP_INT_MAX;
+        }
+
+        $units = array(
+            'g' => 1024,
+            'm' => 1,
+            'k' => 1 / 1024
+        );
+        $unit = strtolower(substr($limit, -1));
+
+        if (isset($units[$unit])) {
+            return (int) ((float) substr($limit, 0, -1) * $units[$unit]);
+        }
+
+        return (int) ((int) $limit / 1048576);
+    }
+
+    /**
      * The file for one report, or array('error' => ...). $target_id is an
      * assessment or client id depending on the report. $options go to the
      * report builder: detail, appendices and the document state from
@@ -136,11 +165,11 @@ class ReadyReports {
      */
     public function render(string $type, int $target_id, string $format, array $options = array()): array
     {
-        if ((int) ini_get('memory_limit') !== -1 && (int) ini_get('memory_limit') < 512) {
-            ini_set('memory_limit', '512M');
+        if (self::megabytes((string) ini_get('memory_limit')) < self::MEMORY_MB) {
+            ini_set('memory_limit', self::MEMORY_MB.'M');
         }
 
-        set_time_limit(180);
+        set_time_limit(PHP_SAPI === 'cli' ? 0 : 180);
 
         $spec = self::spec($type);
 
