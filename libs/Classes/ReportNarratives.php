@@ -203,7 +203,7 @@ class ReportNarratives
             $parts[] = 'The writing rules or AI model changed after it was written ('.$when($written).').';
         }
 
-        return implode(' ', $parts).' Generate rewrites it.';
+        return implode(' ', $parts);
     }
 
     /** Whether a section's text goes into a document of this mode. */

@@ -158,7 +158,7 @@
                             <div class="segmented segmented--switch reports__formats-pick" id="report_formats" role="group" aria-labelledby="report_formats_label">
                                 <button type="button" class="segmented__btn is-on" data-value="pdf" aria-pressed="true">PDF</button>
                                 <button type="button" class="segmented__btn is-on" data-value="docx" aria-pressed="true">Word</button>
-                                <button type="button" class="segmented__btn is-on" data-value="xlsx" aria-pressed="true">Excel</button>
+                                <button type="button" class="segmented__btn" data-value="xlsx" aria-pressed="false">Excel</button>
                             </div>
                         </div>
                         <div class="reports__field">
@@ -437,16 +437,27 @@
             <div class="modal-body">
                 <div class="review">
                     <ul class="review__list" id="narrative_list"></ul>
-                    <section class="review__editor" id="narrative_editor" aria-live="polite">
-                        <p class="review__empty"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Loading narratives&hellip;</p>
-                    </section>
+                    <div class="review__pane">
+                        <div class="review__bar">
+                            <div class="review__bar-title">
+                                <h3 class="review__title" id="narrative_section_title"></h3>
+                                <span id="narrative_section_pill"></span>
+                            </div>
+                            <div class="review__bar-actions">
+                                <button type="button" class="btn btn--secondary" id="do_narrative_reject"><i class="fa-regular fa-xmark"></i> Reject Section</button>
+                                <button type="button" class="btn btn--secondary" id="do_narrative_save"><i class="fa-regular fa-floppy-disk"></i> Save Edits</button>
+                                <button type="button" class="btn btn--primary" id="do_narrative_approve"><i class="fa-regular fa-check"></i> Approve Section</button>
+                            </div>
+                        </div>
+                        <section class="review__editor" id="narrative_editor" aria-live="polite">
+                            <p class="review__empty"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Loading narratives&hellip;</p>
+                        </section>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary me-auto" id="do_narratives_approve_all_open"><i class="fa-regular fa-check-double"></i> Approve All Current Drafts</button>
-                <button type="button" class="btn btn--secondary" id="do_narrative_reject"><i class="fa-regular fa-xmark"></i> Reject</button>
-                <button type="button" class="btn btn--secondary" id="do_narrative_save"><i class="fa-regular fa-floppy-disk"></i> Save Edits</button>
-                <button type="button" class="btn btn--primary" id="do_narrative_approve"><i class="fa-regular fa-check"></i> Approve</button>
+                <button type="button" class="btn btn--primary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -1979,6 +1990,7 @@ $(document).ready(function () {
 
     var ACTIVE = ['Queued', 'Running'];
     var LOCKED = ['ref', 'phase', 'kind', 'severity', 'section'];
+    var rewriting = {};
     var PILL_CLASS = {
         'Approved': 'badge--active',
         'Draft': 'badge--inactive',
@@ -2186,7 +2198,11 @@ $(document).ready(function () {
         var html = '';
 
         for (var s = 0; s < stale.length; s++) {
-            html += '<li class="reports__issue"><span class="badge badge--onboarding">Out of date</span><span><strong>' + esc(stale[s].label) + '.</strong> ' + esc(stale[s].stale_reason || '') + '</span></li>';
+            html += '<li class="reports__issue"><span class="badge badge--onboarding">Out of date</span><span class="reports__issue-text"><strong>' + esc(stale[s].label) + '.</strong> ' + esc(stale[s].stale_reason || '') + '</span>'
+                + (rewriting[stale[s].section_key]
+                    ? '<span class="reports__issue-busy"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Rewriting</span>'
+                    : '<button type="button" class="btn btn--secondary btn--sm" data-action="regenerate" data-key="' + esc(stale[s].section_key) + '"><i class="fa-regular fa-rotate-right"></i> Regenerate</button>')
+                + '</li>';
         }
 
         $('#narratives_stale_list').html(html).prop('hidden', stale.length === 0);
@@ -2329,6 +2345,7 @@ $(document).ready(function () {
             toastr.error('Some narrative sections could not be written');
         }
 
+        rewriting = {};
         load_center();
 
         if ($('#narrative_modal').hasClass('show')) {
@@ -2352,6 +2369,7 @@ $(document).ready(function () {
 
             if (!obj.success) {
                 set_loading(button, false);
+                rewriting = {};
 
                 if (type === 'package') {
                     package_requested = false;
@@ -2377,6 +2395,24 @@ $(document).ready(function () {
             load_center();
         });
     }
+
+    function regenerate_section(key, button) {
+        start_job('narratives', 'Narratives', {
+            mode: 'sections',
+            sections: [key],
+            revise: 'none'
+        }, button);
+        rewriting[key] = true;
+        load_center();
+
+        if ($('#narrative_modal').hasClass('show')) {
+            render_editor();
+        }
+    }
+
+    $(document).on('click', '#narratives_stale_list [data-action="regenerate"], #narrative_editor [data-action="regenerate"]', function () {
+        regenerate_section($(this).attr('data-key'), this);
+    });
 
     $('#do_narratives_generate').click(function () {
         start_job('narratives', 'Narratives', {
@@ -2632,7 +2668,7 @@ $(document).ready(function () {
         var status = section ? pill_status(section) : 'Missing';
 
         $('#do_narrative_save').prop('disabled', status === 'Missing' || !dirty);
-        $('#do_narrative_approve').prop('disabled', status === 'Missing' || status === 'Stale' || (status === 'Approved' && !dirty));
+        $('#do_narrative_approve').prop('disabled', status === 'Missing' || status === 'Out of date' || (status === 'Approved' && !dirty));
         $('#do_narrative_reject').prop('disabled', status === 'Missing' || status === 'Rejected');
     }
 
@@ -2644,15 +2680,22 @@ $(document).ready(function () {
         dirty = false;
 
         if (!section) {
+            $('#narrative_section_title').text('');
+            $('#narrative_section_pill').html('');
             $('#narrative_editor').html('<p class="review__empty">No narrative sections for this assessment.</p>');
             sync_buttons();
             return;
         }
 
-        html += '<div class="review__head"><h3 class="review__title">' + esc(section.label) + '</h3>' + pill(section) + '</div>';
+        $('#narrative_section_title').text(section.label);
+        $('#narrative_section_pill').html(pill(section));
 
-        if (section.state === 'stale' && section.stale_reason) {
-            html += '<p class="review__stale">' + esc(section.stale_reason) + '</p>';
+        if (section.state === 'stale') {
+            html += '<div class="review__stale"><p><strong>Out of date.</strong> ' + esc(section.stale_reason || '') + '</p>'
+                + (rewriting[section.section_key]
+                    ? '<p class="review__stale-busy"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Rewriting this section now. It takes a few minutes; you can close this window and keep working.</p>'
+                    : '<button type="button" class="btn btn--secondary btn--sm" data-action="regenerate" data-key="' + esc(section.section_key) + '"><i class="fa-regular fa-rotate-right"></i> Regenerate This Section</button>')
+                + '</div>';
         }
 
         if (section.state === 'missing' || !section.content) {
@@ -2851,16 +2894,20 @@ $(document).ready(function () {
         });
     });
 
-    $('#do_narrative_approve').click(function () {
+    function approve_section(button) {
 
         if (!dirty) {
-            set_status('#do_narrative_approve', 'Approved');
+            set_status(button, 'Approved');
             return;
         }
 
-        save_section('#do_narrative_approve', function () {
-            set_status('#do_narrative_approve', 'Approved');
+        save_section(button, function () {
+            set_status(button, 'Approved');
         });
+    }
+
+    $('#do_narrative_approve').click(function () {
+        approve_section('#do_narrative_approve');
     });
 
     $('#do_narrative_reject').click(function () {

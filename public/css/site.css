@@ -10190,3 +10190,74 @@ body.app .review__stale {
     border-left: 3px solid var(--high);
     border-radius: var(--radius);
 }
+
+body.app .review__pane {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+}
+
+body.app .review__bar {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+}
+
+body.app .review__bar-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+body.app .review__bar-title .review__title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+body.app .review__bar-actions {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 8px;
+}
+
+body.app .review__stale p {
+    margin: 0 0 8px 0;
+}
+
+body.app .review__stale p:last-child {
+    margin-bottom: 0;
+}
+
+body.app .review__stale-busy {
+    color: var(--text-secondary);
+}
+
+body.app .reports__issue-text {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+body.app .reports__issue .btn,
+body.app .reports__issue-busy {
+    flex: 0 0 auto;
+    align-self: center;
+}
+
+body.app .reports__issue-busy {
+    font-size: 13px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+body.app .headline {
+    margin: 0 0 20px 0;
+}
