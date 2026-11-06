@@ -26,6 +26,7 @@ class ApiController extends Controller {
     public $invoices_model;
     public $subscriptions_model;
     public $poam_model;
+    public $item_comments_model;
 
     public function __construct(){
         parent::__construct();
@@ -40,6 +41,7 @@ class ApiController extends Controller {
         $this->dashboard_model = new DashboardModel();
         $this->invoices_model = new InvoicesModel();
         $this->poam_model = new PoamModel();
+        $this->item_comments_model = new ItemCommentsModel();
     }
 
     public function loginAction(){
@@ -6764,6 +6766,98 @@ class ApiController extends Controller {
         $this->poam_milestone_delete($item, (int) $milestone[0]['id'], true);
     }
 
+    /**
+     * A client links one of their own client's shared vault files to their
+     * item. The role is always Progress whatever is posted; private files and
+     * files of another client are refused.
+     */
+    public function portal_poam_evidence_linkAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $item_id = $this->poam_post_id('item_id');
+        $evidence_id = $this->poam_post_id('evidence_id');
+
+        if ($item_id === 0 || $evidence_id === 0) {
+            $this->poam_fail('That evidence could not be found');
+        }
+
+        $item = $this->poam_portal_item($item_id);
+
+        if ($item['poam_status'] === 'Closed') {
+            $this->poam_fail('This item is closed. Reopen it to make changes.');
+        }
+
+        $evidence = $this->poam_model->client_evidence($evidence_id, (int) Session::get('client_id'), Session::get('company_id'));
+
+        if (count($evidence) !== 1 || (int) $evidence[0]['evidence_private'] !== 0) {
+            $this->poam_fail('That evidence could not be found');
+        }
+
+        $result = $this->poam_model->portal_link_evidence(
+            (int) $item['id'],
+            Session::get('company_id'),
+            (int) $evidence[0]['id'],
+            (string) $evidence[0]['evidence_title'],
+            (int) Session::get('user_id')
+        );
+
+        if (!is_int($result)) {
+            $this->poam_fail($result);
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Evidence linked';
+        $response['link_id'] = $result;
+        echo json_encode($response);
+        exit;
+    }
+
+    /** A client removes a Progress link they made on their own open item. */
+    public function portal_poam_evidence_unlinkAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        $link_id = $this->poam_post_id('link_id');
+
+        if ($link_id === 0) {
+            $this->poam_fail('That evidence link could not be found');
+        }
+
+        $link = $this->poam_model->get_evidence_link($link_id, Session::get('company_id'));
+
+        if (count($link) !== 1) {
+            $this->poam_fail('That evidence link could not be found');
+        }
+
+        $item = $this->poam_portal_item((int) $link[0]['poam_item_id']);
+
+        if ($item['poam_status'] === 'Closed') {
+            $this->poam_fail('This item is closed. Reopen it to make changes.');
+        }
+
+        if (!PoamModel::portal_may_unlink($link[0], (int) Session::get('user_id'))) {
+            $this->poam_fail('That evidence link could not be found');
+        }
+
+        $result = $this->poam_model->portal_unlink_evidence((int) $link[0]['id'], Session::get('company_id'), (int) Session::get('user_id'));
+
+        if ($result !== true) {
+            $this->poam_fail($result);
+        }
+
+        $response['success'] = true;
+        $response['message'] = 'Evidence removed';
+        echo json_encode($response);
+        exit;
+    }
+
     private function poam_register(int $assessment_id, bool $portal): array
     {
         $company_id = (int) Session::get('company_id');
@@ -6843,7 +6937,7 @@ class ApiController extends Controller {
                 'message' => 'ok',
                 'item' => PoamModel::portal_item($presented),
                 'milestones' => PoamModel::portal_milestones($this->poam_model->load_milestones((int) $item['id'], 0, $company_id)),
-                'evidence' => PoamModel::portal_evidence($this->poam_model->load_evidence((int) $item['id'], 0, $company_id, false)),
+                'evidence' => PoamModel::portal_evidence($this->poam_model->load_evidence((int) $item['id'], 0, $company_id, false), (int) Session::get('user_id'), $item['poam_status'] !== 'Closed'),
                 'history' => PoamModel::portal_history($this->poam_history_rows($this->poam_model->load_history((int) $item['id'], 0, $company_id))),
                 'statuses' => Poam::EDITABLE_STATUSES,
                 'milestone_statuses' => Poam::MILESTONE_STATUSES,
@@ -7050,7 +7144,195 @@ class ApiController extends Controller {
         }
     }
 
+    /** A posted id: a positive whole number, otherwise 0. */
+    private function poam_post_id(string $key): int
+    {
+        $value = $this->post[$key] ?? '';
+
+        if (!is_string($value) && !is_int($value)) {
+            return 0;
+        }
+
+        $value = trim((string) $value);
+
+        if ($value === '' || !ctype_digit($value) || strlen($value) > 10) {
+            return 0;
+        }
+
+        return (int) $value;
+    }
+
     private function poam_fail(string $message): void
+    {
+        echo json_encode(array(
+            'success' => false,
+            'message' => $message
+        ));
+        exit;
+    }
+
+    /* ------------------------------------------------------- control comments */
+
+    /** The comments on one control of the signed-in client's own assessment. */
+    public function portal_item_comments_loadAction(){
+
+        $item = $this->comment_portal_item($this->poam_post_id('item_id'));
+
+        $this->comment_list($item);
+    }
+
+    public function portal_item_comment_addAction(){
+
+        $item = $this->comment_portal_item($this->poam_post_id('item_id'));
+
+        $this->comment_add($item);
+    }
+
+    /** Removes one of the caller's own comments on a control of their own client. */
+    public function portal_item_comment_deleteAction(){
+
+        $comment = $this->comment_row($this->poam_post_id('comment_id'));
+
+        $this->comment_portal_item((int) $comment['assessment_item_id']);
+
+        $this->comment_delete($comment);
+    }
+
+    /** The comments on one control of an assessment in the organisation. */
+    public function item_comments_loadAction(){
+
+        $item = $this->comment_staff_item($this->poam_post_id('item_id'));
+
+        $this->comment_list($item);
+    }
+
+    public function item_comment_addAction(){
+
+        $item = $this->comment_staff_item($this->poam_post_id('item_id'));
+
+        $this->comment_add($item);
+    }
+
+    public function item_comment_deleteAction(){
+
+        $comment = $this->comment_row($this->poam_post_id('comment_id'));
+
+        $this->comment_staff_item((int) $comment['assessment_item_id']);
+
+        $this->comment_delete($comment);
+    }
+
+    /** A control of the signed-in client's own assessment, for portal users only. */
+    private function comment_portal_item(int $item_id): array
+    {
+        $item = $this->portal_item_row($item_id);
+
+        if ($item === null) {
+            $this->comment_fail('That control could not be found');
+        }
+
+        return $item;
+    }
+
+    private function comment_staff_item(int $item_id): array
+    {
+        if (Session::get('user_type') !== 'staff' || $item_id === 0) {
+            $this->comment_fail('That control could not be found');
+        }
+
+        $rows = $this->assessments_model->get_item($item_id, Session::get('company_id'));
+
+        if (!is_array($rows) || count($rows) !== 1) {
+            $this->comment_fail('That control could not be found');
+        }
+
+        return $rows[0];
+    }
+
+    private function comment_row(int $comment_id): array
+    {
+        if ($comment_id === 0) {
+            $this->comment_fail('That comment could not be found');
+        }
+
+        $rows = $this->item_comments_model->get_comment($comment_id, Session::get('company_id'));
+
+        if (count($rows) !== 1) {
+            $this->comment_fail('That comment could not be found');
+        }
+
+        return $rows[0];
+    }
+
+    private function comment_list(array $item): void
+    {
+        echo json_encode(array(
+            'success' => true,
+            'comments' => $this->item_comments_model->load_comments(
+                (int) $item['id'],
+                Session::get('company_id'),
+                (int) Session::get('user_id')
+            )
+        ));
+        exit;
+    }
+
+    private function comment_add(array $item): void
+    {
+        if (!is_string($this->post['comment_text'] ?? '')) {
+            $this->comment_fail('Enter a comment');
+        }
+
+        $comment_text = $this->input('comment_text');
+        $error = ItemCommentsModel::text_error($comment_text);
+
+        if ($error !== '') {
+            $this->comment_fail($error);
+        }
+
+        $comment_id = $this->item_comments_model->add_comment(
+            Session::get('company_id'),
+            (int) $item['assessment_id'],
+            (int) $item['id'],
+            $comment_text,
+            (int) Session::get('user_id')
+        );
+
+        if (empty($comment_id)) {
+            $this->comment_fail('That comment could not be saved');
+        }
+
+        echo json_encode(array(
+            'success' => true,
+            'message' => 'Comment added'
+        ));
+        exit;
+    }
+
+    private function comment_delete(array $comment): void
+    {
+        if (!ItemCommentsModel::may_delete($comment, (int) Session::get('user_id'))) {
+            $this->comment_fail('You can only remove your own comments');
+        }
+
+        $rows = $this->item_comments_model->delete_comment(
+            (int) $comment['id'],
+            Session::get('company_id'),
+            (int) Session::get('user_id')
+        );
+
+        if ($rows !== 1) {
+            $this->comment_fail('That comment could not be found');
+        }
+
+        echo json_encode(array(
+            'success' => true,
+            'message' => 'Comment removed'
+        ));
+        exit;
+    }
+
+    private function comment_fail(string $message): void
     {
         echo json_encode(array(
             'success' => false,

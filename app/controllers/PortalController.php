@@ -38,19 +38,6 @@ class PortalController extends Controller {
         $this->view->render();
     }
 
-    public function evidenceAction(){
-
-        $client = $this->client();
-
-        if ($client === null) {
-            $this->refuse();
-            return;
-        }
-
-        $this->view->client = $client;
-        $this->view->render();
-    }
-
     public function assessmentAction(){
 
         $client = $this->client();

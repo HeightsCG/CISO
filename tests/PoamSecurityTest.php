@@ -304,14 +304,136 @@ return array(
             'portal_poam_item_loadAction',
             'portal_poam_item_saveAction',
             'portal_poam_milestone_saveAction',
-            'portal_poam_milestone_deleteAction'
+            'portal_poam_milestone_deleteAction',
+            'portal_poam_evidence_linkAction',
+            'portal_poam_evidence_unlinkAction'
         ), array_keys($portal), 'the portal POA&M actions; adding one means adding its guard and a test here');
+
+        $evidence_actions = array(
+            'portal_poam_evidence_linkAction',
+            'portal_poam_evidence_unlinkAction'
+        );
 
         foreach ($portal as $name => $body) {
             Assert::true(strpos($body, '$this->poam_portal_item(') !== false || strpos($body, '$this->refuse_unless_poam_portal(') !== false, $name.' is guarded');
             Assert::true(preg_match('/poam_(save|milestone_save|milestone_delete|item_payload|register)\([^;]*\bfalse\)/', $body) === 0, $name.' never takes the staff path');
-            Assert::true(preg_match('/close|reopen|link_evidence|clock/', $body) === 0, $name.' cannot close, reopen, link evidence or set the clock');
+            Assert::true(preg_match('/close|reopen|clock/', preg_replace("/'[^']*'/", "''", $body)) === 0, $name.' cannot close, reopen or set the clock');
+            if (!in_array($name, $evidence_actions, true)) {
+                Assert::true(preg_match('/link_evidence/', $body) === 0, $name.' cannot link evidence');
+            }
         }
+
+        foreach ($evidence_actions as $name) {
+            $body = $portal[$name];
+            Assert::true(preg_match('/->(link_evidence|unlink_evidence)\(/', $body) === 0, $name.' never calls the staff link or unlink');
+            Assert::true(preg_match('/evidence_role|input\(/', $body) === 0, $name.' reads no role or free input from the request');
+            Assert::true(strpos($body, '$this->poam_post_id(') !== false, $name.' validates its ids');
+            Assert::true(strpos($body, "\$item['poam_status'] === 'Closed'") !== false, $name.' refuses a closed item');
+        }
+
+        $link = $portal['portal_poam_evidence_linkAction'];
+        Assert::true(strpos($link, "client_evidence(\$evidence_id, (int) Session::get('client_id'), Session::get('company_id'))") !== false, 'the file must belong to the session client and company');
+        Assert::true(strpos($link, "(int) \$evidence[0]['evidence_private'] !== 0") !== false, 'a private file is refused');
+        Assert::true(strpos($link, '$this->poam_model->portal_link_evidence(') !== false, 'linking goes through the portal model method');
+
+        $unlink = $portal['portal_poam_evidence_unlinkAction'];
+        Assert::true(strpos($unlink, "PoamModel::portal_may_unlink(\$link[0], (int) Session::get('user_id'))") !== false, 'only the user\'s own Progress links can be removed');
+        Assert::true(strpos($unlink, '$this->poam_model->portal_unlink_evidence(') !== false, 'unlinking goes through the portal model method');
+    },
+
+    'portal evidence links are always Progress, never duplicated, and marked as portal changes' => function () {
+        $model = (string) file_get_contents(ROOT.'/app/models/PoamModel.php');
+        Assert::same('Progress', Poam::PORTAL_EVIDENCE_ROLE, 'the portal role is Progress');
+        Assert::true(in_array(Poam::PORTAL_EVIDENCE_ROLE, Poam::EVIDENCE_ROLES, true), 'the portal role is a valid role');
+
+        $start = strpos($model, 'public function portal_link_evidence(');
+        $end = strpos($model, 'public function portal_unlink_evidence(');
+        Assert::true($start !== false && $end !== false && $end > $start, 'the portal link methods can be found');
+        $link = substr($model, $start, $end - $start);
+        $unlink = substr($model, $end, strpos($model, 'public function save_clock_date(') - $end);
+
+        Assert::true(strpos($link, 'public function portal_link_evidence($item_id, $company_id, $evidence_id, $evidence_title, $user_id)') !== false, 'no role parameter at all');
+        Assert::true(strpos($link, "'evidence_role' => Poam::PORTAL_EVIDENCE_ROLE") !== false, 'the stored role is forced');
+        Assert::true(strpos($link, "evidence_id = :evidence_id and deleted = 0") !== false && strpos($link, "evidence_role = :evidence_role") === false, 'a link of the same file in any role is a duplicate');
+        Assert::true(strpos($link, "\$item['poam_status'] === 'Closed'") !== false, 'a closed item is refused under the row lock');
+        Assert::true(strpos($link, 'self::PORTAL_NOTE') !== false, 'link history is marked as a portal change');
+        Assert::true(strpos($unlink, 'self::portal_may_unlink(') !== false, 'unlink re-checks the owner and role');
+        Assert::true(strpos($unlink, "evidence_role = :evidence_role and linked_by = :user_id") !== false, 'the update itself is limited to the user\'s Progress link');
+        Assert::true(strpos($unlink, "\$item['poam_status'] === 'Closed'") !== false, 'unlink refuses a closed item under the row lock');
+        Assert::true(strpos($unlink, 'self::PORTAL_NOTE') !== false, 'unlink history is marked as a portal change');
+    },
+
+    'a portal user may unlink only their own Progress links' => function () {
+        $link = array(
+            'id' => 5,
+            'evidence_role' => 'Progress',
+            'linked_by' => 12
+        );
+
+        Assert::true(PoamModel::portal_may_unlink($link, 12), 'own Progress link');
+        Assert::true(!PoamModel::portal_may_unlink($link, 13), 'another user\'s link');
+        Assert::true(!PoamModel::portal_may_unlink(array_merge($link, array(
+            'linked_by' => 1
+        )), 12), 'a staff-created link');
+        Assert::true(!PoamModel::portal_may_unlink(array_merge($link, array(
+            'evidence_role' => 'Closure'
+        )), 12), 'a Closure link, even their own');
+        Assert::true(!PoamModel::portal_may_unlink(array(
+            'evidence_role' => 'Progress'
+        ), 12), 'no recorded linker');
+        Assert::true(!PoamModel::portal_may_unlink(array_merge($link, array(
+            'linked_by' => 0
+        )), 0), 'no session user');
+    },
+
+    'the portal evidence list flags only removable links, and none on a closed item' => function () {
+        $rows = array(
+            array(
+                'id' => 1,
+                'poam_item_id' => 60,
+                'evidence_id' => 902,
+                'evidence_role' => 'Progress',
+                'evidence_title' => 'Mine',
+                'evidence_private' => 0,
+                'linked_by' => 12,
+                'date_created' => '2026-11-05 10:00:00'
+            ),
+            array(
+                'id' => 2,
+                'poam_item_id' => 60,
+                'evidence_id' => 903,
+                'evidence_role' => 'Progress',
+                'evidence_title' => 'Staff',
+                'evidence_private' => 0,
+                'linked_by' => 1,
+                'date_created' => '2026-11-05 10:00:00'
+            ),
+            array(
+                'id' => 3,
+                'poam_item_id' => 60,
+                'evidence_id' => 904,
+                'evidence_role' => 'Closure',
+                'evidence_title' => 'Closure',
+                'evidence_private' => 0,
+                'linked_by' => 12,
+                'date_created' => '2026-11-05 10:00:00'
+            )
+        );
+
+        $open = PoamModel::portal_evidence($rows, 12, true);
+        Assert::same(array(
+            true,
+            false,
+            false
+        ), array_column($open, 'can_unlink'), 'only the user\'s own Progress link on an open item');
+        Assert::true(!array_key_exists('linked_by', $open[0]), 'no user id reaches the portal');
+
+        $closed = PoamModel::portal_evidence($rows, 12, false);
+        Assert::same(array(
+            false,
+            false,
+            false
+        ), array_column($closed, 'can_unlink'), 'nothing is removable on a closed item');
     },
 
     'every staff POA&M action refuses anyone but staff of the company' => function () use ($poam_api, $actions) {

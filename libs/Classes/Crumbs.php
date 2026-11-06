@@ -155,12 +155,6 @@ class Crumbs
                     array('Invoices', '')
                 );
 
-            case 'portal/evidence':
-                return array(
-                    array('Your Assessments', '/portal'),
-                    array('Evidence', '')
-                );
-
             case 'portal/assessment':
                 return array(
                     array('Your Assessments', '/portal'),

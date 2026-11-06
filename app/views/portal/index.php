@@ -15,12 +15,22 @@
         </div>
     </div>
 
-    <div class="panel">
+    <div class="panel listpage">
         <div class="panel__head roster__toolbar">
             <input type="search" id="assessment_search" class="input roster__search" placeholder="Search assessments" autocomplete="off" spellcheck="false" aria-label="Search assessments">
         </div>
-        <div class="panel__body">
-            <div class="tiles" id="assessments_list"></div>
+        <div class="panel__body panel__body--flush listpage__body">
+            <table class="data listpage__table" id="assessments_table" hidden>
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Progress</th>
+                        <th scope="col">Dates</th>
+                    </tr>
+                </thead>
+                <tbody id="assessments_list"></tbody>
+            </table>
             <p class="tiles__empty" id="assessments_empty"><i class="fa-regular fa-spinner-third fa-spin" aria-hidden="true"></i> Loading assessments&hellip;</p>
         </div>
     </div>
@@ -35,18 +45,20 @@ $(document).ready(function () {
         return total > 0 ? Math.round(done / total * 100) : 0;
     }
 
-    function status_tone(value) {
-
-        if (value === 'Complete') {
-            return 'badge--active';
+    var STATUS = {
+        'Planned': {
+            label: 'Not Started',
+            tone: 'is-none'
+        },
+        'In Progress': {
+            label: 'In Progress',
+            tone: 'is-partial'
+        },
+        'Complete': {
+            label: 'Complete',
+            tone: 'is-ok'
         }
-
-        if (value === 'In Progress') {
-            return 'badge--onboarding';
-        }
-
-        return 'badge--inactive';
-    }
+    };
 
     function standard_of(row) {
         return row.short_code + (row.version === '' ? '' : ' · ' + row.version);
@@ -113,18 +125,20 @@ $(document).ready(function () {
 
             shown++;
 
-            html += '<a class="tile" href="/portal/assessment/id/' + row.id + '">'
-                + '<span class="tile__top">'
-                + '<span class="tile__title">' + esc(row.assessment_name) + '</span>'
-                + '<span class="badge ' + status_tone(row.assessment_status) + '">' + esc(row.assessment_status) + '</span>'
-                + '</span>'
-                + '<span class="tile__meta">' + esc(standard_of(row)) + '</span>'
-                + '<span class="tile__figure">' + percent(parseInt(row.assessed_count, 10), parseInt(row.item_count, 10)) + '%<span class="tile__figure-label">complete</span></span>'
-                + '<span class="tile__foot"><span>' + esc(dates_of(row)) + '</span></span>'
-                + '</a>';
+            var pct = percent(parseInt(row.assessed_count, 10), parseInt(row.item_count, 10));
+            var state = STATUS[row.assessment_status] || STATUS['Planned'];
+
+            html += '<tr class="rowlink">'
+                + '<td><a class="rowlink__a listpage__name" href="/portal/assessment/id/' + row.id + '">' + esc(row.assessment_name) + '</a>'
+                + '<span class="listpage__sub">' + esc(standard_of(row)) + '</span></td>'
+                + '<td><span class="listpage__status" title="' + state.label + '"><span class="rollup__dot ' + state.tone + '"></span><span class="visually-hidden">' + state.label + '</span></span></td>'
+                + '<td><span class="listpage__progress"><span class="progress"><span class="progress__bar" style="width:' + pct + '%"></span></span><span class="listpage__pct">' + pct + '%</span></span></td>'
+                + '<td>' + esc(dates_of(row)) + '</td>'
+                + '</tr>';
         }
 
-        $('#assessments_list').html(html).prop('hidden', shown === 0);
+        $('#assessments_list').html(html);
+        $('#assessments_table').prop('hidden', shown === 0);
         $('#assessments_empty').prop('hidden', shown > 0).text(assessments.length === 0
             ? 'No assessments yet.'
             : 'No assessments match your search.');

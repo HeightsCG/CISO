@@ -155,6 +155,21 @@
                                     </div>
                                 </div>
 
+                                <div class="workbench__section">
+                                    <h3 class="record__group-title comments__title">Comments</h3>
+                                    <ul class="evidence__list comments__list" id="item_comments" hidden></ul>
+                                    <p class="ctl__none comments__none" id="item_comments_empty" hidden>No comments yet.</p>
+                                    <div class="row">
+                                        <div class="col-md-12 form-group">
+                                            <label class="visually-hidden" for="item_comment_text">Comment</label>
+                                            <textarea class="form-control" id="item_comment_text" rows="2" maxlength="4000"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="comments__add">
+                                        <button type="button" class="btn btn--primary btn--sm" id="do_item_comment_add"><i class="fa-regular fa-comment"></i> Add Comment</button>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </section>
@@ -2038,7 +2053,152 @@ $(document).ready(function () {
         evidence_target = current_item;
         $('#evidence_count').text(parseInt(current_item.evidence_count, 10) || 0);
         load_item_evidence();
+
+        $('#item_comments').prop('hidden', true).empty();
+        $('#item_comments_empty').prop('hidden', true);
+        $('#item_comment_text').val('').removeClass('is-invalid');
+        load_item_comments();
     }
+
+    function comment_html(row) {
+
+        var html = '<li class="comments__item" data-id="' + row.id + '">'
+            + '<div class="comments__head">'
+            + '<span class="comments__author">' + (parseInt(row.is_own, 10) === 1 ? 'You' : esc(row.author_name)) + '</span>';
+
+        if (parseInt(row.is_client, 10) === 1) {
+            html += '<span class="badge badge--prospect">Client</span>';
+        }
+
+        html += '<span class="comments__date">' + esc(row.date_created_display) + '</span>';
+
+        if (parseInt(row.is_own, 10) === 1) {
+            html += '<span class="comments__tools">'
+                + '<button type="button" class="btn btn--tertiary btn--sm" data-action="comment-delete">Delete</button>'
+                + '<span class="comments__confirm" hidden>'
+                + '<button type="button" class="btn btn--destructive btn--sm" data-action="comment-delete-yes">Delete</button>'
+                + '<button type="button" class="btn btn--tertiary btn--sm" data-action="comment-delete-no">Cancel</button>'
+                + '</span>'
+                + '</span>';
+        }
+
+        return html + '</div><p class="comments__text">' + esc(row.comment_text) + '</p></li>';
+    }
+
+    function load_item_comments() {
+
+        var target = current_item;
+        var obj = {
+            item_id: target.id
+        };
+
+        ApiDataSvc.apiCall('post', 'item_comments_load', obj, function (data) {
+
+            var response = JSON.parse(data);
+            var html = '';
+
+            if (current_item !== target) {
+                return;
+            }
+
+            if (!response.success) {
+                toastr.error(response.message);
+                return;
+            }
+
+            for (var i = 0; i < response.comments.length; i++) {
+                html += comment_html(response.comments[i]);
+            }
+
+            $('#item_comments').html(html).prop('hidden', html === '');
+            $('#item_comments_empty').prop('hidden', html !== '');
+
+            if (html !== '') {
+                $('#item_comments').scrollTop($('#item_comments')[0].scrollHeight);
+            }
+        });
+    }
+
+    $('#do_item_comment_add').click(function () {
+
+        var button = this;
+        var obj = {
+            item_id: current_item.id,
+            comment_text: String($('#item_comment_text').val() || '').trim()
+        };
+
+        $('#item_comment_text').removeClass('is-invalid');
+
+        if (obj.comment_text === '') {
+            $('#item_comment_text').addClass('is-invalid');
+            toastr.error('Enter a comment');
+            return;
+        }
+
+        set_loading(button, true);
+
+        ApiDataSvc.apiCall('post', 'item_comment_add', obj, function (data) {
+
+            var response = JSON.parse(data);
+
+            set_loading(button, false);
+
+            if (response.success) {
+                $('#item_comment_text').val('');
+                load_item_comments();
+            } else {
+                $('#item_comment_text').addClass('is-invalid');
+                toastr.error(response.message);
+            }
+        }, function () {
+            set_loading(button, false);
+        });
+    });
+
+    $('#item_comment_text').on('input', function () {
+        $(this).removeClass('is-invalid');
+    });
+
+    $('#item_comments').on('click', '[data-action="comment-delete"]', function () {
+
+        var tools = $(this).closest('.comments__tools');
+
+        $(this).prop('hidden', true);
+        tools.find('.comments__confirm').prop('hidden', false);
+    });
+
+    $('#item_comments').on('click', '[data-action="comment-delete-no"]', function () {
+
+        var tools = $(this).closest('.comments__tools');
+
+        tools.find('.comments__confirm').prop('hidden', true);
+        tools.find('[data-action="comment-delete"]').prop('hidden', false);
+    });
+
+    $('#item_comments').on('click', '[data-action="comment-delete-yes"]', function () {
+
+        var button = this;
+        var obj = {
+            comment_id: $(this).closest('.comments__item').attr('data-id')
+        };
+
+        set_loading(button, true);
+
+        ApiDataSvc.apiCall('post', 'item_comment_delete', obj, function (data) {
+
+            var response = JSON.parse(data);
+
+            set_loading(button, false);
+
+            if (response.success) {
+                load_item_comments();
+            } else {
+                toastr.error(response.message);
+            }
+        }, function () {
+            set_loading(button, false);
+        });
+    });
 
     $('#items_body').on('click', '.item__row', function () {
         open_item($(this).attr('data-id'));

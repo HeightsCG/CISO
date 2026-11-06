@@ -460,6 +460,7 @@ class PoamModel extends Model {
                     pe.poam_item_id,
                     pe.evidence_id,
                     pe.evidence_role,
+                    pe.linked_by,
                     pe.date_created,
                     pi.poam_ref,
                     e.evidence_title,
@@ -992,6 +993,100 @@ class PoamModel extends Model {
         return $rows === 1;
     }
 
+    /**
+     * A client portal user links one of their client's shared vault files to
+     * an open record. The role is always Progress and any existing link of
+     * the same file to the record is refused. Returns the link id, or an
+     * error message.
+     */
+    public function portal_link_evidence($item_id, $company_id, $evidence_id, $evidence_title, $user_id)
+    {
+        $now = date('Y-m-d H:i:s');
+
+        $this->db->beginTransaction();
+
+        try {
+            $item = $this->locked_item($item_id, $company_id);
+
+            if ($item === null || $item['poam_status'] === 'Closed') {
+                $this->db->rollBack();
+                return 'This item is closed. Reopen it to make changes.';
+            }
+
+            $existing = parent::select("SELECT id FROM poam_evidence WHERE poam_item_id = :item_id and evidence_id = :evidence_id and deleted = 0", array(
+                'item_id' => $item['id'],
+                'evidence_id' => $evidence_id
+            ));
+
+            if (count($existing) > 0) {
+                $this->db->rollBack();
+                return 'That file is already linked to this item';
+            }
+
+            $link_id = (int) parent::insert('poam_evidence', array(
+                'company_id' => $item['company_id'],
+                'poam_item_id' => $item['id'],
+                'evidence_id' => $evidence_id,
+                'evidence_role' => Poam::PORTAL_EVIDENCE_ROLE,
+                'linked_by' => $user_id,
+                'date_created' => $now,
+                'deleted' => 0
+            ));
+            $this->history($item['company_id'], $item['assessment_id'], (int) $item['id'], null, 'User', 'evidence_linked', null, Poam::PORTAL_EVIDENCE_ROLE.': '.$evidence_title, Poam::PORTAL_EVIDENCE_ROLE.' evidence linked. '.self::PORTAL_NOTE, $user_id, $now);
+
+            $this->db->commit();
+        } catch (Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+
+        return $link_id;
+    }
+
+    /**
+     * Removes a Progress link the same portal user made, on an open record.
+     * Returns true, or an error message.
+     */
+    public function portal_unlink_evidence($link_id, $company_id, $user_id)
+    {
+        $now = date('Y-m-d H:i:s');
+        $link = $this->get_evidence_link($link_id, $company_id);
+
+        if (count($link) !== 1 || !self::portal_may_unlink($link[0], $user_id)) {
+            return 'That evidence link could not be found';
+        }
+
+        $this->db->beginTransaction();
+
+        try {
+            $item = $this->locked_item($link[0]['poam_item_id'], $company_id);
+
+            if ($item === null || $item['poam_status'] === 'Closed') {
+                $this->db->rollBack();
+                return 'This item is closed. Reopen it to make changes.';
+            }
+
+            $rows = parent::update('poam_evidence', array(
+                'deleted' => 1
+            ), 'id = :link_id and evidence_role = :evidence_role and linked_by = :user_id and deleted = 0', array(
+                'link_id' => $link_id,
+                'evidence_role' => Poam::PORTAL_EVIDENCE_ROLE,
+                'user_id' => $user_id
+            ));
+
+            if ($rows === 1) {
+                $this->history($item['company_id'], $item['assessment_id'], (int) $item['id'], null, 'User', 'evidence_unlinked', $link[0]['evidence_role'].': '.$link[0]['evidence_title'], null, $link[0]['evidence_role'].' evidence removed. '.self::PORTAL_NOTE, $user_id, $now);
+            }
+
+            $this->db->commit();
+        } catch (Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+
+        return $rows === 1 ? true : 'That evidence link could not be found';
+    }
+
     /** Sets the CMMC Conditional status date; logged against the assessment (record 0). */
     public function save_clock_date($assessment_id, $company_id, $poam_clock_date, $user_id)
     {
@@ -1068,8 +1163,21 @@ class PoamModel extends Model {
         return $out;
     }
 
-    /** Evidence links of files that are not private, without file names or user columns. */
-    public static function portal_evidence(array $rows): array
+    /** Whether a portal user may remove a link: a Progress link they made themselves. */
+    public static function portal_may_unlink(array $link, $user_id): bool
+    {
+        if ((int) $user_id <= 0) {
+            return false;
+        }
+
+        return (string) ($link['evidence_role'] ?? '') === Poam::PORTAL_EVIDENCE_ROLE && (int) ($link['linked_by'] ?? 0) === (int) $user_id;
+    }
+
+    /**
+     * Evidence links of files that are not private, without file names or
+     * user columns; can_unlink marks the user's own Progress links of an open record.
+     */
+    public static function portal_evidence(array $rows, $user_id = 0, $item_open = false): array
     {
         $out = array();
 
@@ -1083,7 +1191,8 @@ class PoamModel extends Model {
                 'evidence_id' => $row['evidence_id'],
                 'evidence_role' => $row['evidence_role'],
                 'evidence_title' => $row['evidence_title'],
-                'date_created' => $row['date_created']
+                'date_created' => $row['date_created'],
+                'can_unlink' => $item_open && self::portal_may_unlink($row, $user_id)
             );
         }
 

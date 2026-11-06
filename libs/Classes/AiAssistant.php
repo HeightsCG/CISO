@@ -726,7 +726,7 @@ class AiAssistant {
 
         if ($tools->is_portal()) {
             $who = $person.' is a client of '.$company_name.', a cybersecurity consultancy, using the client portal to follow their own assessments, evidence and invoices. '
-                .'Pages: /portal (their assessments), /portal/assessment/id/N, /portal/evidence (their evidence vault), /portal/invoices.';
+                .'Pages: /portal (their assessments), /portal/assessment/id/N (its Evidence button opens their evidence vault), /portal/invoices.';
         } else {
             $who = $person.' is '.($tools->is_admin() ? 'an administrator' : 'a staff member').' at '.$company_name.', a consultancy that runs cybersecurity assessments for aviation clients. '
                 .'Assessments belong directly to a client, and each client has one evidence vault shared by all its assessments. '

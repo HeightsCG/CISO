@@ -71,6 +71,9 @@ class Poam
         'Closure'
     );
 
+    /** The only role a client portal user can link evidence in; closure evidence is a staff decision. */
+    const PORTAL_EVIDENCE_ROLE = 'Progress';
+
     const CHANGE_SOURCES = array(
         'Sync',
         'User',

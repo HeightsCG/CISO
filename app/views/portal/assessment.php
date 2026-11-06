@@ -5,7 +5,7 @@
         </div>
         <div class="headline__actions">
             <a class="btn btn--secondary btn--pill" href="/portal"><i class="fa-regular fa-chevron-left"></i> Back</a>
-            <a class="btn btn--secondary btn--pill" href="/portal/evidence"><i class="fa-regular fa-folder-open"></i> Evidence</a>
+            <button type="button" class="btn btn--secondary btn--pill" id="do_vault_open"><i class="fa-regular fa-folder-open"></i> Evidence</button>
             <button type="button" class="btn btn--secondary btn--pill" id="do_poam_open"><i class="fa-regular fa-list-check"></i> POA&amp;M</button>
         </div>
     </header>
@@ -60,96 +60,92 @@
     </div>
 </div>
 
-<div class="modal fade" data-bs-backdrop="static" id="portal_item_modal" tabindex="-1" aria-labelledby="portal_item_modal_title" aria-hidden="true">
+<div class="modal fade" id="portal_item_modal" tabindex="-1" aria-labelledby="portal_item_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="portal_item_modal_title">Control</h2>
+                <div class="ctl__heading">
+                    <p class="assess__eyebrow ctl__eyebrow"><span class="assess__family" id="item_family"></span></p>
+                    <h2 class="modal-title" id="portal_item_modal_title"><span id="item_heading"></span><span class="badge ctl__badge" id="item_result"></span></h2>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="assess__eyebrow"><span class="assess__id" id="item_identifier"></span> <span class="assess__sep" aria-hidden="true">&middot;</span> <span class="assess__family" id="item_family"></span></p>
-                <h3 class="assess__title" id="item_title"></h3>
-                <p class="assess__text" id="item_description"></p>
-                <div class="row mb-4">
-                    <div class="col-md-12 form-group">
-                        <label>Result</label>
-                        <div><span class="badge" id="item_result"></span></div>
+                <p class="ctl__desc" id="item_description"></p>
+                <div class="poam__section">
+                    <div class="poam__section-head">
+                        <h3 class="record__group-title">Evidence</h3>
+                        <span class="poam__ev-actions">
+                            <button type="button" class="btn btn--secondary btn--sm" id="do_attach_open"><i class="fa-regular fa-link"></i> Attach from Vault</button>
+                            <button type="button" class="btn btn--secondary btn--sm" id="do_item_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload New</button>
+                            <input type="file" id="item_upload_file" multiple hidden>
+                        </span>
+                    </div>
+                    <ul class="evidence__list" id="item_evidence" hidden></ul>
+                    <p class="ctl__none" id="item_evidence_empty" hidden>No evidence attached to this control yet.</p>
+                </div>
+                <div class="poam__section">
+                    <div class="poam__section-head">
+                        <h3 class="record__group-title">Comments</h3>
+                    </div>
+                    <ul class="evidence__list comments__list" id="item_comments" hidden></ul>
+                    <p class="ctl__none comments__none" id="item_comments_empty" hidden>No comments yet.</p>
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label class="visually-hidden" for="item_comment_text">Comment</label>
+                            <textarea class="form-control" id="item_comment_text" rows="2" maxlength="4000"></textarea>
+                        </div>
+                    </div>
+                    <div class="comments__add">
+                        <button type="button" class="btn btn--primary btn--sm" id="do_item_comment_add"><i class="fa-regular fa-comment"></i> Add Comment</button>
                     </div>
                 </div>
-                <h3 class="record__group-title">Evidence</h3>
-                <ul class="evidence__list" id="item_evidence"></ul>
-                <div class="assess__actions">
-                    <button type="button" class="btn btn--secondary btn--sm" id="do_attach_open"><i class="fa-regular fa-link"></i> Attach from Evidence</button>
-                    <button type="button" class="btn btn--secondary btn--sm" id="do_item_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload New</button>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
 <div class="modal fade" data-bs-backdrop="static" id="portal_attach_modal" tabindex="-1" aria-labelledby="portal_attach_modal_title" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title" id="portal_attach_modal_title">Attach Evidence</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="search" id="attach_search" class="input pick__search mb-4" placeholder="Search title or file name..." autocomplete="off" spellcheck="false">
-                <table class="data data--light" id="attach_table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col" class="vault__col-date">Uploaded</th>
-                            <th scope="col"><span class="visually-hidden">Attach</span></th>
-                        </tr>
-                    </thead>
-                    <tbody id="attach_body"></tbody>
-                </table>
-                <p class="vault__empty" id="attach_empty" hidden></p>
+                <p class="pick__label">Files in <?php echo htmlspecialchars($this->client['company_name'], ENT_QUOTES, 'UTF-8'); ?>&rsquo;s evidence vault <span class="pick__count" id="pick_count"></span></p>
+                <div class="vault vault--pick">
+                    <aside class="vault__tree">
+                        <div class="panel__head">
+                            <h2 class="panel__title">Folders</h2>
+                        </div>
+                        <ul class="vault__list" id="pick_tree"></ul>
+                    </aside>
+
+                    <section class="vault__files">
+                        <div class="vault__toolbar">
+                            <input type="search" id="pick_search" class="input vault__search" placeholder="Search title or file name..." autocomplete="off" spellcheck="false">
+                        </div>
+                        <div class="pick__scroll">
+                            <table class="data data--light" id="pick_table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="pick__sort is-sortable" data-sort="evidence_title">Name</th>
+                                        <th scope="col" class="vault__col-size pick__sort is-sortable" data-sort="file_size">Size</th>
+                                        <th scope="col" class="vault__col-date pick__sort is-sortable" data-sort="date_created">Uploaded</th>
+                                        <th scope="col" class="vault__col-links pick__sort is-sortable" data-sort="link_count">Controls</th>
+                                        <th scope="col" class="pick__col-attach"><span class="visually-hidden">Attach</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pick_list"></tbody>
+                            </table>
+                            <p class="vault__empty" id="pick_empty" hidden></p>
+                        </div>
+                    </section>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Done</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" data-bs-backdrop="static" id="portal_upload_modal" tabindex="-1" aria-labelledby="portal_upload_modal_title" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="portal_upload_modal_title">Upload Evidence</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p class="import__hint">Saved to your evidence and attached to <strong id="upload_for"></strong>. Documents, images and archives up to 25MB.</p>
-                <div class="row mb-4">
-                    <div class="col-md-12 form-group">
-                        <label for="evidence_title">Title <abbr title="required">*</abbr></label>
-                        <input type="text" class="form-control" id="evidence_title" placeholder="Information security policy, signed">
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-12 form-group">
-                        <label for="evidence_description">Description</label>
-                        <textarea class="form-control" id="evidence_description" rows="3" placeholder="What this shows and where it came from."></textarea>
-                    </div>
-                </div>
-                <div class="row mb-4">
-                    <div class="col-md-12 form-group">
-                        <label for="evidence_file">File <abbr title="required">*</abbr></label>
-                        <input type="file" class="form-control" id="evidence_file">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="do_upload" class="btn btn--primary">Upload Evidence</button>
             </div>
         </div>
     </div>
@@ -271,10 +267,122 @@
                     </table>
                     <p class="poam__none" id="poam_milestones_empty">No milestones.</p>
                 </div>
+
+                <div class="poam__section">
+                    <div class="poam__section-head">
+                        <h3 class="record__group-title">Evidence</h3>
+                        <span class="poam__ev-actions" id="poam_ev_actions">
+                            <button type="button" class="btn btn--secondary btn--sm" id="do_poam_ev_attach_open"><i class="fa-regular fa-link"></i> Attach from Vault</button>
+                            <button type="button" class="btn btn--primary btn--sm" id="do_poam_ev_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload New</button>
+                            <input type="file" id="poam_ev_upload_file" multiple hidden>
+                        </span>
+                    </div>
+                    <ul class="evidence__list poam__evidence" id="poam_ev_list" hidden></ul>
+                    <p class="poam__none" id="poam_ev_empty">No evidence linked.</p>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn--secondary" id="poam_item_dismiss" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn--primary" id="do_poam_save">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop="static" id="vault_modal" tabindex="-1" aria-labelledby="vault_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="vault_modal_title">Evidence</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="vault vault--pick">
+                    <aside class="vault__tree">
+                        <div class="panel__head">
+                            <h2 class="panel__title">Folders</h2>
+                        </div>
+                        <ul class="vault__list" id="vault_folder_tree"></ul>
+                    </aside>
+
+                    <section class="vault__files">
+                        <div class="vault__toolbar">
+                            <input type="search" id="vault_search" class="input vault__search" placeholder="Search title or file name..." autocomplete="off" spellcheck="false">
+                            <button type="button" class="btn btn--primary" id="do_vault_upload_open"><i class="fa-regular fa-arrow-up-from-bracket"></i> Upload Evidence</button>
+                        </div>
+                        <div class="pick__scroll">
+                            <table class="data data--light" id="vault_table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col" class="vault__col-size">Size</th>
+                                        <th scope="col" class="vault__col-date">Uploaded</th>
+                                        <th scope="col" class="vault__col-links">Controls</th>
+                                        <th scope="col" class="vault__col-by">Uploaded by</th>
+                                        <th scope="col" class="vault__col-actions"><span class="visually-hidden">Actions</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vault_body"></tbody>
+                            </table>
+                            <p class="vault__empty" id="vault_empty" hidden></p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop="static" id="vault_upload_modal" tabindex="-1" aria-labelledby="vault_upload_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="vault_upload_modal_title">Upload Evidence</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="import__hint">Saved into <strong id="vault_upload_folder"></strong>. Documents, images and archives up to 25MB.</p>
+                <div class="row mb-4">
+                    <div class="col-md-12 form-group">
+                        <label for="vault_evidence_title">Title <abbr title="required">*</abbr></label>
+                        <input type="text" class="form-control" id="vault_evidence_title" placeholder="Information security policy, signed">
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-12 form-group">
+                        <label for="vault_evidence_description">Description</label>
+                        <textarea class="form-control" id="vault_evidence_description" rows="3" placeholder="What this shows and where it came from."></textarea>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-12 form-group">
+                        <label for="vault_evidence_file">File <abbr title="required">*</abbr></label>
+                        <input type="file" class="form-control" id="vault_evidence_file">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="do_vault_upload" class="btn btn--primary">Upload Evidence</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop="static" id="vault_remove_modal" tabindex="-1" aria-labelledby="vault_remove_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="vault_remove_modal_title">Remove Evidence</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="vault_remove_id" value="0">
+                <p>Remove <strong id="vault_remove_title"></strong>? This cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="do_vault_remove" class="btn btn--destructive">Remove Evidence</button>
             </div>
         </div>
     </div>
@@ -285,7 +393,6 @@ $(document).ready(function () {
 
     var assessment_id = <?php echo (int) $this->assessment['id']; ?>;
     var items = [];
-    var vault = [];
     var current_item = null;
 
     function size_label(bytes) {
@@ -473,20 +580,31 @@ $(document).ready(function () {
 
         current_item = found;
 
-        $('#item_identifier').text(current_item.control_identifier);
+        var summary = description_body(current_item.control_title, current_item.description);
+
         $('#item_family').text(current_item.family === '' ? 'Ungrouped' : current_item.family);
-        $('#item_title').text(current_item.control_title);
-        $('#item_description').text(description_body(current_item.control_title, current_item.description));
+        $('#item_heading').text(current_item.control_identifier + ' ' + current_item.control_title);
+        $('#item_description').text(summary).attr('title', summary).prop('hidden', summary === '');
+        $('#item_evidence').prop('hidden', true).empty();
+        $('#item_evidence_empty').prop('hidden', true);
         $('#item_result').text(current_item.item_result)
             .removeClass('badge--active badge--onboarding badge--critical badge--prospect badge--inactive')
             .addClass(badge_for(current_item.item_result));
 
+        $('#item_comments').prop('hidden', true).empty();
+        $('#item_comments_empty').prop('hidden', true);
+        $('#item_comment_text').val('').removeClass('is-invalid');
+
         load_item_evidence();
+        load_item_comments();
         modal('portal_item_modal').show();
     });
 
     function load_item_evidence() {
-        ApiDataSvc.apiCall('post', 'portal_item_evidence', { item_id: current_item.id }, function (data) {
+
+        var target = current_item;
+
+        ApiDataSvc.apiCall('post', 'portal_item_evidence', { item_id: target.id }, function (data) {
 
             var rows = JSON.parse(data);
             var html = '';
@@ -495,25 +613,163 @@ $(document).ready(function () {
                 html += '<li class="evidence__item" data-id="' + rows[i].id + '">'
                     + '<div><a href="#" class="evidence__open" data-id="' + rows[i].id + '">' + esc(rows[i].evidence_title) + '</a>'
                     + '<span class="evidence__meta">' + esc(rows[i].file_name) + ' &middot; ' + size_label(rows[i].file_size) + '</span></div>'
-                    + '<button type="button" class="btn btn--tertiary btn--sm" data-action="unlink" data-id="' + rows[i].id + '">Detach</button>'
+                    + '<button type="button" class="btn btn--tertiary btn--sm" data-action="unlink" data-id="' + rows[i].id + '" aria-label="Detach ' + esc(rows[i].evidence_title) + '"><i class="fa-regular fa-link-slash"></i></button>'
                     + '</li>';
             }
 
-            $('#item_evidence').html(html === ''
-                ? '<li class="evidence__none">Nothing attached to this control yet.</li>'
-                : html);
+            if (current_item !== target) {
+                return;
+            }
+
+            $('#item_evidence').html(html).prop('hidden', html === '');
+            $('#item_evidence_empty').prop('hidden', html !== '');
         });
     }
 
-    $('#item_evidence').on('click', '.evidence__open', function (e) {
+    function comment_html(row) {
 
-        e.preventDefault();
+        var html = '<li class="comments__item" data-id="' + row.id + '">'
+            + '<div class="comments__head">'
+            + '<span class="comments__author">' + (parseInt(row.is_own, 10) === 1 ? 'You' : esc(row.author_name)) + '</span>'
+            + '<span class="comments__date">' + esc(row.date_created_display) + '</span>';
 
-        var link = this;
+        if (parseInt(row.is_own, 10) === 1) {
+            html += '<span class="comments__tools">'
+                + '<button type="button" class="btn btn--tertiary btn--sm" data-action="comment-delete">Delete</button>'
+                + '<span class="comments__confirm" hidden>'
+                + '<button type="button" class="btn btn--destructive btn--sm" data-action="comment-delete-yes">Delete</button>'
+                + '<button type="button" class="btn btn--tertiary btn--sm" data-action="comment-delete-no">Cancel</button>'
+                + '</span>'
+                + '</span>';
+        }
+
+        return html + '</div><p class="comments__text">' + esc(row.comment_text) + '</p></li>';
+    }
+
+    function load_item_comments() {
+
+        var target = current_item;
+        var obj = {
+            item_id: target.id
+        };
+
+        ApiDataSvc.apiCall('post', 'portal_item_comments_load', obj, function (data) {
+
+            var response = JSON.parse(data);
+            var html = '';
+
+            if (current_item !== target) {
+                return;
+            }
+
+            if (!response.success) {
+                toastr.error(response.message);
+                return;
+            }
+
+            for (var i = 0; i < response.comments.length; i++) {
+                html += comment_html(response.comments[i]);
+            }
+
+            $('#item_comments').html(html).prop('hidden', html === '');
+            $('#item_comments_empty').prop('hidden', html !== '');
+
+            if (html !== '') {
+                $('#item_comments').scrollTop($('#item_comments')[0].scrollHeight);
+            }
+        });
+    }
+
+    $('#portal_item_modal').on('shown.bs.modal', function () {
+        $('#item_comments').scrollTop($('#item_comments')[0].scrollHeight);
+    });
+
+    $('#do_item_comment_add').click(function () {
+
+        var button = this;
+        var obj = {
+            item_id: current_item.id,
+            comment_text: String($('#item_comment_text').val() || '').trim()
+        };
+
+        $('#item_comment_text').removeClass('is-invalid');
+
+        if (obj.comment_text === '') {
+            $('#item_comment_text').addClass('is-invalid');
+            toastr.error('Enter a comment');
+            return;
+        }
+
+        set_loading(button, true);
+
+        ApiDataSvc.apiCall('post', 'portal_item_comment_add', obj, function (data) {
+
+            var response = JSON.parse(data);
+
+            set_loading(button, false);
+
+            if (response.success) {
+                $('#item_comment_text').val('');
+                load_item_comments();
+            } else {
+                $('#item_comment_text').addClass('is-invalid');
+                toastr.error(response.message);
+            }
+        }, function () {
+            set_loading(button, false);
+        });
+    });
+
+    $('#item_comment_text').on('input', function () {
+        $(this).removeClass('is-invalid');
+    });
+
+    $('#item_comments').on('click', '[data-action="comment-delete"]', function () {
+
+        var tools = $(this).closest('.comments__tools');
+
+        $(this).prop('hidden', true);
+        tools.find('.comments__confirm').prop('hidden', false);
+    });
+
+    $('#item_comments').on('click', '[data-action="comment-delete-no"]', function () {
+
+        var tools = $(this).closest('.comments__tools');
+
+        tools.find('.comments__confirm').prop('hidden', true);
+        tools.find('[data-action="comment-delete"]').prop('hidden', false);
+    });
+
+    $('#item_comments').on('click', '[data-action="comment-delete-yes"]', function () {
+
+        var button = this;
+        var obj = {
+            comment_id: $(this).closest('.comments__item').attr('data-id')
+        };
+
+        set_loading(button, true);
+
+        ApiDataSvc.apiCall('post', 'portal_item_comment_delete', obj, function (data) {
+
+            var response = JSON.parse(data);
+
+            set_loading(button, false);
+
+            if (response.success) {
+                load_item_comments();
+            } else {
+                toastr.error(response.message);
+            }
+        }, function () {
+            set_loading(button, false);
+        });
+    });
+
+    function open_evidence_file(link, evidence_id) {
 
         set_loading(link, true);
 
-        ApiDataSvc.apiCall('post', 'portal_evidence_url', { evidence_id: $(this).attr('data-id') }, function (data) {
+        ApiDataSvc.apiCall('post', 'portal_evidence_url', { evidence_id: evidence_id }, function (data) {
 
             var obj = JSON.parse(data);
 
@@ -525,6 +781,11 @@ $(document).ready(function () {
                 toastr.error(obj.message);
             }
         });
+    }
+
+    $('#item_evidence, #pick_list').on('click', '.evidence__open', function (e) {
+        e.preventDefault();
+        open_evidence_file(this, $(this).attr('data-id'));
     });
 
     $('#item_evidence').on('click', '[data-action="unlink"]', function () {
@@ -552,120 +813,331 @@ $(document).ready(function () {
         });
     });
 
+    var pick = {
+        mode: 'control',
+        folders: [],
+        evidence: [],
+        folder: 0,
+        sort: 'date_created',
+        dir: 'desc'
+    };
+
+    function extension_of(name) {
+
+        var at = String(name || '').lastIndexOf('.');
+
+        return at === -1 ? 'FILE' : String(name).slice(at + 1).toUpperCase().slice(0, 4);
+    }
+
     function attached_ids() {
+
+        if (pick.mode === 'poam') {
+            return poam.payload.evidence.map(function (link) {
+                return String(link.evidence_id);
+            });
+        }
+
         return $('#item_evidence .evidence__item').map(function () {
             return String($(this).attr('data-id'));
         }).get();
     }
 
-    function render_attach() {
+    function pick_children(parent_id) {
 
-        var term = $('#attach_search').val().trim().toLowerCase();
-        var attached = attached_ids();
+        var out = [];
+
+        for (var i = 0; i < pick.folders.length; i++) {
+            if (parseInt(pick.folders[i].parent_id, 10) === parseInt(parent_id, 10)) {
+                out.push(pick.folders[i]);
+            }
+        }
+
+        return out;
+    }
+
+    function pick_count_of(id) {
+
+        var total = 0;
+
+        for (var i = 0; i < pick.evidence.length; i++) {
+            if (parseInt(id, 10) === 0 || parseInt(pick.evidence[i].folder_id, 10) === parseInt(id, 10)) {
+                total++;
+            }
+        }
+
+        return '<span class="vault__count' + (total === 0 ? ' vault__count--empty' : '') + '">' + total + '</span>';
+    }
+
+    function pick_branch(parent_id, depth) {
+
         var html = '';
-        var shown = 0;
+        var kids = pick_children(parent_id);
 
-        for (var i = 0; i < vault.length; i++) {
+        for (var i = 0; i < kids.length; i++) {
+            html += '<li class="vault__item' + (pick.folder === parseInt(kids[i].id, 10) ? ' is-on' : '') + '" style="--tree-depth:' + depth + '">'
+                + '<button type="button" class="vault__link" data-id="' + kids[i].id + '">'
+                + '<i class="fa-regular fa-folder"></i><span class="vault__name">' + esc(kids[i].folder_name) + '</span>'
+                + pick_count_of(kids[i].id) + '</button></li>'
+                + pick_branch(kids[i].id, depth + 1);
+        }
 
-            var e = vault[i];
+        return html;
+    }
+
+    function pick_render_tree() {
+        $('#pick_tree').html('<li class="vault__item' + (pick.folder === 0 ? ' is-on' : '') + '" style="--tree-depth:0">'
+            + '<button type="button" class="vault__link" data-id="0">'
+            + '<i class="fa-regular fa-inbox"></i><span class="vault__name">All Evidence</span>'
+            + pick_count_of(0) + '</button></li>'
+            + pick_branch(0, 0));
+    }
+
+    function pick_key(row) {
+
+        if (pick.sort === 'file_size' || pick.sort === 'link_count') {
+            return parseInt(row[pick.sort], 10) || 0;
+        }
+
+        if (pick.sort === 'date_created') {
+            return parseInt(row.id, 10) || 0;
+        }
+
+        return String(row.evidence_title || row.file_name).toLowerCase();
+    }
+
+    function pick_visible() {
+
+        var term = $('#pick_search').val().trim().toLowerCase();
+        var out = [];
+
+        for (var i = 0; i < pick.evidence.length; i++) {
+
+            var e = pick.evidence[i];
+
+            if (pick.folder !== 0 && parseInt(e.folder_id, 10) !== pick.folder) {
+                continue;
+            }
 
             if (term !== '' && (e.evidence_title + ' ' + e.file_name).toLowerCase().indexOf(term) === -1) {
                 continue;
             }
 
-            shown++;
-
-            html += '<tr class="vault__row">'
-                + '<td class="vault__cell-name"><span class="vault__line">'
-                + '<span class="vault__title">' + esc(e.evidence_title) + '</span>'
-                + '<span class="vault__file">' + esc(e.file_name) + '</span></span></td>'
-                + '<td class="vault__col-date">' + esc(e.date_created_display) + '</td>'
-                + '<td class="pick__col-attach">' + (attached.indexOf(String(e.id)) !== -1
-                    ? '<span class="badge badge--active">Attached</span>'
-                    : '<button type="button" class="btn btn--secondary btn--sm" data-action="attach" data-id="' + e.id + '">Attach</button>')
-                + '</td></tr>';
+            out.push(e);
         }
 
-        $('#attach_body').html(html);
-        $('#attach_table').toggle(shown > 0);
-        $('#attach_empty').prop('hidden', shown > 0).text(vault.length === 0
-            ? 'You have no evidence uploaded yet. Use Upload New.'
-            : 'No files match your search.');
+        out.sort(function (a, b) {
+
+            var x = pick_key(a);
+            var y = pick_key(b);
+
+            return (x < y ? -1 : (x > y ? 1 : 0)) * (pick.dir === 'asc' ? 1 : -1);
+        });
+
+        return out;
+    }
+
+    function pick_empty_text() {
+
+        var term = $('#pick_search').val().trim();
+
+        if (pick.evidence.length === 0) {
+            return 'No evidence has been collected yet.';
+        }
+
+        if (term !== '') {
+            return 'No files match “' + term + '”.';
+        }
+
+        return 'This folder is empty.';
+    }
+
+    function pick_row(row, attached) {
+
+        var already = attached.indexOf(String(row.id)) !== -1;
+        var used = parseInt(row.link_count, 10);
+
+        return '<tr class="vault__row">'
+            + '<td class="vault__cell-name"><span class="vault__line">'
+            + '<a href="#" class="vault__title evidence__open" data-id="' + row.id + '" title="' + esc(row.evidence_title) + '">' + esc(row.evidence_title) + '</a>'
+            + '<span class="vault__file" title="' + esc(row.file_name) + '">' + esc(row.file_name) + ' &middot; ' + esc(extension_of(row.file_name)) + '</span>'
+            + '</span></td>'
+            + '<td class="vault__col-size">' + size_label(row.file_size) + '</td>'
+            + '<td class="vault__col-date">' + esc(row.date_created_display) + '</td>'
+            + '<td class="vault__col-links"><span class="chip' + (used > 0 ? '' : ' chip--empty') + '">' + used + '</span></td>'
+            + '<td class="pick__col-attach">' + (already
+                ? '<span class="badge badge--active">Attached</span>'
+                : '<button type="button" class="btn btn--secondary btn--sm" data-action="attach" data-id="' + row.id + '">Attach</button>')
+            + '</td></tr>';
+    }
+
+    function mark_sort() {
+        $('#portal_attach_modal .pick__sort').removeClass('is-asc is-desc');
+        $('#portal_attach_modal .pick__sort[data-sort="' + pick.sort + '"]').addClass(pick.dir === 'asc' ? 'is-asc' : 'is-desc');
+    }
+
+    function pick_render() {
+
+        var rows = pick_visible();
+        var attached = attached_ids();
+        var html = '';
+
+        for (var i = 0; i < rows.length; i++) {
+            html += pick_row(rows[i], attached);
+        }
+
+        $('#pick_list').html(html);
+        $('#pick_table').toggle(rows.length > 0);
+        $('#pick_empty').prop('hidden', rows.length > 0).text(pick_empty_text());
+        $('#pick_count').text(pick.evidence.length + (pick.evidence.length === 1 ? ' file' : ' files'));
+        mark_sort();
+    }
+
+    function pick_open(mode, button) {
+
+        pick.mode = mode;
+        $('#portal_attach_modal .modal-dialog').toggleClass('pick--wide', mode === 'poam');
+        pick.folders = [];
+        pick.evidence = [];
+        pick.folder = 0;
+        pick.sort = 'date_created';
+        pick.dir = 'desc';
+
+        $('#pick_search').val('');
+        $('#pick_list').empty();
+        pick_render_tree();
+        pick_render();
+        set_loading(button, true);
+
+        var pending = 2;
+
+        function finish() {
+
+            pending--;
+
+            if (pending > 0) {
+                return;
+            }
+
+            set_loading(button, false);
+            pick_render_tree();
+            pick_render();
+            modal('portal_attach_modal').show();
+        }
+
+        ApiDataSvc.apiCall('post', 'portal_folders', {}, function (data) {
+            pick.folders = JSON.parse(data);
+            finish();
+        }, function () {
+            set_loading(button, false);
+        });
+
+        ApiDataSvc.apiCall('post', 'portal_evidence', {}, function (data) {
+            pick.evidence = JSON.parse(data);
+            finish();
+        }, function () {
+            set_loading(button, false);
+        });
     }
 
     $('#do_attach_open').click(function () {
-        $('#attach_search').val('');
-        ApiDataSvc.apiCall('post', 'portal_evidence', {}, function (data) {
-            vault = JSON.parse(data);
-            render_attach();
-            modal('portal_attach_modal').show();
-        });
+        pick_open('control', this);
     });
 
-    $('#attach_search').on('input', render_attach);
+    $('#pick_tree').on('click', '.vault__link', function () {
+        pick.folder = parseInt($(this).attr('data-id'), 10);
+        pick_render_tree();
+        pick_render();
+    });
 
-    $('#attach_body').on('click', '[data-action="attach"]', function () {
+    $('#pick_search').on('input', pick_render);
+
+    $(document).on('click', '#portal_attach_modal .is-sortable', function () {
+
+        var column = $(this).attr('data-sort');
+
+        if (pick.sort === column) {
+            pick.dir = (pick.dir === 'asc') ? 'desc' : 'asc';
+        } else {
+            pick.sort = column;
+            pick.dir = (column === 'evidence_title') ? 'asc' : 'desc';
+        }
+
+        pick_render();
+    });
+
+    function link_target(evidence_id, done) {
+
+        if (pick.mode === 'poam') {
+            ApiDataSvc.apiCall('post', 'portal_poam_evidence_link', {
+                item_id: poam.payload.item.id,
+                evidence_id: evidence_id
+            }, done);
+            return;
+        }
+
+        ApiDataSvc.apiCall('post', 'portal_link_evidence', {
+            item_id: current_item.id,
+            evidence_id: evidence_id
+        }, done);
+    }
+
+    function refresh_target() {
+
+        if (pick.mode === 'poam') {
+            poam.changed = true;
+            poam_reload_item();
+            return;
+        }
+
+        load_item_evidence();
+        load();
+    }
+
+    $('#pick_list').on('click', '[data-action="attach"]', function () {
 
         var button = this;
 
         set_loading(button, true);
 
-        ApiDataSvc.apiCall('post', 'portal_link_evidence', {
-            item_id: current_item.id,
-            evidence_id: $(this).attr('data-id')
-        }, function (data) {
+        link_target($(this).attr('data-id'), function (data) {
 
             var obj = JSON.parse(data);
 
             set_loading(button, false);
 
             if (obj.success) {
-                toastr.success(obj.message);
-                load_item_evidence();
-                load();
                 modal('portal_attach_modal').hide();
+                toastr.success(obj.message);
+                refresh_target();
             } else {
                 toastr.error(obj.message);
             }
         });
     });
 
-    $('#do_item_upload_open').click(function () {
-        $('#evidence_title').val('').removeClass('is-invalid');
-        $('#evidence_description').val('');
-        $('#evidence_file').val('').removeClass('is-invalid');
-        $('#upload_for').text(current_item.control_identifier);
-        modal('portal_upload_modal').show();
-    });
+    function file_title(name) {
 
-    $('#do_upload').click(function () {
+        var at = String(name).lastIndexOf('.');
 
-        if ($('#evidence_title').val().trim() === '') {
-            $('#evidence_title').addClass('is-invalid');
-            toastr.error('Evidence title is required');
-            return;
-        }
+        return (at > 0 ? String(name).slice(0, at) : String(name)).replace(/[_-]+/g, ' ').trim();
+    }
 
-        if ($('#evidence_file')[0].files.length === 0) {
-            $('#evidence_file').addClass('is-invalid');
-            toastr.error('Choose a file to upload');
+    var uploaded = 0;
+
+    function upload_next(files, index, done) {
+
+        if (index >= files.length) {
+            done();
             return;
         }
 
         var form_data = new FormData();
 
         form_data.append('folder_id', 0);
-        form_data.append('evidence_title', $('#evidence_title').val().trim());
-        form_data.append('description', $('#evidence_description').val().trim());
-        form_data.append('evidence_file', $('#evidence_file')[0].files[0]);
-
-        var csrf = document.querySelector('meta[name="csrf-token"]');
-
-        if (csrf) {
-            form_data.append('csrf_token', csrf.getAttribute('content'));
-        }
-
-        set_loading('#do_upload', true);
+        form_data.append('evidence_file', files[index]);
+        form_data.append('evidence_title', file_title(files[index].name));
+        form_data.append('description', '');
+        form_data.append('csrf_token', $('meta[name="csrf-token"]').attr('content'));
 
         $.ajax({
             url: '/api/portal_upload_evidence',
@@ -678,36 +1150,61 @@ $(document).ready(function () {
                 var obj = JSON.parse(data);
 
                 if (!obj.success) {
-                    set_loading('#do_upload', false);
-                    toastr.error(obj.message);
+                    toastr.error(files[index].name + ': ' + obj.message);
+                    upload_next(files, index + 1, done);
                     return;
                 }
 
-                ApiDataSvc.apiCall('post', 'portal_link_evidence', {
-                    item_id: current_item.id,
-                    evidence_id: obj.evidence_id
-                }, function (linked) {
+                link_target(obj.evidence_id, function (linked) {
 
-                    var link_obj = JSON.parse(linked);
+                    var res = JSON.parse(linked);
 
-                    set_loading('#do_upload', false);
-                    modal('portal_upload_modal').hide();
-
-                    if (link_obj.success) {
-                        toastr.success('Evidence uploaded and attached');
+                    if (res.success) {
+                        uploaded++;
                     } else {
-                        toastr.error(link_obj.message);
+                        toastr.error(files[index].name + ': ' + res.message);
                     }
 
-                    load_item_evidence();
-                    load();
+                    upload_next(files, index + 1, done);
                 });
             },
             error: function () {
-                set_loading('#do_upload', false);
-                toastr.error('That file could not be uploaded');
+                toastr.error(files[index].name + ' could not be uploaded.');
+                upload_next(files, index + 1, done);
             }
         });
+    }
+
+    function upload_files(mode, input, button) {
+
+        var files = Array.prototype.slice.call(input.files || []);
+
+        if (files.length === 0) {
+            return;
+        }
+
+        pick.mode = mode;
+        uploaded = 0;
+        set_loading(button, true);
+
+        upload_next(files, 0, function () {
+
+            set_loading(button, false);
+
+            if (uploaded > 0) {
+                toastr.success(uploaded === 1 ? 'Evidence uploaded' : uploaded + ' files uploaded');
+            }
+
+            refresh_target();
+        });
+    }
+
+    $('#do_item_upload_open').click(function () {
+        $('#item_upload_file').val('').trigger('click');
+    });
+
+    $('#item_upload_file').on('change', function () {
+        upload_files('control', this, '#do_item_upload_open');
     });
 
     var poam = {
@@ -950,9 +1447,65 @@ $(document).ready(function () {
         $('#do_poam_save').prop('hidden', poam_is_closed());
         $('#poam_item_dismiss').text(poam_is_closed() ? 'Close' : 'Cancel');
         $('#do_poam_milestone_add').prop('hidden', poam_is_closed());
+        $('#poam_ev_actions').prop('hidden', poam_is_closed());
 
         poam_render_milestones();
+        poam_render_evidence();
     }
+
+    function poam_render_evidence() {
+
+        var list = poam.payload.evidence;
+        var html = '';
+
+        for (var i = 0; i < list.length; i++) {
+            html += '<li class="evidence__item">'
+                + '<div class="poam__ev"><span class="poam__ev-title">' + esc(list[i].evidence_title) + '</span><span class="poam__ev-file">' + esc(poam_date(list[i].date_created)) + '</span></div>'
+                + '<span class="badge ' + (list[i].evidence_role === 'Closure' ? 'badge--active' : 'badge--prospect') + '">' + esc(list[i].evidence_role) + '</span>'
+                + (list[i].can_unlink && !poam_is_closed() ? '<button type="button" class="btn btn--secondary btn--sm" data-action="poam_ev_unlink" data-id="' + list[i].id + '">Unlink</button>' : '')
+                + '</li>';
+        }
+
+        $('#poam_ev_list').html(html).prop('hidden', list.length === 0);
+        $('#poam_ev_empty').prop('hidden', list.length > 0);
+    }
+
+    $('#do_poam_ev_attach_open').click(function () {
+        pick_open('poam', this);
+    });
+
+    $('#do_poam_ev_upload_open').click(function () {
+        $('#poam_ev_upload_file').val('').trigger('click');
+    });
+
+    $('#poam_ev_upload_file').on('change', function () {
+        upload_files('poam', this, '#do_poam_ev_upload_open');
+    });
+
+    $('#poam_ev_list').on('click', '[data-action="poam_ev_unlink"]', function () {
+
+        var button = this;
+
+        set_loading(button, true);
+
+        ApiDataSvc.apiCall('post', 'portal_poam_evidence_unlink', { link_id: $(this).attr('data-id') }, function (data) {
+
+            var response = JSON.parse(data);
+
+            set_loading(button, false);
+
+            if (!response.success) {
+                toastr.error(response.message);
+                return;
+            }
+
+            toastr.success(response.message);
+            poam.changed = true;
+            poam_reload_item();
+        }, function () {
+            set_loading(button, false);
+        });
+    });
 
     function poam_value(selector) {
         return String($(selector).val() || '').trim();
@@ -1172,6 +1725,327 @@ $(document).ready(function () {
     }
 
     load();
+
+});
+</script>
+
+<script>
+$(document).ready(function () {
+
+    var vault_user_id = <?php echo (int) Session::get('user_id'); ?>;
+    var vault_folders = [];
+    var vault_evidence = [];
+    var vault_folder = 0;
+
+    function vault_size_label(bytes) {
+
+        var n = parseInt(bytes, 10);
+
+        if (isNaN(n) || n <= 0) {
+            return '';
+        }
+        if (n < 1024) {
+            return n + ' B';
+        }
+        if (n < 1048576) {
+            return Math.round(n / 1024) + ' KB';
+        }
+        return (n / 1048576).toFixed(1) + ' MB';
+    }
+
+    function vault_extension_of(name) {
+
+        var at = String(name || '').lastIndexOf('.');
+
+        return at === -1 ? '' : String(name).slice(at + 1).toUpperCase().slice(0, 5);
+    }
+
+    function vault_children_of(parent_id) {
+
+        var out = [];
+
+        for (var i = 0; i < vault_folders.length; i++) {
+            if (parseInt(vault_folders[i].parent_id, 10) === parseInt(parent_id, 10)) {
+                out.push(vault_folders[i]);
+            }
+        }
+
+        return out;
+    }
+
+    function vault_count_of(id) {
+
+        var total = 0;
+
+        for (var i = 0; i < vault_evidence.length; i++) {
+            if (parseInt(id, 10) === 0 || parseInt(vault_evidence[i].folder_id, 10) === parseInt(id, 10)) {
+                total++;
+            }
+        }
+
+        return '<span class="vault__count' + (total === 0 ? ' vault__count--empty' : '') + '">' + total + '</span>';
+    }
+
+    function vault_folder_name_of(id) {
+
+        for (var i = 0; i < vault_folders.length; i++) {
+            if (parseInt(vault_folders[i].id, 10) === parseInt(id, 10)) {
+                return vault_folders[i].folder_name;
+            }
+        }
+
+        return 'All Evidence';
+    }
+
+    function vault_tree_branch(parent_id, depth) {
+
+        var html = '';
+        var kids = vault_children_of(parent_id);
+
+        for (var i = 0; i < kids.length; i++) {
+            html += '<li class="vault__item' + (vault_folder === parseInt(kids[i].id, 10) ? ' is-on' : '') + '" style="--tree-depth:' + depth + '">'
+                + '<button type="button" class="vault__link" data-id="' + kids[i].id + '">'
+                + '<i class="fa-regular fa-folder"></i><span class="vault__name">' + esc(kids[i].folder_name) + '</span>'
+                + vault_count_of(kids[i].id) + '</button></li>'
+                + vault_tree_branch(kids[i].id, depth + 1);
+        }
+
+        return html;
+    }
+
+    function vault_render_tree() {
+        $('#vault_folder_tree').html('<li class="vault__item' + (vault_folder === 0 ? ' is-on' : '') + '" style="--tree-depth:0">'
+            + '<button type="button" class="vault__link" data-id="0">'
+            + '<i class="fa-regular fa-inbox"></i><span class="vault__name">All Evidence</span>'
+            + vault_count_of(0) + '</button></li>'
+            + vault_tree_branch(0, 0));
+    }
+
+    function vault_visible() {
+
+        var term = $('#vault_search').val().trim().toLowerCase();
+        var out = [];
+
+        for (var i = 0; i < vault_evidence.length; i++) {
+
+            var e = vault_evidence[i];
+
+            if (vault_folder !== 0 && parseInt(e.folder_id, 10) !== vault_folder) {
+                continue;
+            }
+
+            if (term !== '' && (e.evidence_title + ' ' + e.file_name).toLowerCase().indexOf(term) === -1) {
+                continue;
+            }
+
+            out.push(e);
+        }
+
+        return out;
+    }
+
+    function vault_render() {
+
+        var rows = vault_visible();
+        var html = '';
+
+        for (var i = 0; i < rows.length; i++) {
+
+            var e = rows[i];
+            var links = parseInt(e.link_count, 10);
+            var ext = vault_extension_of(e.file_name);
+
+            html += '<tr class="vault__row" data-id="' + e.id + '">'
+                + '<td class="vault__cell-name"><span class="vault__line">'
+                + '<a href="#" class="vault__title evidence__open" data-id="' + e.id + '" title="' + esc(e.evidence_title) + '">' + esc(e.evidence_title) + '</a>'
+                + '<span class="vault__file" title="' + esc(e.file_name) + '">' + esc(e.file_name) + (ext === '' ? '' : ' &middot; ' + esc(ext)) + '</span>'
+                + '</span></td>'
+                + '<td class="vault__col-size">' + vault_size_label(e.file_size) + '</td>'
+                + '<td class="vault__col-date">' + esc(e.date_created_display) + '</td>'
+                + '<td class="vault__col-links">' + (links > 0
+                    ? '<span class="chip">' + links + '</span>'
+                    : '<span class="chip chip--empty">0</span>') + '</td>'
+                + '<td>' + esc(e.uploaded_by_name === null ? '' : e.uploaded_by_name) + '</td>'
+                + '<td class="vault__col-actions">' + (parseInt(e.uploaded_by, 10) === vault_user_id && links === 0
+                    ? '<button type="button" class="btn btn--tertiary btn--sm" data-action="remove" data-id="' + e.id + '" data-title="' + esc(e.evidence_title) + '" title="Remove" aria-label="Remove ' + esc(e.evidence_title) + '"><i class="fa-regular fa-trash-can"></i></button>'
+                    : '') + '</td>'
+                + '</tr>';
+        }
+
+        $('#vault_body').html(html);
+        $('#vault_table').toggle(rows.length > 0);
+        $('#vault_empty').prop('hidden', rows.length > 0).text(vault_evidence.length === 0
+            ? 'No evidence has been collected yet.'
+            : ($('#vault_search').val().trim() === ''
+                ? vault_folder_name_of(vault_folder) + ' has no evidence yet.'
+                : 'No files match your search.'));
+    }
+
+    function vault_load(done) {
+
+        var pending = 2;
+
+        function finish() {
+
+            pending--;
+
+            if (pending > 0) {
+                return;
+            }
+
+            vault_render_tree();
+            vault_render();
+
+            if (done) {
+                done();
+            }
+        }
+
+        ApiDataSvc.apiCall('post', 'portal_folders', {}, function (data) {
+            vault_folders = JSON.parse(data);
+            finish();
+        });
+
+        ApiDataSvc.apiCall('post', 'portal_evidence', {}, function (data) {
+            vault_evidence = JSON.parse(data);
+            finish();
+        });
+    }
+
+    $('#do_vault_open').click(function () {
+
+        vault_folder = 0;
+        $('#vault_search').val('');
+        set_loading('#do_vault_open', true);
+
+        vault_load(function () {
+            set_loading('#do_vault_open', false);
+            modal('vault_modal').show();
+        });
+    });
+
+    $('#vault_folder_tree').on('click', '.vault__link', function () {
+        vault_folder = parseInt($(this).attr('data-id'), 10);
+        vault_render_tree();
+        vault_render();
+    });
+
+    $('#vault_search').on('input', vault_render);
+
+    $('#vault_body').on('click', '.evidence__open', function (e) {
+
+        e.preventDefault();
+
+        var link = this;
+
+        set_loading(link, true);
+
+        ApiDataSvc.apiCall('post', 'portal_evidence_url', { evidence_id: $(this).attr('data-id') }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading(link, false);
+
+            if (obj.success) {
+                window.open(obj.url, '_blank', 'noopener');
+            } else {
+                toastr.error(obj.message);
+            }
+        });
+    });
+
+    $('#vault_body').on('click', '[data-action="remove"]', function () {
+        $('#vault_remove_id').val($(this).attr('data-id'));
+        $('#vault_remove_title').text($(this).attr('data-title'));
+        modal('vault_remove_modal').show();
+    });
+
+    $('#do_vault_remove').click(function () {
+
+        set_loading('#do_vault_remove', true);
+
+        ApiDataSvc.apiCall('post', 'portal_delete_evidence', { evidence_id: $('#vault_remove_id').val() }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            if (obj.success) {
+                vault_load(function () {
+                    set_loading('#do_vault_remove', false);
+                    modal('vault_remove_modal').hide();
+                    toastr.success(obj.message);
+                });
+            } else {
+                set_loading('#do_vault_remove', false);
+                toastr.error(obj.message);
+            }
+        });
+    });
+
+    $('#do_vault_upload_open').click(function () {
+        $('#vault_evidence_title').val('').removeClass('is-invalid');
+        $('#vault_evidence_description').val('');
+        $('#vault_evidence_file').val('').removeClass('is-invalid');
+        $('#vault_upload_folder').text(vault_folder_name_of(vault_folder));
+        modal('vault_upload_modal').show();
+    });
+
+    $('#do_vault_upload').click(function () {
+
+        if ($('#vault_evidence_title').val().trim() === '') {
+            $('#vault_evidence_title').addClass('is-invalid');
+            toastr.error('Evidence title is required');
+            return;
+        }
+
+        if ($('#vault_evidence_file')[0].files.length === 0) {
+            $('#vault_evidence_file').addClass('is-invalid');
+            toastr.error('Choose a file to upload');
+            return;
+        }
+
+        var form_data = new FormData();
+
+        form_data.append('folder_id', vault_folder);
+        form_data.append('evidence_title', $('#vault_evidence_title').val().trim());
+        form_data.append('description', $('#vault_evidence_description').val().trim());
+        form_data.append('evidence_file', $('#vault_evidence_file')[0].files[0]);
+
+        var csrf = document.querySelector('meta[name="csrf-token"]');
+
+        if (csrf) {
+            form_data.append('csrf_token', csrf.getAttribute('content'));
+        }
+
+        set_loading('#do_vault_upload', true);
+
+        $.ajax({
+            url: '/api/portal_upload_evidence',
+            type: 'POST',
+            data: form_data,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+
+                var obj = JSON.parse(data);
+
+                if (!obj.success) {
+                    set_loading('#do_vault_upload', false);
+                    toastr.error(obj.message);
+                    return;
+                }
+
+                vault_load(function () {
+                    set_loading('#do_vault_upload', false);
+                    modal('vault_upload_modal').hide();
+                    toastr.success(obj.message);
+                });
+            },
+            error: function () {
+                set_loading('#do_vault_upload', false);
+                toastr.error('That file could not be uploaded');
+            }
+        });
+    });
 
 });
 </script>
