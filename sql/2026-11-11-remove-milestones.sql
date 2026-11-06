@@ -3,4 +3,4 @@
 --
 --     mysql <database> < sql/2026-11-11-remove-milestones.sql
 
-DROP TABLE item_milestones;
+DROP TABLE IF EXISTS item_milestones;

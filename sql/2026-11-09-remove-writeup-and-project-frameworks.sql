@@ -14,6 +14,6 @@ ALTER TABLE assessments
     DROP COLUMN readiness_text,
     DROP COLUMN decisions_text;
 
-DROP TABLE assessment_documents;
+DROP TABLE IF EXISTS assessment_documents;
 
-DROP TABLE project_standards;
+DROP TABLE IF EXISTS project_standards;
