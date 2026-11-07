@@ -140,6 +140,60 @@ class NotificationsModel extends Model {
         return $this->send($to_array, 0, $subject, $message, $attachments);
     }
 
+    /** Alert for a demo or pricing request sent from the public /demo page. */
+    public function send_lead_alert($lead_type, $first_name, $last_name, $lead_email, $lead_phone, $company_name, $organization_type, $lead_message)
+    {
+        $config = Main::get_config();
+        $to_email = $config['global']['leads_email'] ?? ($config['global']['support_email'] ?? '');
+
+        if ($to_email === '') {
+            return false;
+        }
+
+        $label = ($lead_type === 'pricing' ? 'Pricing request' : 'Demo request');
+        $subject = $label.' from '.$company_name;
+
+        $variables = array(
+            'heading'           => htmlspecialchars($label, ENT_QUOTES, 'UTF-8'),
+            'full_name'         => htmlspecialchars($first_name.' '.$last_name, ENT_QUOTES, 'UTF-8'),
+            'company_name'      => htmlspecialchars($company_name, ENT_QUOTES, 'UTF-8'),
+            'organization_type' => htmlspecialchars($organization_type, ENT_QUOTES, 'UTF-8'),
+            'lead_email'        => htmlspecialchars($lead_email, ENT_QUOTES, 'UTF-8'),
+            'phone_row'         => '',
+            'message_block'     => '',
+            'leads_url'         => $this->app_url().'/admin/leads'
+        );
+
+        if ($lead_phone !== '') {
+            $variables['phone_row'] = '<tr><td style="padding:0 16px 6px 0;color:#7A8794;">Phone</td><td style="padding:0 0 6px 0;">'.htmlspecialchars($lead_phone, ENT_QUOTES, 'UTF-8').'</td></tr>';
+        }
+
+        if ($lead_message !== '') {
+            $variables['message_block'] = '<p style="margin:0 0 20px 0;font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;font-size:14px;line-height:21px;color:#16212E;white-space:pre-wrap;">'.htmlspecialchars($lead_message, ENT_QUOTES, 'UTF-8').'</p>';
+        }
+
+        $message = $this->build_email(
+            'lead_request',
+            $subject,
+            $label.' from '.$first_name.' '.$last_name.' at '.$company_name.'.',
+            'Sent from the request form on the '.Main::site_name().' website.',
+            $variables
+        );
+
+        if ($message === '') {
+            return false;
+        }
+
+        $to_array = array(
+            array(
+                'email' => $to_email,
+                'name'  => Main::site_name()
+            )
+        );
+
+        return $this->send($to_array, 0, $subject, $message);
+    }
+
     /**
      * The single way out. Outside production the recipients are replaced, so a test
      * invite can never reach a real client's inbox, and the subject carries who it

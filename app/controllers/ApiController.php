@@ -6,7 +6,8 @@ class ApiController extends Controller {
     public $public_actions = array(
         'loginAction',
         'forgot_passwordAction',
-        'reset_passwordAction'
+        'reset_passwordAction',
+        'request_demoAction'
     );
 
     /** user_roles.id for Client; a portal account always carries it. */
@@ -27,6 +28,7 @@ class ApiController extends Controller {
     public $subscriptions_model;
     public $poam_model;
     public $item_comments_model;
+    public $leads_model;
 
     public function __construct(){
         parent::__construct();
@@ -42,6 +44,7 @@ class ApiController extends Controller {
         $this->invoices_model = new InvoicesModel();
         $this->poam_model = new PoamModel();
         $this->item_comments_model = new ItemCommentsModel();
+        $this->leads_model = new LeadsModel();
     }
 
     public function loginAction(){
@@ -205,6 +208,100 @@ class ApiController extends Controller {
 
         $response['success'] = true;
         $response['message'] = 'If that account is on our system, a reset link is on its way.';
+        echo json_encode($response);
+    }
+
+    /**
+     * The public demo and pricing form. company_website is a field people never
+     * see, so anything in it came from a bot: it is answered as a success and
+     * dropped. Each address may send five requests an hour.
+     */
+    public function request_demoAction(){
+
+        $response = array(
+            'success' => false,
+            'message' => 'Something went wrong'
+        );
+
+        if ($this->input('company_website') !== '') {
+            $response['success'] = true;
+            $response['message'] = 'Thanks. We will be in touch shortly.';
+            echo json_encode($response);
+            exit;
+        }
+
+        $lead_type = $this->input('lead_type');
+        $first_name = mb_substr($this->input('first_name'), 0, 100);
+        $last_name = mb_substr($this->input('last_name'), 0, 100);
+        $lead_email = mb_substr($this->input('lead_email'), 0, 255);
+        $lead_phone = mb_substr(preg_replace('/[^0-9+()\-. ]/', '', $this->input('lead_phone')), 0, 40);
+        $company_name = mb_substr($this->input('company_name'), 0, 200);
+        $organization_type = $this->input('organization_type');
+        $lead_message = mb_substr($this->input('lead_message'), 0, 4000);
+
+        if (!in_array($lead_type, array('demo', 'pricing'), true)) {
+            $response['message'] = 'Choose a demo or pricing request';
+            echo json_encode($response);
+            exit;
+        }
+
+        if ($first_name === '' || $last_name === '' || $company_name === '') {
+            $response['message'] = 'Please fill in the required fields';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!filter_var($lead_email, FILTER_VALIDATE_EMAIL)) {
+            $response['message'] = 'Enter a valid work email address';
+            echo json_encode($response);
+            exit;
+        }
+
+        if (!in_array($organization_type, LeadsModel::ORGANIZATION_TYPES, true)) {
+            $response['message'] = 'Choose your organization type';
+            echo json_encode($response);
+            exit;
+        }
+
+        $ip_address = $this->get_ip_address();
+
+        if ($this->leads_model->count_recent_from_ip($ip_address) >= 5) {
+            $response['message'] = 'Too many requests. Please try again later.';
+            echo json_encode($response);
+            exit;
+        }
+
+        $lead_id = $this->leads_model->add_lead(
+            $lead_type,
+            $first_name,
+            $last_name,
+            $lead_email,
+            $lead_phone,
+            $company_name,
+            $organization_type,
+            $lead_message,
+            $ip_address,
+            $this->get_user_agent()
+        );
+
+        if (empty($lead_id)) {
+            echo json_encode($response);
+            exit;
+        }
+
+        $this->notifications_model->send_lead_alert(
+            $lead_type,
+            $first_name,
+            $last_name,
+            $lead_email,
+            $lead_phone,
+            $company_name,
+            $organization_type,
+            $lead_message
+        );
+
+        $response['success'] = true;
+        $response['message'] = 'Thanks. We will be in touch shortly.';
         echo json_encode($response);
     }
 
@@ -1984,6 +2081,20 @@ class ApiController extends Controller {
         $this->refuse_unless_global_admin();
 
         echo json_encode($this->companies_model->get_companies());
+    }
+
+    public function global_leadsAction(){
+
+        $this->refuse_unless_global_admin();
+
+        $sql_date_format = '%m/%d/%Y';
+        $own = $this->companies_model->get_company(Session::get('company_id'));
+
+        if (is_array($own) && count($own) === 1 && !empty($own[0]['date_format_sql'])) {
+            $sql_date_format = $own[0]['date_format_sql'];
+        }
+
+        echo json_encode($this->leads_model->load_leads($sql_date_format));
     }
 
     /**

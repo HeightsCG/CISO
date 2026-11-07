@@ -84,6 +84,11 @@ class View {
         return $this->protected;
     }
 
+    public function demo_page(): void
+    {
+        require Main::lib_path().'/Layout/demo.php';
+    }
+
     public function login_form(): void
     {
         $file = $this->login_file();
