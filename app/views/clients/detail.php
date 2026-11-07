@@ -5,6 +5,9 @@
         <div class="headline__text">
             <h1 class="headline__title"><button type="button" class="headline__edit" id="do_rename_open" aria-label="Edit name"><?php echo htmlspecialchars($this->client['company_name'], ENT_QUOTES, 'UTF-8'); ?></button></h1>
         </div>
+        <div class="headline__actions">
+            <a class="btn btn--secondary btn--pill" href="/portal/preview/id/<?php echo (int) $this->client['id']; ?>"><i class="fa-regular fa-eye"></i> View Portal</a>
+        </div>
     </header>
 
     <div class="row g-4">

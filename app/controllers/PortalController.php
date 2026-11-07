@@ -25,6 +25,38 @@ class PortalController extends Controller {
         $this->view->render();
     }
 
+    /**
+     * Staff open a client's portal as that client sees it. Only reads are let
+     * through for a preview; every portal write still requires a client account.
+     */
+    public function previewAction(){
+
+        if (Session::get('user_type') !== 'staff') {
+            header('Location: /');
+            exit;
+        }
+
+        $client = $this->clients_model->get_client((int) Main::get_param('id'), Session::get('company_id'));
+
+        if (!is_array($client) || count($client) !== 1) {
+            Errors::page_not_found();
+            return;
+        }
+
+        Session::set('portal_preview_client_id', (int) $client[0]['id']);
+        header('Location: /portal');
+        exit;
+    }
+
+    public function exitAction(){
+
+        $client_id = (int) Session::get('portal_preview_client_id');
+        Session::set('portal_preview_client_id', 0);
+
+        header('Location: '.($client_id > 0 ? '/clients/detail/id/'.$client_id : '/clients'));
+        exit;
+    }
+
     public function invoicesAction(){
 
         $client = $this->client();
@@ -88,14 +120,21 @@ class PortalController extends Controller {
      */
     private function client()
     {
-        if (Session::get('user_type') !== 'portal') {
+        $preview = Session::get('user_type') === 'staff' && (int) Session::get('portal_preview_client_id') > 0;
+
+        if (Session::get('user_type') !== 'portal' && !$preview) {
             return null;
         }
 
-        $client = $this->clients_model->get_client(Session::get('client_id'), Session::get('company_id'));
+        $client_id = $preview ? (int) Session::get('portal_preview_client_id') : Session::get('client_id');
+        $client = $this->clients_model->get_client($client_id, Session::get('company_id'));
 
         if (!is_array($client) || count($client) !== 1) {
             return null;
+        }
+
+        if ($preview) {
+            $this->view->preview_client = $client[0];
         }
 
         return $client[0];

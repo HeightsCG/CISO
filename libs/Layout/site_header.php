@@ -53,7 +53,7 @@ $(document).ready(function () {
 });
 </script>
 </head>
-<body class="app">
+<body class="app<?php echo !empty($this->preview_client) ? ' is-portal-preview' : ''; ?>">
 
 <div class="shell<?php echo (AiAssistant::configured() && Session::get('ai_panel_open') !== 0) ? ' has-assist' : ''; ?>" id="shell">
     <aside class="shell__nav" id="shell_nav">
@@ -63,7 +63,7 @@ $(document).ready(function () {
         <nav class="shell__menu" aria-label="Primary">
             <div class="shell__group">
                 <p class="shell__group-label">Menu</p>
-                <?php if (Session::get('user_type') === 'portal') { ?>
+                <?php if (Session::get('user_type') === 'portal' || !empty($this->preview_client)) { ?>
                 <a class="shell__link<?php echo ($this->controller == 'portal' && $this->method != 'invoices') ? ' is-active' : ''; ?>" href="/portal">
                     <i class="fa-thin fa-house"></i>
                     <span>Your Assessments</span>
@@ -155,3 +155,10 @@ $(document).ready(function () {
             </div>
         </header>
         <main class="shell__workspace">
+            <?php if (!empty($this->preview_client)) { ?>
+            <div class="preview-bar" role="status">
+                <i class="fa-regular fa-eye" aria-hidden="true"></i>
+                <span class="preview-bar__text">Viewing <strong><?php echo htmlspecialchars(html_entity_decode($this->preview_client['company_name'], ENT_QUOTES, 'UTF-8'), ENT_QUOTES, 'UTF-8'); ?></strong>'s portal. Changes are switched off.</span>
+                <a class="btn btn--secondary btn--sm preview-bar__exit" href="/portal/exit">Exit Preview</a>
+            </div>
+            <?php } ?>

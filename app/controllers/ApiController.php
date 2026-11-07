@@ -964,40 +964,69 @@ class ApiController extends Controller {
     }
 
     /**
+     * The client whose portal this request is for. A client account always gets
+     * its own. Staff previewing a client's portal get that client only for reads,
+     * and only while the client still belongs to their organisation, so every
+     * write in the portal keeps refusing staff exactly as before.
+     */
+    private function portal_client_id(bool $read = false): int
+    {
+        if (Session::get('user_type') === 'portal') {
+            return (int) Session::get('client_id');
+        }
+
+        $preview_id = (int) Session::get('portal_preview_client_id');
+
+        if (!$read || Session::get('user_type') !== 'staff' || $preview_id <= 0) {
+            return 0;
+        }
+
+        $client = $this->clients_model->get_client($preview_id, Session::get('company_id'));
+
+        return (is_array($client) && count($client) === 1) ? $preview_id : 0;
+    }
+
+    /**
      * client_id comes from the session, never from POST: it is the whole of the
      * caller's entitlement, so accepting it as a parameter would let any signed-in
      * client name someone else's.
      */
     public function portal_assessmentsAction(){
 
-        if (Session::get('user_type') !== 'portal') {
+        $client_id = $this->portal_client_id(true);
+
+        if ($client_id === 0) {
             echo json_encode(array());
             exit;
         }
 
-        $data = $this->assessments_model->client_assessments(Session::get('client_id'), Session::get('company_id'));
+        $data = $this->assessments_model->client_assessments($client_id, Session::get('company_id'));
         echo json_encode($data);
     }
 
     public function portal_foldersAction(){
 
-        if (Session::get('user_type') !== 'portal') {
+        $client_id = $this->portal_client_id(true);
+
+        if ($client_id === 0) {
             echo json_encode(array());
             exit;
         }
 
-        $data = $this->evidence_model->portal_folders(Session::get('client_id'), Session::get('company_id'));
+        $data = $this->evidence_model->portal_folders($client_id, Session::get('company_id'));
         echo json_encode($data);
     }
 
     public function portal_evidenceAction(){
 
-        if (Session::get('user_type') !== 'portal') {
+        $client_id = $this->portal_client_id(true);
+
+        if ($client_id === 0) {
             echo json_encode(array());
             exit;
         }
 
-        $data = $this->evidence_model->portal_evidence(Session::get('client_id'), Session::get('company_id'));
+        $data = $this->evidence_model->portal_evidence($client_id, Session::get('company_id'));
         echo json_encode($data);
     }
 
@@ -1013,7 +1042,7 @@ class ApiController extends Controller {
             'message' => 'Something went wrong'
         );
 
-        $evidence = $this->portal_evidence_row((int) ($this->post['evidence_id'] ?? 0));
+        $evidence = $this->portal_evidence_row((int) ($this->post['evidence_id'] ?? 0), true);
 
         if ($evidence === null) {
             $response['message'] = 'That evidence could not be found';
@@ -1039,9 +1068,11 @@ class ApiController extends Controller {
      * One vault row the calling client is entitled to see, or null. Reached by id
      * within the organisation, then re-checked against the caller's own client.
      */
-    private function portal_evidence_row($evidence_id)
+    private function portal_evidence_row($evidence_id, bool $read = false)
     {
-        if (Session::get('user_type') !== 'portal' || empty($evidence_id)) {
+        $client_id = $this->portal_client_id($read);
+
+        if ($client_id === 0 || empty($evidence_id)) {
             return null;
         }
 
@@ -1055,7 +1086,7 @@ class ApiController extends Controller {
             return null;
         }
 
-        if ((int) $evidence[0]['client_id'] !== (int) Session::get('client_id')) {
+        if ((int) $evidence[0]['client_id'] !== $client_id) {
             return null;
         }
 
@@ -1064,14 +1095,14 @@ class ApiController extends Controller {
 
     public function portal_item_evidenceAction(){
 
-        if ($this->portal_item_row((int) ($this->post['item_id'] ?? 0)) === null) {
+        if ($this->portal_item_row((int) ($this->post['item_id'] ?? 0), true) === null) {
             echo json_encode(array());
             exit;
         }
 
         $data = $this->evidence_model->portal_item_evidence(
             (int) $this->post['item_id'],
-            Session::get('client_id'),
+            $this->portal_client_id(true),
             Session::get('company_id')
         );
 
@@ -1186,9 +1217,11 @@ class ApiController extends Controller {
      * assessment's client_id, so the check needs no extra query - and its
      * ai.* includes notes, which stays server-side.
      */
-    private function portal_item_row($item_id)
+    private function portal_item_row($item_id, bool $read = false)
     {
-        if (Session::get('user_type') !== 'portal' || empty($item_id)) {
+        $client_id = $this->portal_client_id($read);
+
+        if ($client_id === 0 || empty($item_id)) {
             return null;
         }
 
@@ -1198,7 +1231,7 @@ class ApiController extends Controller {
             return null;
         }
 
-        if ((int) $item[0]['client_id'] !== (int) Session::get('client_id')) {
+        if ((int) $item[0]['client_id'] !== $client_id) {
             return null;
         }
 
@@ -1226,14 +1259,16 @@ class ApiController extends Controller {
 
     public function portal_itemsAction(){
 
-        if (Session::get('user_type') !== 'portal') {
+        $client_id = $this->portal_client_id(true);
+
+        if ($client_id === 0) {
             echo json_encode(array());
             exit;
         }
 
         $data = $this->assessments_model->portal_items(
             (int) ($this->post['assessment_id'] ?? 0),
-            Session::get('client_id'),
+            $client_id,
             Session::get('company_id')
         );
 
@@ -6132,9 +6167,11 @@ class ApiController extends Controller {
      * draft is excluded outright - it is staff work in progress that Stripe has
      * never sent, and may carry an internal memo.
      */
-    private function portal_invoice_row($invoice_id)
+    private function portal_invoice_row($invoice_id, bool $read = false)
     {
-        if (Session::get('user_type') !== 'portal' || empty($invoice_id)) {
+        $client_id = $this->portal_client_id($read);
+
+        if ($client_id === 0 || empty($invoice_id)) {
             return null;
         }
 
@@ -6144,7 +6181,7 @@ class ApiController extends Controller {
             return null;
         }
 
-        if ((int) $invoice[0]['client_id'] !== (int) Session::get('client_id')) {
+        if ((int) $invoice[0]['client_id'] !== $client_id) {
             return null;
         }
 
@@ -6162,12 +6199,14 @@ class ApiController extends Controller {
      */
     public function portal_invoicesAction(){
 
-        if (Session::get('user_type') !== 'portal') {
+        $client_id = $this->portal_client_id(true);
+
+        if ($client_id === 0) {
             echo json_encode(array());
             exit;
         }
 
-        echo json_encode($this->invoices_model->portal_invoices(Session::get('client_id'), Session::get('company_id')));
+        echo json_encode($this->invoices_model->portal_invoices($client_id, Session::get('company_id')));
     }
 
     /**
@@ -6184,14 +6223,13 @@ class ApiController extends Controller {
             'message' => 'That invoice could not be found'
         );
 
-        $invoice = $this->portal_invoice_row((int) ($this->post['invoice_id'] ?? 0));
+        $link_type = ($this->post['link_type'] ?? 'pay') === 'pdf' ? 'pdf' : 'pay';
+        $invoice = $this->portal_invoice_row((int) ($this->post['invoice_id'] ?? 0), $link_type === 'pdf');
 
         if ($invoice === null) {
             echo json_encode($response);
             exit;
         }
-
-        $link_type = ($this->post['link_type'] ?? 'pay') === 'pdf' ? 'pdf' : 'pay';
 
         /**
          * Re-read from Stripe so a voided invoice cannot still be paid from a stale
@@ -6992,7 +7030,7 @@ class ApiController extends Controller {
 
     public function portal_poam_item_loadAction(){
 
-        $item = $this->poam_portal_item((int) ($this->post['item_id'] ?? 0));
+        $item = $this->poam_portal_item((int) ($this->post['item_id'] ?? 0), true);
 
         echo json_encode($this->poam_item_payload($item, true));
         exit;
@@ -7376,15 +7414,17 @@ class ApiController extends Controller {
     }
 
     /** A record of the signed-in client's own assessments, for portal users only. */
-    private function poam_portal_item(int $item_id): array
+    private function poam_portal_item(int $item_id, bool $read = false): array
     {
-        if (Session::get('user_type') !== 'portal') {
+        $client_id = $this->portal_client_id($read);
+
+        if ($client_id === 0) {
             $this->poam_fail('That item could not be found');
         }
 
         $rows = $this->poam_model->get_item($item_id, Session::get('company_id'));
 
-        if (count($rows) !== 1 || !PoamModel::portal_owns($rows[0], Session::get('user_type'), Session::get('client_id'))) {
+        if (count($rows) !== 1 || !PoamModel::portal_owns($rows[0], 'portal', $client_id)) {
             $this->poam_fail('That item could not be found');
         }
 
@@ -7393,11 +7433,13 @@ class ApiController extends Controller {
 
     private function refuse_unless_poam_portal(int $assessment_id): void
     {
-        if (Session::get('user_type') !== 'portal' || empty(Session::get('client_id'))) {
+        $client_id = $this->portal_client_id(true);
+
+        if ($client_id === 0) {
             $this->poam_fail('That assessment could not be found');
         }
 
-        $assessment = $this->assessments_model->client_assessment($assessment_id, Session::get('client_id'), Session::get('company_id'));
+        $assessment = $this->assessments_model->client_assessment($assessment_id, $client_id, Session::get('company_id'));
 
         if (!is_array($assessment) || count($assessment) !== 1) {
             $this->poam_fail('That assessment could not be found');
@@ -7436,7 +7478,7 @@ class ApiController extends Controller {
     /** The comments on one control of the signed-in client's own assessment. */
     public function portal_item_comments_loadAction(){
 
-        $item = $this->comment_portal_item($this->poam_post_id('item_id'));
+        $item = $this->comment_portal_item($this->poam_post_id('item_id'), true);
 
         $this->comment_list($item);
     }
@@ -7483,9 +7525,9 @@ class ApiController extends Controller {
     }
 
     /** A control of the signed-in client's own assessment, for portal users only. */
-    private function comment_portal_item(int $item_id): array
+    private function comment_portal_item(int $item_id, bool $read = false): array
     {
-        $item = $this->portal_item_row($item_id);
+        $item = $this->portal_item_row($item_id, $read);
 
         if ($item === null) {
             $this->comment_fail('That control could not be found');

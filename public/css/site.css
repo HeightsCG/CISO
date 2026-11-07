@@ -11829,3 +11829,51 @@ a.land__nav-cta:hover {
     content: "\2713";
     margin-right: var(--space-1);
 }
+
+.preview-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--fs-body);
+    color: var(--text-primary);
+    background: var(--accent-subtle);
+    border: 1px solid var(--accent-border);
+    border-radius: var(--radius);
+}
+
+.preview-bar > i {
+    color: var(--accent);
+}
+
+.preview-bar__text {
+    flex: 1 1 auto;
+}
+
+.is-portal-preview #do_attach_open,
+.is-portal-preview #do_item_upload_open,
+.is-portal-preview #item_comment_text,
+.is-portal-preview .comments__add,
+.is-portal-preview #do_poam_milestone_add,
+.is-portal-preview #do_poam_ev_attach_open,
+.is-portal-preview #do_poam_ev_upload_open,
+.is-portal-preview #do_poam_save,
+.is-portal-preview #do_vault_upload_open,
+.is-portal-preview [data-action="unlink"],
+.is-portal-preview [data-action="attach"],
+.is-portal-preview [data-action="remove"],
+.is-portal-preview [data-action="pay"],
+.is-portal-preview [data-action="poam_ev_unlink"],
+.is-portal-preview [data-action^="comment"],
+.is-portal-preview [data-action^="ms_"] {
+    display: none !important;
+}
+
+.is-portal-preview #poam_owner,
+.is-portal-preview #poam_status,
+.is-portal-preview #poam_resources,
+.is-portal-preview #poam_comments {
+    pointer-events: none;
+    background-color: var(--surface-inset);
+}
