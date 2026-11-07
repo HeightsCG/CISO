@@ -11,6 +11,11 @@ class StandardsController extends Controller {
 
     public function indexAction() {
 
+        if ((int) Session::get('user_id') <= 0) {
+            header('Location: /');
+            exit;
+        }
+
         if ((int) Session::get('global_admin') !== 1) {
             Errors::access_denied();
             return;
@@ -20,6 +25,11 @@ class StandardsController extends Controller {
     }
 
     public function detailAction() {
+
+        if ((int) Session::get('user_id') <= 0) {
+            header('Location: /');
+            exit;
+        }
 
         if ((int) Session::get('global_admin') !== 1) {
             Errors::access_denied();
@@ -38,6 +48,11 @@ class StandardsController extends Controller {
     }
 
     public function formAction() {
+
+        if ((int) Session::get('user_id') <= 0) {
+            header('Location: /');
+            exit;
+        }
 
         if ((int) Session::get('global_admin') !== 1) {
             Errors::access_denied();

@@ -2,7 +2,7 @@
 
 > CISO.aero is a cybersecurity governance, risk and compliance (GRC) platform built for aviation. Consultants and in-house security teams use it to assess airlines, airports, MROs, design and production organisations and their suppliers against EASA Part-IS, TSA, CMMC, NIST and other frameworks, collect evidence once and reuse it across frameworks, and issue reports for leadership.
 
-CISO.aero is a private, sign-in-only web application. The public site is the home page at https://ciso.aero/. Contact: support@ciso.aero.
+CISO.aero is a private, sign-in-only web application. The public pages are the home page at https://ciso.aero/ and the demo and pricing request page at https://ciso.aero/demo. Contact: support@ciso.aero.
 
 ## What it does
 
@@ -41,6 +41,11 @@ CISO.aero is a private, sign-in-only web application. The public site is the hom
 2. Assess and collect evidence: work through each control, mark its points of focus, and attach evidence from the vault.
 3. Report and follow through: issue the reports, agree remediation with leadership, and reassess against the baseline.
 
+## Demo and pricing
+
+Pricing is quoted on request, based on the size of the team and the number of organizations being assessed. Book a live demo or request pricing at https://ciso.aero/demo; the form asks for name, work email, company and organization type, and the team replies by email.
+
 ## Links
 
 - [Home page](https://ciso.aero/): product overview and sign-in
+- [Book a demo or request pricing](https://ciso.aero/demo): request a live walkthrough or a price quote

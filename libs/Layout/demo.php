@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<?php require Main::lib_path().'/Layout/analytics.php'; ?>
 <?php echo CSRF::meta(); ?>
-<?php echo Main::head_meta(); ?>
-<?php echo Main::landing_meta(); ?>
+<?php echo Main::head_meta('Book a Demo or Request Pricing | '.Main::site_name(), 'See CISO.aero, the aviation cybersecurity GRC platform, in a live demo or request pricing for your team. EASA Part-IS, TSA, CMMC, NIST and more.', '/demo'); ?>
+<?php echo Main::landing_meta('/demo', 'Book a demo or request pricing | '.Main::site_name()); ?>
 <title>Book a demo or request pricing | <?php echo Main::site_name(); ?></title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">

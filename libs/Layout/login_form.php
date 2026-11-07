@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<?php require Main::lib_path().'/Layout/analytics.php'; ?>
 <?php echo CSRF::meta(); ?>
-<?php echo Main::head_meta(); ?>
+<?php echo Main::head_meta(Main::site_name().' | Aviation cybersecurity governance and compliance platform'); ?>
 <?php echo Main::landing_meta(); ?>
 <title><?php echo Main::site_name(); ?> | Aviation cybersecurity governance and compliance platform</title>
 

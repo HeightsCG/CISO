@@ -83,11 +83,12 @@ class Main {
      * unfurl caches already hold, which key on the image URL and not on its
      * contents.
      */
-    public static function head_meta(): string
+    public static function head_meta(string $title = '', string $description = '', string $path = '/'): string
     {
-        $base        = self::get_base_domain();
+        $base        = self::canonical_base();
         $name        = self::site_name();
-        $description = 'Aviation cybersecurity governance, centralized. Manage risk, compliance, evidence, and executive oversight from one secure platform.';
+        $title       = ($title === '' ? $name : $title);
+        $description = ($description === '' ? 'Aviation cybersecurity governance, centralized. Manage risk, compliance, evidence, and executive oversight from one secure platform.' : $description);
         $card        = $base.'/images/og-card.png?v='.(int) @filemtime(self::app_path().'/public/images/og-card.png');
         $card_alt    = 'CISO.aero: Aviation cybersecurity governance, centralized.';
 
@@ -105,9 +106,9 @@ class Main {
             '<meta name="description" content="'.self::attr($description).'">',
             '<meta property="og:type" content="website">',
             '<meta property="og:site_name" content="'.self::attr($name).'">',
-            '<meta property="og:title" content="'.self::attr($name).'">',
+            '<meta property="og:title" content="'.self::attr($title).'">',
             '<meta property="og:description" content="'.self::attr($description).'">',
-            '<meta property="og:url" content="'.self::attr($base.'/').'">',
+            '<meta property="og:url" content="'.self::attr($base.$path).'">',
             '<meta property="og:image" content="'.self::attr($card).'">',
             '<meta property="og:image:secure_url" content="'.self::attr(preg_replace('#^http://#', 'https://', $card)).'">',
             '<meta property="og:image:type" content="image/png">',
@@ -116,7 +117,7 @@ class Main {
             '<meta property="og:image:alt" content="'.self::attr($card_alt).'">',
             '<meta property="og:locale" content="en_US">',
             '<meta name="twitter:card" content="summary_large_image">',
-            '<meta name="twitter:title" content="'.self::attr($name).'">',
+            '<meta name="twitter:title" content="'.self::attr($title).'">',
             '<meta name="twitter:description" content="'.self::attr($description).'">',
             '<meta name="twitter:image" content="'.self::attr($card).'">',
             '<meta name="twitter:image:alt" content="'.self::attr($card_alt).'">'
@@ -130,14 +131,15 @@ class Main {
      * visitors get the landing page on every URL, so only the root is
      * indexable and every other path points its canonical at the root.
      */
-    public static function landing_meta(): string
+    public static function landing_meta(string $path = '/', string $page_name = ''): string
     {
-        $base   = self::get_base_domain();
+        $base   = self::canonical_base();
         $name   = self::site_name();
         $home   = $base.'/';
+        $page   = $base.$path;
         $robots = 'noindex, follow';
 
-        if (self::get_url() === array()) {
+        if (self::get_url() === array() || $path !== '/') {
             $robots = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
         }
 
@@ -167,6 +169,13 @@ class Main {
                     'url'          => $home,
                     'logo'         => $base.'/images/icon-512.png',
                     'email'        => self::config('global', 'support_email'),
+                    'contactPoint' => array(
+                        '@type'       => 'ContactPoint',
+                        'contactType' => 'sales',
+                        'email'       => self::config('global', 'support_email'),
+                        'url'         => $base.'/demo',
+                        'availableLanguage' => 'en'
+                    ),
                     'description'  => 'CISO.aero is a cybersecurity governance, risk and compliance platform built for aviation: airlines, airports, MROs, design and production organisations and their suppliers.',
                     'knowsAbout'   => array_merge(
                         array(
@@ -216,10 +225,10 @@ class Main {
                     )
                 ),
                 array(
-                    '@type'       => 'WebPage',
-                    '@id'         => $home.'#webpage',
-                    'url'         => $home,
-                    'name'        => $name.' | Aviation cybersecurity governance',
+                    '@type'       => ($path === '/' ? 'WebPage' : 'ContactPage'),
+                    '@id'         => $page.'#webpage',
+                    'url'         => $page,
+                    'name'        => ($page_name === '' ? $name.' | Aviation cybersecurity governance' : $page_name),
                     'inLanguage'  => 'en',
                     'isPartOf'    => array(
                         '@id' => $home.'#website'
@@ -234,7 +243,7 @@ class Main {
 
         $tags = array(
             '<meta name="robots" content="'.self::attr($robots).'">',
-            '<link rel="canonical" href="'.self::attr($home).'">',
+            '<link rel="canonical" href="'.self::attr($page).'">',
             '<link rel="alternate" type="text/markdown" title="'.self::attr($name).' summary for AI assistants" href="/llms.txt">',
             '<link rel="sitemap" type="application/xml" href="/sitemap.xml">',
             '<script type="application/ld+json">'.json_encode($graph, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG).'</script>'
@@ -322,6 +331,16 @@ class Main {
     public static function do_logout(): void
     {
         Session::destroy();
+    }
+
+    /** The public address search engines should list, whatever host served the request. */
+    public static function canonical_base(): string
+    {
+        if (self::get_environment() === 'production') {
+            return 'https://ciso.aero';
+        }
+
+        return self::get_base_domain();
     }
 
     public static function get_base_domain(): string

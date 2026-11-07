@@ -14,6 +14,11 @@ class UsersController extends Controller {
      */
     public function indexAction(){
 
+        if ((int) Session::get('user_id') <= 0) {
+            header('Location: /');
+            exit;
+        }
+
         if ((int) Session::get('global_admin') !== 1) {
             Errors::access_denied();
             return;
