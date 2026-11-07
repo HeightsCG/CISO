@@ -86,13 +86,9 @@ $(document).ready(function () {
                     <span>Assessments</span>
                 </a>
                 <?php if (Session::get('global_admin') === 1) { ?>
-                <a class="shell__link<?php echo $this->controller == 'standards' ? ' is-active' : ''; ?>" href="/standards">
-                    <i class="fa-thin fa-gear"></i>
-                    <span>Standards</span>
-                </a>
-                <a class="shell__link<?php echo $this->controller == 'users' ? ' is-active' : ''; ?>" href="/users">
-                    <i class="fa-thin fa-users"></i>
-                    <span>User Accounts</span>
+                <a class="shell__link<?php echo in_array($this->controller, array('admin', 'standards', 'users'), true) ? ' is-active' : ''; ?>" href="/admin">
+                    <i class="fa-thin fa-user-shield"></i>
+                    <span>Admin</span>
                 </a>
                 <?php } ?>
                 <?php } ?>

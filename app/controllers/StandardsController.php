@@ -10,10 +10,21 @@ class StandardsController extends Controller {
     }
 
     public function indexAction() {
+
+        if ((int) Session::get('global_admin') !== 1) {
+            Errors::access_denied();
+            return;
+        }
+
         $this->view->render();
     }
 
     public function detailAction() {
+
+        if ((int) Session::get('global_admin') !== 1) {
+            Errors::access_denied();
+            return;
+        }
 
         $standard = $this->standards_model->get_standard(Main::get_param('id'), Session::get('company_id'));
 
@@ -27,6 +38,11 @@ class StandardsController extends Controller {
     }
 
     public function formAction() {
+
+        if ((int) Session::get('global_admin') !== 1) {
+            Errors::access_denied();
+            return;
+        }
 
         $standard_id = Main::get_param('id');
 

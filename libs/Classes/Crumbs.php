@@ -96,13 +96,20 @@ class Crumbs
                     ($subscription === null ? 'New Subscription' : $subscription['subscription_name'])
                 );
 
+            case 'admin/index':
+                return array(
+                    array('Admin', '')
+                );
+
             case 'standards/index':
                 return array(
+                    array('Admin', '/admin'),
                     array('Standards', '')
                 );
 
             case 'standards/detail':
                 return array(
+                    array('Admin', '/admin'),
                     array('Standards', '/standards'),
                     array($standard['standard_name'] ?? 'Standard', '')
                 );
@@ -110,10 +117,12 @@ class Crumbs
             case 'standards/form':
                 return ($standard === null
                     ? array(
+                        array('Admin', '/admin'),
                         array('Standards', '/standards'),
                         array('Add Standard', '')
                     )
                     : array(
+                        array('Admin', '/admin'),
                         array('Standards', '/standards'),
                         array($standard['standard_name'], '/standards/detail/id/'.((int) $standard['id'])),
                         array('Edit', '')
@@ -132,6 +141,7 @@ class Crumbs
 
             case 'users/index':
                 return array(
+                    array('Admin', '/admin'),
                     array('User Accounts', '')
                 );
 
