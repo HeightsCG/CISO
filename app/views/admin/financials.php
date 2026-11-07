@@ -107,7 +107,7 @@ $(document).ready(function () {
 
             var s = subscriptions[i];
 
-            if (s.subscription_status === 'active' || s.subscription_status === 'past_due') {
+            if ((s.subscription_status === 'active' || s.subscription_status === 'past_due') && s.monthly_cents > 0) {
                 mrr += s.monthly_cents;
                 paying++;
             }
@@ -207,7 +207,7 @@ $(document).ready(function () {
 
             html += '<tr>'
                 + '<td><span class="listpage__name">' + esc(s.company_name) + '</span></td>'
-                + '<td>' + esc(s.plan_name) + '</td>'
+                + '<td>' + esc(s.plan_name) + (s.discount_label === '' ? '' : '<span class="listpage__sub">' + esc(s.discount_label) + '</span>') + '</td>'
                 + '<td>' + status_badge(s) + '</td>'
                 + '<td class="num">' + money(s.monthly_cents) + '</td>'
                 + '<td>' + esc(s.started_display) + '</td>'

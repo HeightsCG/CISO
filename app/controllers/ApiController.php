@@ -2211,6 +2211,30 @@ class ApiController extends Controller {
                 $period_end = max($period_end, (int) ($item['current_period_end'] ?? 0));
             }
 
+            $discount = StripeService::subscription_discount($subscription);
+            $discount_label = '';
+
+            if (!empty($discount) && ($discount['ends'] === 0 || $discount['ends'] > time())) {
+
+                $months = 1;
+                $first = $subscription['items']['data'][0]['price']['recurring'] ?? array();
+                $count = max(1, (int) ($first['interval_count'] ?? 1));
+
+                if (($first['interval'] ?? 'month') === 'year') {
+                    $months = 12 * $count;
+                } elseif (($first['interval'] ?? 'month') === 'month') {
+                    $months = $count;
+                }
+
+                if ($discount['percent_off'] > 0) {
+                    $monthly_cents = $monthly_cents * (1 - min(100, $discount['percent_off']) / 100);
+                } elseif ($discount['amount_off'] > 0) {
+                    $monthly_cents = max(0, $monthly_cents - $discount['amount_off'] / $months);
+                }
+
+                $discount_label = $discount['label'];
+            }
+
             $ended_at = (int) ($subscription['ended_at'] ?? 0);
             $canceled_at = (int) ($subscription['canceled_at'] ?? 0);
             $cancelling = !empty($subscription['cancel_at_period_end']) || !empty($subscription['cancel_at']);
@@ -2223,6 +2247,7 @@ class ApiController extends Controller {
                 'subscription_status' => $subscription['status'],
                 'currency'        => $currency,
                 'monthly_cents'   => (int) round($monthly_cents),
+                'discount_label'  => $discount_label,
                 'cancelling'      => $cancelling,
                 'started_display' => date($date_format, (int) $subscription['start_date']),
                 'renews_display'  => ($period_end > 0 && $subscription['status'] !== 'canceled') ? date($date_format, $period_end) : '',

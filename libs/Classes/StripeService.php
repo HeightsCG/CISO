@@ -461,7 +461,8 @@ class StripeService {
         try {
             $list = self::client()->subscriptions->all(array(
                 'status' => 'all',
-                'limit'  => 100
+                'limit'  => 100,
+                'expand' => array('data.discounts')
             ));
 
             $subscriptions = array();
@@ -575,9 +576,11 @@ class StripeService {
             }
 
             return array(
-                'free'  => (float) ($coupon['percent_off'] ?? 0) >= 100,
-                'ends'  => (int) ($discount['end'] ?? 0),
-                'label' => self::coupon_label($coupon)
+                'free'        => (float) ($coupon['percent_off'] ?? 0) >= 100,
+                'ends'        => (int) ($discount['end'] ?? 0),
+                'label'       => self::coupon_label($coupon),
+                'percent_off' => (float) ($coupon['percent_off'] ?? 0),
+                'amount_off'  => (int) ($coupon['amount_off'] ?? 0)
             );
         }
 
