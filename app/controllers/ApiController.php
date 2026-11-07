@@ -2113,6 +2113,7 @@ class ApiController extends Controller {
         $lookup = StripeService::all_platform_subscriptions();
 
         if (!$lookup['reachable']) {
+            $response['message'] = 'Stripe could not be reached: '.StripeService::last_error();
             echo json_encode($response);
             exit;
         }

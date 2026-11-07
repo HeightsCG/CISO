@@ -231,7 +231,7 @@ $(document).ready(function () {
 
         if (!response.success) {
             toastr.error(response.message);
-            $('#subscriptions_empty').text(response.message + '.');
+            $('#subscriptions_empty').text(response.message);
             return;
         }
 

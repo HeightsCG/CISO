@@ -422,19 +422,28 @@ class StripeService {
     public static function all_platform_subscriptions(): array
     {
         if (!self::configured()) {
+            self::$last_error = 'Stripe is not configured on this server';
             return array(
                 'reachable'     => false,
                 'subscriptions' => array()
             );
         }
 
-        try {
-            $products = array();
+        $products = array();
 
+        try {
             foreach (self::client()->products->all(array('limit' => 100))->autoPagingIterator() as $product) {
                 $products[$product->id] = $product->name;
             }
+        } catch (\Throwable $e) {
+            self::fail('platform product names', $e);
 
+            foreach (self::platform_plans() as $plan) {
+                $products['price:'.$plan['price_id']] = $plan['name'];
+            }
+        }
+
+        try {
             $list = self::client()->subscriptions->all(array(
                 'status' => 'all',
                 'limit'  => 100
@@ -452,7 +461,7 @@ class StripeService {
 
                 foreach ($row['items']['data'] as $i => $item) {
                     $product_id = is_array($item['price']['product']) ? $item['price']['product']['id'] : (string) $item['price']['product'];
-                    $row['items']['data'][$i]['product_name'] = $products[$product_id] ?? '';
+                    $row['items']['data'][$i]['product_name'] = $products[$product_id] ?? ($products['price:'.$item['price']['id']] ?? '');
                 }
 
                 $subscriptions[] = $row;
