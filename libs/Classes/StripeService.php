@@ -331,7 +331,7 @@ class StripeService {
                 'customer' => $customer_id,
                 'status'   => 'all',
                 'limit'    => 10,
-                'expand'   => array('data.default_payment_method')
+                'expand'   => array('data.default_payment_method', 'data.discounts')
             ));
 
             /* Cancelled and incomplete subscriptions stay on the customer forever,
@@ -538,6 +538,50 @@ class StripeService {
             self::fail('promotion code lookup', $e);
             return array();
         }
+    }
+
+    /**
+     * The discount on a subscription, as the Subscription page needs it: whether
+     * it makes the plan free, and until when. The coupon sits on source.coupon in
+     * newer API versions and on coupon in older ones.
+     */
+    public static function subscription_discount(array $subscription): array
+    {
+        $discounts = $subscription['discounts'] ?? array();
+
+        if (empty($discounts) && !empty($subscription['discount'])) {
+            $discounts = array($subscription['discount']);
+        }
+
+        foreach ($discounts as $discount) {
+
+            if (!is_array($discount)) {
+                continue;
+            }
+
+            $coupon = $discount['source']['coupon'] ?? ($discount['coupon'] ?? null);
+
+            try {
+                if (is_string($coupon) && $coupon !== '') {
+                    $coupon = self::client()->coupons->retrieve($coupon)->toArray();
+                }
+            } catch (\Throwable $e) {
+                self::fail('subscription coupon', $e);
+                continue;
+            }
+
+            if (!is_array($coupon)) {
+                continue;
+            }
+
+            return array(
+                'free'  => (float) ($coupon['percent_off'] ?? 0) >= 100,
+                'ends'  => (int) ($discount['end'] ?? 0),
+                'label' => self::coupon_label($coupon)
+            );
+        }
+
+        return array();
     }
 
     private static function coupon_label(array $coupon): string

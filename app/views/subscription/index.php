@@ -29,7 +29,19 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
     </div>
     <?php } ?>
 
-    <?php if ($has_sub && !$ending && !empty($item['current_period_end'])) { ?>
+    <?php if ($has_sub && !$ending && !empty($this->discount['free']) && empty($this->discount['ends'])) { ?>
+    <div class="alert alert--info" role="status">
+        <i class="fa-regular fa-circle-info alert__icon" aria-hidden="true"></i>
+        <p class="alert__title">This subscription is free</p>
+        <p class="alert__text">Your promo code covers the full price, so nothing is billed and no card is needed.</p>
+    </div>
+    <?php } elseif ($has_sub && !$ending && !empty($this->discount['free'])) { ?>
+    <div class="alert alert--info" role="status">
+        <i class="fa-regular fa-circle-info alert__icon" aria-hidden="true"></i>
+        <p class="alert__title">This subscription is free until <?php echo htmlspecialchars(date('m/d/Y', (int) $this->discount['ends']), ENT_QUOTES, 'UTF-8'); ?></p>
+        <p class="alert__text">After that it bills automatically to the card on file. Add a card before then to keep the plan.</p>
+    </div>
+    <?php } elseif ($has_sub && !$ending && !empty($item['current_period_end'])) { ?>
     <div class="alert alert--info" role="status">
         <i class="fa-regular fa-circle-info alert__icon" aria-hidden="true"></i>
         <p class="alert__title">This subscription renews on <?php echo htmlspecialchars(date('m/d/Y', (int) $item['current_period_end']), ENT_QUOTES, 'UTF-8'); ?></p>
