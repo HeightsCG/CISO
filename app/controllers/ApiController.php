@@ -4111,11 +4111,24 @@ class ApiController extends Controller {
 
         $customer_id = $this->platform_customer_id();
         $price_id    = trim((string) ($this->post['price_id'] ?? ''));
+        $promo_code  = strtoupper(preg_replace('/\s+/', '', $this->input('promo_code')));
+        $promotion   = array();
 
         if ($customer_id === '' || !$this->is_platform_price($price_id)) {
             $response['message'] = 'That plan could not be found';
             echo json_encode($response);
             return;
+        }
+
+        if ($promo_code !== '') {
+
+            $promotion = StripeService::find_promotion_code($promo_code);
+
+            if (empty($promotion['id'])) {
+                $response['message'] = 'That promo code is not valid';
+                echo json_encode($response);
+                return;
+            }
         }
 
         /**
@@ -4137,7 +4150,7 @@ class ApiController extends Controller {
 
         if (!empty($pending['id'])) {
 
-            if (($pending['items']['data'][0]['price']['id'] ?? '') === $price_id) {
+            if (empty($promotion['id']) && ($pending['items']['data'][0]['price']['id'] ?? '') === $price_id) {
 
                 $response['success'] = true;
                 $response['message'] = 'Subscription started';
@@ -4151,7 +4164,7 @@ class ApiController extends Controller {
             StripeService::cancel_platform_subscription($pending['id'], false);
         }
 
-        $subscription = StripeService::create_platform_subscription($customer_id, $price_id, Session::get('company_id'));
+        $subscription = StripeService::create_platform_subscription($customer_id, $price_id, Session::get('company_id'), $promotion['id'] ?? '');
 
         if (empty($subscription['id'])) {
             $response['message'] = 'The subscription could not be started: '.StripeService::last_error();
@@ -4164,6 +4177,36 @@ class ApiController extends Controller {
 
         $response['message'] = 'Subscription started';
         $response['client_secret'] = $this->payment_secret_if_due($subscription);
+        echo json_encode($response);
+    }
+
+    /** Checks a promo code typed on the Subscription page and says what it gives. */
+    public function subscription_promoAction(){
+
+        $this->refuse_unless_company_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'That promo code is not valid'
+        );
+
+        $promo_code = strtoupper(preg_replace('/\s+/', '', $this->input('promo_code')));
+
+        if ($promo_code === '') {
+            $response['message'] = 'Enter a promo code';
+            echo json_encode($response);
+            return;
+        }
+
+        $promotion = StripeService::find_promotion_code($promo_code);
+
+        if (empty($promotion['id'])) {
+            echo json_encode($response);
+            return;
+        }
+
+        $response['success'] = true;
+        $response['message'] = $promotion['code'].': '.$promotion['label'];
         echo json_encode($response);
     }
 

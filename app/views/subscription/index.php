@@ -61,8 +61,17 @@ $ending  = !empty($this->subscription['cancel_at_period_end']);
 
     <div class="invoice-main">
         <section class="plans">
-            <div class="plans__head">
+            <div class="plans__head plans__head--promo">
                 <h2 class="plans__title"><?php echo ($has_sub ? 'Change Plan' : 'Choose a Plan'); ?></h2>
+                <?php if (!$has_sub && $this->configured && count($this->plans) > 0) { ?>
+                <div class="promo">
+                    <div class="promo__row">
+                        <input type="text" id="promo_code" class="form-control promo__input" placeholder="Promo Code" aria-label="Promo code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40">
+                        <button type="button" id="do_promo" class="btn btn--secondary">Apply</button>
+                    </div>
+                    <p class="promo__note" id="promo_note" hidden></p>
+                </div>
+                <?php } ?>
             </div>
 
             <?php if (count($this->plans) === 0) { ?>
@@ -372,6 +381,50 @@ $(document).ready(function () {
 
     var pending_change = null;
 
+    $('#promo_code').on('input', function () {
+        var cleaned = this.value.toUpperCase().replace(/\s+/g, '');
+        if (cleaned !== this.value) {
+            this.value = cleaned;
+        }
+        $(this).removeClass('is-invalid');
+        $('#promo_note').prop('hidden', true).text('');
+    });
+
+    $('#promo_code').on('keydown', function (e) {
+        if (e.key === 'Enter') {
+            $('#do_promo').click();
+        }
+    });
+
+    $('#do_promo').click(function () {
+
+        $('#promo_code').removeClass('is-invalid');
+
+        if ($('#promo_code').val().trim() === '') {
+            $('#promo_code').addClass('is-invalid');
+            toastr.error('Enter a promo code.');
+            return;
+        }
+
+        set_loading('#do_promo', true);
+
+        ApiDataSvc.apiCall('post', 'subscription_promo', { promo_code: $('#promo_code').val().trim() }, function (data) {
+
+            var obj = JSON.parse(data);
+
+            set_loading('#do_promo', false);
+
+            if (!obj.success) {
+                $('#promo_code').addClass('is-invalid');
+                $('#promo_note').prop('hidden', true).text('');
+                toastr.error(obj.message);
+                return;
+            }
+
+            $('#promo_note').text(obj.message).prop('hidden', false);
+        });
+    });
+
     /**
      * Starting a subscription goes straight through. Changing one is priced
      * first and agreed to, because a change part-way through a period is
@@ -386,7 +439,7 @@ $(document).ready(function () {
 
         if (!has_subscription) {
 
-            ApiDataSvc.apiCall('post', 'subscription_start', { price_id: button.data('price') }, function (data) {
+            ApiDataSvc.apiCall('post', 'subscription_start', { price_id: button.data('price'), promo_code: $('#promo_code').length ? $('#promo_code').val().trim() : '' }, function (data) {
 
                 var obj = JSON.parse(data);
 

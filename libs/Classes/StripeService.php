@@ -495,6 +495,81 @@ class StripeService {
         }
     }
 
+    /**
+     * An active promotion code typed by a company, with a plain description of
+     * what it gives. Empty when the code does not exist or can no longer be used.
+     * The coupon sits on promotion.coupon in newer API versions and on coupon in
+     * older ones, so both are read.
+     */
+    public static function find_promotion_code($code): array
+    {
+        if (!self::configured() || (string) $code === '') {
+            return array();
+        }
+
+        try {
+            $list = self::client()->promotionCodes->all(array(
+                'code'   => $code,
+                'active' => true,
+                'limit'  => 1
+            ));
+
+            if (empty($list->data)) {
+                return array();
+            }
+
+            $promotion = $list->data[0]->toArray();
+            $coupon = $promotion['promotion']['coupon'] ?? ($promotion['coupon'] ?? null);
+
+            if (is_string($coupon) && $coupon !== '') {
+                $coupon = self::client()->coupons->retrieve($coupon)->toArray();
+            }
+
+            if (!is_array($coupon) || empty($coupon['valid'])) {
+                return array();
+            }
+
+            return array(
+                'id'    => $promotion['id'],
+                'code'  => $promotion['code'],
+                'label' => self::coupon_label($coupon)
+            );
+        } catch (\Throwable $e) {
+            self::fail('promotion code lookup', $e);
+            return array();
+        }
+    }
+
+    private static function coupon_label(array $coupon): string
+    {
+        $duration = (string) ($coupon['duration'] ?? 'once');
+        $months = (int) ($coupon['duration_in_months'] ?? 0);
+
+        if ((float) ($coupon['percent_off'] ?? 0) >= 100) {
+            if ($duration === 'forever') {
+                return 'Free';
+            }
+            if ($duration === 'repeating' && $months > 0) {
+                return 'Free for '.$months.' month'.($months === 1 ? '' : 's');
+            }
+            return 'First payment free';
+        }
+
+        $amount = !empty($coupon['percent_off'])
+            ? rtrim(rtrim(number_format((float) $coupon['percent_off'], 2), '0'), '.').'% off'
+            : Money::symbol((string) ($coupon['currency'] ?? 'usd')).Money::figure((int) ($coupon['amount_off'] ?? 0)).' off';
+
+        if ($duration === 'forever') {
+            return $amount.' every payment';
+        }
+
+        if ($duration === 'repeating' && $months > 0) {
+            return $amount.' for '.$months.' month'.($months === 1 ? '' : 's');
+        }
+
+        return $amount.' the first payment';
+    }
+
     /** What this platform sells: active recurring prices, newest first. */
     public static function platform_plans(): array
     {
@@ -587,26 +662,32 @@ class StripeService {
      * stopped carrying a payment intent in API 2025-03-31.basil, and reading the
      * old field returns null with no error raised anywhere.
      */
-    public static function create_platform_subscription($customer_id, $price_id, $company_id): array
+    public static function create_platform_subscription($customer_id, $price_id, $company_id, $promotion_code_id = ''): array
     {
         if (!self::configured() || (string) $customer_id === '' || (string) $price_id === '') {
             return array();
         }
 
+        $params = array(
+            'customer' => $customer_id,
+            'items'    => array(array('price' => $price_id)),
+            'payment_behavior' => 'default_incomplete',
+            'payment_settings' => array(
+                'save_default_payment_method' => 'on_subscription'
+            ),
+            'expand'   => array('latest_invoice.confirmation_secret'),
+            'metadata' => array(
+                'app'        => 'ciso',
+                'company_id' => (string) $company_id
+            )
+        );
+
+        if ((string) $promotion_code_id !== '') {
+            $params['discounts'] = array(array('promotion_code' => $promotion_code_id));
+        }
+
         try {
-            $subscription = self::client()->subscriptions->create(array(
-                'customer' => $customer_id,
-                'items'    => array(array('price' => $price_id)),
-                'payment_behavior' => 'default_incomplete',
-                'payment_settings' => array(
-                    'save_default_payment_method' => 'on_subscription'
-                ),
-                'expand'   => array('latest_invoice.confirmation_secret'),
-                'metadata' => array(
-                    'app'        => 'ciso',
-                    'company_id' => (string) $company_id
-                )
-            ));
+            $subscription = self::client()->subscriptions->create($params);
             return $subscription->toArray();
         } catch (\Throwable $e) {
             self::fail('platform subscription create', $e);
