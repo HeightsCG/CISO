@@ -414,6 +414,63 @@ class StripeService {
         }
     }
 
+    /**
+     * Every subscription on the platform account, for the admin Financials page.
+     * Incomplete ones were never paid for and are left out. Answers whether
+     * Stripe could be reached, so an outage is not shown as zero revenue.
+     */
+    public static function all_platform_subscriptions(): array
+    {
+        if (!self::configured()) {
+            return array(
+                'reachable'     => false,
+                'subscriptions' => array()
+            );
+        }
+
+        try {
+            $products = array();
+
+            foreach (self::client()->products->all(array('limit' => 100))->autoPagingIterator() as $product) {
+                $products[$product->id] = $product->name;
+            }
+
+            $list = self::client()->subscriptions->all(array(
+                'status' => 'all',
+                'limit'  => 100
+            ));
+
+            $subscriptions = array();
+
+            foreach ($list->autoPagingIterator() as $subscription) {
+
+                if (in_array($subscription->status, array('incomplete', 'incomplete_expired'), true)) {
+                    continue;
+                }
+
+                $row = $subscription->toArray();
+
+                foreach ($row['items']['data'] as $i => $item) {
+                    $product_id = is_array($item['price']['product']) ? $item['price']['product']['id'] : (string) $item['price']['product'];
+                    $row['items']['data'][$i]['product_name'] = $products[$product_id] ?? '';
+                }
+
+                $subscriptions[] = $row;
+            }
+
+            return array(
+                'reachable'     => true,
+                'subscriptions' => $subscriptions
+            );
+        } catch (\Throwable $e) {
+            self::fail('all platform subscriptions', $e);
+            return array(
+                'reachable'     => false,
+                'subscriptions' => array()
+            );
+        }
+    }
+
     /** What this platform sells: active recurring prices, newest first. */
     public static function platform_plans(): array
     {

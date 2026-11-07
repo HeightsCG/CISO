@@ -11610,3 +11610,26 @@ body.app #vault_modal .modal-body {
 #portal_item_modal .comments__add {
     margin-top: var(--space-3);
 }
+
+#financials .kpi {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+#financials > .summary {
+    position: static;
+    flex: 0 0 auto;
+}
+
+@media (max-width: 991.98px) {
+
+    #financials .kpi {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 575.98px) {
+
+    #financials .kpi {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

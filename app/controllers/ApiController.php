@@ -1987,6 +1987,111 @@ class ApiController extends Controller {
     }
 
     /**
+     * Every company's CISO.aero plan, read live from Stripe. Each row carries its
+     * amount normalised to a month so the page can total MRR across intervals.
+     */
+    public function global_financialsAction(){
+
+        $this->refuse_unless_global_admin();
+
+        $response = array(
+            'success' => false,
+            'message' => 'Stripe could not be reached'
+        );
+
+        $lookup = StripeService::all_platform_subscriptions();
+
+        if (!$lookup['reachable']) {
+            echo json_encode($response);
+            exit;
+        }
+
+        $companies = array();
+        $customers = $this->companies_model->platform_customers();
+
+        foreach (is_array($customers) ? $customers : array() as $company) {
+            $companies[$company['platform_customer_id']] = $company;
+        }
+
+        $date_format = 'm/d/Y';
+        $own = $this->companies_model->get_company(Session::get('company_id'));
+
+        if (is_array($own) && count($own) === 1 && !empty($own[0]['date_format'])) {
+            $date_format = $own[0]['date_format'];
+        }
+
+        $rows = array();
+
+        foreach ($lookup['subscriptions'] as $subscription) {
+
+            $customer_id = is_array($subscription['customer']) ? $subscription['customer']['id'] : (string) $subscription['customer'];
+
+            if (!isset($companies[$customer_id])) {
+                continue;
+            }
+
+            $monthly_cents = 0;
+            $plan_name = '';
+            $currency = (string) $subscription['currency'];
+            $period_end = 0;
+
+            foreach ($subscription['items']['data'] as $item) {
+
+                $price = $item['price'];
+                $amount = (int) $price['unit_amount'] * (int) ($item['quantity'] ?? 1);
+                $count = max(1, (int) ($price['recurring']['interval_count'] ?? 1));
+
+                switch ($price['recurring']['interval'] ?? 'month') {
+                    case 'year':
+                        $amount = $amount / (12 * $count);
+                        break;
+                    case 'week':
+                        $amount = $amount * 52 / (12 * $count);
+                        break;
+                    case 'day':
+                        $amount = $amount * 365 / (12 * $count);
+                        break;
+                    default:
+                        $amount = $amount / $count;
+                }
+
+                $monthly_cents += $amount;
+
+                if ($plan_name === '') {
+                    $plan_name = (string) $item['product_name'];
+                }
+
+                $period_end = max($period_end, (int) ($item['current_period_end'] ?? 0));
+            }
+
+            $ended_at = (int) ($subscription['ended_at'] ?? 0);
+            $canceled_at = (int) ($subscription['canceled_at'] ?? 0);
+            $cancelling = !empty($subscription['cancel_at_period_end']) || !empty($subscription['cancel_at']);
+
+            $rows[] = array(
+                'subscription_id' => $subscription['id'],
+                'company_id'      => (int) $companies[$customer_id]['id'],
+                'company_name'    => html_entity_decode($companies[$customer_id]['company_name'], ENT_QUOTES, 'UTF-8'),
+                'plan_name'       => $plan_name,
+                'subscription_status' => $subscription['status'],
+                'currency'        => $currency,
+                'monthly_cents'   => (int) round($monthly_cents),
+                'cancelling'      => $cancelling,
+                'started_display' => date($date_format, (int) $subscription['start_date']),
+                'renews_display'  => ($period_end > 0 && $subscription['status'] !== 'canceled') ? date($date_format, $period_end) : '',
+                'ended_display'   => $ended_at > 0 ? date($date_format, $ended_at) : '',
+                'ended_at'        => $ended_at,
+                'canceled_at'     => $canceled_at
+            );
+        }
+
+        $response['success'] = true;
+        $response['message'] = '';
+        $response['subscriptions'] = $rows;
+        echo json_encode($response);
+    }
+
+    /**
      * The client list belongs to whichever company the account is being placed in,
      * not to the admin's own, so it is fetched per company rather than from the
      * session like load_clients does.

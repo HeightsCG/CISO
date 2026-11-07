@@ -40,6 +40,20 @@ class CompaniesModel extends Model {
         return parent::select($sql);
     }
 
+    /** Companies that have a Stripe customer for their own CISO.aero plan. */
+    public function platform_customers()
+    {
+        $sql = "SELECT
+                    c.id,
+                    c.company_name,
+                    c.platform_customer_id
+                FROM
+                    companies c
+                WHERE
+                    c.platform_customer_id IS NOT NULL";
+        return parent::select($sql);
+    }
+
     public function get_company($company_id)
     {
         $where = array(

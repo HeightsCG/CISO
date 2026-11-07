@@ -18,6 +18,9 @@
                         <td><a class="rowlink__a listpage__name" href="/standards"><i class="fa-thin fa-gear"></i> Standards</a></td>
                     </tr>
                     <tr class="rowlink">
+                        <td><a class="rowlink__a listpage__name" href="/admin/financials"><i class="fa-thin fa-chart-line"></i> Financials</a></td>
+                    </tr>
+                    <tr class="rowlink">
                         <td><a class="rowlink__a listpage__name" href="/users"><i class="fa-thin fa-users"></i> User Accounts</a></td>
                     </tr>
                 </tbody>

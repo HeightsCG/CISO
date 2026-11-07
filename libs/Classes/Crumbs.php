@@ -101,6 +101,12 @@ class Crumbs
                     array('Admin', '')
                 );
 
+            case 'admin/financials':
+                return array(
+                    array('Admin', '/admin'),
+                    array('Financials', '')
+                );
+
             case 'standards/index':
                 return array(
                     array('Admin', '/admin'),

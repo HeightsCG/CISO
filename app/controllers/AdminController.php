@@ -17,4 +17,14 @@ class AdminController extends Controller {
         $this->view->render();
     }
 
+    public function financialsAction(){
+
+        if ((int) Session::get('global_admin') !== 1) {
+            Errors::access_denied();
+            return;
+        }
+
+        $this->view->render();
+    }
+
 }
