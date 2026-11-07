@@ -40,9 +40,9 @@ class StripeController extends Controller {
          */
         Session::destroy();
 
-        $secret = StripeService::webhook_secret();
+        $secrets = StripeService::webhook_secrets();
 
-        if ($secret === '') {
+        if (count($secrets) === 0) {
             error_log('[stripe] webhook received but stripe_webhook_secret is not configured');
             $this->respond(500, 'webhook secret not configured');
             return;
@@ -63,15 +63,24 @@ class StripeController extends Controller {
             return;
         }
 
-        try {
-            $event = \Stripe\Webhook::constructEvent($payload, $signature, $secret);
-        } catch (\Stripe\Exception\SignatureVerificationException $e) {
+        $event = null;
+
+        foreach ($secrets as $secret) {
+            try {
+                $event = \Stripe\Webhook::constructEvent($payload, $signature, $secret);
+                break;
+            } catch (\Stripe\Exception\SignatureVerificationException $e) {
+                continue;
+            } catch (\Throwable $e) {
+                error_log('[stripe] webhook could not be parsed: '.get_class($e));
+                $this->respond(400, 'unparseable payload');
+                return;
+            }
+        }
+
+        if ($event === null) {
             error_log('[stripe] webhook signature rejected (bytes='.strlen($payload).' header='.($signature === '' ? 'absent' : 'present').' ip='.$this->get_ip_address().')');
             $this->respond(400, 'invalid signature');
-            return;
-        } catch (\Throwable $e) {
-            error_log('[stripe] webhook could not be parsed: '.get_class($e));
-            $this->respond(400, 'unparseable payload');
             return;
         }
 

@@ -44,6 +44,18 @@ class StripeService {
         return self::cfg('stripe_webhook_secret');
     }
 
+    /**
+     * Stripe now sends events from the platform account and from connected
+     * accounts to two separate destinations, each with its own signing secret.
+     */
+    public static function webhook_secrets(): array
+    {
+        return array_values(array_filter(array(
+            self::cfg('stripe_webhook_secret'),
+            self::cfg('stripe_connect_webhook_secret')
+        )));
+    }
+
     /** Safe to print: this is the key the browser uses to tokenise a card. */
     public static function publish_key(): string
     {
@@ -52,7 +64,7 @@ class StripeService {
 
     public static function configured(): bool
     {
-        return strpos(self::api_key(), 'sk_') === 0;
+        return strpos(self::api_key(), 'sk_') === 0 || strpos(self::api_key(), 'rk_') === 0;
     }
 
     /**
@@ -63,7 +75,7 @@ class StripeService {
      */
     public static function livemode(): int
     {
-        return strpos(self::api_key(), 'sk_live_') === 0 ? 1 : 0;
+        return (strpos(self::api_key(), 'sk_live_') === 0 || strpos(self::api_key(), 'rk_live_') === 0) ? 1 : 0;
     }
 
     public static function last_error(): string
@@ -422,7 +434,10 @@ class StripeService {
     public static function all_platform_subscriptions(): array
     {
         if (!self::configured()) {
-            self::$last_error = 'Stripe is not configured on this server';
+            $key = self::api_key();
+            self::$last_error = ($key === ''
+                ? 'no stripe_api_key found in the ['.Main::get_environment().'] or [global] section of app.ini'
+                : 'the stripe_api_key for ['.Main::get_environment().'] starts with "'.substr($key, 0, 3).'", not sk_ or rk_');
             return array(
                 'reachable'     => false,
                 'subscriptions' => array()
