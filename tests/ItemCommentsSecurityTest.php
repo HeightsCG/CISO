@@ -97,15 +97,25 @@ return array(
         }
     },
 
-    'the portal guard scopes to the session client and refuses non-portal users' => function () use ($api_source, $private_method) {
+    'the portal guard scopes to the session client and refuses non-portal users' => function () use ($api_source, $private_method, $comments_api) {
         $source = $api_source();
         $guard = $private_method($source, 'comment_portal_item');
         $row = $private_method($source, 'portal_item_row');
 
-        Assert::true(strpos($guard, '$this->portal_item_row($item_id)') !== false, 'goes through the shared portal control check');
-        Assert::true(strpos($row, "Session::get('user_type') !== 'portal'") !== false, 'portal users only');
+        Assert::true(strpos($guard, '$this->portal_item_row($item_id, $read)') !== false, 'goes through the shared portal control check');
+        Assert::true(strpos($guard, 'bool $read = false') !== false, 'the guard is write-strict unless a read asks otherwise');
+        Assert::true(strpos($row, '$client_id = $this->portal_client_id($read);') !== false, 'the client comes from the portal client check');
         Assert::true(strpos($row, "get_item(\$item_id, Session::get('company_id'))") !== false, 'company from the session');
-        Assert::true(strpos($row, "(int) \$item[0]['client_id'] !== (int) Session::get('client_id')") !== false, 'client from the session');
+        Assert::true(strpos($row, "(int) \$item[0]['client_id'] !== \$client_id") !== false, 'the control must belong to that client');
+
+        $client = $private_method($source, 'portal_client_id');
+        Assert::true(strpos($client, "if (Session::get('user_type') === 'portal') {\n            return (int) Session::get('client_id');") !== false, 'a client account always gets its own client from the session');
+        Assert::true(strpos($client, "if (!\$read || Session::get('user_type') !== 'staff' || \$preview_id <= 0) {\n            return 0;") !== false, 'staff get a client only for reads while previewing');
+        Assert::true(strpos($client, "get_client(\$preview_id, Session::get('company_id'))") !== false, 'the previewed client must belong to the session company');
+
+        $comments = $comments_api();
+        Assert::true(strpos($comments, "\$this->comment_portal_item(\$this->poam_post_id('item_id'), true)") !== false, 'loading comments is the one read that allows a preview');
+        Assert::true(substr_count($comments, ', true)') === 1, 'no comment write allows a preview');
 
         $staff = $private_method($source, 'comment_staff_item');
         Assert::true(strpos($staff, "Session::get('user_type') !== 'staff'") !== false, 'staff actions refuse portal users');
