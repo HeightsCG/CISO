@@ -1,0 +1,138 @@
+{
+    "key": "nist-privacy-framework",
+    "name": "NIST Privacy Framework",
+    "version": "1.0",
+    "full_name": "NIST Privacy Framework: A Tool for Improving Privacy through Enterprise Risk Management, Version 1.0",
+    "issuing_body": "National Institute of Standards and Technology (NIST)",
+    "standard_codes": [
+        "NIST-PF"
+    ],
+    "aliases": [
+        "Privacy Framework",
+        "NIST PF"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "pfcore",
+            "title": "NIST Privacy Framework 1.0 Core, Privacy Framework Reference Tool (CPRT) export",
+            "version": "1.0 (January 2020)",
+            "publisher": "NIST",
+            "url": "https://csrc.nist.gov/extensions/nudp/services/json/nudp/framework/version/PF_1_0_0/export/excel",
+            "file": "privacy-framework/cprt-pf-1.0.xlsx",
+            "sha256": "224f35d0564e46e18e8df2c96ae31edf6990edc63c67abb8ca354cd037d9362d"
+        },
+        {
+            "id": "pf10",
+            "title": "NIST Privacy Framework: A Tool for Improving Privacy through Enterprise Risk Management, Version 1.0",
+            "version": "1.0 (January 16, 2020)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.01162020.pdf",
+            "file": "privacy-framework/NIST.CSWP.01162020.pdf",
+            "sha256": "58e1f2373e1c8a5782f7ddfce677fa9fc15e2d920ec0ab97ee754697e91bc2f0"
+        }
+    ],
+    "source_of": {
+        "controls": "pfcore"
+    },
+    "terminology": {
+        "control": "subcategory",
+        "controls": "subcategories",
+        "family": "category",
+        "families": "categories",
+        "objective": "outcome element",
+        "objectives": "outcome elements",
+        "plan": "action plan",
+        "plan_short": "action plan",
+        "score": "Implementation index"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Achieved"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Achieved"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Achieved"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable subcategories whose outcome is achieved, with a partially achieved outcome counting as half. The Privacy Framework defines no score; its four Implementation Tiers characterize how an organization manages privacy risk and are not computed from subcategory results. This index is an HCG measure of progress between a Current and a Target Profile."
+    },
+    "rules": [
+        {
+            "id": "tier_scale",
+            "type": "scoring",
+            "summary": "There are four Implementation Tiers: Partial (1), Risk Informed (2), Repeatable (3) and Adaptive (4). They describe a progression that is not compulsory.",
+            "source": "pf10",
+            "cite": "NIST Privacy Framework 1.0, section 2.3",
+            "quote": "There are four distinct Tiers, Partial (Tier 1), Risk Informed (Tier 2), Repeatable (Tier 3), and Adaptive (Tier 4), descriptions of which are in Appendix E."
+        },
+        {
+            "id": "select_outcomes",
+            "type": "applicability",
+            "summary": "An organization selects the Functions, Categories and Subcategories that fit its needs and may add its own, so a subcategory can be out of scope.",
+            "source": "pf10",
+            "cite": "NIST Privacy Framework 1.0, section 2.2",
+            "quote": "An organization can create or add Functions, Categories, and Subcategories as needed."
+        },
+        {
+            "id": "extent_achieved",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A Current Profile records the privacy outcomes being achieved today. In the implementation index a partially achieved outcome counts as half. This is an HCG convention: the Privacy Framework itself defines no score.",
+            "source": "pf10",
+            "cite": "NIST Privacy Framework 1.0, section 2.2",
+            "quote": "A Current Profile indicates privacy outcomes that an organization is currently achieving, while a Target Profile indicates the outcomes needed to achieve the desired privacy risk management goals."
+        },
+        {
+            "id": "gap_action_plan",
+            "type": "applicability",
+            "summary": "The Current and Target Profiles are compared to find gaps, which are addressed in a prioritized action plan.",
+            "source": "pf10",
+            "cite": "NIST Privacy Framework 1.0, section 3.3",
+            "quote": "An organization compares the Current Profile and the Target Profile to determine gaps."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "Privacy Framework",
+            "definition": "The NIST Privacy Framework, a voluntary set of privacy outcomes arranged by Function, Category and Subcategory."
+        },
+        {
+            "term": "Data processing",
+            "definition": "The collective set of data actions: collection, retention, logging, generation, transformation, use, disclosure, sharing, transmission and disposal."
+        },
+        {
+            "term": "Tier",
+            "definition": "A characterization of how an organization views and manages privacy risk, from Tier 1 (Partial) to Tier 4 (Adaptive)."
+        },
+        {
+            "term": "Current Profile",
+            "definition": "The privacy outcomes an organization is achieving today."
+        },
+        {
+            "term": "Target Profile",
+            "definition": "The privacy outcomes an organization has chosen to achieve."
+        },
+        {
+            "term": "NIST",
+            "definition": "National Institute of Standards and Technology, the U.S. agency that publishes the Privacy Framework."
+        }
+    ]
+}

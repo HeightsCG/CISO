@@ -1,0 +1,1344 @@
+{
+    "key": "nist-privacy-framework",
+    "name": "NIST Privacy Framework",
+    "version": "1.0",
+    "full_name": "NIST Privacy Framework: A Tool for Improving Privacy through Enterprise Risk Management, Version 1.0",
+    "issuing_body": "National Institute of Standards and Technology (NIST)",
+    "standard_codes": [
+        "NIST-PF"
+    ],
+    "aliases": [
+        "Privacy Framework",
+        "NIST PF"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "pfcore",
+            "title": "NIST Privacy Framework 1.0 Core, Privacy Framework Reference Tool (CPRT) export",
+            "version": "1.0 (January 2020)",
+            "publisher": "NIST",
+            "url": "https://csrc.nist.gov/extensions/nudp/services/json/nudp/framework/version/PF_1_0_0/export/excel",
+            "file": "privacy-framework/cprt-pf-1.0.xlsx",
+            "sha256": "224f35d0564e46e18e8df2c96ae31edf6990edc63c67abb8ca354cd037d9362d"
+        },
+        {
+            "id": "pf10",
+            "title": "NIST Privacy Framework: A Tool for Improving Privacy through Enterprise Risk Management, Version 1.0",
+            "version": "1.0 (January 16, 2020)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.01162020.pdf",
+            "file": "privacy-framework/NIST.CSWP.01162020.pdf",
+            "sha256": "58e1f2373e1c8a5782f7ddfce677fa9fc15e2d920ec0ab97ee754697e91bc2f0"
+        }
+    ],
+    "source_of": {
+        "controls": "pfcore"
+    },
+    "terminology": {
+        "control": "subcategory",
+        "controls": "subcategories",
+        "family": "category",
+        "families": "categories",
+        "objective": "outcome element",
+        "objectives": "outcome elements",
+        "plan": "action plan",
+        "plan_short": "action plan",
+        "score": "Implementation index"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Achieved"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Achieved"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Achieved"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable subcategories whose outcome is achieved, with a partially achieved outcome counting as half. The Privacy Framework defines no score; its four Implementation Tiers characterize how an organization manages privacy risk and are not computed from subcategory results. This index is an HCG measure of progress between a Current and a Target Profile."
+    },
+    "rules": [
+        {
+            "id": "tier_scale",
+            "type": "scoring",
+            "summary": "There are four Implementation Tiers: Partial (1), Risk Informed (2), Repeatable (3) and Adaptive (4). They describe a progression that is not compulsory.",
+            "source": "pf10",
+            "cite": "NIST Privacy Framework 1.0, section 2.3",
+            "quote": "There are four distinct Tiers, Partial (Tier 1), Risk Informed (Tier 2), Repeatable (Tier 3), and Adaptive (Tier 4), descriptions of which are in Appendix E."
+        },
+        {
+            "id": "select_outcomes",
+            "type": "applicability",
+            "summary": "An organization selects the Functions, Categories and Subcategories that fit its needs and may add its own, so a subcategory can be out of scope.",
+            "source": "pf10",
+            "cite": "NIST Privacy Framework 1.0, section 2.2",
+            "quote": "An organization can create or add Functions, Categories, and Subcategories as needed."
+        },
+        {
+            "id": "extent_achieved",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A Current Profile records the privacy outcomes being achieved today. In the implementation index a partially achieved outcome counts as half. This is an HCG convention: the Privacy Framework itself defines no score.",
+            "source": "pf10",
+            "cite": "NIST Privacy Framework 1.0, section 2.2",
+            "quote": "A Current Profile indicates privacy outcomes that an organization is currently achieving, while a Target Profile indicates the outcomes needed to achieve the desired privacy risk management goals."
+        },
+        {
+            "id": "gap_action_plan",
+            "type": "applicability",
+            "summary": "The Current and Target Profiles are compared to find gaps, which are addressed in a prioritized action plan.",
+            "source": "pf10",
+            "cite": "NIST Privacy Framework 1.0, section 3.3",
+            "quote": "An organization compares the Current Profile and the Target Profile to determine gaps."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "Privacy Framework",
+            "definition": "The NIST Privacy Framework, a voluntary set of privacy outcomes arranged by Function, Category and Subcategory."
+        },
+        {
+            "term": "Data processing",
+            "definition": "The collective set of data actions: collection, retention, logging, generation, transformation, use, disclosure, sharing, transmission and disposal."
+        },
+        {
+            "term": "Tier",
+            "definition": "A characterization of how an organization views and manages privacy risk, from Tier 1 (Partial) to Tier 4 (Adaptive)."
+        },
+        {
+            "term": "Current Profile",
+            "definition": "The privacy outcomes an organization is achieving today."
+        },
+        {
+            "term": "Target Profile",
+            "definition": "The privacy outcomes an organization has chosen to achieve."
+        },
+        {
+            "term": "NIST",
+            "definition": "National Institute of Standards and Technology, the U.S. agency that publishes the Privacy Framework."
+        }
+    ],
+    "display_name": "NIST Privacy Framework (1.0)",
+    "counts": {
+        "families": 18,
+        "controls": 100,
+        "objectives": 0
+    },
+    "families": [
+        {
+            "number": "ID.IM-P",
+            "code": "ID.IM-P",
+            "name": "Inventory and Mapping",
+            "description": "Data processing by systems, products, or services is understood and informs the management of privacy risk.",
+            "function": "IDENTIFY-P",
+            "function_code": "ID-P",
+            "function_description": "Develop the organizational understanding to manage privacy risk for individuals arising from data processing.",
+            "controls": [
+                {
+                    "id": "ID.IM-P1",
+                    "number": "ID.IM-P1",
+                    "text": "Systems/products/services that process data are inventoried.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.IM-P2",
+                    "number": "ID.IM-P2",
+                    "text": "Owners or operators (e.g., the organization or third parties such as service providers, partners, customers, and developers) and their roles with respect to the systems/products/services and components (e.g., internal or external) that process data are inventoried.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.IM-P3",
+                    "number": "ID.IM-P3",
+                    "text": "Categories of individuals (e.g., customers, employees or prospective employees, consumers) whose data are being processed are inventoried.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.IM-P4",
+                    "number": "ID.IM-P4",
+                    "text": "Data actions of the systems/products/services are inventoried.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.IM-P5",
+                    "number": "ID.IM-P5",
+                    "text": "The purposes for the data actions are inventoried.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.IM-P6",
+                    "number": "ID.IM-P6",
+                    "text": "Data elements within the data actions are inventoried.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.IM-P7",
+                    "number": "ID.IM-P7",
+                    "text": "The data processing environment is identified (e.g., geographic location, internal, cloud, third parties).",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.IM-P8",
+                    "number": "ID.IM-P8",
+                    "text": "Data processing is mapped, illustrating the data actions and associated data elements for systems/products/services, including components; roles of the component owners/operators; and interactions of individuals or third parties with the systems/products/services.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "ID.BE-P",
+            "code": "ID.BE-P",
+            "name": "Business Environment",
+            "description": "The organization's mission, objectives, stakeholders, and activities are understood and prioritized; this information is used to inform privacy roles, responsibilities, and risk management decisions.",
+            "function": "IDENTIFY-P",
+            "function_code": "ID-P",
+            "function_description": "Develop the organizational understanding to manage privacy risk for individuals arising from data processing.",
+            "controls": [
+                {
+                    "id": "ID.BE-P1",
+                    "number": "ID.BE-P1",
+                    "text": "The organization's role(s) in the data processing ecosystem are identified and communicated.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.BE-P2",
+                    "number": "ID.BE-P2",
+                    "text": "Priorities for organizational mission, objectives, and activities are established and communicated.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.BE-P3",
+                    "number": "ID.BE-P3",
+                    "text": "Systems/products/services that support organizational priorities are identified and key requirements communicated.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "ID.RA-P",
+            "code": "ID.RA-P",
+            "name": "Risk Assessment",
+            "description": "The organization understands the privacy risks to individuals and how such privacy risks may create follow-on impacts on organizational operations, including mission, functions, other risk management priorities (e.g., compliance, financial), reputation, workforce, and culture.",
+            "function": "IDENTIFY-P",
+            "function_code": "ID-P",
+            "function_description": "Develop the organizational understanding to manage privacy risk for individuals arising from data processing.",
+            "controls": [
+                {
+                    "id": "ID.RA-P1",
+                    "number": "ID.RA-P1",
+                    "text": "Contextual factors related to the systems/products/services and the data actions are identified (e.g., individuals' demographics and privacy interests or perceptions, data sensitivity and/or types, visibility of data processing to individuals and third parties).",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.RA-P2",
+                    "number": "ID.RA-P2",
+                    "text": "Data analytic inputs and outputs are identified and evaluated for bias.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.RA-P3",
+                    "number": "ID.RA-P3",
+                    "text": "Potential problematic data actions and associated problems are identified.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.RA-P4",
+                    "number": "ID.RA-P4",
+                    "text": "Problematic data actions, likelihoods, and impacts are used to determine and prioritize risk.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.RA-P5",
+                    "number": "ID.RA-P5",
+                    "text": "Risk responses are identified, prioritized, and implemented.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "ID.DE-P",
+            "code": "ID.DE-P",
+            "name": "Data Processing Ecosystem Risk Management",
+            "description": "The organization's priorities, constraints, risk tolerance, and assumptions are established and used to support risk decisions associated with managing privacy risk and third parties within the data processing ecosystem. The organization has established and implemented the processes to identify, assess, and manage privacy risks within the data processing ecosystem.",
+            "function": "IDENTIFY-P",
+            "function_code": "ID-P",
+            "function_description": "Develop the organizational understanding to manage privacy risk for individuals arising from data processing.",
+            "controls": [
+                {
+                    "id": "ID.DE-P1",
+                    "number": "ID.DE-P1",
+                    "text": "Data processing ecosystem risk management policies, processes, and procedures are identified, established, assessed, managed, and agreed to by organizational stakeholders.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.DE-P2",
+                    "number": "ID.DE-P2",
+                    "text": "Data processing ecosystem parties (e.g., service providers, customers, partners, product manufacturers, application developers) are identified, prioritized, and assessed using a privacy risk assessment process.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.DE-P3",
+                    "number": "ID.DE-P3",
+                    "text": "Contracts with data processing ecosystem parties are used to implement appropriate measures designed to meet the objectives of an organization's privacy program.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.DE-P4",
+                    "number": "ID.DE-P4",
+                    "text": "Interoperability frameworks or similar multi-party approaches are used to manage data processing ecosystem privacy risks.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "ID.DE-P5",
+                    "number": "ID.DE-P5",
+                    "text": "Data processing ecosystem parties are routinely assessed using audits, test results, or other forms of evaluations to confirm they are meeting their contractual, interoperability framework, or other obligations.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "GV.PO-P",
+            "code": "GV.PO-P",
+            "name": "Governance Policies, Processes, and Procedures",
+            "description": "The policies, processes, and procedures to manage and monitor the organization's regulatory, legal, risk, environmental, and operational requirements are understood and inform the management of privacy risk.",
+            "function": "GOVERN-P",
+            "function_code": "GV-P",
+            "function_description": "Develop and implement the organizational governance structure to enable an ongoing understanding of the organization's risk management priorities that are informed by privacy risk.",
+            "controls": [
+                {
+                    "id": "GV.PO-P1",
+                    "number": "GV.PO-P1",
+                    "text": "Organizational privacy values and policies (e.g., conditions on data processing such as data uses or retention periods, individuals' prerogatives with respect to data processing) are established and communicated.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "GV.PO-P2",
+                    "number": "GV.PO-P2",
+                    "text": "Processes to instill organizational privacy values within system/product/service development and operations are established and in place.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "GV.PO-P3",
+                    "number": "GV.PO-P3",
+                    "text": "Roles and responsibilities for the workforce are established with respect to privacy.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "GV.PO-P4",
+                    "number": "GV.PO-P4",
+                    "text": "Privacy roles and responsibilities are coordinated and aligned with third-party stakeholders (e.g., service providers, customers, partners).",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "GV.PO-P5",
+                    "number": "GV.PO-P5",
+                    "text": "Legal, regulatory, and contractual requirements regarding privacy are understood and managed.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "GV.PO-P6",
+                    "number": "GV.PO-P6",
+                    "text": "Governance and risk management policies, processes, and procedures address privacy risks.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "GV.RM-P",
+            "code": "GV.RM-P",
+            "name": "Risk Management Strategy",
+            "description": "The organization's priorities, constraints, risk tolerances, and assumptions are established and used to support operational risk decisions.",
+            "function": "GOVERN-P",
+            "function_code": "GV-P",
+            "function_description": "Develop and implement the organizational governance structure to enable an ongoing understanding of the organization's risk management priorities that are informed by privacy risk.",
+            "controls": [
+                {
+                    "id": "GV.RM-P1",
+                    "number": "GV.RM-P1",
+                    "text": "Risk management processes are established, managed, and agreed to by organizational stakeholders.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "GV.RM-P2",
+                    "number": "GV.RM-P2",
+                    "text": "Organizational risk tolerance is determined and clearly expressed.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "GV.RM-P3",
+                    "number": "GV.RM-P3",
+                    "text": "The organization's determination of risk tolerance is informed by its role(s) in the data processing ecosystem.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "GV.AT-P",
+            "code": "GV.AT-P",
+            "name": "Awareness and Training",
+            "description": "The organization's workforce and third parties engaged in data processing are provided privacy awareness education and are trained to perform their privacy-related duties and responsibilities consistent with related policies, processes, procedures, and agreements and organizational privacy values.",
+            "function": "GOVERN-P",
+            "function_code": "GV-P",
+            "function_description": "Develop and implement the organizational governance structure to enable an ongoing understanding of the organization's risk management priorities that are informed by privacy risk.",
+            "controls": [
+                {
+                    "id": "GV.AT-P1",
+                    "number": "GV.AT-P1",
+                    "text": "The workforce is informed and trained on its roles and responsibilities.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "GV.AT-P2",
+                    "number": "GV.AT-P2",
+                    "text": "Senior executives understand their roles and responsibilities.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "GV.AT-P3",
+                    "number": "GV.AT-P3",
+                    "text": "Privacy personnel understand their roles and responsibilities.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "GV.AT-P4",
+                    "number": "GV.AT-P4",
+                    "text": "Third parties (e.g., service providers, customers, partners) understand their roles and responsibilities.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "GV.MT-P",
+            "code": "GV.MT-P",
+            "name": "Monitoring and Review",
+            "description": "The policies, processes, and procedures for ongoing review of the organization's privacy posture are understood and inform the management of privacy risk.",
+            "function": "GOVERN-P",
+            "function_code": "GV-P",
+            "function_description": "Develop and implement the organizational governance structure to enable an ongoing understanding of the organization's risk management priorities that are informed by privacy risk.",
+            "controls": [
+                {
+                    "id": "GV.MT-P1",
+                    "number": "GV.MT-P1",
+                    "text": "Privacy risk is re-evaluated on an ongoing basis and as key factors, including the organization's business environment (e.g., introduction of new technologies), governance (e.g., legal obligations, risk tolerance), data processing, and systems/products/services change.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "GV.MT-P2",
+                    "number": "GV.MT-P2",
+                    "text": "Privacy values, policies, and training are reviewed and any updates are communicated.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "GV.MT-P3",
+                    "number": "GV.MT-P3",
+                    "text": "Policies, processes, and procedures for assessing compliance with legal requirements and privacy policies are established and in place.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "GV.MT-P4",
+                    "number": "GV.MT-P4",
+                    "text": "Policies, processes, and procedures for communicating progress on managing privacy risks are established and in place.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "GV.MT-P5",
+                    "number": "GV.MT-P5",
+                    "text": "Policies, processes, and procedures are established and in place to receive, analyze, and respond to problematic data actions disclosed to the organization from internal and external sources (e.g., internal discovery, privacy researchers, professional events).",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "GV.MT-P6",
+                    "number": "GV.MT-P6",
+                    "text": "Policies, processes, and procedures incorporate lessons learned from problematic data actions.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "GV.MT-P7",
+                    "number": "GV.MT-P7",
+                    "text": "Policies, processes, and procedures for receiving, tracking, and responding to complaints, concerns, and questions from individuals about organizational privacy practices are established and in place.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "CT.PO-P",
+            "code": "CT.PO-P",
+            "name": "Data Processing Policies, Processes, and Procedures",
+            "description": "Policies, processes, and procedures are maintained and used to manage data processing (e.g., purpose, scope, roles and responsibilities in the data processing ecosystem, and management commitment) consistent with the organization's risk strategy to protect individuals' privacy.",
+            "function": "CONTROL-P",
+            "function_code": "CT-P",
+            "function_description": "Develop and implement appropriate activities to enable organizations or individuals to manage data with sufficient granularity to manage privacy risks.",
+            "controls": [
+                {
+                    "id": "CT.PO-P1",
+                    "number": "CT.PO-P1",
+                    "text": "Policies, processes, and procedures for authorizing data processing (e.g., organizational decisions, individual consent), revoking authorizations, and maintaining authorizations are established and in place.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CT.PO-P2",
+                    "number": "CT.PO-P2",
+                    "text": "Policies, processes, and procedures for enabling data review, transfer, sharing or disclosure, alteration, and deletion are established and in place (e.g., to maintain data quality, manage data retention).",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CT.PO-P3",
+                    "number": "CT.PO-P3",
+                    "text": "Policies, processes, and procedures for enabling individuals' data processing preferences and requests are established and in place.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CT.PO-P4",
+                    "number": "CT.PO-P4",
+                    "text": "A data life cycle to manage data is aligned and implemented with the system development life cycle to manage systems.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "CT.DM-P",
+            "code": "CT.DM-P",
+            "name": "Data Processing Management",
+            "description": "Data are managed consistent with the organization's risk strategy to protect individuals' privacy, increase manageability, and enable the implementation of privacy principles (e.g., individual participation, data quality, data minimization).",
+            "function": "CONTROL-P",
+            "function_code": "CT-P",
+            "function_description": "Develop and implement appropriate activities to enable organizations or individuals to manage data with sufficient granularity to manage privacy risks.",
+            "controls": [
+                {
+                    "id": "CT.DM-P1",
+                    "number": "CT.DM-P1",
+                    "text": "Data elements can be accessed for review.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CT.DM-P2",
+                    "number": "CT.DM-P2",
+                    "text": "Data elements can be accessed for transmission or disclosure.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CT.DM-P3",
+                    "number": "CT.DM-P3",
+                    "text": "Data elements can be accessed for alteration.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CT.DM-P4",
+                    "number": "CT.DM-P4",
+                    "text": "Data elements can be accessed for deletion.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CT.DM-P5",
+                    "number": "CT.DM-P5",
+                    "text": "Data are destroyed according to policy.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CT.DM-P6",
+                    "number": "CT.DM-P6",
+                    "text": "Data are transmitted using standardized formats.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CT.DM-P7",
+                    "number": "CT.DM-P7",
+                    "text": "Mechanisms for transmitting processing permissions and related data values with data elements are established and in place.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CT.DM-P8",
+                    "number": "CT.DM-P8",
+                    "text": "Audit/log records are determined, documented, implemented, and reviewed in accordance with policy and incorporating the principle of data minimization.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CT.DM-P9",
+                    "number": "CT.DM-P9",
+                    "text": "Technical measures implemented to manage data processing are tested and assessed.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CT.DM-P10",
+                    "number": "CT.DM-P10",
+                    "text": "Stakeholder privacy preferences are included in algorithmic design objectives and outputs are evaluated against these preferences.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "CT.DP-P",
+            "code": "CT.DP-P",
+            "name": "Disassociated Processing",
+            "description": "Data processing solutions increase disassociability consistent with the organization's risk strategy to protect individuals' privacy and enable implementation of privacy principles (e.g., data minimization).",
+            "function": "CONTROL-P",
+            "function_code": "CT-P",
+            "function_description": "Develop and implement appropriate activities to enable organizations or individuals to manage data with sufficient granularity to manage privacy risks.",
+            "controls": [
+                {
+                    "id": "CT.DP-P1",
+                    "number": "CT.DP-P1",
+                    "text": "Data are processed to limit observability and linkability (e.g., data actions take place on local devices, privacy-preserving cryptography).",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CT.DP-P2",
+                    "number": "CT.DP-P2",
+                    "text": "Data are processed to limit the identification of individuals (e.g., de-identification privacy techniques, tokenization).",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CT.DP-P3",
+                    "number": "CT.DP-P3",
+                    "text": "Data are processed to limit the formulation of inferences about individuals' behavior or activities (e.g., data processing is decentralized, distributed architectures).",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CT.DP-P4",
+                    "number": "CT.DP-P4",
+                    "text": "System or device configurations permit selective collection or disclosure of data elements.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CT.DP-P5",
+                    "number": "CT.DP-P5",
+                    "text": "Attribute references are substituted for attribute values.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "CM.PO-P",
+            "code": "CM.PO-P",
+            "name": "Communication Policies, Processes, and Procedures",
+            "description": "Policies, processes, and procedures are maintained and used to increase transparency of the organization's data processing practices (e.g., purpose, scope, roles and responsibilities in the data processing ecosystem, and management commitment) and associated privacy risks.",
+            "function": "COMMUNICATE-P",
+            "function_code": "CM-P",
+            "function_description": "Develop and implement appropriate activities to enable organizations and individuals to have a reliable understanding and engage in a dialogue about how data are processed and associated privacy risks.",
+            "controls": [
+                {
+                    "id": "CM.PO-P1",
+                    "number": "CM.PO-P1",
+                    "text": "Transparency policies, processes, and procedures for communicating data processing purposes, practices, and associated privacy risks are established and in place.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CM.PO-P2",
+                    "number": "CM.PO-P2",
+                    "text": "Roles and responsibilities (e.g., public relations) for communicating data processing purposes, practices, and associated privacy risks are established.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "CM.AW-P",
+            "code": "CM.AW-P",
+            "name": "Data Processing Awareness",
+            "description": "Individuals and organizations have reliable knowledge about data processing practices and associated privacy risks, and effective mechanisms are used and maintained to increase predictability consistent with the organization's risk strategy to protect individuals' privacy.",
+            "function": "COMMUNICATE-P",
+            "function_code": "CM-P",
+            "function_description": "Develop and implement appropriate activities to enable organizations and individuals to have a reliable understanding and engage in a dialogue about how data are processed and associated privacy risks.",
+            "controls": [
+                {
+                    "id": "CM.AW-P1",
+                    "number": "CM.AW-P1",
+                    "text": "Mechanisms (e.g., notices, internal or public reports) for communicating data processing purposes, practices, associated privacy risks, and options for enabling individuals' data processing preferences and requests are established and in place.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CM.AW-P2",
+                    "number": "CM.AW-P2",
+                    "text": "Mechanisms for obtaining feedback from individuals (e.g., surveys or focus groups) about data processing and associated privacy risks are established and in place.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CM.AW-P3",
+                    "number": "CM.AW-P3",
+                    "text": "System/product/service design enables data processing visibility.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CM.AW-P4",
+                    "number": "CM.AW-P4",
+                    "text": "Records of data disclosures and sharing are maintained and can be accessed for review or transmission/disclosure.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CM.AW-P5",
+                    "number": "CM.AW-P5",
+                    "text": "Data corrections or deletions can be communicated to individuals or organizations (e.g., data sources) in the data processing ecosystem.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CM.AW-P6",
+                    "number": "CM.AW-P6",
+                    "text": "Data provenance and lineage are maintained and can be accessed for review or transmission/disclosure.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CM.AW-P7",
+                    "number": "CM.AW-P7",
+                    "text": "Impacted individuals and organizations are notified about a privacy breach or event.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "CM.AW-P8",
+                    "number": "CM.AW-P8",
+                    "text": "Individuals are provided with mitigation mechanisms (e.g., credit monitoring, consent withdrawal, data alteration or deletion) to address impacts of problematic data actions.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "PR.PO-P",
+            "code": "PR.PO-P",
+            "name": "Data Protection Policies, Processes, and Procedures",
+            "description": "Security and privacy policies (e.g., purpose, scope, roles and responsibilities in the data processing ecosystem, and management commitment), processes, and procedures are maintained and used to manage the protection of data.",
+            "function": "PROTECT-P",
+            "function_code": "PR-P",
+            "function_description": "Develop and implement appropriate data processing safeguards.",
+            "controls": [
+                {
+                    "id": "PR.PO-P1",
+                    "number": "PR.PO-P1",
+                    "text": "A baseline configuration of information technology is created and maintained incorporating security principles (e.g., concept of least functionality).",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.PO-P2",
+                    "number": "PR.PO-P2",
+                    "text": "Configuration change control processes are established and in place.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.PO-P3",
+                    "number": "PR.PO-P3",
+                    "text": "Backups of information are conducted, maintained, and tested.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.PO-P4",
+                    "number": "PR.PO-P4",
+                    "text": "Policy and regulations regarding the physical operating environment for organizational assets are met.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.PO-P5",
+                    "number": "PR.PO-P5",
+                    "text": "Protection processes are improved.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.PO-P6",
+                    "number": "PR.PO-P6",
+                    "text": "Effectiveness of protection technologies is shared.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.PO-P7",
+                    "number": "PR.PO-P7",
+                    "text": "Response plans (Incident Response and Business Continuity) and recovery plans (Incident Recovery and Disaster Recovery) are established, in place, and managed.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.PO-P8",
+                    "number": "PR.PO-P8",
+                    "text": "Response and recovery plans are tested.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.PO-P9",
+                    "number": "PR.PO-P9",
+                    "text": "Privacy procedures are included in human resources practices (e.g., deprovisioning, personnel screening).",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.PO-P10",
+                    "number": "PR.PO-P10",
+                    "text": "A vulnerability management plan is developed and implemented.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "PR.AC-P",
+            "code": "PR.AC-P",
+            "name": "Identity Management, Authentication, and Access Control",
+            "description": "Access to data and devices is limited to authorized individuals, processes, and devices, and is managed consistent with the assessed risk of unauthorized access.",
+            "function": "PROTECT-P",
+            "function_code": "PR-P",
+            "function_description": "Develop and implement appropriate data processing safeguards.",
+            "controls": [
+                {
+                    "id": "PR.AC-P1",
+                    "number": "PR.AC-P1",
+                    "text": "Identities and credentials are issued, managed, verified, revoked, and audited for authorized individuals, processes, and devices.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.AC-P2",
+                    "number": "PR.AC-P2",
+                    "text": "Physical access to data and devices is managed.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.AC-P3",
+                    "number": "PR.AC-P3",
+                    "text": "Remote access is managed.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.AC-P4",
+                    "number": "PR.AC-P4",
+                    "text": "Access permissions and authorizations are managed, incorporating the principles of least privilege and separation of duties.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.AC-P5",
+                    "number": "PR.AC-P5",
+                    "text": "Network integrity is protected (e.g., network segregation, network segmentation).",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.AC-P6",
+                    "number": "PR.AC-P6",
+                    "text": "Individuals and devices are proofed and bound to credentials, and authenticated commensurate with the risk of the transaction (e.g., individuals' security and privacy risks and other organizational risks).",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "PR.DS-P",
+            "code": "PR.DS-P",
+            "name": "Data Security",
+            "description": "Data are managed consistent with the organization's risk strategy to protect individuals' privacy and maintain data confidentiality, integrity, and availability.",
+            "function": "PROTECT-P",
+            "function_code": "PR-P",
+            "function_description": "Develop and implement appropriate data processing safeguards.",
+            "controls": [
+                {
+                    "id": "PR.DS-P1",
+                    "number": "PR.DS-P1",
+                    "text": "Data-at-rest are protected.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.DS-P2",
+                    "number": "PR.DS-P2",
+                    "text": "Data-in-transit are protected.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.DS-P3",
+                    "number": "PR.DS-P3",
+                    "text": "Systems/products/services and associated data are formally managed throughout removal, transfers, and disposition.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.DS-P4",
+                    "number": "PR.DS-P4",
+                    "text": "Adequate capacity to ensure availability is maintained.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.DS-P5",
+                    "number": "PR.DS-P5",
+                    "text": "Protections against data leaks are implemented.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.DS-P6",
+                    "number": "PR.DS-P6",
+                    "text": "Integrity checking mechanisms are used to verify software, firmware, and information integrity.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.DS-P7",
+                    "number": "PR.DS-P7",
+                    "text": "The development and testing environment(s) are separate from the production environment.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.DS-P8",
+                    "number": "PR.DS-P8",
+                    "text": "Integrity checking mechanisms are used to verify hardware integrity.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "PR.MA-P",
+            "code": "PR.MA-P",
+            "name": "Maintenance",
+            "description": "System maintenance and repairs are performed consistent with policies, processes, and procedures.",
+            "function": "PROTECT-P",
+            "function_code": "PR-P",
+            "function_description": "Develop and implement appropriate data processing safeguards.",
+            "controls": [
+                {
+                    "id": "PR.MA-P1",
+                    "number": "PR.MA-P1",
+                    "text": "Maintenance and repair of organizational assets are performed and logged, with approved and controlled tools.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.MA-P2",
+                    "number": "PR.MA-P2",
+                    "text": "Remote maintenance of organizational assets is approved, logged, and performed in a manner that prevents unauthorized access.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        },
+        {
+            "number": "PR.PT-P",
+            "code": "PR.PT-P",
+            "name": "Protective Technology",
+            "description": "Technical security solutions are managed to ensure the security and resilience of systems/products/services and associated data, consistent with related policies, processes, procedures, and agreements.",
+            "function": "PROTECT-P",
+            "function_code": "PR-P",
+            "function_description": "Develop and implement appropriate data processing safeguards.",
+            "controls": [
+                {
+                    "id": "PR.PT-P1",
+                    "number": "PR.PT-P1",
+                    "text": "Removable media is protected and its use restricted according to policy.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.PT-P2",
+                    "number": "PR.PT-P2",
+                    "text": "The principle of least functionality is incorporated by configuring systems to provide only essential capabilities.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.PT-P3",
+                    "number": "PR.PT-P3",
+                    "text": "Communications and control networks are protected.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                },
+                {
+                    "id": "PR.PT-P4",
+                    "number": "PR.PT-P4",
+                    "text": "Mechanisms (e.g., failsafe, load balancing, hot swap) are implemented to achieve resilience requirements in normal and adverse situations.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pfcore"
+                }
+            ]
+        }
+    ]
+}
