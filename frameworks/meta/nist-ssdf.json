@@ -1,0 +1,127 @@
+{
+    "key": "nist-ssdf",
+    "name": "NIST SSDF",
+    "version": "1.1",
+    "full_name": "NIST Special Publication 800-218, Secure Software Development Framework (SSDF) Version 1.1: Recommendations for Mitigating the Risk of Software Vulnerabilities",
+    "issuing_body": "National Institute of Standards and Technology (NIST)",
+    "standard_codes": [
+        "NIST-SSDF"
+    ],
+    "aliases": [
+        "SSDF",
+        "SP 800-218",
+        "Secure Software Development Framework"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "ssdftable",
+            "title": "NIST SP 800-218, SSDF Version 1.1 practices table (spreadsheet)",
+            "version": "1.1 (February 2022)",
+            "publisher": "NIST",
+            "url": "https://csrc.nist.gov/files/pubs/sp/800/218/final/docs/nist.sp.800-218.ssdf-table.xlsx",
+            "file": "ssdf/NIST.SP.800-218.SSDF-table.xlsx",
+            "sha256": "f5729c4c6c792cbf6cfbea74eee7cc84c579b2109006fe3cbfa8934eb460bd55"
+        },
+        {
+            "id": "sp800218",
+            "title": "NIST SP 800-218, Secure Software Development Framework (SSDF) Version 1.1",
+            "version": "1.1 (February 2022)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-218.pdf",
+            "file": "ssdf/NIST.SP.800-218.pdf",
+            "sha256": "617746e553a9e2da49bfbd4eef0dfc3094758a39b869314e4173ac36605cde22"
+        }
+    ],
+    "source_of": {
+        "controls": "ssdftable",
+        "guidance": "ssdftable"
+    },
+    "control_flags": {
+        "formerly": "The identifier a task had before version 1.1 moved it, where the table notes one."
+    },
+    "terminology": {
+        "control": "task",
+        "controls": "tasks",
+        "family": "practice",
+        "families": "practices",
+        "objective": "implementation example",
+        "objectives": "implementation examples",
+        "plan": "action plan",
+        "plan_short": "action plan",
+        "score": "Implementation index"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Performed"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Performed"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Performed"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable tasks that are performed, with a partially performed task counting as half. The SSDF defines no score or maturity levels; this index is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "outcome_focus",
+            "type": "applicability",
+            "summary": "The SSDF describes outcomes and does not prescribe how each practice is implemented, so a task is assessed on whether its outcome is reached.",
+            "source": "sp800218",
+            "cite": "NIST SP 800-218, section 2",
+            "quote": "The SSDF does not prescribe how to implement each practice."
+        },
+        {
+            "id": "risk_based_applicability",
+            "type": "applicability",
+            "summary": "Not every practice applies to every use case; the organization decides by risk which practices are relevant, so a task can be not applicable.",
+            "source": "sp800218",
+            "cite": "NIST SP 800-218, section 2",
+            "quote": "Not all practices are applicable to all use cases; organizations should adopt a risk-based approach to determine what practices are relevant, appropriate, and effective to mitigate the threats to their software development practices."
+        },
+        {
+            "id": "partial_task",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "In the implementation index a partially performed task counts as half. This is an HCG convention: the SSDF itself defines no score.",
+            "source": "sp800218",
+            "cite": "NIST SP 800-218, section 2",
+            "quote": "The focus is on the outcomes of the practices rather than on the tools, techniques, and mechanisms to do so."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "SSDF",
+            "definition": "The NIST Secure Software Development Framework, a set of secure software development practices arranged by practice group, practice and task."
+        },
+        {
+            "term": "SDLC",
+            "definition": "Software development life cycle: the process of designing, building, testing, releasing and maintaining software."
+        },
+        {
+            "term": "Notional implementation example",
+            "definition": "An example NIST gives of a tool, process or method that could help perform a task; examples are illustrative, not required."
+        },
+        {
+            "term": "NIST",
+            "definition": "National Institute of Standards and Technology, the U.S. agency that publishes the SSDF."
+        }
+    ]
+}

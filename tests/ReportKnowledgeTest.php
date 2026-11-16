@@ -265,7 +265,8 @@ return array(
         // A rule about one subject is expected to sit in that subject's topic.
         $single_subject = array(
             'hipaa-breach' => 'incident',
-            'hipaa-privacy' => 'privacy'
+            'hipaa-privacy' => 'privacy',
+            'nist-ssdf' => 'sdlc'
         );
 
         foreach (glob(ROOT.'/frameworks/*.json') as $file) {

@@ -148,6 +148,7 @@ class Poam
         'nist-csf-2' => 'plan_handling',
         'nist-ai-rmf' => 'none',
         'nist-privacy-framework' => 'none',
+        'nist-ssdf' => 'none',
         'tsa-aviation-cyber' => 'plan_handling',
         'hipaa-security' => 'none',
         'hipaa-breach' => 'none',
