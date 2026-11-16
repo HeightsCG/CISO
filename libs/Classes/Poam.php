@@ -156,6 +156,7 @@ class Poam
         'ftc-safeguards' => 'none',
         'coppa' => 'none',
         'ccpa' => 'none',
+        'pipeda' => 'none',
         'nydfs-500' => 'none',
         'nis2' => 'none',
         'dora' => 'none',

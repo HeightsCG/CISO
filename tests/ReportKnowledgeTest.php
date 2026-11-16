@@ -270,7 +270,8 @@ return array(
             'gdpr' => 'privacy',
             'uk-gdpr' => 'privacy',
             'coppa' => 'privacy',
-            'ccpa' => 'privacy'
+            'ccpa' => 'privacy',
+            'pipeda' => 'privacy'
         );
 
         foreach (glob(ROOT.'/frameworks/*.json') as $file) {
