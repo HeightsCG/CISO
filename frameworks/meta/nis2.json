@@ -1,0 +1,180 @@
+{
+    "key": "nis2",
+    "name": "NIS 2 Directive",
+    "version": "EU 2022/2555",
+    "full_name": "Directive (EU) 2022/2555 of the European Parliament and of the Council on measures for a high common level of cybersecurity across the Union (NIS 2 Directive)",
+    "issuing_body": "European Parliament and Council of the European Union",
+    "standard_codes": [
+        "NIS2"
+    ],
+    "aliases": [
+        "NIS2",
+        "NIS 2",
+        "Directive 2022/2555"
+    ],
+    "content_licence": "open",
+    "notice": "Assessed against the text of the Directive. Each Member State transposes the Directive into national law, which may add to or specify these obligations.",
+    "sources": [
+        {
+            "id": "dir2555",
+            "title": "Directive (EU) 2022/2555 (NIS 2 Directive), Official Journal L 333, 27.12.2022",
+            "version": "OJ L 333, 27 December 2022",
+            "publisher": "Publications Office of the European Union",
+            "url": "http://publications.europa.eu/resource/celex/32022L2555",
+            "file": "nis2/dir-2022-2555.html",
+            "sha256": "6ee66d5c419d9a056fb98d94083cacf9b818803bd6b416435718e0d4919cb589"
+        }
+    ],
+    "source_of": {
+        "controls": "dir2555"
+    },
+    "control_flags": {
+        "type": "paragraph (a whole paragraph of the article) or point (one lettered point of a paragraph that is a lead-in followed by points).",
+        "lead_in": "Points only: the paragraph's opening words that the point completes."
+    },
+    "terminology": {
+        "control": "obligation",
+        "controls": "obligations",
+        "family": "article",
+        "families": "articles",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable obligations that are implemented. The Directive defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "management_approval",
+            "type": "applicability",
+            "summary": "The management body approves the cybersecurity risk-management measures, oversees their implementation and can be held liable for infringements.",
+            "source": "dir2555",
+            "cite": "Article 20(1)",
+            "quote": "approve the cybersecurity risk-management measures taken by those entities in order to comply with Article 21, oversee its implementation and can be held liable for infringements by the entities of that Article."
+        },
+        {
+            "id": "proportionality",
+            "type": "applicability",
+            "summary": "Measures are proportionate to the entity's exposure to risk, its size, and the likelihood and severity of incidents.",
+            "source": "dir2555",
+            "cite": "Article 21(1)",
+            "quote": "When assessing the proportionality of those measures, due account shall be taken of the degree of the entity’s exposure to risks, the entity’s size and the likelihood of occurrence of incidents and their severity, including their societal and economic impact."
+        },
+        {
+            "id": "early_warning",
+            "type": "deadline",
+            "control": "Art. 23(4)(a)",
+            "hours": 24,
+            "from": "becoming aware of the significant incident",
+            "summary": "An early warning is submitted without undue delay and within 24 hours of becoming aware of a significant incident.",
+            "source": "dir2555",
+            "cite": "Article 23(4)(a)",
+            "quote": "without undue delay and in any event within 24 hours of becoming aware of the significant incident, an early warning"
+        },
+        {
+            "id": "incident_notification",
+            "type": "deadline",
+            "control": "Art. 23(4)(b)",
+            "hours": 72,
+            "from": "becoming aware of the significant incident",
+            "summary": "An incident notification is submitted without undue delay and within 72 hours of becoming aware of a significant incident.",
+            "source": "dir2555",
+            "cite": "Article 23(4)(b)",
+            "quote": "without undue delay and in any event within 72 hours of becoming aware of the significant incident, an incident notification"
+        },
+        {
+            "id": "final_report",
+            "type": "deadline",
+            "control": "Art. 23(4)(d)",
+            "months": 1,
+            "from": "submission of the incident notification",
+            "summary": "A final report is submitted no later than one month after the incident notification.",
+            "source": "dir2555",
+            "cite": "Article 23(4)(d)",
+            "quote": "a final report not later than one month after the submission of the incident notification under point (b), including the following:"
+        },
+        {
+            "id": "trust_service_providers",
+            "type": "deadline",
+            "control": "Art. 23(4)(b)",
+            "hours": 24,
+            "from": "becoming aware of the significant incident",
+            "summary": "A trust service provider submits its incident notification within 24 hours instead of 72 for significant incidents that affect its trust services.",
+            "source": "dir2555",
+            "cite": "Article 23(4), second subparagraph",
+            "quote": "a trust service provider shall, with regard to significant incidents that have an impact on the provision of its trust services, notify the CSIRT or, where applicable, the competent authority, without undue delay and in any event within 24 hours of becoming aware of the significant incident."
+        },
+        {
+            "id": "significant_incident",
+            "type": "applicability",
+            "summary": "An incident is significant when it causes or can cause severe operational disruption or financial loss for the entity, or considerable damage to others.",
+            "source": "dir2555",
+            "cite": "Article 23(3)",
+            "quote": "An incident shall be considered to be significant if:"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "Essential entities that infringe Article 21 or 23 face administrative fines with a maximum of at least EUR 10 million or 2% of total worldwide annual turnover, whichever is higher.",
+            "source": "dir2555",
+            "cite": "Article 34(4)",
+            "quote": "essential entities are subject, in accordance with paragraphs 2 and 3 of this Article, to administrative fines of a maximum of at least EUR"
+        },
+        {
+            "summary": "Important entities that infringe Article 21 or 23 face administrative fines with a maximum of at least EUR 7 million or 1.4% of total worldwide annual turnover, whichever is higher.",
+            "source": "dir2555",
+            "cite": "Article 34(5)",
+            "quote": "important entities are subject, in accordance with paragraphs 2 and 3 of this Article, to administrative fines of a maximum of at least EUR"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "NIS 2",
+            "definition": "Directive (EU) 2022/2555, the European Union's law on cybersecurity risk management and incident reporting for essential and important entities."
+        },
+        {
+            "term": "Essential entity",
+            "definition": "An entity of a type and size listed in Article 3(1) of the Directive, subject to the stricter supervision regime."
+        },
+        {
+            "term": "Important entity",
+            "definition": "An entity in scope of the Directive that does not qualify as an essential entity."
+        },
+        {
+            "term": "CSIRT",
+            "definition": "Computer security incident response team: the national team that receives incident notifications and supports entities in handling incidents."
+        },
+        {
+            "term": "Significant incident",
+            "definition": "An incident that causes or can cause severe operational disruption or financial loss for the entity, or considerable damage to other persons."
+        }
+    ]
+}

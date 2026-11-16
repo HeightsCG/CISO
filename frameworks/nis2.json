@@ -1,0 +1,459 @@
+{
+    "key": "nis2",
+    "name": "NIS 2 Directive",
+    "version": "EU 2022/2555",
+    "full_name": "Directive (EU) 2022/2555 of the European Parliament and of the Council on measures for a high common level of cybersecurity across the Union (NIS 2 Directive)",
+    "issuing_body": "European Parliament and Council of the European Union",
+    "standard_codes": [
+        "NIS2"
+    ],
+    "aliases": [
+        "NIS2",
+        "NIS 2",
+        "Directive 2022/2555"
+    ],
+    "content_licence": "open",
+    "notice": "Assessed against the text of the Directive. Each Member State transposes the Directive into national law, which may add to or specify these obligations.",
+    "sources": [
+        {
+            "id": "dir2555",
+            "title": "Directive (EU) 2022/2555 (NIS 2 Directive), Official Journal L 333, 27.12.2022",
+            "version": "OJ L 333, 27 December 2022",
+            "publisher": "Publications Office of the European Union",
+            "url": "http://publications.europa.eu/resource/celex/32022L2555",
+            "file": "nis2/dir-2022-2555.html",
+            "sha256": "6ee66d5c419d9a056fb98d94083cacf9b818803bd6b416435718e0d4919cb589"
+        }
+    ],
+    "source_of": {
+        "controls": "dir2555"
+    },
+    "control_flags": {
+        "type": "paragraph (a whole paragraph of the article) or point (one lettered point of a paragraph that is a lead-in followed by points).",
+        "lead_in": "Points only: the paragraph's opening words that the point completes."
+    },
+    "terminology": {
+        "control": "obligation",
+        "controls": "obligations",
+        "family": "article",
+        "families": "articles",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable obligations that are implemented. The Directive defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "management_approval",
+            "type": "applicability",
+            "summary": "The management body approves the cybersecurity risk-management measures, oversees their implementation and can be held liable for infringements.",
+            "source": "dir2555",
+            "cite": "Article 20(1)",
+            "quote": "approve the cybersecurity risk-management measures taken by those entities in order to comply with Article 21, oversee its implementation and can be held liable for infringements by the entities of that Article."
+        },
+        {
+            "id": "proportionality",
+            "type": "applicability",
+            "summary": "Measures are proportionate to the entity's exposure to risk, its size, and the likelihood and severity of incidents.",
+            "source": "dir2555",
+            "cite": "Article 21(1)",
+            "quote": "When assessing the proportionality of those measures, due account shall be taken of the degree of the entity’s exposure to risks, the entity’s size and the likelihood of occurrence of incidents and their severity, including their societal and economic impact."
+        },
+        {
+            "id": "early_warning",
+            "type": "deadline",
+            "control": "Art. 23(4)(a)",
+            "hours": 24,
+            "from": "becoming aware of the significant incident",
+            "summary": "An early warning is submitted without undue delay and within 24 hours of becoming aware of a significant incident.",
+            "source": "dir2555",
+            "cite": "Article 23(4)(a)",
+            "quote": "without undue delay and in any event within 24 hours of becoming aware of the significant incident, an early warning"
+        },
+        {
+            "id": "incident_notification",
+            "type": "deadline",
+            "control": "Art. 23(4)(b)",
+            "hours": 72,
+            "from": "becoming aware of the significant incident",
+            "summary": "An incident notification is submitted without undue delay and within 72 hours of becoming aware of a significant incident.",
+            "source": "dir2555",
+            "cite": "Article 23(4)(b)",
+            "quote": "without undue delay and in any event within 72 hours of becoming aware of the significant incident, an incident notification"
+        },
+        {
+            "id": "final_report",
+            "type": "deadline",
+            "control": "Art. 23(4)(d)",
+            "months": 1,
+            "from": "submission of the incident notification",
+            "summary": "A final report is submitted no later than one month after the incident notification.",
+            "source": "dir2555",
+            "cite": "Article 23(4)(d)",
+            "quote": "a final report not later than one month after the submission of the incident notification under point (b), including the following:"
+        },
+        {
+            "id": "trust_service_providers",
+            "type": "deadline",
+            "control": "Art. 23(4)(b)",
+            "hours": 24,
+            "from": "becoming aware of the significant incident",
+            "summary": "A trust service provider submits its incident notification within 24 hours instead of 72 for significant incidents that affect its trust services.",
+            "source": "dir2555",
+            "cite": "Article 23(4), second subparagraph",
+            "quote": "a trust service provider shall, with regard to significant incidents that have an impact on the provision of its trust services, notify the CSIRT or, where applicable, the competent authority, without undue delay and in any event within 24 hours of becoming aware of the significant incident."
+        },
+        {
+            "id": "significant_incident",
+            "type": "applicability",
+            "summary": "An incident is significant when it causes or can cause severe operational disruption or financial loss for the entity, or considerable damage to others.",
+            "source": "dir2555",
+            "cite": "Article 23(3)",
+            "quote": "An incident shall be considered to be significant if:"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "Essential entities that infringe Article 21 or 23 face administrative fines with a maximum of at least EUR 10 million or 2% of total worldwide annual turnover, whichever is higher.",
+            "source": "dir2555",
+            "cite": "Article 34(4)",
+            "quote": "essential entities are subject, in accordance with paragraphs 2 and 3 of this Article, to administrative fines of a maximum of at least EUR"
+        },
+        {
+            "summary": "Important entities that infringe Article 21 or 23 face administrative fines with a maximum of at least EUR 7 million or 1.4% of total worldwide annual turnover, whichever is higher.",
+            "source": "dir2555",
+            "cite": "Article 34(5)",
+            "quote": "important entities are subject, in accordance with paragraphs 2 and 3 of this Article, to administrative fines of a maximum of at least EUR"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "NIS 2",
+            "definition": "Directive (EU) 2022/2555, the European Union's law on cybersecurity risk management and incident reporting for essential and important entities."
+        },
+        {
+            "term": "Essential entity",
+            "definition": "An entity of a type and size listed in Article 3(1) of the Directive, subject to the stricter supervision regime."
+        },
+        {
+            "term": "Important entity",
+            "definition": "An entity in scope of the Directive that does not qualify as an essential entity."
+        },
+        {
+            "term": "CSIRT",
+            "definition": "Computer security incident response team: the national team that receives incident notifications and supports entities in handling incidents."
+        },
+        {
+            "term": "Significant incident",
+            "definition": "An incident that causes or can cause severe operational disruption or financial loss for the entity, or considerable damage to other persons."
+        }
+    ],
+    "display_name": "NIS 2 Directive (EU 2022/2555)",
+    "counts": {
+        "families": 3,
+        "controls": 22,
+        "objectives": 0
+    },
+    "families": [
+        {
+            "number": "20",
+            "code": "Art. 20",
+            "name": "Governance",
+            "controls": [
+                {
+                    "id": "Art. 20(1)",
+                    "number": "Art. 20(1)",
+                    "text": "Member States shall ensure that the management bodies of essential and important entities approve the cybersecurity risk-management measures taken by those entities in order to comply with Article 21, oversee its implementation and can be held liable for infringements by the entities of that Article. The application of this paragraph shall be without prejudice to national law as regards the liability rules applicable to public institutions, as well as the liability of public servants and elected or appointed officials.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 20(2)",
+                    "number": "Art. 20(2)",
+                    "text": "Member States shall ensure that the members of the management bodies of essential and important entities are required to follow training, and shall encourage essential and important entities to offer similar training to their employees on a regular basis, in order that they gain sufficient knowledge and skills to enable them to identify risks and assess cybersecurity risk-management practices and their impact on the services provided by the entity.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                }
+            ]
+        },
+        {
+            "number": "21",
+            "code": "Art. 21",
+            "name": "Cybersecurity risk-management measures",
+            "controls": [
+                {
+                    "id": "Art. 21(1)",
+                    "number": "Art. 21(1)",
+                    "text": "Member States shall ensure that essential and important entities take appropriate and proportionate technical, operational and organisational measures to manage the risks posed to the security of network and information systems which those entities use for their operations or for the provision of their services, and to prevent or minimise the impact of incidents on recipients of their services and on other services. Taking into account the state-of-the-art and, where applicable, relevant European and international standards, as well as the cost of implementation, the measures referred to in the first subparagraph shall ensure a level of security of network and information systems appropriate to the risks posed. When assessing the proportionality of those measures, due account shall be taken of the degree of the entity's exposure to risks, the entity's size and the likelihood of occurrence of incidents and their severity, including their societal and economic impact.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 21(2)(a)",
+                    "number": "Art. 21(2)(a)",
+                    "text": "policies on risk analysis and information system security;",
+                    "description": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following: policies on risk analysis and information system security.",
+                    "type": "point",
+                    "lead_in": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following:",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 21(2)(b)",
+                    "number": "Art. 21(2)(b)",
+                    "text": "incident handling;",
+                    "description": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following: incident handling.",
+                    "type": "point",
+                    "lead_in": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following:",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 21(2)(c)",
+                    "number": "Art. 21(2)(c)",
+                    "text": "business continuity, such as backup management and disaster recovery, and crisis management;",
+                    "description": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following: business continuity, such as backup management and disaster recovery, and crisis management.",
+                    "type": "point",
+                    "lead_in": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following:",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 21(2)(d)",
+                    "number": "Art. 21(2)(d)",
+                    "text": "supply chain security, including security-related aspects concerning the relationships between each entity and its direct suppliers or service providers;",
+                    "description": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following: supply chain security, including security-related aspects concerning the relationships between each entity and its direct suppliers or service providers.",
+                    "type": "point",
+                    "lead_in": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following:",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 21(2)(e)",
+                    "number": "Art. 21(2)(e)",
+                    "text": "security in network and information systems acquisition, development and maintenance, including vulnerability handling and disclosure;",
+                    "description": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following: security in network and information systems acquisition, development and maintenance, including vulnerability handling and disclosure.",
+                    "type": "point",
+                    "lead_in": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following:",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 21(2)(f)",
+                    "number": "Art. 21(2)(f)",
+                    "text": "policies and procedures to assess the effectiveness of cybersecurity risk-management measures;",
+                    "description": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following: policies and procedures to assess the effectiveness of cybersecurity risk-management measures.",
+                    "type": "point",
+                    "lead_in": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following:",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 21(2)(g)",
+                    "number": "Art. 21(2)(g)",
+                    "text": "basic cyber hygiene practices and cybersecurity training;",
+                    "description": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following: basic cyber hygiene practices and cybersecurity training.",
+                    "type": "point",
+                    "lead_in": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following:",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 21(2)(h)",
+                    "number": "Art. 21(2)(h)",
+                    "text": "policies and procedures regarding the use of cryptography and, where appropriate, encryption;",
+                    "description": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following: policies and procedures regarding the use of cryptography and, where appropriate, encryption.",
+                    "type": "point",
+                    "lead_in": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following:",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 21(2)(i)",
+                    "number": "Art. 21(2)(i)",
+                    "text": "human resources security, access control policies and asset management;",
+                    "description": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following: human resources security, access control policies and asset management.",
+                    "type": "point",
+                    "lead_in": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following:",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 21(2)(j)",
+                    "number": "Art. 21(2)(j)",
+                    "text": "the use of multi-factor authentication or continuous authentication solutions, secured voice, video and text communications and secured emergency communication systems within the entity, where appropriate.",
+                    "description": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following: the use of multi-factor authentication or continuous authentication solutions, secured voice, video and text communications and secured emergency communication systems within the entity, where appropriate.",
+                    "type": "point",
+                    "lead_in": "The measures referred to in paragraph 1 shall be based on an all-hazards approach that aims to protect network and information systems and the physical environment of those systems from incidents, and shall include at least the following:",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 21(3)",
+                    "number": "Art. 21(3)",
+                    "text": "Member States shall ensure that, when considering which measures referred to in paragraph 2, point (d), of this Article are appropriate, entities take into account the vulnerabilities specific to each direct supplier and service provider and the overall quality of products and cybersecurity practices of their suppliers and service providers, including their secure development procedures. Member States shall also ensure that, when considering which measures referred to in that point are appropriate, entities are required to take into account the results of the coordinated security risk assessments of critical supply chains carried out in accordance with Article 22(1).",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 21(4)",
+                    "number": "Art. 21(4)",
+                    "text": "Member States shall ensure that an entity that finds that it does not comply with the measures provided for in paragraph 2 takes, without undue delay, all necessary, appropriate and proportionate corrective measures.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                }
+            ]
+        },
+        {
+            "number": "23",
+            "code": "Art. 23",
+            "name": "Reporting obligations",
+            "controls": [
+                {
+                    "id": "Art. 23(1)",
+                    "number": "Art. 23(1)",
+                    "text": "Each Member State shall ensure that essential and important entities notify, without undue delay, its CSIRT or, where applicable, its competent authority in accordance with paragraph 4 of any incident that has a significant impact on the provision of their services as referred to in paragraph 3 (significant incident). Where appropriate, entities concerned shall notify, without undue delay, the recipients of their services of significant incidents that are likely to adversely affect the provision of those services. Each Member State shall ensure that those entities report, inter alia, any information enabling the CSIRT or, where applicable, the competent authority to determine any cross-border impact of the incident. The mere act of notification shall not subject the notifying entity to increased liability. Where the entities concerned notify the competent authority of a significant incident under the first subparagraph, the Member State shall ensure that that competent authority forwards the notification to the CSIRT upon receipt. In the case of a cross-border or cross-sectoral significant incident, Member States shall ensure that their single points of contact are provided in due time with relevant information notified in accordance with paragraph 4.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 23(2)",
+                    "number": "Art. 23(2)",
+                    "text": "Where applicable, Member States shall ensure that essential and important entities communicate, without undue delay, to the recipients of their services that are potentially affected by a significant cyber threat any measures or remedies that those recipients are able to take in response to that threat. Where appropriate, the entities shall also inform those recipients of the significant cyber threat itself.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 23(4)(a)",
+                    "number": "Art. 23(4)(a)",
+                    "text": "without undue delay and in any event within 24 hours of becoming aware of the significant incident, an early warning, which, where applicable, shall indicate whether the significant incident is suspected of being caused by unlawful or malicious acts or could have a cross-border impact;",
+                    "description": "Member States shall ensure that, for the purpose of notification under paragraph 1, the entities concerned submit to the CSIRT or, where applicable, the competent authority: without undue delay and in any event within 24 hours of becoming aware of the significant incident, an early warning, which, where applicable, shall indicate whether the significant incident is suspected of being caused by unlawful or malicious acts or could have a cross-border impact.",
+                    "type": "point",
+                    "lead_in": "Member States shall ensure that, for the purpose of notification under paragraph 1, the entities concerned submit to the CSIRT or, where applicable, the competent authority:",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 23(4)(b)",
+                    "number": "Art. 23(4)(b)",
+                    "text": "without undue delay and in any event within 72 hours of becoming aware of the significant incident, an incident notification, which, where applicable, shall update the information referred to in point (a) and indicate an initial assessment of the significant incident, including its severity and impact, as well as, where available, the indicators of compromise;",
+                    "description": "Member States shall ensure that, for the purpose of notification under paragraph 1, the entities concerned submit to the CSIRT or, where applicable, the competent authority: without undue delay and in any event within 72 hours of becoming aware of the significant incident, an incident notification, which, where applicable, shall update the information referred to in point (a) and indicate an initial assessment of the significant incident, including its severity and impact, as well as, where available, the indicators of compromise.",
+                    "type": "point",
+                    "lead_in": "Member States shall ensure that, for the purpose of notification under paragraph 1, the entities concerned submit to the CSIRT or, where applicable, the competent authority:",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 23(4)(c)",
+                    "number": "Art. 23(4)(c)",
+                    "text": "upon the request of a CSIRT or, where applicable, the competent authority, an intermediate report on relevant status updates;",
+                    "description": "Member States shall ensure that, for the purpose of notification under paragraph 1, the entities concerned submit to the CSIRT or, where applicable, the competent authority: upon the request of a CSIRT or, where applicable, the competent authority, an intermediate report on relevant status updates.",
+                    "type": "point",
+                    "lead_in": "Member States shall ensure that, for the purpose of notification under paragraph 1, the entities concerned submit to the CSIRT or, where applicable, the competent authority:",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 23(4)(d)",
+                    "number": "Art. 23(4)(d)",
+                    "text": "a final report not later than one month after the submission of the incident notification under point (b), including the following: (i) a detailed description of the incident, including its severity and impact; (ii) the type of threat or root cause that is likely to have triggered the incident; (iii) applied and ongoing mitigation measures; (iv) where applicable, the cross-border impact of the incident;",
+                    "description": "Member States shall ensure that, for the purpose of notification under paragraph 1, the entities concerned submit to the CSIRT or, where applicable, the competent authority: a final report not later than one month after the submission of the incident notification under point (b), including the following: (i) a detailed description of the incident, including its severity and impact; (ii) the type of threat or root cause that is likely to have triggered the incident; (iii) applied and ongoing mitigation measures; (iv) where applicable, the cross-border impact of the incident.",
+                    "type": "point",
+                    "lead_in": "Member States shall ensure that, for the purpose of notification under paragraph 1, the entities concerned submit to the CSIRT or, where applicable, the competent authority:",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                },
+                {
+                    "id": "Art. 23(4)(e)",
+                    "number": "Art. 23(4)(e)",
+                    "text": "in the event of an ongoing incident at the time of the submission of the final report referred to in point (d), Member States shall ensure that entities concerned provide a progress report at that time and a final report within one month of their handling of the incident.",
+                    "description": "Member States shall ensure that, for the purpose of notification under paragraph 1, the entities concerned submit to the CSIRT or, where applicable, the competent authority: in the event of an ongoing incident at the time of the submission of the final report referred to in point (d), Member States shall ensure that entities concerned provide a progress report at that time and a final report within one month of their handling of the incident.",
+                    "type": "point",
+                    "lead_in": "Member States shall ensure that, for the purpose of notification under paragraph 1, the entities concerned submit to the CSIRT or, where applicable, the competent authority:",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "dir2555"
+                }
+            ]
+        }
+    ]
+}

@@ -155,6 +155,7 @@ class Poam
         'hipaa-privacy' => 'none',
         'ftc-safeguards' => 'none',
         'nydfs-500' => 'none',
+        'nis2' => 'none',
         'soc2' => 'none',
         'iso-27001-2022' => 'none',
         'pci-dss-4' => 'none'
