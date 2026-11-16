@@ -1,0 +1,1681 @@
+{
+    "key": "iso-42001",
+    "name": "ISO/IEC 42001",
+    "version": "HCG control set 2026",
+    "full_name": "ISO/IEC 42001:2023 Information technology - Artificial intelligence - Management system: HCG control set",
+    "issuing_body": "Heights Consulting Group, structured on ISO/IEC 42001:2023 (ISO/IEC JTC 1/SC 42)",
+    "standard_codes": [
+        "ISO-42001"
+    ],
+    "aliases": [
+        "ISO 42001",
+        "ISO/IEC 42001",
+        "AIMS",
+        "AI management system"
+    ],
+    "content_licence": "hcg_authored",
+    "notice": "HCG control set based on ISO/IEC 42001:2023. Clause numbers and headings 4 to 10 are used for identification only; the standard's text is licensed by ISO and is not reproduced. Controls marked HCG are written by HCG for the standard's AI control areas and do not carry the standard's Annex A numbering. Certification requires assessment against the licensed standard by an accredited certification body.",
+    "sources": [
+        {
+            "id": "iso42001",
+            "title": "ISO/IEC 42001:2023 sample preview (contents list and opening clauses)",
+            "version": "First edition, 2023-12",
+            "publisher": "ISO/IEC, distributed by iTeh Standards",
+            "url": "https://cdn.standards.iteh.ai/samples/iso/iso-iec-42001-2023/e7bdbc149cc04d04a87e3d6b723cead4/iso-iec-42001-2023.pdf",
+            "file": "iso42001/iso-iec-42001-2023-sample.pdf",
+            "sha256": "3220aeccaea0fd2b95807eaae1ab88ed74cf059f1add022e712ffa4afcbd50f8"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG ISO/IEC 42001 control set: descriptions, guidance, test points and AI control area controls",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "iso42001",
+        "objectives": "hcg",
+        "guidance": "hcg"
+    },
+    "control_flags": {
+        "type": "clause for a requirement clause of the standard (official number and heading), or hcg for an HCG-written control in one of the AI control areas."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "clause",
+        "families": "clauses",
+        "objective": "test point",
+        "objectives": "test points",
+        "plan": "Corrective action plan",
+        "plan_short": "Corrective action plan",
+        "score": "Conformity score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Conforms"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Conforms"
+        },
+        {
+            "key": "not_met",
+            "label": "Does Not Conform"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that conform, with partial conformity counting as half. ISO/IEC 42001 defines no score; certification depends on an audit finding no major nonconformity. This percentage is an HCG measure of readiness."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement conforms only when every HCG test point under it is met.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
+            "id": "clauses_mandatory",
+            "type": "applicability",
+            "summary": "Clauses 4 to 10 apply to every organization claiming conformity; none can be excluded.",
+            "source": "hcg",
+            "cite": "ISO/IEC 42001:2023, clauses 4 to 10"
+        },
+        {
+            "id": "annex_controls_selectable",
+            "type": "applicability",
+            "summary": "The AI control areas apply as selected through AI risk treatment and recorded in the statement of applicability; an area excluded there with justification is marked not applicable.",
+            "source": "iso42001",
+            "cite": "ISO/IEC 42001:2023, 3 Terms and definitions",
+            "quote": "Organizations may not require all controls listed in Annex A"
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "In the readiness score a partially conforming requirement counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "ISO/IEC 42001",
+            "definition": "The international standard for an artificial intelligence management system (AIMS): the policies, processes and controls an organization uses to develop, provide or use AI responsibly."
+        },
+        {
+            "term": "AIMS",
+            "definition": "Artificial intelligence management system."
+        },
+        {
+            "term": "Statement of applicability",
+            "definition": "The record of which reference controls an organization applies, which it excludes, and why."
+        },
+        {
+            "term": "AI system impact assessment",
+            "definition": "An assessment of the potential consequences of an AI system for individuals, groups and society."
+        }
+    ],
+    "display_name": "ISO/IEC 42001 (HCG control set 2026)",
+    "counts": {
+        "families": 16,
+        "controls": 46,
+        "objectives": 157
+    },
+    "families": [
+        {
+            "number": "4",
+            "code": "4",
+            "name": "Context of the organization",
+            "controls": [
+                {
+                    "id": "4.1",
+                    "number": "4.1",
+                    "title": "Understanding the organization and its context",
+                    "text": "",
+                    "description": "The organization knows the internal and external factors that shape what its AI management system must achieve, including its role as a developer, provider or user of AI systems and the laws and expectations that apply to its AI use.",
+                    "guidance": "Look for a current context analysis that names the organization's AI roles, the purposes its AI systems serve, the legal and regulatory requirements that apply to them, and how these feed the AI risk assessment.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.1.a",
+                            "text": "Internal and external issues relevant to the organization's use of AI are identified and documented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.1.b",
+                            "text": "The organization's role or roles with respect to AI systems are determined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.1.c",
+                            "text": "Applicable legal, regulatory and contractual requirements for AI are identified.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.1.d",
+                            "text": "The context analysis is reviewed when the organization's AI use changes.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "4.2",
+                    "number": "4.2",
+                    "title": "Understanding the needs and expectations of interested parties",
+                    "text": "",
+                    "description": "The organization identifies who has a stake in its AI systems, such as customers, affected individuals, regulators and staff, what they require, and which of those requirements the AI management system will address.",
+                    "guidance": "Ask for the list of interested parties and their requirements, and check that the decision about which requirements the management system addresses is recorded and reflected in objectives or controls.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.2.a",
+                            "text": "Interested parties relevant to the AI management system are identified.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.2.b",
+                            "text": "Their relevant requirements are recorded.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.2.c",
+                            "text": "The requirements the AI management system will address are decided and documented.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "4.3",
+                    "number": "4.3",
+                    "title": "Determining the scope of the AI management system",
+                    "text": "",
+                    "description": "The organization sets and documents the boundaries of its AI management system: which AI systems, activities, locations and organizational units it covers.",
+                    "guidance": "Obtain the scope statement. Check it names the AI systems and activities covered, explains any exclusions, takes account of the context and interested-party requirements, and is available as documented information.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.3.a",
+                            "text": "The scope of the AI management system is defined, including the AI systems and activities covered.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.3.b",
+                            "text": "The scope takes account of internal and external issues and interested-party requirements.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.3.c",
+                            "text": "Exclusions are justified.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.3.d",
+                            "text": "The scope is maintained as documented information.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "4.4",
+                    "number": "4.4",
+                    "title": "AI management system",
+                    "text": "",
+                    "description": "The organization has established an AI management system, made up of defined processes and their interactions, and keeps it implemented, documented and improving.",
+                    "guidance": "Look for a description of the management system's processes (risk, impact assessment, lifecycle, monitoring, improvement) and evidence that they operate, not only that they are written down.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.4.a",
+                            "text": "The processes of the AI management system and how they interact are defined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.4.b",
+                            "text": "The processes are implemented and operating.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.4.c",
+                            "text": "The management system is documented and maintained.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.4.d",
+                            "text": "The management system is continually improved.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                }
+            ]
+        },
+        {
+            "number": "5",
+            "code": "5",
+            "name": "Leadership",
+            "controls": [
+                {
+                    "id": "5.1",
+                    "number": "5.1",
+                    "title": "Leadership and commitment",
+                    "text": "",
+                    "description": "Top management visibly leads the AI management system: it aligns the AI policy and objectives with the organization's strategy, integrates AI governance into business processes and provides the resources needed.",
+                    "guidance": "Interview a member of top management and review board or executive minutes for decisions on AI governance, resourcing and objectives.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "5.1.a",
+                            "text": "Top management ensures the AI policy and objectives fit the organization's strategic direction.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.1.b",
+                            "text": "AI management system requirements are integrated into business processes.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.1.c",
+                            "text": "Resources for the AI management system are made available.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.1.d",
+                            "text": "Top management communicates the importance of effective AI management and supports others in their roles.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "5.2",
+                    "number": "5.2",
+                    "title": "AI policy",
+                    "text": "",
+                    "description": "The organization has an AI policy, approved by top management, that fits its purpose, commits it to meeting applicable requirements and to continual improvement, and gives a framework for AI objectives.",
+                    "guidance": "Obtain the approved AI policy. Check it states commitments to requirements and improvement, links to objectives, refers to related policies, and has been communicated internally and made available to interested parties as appropriate.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "5.2.a",
+                            "text": "An AI policy is established and approved by top management.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.2.b",
+                            "text": "The policy includes commitments to meet applicable requirements and to continual improvement.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.2.c",
+                            "text": "The policy provides a framework for setting AI objectives.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.2.d",
+                            "text": "The policy is documented, communicated within the organization and available to interested parties as appropriate.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "5.3",
+                    "number": "5.3",
+                    "title": "Roles, responsibilities and authorities",
+                    "text": "",
+                    "description": "Responsibilities and authorities for the AI management system and for AI systems are assigned and communicated, including who ensures conformity and who reports on performance to top management.",
+                    "guidance": "Review the role definitions or RACI for AI governance and check named owners exist for the management system, for each in-scope AI system, and for reporting to top management.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "5.3.a",
+                            "text": "Responsibilities and authorities for AI-related roles are assigned.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.3.b",
+                            "text": "An owner is accountable for ensuring the management system conforms to the standard.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.3.c",
+                            "text": "Reporting on the management system's performance to top management is assigned.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.3.d",
+                            "text": "Roles are communicated within the organization.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                }
+            ]
+        },
+        {
+            "number": "6",
+            "code": "6",
+            "name": "Planning",
+            "controls": [
+                {
+                    "id": "6.1.1",
+                    "number": "6.1.1",
+                    "title": "General",
+                    "text": "",
+                    "description": "When planning the AI management system the organization determines the risks and opportunities it must address, distinguishing acceptable from non-acceptable risk, and plans how to act on them and check the actions work.",
+                    "guidance": "Look for documented risk acceptance criteria and a plan that links identified risks and opportunities to actions and to how their effectiveness will be evaluated.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6.1.1.a",
+                            "text": "Risks and opportunities for the AI management system are determined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.1.b",
+                            "text": "Criteria distinguishing acceptable from non-acceptable AI risk are established.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.1.c",
+                            "text": "Actions to address risks and opportunities are planned and integrated into the management system.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.1.d",
+                            "text": "How the effectiveness of those actions will be evaluated is planned.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "6.1.2",
+                    "number": "6.1.2",
+                    "title": "AI risk assessment",
+                    "text": "",
+                    "description": "The organization has a defined, repeatable process for assessing AI risks that identifies risks, analyses their likely consequences for the organization, individuals and society, and evaluates them against the acceptance criteria.",
+                    "guidance": "Obtain the AI risk assessment procedure and a completed assessment. Check that it covers each in-scope AI system, considers consequences beyond the organization, and produces consistent, comparable results.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6.1.2.a",
+                            "text": "An AI risk assessment process is defined and documented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.2.b",
+                            "text": "The process identifies risks that could prevent the AI objectives being achieved.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.2.c",
+                            "text": "Risks are analysed for likelihood and potential consequences, including to individuals and society.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.2.d",
+                            "text": "Risks are evaluated against the acceptance criteria and prioritised.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.2.e",
+                            "text": "Results of AI risk assessments are retained as documented information.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "6.1.3",
+                    "number": "6.1.3",
+                    "title": "AI risk treatment",
+                    "text": "",
+                    "description": "The organization chooses treatment options for its AI risks, determines the controls needed, compares them with the reference control set to make sure none are overlooked, and records the result in a statement of applicability and a treatment plan.",
+                    "guidance": "Review the statement of applicability and the AI risk treatment plan. Check every control is marked included or excluded with a justification, and that risk owners have approved the plan and the residual risk.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6.1.3.a",
+                            "text": "Risk treatment options are selected for each assessed AI risk.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.3.b",
+                            "text": "The controls needed to implement the treatment are determined and compared with the standard's reference controls.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.3.c",
+                            "text": "A statement of applicability records each control, whether it is applied, and why.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.3.d",
+                            "text": "An AI risk treatment plan is produced and approved, and residual risk is accepted by the appropriate owners.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "6.1.4",
+                    "number": "6.1.4",
+                    "title": "AI system impact assessment",
+                    "text": "",
+                    "description": "The organization has a process for assessing the potential consequences of its AI systems for individuals, groups and society, taking account of the technical and societal context and the jurisdictions where they are used.",
+                    "guidance": "Obtain the impact assessment procedure and check it addresses intended and reasonably foreseeable uses and misuses, affected groups, and how results feed risk assessment and treatment.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6.1.4.a",
+                            "text": "A process for assessing AI system impacts on individuals, groups and society is defined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.4.b",
+                            "text": "Assessments consider intended use, foreseeable misuse and the context of deployment.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.4.c",
+                            "text": "Results inform the AI risk assessment and treatment.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.4.d",
+                            "text": "Impact assessment results are retained as documented information.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "6.2",
+                    "number": "6.2",
+                    "title": "AI objectives and planning to achieve them",
+                    "text": "",
+                    "description": "The organization sets measurable AI objectives consistent with the AI policy and plans what will be done, by whom, with what resources and by when to achieve them.",
+                    "guidance": "Review the AI objectives and check each is measurable or evaluable, monitored, communicated and supported by a plan with owners and dates.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6.2.a",
+                            "text": "AI objectives are set at relevant functions and levels and are consistent with the AI policy.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.2.b",
+                            "text": "Objectives are measurable where practicable and are monitored.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.2.c",
+                            "text": "Plans state what will be done, resources, responsibilities, timing and how results are evaluated.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.2.d",
+                            "text": "Objectives are documented and communicated.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "6.3",
+                    "number": "6.3",
+                    "title": "Planning of changes",
+                    "text": "",
+                    "description": "Changes to the AI management system are carried out in a planned way so that the system keeps working while they are made.",
+                    "guidance": "Ask for an example of a recent change to the management system and look for evidence that it was planned, its consequences considered and resources allocated.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6.3.a",
+                            "text": "Changes to the AI management system are identified and planned before they are made.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.3.b",
+                            "text": "The purpose and potential consequences of each change are considered.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.3.c",
+                            "text": "Resources and responsibilities for changes are allocated.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                }
+            ]
+        },
+        {
+            "number": "7",
+            "code": "7",
+            "name": "Support",
+            "controls": [
+                {
+                    "id": "7.1",
+                    "number": "7.1",
+                    "title": "Resources",
+                    "text": "",
+                    "description": "The organization determines and provides the people, tools, data, computing and funding needed to run and improve the AI management system.",
+                    "guidance": "Compare the resources the management system plan calls for with what is actually budgeted and staffed.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.1.a",
+                            "text": "Resources needed for the AI management system are determined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.1.b",
+                            "text": "The resources are provided.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "7.2",
+                    "number": "7.2",
+                    "title": "Competence",
+                    "text": "",
+                    "description": "People whose work affects AI performance or risk have the education, training or experience their role needs, and the organization acts to close gaps and keeps evidence.",
+                    "guidance": "Sample people in AI roles and compare their recorded competence with the role requirements; check training or hiring actions where gaps were found.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.2.a",
+                            "text": "Competence needed for each AI-related role is determined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.2.b",
+                            "text": "People in those roles are competent on the basis of education, training or experience.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.2.c",
+                            "text": "Actions are taken to acquire missing competence and their effectiveness is evaluated.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.2.d",
+                            "text": "Evidence of competence is retained.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "7.3",
+                    "number": "7.3",
+                    "title": "Awareness",
+                    "text": "",
+                    "description": "People working for the organization know the AI policy, how their work contributes to the AI management system, and what happens if they do not follow it.",
+                    "guidance": "Interview a sample of staff in AI-related roles about the AI policy and their responsibilities, and review awareness material.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.3.a",
+                            "text": "Staff are aware of the AI policy.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.3.b",
+                            "text": "Staff understand their contribution to the effectiveness of the AI management system.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.3.c",
+                            "text": "Staff understand the implications of not conforming to its requirements.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "7.4",
+                    "number": "7.4",
+                    "title": "Communication",
+                    "text": "",
+                    "description": "The organization decides what it communicates about the AI management system, internally and externally, when, to whom and how.",
+                    "guidance": "Look for a communication plan or matrix covering AI governance topics, audiences, timing and channels, and for evidence that it is followed.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.4.a",
+                            "text": "Internal and external communications relevant to the AI management system are determined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.4.b",
+                            "text": "What, when, with whom and how to communicate is defined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.4.c",
+                            "text": "Communications are carried out as planned.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "7.5",
+                    "number": "7.5",
+                    "title": "Documented information",
+                    "text": "",
+                    "description": "The documented information the AI management system needs is created with proper identification and review, and is controlled so that it is available, protected, versioned, retained and disposed of correctly.",
+                    "guidance": "Check document control: owners, versions, approval, access, retention and disposal. Sample several AI management system documents for currency and approval.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.5.a",
+                            "text": "Documented information required by the standard and by the organization is maintained.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.5.b",
+                            "text": "Documents are identified, reviewed and approved when created or updated.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.5.c",
+                            "text": "Documented information is available where needed and protected against loss or misuse.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.5.d",
+                            "text": "Distribution, access, version control, retention and disposal are controlled, including for documents of external origin.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                }
+            ]
+        },
+        {
+            "number": "8",
+            "code": "8",
+            "name": "Operation",
+            "controls": [
+                {
+                    "id": "8.1",
+                    "number": "8.1",
+                    "title": "Operational planning and control",
+                    "text": "",
+                    "description": "The organization plans, implements and controls the processes needed to meet its AI requirements and treat its AI risks, including processes that are outsourced.",
+                    "guidance": "Review operating procedures for AI systems and check that criteria are set, processes follow them, and outsourced AI processes are controlled.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.1.a",
+                            "text": "Criteria for AI processes are established and processes are controlled against them.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.1.b",
+                            "text": "Controls determined in risk treatment are implemented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.1.c",
+                            "text": "Planned changes are controlled and unintended changes are reviewed.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.1.d",
+                            "text": "Externally provided processes, products or services relevant to AI are controlled.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "8.2",
+                    "number": "8.2",
+                    "title": "AI risk assessment",
+                    "text": "",
+                    "description": "AI risk assessments are carried out at planned intervals and whenever significant changes are proposed or occur, and their results are kept.",
+                    "guidance": "Check the dates of AI risk assessments against the planned schedule and against significant changes to AI systems.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.2.a",
+                            "text": "AI risk assessments are performed at planned intervals.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.2.b",
+                            "text": "AI risk assessments are performed when significant changes are proposed or occur.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.2.c",
+                            "text": "Results are retained as documented information.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "8.3",
+                    "number": "8.3",
+                    "title": "AI risk treatment",
+                    "text": "",
+                    "description": "The AI risk treatment plan is carried out and verified, and new risks found during operation are put through risk treatment.",
+                    "guidance": "Trace a sample of treatment actions to evidence of completion and verification.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.3.a",
+                            "text": "The AI risk treatment plan is implemented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.3.b",
+                            "text": "The effectiveness of treatment is verified.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.3.c",
+                            "text": "Results of risk treatment are retained as documented information.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "8.4",
+                    "number": "8.4",
+                    "title": "AI system impact assessment",
+                    "text": "",
+                    "description": "AI system impact assessments are carried out at planned intervals and when significant changes occur, and their results are kept.",
+                    "guidance": "Check impact assessments exist for each in-scope AI system and were refreshed after significant changes.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.4.a",
+                            "text": "AI system impact assessments are performed at planned intervals.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.4.b",
+                            "text": "Impact assessments are performed when significant changes are proposed or occur.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.4.c",
+                            "text": "Results are retained as documented information.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                }
+            ]
+        },
+        {
+            "number": "9",
+            "code": "9",
+            "name": "Performance evaluation",
+            "controls": [
+                {
+                    "id": "9.1",
+                    "number": "9.1",
+                    "title": "Monitoring, measurement, analysis and evaluation",
+                    "text": "",
+                    "description": "The organization decides what to monitor and measure about its AI management system and AI systems, how and when, and analyses and evaluates the results.",
+                    "guidance": "Review the measurement plan, the metrics collected and evidence that results are analysed and reported.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "9.1.a",
+                            "text": "What needs to be monitored and measured is determined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.1.b",
+                            "text": "Methods, timing and responsibilities for monitoring and analysis are defined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.1.c",
+                            "text": "Results are analysed and evaluated.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.1.d",
+                            "text": "Evidence of the results is retained.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "9.2",
+                    "number": "9.2",
+                    "title": "Internal audit",
+                    "text": "",
+                    "description": "The organization audits its AI management system at planned intervals through a defined audit programme, using objective auditors, and reports the results to management.",
+                    "guidance": "Obtain the audit programme and the latest audit report. Check coverage of the scope, auditor independence, and follow-up of findings.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "9.2.a",
+                            "text": "An internal audit programme with frequency, methods, responsibilities and reporting is established.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.2.b",
+                            "text": "Audits are conducted at planned intervals against the standard and the organization's own requirements.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.2.c",
+                            "text": "Auditors are objective and impartial.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.2.d",
+                            "text": "Results are reported to relevant management and retained.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "9.3",
+                    "number": "9.3",
+                    "title": "Management review",
+                    "text": "",
+                    "description": "Top management reviews the AI management system at planned intervals, considering defined inputs, and records decisions on improvement and changes.",
+                    "guidance": "Review the minutes of the last management review and check the required inputs were considered and decisions recorded.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "9.3.a",
+                            "text": "Management reviews are held at planned intervals.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.3.b",
+                            "text": "Reviews consider the status of previous actions, changes in context, performance, audit results and improvement opportunities.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.3.c",
+                            "text": "Outputs include decisions on improvement and any changes to the management system.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.3.d",
+                            "text": "Results of management reviews are retained.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                }
+            ]
+        },
+        {
+            "number": "10",
+            "code": "10",
+            "name": "Improvement",
+            "controls": [
+                {
+                    "id": "10.1",
+                    "number": "10.1",
+                    "title": "Continual improvement",
+                    "text": "",
+                    "description": "The organization continually improves the suitability, adequacy and effectiveness of its AI management system.",
+                    "guidance": "Look for an improvement log or backlog and evidence that improvements were implemented.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "10.1.a",
+                            "text": "Opportunities for improvement are identified.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "10.1.b",
+                            "text": "Improvements are implemented and their effect is checked.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                },
+                {
+                    "id": "10.2",
+                    "number": "10.2",
+                    "title": "Nonconformity and corrective action",
+                    "text": "",
+                    "description": "When a nonconformity occurs the organization reacts to it, finds its cause, takes corrective action to prevent recurrence and checks that the action worked.",
+                    "guidance": "Sample nonconformities from audits or incidents and trace each to root cause, corrective action and effectiveness review.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "10.2.a",
+                            "text": "Nonconformities are controlled, corrected and their consequences dealt with.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "10.2.b",
+                            "text": "Causes are determined and the need for action to prevent recurrence is evaluated.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "10.2.c",
+                            "text": "Corrective actions are implemented and their effectiveness reviewed.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "10.2.d",
+                            "text": "The nature of nonconformities and actions taken are retained as documented information.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso42001"
+                }
+            ]
+        },
+        {
+            "number": "HCG-POL",
+            "code": "HCG-POL",
+            "name": "AI policies (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-POL-01",
+                    "number": "HCG-POL-01",
+                    "title": "AI policy alignment with other policies",
+                    "text": "",
+                    "description": "The AI policy is aligned with the organization's other policies, such as information security, privacy and quality, and the overlaps and conflicts between them are resolved.",
+                    "guidance": "Compare the AI policy with the security, privacy and data policies and check that cross-references exist and do not conflict.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-POL-01.a",
+                            "text": "Policies that interact with AI are identified.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-POL-01.b",
+                            "text": "The AI policy refers to or is reconciled with them.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-POL-01.c",
+                            "text": "The AI policy and related policies are reviewed together at planned intervals.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HCG-ORG",
+            "code": "HCG-ORG",
+            "name": "Internal organization for AI (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-ORG-01",
+                    "number": "HCG-ORG-01",
+                    "title": "Reporting of concerns about AI",
+                    "text": "",
+                    "description": "Staff and others can raise concerns about the organization's AI systems, confidentially where needed, and the concerns are investigated and resolved.",
+                    "guidance": "Check that a reporting channel exists, is communicated, protects reporters, and that reports are logged and followed up.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-ORG-01.a",
+                            "text": "A process exists for raising concerns about AI systems.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-ORG-01.b",
+                            "text": "Reporters can do so confidentially and without retaliation.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-ORG-01.c",
+                            "text": "Concerns are recorded, investigated and resolved.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HCG-RES",
+            "code": "HCG-RES",
+            "name": "Resources for AI systems (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-RES-01",
+                    "number": "HCG-RES-01",
+                    "title": "Inventory of AI system resources",
+                    "text": "",
+                    "description": "For each AI system the organization documents the resources it depends on: data, tools, computing and system resources, and the people and skills involved.",
+                    "guidance": "Obtain the AI system inventory and check each entry records its data sources, models, tooling, infrastructure and responsible people.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-RES-01.a",
+                            "text": "An inventory of AI systems in scope is maintained.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-RES-01.b",
+                            "text": "Data resources used by each AI system are documented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-RES-01.c",
+                            "text": "Tooling, computing and system resources are documented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-RES-01.d",
+                            "text": "Human resources and competences for each AI system are documented.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HCG-IMP",
+            "code": "HCG-IMP",
+            "name": "Assessing impacts of AI systems (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-IMP-01",
+                    "number": "HCG-IMP-01",
+                    "title": "Impact assessment of individuals and groups",
+                    "text": "",
+                    "description": "Each AI system's potential effects on individuals and groups, such as on fairness, safety, privacy and access to services, are assessed and documented before deployment and when it changes.",
+                    "guidance": "Sample impact assessments and check they name affected groups, the kinds of harm considered and the mitigations chosen.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-IMP-01.a",
+                            "text": "Effects on individuals and groups are assessed for each AI system.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-IMP-01.b",
+                            "text": "Assessments cover fairness, safety, privacy and other relevant harms.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-IMP-01.c",
+                            "text": "Assessment results are documented and retained.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-IMP-01.d",
+                            "text": "Mitigations for significant impacts are identified.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-IMP-02",
+                    "number": "HCG-IMP-02",
+                    "title": "Societal impact assessment",
+                    "text": "",
+                    "description": "The broader effects of the organization's AI systems on society, such as on the environment, employment and public trust, are considered and recorded where relevant.",
+                    "guidance": "Look for evidence that societal effects were considered for higher-impact AI systems.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-IMP-02.a",
+                            "text": "Societal effects of AI systems are considered where relevant.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-IMP-02.b",
+                            "text": "Considerations and conclusions are documented.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HCG-LC",
+            "code": "HCG-LC",
+            "name": "AI system life cycle (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-LC-01",
+                    "number": "HCG-LC-01",
+                    "title": "Responsible development objectives",
+                    "text": "",
+                    "description": "The organization sets objectives for responsible AI development, such as fairness, transparency, robustness and accountability, and builds them into its development process.",
+                    "guidance": "Review development standards or checklists for responsible AI criteria and check they are applied in a recent project.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-LC-01.a",
+                            "text": "Objectives for responsible AI development are defined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-LC-01.b",
+                            "text": "The objectives are built into development procedures.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-LC-01.c",
+                            "text": "Projects demonstrate how the objectives were met.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-LC-02",
+                    "number": "HCG-LC-02",
+                    "title": "AI system requirements and design",
+                    "text": "",
+                    "description": "Requirements for each new or changed AI system, including intended use, performance targets and constraints, are specified and documented, and the design and development choices are recorded.",
+                    "guidance": "Sample an AI system's requirements and design records and check intended use, acceptance criteria and key design decisions are written down.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-LC-02.a",
+                            "text": "Requirements, including intended use and performance criteria, are specified for each AI system.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-LC-02.b",
+                            "text": "Design and development decisions are documented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-LC-02.c",
+                            "text": "Requirements are reviewed when the system changes.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-LC-03",
+                    "number": "HCG-LC-03",
+                    "title": "Verification and validation",
+                    "text": "",
+                    "description": "AI systems are verified and validated against their requirements before release, using defined criteria and test data that represent intended use.",
+                    "guidance": "Obtain test and validation reports for a recent release and check criteria, test data representativeness and sign-off.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-LC-03.a",
+                            "text": "Verification and validation criteria are defined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-LC-03.b",
+                            "text": "Testing uses data representative of intended use.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-LC-03.c",
+                            "text": "Results are reviewed and approved before deployment.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-LC-04",
+                    "number": "HCG-LC-04",
+                    "title": "Deployment, operation and monitoring",
+                    "text": "",
+                    "description": "AI systems are deployed under a plan, and in operation their performance, drift and errors are monitored so that problems are caught and corrected.",
+                    "guidance": "Review deployment plans and operational monitoring dashboards or reports for an AI system in production.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-LC-04.a",
+                            "text": "A deployment plan is prepared and followed.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-LC-04.b",
+                            "text": "Performance, drift and error rates are monitored in operation.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-LC-04.c",
+                            "text": "Issues found in operation trigger defined corrective action.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-LC-05",
+                    "number": "HCG-LC-05",
+                    "title": "Technical documentation and event logs",
+                    "text": "",
+                    "description": "Each AI system has technical documentation suitable for the people who rely on it, and records events, such as inputs, outputs and decisions, where needed to trace and review its behaviour.",
+                    "guidance": "Check documentation exists for users and operators, and that logging is enabled with defined retention for systems where traceability matters.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-LC-05.a",
+                            "text": "Technical documentation is prepared for each AI system and kept current.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-LC-05.b",
+                            "text": "Event logging is defined and enabled where traceability is needed.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-LC-05.c",
+                            "text": "Logs are retained and protected for a defined period.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HCG-DATA",
+            "code": "HCG-DATA",
+            "name": "Data for AI systems (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-DATA-01",
+                    "number": "HCG-DATA-01",
+                    "title": "Data acquisition and provenance",
+                    "text": "",
+                    "description": "The organization knows where the data used to develop and operate its AI systems comes from, has the right to use it, and records its provenance.",
+                    "guidance": "Sample datasets and check source, licence or legal basis, collection date and lineage are recorded.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-DATA-01.a",
+                            "text": "Data sources for each AI system are identified.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-DATA-01.b",
+                            "text": "Rights to use the data are confirmed.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-DATA-01.c",
+                            "text": "Provenance and lineage of data are recorded.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-DATA-02",
+                    "number": "HCG-DATA-02",
+                    "title": "Data quality",
+                    "text": "",
+                    "description": "Quality requirements for AI data, such as accuracy, completeness, representativeness and freedom from unwanted bias, are defined and checked.",
+                    "guidance": "Review data quality criteria and the checks run on a recent training or evaluation dataset.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-DATA-02.a",
+                            "text": "Data quality requirements are defined for each AI system.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-DATA-02.b",
+                            "text": "Data is checked against the requirements before use.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-DATA-02.c",
+                            "text": "Bias and representativeness are assessed.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-DATA-03",
+                    "number": "HCG-DATA-03",
+                    "title": "Data preparation",
+                    "text": "",
+                    "description": "Methods used to prepare data for AI systems, such as cleaning, labelling, augmentation and splitting, are defined and recorded so that results can be reproduced and reviewed.",
+                    "guidance": "Check that data preparation steps are scripted or documented and versioned.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-DATA-03.a",
+                            "text": "Data preparation methods are defined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-DATA-03.b",
+                            "text": "Preparation steps are documented or automated so they can be reproduced.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-DATA-03.c",
+                            "text": "Prepared datasets are versioned.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HCG-INFO",
+            "code": "HCG-INFO",
+            "name": "Information for interested parties (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-INFO-01",
+                    "number": "HCG-INFO-01",
+                    "title": "Information for users and affected people",
+                    "text": "",
+                    "description": "Users and people affected by an AI system receive the information they need: that AI is in use, what it does, its limits and how to raise questions or contest outcomes.",
+                    "guidance": "Review user-facing notices, documentation and contact routes for a sample AI system.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-INFO-01.a",
+                            "text": "Users are told when they interact with or are affected by an AI system.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-INFO-01.b",
+                            "text": "Information on purpose, capabilities and limitations is provided.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-INFO-01.c",
+                            "text": "A route to ask questions or contest outcomes is provided.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-INFO-02",
+                    "number": "HCG-INFO-02",
+                    "title": "Reporting incidents and obligations to interested parties",
+                    "text": "",
+                    "description": "The organization has a plan for communicating AI incidents to users and other interested parties and for meeting any reporting obligations, including to regulators.",
+                    "guidance": "Check the incident communication plan covers AI-specific incidents and lists reporting obligations with deadlines.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-INFO-02.a",
+                            "text": "AI incidents are communicated to affected interested parties as planned.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-INFO-02.b",
+                            "text": "Reporting obligations to authorities are identified and met.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-INFO-02.c",
+                            "text": "Records of incident communications are kept.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HCG-USE",
+            "code": "HCG-USE",
+            "name": "Use of AI systems (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-USE-01",
+                    "number": "HCG-USE-01",
+                    "title": "Responsible use processes",
+                    "text": "",
+                    "description": "The organization defines how its AI systems may be used, including acceptable uses, approval for new uses and human oversight, and checks that use stays within those limits.",
+                    "guidance": "Review the acceptable use policy for AI and evidence of approvals for new uses and of human oversight.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-USE-01.a",
+                            "text": "Acceptable and prohibited uses of AI systems are defined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-USE-01.b",
+                            "text": "New uses are approved before they start.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-USE-01.c",
+                            "text": "Human oversight is defined for AI-supported decisions where needed.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-USE-01.d",
+                            "text": "Use is monitored against its intended purpose.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HCG-TP",
+            "code": "HCG-TP",
+            "name": "Third-party and customer relationships (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-TP-01",
+                    "number": "HCG-TP-01",
+                    "title": "Allocation of responsibilities across the AI supply chain",
+                    "text": "",
+                    "description": "Responsibilities for AI systems are divided clearly between the organization, its suppliers and its customers, and recorded in contracts or agreements.",
+                    "guidance": "Sample contracts with AI suppliers and customers and check they allocate responsibilities for data, model behaviour, incidents and compliance.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-TP-01.a",
+                            "text": "Responsibilities between the organization, suppliers and customers are identified.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-TP-01.b",
+                            "text": "They are recorded in contracts or agreements.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-TP-01.c",
+                            "text": "Changes in responsibility are managed.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-TP-02",
+                    "number": "HCG-TP-02",
+                    "title": "Suppliers of AI products and services",
+                    "text": "",
+                    "description": "Suppliers of AI models, data and services are assessed and monitored so that what they provide meets the organization's responsible AI requirements.",
+                    "guidance": "Review supplier due diligence and ongoing monitoring for AI suppliers.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-TP-02.a",
+                            "text": "AI suppliers are assessed before use.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-TP-02.b",
+                            "text": "Requirements are flowed down to suppliers.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-TP-02.c",
+                            "text": "Supplier performance and changes are monitored.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-TP-03",
+                    "number": "HCG-TP-03",
+                    "title": "Customer needs and expectations",
+                    "text": "",
+                    "description": "Where the organization provides AI systems to customers, it takes their needs and expectations into account and gives them what they need to use the system responsibly.",
+                    "guidance": "Check customer requirements and usage guidance are captured for AI products provided to others.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-TP-03.a",
+                            "text": "Customer requirements for AI systems are identified.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-TP-03.b",
+                            "text": "Customers receive guidance for responsible use.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-TP-03.c",
+                            "text": "Customer feedback is collected and acted on.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        }
+    ]
+}

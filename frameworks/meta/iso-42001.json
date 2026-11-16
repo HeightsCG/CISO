@@ -1,0 +1,132 @@
+{
+    "key": "iso-42001",
+    "name": "ISO/IEC 42001",
+    "version": "HCG control set 2026",
+    "full_name": "ISO/IEC 42001:2023 Information technology - Artificial intelligence - Management system: HCG control set",
+    "issuing_body": "Heights Consulting Group, structured on ISO/IEC 42001:2023 (ISO/IEC JTC 1/SC 42)",
+    "standard_codes": [
+        "ISO-42001"
+    ],
+    "aliases": [
+        "ISO 42001",
+        "ISO/IEC 42001",
+        "AIMS",
+        "AI management system"
+    ],
+    "content_licence": "hcg_authored",
+    "notice": "HCG control set based on ISO/IEC 42001:2023. Clause numbers and headings 4 to 10 are used for identification only; the standard's text is licensed by ISO and is not reproduced. Controls marked HCG are written by HCG for the standard's AI control areas and do not carry the standard's Annex A numbering. Certification requires assessment against the licensed standard by an accredited certification body.",
+    "sources": [
+        {
+            "id": "iso42001",
+            "title": "ISO/IEC 42001:2023 sample preview (contents list and opening clauses)",
+            "version": "First edition, 2023-12",
+            "publisher": "ISO/IEC, distributed by iTeh Standards",
+            "url": "https://cdn.standards.iteh.ai/samples/iso/iso-iec-42001-2023/e7bdbc149cc04d04a87e3d6b723cead4/iso-iec-42001-2023.pdf",
+            "file": "iso42001/iso-iec-42001-2023-sample.pdf",
+            "sha256": "3220aeccaea0fd2b95807eaae1ab88ed74cf059f1add022e712ffa4afcbd50f8"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG ISO/IEC 42001 control set: descriptions, guidance, test points and AI control area controls",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "iso42001",
+        "objectives": "hcg",
+        "guidance": "hcg"
+    },
+    "control_flags": {
+        "type": "clause for a requirement clause of the standard (official number and heading), or hcg for an HCG-written control in one of the AI control areas."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "clause",
+        "families": "clauses",
+        "objective": "test point",
+        "objectives": "test points",
+        "plan": "Corrective action plan",
+        "plan_short": "Corrective action plan",
+        "score": "Conformity score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Conforms"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Conforms"
+        },
+        {
+            "key": "not_met",
+            "label": "Does Not Conform"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that conform, with partial conformity counting as half. ISO/IEC 42001 defines no score; certification depends on an audit finding no major nonconformity. This percentage is an HCG measure of readiness."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement conforms only when every HCG test point under it is met.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
+            "id": "clauses_mandatory",
+            "type": "applicability",
+            "summary": "Clauses 4 to 10 apply to every organization claiming conformity; none can be excluded.",
+            "source": "hcg",
+            "cite": "ISO/IEC 42001:2023, clauses 4 to 10"
+        },
+        {
+            "id": "annex_controls_selectable",
+            "type": "applicability",
+            "summary": "The AI control areas apply as selected through AI risk treatment and recorded in the statement of applicability; an area excluded there with justification is marked not applicable.",
+            "source": "iso42001",
+            "cite": "ISO/IEC 42001:2023, 3 Terms and definitions",
+            "quote": "Organizations may not require all controls listed in Annex A"
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "In the readiness score a partially conforming requirement counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "ISO/IEC 42001",
+            "definition": "The international standard for an artificial intelligence management system (AIMS): the policies, processes and controls an organization uses to develop, provide or use AI responsibly."
+        },
+        {
+            "term": "AIMS",
+            "definition": "Artificial intelligence management system."
+        },
+        {
+            "term": "Statement of applicability",
+            "definition": "The record of which reference controls an organization applies, which it excludes, and why."
+        },
+        {
+            "term": "AI system impact assessment",
+            "definition": "An assessment of the potential consequences of an AI system for individuals, groups and society."
+        }
+    ]
+}
