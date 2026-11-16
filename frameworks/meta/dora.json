@@ -1,0 +1,191 @@
+{
+    "key": "dora",
+    "name": "DORA",
+    "version": "EU 2022/2554",
+    "full_name": "Regulation (EU) 2022/2554 of the European Parliament and of the Council on digital operational resilience for the financial sector (Digital Operational Resilience Act)",
+    "issuing_body": "European Parliament and Council of the European Union",
+    "standard_codes": [
+        "DORA"
+    ],
+    "aliases": [
+        "Digital Operational Resilience Act",
+        "Regulation 2022/2554"
+    ],
+    "content_licence": "open",
+    "notice": "Assessed against the text of the Regulation. The regulatory and implementing technical standards adopted under it specify many of these obligations in more detail and are not part of this assessment.",
+    "sources": [
+        {
+            "id": "reg2554",
+            "title": "Regulation (EU) 2022/2554 (Digital Operational Resilience Act), Official Journal L 333, 27.12.2022",
+            "version": "OJ L 333, 27 December 2022",
+            "publisher": "Publications Office of the European Union",
+            "url": "http://publications.europa.eu/resource/celex/32022R2554",
+            "file": "dora/reg-2022-2554.html",
+            "sha256": "cf50d8f023d23b2a56f535aaee0760eba7f1925ef08a9858c5c31d43d414f46b"
+        }
+    ],
+    "source_of": {
+        "controls": "reg2554",
+        "objectives": "reg2554"
+    },
+    "control_flags": {
+        "excludes_microenterprises": "True where the paragraph applies to \"financial entities, other than microenterprises\"; a microenterprise marks it not applicable.",
+        "objectives": "The lettered points of the paragraph."
+    },
+    "terminology": {
+        "control": "obligation",
+        "controls": "obligations",
+        "family": "article",
+        "families": "articles",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable obligations that are implemented. The Regulation defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "An obligation is met only when every element it lists is met.",
+            "source": "reg2554",
+            "cite": "Regulation (EU) 2022/2554"
+        },
+        {
+            "id": "proportionality",
+            "type": "applicability",
+            "summary": "Chapter II is implemented in proportion to the entity's size, overall risk profile and the nature, scale and complexity of its services, activities and operations.",
+            "source": "reg2554",
+            "cite": "Article 4(1)",
+            "quote": "Financial entities shall implement the rules laid down in Chapter II in accordance with the principle of proportionality, taking into account their size and overall risk profile, and the nature, scale and complexity of their services, activities and operations."
+        },
+        {
+            "id": "microenterprises",
+            "type": "applicability",
+            "applies_to": "excludes_microenterprises",
+            "summary": "Paragraphs that apply to financial entities \"other than microenterprises\" are not applicable to a microenterprise.",
+            "source": "reg2554",
+            "cite": "Article 5(3)",
+            "quote": "Financial entities, other than microenterprises, shall establish a role in order to monitor the arrangements concluded with ICT third-party service providers on the use of ICT services"
+        },
+        {
+            "id": "simplified_framework",
+            "type": "applicability",
+            "summary": "The small entities listed in Article 16(1) follow the simplified ICT risk management framework of that article instead of Articles 5 to 15; for them the obligations in those articles are not applicable.",
+            "source": "reg2554",
+            "cite": "Article 16(1)",
+            "quote": "Articles 5 to 15 of this Regulation shall not apply to small and non-interconnected investment firms"
+        },
+        {
+            "id": "management_body",
+            "type": "applicability",
+            "summary": "The management body defines, approves, oversees and is responsible for the ICT risk management framework.",
+            "source": "reg2554",
+            "cite": "Article 5(2)",
+            "quote": "The management body of the financial entity shall define, approve, oversee and be responsible for the implementation of all arrangements related to the ICT risk management framework referred to in Article 6(1)."
+        },
+        {
+            "id": "framework_review",
+            "type": "deadline",
+            "control": "Art. 6(5)",
+            "years": 1,
+            "from": "the previous review",
+            "summary": "The ICT risk management framework is documented and reviewed at least once a year, and after major ICT-related incidents.",
+            "source": "reg2554",
+            "cite": "Article 6(5)",
+            "quote": "The ICT risk management framework shall be documented and reviewed at least once a year, or periodically in the case of microenterprises"
+        },
+        {
+            "id": "yearly_testing",
+            "type": "deadline",
+            "control": "Art. 24(6)",
+            "years": 1,
+            "from": "the previous test",
+            "summary": "ICT systems and applications that support critical or important functions are tested at least yearly.",
+            "source": "reg2554",
+            "cite": "Article 24(6)",
+            "quote": "shall ensure, at least yearly, that appropriate tests are conducted on all ICT systems and applications supporting critical or important functions."
+        },
+        {
+            "id": "tlpt_cycle",
+            "type": "deadline",
+            "control": "Art. 26(1)",
+            "years": 3,
+            "from": "the previous threat-led penetration test",
+            "summary": "Entities identified by their competent authority carry out threat-led penetration testing at least every 3 years.",
+            "source": "reg2554",
+            "cite": "Article 26(1)",
+            "quote": "shall carry out at least every 3 years advanced testing by means of TLPT."
+        },
+        {
+            "id": "register_of_information",
+            "type": "applicability",
+            "summary": "A register of information on all contractual arrangements for ICT services is maintained at entity, sub-consolidated and consolidated levels.",
+            "source": "reg2554",
+            "cite": "Article 28(3)",
+            "quote": "a register of information in relation to all contractual arrangements on the use of ICT services provided by ICT third-party service providers."
+        },
+        {
+            "id": "incident_report_stages",
+            "type": "applicability",
+            "summary": "A major ICT-related incident is reported in three stages: an initial notification, an intermediate report and a final report, within time limits set by technical standards.",
+            "source": "reg2554",
+            "cite": "Article 19(4)",
+            "quote": "submit the following to the relevant competent authority:"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "DORA",
+            "definition": "The Digital Operational Resilience Act, Regulation (EU) 2022/2554, which sets ICT risk management, incident reporting, resilience testing and third-party risk requirements for financial entities in the European Union."
+        },
+        {
+            "term": "ICT",
+            "definition": "Information and communication technology."
+        },
+        {
+            "term": "ICT third-party service provider",
+            "definition": "An undertaking that provides ICT services to a financial entity."
+        },
+        {
+            "term": "Critical or important function",
+            "definition": "A function whose disruption would materially impair the financial entity's financial performance, the soundness or continuity of its services, or its continued compliance with its authorisation."
+        },
+        {
+            "term": "TLPT",
+            "definition": "Threat-led penetration testing: a controlled attempt to compromise the entity's live production systems that mimics the tactics of real threat actors."
+        },
+        {
+            "term": "ESAs",
+            "definition": "The European Supervisory Authorities: the European Banking Authority, the European Insurance and Occupational Pensions Authority and the European Securities and Markets Authority."
+        }
+    ]
+}
