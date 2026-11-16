@@ -1,0 +1,770 @@
+{
+    "key": "us-tx-dpsa",
+    "name": "Texas Data Privacy and Security Act",
+    "version": "Business and Commerce Code as published November 2026",
+    "full_name": "Texas Data Privacy and Security Act (Texas Business and Commerce Code, Chapter 541)",
+    "issuing_body": "State of Texas; published by the Texas Legislative Council",
+    "standard_codes": [
+        "US-TX-DPSA"
+    ],
+    "aliases": [
+        "TDPSA",
+        "Texas TDPSA",
+        "Texas Data Privacy and Security Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against Chapter 541 of the Texas Business and Commerce Code as published by the Texas Legislative Council in November 2026.",
+    "sources": [
+        {
+            "id": "bcc",
+            "title": "Texas Business and Commerce Code, Chapter 541, Consumer Data Protection (chapter page)",
+            "version": "as published November 2026",
+            "publisher": "Texas Legislative Council",
+            "url": "https://tcss.legis.texas.gov/resources/BC/htm/BC.541.htm",
+            "file": "us-tx-dpsa/BC.541.htm",
+            "sha256": "1f56ef0a23bae698ba6234921a4dded70a2444059214093791dcc8d7797591be"
+        }
+    ],
+    "source_of": {
+        "controls": "bcc",
+        "objectives": "bcc"
+    },
+    "control_flags": {
+        "objectives": "The numbered items of a subsection; each is required, or each prohibited under \"may not\", unless the lead-in makes them a choice."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "bcc",
+            "cite": "Tex. Bus. & Com. Code 541.051 to 541.107"
+        },
+        {
+            "id": "applicability",
+            "type": "applicability",
+            "summary": "The Act applies to a person that does business in Texas or offers products or services consumed there, processes or sells personal data, and is not a small business as the U.S. Small Business Administration defines it; small businesses remain bound by section 541.107 on selling sensitive data.",
+            "source": "bcc",
+            "cite": "Tex. Bus. & Com. Code 541.002(a)",
+            "quote": "is not a small business as defined by the United States Small Business Administration"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "541.052(b)",
+            "days": 45,
+            "from": "receipt of the request",
+            "summary": "A consumer request is answered without undue delay and within 45 days of receipt; the period may be extended once by 45 days.",
+            "source": "bcc",
+            "cite": "Tex. Bus. & Com. Code 541.052(b)",
+            "quote": "which may not be later than the 45th day after the date of receipt of the request."
+        },
+        {
+            "id": "appeal_deadline",
+            "type": "deadline",
+            "control": "541.053(c)",
+            "days": 60,
+            "from": "receipt of the appeal",
+            "summary": "An appeal is decided and answered in writing within 60 days of receipt.",
+            "source": "bcc",
+            "cite": "Tex. Bus. & Com. Code 541.053(c)",
+            "quote": "not later than the 60th day after the date of receipt of the appeal"
+        },
+        {
+            "id": "cure_period",
+            "type": "applicability",
+            "summary": "Before suing, the attorney general gives written notice; a violation cured within 30 days, with a written statement, is not pursued.",
+            "source": "bcc",
+            "cite": "Tex. Bus. & Com. Code 541.154",
+            "quote": "within the 30-day period, the person cures the identified violation"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "A violation that continues after the cure period carries a civil penalty of up to $7,500 for each violation, recoverable by the attorney general with injunctive relief.",
+            "source": "bcc",
+            "cite": "Tex. Bus. & Com. Code 541.155(a)",
+            "quote": "is liable for a civil penalty in an amount not to exceed $7,500 for each violation."
+        }
+    ],
+    "glossary": [
+        {
+            "term": "TDPSA",
+            "definition": "The Texas Data Privacy and Security Act, Texas's comprehensive consumer privacy law, in force since 1 July 2024."
+        },
+        {
+            "term": "Controller",
+            "definition": "The person that, alone or jointly with others, determines the purpose and means of processing personal data."
+        },
+        {
+            "term": "Processor",
+            "definition": "A person that processes personal data on behalf of a controller."
+        },
+        {
+            "term": "Sensitive data",
+            "definition": "Personal data revealing racial or ethnic origin, religious beliefs, health diagnosis, sexual orientation, citizenship or immigration status; genetic or biometric data used to identify a person; data of a known child; and precise geolocation data."
+        },
+        {
+            "term": "Data protection assessment",
+            "definition": "A documented assessment, required before targeted advertising, sale of personal data, certain profiling and processing of sensitive data, that weighs the benefits of processing against the risks to consumers."
+        }
+    ],
+    "display_name": "Texas Data Privacy and Security Act (Business and Commerce Code as published November 2026)",
+    "counts": {
+        "families": 11,
+        "controls": 29,
+        "objectives": 39
+    },
+    "families": [
+        {
+            "number": "541.051",
+            "code": "Sec. 541.051",
+            "name": "Consumer's personal data rights; request to exercise rights",
+            "controls": [
+                {
+                    "id": "541.051(b)",
+                    "number": "541.051(b)",
+                    "text": "A controller shall comply with an authenticated consumer request to exercise the right to: (1) confirm whether a controller is processing the consumer's personal data and to access the personal data; (2) correct inaccuracies in the consumer's personal data, taking into account the nature of the personal data and the purposes of the processing of the consumer's personal data; (3) delete personal data provided by or obtained about the consumer; (4) if the data is available in a digital format, obtain a copy of the consumer's personal data that the consumer previously provided to the controller in a portable and, to the extent technically feasible, readily usable format that allows the consumer to transmit the data to another controller without hindrance; or (5) opt out of the processing of the personal data for purposes of: (A) targeted advertising; (B) the sale of personal data; or (C) profiling in furtherance of a decision that produces a legal or similarly significant effect concerning the consumer.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "541.051(b)(1)",
+                            "text": "confirm whether a controller is processing the consumer's personal data and to access the personal data;",
+                            "description": "A controller shall comply with an authenticated consumer request to exercise the right to confirm whether a controller is processing the consumer's personal data and to access the personal data.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.051(b)(2)",
+                            "text": "correct inaccuracies in the consumer's personal data, taking into account the nature of the personal data and the purposes of the processing of the consumer's personal data;",
+                            "description": "A controller shall comply with an authenticated consumer request to exercise the right to correct inaccuracies in the consumer's personal data, taking into account the nature of the personal data and the purposes of the processing of the consumer's personal data.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.051(b)(3)",
+                            "text": "delete personal data provided by or obtained about the consumer;",
+                            "description": "A controller shall comply with an authenticated consumer request to exercise the right to delete personal data provided by or obtained about the consumer.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.051(b)(4)",
+                            "text": "if the data is available in a digital format, obtain a copy of the consumer's personal data that the consumer previously provided to the controller in a portable and, to the extent technically feasible, readily usable format that allows the consumer to transmit the data to another controller without hindrance; or",
+                            "description": "A controller shall comply with an authenticated consumer request to exercise the right to if the data is available in a digital format, obtain a copy of the consumer's personal data that the consumer previously provided to the controller in a portable and, to the extent technically feasible, readily usable format that allows the consumer to transmit the data to another controller without hindrance.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.051(b)(5)",
+                            "text": "opt out of the processing of the personal data for purposes of: (A) targeted advertising; (B) the sale of personal data; or (C) profiling in furtherance of a decision that produces a legal or similarly significant effect concerning the consumer.",
+                            "description": "A controller shall comply with an authenticated consumer request to exercise the right to opt out of the processing of the personal data for purposes of: (A) targeted advertising; (B) the sale of personal data; or (C) profiling in furtherance of a decision that produces a legal or similarly significant effect concerning the consumer.",
+                            "source": "bcc"
+                        }
+                    ],
+                    "source": "bcc"
+                }
+            ]
+        },
+        {
+            "number": "541.052",
+            "code": "Sec. 541.052",
+            "name": "Controller response to consumer request",
+            "controls": [
+                {
+                    "id": "541.052(a)",
+                    "number": "541.052(a)",
+                    "text": "Except as otherwise provided by this chapter, a controller shall comply with a request submitted by a consumer to exercise the consumer's rights pursuant to Section 541.051 as provided by this section.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.052(b)",
+                    "number": "541.052(b)",
+                    "text": "A controller shall respond to the consumer request without undue delay, which may not be later than the 45th day after the date of receipt of the request. The controller may extend the response period once by an additional 45 days when reasonably necessary, taking into account the complexity and number of the consumer's requests, so long as the controller informs the consumer of the extension within the initial 45-day response period, together with the reason for the extension.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.052(c)",
+                    "number": "541.052(c)",
+                    "text": "If a controller declines to take action regarding the consumer's request, the controller shall inform the consumer without undue delay, which may not be later than the 45th day after the date of receipt of the request, of the justification for declining to take action and provide instructions on how to appeal the decision in accordance with Section 541.053.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.052(d)",
+                    "number": "541.052(d)",
+                    "text": "A controller shall provide information in response to a consumer request free of charge, at least twice annually per consumer. If a request from a consumer is manifestly unfounded, excessive, or repetitive, the controller may charge the consumer a reasonable fee to cover the administrative costs of complying with the request or may decline to act on the request. The controller bears the burden of demonstrating for purposes of this subsection that a request is manifestly unfounded, excessive, or repetitive.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                }
+            ]
+        },
+        {
+            "number": "541.053",
+            "code": "Sec. 541.053",
+            "name": "Appeal",
+            "controls": [
+                {
+                    "id": "541.053(a)",
+                    "number": "541.053(a)",
+                    "text": "A controller shall establish a process for a consumer to appeal the controller's refusal to take action on a request within a reasonable period of time after the consumer's receipt of the decision under Section 541.052(c).",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.053(b)",
+                    "number": "541.053(b)",
+                    "text": "The appeal process must be conspicuously available and similar to the process for initiating action to exercise consumer rights by submitting a request under Section 541.051.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.053(c)",
+                    "number": "541.053(c)",
+                    "text": "A controller shall inform the consumer in writing of any action taken or not taken in response to an appeal under this section not later than the 60th day after the date of receipt of the appeal, including a written explanation of the reason or reasons for the decision.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.053(d)",
+                    "number": "541.053(d)",
+                    "text": "If the controller denies an appeal, the controller shall provide the consumer with the online mechanism described by Section 541.152 through which the consumer may contact the attorney general to submit a complaint.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                }
+            ]
+        },
+        {
+            "number": "541.055",
+            "code": "Sec. 541.055",
+            "name": "Methods for submitting consumer requests",
+            "controls": [
+                {
+                    "id": "541.055(a)",
+                    "number": "541.055(a)",
+                    "text": "A controller shall establish two or more secure and reliable methods to enable consumers to submit a request to exercise their consumer rights under this chapter. The methods must take into account: (1) the ways in which consumers normally interact with the controller; (2) the necessity for secure and reliable communications of those requests; and (3) the ability of the controller to authenticate the identity of the consumer making the request.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "541.055(a)(1)",
+                            "text": "the ways in which consumers normally interact with the controller;",
+                            "description": "A controller shall establish two or more secure and reliable methods to enable consumers to submit a request to exercise their consumer rights under this chapter. The methods must take into account the ways in which consumers normally interact with the controller.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.055(a)(2)",
+                            "text": "the necessity for secure and reliable communications of those requests; and",
+                            "description": "A controller shall establish two or more secure and reliable methods to enable consumers to submit a request to exercise their consumer rights under this chapter. The methods must take into account the necessity for secure and reliable communications of those requests.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.055(a)(3)",
+                            "text": "the ability of the controller to authenticate the identity of the consumer making the request.",
+                            "description": "A controller shall establish two or more secure and reliable methods to enable consumers to submit a request to exercise their consumer rights under this chapter. The methods must take into account the ability of the controller to authenticate the identity of the consumer making the request.",
+                            "source": "bcc"
+                        }
+                    ],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.055(b)",
+                    "number": "541.055(b)",
+                    "text": "A controller may not require a consumer to create a new account to exercise the consumer's rights under this subchapter but may require a consumer to use an existing account.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.055(c)",
+                    "number": "541.055(c)",
+                    "text": "Except as provided by Subsection (d), if the controller maintains an Internet website, the controller must provide a mechanism on the website for consumers to submit requests for information required to be disclosed under this chapter.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.055(e)",
+                    "number": "541.055(e)",
+                    "text": "A consumer may designate another person to serve as the consumer's authorized agent and act on the consumer's behalf to opt out of the processing of the consumer's personal data under Sections 541.051(b)(5)(A) and (B). A consumer may designate an authorized agent using a technology, including a link to an Internet website, an Internet browser setting or extension, or a global setting on an electronic device, that allows the consumer to indicate the consumer's intent to opt out of the processing. A controller shall comply with an opt-out request received from an authorized agent under this subsection if the controller is able to verify, with commercially reasonable effort, the identity of the consumer and the authorized agent's authority to act on the consumer's behalf. A controller is not required to comply with an opt-out request received from an authorized agent under this subsection if: (1) the authorized agent does not communicate the request to the controller in a clear and unambiguous manner; (2) the controller is not able to verify, with commercially reasonable effort, that the consumer is a resident of this state; (3) the controller does not possess the ability to process the request; or (4) the controller does not process similar or identical requests the controller receives from consumers for the purpose of complying with similar or identical laws or regulations of another state.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.055(f)",
+                    "number": "541.055(f)",
+                    "text": "A technology described by Subsection (e): (1) may not unfairly disadvantage another controller; (2) may not make use of a default setting, but must require the consumer to make an affirmative, freely given, and unambiguous choice to indicate the consumer's intent to opt out of any processing of a consumer's personal data; and (3) must be consumer-friendly and easy to use by the average consumer. SUBCHAPTER C. CONTROLLER AND PROCESSOR DATA-RELATED DUTIES AND PROHIBITIONS",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                }
+            ]
+        },
+        {
+            "number": "541.101",
+            "code": "Sec. 541.101",
+            "name": "Controller duties; transparency",
+            "controls": [
+                {
+                    "id": "541.101(a)",
+                    "number": "541.101(a)",
+                    "text": "A controller: (1) shall limit the collection of personal data to what is adequate, relevant, and reasonably necessary in relation to the purposes for which that personal data is processed, as disclosed to the consumer; and (2) for purposes of protecting the confidentiality, integrity, and accessibility of personal data, shall establish, implement, and maintain reasonable administrative, technical, and physical data security practices that are appropriate to the volume and nature of the personal data at issue.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "541.101(a)(1)",
+                            "text": "shall limit the collection of personal data to what is adequate, relevant, and reasonably necessary in relation to the purposes for which that personal data is processed, as disclosed to the consumer; and",
+                            "description": "A controller shall limit the collection of personal data to what is adequate, relevant, and reasonably necessary in relation to the purposes for which that personal data is processed, as disclosed to the consumer.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.101(a)(2)",
+                            "text": "for purposes of protecting the confidentiality, integrity, and accessibility of personal data, shall establish, implement, and maintain reasonable administrative, technical, and physical data security practices that are appropriate to the volume and nature of the personal data at issue.",
+                            "description": "A controller for purposes of protecting the confidentiality, integrity, and accessibility of personal data, shall establish, implement, and maintain reasonable administrative, technical, and physical data security practices that are appropriate to the volume and nature of the personal data at issue.",
+                            "source": "bcc"
+                        }
+                    ],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.101(b)",
+                    "number": "541.101(b)",
+                    "text": "A controller may not: (1) except as otherwise provided by this chapter, process personal data for a purpose that is neither reasonably necessary to nor compatible with the disclosed purpose for which the personal data is processed, as disclosed to the consumer, unless the controller obtains the consumer's consent; (2) process personal data in violation of state and federal laws that prohibit unlawful discrimination against consumers; (3) discriminate against a consumer for exercising any of the consumer rights contained in this chapter, including by denying goods or services, charging different prices or rates for goods or services, or providing a different level of quality of goods or services to the consumer; or (4) process the sensitive data of a consumer without obtaining the consumer's consent, or, in the case of processing the sensitive data of a known child, without processing that data in accordance with the Children's Online Privacy Protection Act of 1998 (15 U.S.C. Section 6501 et seq.).",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "541.101(b)(1)",
+                            "text": "except as otherwise provided by this chapter, process personal data for a purpose that is neither reasonably necessary to nor compatible with the disclosed purpose for which the personal data is processed, as disclosed to the consumer, unless the controller obtains the consumer's consent;",
+                            "description": "A controller may not except as otherwise provided by this chapter, process personal data for a purpose that is neither reasonably necessary to nor compatible with the disclosed purpose for which the personal data is processed, as disclosed to the consumer, unless the controller obtains the consumer's consent.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.101(b)(2)",
+                            "text": "process personal data in violation of state and federal laws that prohibit unlawful discrimination against consumers;",
+                            "description": "A controller may not process personal data in violation of state and federal laws that prohibit unlawful discrimination against consumers.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.101(b)(3)",
+                            "text": "discriminate against a consumer for exercising any of the consumer rights contained in this chapter, including by denying goods or services, charging different prices or rates for goods or services, or providing a different level of quality of goods or services to the consumer; or",
+                            "description": "A controller may not discriminate against a consumer for exercising any of the consumer rights contained in this chapter, including by denying goods or services, charging different prices or rates for goods or services, or providing a different level of quality of goods or services to the consumer.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.101(b)(4)",
+                            "text": "process the sensitive data of a consumer without obtaining the consumer's consent, or, in the case of processing the sensitive data of a known child, without processing that data in accordance with the Children's Online Privacy Protection Act of 1998 (15 U.S.C. Section 6501 et seq.).",
+                            "description": "A controller may not process the sensitive data of a consumer without obtaining the consumer's consent, or, in the case of processing the sensitive data of a known child, without processing that data in accordance with the Children's Online Privacy Protection Act of 1998 (15 U.S.C. Section 6501 et seq.).",
+                            "source": "bcc"
+                        }
+                    ],
+                    "source": "bcc"
+                }
+            ]
+        },
+        {
+            "number": "541.102",
+            "code": "Sec. 541.102",
+            "name": "Privacy notice",
+            "controls": [
+                {
+                    "id": "541.102(a)",
+                    "number": "541.102(a)",
+                    "text": "A controller shall provide consumers with a reasonably accessible and clear privacy notice that includes: (1) the categories of personal data processed by the controller, including, if applicable, any sensitive data processed by the controller; (2) the purpose for processing personal data; (3) how consumers may exercise their consumer rights under Subchapter B, including the process by which a consumer may appeal a controller's decision with regard to the consumer's request; (4) if applicable, the categories of personal data that the controller shares with third parties; (5) if applicable, the categories of third parties with whom the controller shares personal data; and (6) a description of the methods required under Section 541.055 through which consumers can submit requests to exercise their consumer rights under this chapter.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "541.102(a)(1)",
+                            "text": "the categories of personal data processed by the controller, including, if applicable, any sensitive data processed by the controller;",
+                            "description": "A controller shall provide consumers with a reasonably accessible and clear privacy notice that includes the categories of personal data processed by the controller, including, if applicable, any sensitive data processed by the controller.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.102(a)(2)",
+                            "text": "the purpose for processing personal data;",
+                            "description": "A controller shall provide consumers with a reasonably accessible and clear privacy notice that includes the purpose for processing personal data.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.102(a)(3)",
+                            "text": "how consumers may exercise their consumer rights under Subchapter B, including the process by which a consumer may appeal a controller's decision with regard to the consumer's request;",
+                            "description": "A controller shall provide consumers with a reasonably accessible and clear privacy notice that includes how consumers may exercise their consumer rights under Subchapter B, including the process by which a consumer may appeal a controller's decision with regard to the consumer's request.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.102(a)(4)",
+                            "text": "if applicable, the categories of personal data that the controller shares with third parties;",
+                            "description": "A controller shall provide consumers with a reasonably accessible and clear privacy notice that includes if applicable, the categories of personal data that the controller shares with third parties.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.102(a)(5)",
+                            "text": "if applicable, the categories of third parties with whom the controller shares personal data; and",
+                            "description": "A controller shall provide consumers with a reasonably accessible and clear privacy notice that includes if applicable, the categories of third parties with whom the controller shares personal data.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.102(a)(6)",
+                            "text": "a description of the methods required under Section 541.055 through which consumers can submit requests to exercise their consumer rights under this chapter.",
+                            "description": "A controller shall provide consumers with a reasonably accessible and clear privacy notice that includes a description of the methods required under Section 541.055 through which consumers can submit requests to exercise their consumer rights under this chapter.",
+                            "source": "bcc"
+                        }
+                    ],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.102(b)",
+                    "number": "541.102(b)",
+                    "text": "If a controller engages in the sale of personal data that is sensitive data, the controller shall include the following notice: \"NOTICE: We may sell your sensitive personal data.\" The notice must be posted in the same location and in the same manner as the privacy notice described by Subsection (a).",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.102(c)",
+                    "number": "541.102(c)",
+                    "text": "If a controller engages in the sale of personal data that is biometric data, the controller shall include the following notice: \"NOTICE: We may sell your biometric personal data.\" The notice must be posted in the same location and in the same manner as the privacy notice described by Subsection (a).",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                }
+            ]
+        },
+        {
+            "number": "541.103",
+            "code": "Sec. 541.103",
+            "name": "Sale of data to third parties and processing data for targeted advertising; disclosure",
+            "controls": [
+                {
+                    "id": "541.103",
+                    "number": "541.103",
+                    "text": "If a controller sells personal data to third parties or processes personal data for targeted advertising, the controller shall clearly and conspicuously disclose that process and the manner in which a consumer may exercise the right to opt out of that process.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                }
+            ]
+        },
+        {
+            "number": "541.104",
+            "code": "Sec. 541.104",
+            "name": "Duties of processor",
+            "controls": [
+                {
+                    "id": "541.104(a)",
+                    "number": "541.104(a)",
+                    "text": "A processor shall adhere to the instructions of a controller and shall assist the controller in meeting or complying with the controller's duties or requirements under this chapter, including: (1) assisting the controller in responding to consumer rights requests submitted under Section 541.051 by using appropriate technical and organizational measures, as reasonably practicable, taking into account the nature of processing and the information available to the processor; (2) assisting the controller with regard to complying with requirements relating to the security of processing personal data, and if applicable, the personal data collected, stored, and processed by an artificial intelligence system, as that term is defined by Section 551.001, and to the notification of a breach of security of the processor's system under Chapter 521, taking into account the nature of processing and the information available to the processor; and (3) providing necessary information to enable the controller to conduct and document data protection assessments under Section 541.105.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "541.104(a)(1)",
+                            "text": "assisting the controller in responding to consumer rights requests submitted under Section 541.051 by using appropriate technical and organizational measures, as reasonably practicable, taking into account the nature of processing and the information available to the processor;",
+                            "description": "A processor shall adhere to the instructions of a controller and shall assist the controller in meeting or complying with the controller's duties or requirements under this chapter, including assisting the controller in responding to consumer rights requests submitted under Section 541.051 by using appropriate technical and organizational measures, as reasonably practicable, taking into account the nature of processing and the information available to the processor.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.104(a)(2)",
+                            "text": "assisting the controller with regard to complying with requirements relating to the security of processing personal data, and if applicable, the personal data collected, stored, and processed by an artificial intelligence system, as that term is defined by Section 551.001, and to the notification of a breach of security of the processor's system under Chapter 521, taking into account the nature of processing and the information available to the processor; and",
+                            "description": "A processor shall adhere to the instructions of a controller and shall assist the controller in meeting or complying with the controller's duties or requirements under this chapter, including assisting the controller with regard to complying with requirements relating to the security of processing personal data, and if applicable, the personal data collected, stored, and processed by an artificial intelligence system, as that term is defined by Section 551.001, and to the notification of a breach of security of the processor's system under Chapter 521, taking into account the nature of processing and the information available to the processor.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.104(a)(3)",
+                            "text": "providing necessary information to enable the controller to conduct and document data protection assessments under Section 541.105.",
+                            "description": "A processor shall adhere to the instructions of a controller and shall assist the controller in meeting or complying with the controller's duties or requirements under this chapter, including providing necessary information to enable the controller to conduct and document data protection assessments under Section 541.105.",
+                            "source": "bcc"
+                        }
+                    ],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.104(b)",
+                    "number": "541.104(b)",
+                    "text": "A contract between a controller and a processor shall govern the processor's data processing procedures with respect to processing performed on behalf of the controller. The contract must include: (1) clear instructions for processing data; (2) the nature and purpose of processing; (3) the type of data subject to processing; (4) the duration of processing; (5) the rights and obligations of both parties; and (6) a requirement that the processor shall: (A) ensure that each person processing personal data is subject to a duty of confidentiality with respect to the data; (B) at the controller's direction, delete or return all personal data to the controller as requested after the provision of the service is completed, unless retention of the personal data is required by law; (C) make available to the controller, on reasonable request, all information in the processor's possession necessary to demonstrate the processor's compliance with the requirements of this chapter; (D) allow, and cooperate with, reasonable assessments by the controller or the controller's designated assessor; and (E) engage any subcontractor pursuant to a written contract that requires the subcontractor to meet the requirements of the processor with respect to the personal data.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "541.104(b)(1)",
+                            "text": "clear instructions for processing data;",
+                            "description": "A contract between a controller and a processor shall govern the processor's data processing procedures with respect to processing performed on behalf of the controller. The contract must include clear instructions for processing data.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.104(b)(2)",
+                            "text": "the nature and purpose of processing;",
+                            "description": "A contract between a controller and a processor shall govern the processor's data processing procedures with respect to processing performed on behalf of the controller. The contract must include the nature and purpose of processing.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.104(b)(3)",
+                            "text": "the type of data subject to processing;",
+                            "description": "A contract between a controller and a processor shall govern the processor's data processing procedures with respect to processing performed on behalf of the controller. The contract must include the type of data subject to processing.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.104(b)(4)",
+                            "text": "the duration of processing;",
+                            "description": "A contract between a controller and a processor shall govern the processor's data processing procedures with respect to processing performed on behalf of the controller. The contract must include the duration of processing.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.104(b)(5)",
+                            "text": "the rights and obligations of both parties; and",
+                            "description": "A contract between a controller and a processor shall govern the processor's data processing procedures with respect to processing performed on behalf of the controller. The contract must include the rights and obligations of both parties.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.104(b)(6)",
+                            "text": "a requirement that the processor shall: (A) ensure that each person processing personal data is subject to a duty of confidentiality with respect to the data; (B) at the controller's direction, delete or return all personal data to the controller as requested after the provision of the service is completed, unless retention of the personal data is required by law; (C) make available to the controller, on reasonable request, all information in the processor's possession necessary to demonstrate the processor's compliance with the requirements of this chapter; (D) allow, and cooperate with, reasonable assessments by the controller or the controller's designated assessor; and (E) engage any subcontractor pursuant to a written contract that requires the subcontractor to meet the requirements of the processor with respect to the personal data.",
+                            "description": "A contract between a controller and a processor shall govern the processor's data processing procedures with respect to processing performed on behalf of the controller. The contract must include a requirement that the processor shall: (A) ensure that each person processing personal data is subject to a duty of confidentiality with respect to the data; (B) at the controller's direction, delete or return all personal data to the controller as requested after the provision of the service is completed, unless retention of the personal data is required by law; (C) make available to the controller, on reasonable request, all information in the processor's possession necessary to demonstrate the processor's compliance with the requirements of this chapter; (D) allow, and cooperate with, reasonable assessments by the controller or the controller's designated assessor; and (E) engage any subcontractor pursuant to a written contract that requires the subcontractor to meet the requirements of the processor with respect to the personal data.",
+                            "source": "bcc"
+                        }
+                    ],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.104(c)",
+                    "number": "541.104(c)",
+                    "text": "Notwithstanding the requirement described by Subsection (b)(6)(D), a processor, in the alternative, may arrange for a qualified and independent assessor to conduct an assessment of the processor's policies and technical and organizational measures in support of the requirements under this chapter using an appropriate and accepted control standard or framework and assessment procedure. The processor shall provide a report of the assessment to the controller on request.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                }
+            ]
+        },
+        {
+            "number": "541.105",
+            "code": "Sec. 541.105",
+            "name": "Data protection assessments",
+            "controls": [
+                {
+                    "id": "541.105(a)",
+                    "number": "541.105(a)",
+                    "text": "A controller shall conduct and document a data protection assessment of each of the following processing activities involving personal data: (1) the processing of personal data for purposes of targeted advertising; (2) the sale of personal data; (3) the processing of personal data for purposes of profiling, if the profiling presents a reasonably foreseeable risk of: (A) unfair or deceptive treatment of or unlawful disparate impact on consumers; (B) financial, physical, or reputational injury to consumers; (C) a physical or other intrusion on the solitude or seclusion, or the private affairs or concerns, of consumers, if the intrusion would be offensive to a reasonable person; or (D) other substantial injury to consumers; (4) the processing of sensitive data; and (5) any processing activities involving personal data that present a heightened risk of harm to consumers.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "541.105(a)(1)",
+                            "text": "the processing of personal data for purposes of targeted advertising;",
+                            "description": "A controller shall conduct and document a data protection assessment of each of the following processing activities involving personal data the processing of personal data for purposes of targeted advertising.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.105(a)(2)",
+                            "text": "the sale of personal data;",
+                            "description": "A controller shall conduct and document a data protection assessment of each of the following processing activities involving personal data the sale of personal data.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.105(a)(3)",
+                            "text": "the processing of personal data for purposes of profiling, if the profiling presents a reasonably foreseeable risk of: (A) unfair or deceptive treatment of or unlawful disparate impact on consumers; (B) financial, physical, or reputational injury to consumers; (C) a physical or other intrusion on the solitude or seclusion, or the private affairs or concerns, of consumers, if the intrusion would be offensive to a reasonable person; or (D) other substantial injury to consumers;",
+                            "description": "A controller shall conduct and document a data protection assessment of each of the following processing activities involving personal data the processing of personal data for purposes of profiling, if the profiling presents a reasonably foreseeable risk of: (A) unfair or deceptive treatment of or unlawful disparate impact on consumers; (B) financial, physical, or reputational injury to consumers; (C) a physical or other intrusion on the solitude or seclusion, or the private affairs or concerns, of consumers, if the intrusion would be offensive to a reasonable person; or (D) other substantial injury to consumers.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.105(a)(4)",
+                            "text": "the processing of sensitive data; and",
+                            "description": "A controller shall conduct and document a data protection assessment of each of the following processing activities involving personal data the processing of sensitive data.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.105(a)(5)",
+                            "text": "any processing activities involving personal data that present a heightened risk of harm to consumers.",
+                            "description": "A controller shall conduct and document a data protection assessment of each of the following processing activities involving personal data any processing activities involving personal data that present a heightened risk of harm to consumers.",
+                            "source": "bcc"
+                        }
+                    ],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.105(b)",
+                    "number": "541.105(b)",
+                    "text": "A data protection assessment conducted under Subsection (a) must: (1) identify and weigh the direct or indirect benefits that may flow from the processing to the controller, the consumer, other stakeholders, and the public, against the potential risks to the rights of the consumer associated with that processing, as mitigated by safeguards that can be employed by the controller to reduce the risks; and (2) factor into the assessment: (A) the use of deidentified data; (B) the reasonable expectations of consumers; (C) the context of the processing; and (D) the relationship between the controller and the consumer whose personal data will be processed.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "541.105(b)(1)",
+                            "text": "identify and weigh the direct or indirect benefits that may flow from the processing to the controller, the consumer, other stakeholders, and the public, against the potential risks to the rights of the consumer associated with that processing, as mitigated by safeguards that can be employed by the controller to reduce the risks; and",
+                            "description": "A data protection assessment conducted under Subsection (a) must identify and weigh the direct or indirect benefits that may flow from the processing to the controller, the consumer, other stakeholders, and the public, against the potential risks to the rights of the consumer associated with that processing, as mitigated by safeguards that can be employed by the controller to reduce the risks.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.105(b)(2)",
+                            "text": "factor into the assessment: (A) the use of deidentified data; (B) the reasonable expectations of consumers; (C) the context of the processing; and (D) the relationship between the controller and the consumer whose personal data will be processed.",
+                            "description": "A data protection assessment conducted under Subsection (a) must factor into the assessment: (A) the use of deidentified data; (B) the reasonable expectations of consumers; (C) the context of the processing; and (D) the relationship between the controller and the consumer whose personal data will be processed.",
+                            "source": "bcc"
+                        }
+                    ],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.105(c)",
+                    "number": "541.105(c)",
+                    "text": "A controller shall make a data protection assessment requested under Section 541.153(b) available to the attorney general pursuant to a civil investigative demand under Section 541.153.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                }
+            ]
+        },
+        {
+            "number": "541.106",
+            "code": "Sec. 541.106",
+            "name": "Deidentified or pseudonymous data",
+            "controls": [
+                {
+                    "id": "541.106(a)",
+                    "number": "541.106(a)",
+                    "text": "A controller in possession of deidentified data shall: (1) take reasonable measures to ensure that the data cannot be associated with an individual; (2) publicly commit to maintaining and using deidentified data without attempting to reidentify the data; and (3) contractually obligate any recipient of the deidentified data to comply with the provisions of this chapter.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "541.106(a)(1)",
+                            "text": "take reasonable measures to ensure that the data cannot be associated with an individual;",
+                            "description": "A controller in possession of deidentified data shall take reasonable measures to ensure that the data cannot be associated with an individual.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.106(a)(2)",
+                            "text": "publicly commit to maintaining and using deidentified data without attempting to reidentify the data; and",
+                            "description": "A controller in possession of deidentified data shall publicly commit to maintaining and using deidentified data without attempting to reidentify the data.",
+                            "source": "bcc"
+                        },
+                        {
+                            "id": "541.106(a)(3)",
+                            "text": "contractually obligate any recipient of the deidentified data to comply with the provisions of this chapter.",
+                            "description": "A controller in possession of deidentified data shall contractually obligate any recipient of the deidentified data to comply with the provisions of this chapter.",
+                            "source": "bcc"
+                        }
+                    ],
+                    "source": "bcc"
+                },
+                {
+                    "id": "541.106(d)",
+                    "number": "541.106(d)",
+                    "text": "A controller that discloses pseudonymous data or deidentified data shall exercise reasonable oversight to monitor compliance with any contractual commitments to which the pseudonymous data or deidentified data is subject and shall take appropriate steps to address any breach of the contractual commitments.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                }
+            ]
+        },
+        {
+            "number": "541.107",
+            "code": "Sec. 541.107",
+            "name": "Requirements for small businesses",
+            "controls": [
+                {
+                    "id": "541.107(a)",
+                    "number": "541.107(a)",
+                    "text": "A person described by Section 541.002(a)(3) may not engage in the sale of personal data that is sensitive data without receiving prior consent from the consumer.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "bcc"
+                }
+            ]
+        }
+    ]
+}

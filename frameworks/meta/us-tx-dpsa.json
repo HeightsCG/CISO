@@ -1,0 +1,151 @@
+{
+    "key": "us-tx-dpsa",
+    "name": "Texas Data Privacy and Security Act",
+    "version": "Business and Commerce Code as published November 2026",
+    "full_name": "Texas Data Privacy and Security Act (Texas Business and Commerce Code, Chapter 541)",
+    "issuing_body": "State of Texas; published by the Texas Legislative Council",
+    "standard_codes": [
+        "US-TX-DPSA"
+    ],
+    "aliases": [
+        "TDPSA",
+        "Texas TDPSA",
+        "Texas Data Privacy and Security Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against Chapter 541 of the Texas Business and Commerce Code as published by the Texas Legislative Council in November 2026.",
+    "sources": [
+        {
+            "id": "bcc",
+            "title": "Texas Business and Commerce Code, Chapter 541, Consumer Data Protection (chapter page)",
+            "version": "as published November 2026",
+            "publisher": "Texas Legislative Council",
+            "url": "https://tcss.legis.texas.gov/resources/BC/htm/BC.541.htm",
+            "file": "us-tx-dpsa/BC.541.htm",
+            "sha256": "1f56ef0a23bae698ba6234921a4dded70a2444059214093791dcc8d7797591be"
+        }
+    ],
+    "source_of": {
+        "controls": "bcc",
+        "objectives": "bcc"
+    },
+    "control_flags": {
+        "objectives": "The numbered items of a subsection; each is required, or each prohibited under \"may not\", unless the lead-in makes them a choice."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "bcc",
+            "cite": "Tex. Bus. & Com. Code 541.051 to 541.107"
+        },
+        {
+            "id": "applicability",
+            "type": "applicability",
+            "summary": "The Act applies to a person that does business in Texas or offers products or services consumed there, processes or sells personal data, and is not a small business as the U.S. Small Business Administration defines it; small businesses remain bound by section 541.107 on selling sensitive data.",
+            "source": "bcc",
+            "cite": "Tex. Bus. & Com. Code 541.002(a)",
+            "quote": "is not a small business as defined by the United States Small Business Administration"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "541.052(b)",
+            "days": 45,
+            "from": "receipt of the request",
+            "summary": "A consumer request is answered without undue delay and within 45 days of receipt; the period may be extended once by 45 days.",
+            "source": "bcc",
+            "cite": "Tex. Bus. & Com. Code 541.052(b)",
+            "quote": "which may not be later than the 45th day after the date of receipt of the request."
+        },
+        {
+            "id": "appeal_deadline",
+            "type": "deadline",
+            "control": "541.053(c)",
+            "days": 60,
+            "from": "receipt of the appeal",
+            "summary": "An appeal is decided and answered in writing within 60 days of receipt.",
+            "source": "bcc",
+            "cite": "Tex. Bus. & Com. Code 541.053(c)",
+            "quote": "not later than the 60th day after the date of receipt of the appeal"
+        },
+        {
+            "id": "cure_period",
+            "type": "applicability",
+            "summary": "Before suing, the attorney general gives written notice; a violation cured within 30 days, with a written statement, is not pursued.",
+            "source": "bcc",
+            "cite": "Tex. Bus. & Com. Code 541.154",
+            "quote": "within the 30-day period, the person cures the identified violation"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "A violation that continues after the cure period carries a civil penalty of up to $7,500 for each violation, recoverable by the attorney general with injunctive relief.",
+            "source": "bcc",
+            "cite": "Tex. Bus. & Com. Code 541.155(a)",
+            "quote": "is liable for a civil penalty in an amount not to exceed $7,500 for each violation."
+        }
+    ],
+    "glossary": [
+        {
+            "term": "TDPSA",
+            "definition": "The Texas Data Privacy and Security Act, Texas's comprehensive consumer privacy law, in force since 1 July 2024."
+        },
+        {
+            "term": "Controller",
+            "definition": "The person that, alone or jointly with others, determines the purpose and means of processing personal data."
+        },
+        {
+            "term": "Processor",
+            "definition": "A person that processes personal data on behalf of a controller."
+        },
+        {
+            "term": "Sensitive data",
+            "definition": "Personal data revealing racial or ethnic origin, religious beliefs, health diagnosis, sexual orientation, citizenship or immigration status; genetic or biometric data used to identify a person; data of a known child; and precise geolocation data."
+        },
+        {
+            "term": "Data protection assessment",
+            "definition": "A documented assessment, required before targeted advertising, sale of personal data, certain profiling and processing of sensitive data, that weighs the benefits of processing against the risks to consumers."
+        }
+    ]
+}
