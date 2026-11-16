@@ -20,13 +20,15 @@ class Controller {
     }
 
     /**
-     * Protected controllers that answer with JSON have no layout to fall back on,
-     * so the session is enforced here rather than in each action. View controllers
-     * keep their existing behaviour: layout.php renders the login form instead.
+     * A signed-out visitor to a protected controller is stopped here, before the
+     * action runs: an action would look its record up for an absent company, find
+     * nothing and answer "page not found". JSON controllers answer 401; view
+     * controllers render the layout, which shows the sign-in form, and after sign-in
+     * the form reloads the same address.
      */
     private function enforce_protection(): void
     {
-        if (empty($this->json) || empty($this->protected)) {
+        if (empty($this->protected)) {
             return;
         }
 
@@ -36,6 +38,11 @@ class Controller {
 
         if (!empty(Session::get('user_id'))) {
             return;
+        }
+
+        if (empty($this->json)) {
+            $this->view->render();
+            exit;
         }
 
         http_response_code(401);
