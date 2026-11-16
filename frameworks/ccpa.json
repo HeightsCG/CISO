@@ -1,0 +1,887 @@
+{
+    "key": "ccpa",
+    "name": "CCPA",
+    "version": "as amended, effective 1 January 2025",
+    "full_name": "California Consumer Privacy Act of 2018, as amended by the California Privacy Rights Act of 2020 (California Civil Code sections 1798.100 to 1798.199.100)",
+    "issuing_body": "State of California; text published by the California Privacy Protection Agency",
+    "standard_codes": [
+        "CCPA"
+    ],
+    "aliases": [
+        "CPRA",
+        "CCPA/CPRA",
+        "California Consumer Privacy Act",
+        "California Privacy Rights Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against the statute as published by the California Privacy Protection Agency, effective 1 January 2025. The Agency's regulations (California Code of Regulations, title 11, division 6) add detail to these duties and are not part of this assessment.",
+    "sources": [
+        {
+            "id": "ccpa",
+            "title": "California Consumer Privacy Act of 2018, statute text posted by the California Privacy Protection Agency",
+            "version": "effective 1 January 2025 (SB 1223, AB 1008, AB 1824 update)",
+            "publisher": "California Privacy Protection Agency",
+            "url": "https://cppa.ca.gov/regulations/pdf/ccpa_statute.pdf",
+            "file": "ccpa/ccpa_statute.pdf",
+            "sha256": "0beb83ccf73d82ede066f7e4154952435484410f748da09ac4329ed9afe6a43f"
+        }
+    ],
+    "source_of": {
+        "controls": "ccpa",
+        "objectives": "ccpa"
+    },
+    "control_flags": {
+        "objectives": "The numbered paragraphs directly beneath a subdivision."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every applicable element it lists is met.",
+            "source": "ccpa",
+            "cite": "California Civil Code 1798.100 to 1798.135"
+        },
+        {
+            "id": "business_threshold",
+            "type": "applicability",
+            "summary": "The Act applies to a for-profit business that does business in California and meets a size threshold, the first of which is annual gross revenues above $25 million as adjusted.",
+            "source": "ccpa",
+            "cite": "Civil Code 1798.140(d)(1)(A)",
+            "quote": "had annual gross revenues in excess of twenty-five million dollars"
+        },
+        {
+            "id": "data_minimization",
+            "type": "applicability",
+            "control": "1798.100(c)",
+            "summary": "Collection, use, retention and sharing of personal information is limited to what is reasonably necessary and proportionate to the purposes it was collected for.",
+            "source": "ccpa",
+            "cite": "Civil Code 1798.100(c)",
+            "quote": "shall be reasonably necessary and proportionate to achieve the purposes for which the personal information was collected or processed"
+        },
+        {
+            "id": "reasonable_security",
+            "type": "applicability",
+            "control": "1798.100(e)",
+            "summary": "A business implements reasonable security procedures and practices appropriate to the nature of the personal information.",
+            "source": "ccpa",
+            "cite": "Civil Code 1798.100(e)",
+            "quote": "shall implement reasonable security procedures and practices appropriate to the nature of the personal information"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "1798.130(a)",
+            "days": 45,
+            "from": "receipt of the verifiable consumer request",
+            "summary": "A verifiable consumer request to know, correct or delete is answered within 45 days of receipt; the period may be extended once by another 45 days with notice to the consumer.",
+            "source": "ccpa",
+            "cite": "Civil Code 1798.130(a)(2)(A)",
+            "quote": "within 45 days of receiving a verifiable consumer request from the consumer."
+        },
+        {
+            "id": "opt_in_wait",
+            "type": "deadline",
+            "months": 12,
+            "from": "the consumer's refusal",
+            "summary": "After a consumer declines a financial incentive programme, the business waits at least 12 months before asking again.",
+            "source": "ccpa",
+            "cite": "Civil Code 1798.125(b)(3)",
+            "quote": "then the business shall wait for at least 12 months before next requesting that the consumer provide opt-in consent"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "The California Privacy Protection Agency can impose an administrative fine of up to $2,500 per violation, or $7,500 per intentional violation or violation involving a minor's information; the amounts are adjusted for inflation.",
+            "source": "ccpa",
+            "cite": "Civil Code 1798.155(a)",
+            "quote": "for each violation or seven thousand five hundred dollars"
+        },
+        {
+            "summary": "A consumer whose unencrypted personal information is breached because of a failure to maintain reasonable security can sue for $100 to $750 per incident, as adjusted, or actual damages if greater.",
+            "source": "ccpa",
+            "cite": "Civil Code 1798.150(a)(1)(A)",
+            "quote": "per consumer per incident or actual damages, whichever is greater."
+        }
+    ],
+    "glossary": [
+        {
+            "term": "CCPA",
+            "definition": "The California Consumer Privacy Act of 2018, California's law giving consumers rights over the personal information businesses collect about them."
+        },
+        {
+            "term": "CPRA",
+            "definition": "The California Privacy Rights Act of 2020, the ballot measure that amended and expanded the CCPA and created the California Privacy Protection Agency."
+        },
+        {
+            "term": "Business",
+            "definition": "A for-profit entity that does business in California, determines why and how consumers' personal information is processed, and meets one of the Act's size or data-volume thresholds."
+        },
+        {
+            "term": "Service provider",
+            "definition": "A person that processes personal information on behalf of a business under a written contract that restricts its use of that information."
+        },
+        {
+            "term": "Sell and share",
+            "definition": "To sell is to disclose personal information to a third party for money or other valuable consideration; to share is to disclose it for cross-context behavioral advertising."
+        },
+        {
+            "term": "Sensitive personal information",
+            "definition": "Personal information such as government identifiers, account credentials, precise geolocation, racial or ethnic origin, health data and the contents of private communications."
+        },
+        {
+            "term": "Verifiable consumer request",
+            "definition": "A request from a consumer, or someone authorized to act for them, that the business can reasonably verify comes from the consumer the information is about."
+        }
+    ],
+    "display_name": "CCPA (as amended, effective 1 January 2025)",
+    "counts": {
+        "families": 10,
+        "controls": 32,
+        "objectives": 53
+    },
+    "families": [
+        {
+            "number": "1798.100",
+            "code": "",
+            "name": "General Duties of Businesses that Collect Personal Information",
+            "controls": [
+                {
+                    "id": "1798.100(a)",
+                    "number": "1798.100(a)",
+                    "text": "A business that controls the collection of a consumer's personal information shall, at or before the point of collection, inform consumers of the following: (1) The categories of personal information to be collected and the purposes for which the categories of personal information are collected or used and whether that information is sold or shared. A business shall not collect additional categories of personal information or use personal information collected for additional purposes that are incompatible with the disclosed purpose for which the personal information was collected without providing the consumer with notice consistent with this section. (2) If the business collects sensitive personal information, the categories of sensitive personal information to be collected and the purposes for which the categories of sensitive personal information are collected or used, and whether that information is sold or shared. A business shall not collect additional categories of sensitive personal information or use sensitive personal information collected for additional purposes that are incompatible with the disclosed purpose for which the sensitive personal information was collected without providing the consumer with notice consistent with this section. (3) The length of time the business intends to retain each category of personal information, including sensitive personal information, or if that is not possible, the criteria used to determine that period provided that a business shall not retain a consumer's personal information or sensitive personal information for each disclosed purpose for which the personal information was collected for longer than is reasonably necessary for that disclosed purpose.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1798.100(a)(1)",
+                            "text": "The categories of personal information to be collected and the purposes for which the categories of personal information are collected or used and whether that information is sold or shared. A business shall not collect additional categories of personal information or use personal information collected for additional purposes that are incompatible with the disclosed purpose for which the personal information was collected without providing the consumer with notice consistent with this section.",
+                            "description": "A business that controls the collection of a consumer's personal information shall, at or before the point of collection, inform consumers of the following: The categories of personal information to be collected and the purposes for which the categories of personal information are collected or used and whether that information is sold or shared. A business shall not collect additional categories of personal information or use personal information collected for additional purposes that are incompatible with the disclosed purpose for which the personal information was collected without providing the consumer with notice consistent with this section.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.100(a)(2)",
+                            "text": "If the business collects sensitive personal information, the categories of sensitive personal information to be collected and the purposes for which the categories of sensitive personal information are collected or used, and whether that information is sold or shared. A business shall not collect additional categories of sensitive personal information or use sensitive personal information collected for additional purposes that are incompatible with the disclosed purpose for which the sensitive personal information was collected without providing the consumer with notice consistent with this section.",
+                            "description": "A business that controls the collection of a consumer's personal information shall, at or before the point of collection, inform consumers of the following: If the business collects sensitive personal information, the categories of sensitive personal information to be collected and the purposes for which the categories of sensitive personal information are collected or used, and whether that information is sold or shared. A business shall not collect additional categories of sensitive personal information or use sensitive personal information collected for additional purposes that are incompatible with the disclosed purpose for which the sensitive personal information was collected without providing the consumer with notice consistent with this section.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.100(a)(3)",
+                            "text": "The length of time the business intends to retain each category of personal information, including sensitive personal information, or if that is not possible, the criteria used to determine that period provided that a business shall not retain a consumer's personal information or sensitive personal information for each disclosed purpose for which the personal information was collected for longer than is reasonably necessary for that disclosed purpose.",
+                            "description": "A business that controls the collection of a consumer's personal information shall, at or before the point of collection, inform consumers of the following: The length of time the business intends to retain each category of personal information, including sensitive personal information, or if that is not possible, the criteria used to determine that period provided that a business shall not retain a consumer's personal information or sensitive personal information for each disclosed purpose for which the personal information was collected for longer than is reasonably necessary for that disclosed purpose.",
+                            "source": "ccpa"
+                        }
+                    ],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.100(b)",
+                    "number": "1798.100(b)",
+                    "text": "A business that, acting as a third party, controls the collection of personal information about a consumer may satisfy its obligation under subdivision (a) by providing the required information prominently and conspicuously on the homepage of its internet website. In addition, if a business acting as a third party controls the collection of personal information about a consumer on its premises, including in a vehicle, then the business shall, at or before the point of collection, inform consumers as to the categories of personal information to be collected and the purposes for which the categories of personal information are used, and whether that personal information is sold, in a clear and conspicuous manner at the location.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.100(c)",
+                    "number": "1798.100(c)",
+                    "text": "A business' collection, use, retention, and sharing of a consumer's personal information shall be reasonably necessary and proportionate to achieve the purposes for which the personal information was collected or processed, or for another disclosed purpose that is compatible with the context in which the personal information was collected, and not further processed in a manner that is incompatible with those purposes.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.100(d)",
+                    "number": "1798.100(d)",
+                    "text": "A business that collects a consumer's personal information and that sells that personal information to, or shares it with, a third party or that discloses it to a service provider or contractor for a business purpose shall enter into an agreement with the third party, service provider, or contractor, that: (1) Specifies that the personal information is sold or disclosed by the business only for limited and specified purposes. (2) Obligates the third party, service provider, or contractor to comply with applicable obligations under this title and obligate those persons to provide the same level of privacy protection as is required by this title. (3) Grants the business rights to take reasonable and appropriate steps to help ensure that the third party, service provider, or contractor uses the personal information transferred in a manner consistent with the business' obligations under this title. (4) Requires the third party, service provider, or contractor to notify the business if it makes a determination that it can no longer meet its obligations under this title. (5) Grants the business the right, upon notice, including under paragraph (4), to take reasonable and appropriate steps to stop and remediate unauthorized use of personal information.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1798.100(d)(1)",
+                            "text": "Specifies that the personal information is sold or disclosed by the business only for limited and specified purposes.",
+                            "description": "A business that collects a consumer's personal information and that sells that personal information to, or shares it with, a third party or that discloses it to a service provider or contractor for a business purpose shall enter into an agreement with the third party, service provider, or contractor, that: Specifies that the personal information is sold or disclosed by the business only for limited and specified purposes.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.100(d)(2)",
+                            "text": "Obligates the third party, service provider, or contractor to comply with applicable obligations under this title and obligate those persons to provide the same level of privacy protection as is required by this title.",
+                            "description": "A business that collects a consumer's personal information and that sells that personal information to, or shares it with, a third party or that discloses it to a service provider or contractor for a business purpose shall enter into an agreement with the third party, service provider, or contractor, that: Obligates the third party, service provider, or contractor to comply with applicable obligations under this title and obligate those persons to provide the same level of privacy protection as is required by this title.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.100(d)(3)",
+                            "text": "Grants the business rights to take reasonable and appropriate steps to help ensure that the third party, service provider, or contractor uses the personal information transferred in a manner consistent with the business' obligations under this title.",
+                            "description": "A business that collects a consumer's personal information and that sells that personal information to, or shares it with, a third party or that discloses it to a service provider or contractor for a business purpose shall enter into an agreement with the third party, service provider, or contractor, that: Grants the business rights to take reasonable and appropriate steps to help ensure that the third party, service provider, or contractor uses the personal information transferred in a manner consistent with the business' obligations under this title.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.100(d)(4)",
+                            "text": "Requires the third party, service provider, or contractor to notify the business if it makes a determination that it can no longer meet its obligations under this title.",
+                            "description": "A business that collects a consumer's personal information and that sells that personal information to, or shares it with, a third party or that discloses it to a service provider or contractor for a business purpose shall enter into an agreement with the third party, service provider, or contractor, that: Requires the third party, service provider, or contractor to notify the business if it makes a determination that it can no longer meet its obligations under this title.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.100(d)(5)",
+                            "text": "Grants the business the right, upon notice, including under paragraph (4), to take reasonable and appropriate steps to stop and remediate unauthorized use of personal information.",
+                            "description": "A business that collects a consumer's personal information and that sells that personal information to, or shares it with, a third party or that discloses it to a service provider or contractor for a business purpose shall enter into an agreement with the third party, service provider, or contractor, that: Grants the business the right, upon notice, including under paragraph (4), to take reasonable and appropriate steps to stop and remediate unauthorized use of personal information.",
+                            "source": "ccpa"
+                        }
+                    ],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.100(e)",
+                    "number": "1798.100(e)",
+                    "text": "A business that collects a consumer's personal information shall implement reasonable security procedures and practices appropriate to the nature of the personal information to protect the personal information from unauthorized or illegal access, destruction, use, modification, or disclosure in accordance with Section 1798.81.5.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                }
+            ]
+        },
+        {
+            "number": "1798.105",
+            "code": "",
+            "name": "Consumers' Right to Delete Personal Information",
+            "controls": [
+                {
+                    "id": "1798.105(a)",
+                    "number": "1798.105(a)",
+                    "text": "A consumer shall have the right to request that a business delete any personal information about the consumer which the business has collected from the consumer.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.105(b)",
+                    "number": "1798.105(b)",
+                    "text": "A business that collects personal information about consumers shall disclose, pursuant to Section 1798.130, the consumer's rights to request the deletion of the consumer's personal information.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.105(c)",
+                    "number": "1798.105(c)",
+                    "text": "(1) A business that receives a verifiable consumer request from a consumer to delete the consumer's personal information pursuant to subdivision (a) of this section shall delete the consumer's personal information from its records, notify any service providers or contractors to delete the consumer's personal information from their records, and notify all third parties to whom the business has sold or shared the personal information to delete the consumer's personal information unless this proves impossible or involves disproportionate effort. (2) The business may maintain a confidential record of deletion requests solely for the purpose of preventing the personal information of a consumer who has submitted a deletion request from being sold, for compliance with laws or for other purposes, solely to the extent permissible under this title. (3) A service provider or contractor shall cooperate with the business in responding to a verifiable consumer request, and at the direction of the business, shall delete, or enable the business to delete and shall notify any of its own service providers or contractors to delete personal information about the consumer collected, used, processed, or retained by the service provider or the contractor. The service provider or contractor shall notify any service providers, contractors, or third parties who may have accessed personal information from or through the service provider or contractor, unless the information was accessed at the direction of the business, to delete the consumer's personal information unless this proves impossible or involves disproportionate effort. A service provider or contractor shall not be required to comply with a deletion request submitted by the consumer directly to the service provider or contractor to the extent that the service provider or contractor has collected, used, processed, or retained the consumer's personal information in its role as a service provider or contractor to the business.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1798.105(c)(1)",
+                            "text": "A business that receives a verifiable consumer request from a consumer to delete the consumer's personal information pursuant to subdivision (a) of this section shall delete the consumer's personal information from its records, notify any service providers or contractors to delete the consumer's personal information from their records, and notify all third parties to whom the business has sold or shared the personal information to delete the consumer's personal information unless this proves impossible or involves disproportionate effort.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.105(c)(2)",
+                            "text": "The business may maintain a confidential record of deletion requests solely for the purpose of preventing the personal information of a consumer who has submitted a deletion request from being sold, for compliance with laws or for other purposes, solely to the extent permissible under this title.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.105(c)(3)",
+                            "text": "A service provider or contractor shall cooperate with the business in responding to a verifiable consumer request, and at the direction of the business, shall delete, or enable the business to delete and shall notify any of its own service providers or contractors to delete personal information about the consumer collected, used, processed, or retained by the service provider or the contractor. The service provider or contractor shall notify any service providers, contractors, or third parties who may have accessed personal information from or through the service provider or contractor, unless the information was accessed at the direction of the business, to delete the consumer's personal information unless this proves impossible or involves disproportionate effort. A service provider or contractor shall not be required to comply with a deletion request submitted by the consumer directly to the service provider or contractor to the extent that the service provider or contractor has collected, used, processed, or retained the consumer's personal information in its role as a service provider or contractor to the business.",
+                            "source": "ccpa"
+                        }
+                    ],
+                    "source": "ccpa"
+                }
+            ]
+        },
+        {
+            "number": "1798.106",
+            "code": "",
+            "name": "Consumers' Right to Correct Inaccurate Personal Information",
+            "controls": [
+                {
+                    "id": "1798.106(a)",
+                    "number": "1798.106(a)",
+                    "text": "A consumer shall have the right to request a business that maintains inaccurate personal information about the consumer to correct that inaccurate personal information, taking into account the nature of the personal information and the purposes of the processing of the personal information.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.106(b)",
+                    "number": "1798.106(b)",
+                    "text": "A business that collects personal information about consumers shall disclose, pursuant to Section 1798.130, the consumer's right to request correction of inaccurate personal information.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.106(c)",
+                    "number": "1798.106(c)",
+                    "text": "A business that receives a verifiable consumer request to correct inaccurate personal information shall use commercially reasonable efforts to correct the inaccurate personal information as directed by the consumer, pursuant to Section 1798.130 and regulations adopted pursuant to paragraph (7) of subdivision (a) of Section 1798.185.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                }
+            ]
+        },
+        {
+            "number": "1798.110",
+            "code": "",
+            "name": "Consumers' Right to Know What Personal Information is Being Collected. Right to Access Personal Information",
+            "controls": [
+                {
+                    "id": "1798.110(a)",
+                    "number": "1798.110(a)",
+                    "text": "A consumer shall have the right to request that a business that collects personal information about the consumer disclose to the consumer the following: (1) The categories of personal information it has collected about that consumer. (2) The categories of sources from which the personal information is collected. (3) The business or commercial purpose for collecting, selling, or sharing personal information. (4) The categories of third parties to whom the business discloses personal information. (5) The specific pieces of personal information it has collected about that consumer.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1798.110(a)(1)",
+                            "text": "The categories of personal information it has collected about that consumer.",
+                            "description": "A consumer shall have the right to request that a business that collects personal information about the consumer disclose to the consumer the following: The categories of personal information it has collected about that consumer.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.110(a)(2)",
+                            "text": "The categories of sources from which the personal information is collected.",
+                            "description": "A consumer shall have the right to request that a business that collects personal information about the consumer disclose to the consumer the following: The categories of sources from which the personal information is collected.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.110(a)(3)",
+                            "text": "The business or commercial purpose for collecting, selling, or sharing personal information.",
+                            "description": "A consumer shall have the right to request that a business that collects personal information about the consumer disclose to the consumer the following: The business or commercial purpose for collecting, selling, or sharing personal information.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.110(a)(4)",
+                            "text": "The categories of third parties to whom the business discloses personal information.",
+                            "description": "A consumer shall have the right to request that a business that collects personal information about the consumer disclose to the consumer the following: The categories of third parties to whom the business discloses personal information.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.110(a)(5)",
+                            "text": "The specific pieces of personal information it has collected about that consumer.",
+                            "description": "A consumer shall have the right to request that a business that collects personal information about the consumer disclose to the consumer the following: The specific pieces of personal information it has collected about that consumer.",
+                            "source": "ccpa"
+                        }
+                    ],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.110(b)",
+                    "number": "1798.110(b)",
+                    "text": "A business that collects personal information about a consumer shall disclose to the consumer, pursuant to subparagraph (B) of paragraph (3) of subdivision (a) of Section 1798.130, the information specified in subdivision (a) upon receipt of a verifiable consumer request from the consumer, provided that a business shall be deemed to be in compliance with paragraphs (1) to (4), inclusive, of subdivision (a) to the extent that the categories of information and the business or commercial purpose for collecting, selling, or sharing personal information it would be required to disclose to the consumer pursuant to paragraphs (1) to (4), inclusive, of subdivision (a) is the same as the information it has disclosed pursuant to paragraphs (1) to (4), inclusive, of subdivision (c).",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.110(c)",
+                    "number": "1798.110(c)",
+                    "text": "A business that collects personal information about consumers shall disclose, pursuant to subparagraph (B) of paragraph (5) of subdivision (a) of Section 1798.130: (1) The categories of personal information it has collected about consumers. (2) The categories of sources from which the personal information is collected. (3) The business or commercial purpose for collecting, selling, or sharing personal information. (4) The categories of third parties to whom the business discloses personal information. (5) That a consumer has the right to request the specific pieces of personal information the business has collected about that consumer.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1798.110(c)(1)",
+                            "text": "The categories of personal information it has collected about consumers.",
+                            "description": "A business that collects personal information about consumers shall disclose, pursuant to subparagraph (B) of paragraph (5) of subdivision (a) of Section 1798.130: The categories of personal information it has collected about consumers.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.110(c)(2)",
+                            "text": "The categories of sources from which the personal information is collected.",
+                            "description": "A business that collects personal information about consumers shall disclose, pursuant to subparagraph (B) of paragraph (5) of subdivision (a) of Section 1798.130: The categories of sources from which the personal information is collected.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.110(c)(3)",
+                            "text": "The business or commercial purpose for collecting, selling, or sharing personal information.",
+                            "description": "A business that collects personal information about consumers shall disclose, pursuant to subparagraph (B) of paragraph (5) of subdivision (a) of Section 1798.130: The business or commercial purpose for collecting, selling, or sharing personal information.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.110(c)(4)",
+                            "text": "The categories of third parties to whom the business discloses personal information.",
+                            "description": "A business that collects personal information about consumers shall disclose, pursuant to subparagraph (B) of paragraph (5) of subdivision (a) of Section 1798.130: The categories of third parties to whom the business discloses personal information.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.110(c)(5)",
+                            "text": "That a consumer has the right to request the specific pieces of personal information the business has collected about that consumer.",
+                            "description": "A business that collects personal information about consumers shall disclose, pursuant to subparagraph (B) of paragraph (5) of subdivision (a) of Section 1798.130: That a consumer has the right to request the specific pieces of personal information the business has collected about that consumer.",
+                            "source": "ccpa"
+                        }
+                    ],
+                    "source": "ccpa"
+                }
+            ]
+        },
+        {
+            "number": "1798.115",
+            "code": "",
+            "name": "Consumers' Right to Know What Personal Information is Sold or Shared and to Whom",
+            "controls": [
+                {
+                    "id": "1798.115(a)",
+                    "number": "1798.115(a)",
+                    "text": "A consumer shall have the right to request that a business that sells or shares the consumer's personal information, or that discloses it for a business purpose, disclose to that consumer: (1) The categories of personal information that the business collected about the consumer. (2) The categories of personal information that the business sold or shared about the consumer and the categories of third parties to whom the personal information was sold or shared, by category or categories of personal information for each category of third parties to whom the personal information was sold or shared. (3) The categories of personal information that the business disclosed about the consumer for a business purpose and the categories of persons to whom it was disclosed for a business purpose.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1798.115(a)(1)",
+                            "text": "The categories of personal information that the business collected about the consumer.",
+                            "description": "A consumer shall have the right to request that a business that sells or shares the consumer's personal information, or that discloses it for a business purpose, disclose to that consumer: The categories of personal information that the business collected about the consumer.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.115(a)(2)",
+                            "text": "The categories of personal information that the business sold or shared about the consumer and the categories of third parties to whom the personal information was sold or shared, by category or categories of personal information for each category of third parties to whom the personal information was sold or shared.",
+                            "description": "A consumer shall have the right to request that a business that sells or shares the consumer's personal information, or that discloses it for a business purpose, disclose to that consumer: The categories of personal information that the business sold or shared about the consumer and the categories of third parties to whom the personal information was sold or shared, by category or categories of personal information for each category of third parties to whom the personal information was sold or shared.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.115(a)(3)",
+                            "text": "The categories of personal information that the business disclosed about the consumer for a business purpose and the categories of persons to whom it was disclosed for a business purpose.",
+                            "description": "A consumer shall have the right to request that a business that sells or shares the consumer's personal information, or that discloses it for a business purpose, disclose to that consumer: The categories of personal information that the business disclosed about the consumer for a business purpose and the categories of persons to whom it was disclosed for a business purpose.",
+                            "source": "ccpa"
+                        }
+                    ],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.115(b)",
+                    "number": "1798.115(b)",
+                    "text": "A business that sells or shares personal information about a consumer, or that discloses a consumer's personal information for a business purpose, shall disclose, pursuant to paragraph (4) of subdivision (a) of Section 1798.130, the information specified in subdivision (a) to the consumer upon receipt of a verifiable consumer request from the consumer.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.115(c)",
+                    "number": "1798.115(c)",
+                    "text": "A business that sells or shares consumers' personal information, or that discloses consumers' personal information for a business purpose, shall disclose, pursuant to subparagraph (C) of paragraph (5) of subdivision (a) of Section 1798.130: (1) The category or categories of consumers' personal information it has sold or shared, or if the business has not sold or shared consumers' personal information, it shall disclose that fact. (2) The category or categories of consumers' personal information it has disclosed for a business purpose, or if the business has not disclosed consumers' personal information for a business purpose, it shall disclose that fact.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1798.115(c)(1)",
+                            "text": "The category or categories of consumers' personal information it has sold or shared, or if the business has not sold or shared consumers' personal information, it shall disclose that fact.",
+                            "description": "A business that sells or shares consumers' personal information, or that discloses consumers' personal information for a business purpose, shall disclose, pursuant to subparagraph (C) of paragraph (5) of subdivision (a) of Section 1798.130: The category or categories of consumers' personal information it has sold or shared, or if the business has not sold or shared consumers' personal information, it shall disclose that fact.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.115(c)(2)",
+                            "text": "The category or categories of consumers' personal information it has disclosed for a business purpose, or if the business has not disclosed consumers' personal information for a business purpose, it shall disclose that fact.",
+                            "description": "A business that sells or shares consumers' personal information, or that discloses consumers' personal information for a business purpose, shall disclose, pursuant to subparagraph (C) of paragraph (5) of subdivision (a) of Section 1798.130: The category or categories of consumers' personal information it has disclosed for a business purpose, or if the business has not disclosed consumers' personal information for a business purpose, it shall disclose that fact.",
+                            "source": "ccpa"
+                        }
+                    ],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.115(d)",
+                    "number": "1798.115(d)",
+                    "text": "A third party shall not sell or share personal information about a consumer that has been sold to, or shared with, the third party by a business unless the consumer has received explicit notice and is provided an opportunity to exercise the right to opt-out pursuant to Section 1798.120.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                }
+            ]
+        },
+        {
+            "number": "1798.120",
+            "code": "",
+            "name": "Consumers' Right to Opt Out of Sale or Sharing of Personal Information",
+            "controls": [
+                {
+                    "id": "1798.120(a)",
+                    "number": "1798.120(a)",
+                    "text": "(1) A consumer shall have the right, at any time, to direct a business that sells or shares personal information about the consumer to third parties not to sell or share the consumer's personal information. This right may be referred to as the right to opt out of sale or sharing. (2) A business to which another business transfers the personal information of a consumer as an asset that is part of a merger, acquisition, bankruptcy, or other transaction in which the transferee assumes control of all of, or part of, the transferor shall comply with a consumer's direction to the transferor made pursuant to this subdivision.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1798.120(a)(1)",
+                            "text": "A consumer shall have the right, at any time, to direct a business that sells or shares personal information about the consumer to third parties not to sell or share the consumer's personal information. This right may be referred to as the right to opt out of sale or sharing.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.120(a)(2)",
+                            "text": "A business to which another business transfers the personal information of a consumer as an asset that is part of a merger, acquisition, bankruptcy, or other transaction in which the transferee assumes control of all of, or part of, the transferor shall comply with a consumer's direction to the transferor made pursuant to this subdivision.",
+                            "source": "ccpa"
+                        }
+                    ],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.120(b)",
+                    "number": "1798.120(b)",
+                    "text": "A business that sells consumers' personal information to, or shares it with, third parties shall provide notice to consumers, pursuant to subdivision (a) of Section 1798.135, that this information may be sold or shared and that consumers have the \"right to opt out\" of the sale or sharing of their personal information.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.120(c)",
+                    "number": "1798.120(c)",
+                    "text": "Notwithstanding subdivision (a), a business shall not sell or share the personal information of consumers if the business has actual knowledge that the consumer is less than 16 years of age, unless the consumer, in the case of consumers at least 13 years of age and less than 16 years of age, or the consumer's parent or guardian, in the case of consumers who are less than 13 years of age, has affirmatively authorized the sale or sharing of the consumer's personal information. A business that willfully disregards the consumer's age shall be deemed to have had actual knowledge of the consumer's age.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.120(d)",
+                    "number": "1798.120(d)",
+                    "text": "A business that has received direction from a consumer not to sell or share the consumer's personal information or, in the case of a minor consumer's personal information has not received consent to sell or share the minor consumer's personal information, shall be prohibited, pursuant to paragraph (4) of subdivision (c) of Section 1798.135, from selling or sharing the consumer's personal information after its receipt of the consumer's direction, unless the consumer subsequently provides consent, for the sale or sharing of the consumer's personal information.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                }
+            ]
+        },
+        {
+            "number": "1798.121",
+            "code": "",
+            "name": "Consumers' Right to Limit Use and Disclosure of Sensitive Personal Information",
+            "controls": [
+                {
+                    "id": "1798.121(a)",
+                    "number": "1798.121(a)",
+                    "text": "A consumer shall have the right, at any time, to direct a business that collects sensitive personal information about the consumer to limit its use of the consumer's sensitive personal information to that use which is necessary to perform the services or provide the goods reasonably expected by an average consumer who requests those goods or services, to perform the services set forth in paragraphs (2), (4), (5), and (8) of subdivision (e) of Section 1798.140, and as authorized by regulations adopted pursuant to subparagraph (C) of paragraph (18) of subdivision (a) of Section 1798.185. A business that uses or discloses a consumer's sensitive personal information for purposes other than those specified in this subdivision shall provide notice to consumers, pursuant to subdivision (a) of Section 1798.135, that this information may be used, or disclosed to a service provider or contractor, for additional, specified purposes and that consumers have the right to limit the use or disclosure of their sensitive personal information.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.121(b)",
+                    "number": "1798.121(b)",
+                    "text": "A business that has received direction from a consumer not to use or disclose the consumer's sensitive personal information, except as authorized by subdivision (a), shall be prohibited, pursuant to paragraph (4) of subdivision (c) of Section 1798.135, from using or disclosing the consumer's sensitive personal information for any other purpose after its receipt of the consumer's direction unless the consumer subsequently provides consent for the use or disclosure of the consumer's sensitive personal information for additional purposes.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.121(c)",
+                    "number": "1798.121(c)",
+                    "text": "A service provider or contractor that assists a business in performing the purposes authorized by subdivision (a) may not use the sensitive personal information after it has received instructions from the business and to the extent it has actual knowledge that the personal information is sensitive personal information for any other purpose. A service provider or contractor is only required to limit its use of sensitive personal information received pursuant to a written contract with the business in response to instructions from the business and only with respect to its relationship with that business.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                }
+            ]
+        },
+        {
+            "number": "1798.125",
+            "code": "",
+            "name": "Consumers' Right of No Retaliation Following Opt Out or Exercise of Other Rights",
+            "controls": [
+                {
+                    "id": "1798.125(a)",
+                    "number": "1798.125(a)",
+                    "text": "(1) A business shall not discriminate against a consumer because the consumer exercised any of the consumer's rights under this title, including, but not limited to, by: (A) Denying goods or services to the consumer. (B) Charging different prices or rates for goods or services, including through the use of discounts or other benefits or imposing penalties. (C) Providing a different level or quality of goods or services to the consumer. (D) Suggesting that the consumer will receive a different price or rate for goods or services or a different level or quality of goods or services. (E) Retaliating against an employee, applicant for employment, or independent contractor, as defined in subparagraph (A) of paragraph (2) of subdivision (m) of Section 1798.145, for exercising their rights under this title. (2) Nothing in this subdivision prohibits a business, pursuant to subdivision (b), from charging a consumer a different price or rate, or from providing a different level or quality of goods or services to the consumer, if that difference is reasonably related to the value provided to the business by the consumer's data. (3) This subdivision does not prohibit a business from offering loyalty, rewards, premium features, discounts, or club card programs consistent with this title.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1798.125(a)(1)",
+                            "text": "A business shall not discriminate against a consumer because the consumer exercised any of the consumer's rights under this title, including, but not limited to, by: (A) Denying goods or services to the consumer. (B) Charging different prices or rates for goods or services, including through the use of discounts or other benefits or imposing penalties. (C) Providing a different level or quality of goods or services to the consumer. (D) Suggesting that the consumer will receive a different price or rate for goods or services or a different level or quality of goods or services. (E) Retaliating against an employee, applicant for employment, or independent contractor, as defined in subparagraph (A) of paragraph (2) of subdivision (m) of Section 1798.145, for exercising their rights under this title.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.125(a)(2)",
+                            "text": "Nothing in this subdivision prohibits a business, pursuant to subdivision (b), from charging a consumer a different price or rate, or from providing a different level or quality of goods or services to the consumer, if that difference is reasonably related to the value provided to the business by the consumer's data.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.125(a)(3)",
+                            "text": "This subdivision does not prohibit a business from offering loyalty, rewards, premium features, discounts, or club card programs consistent with this title.",
+                            "source": "ccpa"
+                        }
+                    ],
+                    "source": "ccpa"
+                }
+            ]
+        },
+        {
+            "number": "1798.130",
+            "code": "",
+            "name": "Notice, Disclosure, Correction, and Deletion Requirements",
+            "controls": [
+                {
+                    "id": "1798.130(a)",
+                    "number": "1798.130(a)",
+                    "text": "In order to comply with Sections 1798.100, 1798.105, 1798.106, 1798.110, 1798.115, and 1798.125, a business shall, in a form that is reasonably accessible to consumers: (1) (A) Make available to consumers two or more designated methods for submitting requests for information required to be disclosed pursuant to Sections 1798.110 and 1798.115, or requests for deletion or correction pursuant to Sections 1798.105 and 1798.106, respectively, including, at a minimum, a toll- free telephone number. A business that operates exclusively online and has a direct relationship with a consumer from whom it collects personal information shall only be required to provide an email address for submitting requests for information required to be disclosed pursuant to Sections 1798.110 and 1798.115, or for requests for deletion or correction pursuant to Sections 1798.105 and 1798.106, respectively. (B) If the business maintains an internet website, make the internet website available to consumers to submit requests for information required to be disclosed pursuant to Sections 1798.110 and 1798.115, or requests for deletion or correction pursuant to Sections 1798.105 and 1798.106, respectively. (2) (A) Disclose and deliver the required information to a consumer free of charge, correct inaccurate personal information, or delete a consumer's personal information, based on the consumer's request, within 45 days of receiving a verifiable consumer request from the consumer. The business shall promptly take steps to determine whether the request is a verifiable consumer request, but this shall not extend the business' duty to disclose and deliver the information, to correct inaccurate personal information, or to delete personal information within 45 days of receipt of the consumer's request. The time period to provide the required information, to correct inaccurate personal information, or to delete personal information may be extended once by an additional 45 days when reasonably necessary, provided the consumer is provided notice of the extension within the first 45-day period. The disclosure of the required information shall be made in writing and delivered through the consumer's account with the business, if the consumer maintains an account with the business, or by mail or electronically at the consumer's option if the consumer does not maintain an account with the business, in a readily useable format that allows the consumer to transmit this information from one entity to another entity without hindrance. The business may require authentication of the consumer that is reasonable in light of the nature of the personal information requested, but shall not require the consumer to create an account with the business in order to make a verifiable consumer request provided that if the consumer, has an account with the business, the business may require the consumer to use that account to submit a verifiable consumer request. (B) The disclosure of the required information shall cover the 12-month period preceding the business' receipt of the verifiable consumer request provided that, upon the adoption of a regulation pursuant to paragraph (8) of subdivision (a) of Section 1798.185, a consumer may request that the business disclose the required information beyond the 12-month period, and the business shall be required to provide that information unless doing so proves impossible or would involve a disproportionate effort. A consumer's right to request required information beyond the 12-month period, and a business' obligation to provide that information, shall only apply to personal information collected on or after January 1, 2022. Nothing in this subparagraph shall require a business to keep personal information for any length of time. (3) (A) A business that receives a verifiable consumer request pursuant to Section 1798.110 or 1798.115 shall disclose any personal information it has collected about a consumer, directly or indirectly, including through or by a service provider or contractor, to the consumer. A service provider or contractor shall not be required to comply with a verifiable consumer request received directly from a consumer or a consumer's authorized agent, pursuant to Section 1798.110 or 1798.115, to the extent that the service provider or contractor has collected personal information about the consumer in its role as a service provider or contractor. A service provider or contractor shall provide assistance to a business with which it has a contractual relationship with respect to the business' response to a verifiable consumer request, including, but not limited to, by providing to the business the consumer's personal information in the service provider or contractor's possession, which the service provider or contractor obtained as a result of providing services to the business, and by correcting inaccurate information or by enabling the business to do the same. A service provider or contractor that collects personal information pursuant to a written contract with a business shall be required to assist the business through appropriate technical and organizational measures in complying with the requirements of subdivisions (d) to (f), inclusive, of Section 1798.100, taking into account the nature of the processing. (B) For purposes of subdivision (b) of Section 1798.110: (i) To identify the consumer, associate the information provided by the consumer in the verifiable consumer request to any personal information previously collected by the business about the consumer. (ii) Identify by category or categories the personal information collected about the consumer for the applicable period of time by reference to the enumerated category or categories in subdivision (c) that most closely describes the personal information collected; the categories of sources from which the consumer's personal information was collected; the business or commercial purpose for collecting, selling, or sharing the consumer's personal information; and the categories of third parties to whom the business discloses the consumer's personal information. (iii) Provide the specific pieces of personal information obtained from the consumer in a format that is easily understandable to the average consumer, and to the extent technically feasible, in a structured, commonly used, machine-readable format that may also be transmitted to another entity at the consumer's request without hindrance. \"Specific pieces of information\" do not include data generated to help ensure security and integrity or as prescribed by regulation. Personal information is not considered to have been disclosed by a business when a consumer instructs a business to transfer the consumer's personal information from one business to another in the context of switching services. (4) For purposes of subdivision (b) of Section 1798.115: (A) Identify the consumer and associate the information provided by the consumer in the verifiable consumer request to any personal information previously collected by the business about the consumer. (B) Identify by category or categories the personal information of the consumer that the business sold or shared during the applicable period of time by reference to the enumerated category in subdivision (c) that most closely describes the personal information, and provide the categories of third parties to whom the consumer's personal information was sold or shared during the applicable period of time by reference to the enumerated category or categories in subdivision (c) that most closely describes the personal information sold or shared. The business shall disclose the information in a list that is separate from a list generated for the purposes of subparagraph (C). (C) Identify by category or categories the personal information of the consumer that the business disclosed for a business purpose during the applicable period of time by reference to the enumerated category or categories in subdivision (c) that most closely describes the personal information, and provide the categories of persons to whom the consumer's personal information was disclosed for a business purpose during the applicable period of time by reference to the enumerated category or categories in subdivision (c) that most closely describes the personal information disclosed. The business shall disclose the information in a list that is separate from a list generated for the purposes of subparagraph (B). (5) Disclose the following information in its online privacy policy or policies if the business has an online privacy policy or policies and in any California-specific description of consumers' privacy rights, or if the business does not maintain those policies, on its internet website, and update that information at least once every 12 months: (A) A description of a consumer's rights pursuant to Sections 1798.100, 1798.105, 1798.106, 1798.110, 1798.115, and 1798.125 and two or more designated methods for submitting requests, except as provided in subparagraph (A) of paragraph (1) of subdivision (a). (B) For purposes of subdivision (c) of Section 1798.110: (i) A list of the categories of personal information it has collected about consumers in the preceding 12 months by reference to the enumerated category or categories in subdivision (c) that most closely describe the personal information collected. (ii) The categories of sources from which consumers' personal information is collected. (iii) The business or commercial purpose for collecting, selling, or sharing consumers' personal information. (iv) The categories of third parties to whom the business discloses consumers' personal information. (C) For purposes of paragraphs (1) and (2) of subdivision (c) of Section 1798.115, two separate lists: (i) A list of the categories of personal information it has sold or shared about consumers in the preceding 12 months by reference to the enumerated category or categories in subdivision (c) that most closely describe the personal information sold or shared, or if the business has not sold or shared consumers' personal information in the preceding 12 months, the business shall prominently disclose that fact in its privacy policy. (ii) A list of the categories of personal information it has disclosed about consumers for a business purpose in the preceding 12 months by reference to the enumerated category in subdivision (c) that most closely describes the personal information disclosed, or if the business has not disclosed consumers' personal information for a business purpose in the preceding 12 months, the business shall disclose that fact. (6) Ensure that all individuals responsible for handling consumer inquiries about the business' privacy practices or the business' compliance with this title are informed of all requirements in Sections 1798.100, 1798.105, 1798.106, 1798.110, 1798.115, 1798.125, and this section, and how to direct consumers to exercise their rights under those sections. (7) Use any personal information collected from the consumer in connection with the business' verification of the consumer's request solely for the purposes of verification and shall not further disclose the personal information, retain it longer than necessary for purposes of verification, or use it for unrelated purposes.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1798.130(a)(1)",
+                            "text": "(A) Make available to consumers two or more designated methods for submitting requests for information required to be disclosed pursuant to Sections 1798.110 and 1798.115, or requests for deletion or correction pursuant to Sections 1798.105 and 1798.106, respectively, including, at a minimum, a toll- free telephone number. A business that operates exclusively online and has a direct relationship with a consumer from whom it collects personal information shall only be required to provide an email address for submitting requests for information required to be disclosed pursuant to Sections 1798.110 and 1798.115, or for requests for deletion or correction pursuant to Sections 1798.105 and 1798.106, respectively. (B) If the business maintains an internet website, make the internet website available to consumers to submit requests for information required to be disclosed pursuant to Sections 1798.110 and 1798.115, or requests for deletion or correction pursuant to Sections 1798.105 and 1798.106, respectively.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.130(a)(2)",
+                            "text": "(A) Disclose and deliver the required information to a consumer free of charge, correct inaccurate personal information, or delete a consumer's personal information, based on the consumer's request, within 45 days of receiving a verifiable consumer request from the consumer. The business shall promptly take steps to determine whether the request is a verifiable consumer request, but this shall not extend the business' duty to disclose and deliver the information, to correct inaccurate personal information, or to delete personal information within 45 days of receipt of the consumer's request. The time period to provide the required information, to correct inaccurate personal information, or to delete personal information may be extended once by an additional 45 days when reasonably necessary, provided the consumer is provided notice of the extension within the first 45-day period. The disclosure of the required information shall be made in writing and delivered through the consumer's account with the business, if the consumer maintains an account with the business, or by mail or electronically at the consumer's option if the consumer does not maintain an account with the business, in a readily useable format that allows the consumer to transmit this information from one entity to another entity without hindrance. The business may require authentication of the consumer that is reasonable in light of the nature of the personal information requested, but shall not require the consumer to create an account with the business in order to make a verifiable consumer request provided that if the consumer, has an account with the business, the business may require the consumer to use that account to submit a verifiable consumer request. (B) The disclosure of the required information shall cover the 12-month period preceding the business' receipt of the verifiable consumer request provided that, upon the adoption of a regulation pursuant to paragraph (8) of subdivision (a) of Section 1798.185, a consumer may request that the business disclose the required information beyond the 12-month period, and the business shall be required to provide that information unless doing so proves impossible or would involve a disproportionate effort. A consumer's right to request required information beyond the 12-month period, and a business' obligation to provide that information, shall only apply to personal information collected on or after January 1, 2022. Nothing in this subparagraph shall require a business to keep personal information for any length of time.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.130(a)(3)",
+                            "text": "(A) A business that receives a verifiable consumer request pursuant to Section 1798.110 or 1798.115 shall disclose any personal information it has collected about a consumer, directly or indirectly, including through or by a service provider or contractor, to the consumer. A service provider or contractor shall not be required to comply with a verifiable consumer request received directly from a consumer or a consumer's authorized agent, pursuant to Section 1798.110 or 1798.115, to the extent that the service provider or contractor has collected personal information about the consumer in its role as a service provider or contractor. A service provider or contractor shall provide assistance to a business with which it has a contractual relationship with respect to the business' response to a verifiable consumer request, including, but not limited to, by providing to the business the consumer's personal information in the service provider or contractor's possession, which the service provider or contractor obtained as a result of providing services to the business, and by correcting inaccurate information or by enabling the business to do the same. A service provider or contractor that collects personal information pursuant to a written contract with a business shall be required to assist the business through appropriate technical and organizational measures in complying with the requirements of subdivisions (d) to (f), inclusive, of Section 1798.100, taking into account the nature of the processing. (B) For purposes of subdivision (b) of Section 1798.110: (i) To identify the consumer, associate the information provided by the consumer in the verifiable consumer request to any personal information previously collected by the business about the consumer. (ii) Identify by category or categories the personal information collected about the consumer for the applicable period of time by reference to the enumerated category or categories in subdivision (c) that most closely describes the personal information collected; the categories of sources from which the consumer's personal information was collected; the business or commercial purpose for collecting, selling, or sharing the consumer's personal information; and the categories of third parties to whom the business discloses the consumer's personal information. (iii) Provide the specific pieces of personal information obtained from the consumer in a format that is easily understandable to the average consumer, and to the extent technically feasible, in a structured, commonly used, machine-readable format that may also be transmitted to another entity at the consumer's request without hindrance. \"Specific pieces of information\" do not include data generated to help ensure security and integrity or as prescribed by regulation. Personal information is not considered to have been disclosed by a business when a consumer instructs a business to transfer the consumer's personal information from one business to another in the context of switching services.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.130(a)(4)",
+                            "text": "For purposes of subdivision (b) of Section 1798.115: (A) Identify the consumer and associate the information provided by the consumer in the verifiable consumer request to any personal information previously collected by the business about the consumer. (B) Identify by category or categories the personal information of the consumer that the business sold or shared during the applicable period of time by reference to the enumerated category in subdivision (c) that most closely describes the personal information, and provide the categories of third parties to whom the consumer's personal information was sold or shared during the applicable period of time by reference to the enumerated category or categories in subdivision (c) that most closely describes the personal information sold or shared. The business shall disclose the information in a list that is separate from a list generated for the purposes of subparagraph (C). (C) Identify by category or categories the personal information of the consumer that the business disclosed for a business purpose during the applicable period of time by reference to the enumerated category or categories in subdivision (c) that most closely describes the personal information, and provide the categories of persons to whom the consumer's personal information was disclosed for a business purpose during the applicable period of time by reference to the enumerated category or categories in subdivision (c) that most closely describes the personal information disclosed. The business shall disclose the information in a list that is separate from a list generated for the purposes of subparagraph (B).",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.130(a)(5)",
+                            "text": "Disclose the following information in its online privacy policy or policies if the business has an online privacy policy or policies and in any California-specific description of consumers' privacy rights, or if the business does not maintain those policies, on its internet website, and update that information at least once every 12 months: (A) A description of a consumer's rights pursuant to Sections 1798.100, 1798.105, 1798.106, 1798.110, 1798.115, and 1798.125 and two or more designated methods for submitting requests, except as provided in subparagraph (A) of paragraph (1) of subdivision (a). (B) For purposes of subdivision (c) of Section 1798.110: (i) A list of the categories of personal information it has collected about consumers in the preceding 12 months by reference to the enumerated category or categories in subdivision (c) that most closely describe the personal information collected. (ii) The categories of sources from which consumers' personal information is collected. (iii) The business or commercial purpose for collecting, selling, or sharing consumers' personal information. (iv) The categories of third parties to whom the business discloses consumers' personal information. (C) For purposes of paragraphs (1) and (2) of subdivision (c) of Section 1798.115, two separate lists: (i) A list of the categories of personal information it has sold or shared about consumers in the preceding 12 months by reference to the enumerated category or categories in subdivision (c) that most closely describe the personal information sold or shared, or if the business has not sold or shared consumers' personal information in the preceding 12 months, the business shall prominently disclose that fact in its privacy policy. (ii) A list of the categories of personal information it has disclosed about consumers for a business purpose in the preceding 12 months by reference to the enumerated category in subdivision (c) that most closely describes the personal information disclosed, or if the business has not disclosed consumers' personal information for a business purpose in the preceding 12 months, the business shall disclose that fact.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.130(a)(6)",
+                            "text": "Ensure that all individuals responsible for handling consumer inquiries about the business' privacy practices or the business' compliance with this title are informed of all requirements in Sections 1798.100, 1798.105, 1798.106, 1798.110, 1798.115, 1798.125, and this section, and how to direct consumers to exercise their rights under those sections.",
+                            "description": "In order to comply with Sections 1798.100, 1798.105, 1798.106, 1798.110, 1798.115, and 1798.125, a business shall, in a form that is reasonably accessible to consumers: Ensure that all individuals responsible for handling consumer inquiries about the business' privacy practices or the business' compliance with this title are informed of all requirements in Sections 1798.100, 1798.105, 1798.106, 1798.110, 1798.115, 1798.125, and this section, and how to direct consumers to exercise their rights under those sections.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.130(a)(7)",
+                            "text": "Use any personal information collected from the consumer in connection with the business' verification of the consumer's request solely for the purposes of verification and shall not further disclose the personal information, retain it longer than necessary for purposes of verification, or use it for unrelated purposes.",
+                            "description": "In order to comply with Sections 1798.100, 1798.105, 1798.106, 1798.110, 1798.115, and 1798.125, a business shall, in a form that is reasonably accessible to consumers: Use any personal information collected from the consumer in connection with the business' verification of the consumer's request solely for the purposes of verification and shall not further disclose the personal information, retain it longer than necessary for purposes of verification, or use it for unrelated purposes.",
+                            "source": "ccpa"
+                        }
+                    ],
+                    "source": "ccpa"
+                }
+            ]
+        },
+        {
+            "number": "1798.135",
+            "code": "",
+            "name": "Methods of Limiting Sale, Sharing, and Use of Personal Information and Use of Sensitive Personal Information",
+            "controls": [
+                {
+                    "id": "1798.135(a)",
+                    "number": "1798.135(a)",
+                    "text": "A business that sells or shares consumers' personal information or uses or discloses consumers' sensitive personal information for purposes other than those authorized by subdivision (a) of Section 1798.121 shall, in a form that is reasonably accessible to consumers: (1) Provide a clear and conspicuous link on the business' internet homepages, titled \"Do Not Sell or Share My Personal Information,\" to an internet web page that enables a consumer, or a person authorized by the consumer, to opt out of the sale or sharing of the consumer's personal information. (2) Provide a clear and conspicuous link on the business' internet homepages, titled \"Limit the Use of My Sensitive Personal Information,\" that enables a consumer, or a person authorized by the consumer, to limit the use or disclosure of the consumer's sensitive personal information to those uses authorized by subdivision (a) of Section 1798.121. (3) At the business' discretion, utilize a single, clearly labeled link on the business' internet homepages, in lieu of complying with paragraphs (1) and (2), if that link easily allows a consumer to opt out of the sale or sharing of the consumer's personal information and to limit the use or disclosure of the consumer's sensitive personal information. (4) In the event that a business responds to opt-out requests received pursuant to paragraph (1), (2), or (3) by informing the consumer of a charge for the use of any product or service, present the terms of any financial incentive offered pursuant to subdivision (b) of Section 1798.125 for the retention, use, sale, or sharing of the consumer's personal information.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1798.135(a)(1)",
+                            "text": "Provide a clear and conspicuous link on the business' internet homepages, titled \"Do Not Sell or Share My Personal Information,\" to an internet web page that enables a consumer, or a person authorized by the consumer, to opt out of the sale or sharing of the consumer's personal information.",
+                            "description": "A business that sells or shares consumers' personal information or uses or discloses consumers' sensitive personal information for purposes other than those authorized by subdivision (a) of Section 1798.121 shall, in a form that is reasonably accessible to consumers: Provide a clear and conspicuous link on the business' internet homepages, titled \"Do Not Sell or Share My Personal Information,\" to an internet web page that enables a consumer, or a person authorized by the consumer, to opt out of the sale or sharing of the consumer's personal information.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.135(a)(2)",
+                            "text": "Provide a clear and conspicuous link on the business' internet homepages, titled \"Limit the Use of My Sensitive Personal Information,\" that enables a consumer, or a person authorized by the consumer, to limit the use or disclosure of the consumer's sensitive personal information to those uses authorized by subdivision (a) of Section 1798.121.",
+                            "description": "A business that sells or shares consumers' personal information or uses or discloses consumers' sensitive personal information for purposes other than those authorized by subdivision (a) of Section 1798.121 shall, in a form that is reasonably accessible to consumers: Provide a clear and conspicuous link on the business' internet homepages, titled \"Limit the Use of My Sensitive Personal Information,\" that enables a consumer, or a person authorized by the consumer, to limit the use or disclosure of the consumer's sensitive personal information to those uses authorized by subdivision (a) of Section 1798.121.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.135(a)(3)",
+                            "text": "At the business' discretion, utilize a single, clearly labeled link on the business' internet homepages, in lieu of complying with paragraphs (1) and (2), if that link easily allows a consumer to opt out of the sale or sharing of the consumer's personal information and to limit the use or disclosure of the consumer's sensitive personal information.",
+                            "description": "A business that sells or shares consumers' personal information or uses or discloses consumers' sensitive personal information for purposes other than those authorized by subdivision (a) of Section 1798.121 shall, in a form that is reasonably accessible to consumers: At the business' discretion, utilize a single, clearly labeled link on the business' internet homepages, in lieu of complying with paragraphs (1) and (2), if that link easily allows a consumer to opt out of the sale or sharing of the consumer's personal information and to limit the use or disclosure of the consumer's sensitive personal information.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.135(a)(4)",
+                            "text": "In the event that a business responds to opt-out requests received pursuant to paragraph (1), (2), or (3) by informing the consumer of a charge for the use of any product or service, present the terms of any financial incentive offered pursuant to subdivision (b) of Section 1798.125 for the retention, use, sale, or sharing of the consumer's personal information.",
+                            "description": "A business that sells or shares consumers' personal information or uses or discloses consumers' sensitive personal information for purposes other than those authorized by subdivision (a) of Section 1798.121 shall, in a form that is reasonably accessible to consumers: In the event that a business responds to opt-out requests received pursuant to paragraph (1), (2), or (3) by informing the consumer of a charge for the use of any product or service, present the terms of any financial incentive offered pursuant to subdivision (b) of Section 1798.125 for the retention, use, sale, or sharing of the consumer's personal information.",
+                            "source": "ccpa"
+                        }
+                    ],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.135(b)",
+                    "number": "1798.135(b)",
+                    "text": "(1) A business shall not be required to comply with subdivision (a) if the business allows consumers to opt out of the sale or sharing of their personal information and to limit the use of their sensitive personal information through an opt-out preference signal sent with the consumer's consent by a platform, technology, or mechanism, based on technical specifications set forth in regulations adopted pursuant to paragraph (19) of subdivision (a) of Section 1798.185, to the business indicating the consumer's intent to opt out of the business' sale or sharing of the consumer's personal information or to limit the use or disclosure of the consumer's sensitive personal information, or both. (2) A business that allows consumers to opt out of the sale or sharing of their personal information and to limit the use of their sensitive personal information pursuant to paragraph (1) may provide a link to a web page that enables the consumer to consent to the business ignoring the opt-out preference signal with respect to that business' sale or sharing of the consumer's personal information or the use of the consumer's sensitive personal information for additional purposes provided that: (A) The consent web page also allows the consumer or a person authorized by the consumer to revoke the consent as easily as it is affirmatively provided. (B) The link to the web page does not degrade the consumer's experience on the web page the consumer intends to visit and has a similar look, feel, and size relative to other links on the same web page. (C) The consent web page complies with technical specifications set forth in regulations adopted pursuant to paragraph (19) of subdivision (a) of Section 1798.185. (3) A business that complies with subdivision (a) is not required to comply with subdivision (b). For the purposes of clarity, a business may elect whether to comply with subdivision (a) or subdivision (b).",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1798.135(b)(1)",
+                            "text": "A business shall not be required to comply with subdivision (a) if the business allows consumers to opt out of the sale or sharing of their personal information and to limit the use of their sensitive personal information through an opt-out preference signal sent with the consumer's consent by a platform, technology, or mechanism, based on technical specifications set forth in regulations adopted pursuant to paragraph (19) of subdivision (a) of Section 1798.185, to the business indicating the consumer's intent to opt out of the business' sale or sharing of the consumer's personal information or to limit the use or disclosure of the consumer's sensitive personal information, or both.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.135(b)(2)",
+                            "text": "A business that allows consumers to opt out of the sale or sharing of their personal information and to limit the use of their sensitive personal information pursuant to paragraph (1) may provide a link to a web page that enables the consumer to consent to the business ignoring the opt-out preference signal with respect to that business' sale or sharing of the consumer's personal information or the use of the consumer's sensitive personal information for additional purposes provided that: (A) The consent web page also allows the consumer or a person authorized by the consumer to revoke the consent as easily as it is affirmatively provided. (B) The link to the web page does not degrade the consumer's experience on the web page the consumer intends to visit and has a similar look, feel, and size relative to other links on the same web page. (C) The consent web page complies with technical specifications set forth in regulations adopted pursuant to paragraph (19) of subdivision (a) of Section 1798.185.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.135(b)(3)",
+                            "text": "A business that complies with subdivision (a) is not required to comply with subdivision (b). For the purposes of clarity, a business may elect whether to comply with subdivision (a) or subdivision (b).",
+                            "source": "ccpa"
+                        }
+                    ],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.135(c)",
+                    "number": "1798.135(c)",
+                    "text": "A business that is subject to this section shall: (1) Not require a consumer to create an account or provide additional information beyond what is necessary in order to direct the business not to sell or share the consumer's personal information or to limit use or disclosure of the consumer's sensitive personal information. (2) Include a description of a consumer's rights pursuant to Sections 1798.120 and 1798.121, along with a separate link to the \"Do Not Sell or Share My Personal Information\" internet web page and a separate link to the \"Limit the Use of My Sensitive Personal Information\" internet web page, if applicable, or a single link to both choices, or a statement that the business responds to and abides by opt-out preference signals sent by a platform, technology, or mechanism in accordance with subdivision (b), in: (A) Its online privacy policy or policies if the business has an online privacy policy or policies. (B) Any California-specific description of consumers' privacy rights. (3) Ensure that all individuals responsible for handling consumer inquiries about the business' privacy practices or the business' compliance with this title are informed of all requirements in Sections 1798.120, 1798.121, and this section and how to direct consumers to exercise their rights under those sections. (4) For consumers who exercise their right to opt out of the sale or sharing of their personal information or limit the use or disclosure of their sensitive personal information, refrain from selling or sharing the consumer's personal information or using or disclosing the consumer's sensitive personal information and wait for at least 12 months before requesting that the consumer authorize the sale or sharing of the consumer's personal information or the use and disclosure of the consumer's sensitive personal information for additional purposes, or as authorized by regulations. (5) For consumers under 16 years of age who do not consent to the sale or sharing of their personal information, refrain from selling or sharing the personal information of the consumer under 16 years of age and wait for at least 12 months before requesting the consumer's consent again, or as authorized by regulations or until the consumer attains 16 years of age. (6) Use any personal information collected from the consumer in connection with the submission of the consumer's opt-out request solely for the purposes of complying with the opt-out request.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1798.135(c)(1)",
+                            "text": "Not require a consumer to create an account or provide additional information beyond what is necessary in order to direct the business not to sell or share the consumer's personal information or to limit use or disclosure of the consumer's sensitive personal information.",
+                            "description": "A business that is subject to this section shall: Not require a consumer to create an account or provide additional information beyond what is necessary in order to direct the business not to sell or share the consumer's personal information or to limit use or disclosure of the consumer's sensitive personal information.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.135(c)(2)",
+                            "text": "Include a description of a consumer's rights pursuant to Sections 1798.120 and 1798.121, along with a separate link to the \"Do Not Sell or Share My Personal Information\" internet web page and a separate link to the \"Limit the Use of My Sensitive Personal Information\" internet web page, if applicable, or a single link to both choices, or a statement that the business responds to and abides by opt-out preference signals sent by a platform, technology, or mechanism in accordance with subdivision (b), in: (A) Its online privacy policy or policies if the business has an online privacy policy or policies. (B) Any California-specific description of consumers' privacy rights.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.135(c)(3)",
+                            "text": "Ensure that all individuals responsible for handling consumer inquiries about the business' privacy practices or the business' compliance with this title are informed of all requirements in Sections 1798.120, 1798.121, and this section and how to direct consumers to exercise their rights under those sections.",
+                            "description": "A business that is subject to this section shall: Ensure that all individuals responsible for handling consumer inquiries about the business' privacy practices or the business' compliance with this title are informed of all requirements in Sections 1798.120, 1798.121, and this section and how to direct consumers to exercise their rights under those sections.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.135(c)(4)",
+                            "text": "For consumers who exercise their right to opt out of the sale or sharing of their personal information or limit the use or disclosure of their sensitive personal information, refrain from selling or sharing the consumer's personal information or using or disclosing the consumer's sensitive personal information and wait for at least 12 months before requesting that the consumer authorize the sale or sharing of the consumer's personal information or the use and disclosure of the consumer's sensitive personal information for additional purposes, or as authorized by regulations.",
+                            "description": "A business that is subject to this section shall: For consumers who exercise their right to opt out of the sale or sharing of their personal information or limit the use or disclosure of their sensitive personal information, refrain from selling or sharing the consumer's personal information or using or disclosing the consumer's sensitive personal information and wait for at least 12 months before requesting that the consumer authorize the sale or sharing of the consumer's personal information or the use and disclosure of the consumer's sensitive personal information for additional purposes, or as authorized by regulations.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.135(c)(5)",
+                            "text": "For consumers under 16 years of age who do not consent to the sale or sharing of their personal information, refrain from selling or sharing the personal information of the consumer under 16 years of age and wait for at least 12 months before requesting the consumer's consent again, or as authorized by regulations or until the consumer attains 16 years of age.",
+                            "description": "A business that is subject to this section shall: For consumers under 16 years of age who do not consent to the sale or sharing of their personal information, refrain from selling or sharing the personal information of the consumer under 16 years of age and wait for at least 12 months before requesting the consumer's consent again, or as authorized by regulations or until the consumer attains 16 years of age.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.135(c)(6)",
+                            "text": "Use any personal information collected from the consumer in connection with the submission of the consumer's opt-out request solely for the purposes of complying with the opt-out request.",
+                            "description": "A business that is subject to this section shall: Use any personal information collected from the consumer in connection with the submission of the consumer's opt-out request solely for the purposes of complying with the opt-out request.",
+                            "source": "ccpa"
+                        }
+                    ],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.135(e)",
+                    "number": "1798.135(e)",
+                    "text": "A consumer may authorize another person to opt out of the sale or sharing of the consumer's personal information and to limit the use of the consumer's sensitive personal information on the consumer's behalf, including through an opt-out preference signal, as defined in paragraph (1) of subdivision (b), indicating the consumer's intent to opt out, and a business shall comply with an opt-out request received from a person authorized by the consumer to act on the consumer's behalf, pursuant to regulations adopted by the Attorney General regardless of whether the business has elected to comply with subdivision (a) or (b). For purposes of clarity, a business that elects to comply with subdivision (a) may respond to the consumer's opt-out request consistently with Section 1798.125.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ccpa"
+                },
+                {
+                    "id": "1798.135(f)",
+                    "number": "1798.135(f)",
+                    "text": "If a business communicates a consumer's opt-out request to any person authorized by the business to collect personal information, the person shall thereafter only use that consumer's personal information for a business purpose specified by the business, or as otherwise permitted by this title, and shall be prohibited from: (1) Selling or sharing the personal information. (2) Retaining, using, or disclosing that consumer's personal information. (A) For any purpose other than for the specific purpose of performing the services offered to the business. (B) Outside of the direct business relationship between the person and the business. (C) For a commercial purpose other than providing the services to the business.",
+                    "type": "subdivision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1798.135(f)(1)",
+                            "text": "Selling or sharing the personal information.",
+                            "description": "If a business communicates a consumer's opt-out request to any person authorized by the business to collect personal information, the person shall thereafter only use that consumer's personal information for a business purpose specified by the business, or as otherwise permitted by this title, and shall be prohibited from: Selling or sharing the personal information.",
+                            "source": "ccpa"
+                        },
+                        {
+                            "id": "1798.135(f)(2)",
+                            "text": "Retaining, using, or disclosing that consumer's personal information. (A) For any purpose other than for the specific purpose of performing the services offered to the business. (B) Outside of the direct business relationship between the person and the business. (C) For a commercial purpose other than providing the services to the business.",
+                            "source": "ccpa"
+                        }
+                    ],
+                    "source": "ccpa"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,175 @@
+{
+    "key": "ccpa",
+    "name": "CCPA",
+    "version": "as amended, effective 1 January 2025",
+    "full_name": "California Consumer Privacy Act of 2018, as amended by the California Privacy Rights Act of 2020 (California Civil Code sections 1798.100 to 1798.199.100)",
+    "issuing_body": "State of California; text published by the California Privacy Protection Agency",
+    "standard_codes": [
+        "CCPA"
+    ],
+    "aliases": [
+        "CPRA",
+        "CCPA/CPRA",
+        "California Consumer Privacy Act",
+        "California Privacy Rights Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against the statute as published by the California Privacy Protection Agency, effective 1 January 2025. The Agency's regulations (California Code of Regulations, title 11, division 6) add detail to these duties and are not part of this assessment.",
+    "sources": [
+        {
+            "id": "ccpa",
+            "title": "California Consumer Privacy Act of 2018, statute text posted by the California Privacy Protection Agency",
+            "version": "effective 1 January 2025 (SB 1223, AB 1008, AB 1824 update)",
+            "publisher": "California Privacy Protection Agency",
+            "url": "https://cppa.ca.gov/regulations/pdf/ccpa_statute.pdf",
+            "file": "ccpa/ccpa_statute.pdf",
+            "sha256": "0beb83ccf73d82ede066f7e4154952435484410f748da09ac4329ed9afe6a43f"
+        }
+    ],
+    "source_of": {
+        "controls": "ccpa",
+        "objectives": "ccpa"
+    },
+    "control_flags": {
+        "objectives": "The numbered paragraphs directly beneath a subdivision."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every applicable element it lists is met.",
+            "source": "ccpa",
+            "cite": "California Civil Code 1798.100 to 1798.135"
+        },
+        {
+            "id": "business_threshold",
+            "type": "applicability",
+            "summary": "The Act applies to a for-profit business that does business in California and meets a size threshold, the first of which is annual gross revenues above $25 million as adjusted.",
+            "source": "ccpa",
+            "cite": "Civil Code 1798.140(d)(1)(A)",
+            "quote": "had annual gross revenues in excess of twenty-five million dollars"
+        },
+        {
+            "id": "data_minimization",
+            "type": "applicability",
+            "control": "1798.100(c)",
+            "summary": "Collection, use, retention and sharing of personal information is limited to what is reasonably necessary and proportionate to the purposes it was collected for.",
+            "source": "ccpa",
+            "cite": "Civil Code 1798.100(c)",
+            "quote": "shall be reasonably necessary and proportionate to achieve the purposes for which the personal information was collected or processed"
+        },
+        {
+            "id": "reasonable_security",
+            "type": "applicability",
+            "control": "1798.100(e)",
+            "summary": "A business implements reasonable security procedures and practices appropriate to the nature of the personal information.",
+            "source": "ccpa",
+            "cite": "Civil Code 1798.100(e)",
+            "quote": "shall implement reasonable security procedures and practices appropriate to the nature of the personal information"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "1798.130(a)",
+            "days": 45,
+            "from": "receipt of the verifiable consumer request",
+            "summary": "A verifiable consumer request to know, correct or delete is answered within 45 days of receipt; the period may be extended once by another 45 days with notice to the consumer.",
+            "source": "ccpa",
+            "cite": "Civil Code 1798.130(a)(2)(A)",
+            "quote": "within 45 days of receiving a verifiable consumer request from the consumer."
+        },
+        {
+            "id": "opt_in_wait",
+            "type": "deadline",
+            "months": 12,
+            "from": "the consumer's refusal",
+            "summary": "After a consumer declines a financial incentive programme, the business waits at least 12 months before asking again.",
+            "source": "ccpa",
+            "cite": "Civil Code 1798.125(b)(3)",
+            "quote": "then the business shall wait for at least 12 months before next requesting that the consumer provide opt-in consent"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "The California Privacy Protection Agency can impose an administrative fine of up to $2,500 per violation, or $7,500 per intentional violation or violation involving a minor's information; the amounts are adjusted for inflation.",
+            "source": "ccpa",
+            "cite": "Civil Code 1798.155(a)",
+            "quote": "for each violation or seven thousand five hundred dollars"
+        },
+        {
+            "summary": "A consumer whose unencrypted personal information is breached because of a failure to maintain reasonable security can sue for $100 to $750 per incident, as adjusted, or actual damages if greater.",
+            "source": "ccpa",
+            "cite": "Civil Code 1798.150(a)(1)(A)",
+            "quote": "per consumer per incident or actual damages, whichever is greater."
+        }
+    ],
+    "glossary": [
+        {
+            "term": "CCPA",
+            "definition": "The California Consumer Privacy Act of 2018, California's law giving consumers rights over the personal information businesses collect about them."
+        },
+        {
+            "term": "CPRA",
+            "definition": "The California Privacy Rights Act of 2020, the ballot measure that amended and expanded the CCPA and created the California Privacy Protection Agency."
+        },
+        {
+            "term": "Business",
+            "definition": "A for-profit entity that does business in California, determines why and how consumers' personal information is processed, and meets one of the Act's size or data-volume thresholds."
+        },
+        {
+            "term": "Service provider",
+            "definition": "A person that processes personal information on behalf of a business under a written contract that restricts its use of that information."
+        },
+        {
+            "term": "Sell and share",
+            "definition": "To sell is to disclose personal information to a third party for money or other valuable consideration; to share is to disclose it for cross-context behavioral advertising."
+        },
+        {
+            "term": "Sensitive personal information",
+            "definition": "Personal information such as government identifiers, account credentials, precise geolocation, racial or ethnic origin, health data and the contents of private communications."
+        },
+        {
+            "term": "Verifiable consumer request",
+            "definition": "A request from a consumer, or someone authorized to act for them, that the business can reasonably verify comes from the consumer the information is about."
+        }
+    ]
+}

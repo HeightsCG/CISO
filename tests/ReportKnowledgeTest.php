@@ -269,7 +269,8 @@ return array(
             'nist-ssdf' => 'sdlc',
             'gdpr' => 'privacy',
             'uk-gdpr' => 'privacy',
-            'coppa' => 'privacy'
+            'coppa' => 'privacy',
+            'ccpa' => 'privacy'
         );
 
         foreach (glob(ROOT.'/frameworks/*.json') as $file) {

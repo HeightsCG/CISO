@@ -155,6 +155,7 @@ class Poam
         'hipaa-privacy' => 'none',
         'ftc-safeguards' => 'none',
         'coppa' => 'none',
+        'ccpa' => 'none',
         'nydfs-500' => 'none',
         'nis2' => 'none',
         'dora' => 'none',
