@@ -1,0 +1,233 @@
+{
+    "key": "us-mt-cdpa",
+    "name": "Montana Consumer Data Privacy Act",
+    "version": "MCA 2025",
+    "full_name": "Montana Consumer Data Privacy Act (Montana Code Annotated 2025, Title 30, Chapter 14, Part 28)",
+    "issuing_body": "State of Montana; published by the Montana Legislative Services Division",
+    "standard_codes": [
+        "US-MT-CDPA"
+    ],
+    "aliases": [
+        "MCDPA",
+        "Montana MCDPA",
+        "Montana Consumer Data Privacy Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against Part 28 of Title 30, Chapter 14 in the Montana Code Annotated 2025, which includes the 2025 amendments (lower thresholds and the duties toward minors).",
+    "sources": [
+        {
+            "id": "mca2803",
+            "title": "Montana Code Annotated 2025, 30-14-2803, Applicability",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0030/0300-0140-0280-0030.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0030.html",
+            "sha256": "4e1f6ddf46b9262293510da5f0634ba8d7f7b87ee2ca084d6354c3b55c116dbf"
+        },
+        {
+            "id": "mca2808",
+            "title": "Montana Code Annotated 2025, 30-14-2808, Consumer personal data -- opt-out -- compliance -- appeals",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0080/0300-0140-0280-0080.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0080.html",
+            "sha256": "631b422a5b640b222eb492243bf5c49e5811ee9f221b28679d482e3f00694e94"
+        },
+        {
+            "id": "mca2809",
+            "title": "Montana Code Annotated 2025, 30-14-2809, Authorized agent",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0090/0300-0140-0280-0090.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0090.html",
+            "sha256": "d4d51210c8ac186d21f56ddba82bf47d8b4d0d45c1be8bec8b10730347a94dd8"
+        },
+        {
+            "id": "mca2811",
+            "title": "Montana Code Annotated 2025, 30-14-2811, Duties of controllers -- duty of care -- rebuttable presumption",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0110/0300-0140-0280-0110.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0110.html",
+            "sha256": "a0762c58f5eba5a95670b3954688831a55212cac4532b33c4ee806c85b88791c"
+        },
+        {
+            "id": "mca2812",
+            "title": "Montana Code Annotated 2025, 30-14-2812, Data processing by controller -- limitations",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0120/0300-0140-0280-0120.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0120.html",
+            "sha256": "c2149da8a3a40a0d5ce69d032fd3269ce86e3292a60f6e49d45a9801b587f807"
+        },
+        {
+            "id": "mca2813",
+            "title": "Montana Code Annotated 2025, 30-14-2813, Data processor -- allowances -- limitations",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0130/0300-0140-0280-0130.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0130.html",
+            "sha256": "51dbe5d058bd2b2007595d31c29349aa2d60873133ca08e6d8aee4c47b216605"
+        },
+        {
+            "id": "mca2814",
+            "title": "Montana Code Annotated 2025, 30-14-2814, Data protection assessment",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0140/0300-0140-0280-0140.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0140.html",
+            "sha256": "9b3b5f70bc56e9e7721f647e5f3fd3b93ddc98aa809c6c6a00a5cbf4bdf37ea7"
+        },
+        {
+            "id": "mca2815",
+            "title": "Montana Code Annotated 2025, 30-14-2815, De-identified data",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0150/0300-0140-0280-0150.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0150.html",
+            "sha256": "47ecf01c1a03bd24ce92fa1be45df1976fdd9ec4f2f0fe0677b3fe5bbca733e4"
+        },
+        {
+            "id": "mca2818",
+            "title": "Montana Code Annotated 2025, 30-14-2818, Responsibility according to role -- processing data of minors",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0180/0300-0140-0280-0180.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0180.html",
+            "sha256": "63c651688b90ebac9561b2f63407ac4cd95c112c102882b8a7d65bbfdbd9b6f4"
+        },
+        {
+            "id": "mca2819",
+            "title": "Montana Code Annotated 2025, 30-14-2819, Data protection assessments for heightened risk of harm to minors",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0190/0300-0140-0280-0190.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0190.html",
+            "sha256": "5f340b8b05304ff8cafd5d79be1ec7705709da29dfa2e0d78dac2f1b3ad1ca9e"
+        },
+        {
+            "id": "mca2820",
+            "title": "Montana Code Annotated 2025, 30-14-2820, Civil penalty -- injunction",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0200/0300-0140-0280-0200.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0200.html",
+            "sha256": "67ae6766ffbbbc0622efa5ae7350ca3367be6e577cb917a86283c026d463c7d3"
+        }
+    ],
+    "source_of": {
+        "controls": "mca2808",
+        "objectives": "mca2808"
+    },
+    "control_flags": {
+        "objectives": "The provisions beneath a requirement whose lead-in states the duty; each is required unless the lead-in makes them a choice."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "mca2808",
+            "cite": "MCA 30-14-2808 to 30-14-2819"
+        },
+        {
+            "id": "thresholds",
+            "type": "applicability",
+            "summary": "The Act applies to a business that does business in Montana or targets Montana residents and controls or processes personal data of at least 25,000 consumers, or of at least 15,000 while deriving over 25% of gross revenue from selling personal data. The minors' provisions (2811, 2818, 2819) apply regardless of those thresholds.",
+            "source": "mca2803",
+            "cite": "MCA 30-14-2803(1)",
+            "quote": "control or process the personal data of not less than 25,000 consumers"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "30-14-2808(4)",
+            "days": 45,
+            "from": "receipt of the request",
+            "summary": "A consumer request is answered without undue delay and within 45 days of receipt; the period may be extended once by 45 days.",
+            "source": "mca2808",
+            "cite": "MCA 30-14-2808(4)(a)",
+            "quote": "not later than 45 days after receipt of the request"
+        },
+        {
+            "id": "appeal_deadline",
+            "type": "deadline",
+            "control": "30-14-2808(5)",
+            "days": 60,
+            "from": "receipt of the appeal",
+            "summary": "An appeal is decided and answered in writing within 60 days of receipt.",
+            "source": "mca2808",
+            "cite": "MCA 30-14-2808(5)",
+            "quote": "Not later than 60 days after receipt of an appeal, a controller shall inform the consumer in writing"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "A violation that continues after the 30-day cure period carries a civil penalty of up to $7,500 for each violation.",
+            "source": "mca2820",
+            "cite": "MCA 30-14-2820(2)",
+            "quote": "liable for a civil penalty in an amount not to exceed $7,500"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "MCDPA",
+            "definition": "The Montana Consumer Data Privacy Act, Montana's comprehensive consumer privacy law, in force since 1 October 2024 and amended in 2025."
+        },
+        {
+            "term": "Controller",
+            "definition": "The person that, alone or jointly with others, determines the purpose and means of processing personal data."
+        },
+        {
+            "term": "Processor",
+            "definition": "A person that processes personal data on behalf of a controller."
+        },
+        {
+            "term": "Sensitive data",
+            "definition": "Personal data revealing racial or ethnic origin, religious beliefs, health diagnosis, sexual orientation, citizenship or immigration status; genetic or biometric data used to identify a person; data of a known child; and precise geolocation data."
+        },
+        {
+            "term": "Data protection assessment",
+            "definition": "A documented assessment, required before targeted advertising, sale of personal data, certain profiling and processing of sensitive data, that weighs the benefits of processing against the risks to consumers."
+        }
+    ]
+}

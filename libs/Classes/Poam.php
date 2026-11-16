@@ -165,6 +165,7 @@ class Poam
         'us-tx-dpsa' => 'none',
         'us-or-cpa' => 'none',
         'us-ut-cpa' => 'none',
+        'us-mt-cdpa' => 'none',
         'nydfs-500' => 'none',
         'nis2' => 'none',
         'dora' => 'none',

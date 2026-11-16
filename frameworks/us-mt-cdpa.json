@@ -1,0 +1,905 @@
+{
+    "key": "us-mt-cdpa",
+    "name": "Montana Consumer Data Privacy Act",
+    "version": "MCA 2025",
+    "full_name": "Montana Consumer Data Privacy Act (Montana Code Annotated 2025, Title 30, Chapter 14, Part 28)",
+    "issuing_body": "State of Montana; published by the Montana Legislative Services Division",
+    "standard_codes": [
+        "US-MT-CDPA"
+    ],
+    "aliases": [
+        "MCDPA",
+        "Montana MCDPA",
+        "Montana Consumer Data Privacy Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against Part 28 of Title 30, Chapter 14 in the Montana Code Annotated 2025, which includes the 2025 amendments (lower thresholds and the duties toward minors).",
+    "sources": [
+        {
+            "id": "mca2803",
+            "title": "Montana Code Annotated 2025, 30-14-2803, Applicability",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0030/0300-0140-0280-0030.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0030.html",
+            "sha256": "4e1f6ddf46b9262293510da5f0634ba8d7f7b87ee2ca084d6354c3b55c116dbf"
+        },
+        {
+            "id": "mca2808",
+            "title": "Montana Code Annotated 2025, 30-14-2808, Consumer personal data -- opt-out -- compliance -- appeals",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0080/0300-0140-0280-0080.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0080.html",
+            "sha256": "631b422a5b640b222eb492243bf5c49e5811ee9f221b28679d482e3f00694e94"
+        },
+        {
+            "id": "mca2809",
+            "title": "Montana Code Annotated 2025, 30-14-2809, Authorized agent",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0090/0300-0140-0280-0090.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0090.html",
+            "sha256": "d4d51210c8ac186d21f56ddba82bf47d8b4d0d45c1be8bec8b10730347a94dd8"
+        },
+        {
+            "id": "mca2811",
+            "title": "Montana Code Annotated 2025, 30-14-2811, Duties of controllers -- duty of care -- rebuttable presumption",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0110/0300-0140-0280-0110.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0110.html",
+            "sha256": "a0762c58f5eba5a95670b3954688831a55212cac4532b33c4ee806c85b88791c"
+        },
+        {
+            "id": "mca2812",
+            "title": "Montana Code Annotated 2025, 30-14-2812, Data processing by controller -- limitations",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0120/0300-0140-0280-0120.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0120.html",
+            "sha256": "c2149da8a3a40a0d5ce69d032fd3269ce86e3292a60f6e49d45a9801b587f807"
+        },
+        {
+            "id": "mca2813",
+            "title": "Montana Code Annotated 2025, 30-14-2813, Data processor -- allowances -- limitations",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0130/0300-0140-0280-0130.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0130.html",
+            "sha256": "51dbe5d058bd2b2007595d31c29349aa2d60873133ca08e6d8aee4c47b216605"
+        },
+        {
+            "id": "mca2814",
+            "title": "Montana Code Annotated 2025, 30-14-2814, Data protection assessment",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0140/0300-0140-0280-0140.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0140.html",
+            "sha256": "9b3b5f70bc56e9e7721f647e5f3fd3b93ddc98aa809c6c6a00a5cbf4bdf37ea7"
+        },
+        {
+            "id": "mca2815",
+            "title": "Montana Code Annotated 2025, 30-14-2815, De-identified data",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0150/0300-0140-0280-0150.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0150.html",
+            "sha256": "47ecf01c1a03bd24ce92fa1be45df1976fdd9ec4f2f0fe0677b3fe5bbca733e4"
+        },
+        {
+            "id": "mca2818",
+            "title": "Montana Code Annotated 2025, 30-14-2818, Responsibility according to role -- processing data of minors",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0180/0300-0140-0280-0180.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0180.html",
+            "sha256": "63c651688b90ebac9561b2f63407ac4cd95c112c102882b8a7d65bbfdbd9b6f4"
+        },
+        {
+            "id": "mca2819",
+            "title": "Montana Code Annotated 2025, 30-14-2819, Data protection assessments for heightened risk of harm to minors",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0190/0300-0140-0280-0190.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0190.html",
+            "sha256": "5f340b8b05304ff8cafd5d79be1ec7705709da29dfa2e0d78dac2f1b3ad1ca9e"
+        },
+        {
+            "id": "mca2820",
+            "title": "Montana Code Annotated 2025, 30-14-2820, Civil penalty -- injunction",
+            "version": "MCA 2025",
+            "publisher": "Montana Legislative Services Division",
+            "url": "https://mca.legmt.gov/bills/mca/title_0300/chapter_0140/part_0280/section_0200/0300-0140-0280-0200.html",
+            "file": "us-mt-cdpa/0300-0140-0280-0200.html",
+            "sha256": "67ae6766ffbbbc0622efa5ae7350ca3367be6e577cb917a86283c026d463c7d3"
+        }
+    ],
+    "source_of": {
+        "controls": "mca2808",
+        "objectives": "mca2808"
+    },
+    "control_flags": {
+        "objectives": "The provisions beneath a requirement whose lead-in states the duty; each is required unless the lead-in makes them a choice."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "mca2808",
+            "cite": "MCA 30-14-2808 to 30-14-2819"
+        },
+        {
+            "id": "thresholds",
+            "type": "applicability",
+            "summary": "The Act applies to a business that does business in Montana or targets Montana residents and controls or processes personal data of at least 25,000 consumers, or of at least 15,000 while deriving over 25% of gross revenue from selling personal data. The minors' provisions (2811, 2818, 2819) apply regardless of those thresholds.",
+            "source": "mca2803",
+            "cite": "MCA 30-14-2803(1)",
+            "quote": "control or process the personal data of not less than 25,000 consumers"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "30-14-2808(4)",
+            "days": 45,
+            "from": "receipt of the request",
+            "summary": "A consumer request is answered without undue delay and within 45 days of receipt; the period may be extended once by 45 days.",
+            "source": "mca2808",
+            "cite": "MCA 30-14-2808(4)(a)",
+            "quote": "not later than 45 days after receipt of the request"
+        },
+        {
+            "id": "appeal_deadline",
+            "type": "deadline",
+            "control": "30-14-2808(5)",
+            "days": 60,
+            "from": "receipt of the appeal",
+            "summary": "An appeal is decided and answered in writing within 60 days of receipt.",
+            "source": "mca2808",
+            "cite": "MCA 30-14-2808(5)",
+            "quote": "Not later than 60 days after receipt of an appeal, a controller shall inform the consumer in writing"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "A violation that continues after the 30-day cure period carries a civil penalty of up to $7,500 for each violation.",
+            "source": "mca2820",
+            "cite": "MCA 30-14-2820(2)",
+            "quote": "liable for a civil penalty in an amount not to exceed $7,500"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "MCDPA",
+            "definition": "The Montana Consumer Data Privacy Act, Montana's comprehensive consumer privacy law, in force since 1 October 2024 and amended in 2025."
+        },
+        {
+            "term": "Controller",
+            "definition": "The person that, alone or jointly with others, determines the purpose and means of processing personal data."
+        },
+        {
+            "term": "Processor",
+            "definition": "A person that processes personal data on behalf of a controller."
+        },
+        {
+            "term": "Sensitive data",
+            "definition": "Personal data revealing racial or ethnic origin, religious beliefs, health diagnosis, sexual orientation, citizenship or immigration status; genetic or biometric data used to identify a person; data of a known child; and precise geolocation data."
+        },
+        {
+            "term": "Data protection assessment",
+            "definition": "A documented assessment, required before targeted advertising, sale of personal data, certain profiling and processing of sensitive data, that weighs the benefits of processing against the risks to consumers."
+        }
+    ],
+    "display_name": "Montana Consumer Data Privacy Act (MCA 2025)",
+    "counts": {
+        "families": 9,
+        "controls": 34,
+        "objectives": 43
+    },
+    "families": [
+        {
+            "number": "30-14-2808",
+            "code": "30-14-2808 MCA",
+            "name": "Consumer personal data -- opt-out -- compliance -- appeals",
+            "controls": [
+                {
+                    "id": "30-14-2808(4)",
+                    "number": "30-14-2808(4)",
+                    "text": "Except as otherwise provided in this part, a controller shall comply with a request by a consumer to exercise the consumer rights authorized pursuant to this section as follows: (a) A controller shall respond to the consumer without undue delay, but not later than 45 days after receipt of the request. The controller may extend the response period by 45 additional days when reasonably necessary, considering the complexity and number of the consumer's requests, provided the controller informs the consumer of the extension within the initial 45-day response period and the reason for the extension. (b) If a controller declines to act regarding the consumer's request, the controller shall inform the consumer without undue delay, but not later than 45 days after receipt of the request, of the justification for declining to act and provide instructions for how to appeal the decision. (c) Information provided in response to a consumer request must be provided by a controller, free of charge, once for each consumer during any 12-month period. If requests from a consumer are manifestly unfounded, excessive, technically infeasible, or repetitive, the controller may charge the consumer a reasonable fee to cover the administrative costs of complying with the request or decline to act on the request. The controller bears the burden of demonstrating the manifestly unfounded, excessive, technically infeasible, or repetitive nature of the request. (d) If a controller is unable to authenticate a request to exercise any of the rights afforded under subsections (1)(a) through (1)(d) of this section using commercially reasonable efforts, the controller may not be required to comply with a request to initiate an action pursuant to this section and shall provide notice to the consumer that the controller is unable to authenticate the request to exercise the right or rights until the consumer provides additional information reasonably necessary to authenticate the consumer and the consumer's request to exercise the consumer's rights. A controller may not be required to authenticate an opt-out request, but a controller may deny an opt-out request if the controller has a good faith, reasonable, and documented belief that the request is fraudulent. If a controller denies an opt-out request because the controller believes the request is fraudulent, the controller shall send notice to the person who made the request disclosing that the controller believes the request is fraudulent and that the controller may not comply with the request. (e) A controller that has obtained personal data about a consumer from a source other than the consumer must be deemed in compliance with the consumer's request to delete the consumer's data pursuant to subsection (1)(c) by: (i) retaining a record of the deletion request and the minimum data necessary for the purpose of ensuring the consumer's personal data remains deleted from the controller's records and not using the retained data for any other purpose pursuant to the provisions of this part; or (ii) opting the consumer out of the processing of the consumer's personal data for any purpose except for those exempted pursuant to the provisions of this part.",
+                    "type": "subsection",
+                    "source": "mca2808",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "30-14-2808(4)(a)",
+                            "text": "A controller shall respond to the consumer without undue delay, but not later than 45 days after receipt of the request. The controller may extend the response period by 45 additional days when reasonably necessary, considering the complexity and number of the consumer's requests, provided the controller informs the consumer of the extension within the initial 45-day response period and the reason for the extension.",
+                            "source": "mca2808"
+                        },
+                        {
+                            "id": "30-14-2808(4)(b)",
+                            "text": "If a controller declines to act regarding the consumer's request, the controller shall inform the consumer without undue delay, but not later than 45 days after receipt of the request, of the justification for declining to act and provide instructions for how to appeal the decision.",
+                            "source": "mca2808"
+                        },
+                        {
+                            "id": "30-14-2808(4)(c)",
+                            "text": "Information provided in response to a consumer request must be provided by a controller, free of charge, once for each consumer during any 12-month period. If requests from a consumer are manifestly unfounded, excessive, technically infeasible, or repetitive, the controller may charge the consumer a reasonable fee to cover the administrative costs of complying with the request or decline to act on the request. The controller bears the burden of demonstrating the manifestly unfounded, excessive, technically infeasible, or repetitive nature of the request.",
+                            "source": "mca2808"
+                        },
+                        {
+                            "id": "30-14-2808(4)(d)",
+                            "text": "If a controller is unable to authenticate a request to exercise any of the rights afforded under subsections (1)(a) through (1)(d) of this section using commercially reasonable efforts, the controller may not be required to comply with a request to initiate an action pursuant to this section and shall provide notice to the consumer that the controller is unable to authenticate the request to exercise the right or rights until the consumer provides additional information reasonably necessary to authenticate the consumer and the consumer's request to exercise the consumer's rights. A controller may not be required to authenticate an opt-out request, but a controller may deny an opt-out request if the controller has a good faith, reasonable, and documented belief that the request is fraudulent. If a controller denies an opt-out request because the controller believes the request is fraudulent, the controller shall send notice to the person who made the request disclosing that the controller believes the request is fraudulent and that the controller may not comply with the request.",
+                            "source": "mca2808"
+                        },
+                        {
+                            "id": "30-14-2808(4)(e)",
+                            "text": "A controller that has obtained personal data about a consumer from a source other than the consumer must be deemed in compliance with the consumer's request to delete the consumer's data pursuant to subsection (1)(c) by: (i) retaining a record of the deletion request and the minimum data necessary for the purpose of ensuring the consumer's personal data remains deleted from the controller's records and not using the retained data for any other purpose pursuant to the provisions of this part; or (ii) opting the consumer out of the processing of the consumer's personal data for any purpose except for those exempted pursuant to the provisions of this part.",
+                            "source": "mca2808"
+                        }
+                    ]
+                },
+                {
+                    "id": "30-14-2808(5)",
+                    "number": "30-14-2808(5)",
+                    "text": "A controller shall establish a process for a consumer to appeal the controller's refusal to act on a request within a reasonable period after the consumer's receipt of the decision. The appeal process must be conspicuously available and like the process for submitting requests to initiate action pursuant to this section. Not later than 60 days after receipt of an appeal, a controller shall inform the consumer in writing of any action taken or not taken in response to the appeal, including a written explanation of the reasons for the decisions. If the appeal is denied, the controller shall also provide the consumer with an online mechanism, if available, or other method through which the consumer may contact the attorney general to submit a complaint.",
+                    "type": "subsection",
+                    "source": "mca2808",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                },
+                {
+                    "id": "30-14-2808(6)",
+                    "number": "30-14-2808(6)",
+                    "text": "In response to a consumer request under subsection (1)(a), a controller may not disclose the following information about a consumer but shall inform the consumer instead with sufficient particularity that the controller has collected this information: (a) social security number; (b) driver's license number or other government-issued identification number; (c) financial account number; (d) health insurance account number or medical identification number; (e) account password, security questions, or answer; or (f) biometric data.",
+                    "type": "subsection",
+                    "source": "mca2808",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "30-14-2808(6)(a)",
+                            "text": "social security number;",
+                            "source": "mca2808",
+                            "description": "In response to a consumer request under subsection (1)(a), a controller may not disclose the following information about a consumer but shall inform the consumer instead with sufficient particularity that the controller has collected this information social security number."
+                        },
+                        {
+                            "id": "30-14-2808(6)(b)",
+                            "text": "driver's license number or other government-issued identification number;",
+                            "source": "mca2808",
+                            "description": "In response to a consumer request under subsection (1)(a), a controller may not disclose the following information about a consumer but shall inform the consumer instead with sufficient particularity that the controller has collected this information driver's license number or other government-issued identification number."
+                        },
+                        {
+                            "id": "30-14-2808(6)(c)",
+                            "text": "financial account number;",
+                            "source": "mca2808",
+                            "description": "In response to a consumer request under subsection (1)(a), a controller may not disclose the following information about a consumer but shall inform the consumer instead with sufficient particularity that the controller has collected this information financial account number."
+                        },
+                        {
+                            "id": "30-14-2808(6)(d)",
+                            "text": "health insurance account number or medical identification number;",
+                            "source": "mca2808",
+                            "description": "In response to a consumer request under subsection (1)(a), a controller may not disclose the following information about a consumer but shall inform the consumer instead with sufficient particularity that the controller has collected this information health insurance account number or medical identification number."
+                        },
+                        {
+                            "id": "30-14-2808(6)(e)",
+                            "text": "account password, security questions, or answer; or",
+                            "source": "mca2808",
+                            "description": "In response to a consumer request under subsection (1)(a), a controller may not disclose the following information about a consumer but shall inform the consumer instead with sufficient particularity that the controller has collected this information account password, security questions, or answer."
+                        },
+                        {
+                            "id": "30-14-2808(6)(f)",
+                            "text": "biometric data.",
+                            "source": "mca2808",
+                            "description": "In response to a consumer request under subsection (1)(a), a controller may not disclose the following information about a consumer but shall inform the consumer instead with sufficient particularity that the controller has collected this information biometric data."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "number": "30-14-2809",
+            "code": "30-14-2809 MCA",
+            "name": "Authorized agent",
+            "controls": [
+                {
+                    "id": "30-14-2809(2)",
+                    "number": "30-14-2809(2)",
+                    "text": "A controller shall comply with an opt-out request received from an authorized agent if the controller is able to verify, with commercially reasonable effort, the identity of the consumer and the authorized agent's authority to act on the consumer's behalf.",
+                    "type": "subsection",
+                    "source": "mca2809",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                },
+                {
+                    "id": "30-14-2809(3)",
+                    "number": "30-14-2809(3)",
+                    "text": "Opt-out methods must: (a) provide a clear and conspicuous link on the controller's internet website to an internet web page that enables a consumer, or an agent of the consumer, to opt out of the targeted advertising or sale of the consumer's personal data; and (b) by no later than January 1, 2025, allow a consumer to opt out of any processing of the consumer's personal data for the purposes of targeted advertising, or any sale of such personal data through an opt-out preference signal sent with the consumer's consent, to the controller by a platform, technology, or mechanism that: (i) may not unfairly disadvantage another controller; (ii) may not make use of a default setting, but require the consumer to make an affirmative, freely given and unambiguous choice to opt out of any processing of a customer's personal data pursuant to this part; (iii) must be consumer-friendly and easy to use by the average consumer; (iv) must be consistent with any federal or state law or regulation; and (v) must allow the controller to accurately determine whether the consumer is a resident of the state and whether the consumer has made a legitimate request to opt out of any sale of a consumer's personal data or targeted advertising.",
+                    "type": "subsection",
+                    "source": "mca2809",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "30-14-2809(3)(a)",
+                            "text": "provide a clear and conspicuous link on the controller's internet website to an internet web page that enables a consumer, or an agent of the consumer, to opt out of the targeted advertising or sale of the consumer's personal data; and",
+                            "source": "mca2809",
+                            "description": "Opt-out methods must provide a clear and conspicuous link on the controller's internet website to an internet web page that enables a consumer, or an agent of the consumer, to opt out of the targeted advertising or sale of the consumer's personal data."
+                        },
+                        {
+                            "id": "30-14-2809(3)(b)",
+                            "text": "by no later than January 1, 2025, allow a consumer to opt out of any processing of the consumer's personal data for the purposes of targeted advertising, or any sale of such personal data through an opt-out preference signal sent with the consumer's consent, to the controller by a platform, technology, or mechanism that: (i) may not unfairly disadvantage another controller; (ii) may not make use of a default setting, but require the consumer to make an affirmative, freely given and unambiguous choice to opt out of any processing of a customer's personal data pursuant to this part; (iii) must be consumer-friendly and easy to use by the average consumer; (iv) must be consistent with any federal or state law or regulation; and (v) must allow the controller to accurately determine whether the consumer is a resident of the state and whether the consumer has made a legitimate request to opt out of any sale of a consumer's personal data or targeted advertising.",
+                            "source": "mca2809"
+                        }
+                    ]
+                },
+                {
+                    "id": "30-14-2809(4)(a)",
+                    "number": "30-14-2809(4)(a)",
+                    "text": "If a consumer's decision to opt out of any processing of the consumer's personal data for the purposes of targeted advertising, or any sale of personal data, through an opt-out preference signal sent in accordance with the provisions of subsection (3) conflicts with the consumer's existing controller-specific privacy setting or voluntary participation in a controller's bona fide loyalty, rewards, premium features, discounts, or club card program, the controller shall comply with the consumer's opt-out preference signal but may notify the consumer of the conflict and provide the choice to confirm controller-specific privacy settings or participation in such a program.",
+                    "type": "subsection",
+                    "source": "mca2809",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                },
+                {
+                    "id": "30-14-2809(4)(b)",
+                    "number": "30-14-2809(4)(b)",
+                    "text": "If a controller responds to consumer opt-out requests received in accordance with subsection (3) by informing the consumer of a charge for the use of any product or service, the controller shall present the terms of any financial incentive offered pursuant to subsection (3) for the retention, use, sale, or sharing of the consumer's personal data.",
+                    "type": "subsection",
+                    "source": "mca2809",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                }
+            ]
+        },
+        {
+            "number": "30-14-2811",
+            "code": "30-14-2811 MCA",
+            "name": "Duties of controllers -- duty of care -- rebuttable presumption",
+            "controls": [
+                {
+                    "id": "30-14-2811(1)(a)",
+                    "number": "30-14-2811(1)(a)",
+                    "text": "A controller that offers an online service, product, or feature to a consumer whom the controller actually knows or willfully disregards is a minor shall use reasonable care to avoid a heightened risk of harm to minors caused by the online service, product, or feature.",
+                    "type": "subsection",
+                    "source": "mca2811",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                },
+                {
+                    "id": "30-14-2811(2)",
+                    "number": "30-14-2811(2)",
+                    "text": "Unless a controller has obtained consent in accordance with subsection (3), a controller that offers an online service, product, or feature to a consumer whom the controller actually knows or willfully disregards is a minor may not: (a) process a minor's personal data: (i) for the purposes of: (A) targeted advertising; (B) the sale of personal data; or (C) profiling in furtherance of decisions that produce legal or similarly significant effects concerning a consumer; (ii) for any processing purpose other than the processing purpose that the controller disclosed at the time the controller collected the minor's personal data or that is reasonably necessary for and compatible with the processing purpose that the controller disclosed at the time the controller collected the minor's personal data; or (iii) for longer than is reasonably necessary to provide the online service, product, or feature; (b) use a system design feature to significantly increase, sustain, or extend a minor's use of the online service, product, or feature; or (c) collect a minor's precise geolocation data unless: (i) the minor's precise geolocation data is reasonably necessary for the controller to provide the online service, product, or feature; (ii) the controller only collects and retains the minor's precise geolocation data for the time necessary to provide the online service, product, or feature; and (iii) the controller provides to the minor a signal indicating that the controller is collecting the minor's precise geolocation data and makes the signal available to the minor for the entire duration of the collection of the minor's precise geolocation data. This subsection (2)(c)(iii) does not apply to a service or application that is used by and under the direction of a ski area operator.",
+                    "type": "subsection",
+                    "source": "mca2811",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                },
+                {
+                    "id": "30-14-2811(3)(a)",
+                    "number": "30-14-2811(3)(a)",
+                    "text": "A controller may not engage in the activities described in subsection (2) unless the controller obtains: (i) the minor's consent; or (ii) if the minor is a child, the consent of the minor's parent or legal guardian. A controller that complies with the verifiable parental consent requirements established in the Children's Online Privacy Protection Act of 1998, 15 U.S.C. 6501, et seq., as amended, and the regulations, rules, guidance, and exemptions adopted pursuant to this act, as amended, is considered to have satisfied any requirement to obtain parental consent under this subsection (3)(a)(ii).",
+                    "type": "subsection",
+                    "source": "mca2811",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                },
+                {
+                    "id": "30-14-2811(3)(b)",
+                    "number": "30-14-2811(3)(b)",
+                    "text": "(i) A controller that offers an online service, product, or feature to a consumer whom the controller actually knows or willfully disregards is a minor may not: (A) provide a consent mechanism that is designed to substantially subvert or impair or is manipulated with the effect of substantially subverting or impairing user autonomy, decision-making, or choice; or (B) except as provided in subsection (3)(b)(ii), offer a direct messaging apparatus for use by a minor without providing readily accessible and easy-to-use safeguards to limit the ability of an adult to send unsolicited communications to the minor with whom the adult is not connected. (ii) Subsection (3)(b)(i)(B) does not apply to an online service, product, or feature of which the predominant or exclusive function is: (A) electronic mail; or (B) direct messaging consisting of text, photos, or videos that are sent between devices by electronic means in which messages are: (I) shared between the sender and the recipient; (II) only visible to the sender and the recipient; and (III) not posted publicly.",
+                    "type": "subsection",
+                    "source": "mca2811",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                }
+            ]
+        },
+        {
+            "number": "30-14-2812",
+            "code": "30-14-2812 MCA",
+            "name": "Data processing by controller -- limitations",
+            "controls": [
+                {
+                    "id": "30-14-2812(1)",
+                    "number": "30-14-2812(1)",
+                    "text": "A controller shall: (a) limit the collection of personal data to what is adequate, relevant, and reasonably necessary in relation to the purposes for which the personal data is processed, as disclosed to the consumer; (b) establish, implement, and maintain reasonable administrative, technical, and physical data security practices to protect the confidentiality, integrity, and accessibility of personal data appropriate to the volume and nature of the personal data at issue; and (c) provide an effective mechanism for a consumer to revoke the consumer's consent under this section that is at least as easy as the mechanism by which the consumer provided the consumer's consent and, on revocation of the consent, cease to process the personal data as soon as practicable, but not later than 45 days after the receipt of the request.",
+                    "type": "subsection",
+                    "source": "mca2812",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "30-14-2812(1)(a)",
+                            "text": "limit the collection of personal data to what is adequate, relevant, and reasonably necessary in relation to the purposes for which the personal data is processed, as disclosed to the consumer;",
+                            "source": "mca2812",
+                            "description": "A controller shall limit the collection of personal data to what is adequate, relevant, and reasonably necessary in relation to the purposes for which the personal data is processed, as disclosed to the consumer."
+                        },
+                        {
+                            "id": "30-14-2812(1)(b)",
+                            "text": "establish, implement, and maintain reasonable administrative, technical, and physical data security practices to protect the confidentiality, integrity, and accessibility of personal data appropriate to the volume and nature of the personal data at issue; and",
+                            "source": "mca2812",
+                            "description": "A controller shall establish, implement, and maintain reasonable administrative, technical, and physical data security practices to protect the confidentiality, integrity, and accessibility of personal data appropriate to the volume and nature of the personal data at issue."
+                        },
+                        {
+                            "id": "30-14-2812(1)(c)",
+                            "text": "provide an effective mechanism for a consumer to revoke the consumer's consent under this section that is at least as easy as the mechanism by which the consumer provided the consumer's consent and, on revocation of the consent, cease to process the personal data as soon as practicable, but not later than 45 days after the receipt of the request.",
+                            "source": "mca2812",
+                            "description": "A controller shall provide an effective mechanism for a consumer to revoke the consumer's consent under this section that is at least as easy as the mechanism by which the consumer provided the consumer's consent and, on revocation of the consent, cease to process the personal data as soon as practicable, but not later than 45 days after the receipt of the request."
+                        }
+                    ]
+                },
+                {
+                    "id": "30-14-2812(2)",
+                    "number": "30-14-2812(2)",
+                    "text": "A controller may not: (a) except as otherwise provided in this part, process personal data for purposes that are not reasonably necessary to or compatible with the disclosed purposes for which the personal data is processed as disclosed to the consumer unless the controller obtains the consumer's consent; (b) process sensitive data concerning a consumer without obtaining the consumer's consent or, in the case of the processing of sensitive data concerning a known child, without processing the sensitive data in accordance with the Children's Online Privacy Protection Act of 1998, 15 U.S.C. 6501, et seq.; (c) process personal data in violation of the laws of this state and federal laws that prohibit unlawful discrimination against consumers; (d) process the personal data of a consumer for the purposes of targeted advertising or sell the consumer's personal data without the consumer's consent under circumstances in which a controller has actual knowledge or willfully disregards that the consumer is at least 13 years of age but younger than 16 years of age; or (e) discriminate against a consumer for exercising any of the consumer rights contained in this part, including denying goods or services, charging different prices or rates for goods or services, or providing a different level of quality of goods or services to the consumer.",
+                    "type": "subsection",
+                    "source": "mca2812",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "30-14-2812(2)(a)",
+                            "text": "except as otherwise provided in this part, process personal data for purposes that are not reasonably necessary to or compatible with the disclosed purposes for which the personal data is processed as disclosed to the consumer unless the controller obtains the consumer's consent;",
+                            "source": "mca2812",
+                            "description": "A controller may not except as otherwise provided in this part, process personal data for purposes that are not reasonably necessary to or compatible with the disclosed purposes for which the personal data is processed as disclosed to the consumer unless the controller obtains the consumer's consent."
+                        },
+                        {
+                            "id": "30-14-2812(2)(b)",
+                            "text": "process sensitive data concerning a consumer without obtaining the consumer's consent or, in the case of the processing of sensitive data concerning a known child, without processing the sensitive data in accordance with the Children's Online Privacy Protection Act of 1998, 15 U.S.C. 6501, et seq.;",
+                            "source": "mca2812",
+                            "description": "A controller may not process sensitive data concerning a consumer without obtaining the consumer's consent or, in the case of the processing of sensitive data concerning a known child, without processing the sensitive data in accordance with the Children's Online Privacy Protection Act of 1998, 15 U.S.C. 6501, et seq."
+                        },
+                        {
+                            "id": "30-14-2812(2)(c)",
+                            "text": "process personal data in violation of the laws of this state and federal laws that prohibit unlawful discrimination against consumers;",
+                            "source": "mca2812",
+                            "description": "A controller may not process personal data in violation of the laws of this state and federal laws that prohibit unlawful discrimination against consumers."
+                        },
+                        {
+                            "id": "30-14-2812(2)(d)",
+                            "text": "process the personal data of a consumer for the purposes of targeted advertising or sell the consumer's personal data without the consumer's consent under circumstances in which a controller has actual knowledge or willfully disregards that the consumer is at least 13 years of age but younger than 16 years of age; or",
+                            "source": "mca2812",
+                            "description": "A controller may not process the personal data of a consumer for the purposes of targeted advertising or sell the consumer's personal data without the consumer's consent under circumstances in which a controller has actual knowledge or willfully disregards that the consumer is at least 13 years of age but younger than 16 years of age."
+                        },
+                        {
+                            "id": "30-14-2812(2)(e)",
+                            "text": "discriminate against a consumer for exercising any of the consumer rights contained in this part, including denying goods or services, charging different prices or rates for goods or services, or providing a different level of quality of goods or services to the consumer.",
+                            "source": "mca2812",
+                            "description": "A controller may not discriminate against a consumer for exercising any of the consumer rights contained in this part, including denying goods or services, charging different prices or rates for goods or services, or providing a different level of quality of goods or services to the consumer."
+                        }
+                    ]
+                },
+                {
+                    "id": "30-14-2812(4)",
+                    "number": "30-14-2812(4)",
+                    "text": "If a controller sells personal data to third parties or processes personal data for targeted advertising, the controller shall clearly and conspicuously disclose the processing in its privacy notice and provide access to a clear and conspicuous method outside the privacy notice for a consumer to opt out of the sale or processing. This method may include but is not limited to an internet hyperlink clearly labeled \"your opt-out rights\" or \"your privacy rights\" that directly effectuates the opt-out request or takes consumers to a web page where the consumer can make the opt-out request.",
+                    "type": "subsection",
+                    "source": "mca2812",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                },
+                {
+                    "id": "30-14-2812(5)",
+                    "number": "30-14-2812(5)",
+                    "text": "A controller shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes: (a) the categories of personal data processed by the controller; (b) the purpose for processing personal data; (c) the categories of personal data that the controller sells to or shares with third parties, if any; (d) the categories of third parties, if any, with which the controller sells or shares personal data; and (e) an active e-mail address or other mechanism that the consumer may use to contact the controller; (f) an explanation of the rights provided by 30-14-2808(1) and how consumers may exercise their consumer rights, including how a consumer may appeal a controller's decision regarding the consumer's request; and (g) the date the privacy notice was last updated.",
+                    "type": "subsection",
+                    "source": "mca2812",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "30-14-2812(5)(a)",
+                            "text": "the categories of personal data processed by the controller;",
+                            "source": "mca2812",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes the categories of personal data processed by the controller."
+                        },
+                        {
+                            "id": "30-14-2812(5)(b)",
+                            "text": "the purpose for processing personal data;",
+                            "source": "mca2812",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes the purpose for processing personal data."
+                        },
+                        {
+                            "id": "30-14-2812(5)(c)",
+                            "text": "the categories of personal data that the controller sells to or shares with third parties, if any;",
+                            "source": "mca2812",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes the categories of personal data that the controller sells to or shares with third parties, if any."
+                        },
+                        {
+                            "id": "30-14-2812(5)(d)",
+                            "text": "the categories of third parties, if any, with which the controller sells or shares personal data; and",
+                            "source": "mca2812",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes the categories of third parties, if any, with which the controller sells or shares personal data."
+                        },
+                        {
+                            "id": "30-14-2812(5)(e)",
+                            "text": "an active e-mail address or other mechanism that the consumer may use to contact the controller;",
+                            "source": "mca2812",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes an active e-mail address or other mechanism that the consumer may use to contact the controller."
+                        },
+                        {
+                            "id": "30-14-2812(5)(f)",
+                            "text": "an explanation of the rights provided by 30-14-2808(1) and how consumers may exercise their consumer rights, including how a consumer may appeal a controller's decision regarding the consumer's request; and",
+                            "source": "mca2812",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes an explanation of the rights provided by 30-14-2808(1) and how consumers may exercise their consumer rights, including how a consumer may appeal a controller's decision regarding the consumer's request."
+                        },
+                        {
+                            "id": "30-14-2812(5)(g)",
+                            "text": "the date the privacy notice was last updated.",
+                            "source": "mca2812",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes the date the privacy notice was last updated."
+                        }
+                    ]
+                },
+                {
+                    "id": "30-14-2812(6)",
+                    "number": "30-14-2812(6)",
+                    "text": "The privacy notice must be made available to the public in each language in which the controller provides a product or service that is subject to the privacy notice or carries out activities related to the product or service.",
+                    "type": "subsection",
+                    "source": "mca2812",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                },
+                {
+                    "id": "30-14-2812(7)",
+                    "number": "30-14-2812(7)",
+                    "text": "The controller shall provide the privacy notice in a manner that is reasonably accessible to and usable by individuals with disabilities.",
+                    "type": "subsection",
+                    "source": "mca2812",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                },
+                {
+                    "id": "30-14-2812(8)",
+                    "number": "30-14-2812(8)",
+                    "text": "Whenever a controller makes a material change to the controller's privacy notice or practices, the controller shall notify consumers affected by the material change with respect to any prospectively collected personal data and provide a reasonable opportunity for consumers to withdraw consent to any further materially different collection, processing, or transfer of previously collected personal data under the changed policy. The controller shall take all reasonable electronic measures to provide notification regarding material changes to affected consumers, taking into account available technology and the nature of the relationship.",
+                    "type": "subsection",
+                    "source": "mca2812",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                },
+                {
+                    "id": "30-14-2812(10)",
+                    "number": "30-14-2812(10)",
+                    "text": "The privacy notice must be posted online through a conspicuous hyperlink using the word \"privacy\" on the controller's website homepage or on a mobile device's application store page or download page. A controller that maintains an application on a mobile device or other device shall also include a hyperlink to the privacy notice in the application's settings menu or in a similarly conspicuous and accessible location. A controller that does not operate a website shall make the privacy notice conspicuously available to consumers through a medium regularly used by the controller to interact with consumers, including but not limited to mail.",
+                    "type": "subsection",
+                    "source": "mca2812",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                },
+                {
+                    "id": "30-14-2812(11)(a)",
+                    "number": "30-14-2812(11)(a)",
+                    "text": "A controller shall establish and describe in a privacy notice one or more secure and reliable means for consumers to submit a request to exercise their consumer rights pursuant to this part considering the ways in which consumers normally interact with the controller, the need for secure and reliable communication of consumer requests, and the ability of the controller to verify the identity of the consumer making the request.",
+                    "type": "subsection",
+                    "source": "mca2812",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                },
+                {
+                    "id": "30-14-2812(11)(b)",
+                    "number": "30-14-2812(11)(b)",
+                    "text": "A controller may not require a consumer to create a new account to exercise consumer rights but may require a consumer to use an existing account.",
+                    "type": "subsection",
+                    "source": "mca2812",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                }
+            ]
+        },
+        {
+            "number": "30-14-2813",
+            "code": "30-14-2813 MCA",
+            "name": "Data processor -- allowances -- limitations",
+            "controls": [
+                {
+                    "id": "30-14-2813(1)",
+                    "number": "30-14-2813(1)",
+                    "text": "A processor shall adhere to the instructions of a controller and shall assist the controller in meeting the controller's obligations under this part to include: (a) considering the nature of processing and the information available to the processor by appropriate technical and organizational measures as much as reasonably practicable to fulfill the controller's obligation to respond to consumer rights requests; (b) considering the nature of processing and the information available to the processor by assisting the controller in meeting the controller's obligations in relation to the security of processing the personal data and in relation to the notification of a breach of security, as provided for in 30-14-1704, of the system of the processor to meet the controller's obligations; and (c) providing necessary information to enable the controller to conduct and document data protection assessments.",
+                    "type": "subsection",
+                    "source": "mca2813",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "30-14-2813(1)(a)",
+                            "text": "considering the nature of processing and the information available to the processor by appropriate technical and organizational measures as much as reasonably practicable to fulfill the controller's obligation to respond to consumer rights requests;",
+                            "source": "mca2813",
+                            "description": "A processor shall adhere to the instructions of a controller and shall assist the controller in meeting the controller's obligations under this part to include considering the nature of processing and the information available to the processor by appropriate technical and organizational measures as much as reasonably practicable to fulfill the controller's obligation to respond to consumer rights requests."
+                        },
+                        {
+                            "id": "30-14-2813(1)(b)",
+                            "text": "considering the nature of processing and the information available to the processor by assisting the controller in meeting the controller's obligations in relation to the security of processing the personal data and in relation to the notification of a breach of security, as provided for in 30-14-1704, of the system of the processor to meet the controller's obligations; and",
+                            "source": "mca2813",
+                            "description": "A processor shall adhere to the instructions of a controller and shall assist the controller in meeting the controller's obligations under this part to include considering the nature of processing and the information available to the processor by assisting the controller in meeting the controller's obligations in relation to the security of processing the personal data and in relation to the notification of a breach of security, as provided for in 30-14-1704, of the system of the processor to meet the controller's obligations."
+                        },
+                        {
+                            "id": "30-14-2813(1)(c)",
+                            "text": "providing necessary information to enable the controller to conduct and document data protection assessments.",
+                            "source": "mca2813",
+                            "description": "A processor shall adhere to the instructions of a controller and shall assist the controller in meeting the controller's obligations under this part to include providing necessary information to enable the controller to conduct and document data protection assessments."
+                        }
+                    ]
+                },
+                {
+                    "id": "30-14-2813(2)",
+                    "number": "30-14-2813(2)",
+                    "text": "A contract between a controller and a processor must govern the processor's data processing procedures with respect to processing performed on behalf of the controller. The contract must be binding and clearly set forth instructions for processing data, the nature and purpose of processing, the type of data subject to processing, the duration of processing, and the rights and obligations of both parties. The contract must also require that the processor: (a) ensure that each person processing personal data is subject to a duty of confidentiality with respect to the personal data; (b) at the controller's direction, delete or return all personal data to the controller as requested at the end of the provision of services, unless retention of the personal data is required by law; (c) on the reasonable request of the controller, make available to the controller all information in the processor's possession necessary to demonstrate the processor's compliance with the obligations in this part; (d) engage any subcontractor pursuant to a written contract that requires the subcontractor to meet the obligations of the processor with respect to the personal data; and (e) allow and cooperate with reasonable assessments by the controller or the controller's designated assessor, or the processor may arrange for a qualified and independent assessor to assess the processor's policies and technical and organizational measures in support of the obligations under this part using an appropriate and accepted control standard or framework and assessment procedure for the assessments. The processor shall provide a report of the assessment to the controller on request.",
+                    "type": "subsection",
+                    "source": "mca2813",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "30-14-2813(2)(a)",
+                            "text": "ensure that each person processing personal data is subject to a duty of confidentiality with respect to the personal data;",
+                            "source": "mca2813",
+                            "description": "A contract between a controller and a processor must govern the processor's data processing procedures with respect to processing performed on behalf of the controller. The contract must be binding and clearly set forth instructions for processing data, the nature and purpose of processing, the type of data subject to processing, the duration of processing, and the rights and obligations of both parties. The contract must also require that the processor ensure that each person processing personal data is subject to a duty of confidentiality with respect to the personal data."
+                        },
+                        {
+                            "id": "30-14-2813(2)(b)",
+                            "text": "at the controller's direction, delete or return all personal data to the controller as requested at the end of the provision of services, unless retention of the personal data is required by law;",
+                            "source": "mca2813",
+                            "description": "A contract between a controller and a processor must govern the processor's data processing procedures with respect to processing performed on behalf of the controller. The contract must be binding and clearly set forth instructions for processing data, the nature and purpose of processing, the type of data subject to processing, the duration of processing, and the rights and obligations of both parties. The contract must also require that the processor at the controller's direction, delete or return all personal data to the controller as requested at the end of the provision of services, unless retention of the personal data is required by law."
+                        },
+                        {
+                            "id": "30-14-2813(2)(c)",
+                            "text": "on the reasonable request of the controller, make available to the controller all information in the processor's possession necessary to demonstrate the processor's compliance with the obligations in this part;",
+                            "source": "mca2813",
+                            "description": "A contract between a controller and a processor must govern the processor's data processing procedures with respect to processing performed on behalf of the controller. The contract must be binding and clearly set forth instructions for processing data, the nature and purpose of processing, the type of data subject to processing, the duration of processing, and the rights and obligations of both parties. The contract must also require that the processor on the reasonable request of the controller, make available to the controller all information in the processor's possession necessary to demonstrate the processor's compliance with the obligations in this part."
+                        },
+                        {
+                            "id": "30-14-2813(2)(d)",
+                            "text": "engage any subcontractor pursuant to a written contract that requires the subcontractor to meet the obligations of the processor with respect to the personal data; and",
+                            "source": "mca2813",
+                            "description": "A contract between a controller and a processor must govern the processor's data processing procedures with respect to processing performed on behalf of the controller. The contract must be binding and clearly set forth instructions for processing data, the nature and purpose of processing, the type of data subject to processing, the duration of processing, and the rights and obligations of both parties. The contract must also require that the processor engage any subcontractor pursuant to a written contract that requires the subcontractor to meet the obligations of the processor with respect to the personal data."
+                        },
+                        {
+                            "id": "30-14-2813(2)(e)",
+                            "text": "allow and cooperate with reasonable assessments by the controller or the controller's designated assessor, or the processor may arrange for a qualified and independent assessor to assess the processor's policies and technical and organizational measures in support of the obligations under this part using an appropriate and accepted control standard or framework and assessment procedure for the assessments. The processor shall provide a report of the assessment to the controller on request.",
+                            "source": "mca2813"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "number": "30-14-2814",
+            "code": "30-14-2814 MCA",
+            "name": "Data protection assessment",
+            "controls": [
+                {
+                    "id": "30-14-2814(1)",
+                    "number": "30-14-2814(1)",
+                    "text": "A controller shall conduct and document a data protection assessment for each of the controller's processing activities that presents a heightened risk of harm to a consumer. For the purposes of this section, processing that presents a heightened risk of harm to a consumer includes: (a) the processing of personal data for the purposes of targeted advertising; (b) the sale of personal data; (c) the processing of personal data for the purposes of profiling in which the profiling presents a reasonably foreseeable risk of: (i) unfair or deceptive treatment of or unlawful disparate impact on consumers; (ii) financial, physical, or reputational injury to consumers; (iii) a physical or other form of intrusion on the solitude or seclusion or the private affairs or concerns of consumers in which the intrusion would be offensive to a reasonable person; or (iv) other substantial injury to consumers; and (d) the processing of sensitive data.",
+                    "type": "subsection",
+                    "source": "mca2814",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                },
+                {
+                    "id": "30-14-2814(2)(a)",
+                    "number": "30-14-2814(2)(a)",
+                    "text": "Data protection assessments conducted pursuant to subsection (1) must identify and weigh the benefits that may flow, directly and indirectly, from the processing to the controller, the consumer, other stakeholders, and the public against the potential risks to the rights of the consumer associated with the processing as mitigated by safeguards that may be employed by the controller to reduce these risks.",
+                    "type": "subsection",
+                    "source": "mca2814",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                },
+                {
+                    "id": "30-14-2814(2)(b)",
+                    "number": "30-14-2814(2)(b)",
+                    "text": "The controller shall factor into any data protection assessment the use of de-identified data and the reasonable expectations of consumers, as well as the context of the processing and the relationship between the controller and the consumer whose personal data will be processed.",
+                    "type": "subsection",
+                    "source": "mca2814",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                }
+            ]
+        },
+        {
+            "number": "30-14-2815",
+            "code": "30-14-2815 MCA",
+            "name": "De-identified data",
+            "controls": [
+                {
+                    "id": "30-14-2815(1)",
+                    "number": "30-14-2815(1)",
+                    "text": "Any controller in possession of de-identified data shall: (a) take reasonable measures to ensure that the de-identified data cannot be associated with an individual; (b) publicly commit to maintaining and using de-identified data without attempting to re-identify the de-identified data; and (c) contractually obligate any recipients of the de-identified data to comply with all provisions of this part.",
+                    "type": "subsection",
+                    "source": "mca2815",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "30-14-2815(1)(a)",
+                            "text": "take reasonable measures to ensure that the de-identified data cannot be associated with an individual;",
+                            "source": "mca2815",
+                            "description": "Any controller in possession of de-identified data shall take reasonable measures to ensure that the de-identified data cannot be associated with an individual."
+                        },
+                        {
+                            "id": "30-14-2815(1)(b)",
+                            "text": "publicly commit to maintaining and using de-identified data without attempting to re-identify the de-identified data; and",
+                            "source": "mca2815",
+                            "description": "Any controller in possession of de-identified data shall publicly commit to maintaining and using de-identified data without attempting to re-identify the de-identified data."
+                        },
+                        {
+                            "id": "30-14-2815(1)(c)",
+                            "text": "contractually obligate any recipients of the de-identified data to comply with all provisions of this part.",
+                            "source": "mca2815",
+                            "description": "Any controller in possession of de-identified data shall contractually obligate any recipients of the de-identified data to comply with all provisions of this part."
+                        }
+                    ]
+                },
+                {
+                    "id": "30-14-2815(5)",
+                    "number": "30-14-2815(5)",
+                    "text": "A controller that discloses pseudonymous data or de-identified data shall exercise reasonable oversight to monitor compliance with any contractual commitments to which the pseudonymous data or de-identified data is subject and shall take appropriate steps to address any breaches of those contractual commitments.",
+                    "type": "subsection",
+                    "source": "mca2815",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                }
+            ]
+        },
+        {
+            "number": "30-14-2818",
+            "code": "30-14-2818 MCA",
+            "name": "Responsibility according to role -- processing data of minors",
+            "controls": [
+                {
+                    "id": "30-14-2818(1)",
+                    "number": "30-14-2818(1)",
+                    "text": "A processor shall adhere to the instructions of a controller and shall assist the controller to meet the controller's obligations under 30-14-2811 and 30-14-2819, taking into account the nature of the processing and the information available to the processor. The processor shall assist the controller by: (a) taking appropriate technical and organizational measures, insofar as this is possible, for the fulfillment of the controller's obligations under 30-14-2811; and (b) providing information to enable the controller to conduct and document data protection assessments pursuant to 30-14-2819.",
+                    "type": "subsection",
+                    "source": "mca2818",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "30-14-2818(1)(a)",
+                            "text": "taking appropriate technical and organizational measures, insofar as this is possible, for the fulfillment of the controller's obligations under 30-14-2811; and",
+                            "source": "mca2818",
+                            "description": "A processor shall adhere to the instructions of a controller and shall assist the controller to meet the controller's obligations under 30-14-2811 and 30-14-2819, taking into account the nature of the processing and the information available to the processor. The processor shall assist the controller by taking appropriate technical and organizational measures, insofar as this is possible, for the fulfillment of the controller's obligations under 30-14-2811."
+                        },
+                        {
+                            "id": "30-14-2818(1)(b)",
+                            "text": "providing information to enable the controller to conduct and document data protection assessments pursuant to 30-14-2819.",
+                            "source": "mca2818",
+                            "description": "A processor shall adhere to the instructions of a controller and shall assist the controller to meet the controller's obligations under 30-14-2811 and 30-14-2819, taking into account the nature of the processing and the information available to the processor. The processor shall assist the controller by providing information to enable the controller to conduct and document data protection assessments pursuant to 30-14-2819."
+                        }
+                    ]
+                },
+                {
+                    "id": "30-14-2818(2)",
+                    "number": "30-14-2818(2)",
+                    "text": "A contract between a controller and a processor must satisfy the requirements of 30-14-2813(2).",
+                    "type": "subsection",
+                    "source": "mca2818",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                }
+            ]
+        },
+        {
+            "number": "30-14-2819",
+            "code": "30-14-2819 MCA",
+            "name": "Data protection assessments for heightened risk of harm to minors",
+            "controls": [
+                {
+                    "id": "30-14-2819(1)",
+                    "number": "30-14-2819(1)",
+                    "text": "A controller that, on or after October 1, 2025, offers an online service, product, or feature to a consumer whom the controller actually knows or willfully disregards is a minor shall conduct a data protection assessment for the online service, product, or feature if there is a heightened risk of harm to minors. The controller shall conduct the data protection assessment: (a) in a manner that is consistent with the requirements established in 30-14-2814; and (b) to address: (i) the purpose of the online service, product, or feature; (ii) the categories of a minor's personal data that the online service, product, or feature processes; (iii) the purposes for which the controller processes a minor's personal data with respect to the online service, product, or feature; and (iv) a heightened risk of harm to minors that is a reasonably foreseeable result of offering the online service, product, or feature to minors.",
+                    "type": "subsection",
+                    "source": "mca2819",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                },
+                {
+                    "id": "30-14-2819(2)",
+                    "number": "30-14-2819(2)",
+                    "text": "A controller that conducts a data protection assessment pursuant to subsection (1) shall: (a) review the data protection assessment as necessary to account for a material change to the processing operations of the online service, product, or feature that is the subject of the data protection assessment; and (b) maintain documentation concerning the data protection assessment for the longer of: (i) 3 years after the date on which the processing operations cease; or (ii) the date the controller ceases offering the online service, product, or feature.",
+                    "type": "subsection",
+                    "source": "mca2819",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "30-14-2819(2)(a)",
+                            "text": "review the data protection assessment as necessary to account for a material change to the processing operations of the online service, product, or feature that is the subject of the data protection assessment; and",
+                            "source": "mca2819",
+                            "description": "A controller that conducts a data protection assessment pursuant to subsection (1) shall review the data protection assessment as necessary to account for a material change to the processing operations of the online service, product, or feature that is the subject of the data protection assessment."
+                        },
+                        {
+                            "id": "30-14-2819(2)(b)",
+                            "text": "maintain documentation concerning the data protection assessment for the longer of: (i) 3 years after the date on which the processing operations cease; or (ii) the date the controller ceases offering the online service, product, or feature.",
+                            "source": "mca2819"
+                        }
+                    ]
+                },
+                {
+                    "id": "30-14-2819(5)",
+                    "number": "30-14-2819(5)",
+                    "text": "If a controller conducts a data protection assessment pursuant to subsection (1) or a data protection assessment review pursuant to subsection (2)(a) and determines that the online service, product, or feature that is the subject of the assessment poses a heightened risk of harm to minors, the controller shall establish and implement a plan to mitigate or eliminate the heightened risk.",
+                    "type": "subsection",
+                    "source": "mca2819",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                },
+                {
+                    "id": "30-14-2819(6)(b)",
+                    "number": "30-14-2819(6)(b)",
+                    "text": "(i) A controller shall make a data protection assessment conducted pursuant to this section available to the attorney general on request. The attorney general may evaluate the data protection assessment for compliance with this section and with other laws. (ii) The disclosure of a data protection assessment pursuant to a request from the attorney general does not constitute a waiver of any attorney-client privilege or work-product protection that might otherwise exist with respect to the assessment and any information in the assessment.",
+                    "type": "subsection",
+                    "source": "mca2819",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": []
+                }
+            ]
+        }
+    ]
+}

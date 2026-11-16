@@ -279,7 +279,8 @@ return array(
             'us-co-cpa' => 'privacy',
             'us-tx-dpsa' => 'privacy',
             'us-or-cpa' => 'privacy',
-            'us-ut-cpa' => 'privacy'
+            'us-ut-cpa' => 'privacy',
+            'us-mt-cdpa' => 'privacy'
         );
 
         foreach (glob(ROOT.'/frameworks/*.json') as $file) {
