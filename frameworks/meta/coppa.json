@@ -1,0 +1,141 @@
+{
+    "key": "coppa",
+    "name": "COPPA Rule",
+    "version": "16 CFR Part 312",
+    "full_name": "Children's Online Privacy Protection Rule (16 CFR Part 312), implementing the Children's Online Privacy Protection Act",
+    "issuing_body": "Federal Trade Commission (FTC)",
+    "standard_codes": [
+        "COPPA"
+    ],
+    "aliases": [
+        "COPPA",
+        "Children's Online Privacy Protection Act",
+        "Children's Online Privacy Protection Rule"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "cfr312",
+            "title": "16 CFR Part 312, Children's Online Privacy Protection Rule",
+            "version": "eCFR as of 30 October 2026",
+            "publisher": "eCFR, Office of the Federal Register",
+            "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-10-30/title-16.xml?part=312",
+            "file": "coppa/16-cfr-312.xml",
+            "date": "2026-10-30",
+            "sha256": "5a29d13e4512092a2d064a62a581031dc75aa99998540e6c2ef24f0dbfc66df9"
+        }
+    ],
+    "source_of": {
+        "controls": "cfr312",
+        "objectives": "cfr312"
+    },
+    "control_flags": {
+        "objectives": "The numbered paragraphs directly beneath a requirement. In 312.5(b) and 312.5(c) they are alternatives (methods of obtaining consent, exceptions to prior consent): the ones the operator relies on are assessed and the rest marked not applicable."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Rule defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every applicable element it lists is met.",
+            "source": "cfr312",
+            "cite": "16 CFR Part 312"
+        },
+        {
+            "id": "consent_before_collection",
+            "type": "applicability",
+            "control": "312.5(a)",
+            "summary": "Verifiable parental consent is obtained before any collection, use or disclosure of personal information from children.",
+            "source": "cfr312",
+            "cite": "16 CFR 312.5(a)(1)",
+            "quote": "An operator is required to obtain verifiable parental consent before any collection, use, or disclosure of personal information from children"
+        },
+        {
+            "id": "no_conditioning",
+            "type": "applicability",
+            "control": "312.7",
+            "summary": "A child's participation in an activity may not be conditioned on disclosing more personal information than is reasonably necessary to take part.",
+            "source": "cfr312",
+            "cite": "16 CFR 312.7",
+            "quote": "An operator is prohibited from conditioning a child's participation in a game, the offering of a prize, or another activity on the child's disclosing more personal information than is reasonably necessary to participate in such activity."
+        },
+        {
+            "id": "written_security_program",
+            "type": "applicability",
+            "control": "312.8(b)",
+            "summary": "The operator maintains a written information security program with safeguards appropriate to the sensitivity of the children's information and to the operator's size, complexity and activities.",
+            "source": "cfr312",
+            "cite": "16 CFR 312.8(b)",
+            "quote": "the operator must establish, implement, and maintain a written information security program"
+        },
+        {
+            "id": "retention_limit",
+            "type": "retention",
+            "control": "312.10",
+            "summary": "Personal information collected online from a child is kept only as long as reasonably necessary for the specific purposes it was collected for, and never indefinitely.",
+            "source": "cfr312",
+            "cite": "16 CFR 312.10",
+            "quote": "shall retain personal information collected online from a child for only as long as is reasonably necessary to fulfill the specific purpose(s) for which the information was collected"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "COPPA",
+            "definition": "The Children's Online Privacy Protection Act of 1998, implemented by the FTC's Children's Online Privacy Protection Rule."
+        },
+        {
+            "term": "Child",
+            "definition": "An individual under the age of 13."
+        },
+        {
+            "term": "Operator",
+            "definition": "A person who operates a commercial website or online service directed to children, or who knowingly collects personal information from children online."
+        },
+        {
+            "term": "Verifiable parental consent",
+            "definition": "A reasonable effort, taking available technology into account, to ensure that a child's parent is told about the operator's information practices and authorizes them before the child's personal information is collected."
+        },
+        {
+            "term": "FTC",
+            "definition": "Federal Trade Commission, the U.S. agency that issues and enforces the COPPA Rule."
+        }
+    ]
+}

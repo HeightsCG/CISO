@@ -268,7 +268,8 @@ return array(
             'hipaa-privacy' => 'privacy',
             'nist-ssdf' => 'sdlc',
             'gdpr' => 'privacy',
-            'uk-gdpr' => 'privacy'
+            'uk-gdpr' => 'privacy',
+            'coppa' => 'privacy'
         );
 
         foreach (glob(ROOT.'/frameworks/*.json') as $file) {
