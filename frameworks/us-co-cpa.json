@@ -1,0 +1,826 @@
+{
+    "key": "us-co-cpa",
+    "name": "Colorado Privacy Act",
+    "version": "Colorado Revised Statutes 2024",
+    "full_name": "Colorado Privacy Act (Colorado Revised Statutes, Title 6, Article 1, Part 13, sections 6-1-1301 to 6-1-1314)",
+    "issuing_body": "State of Colorado; published by the Office of Legislative Legal Services",
+    "standard_codes": [
+        "US-CO-CPA"
+    ],
+    "aliases": [
+        "CPA",
+        "Colorado CPA",
+        "Colorado Privacy Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against Part 13 of Article 1 of Title 6 in the Colorado Revised Statutes 2024 printout, which includes the minors' provisions effective 1 October 2025 and the biometric provisions effective 1 July 2025. Amendments made in the 2025 legislative session are not in that edition. The Colorado Privacy Act Rules (4 CCR 904-3) add detail and are not part of this assessment.",
+    "sources": [
+        {
+            "id": "crs",
+            "title": "Colorado Revised Statutes 2024, Title 6, Consumer and Commercial Affairs (uncertified printout)",
+            "version": "Colorado Revised Statutes 2024",
+            "publisher": "Colorado Office of Legislative Legal Services",
+            "url": "https://leg.colorado.gov/sites/default/files/images/olls/crs2024-title-06.pdf",
+            "file": "us-co-cpa/crs2024-title-06.pdf",
+            "sha256": "560ff6d64b5afdf2a3bc5ac917a392269d16270a029b252ff8f7957deb38b423"
+        }
+    ],
+    "source_of": {
+        "controls": "crs",
+        "objectives": "crs"
+    },
+    "control_flags": {
+        "objectives": "The items under a provision, only where every one must be met."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "crs",
+            "cite": "C.R.S. 6-1-1305 to 6-1-1314"
+        },
+        {
+            "id": "thresholds",
+            "type": "applicability",
+            "summary": "The Act applies to a business that conducts business in Colorado and controls or processes personal data of 100,000 or more consumers in a year, or earns revenue from selling personal data of 25,000 or more consumers.",
+            "source": "crs",
+            "cite": "C.R.S. 6-1-1304(1)",
+            "quote": "Controls or processes the personal data of one hundred thousand consumers or more during a calendar year;"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "6-1-1306(2)(a)",
+            "days": 45,
+            "from": "receipt of the request",
+            "summary": "A consumer request is acted on within 45 days of receipt; the period may be extended once by 45 days.",
+            "source": "crs",
+            "cite": "C.R.S. 6-1-1306(2)(a)",
+            "quote": "within forty-five days after receipt of the request."
+        },
+        {
+            "id": "appeal_deadline",
+            "type": "deadline",
+            "control": "6-1-1306(3)(b)",
+            "days": 45,
+            "from": "receipt of the appeal",
+            "summary": "An appeal is decided and the consumer told the outcome, with reasons, within 45 days of receipt.",
+            "source": "crs",
+            "cite": "C.R.S. 6-1-1306(3)(b)",
+            "quote": "Within forty-five days after receipt of an appeal, a controller shall inform the consumer"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "A violation is a deceptive trade practice under the Colorado Consumer Protection Act, enforced by the attorney general and district attorneys, with civil penalties under that Act.",
+            "source": "crs",
+            "cite": "C.R.S. 6-1-1311(1)(c)",
+            "quote": "a violation of this part 13 is a deceptive trade practice."
+        }
+    ],
+    "glossary": [
+        {
+            "term": "CPA",
+            "definition": "The Colorado Privacy Act, Colorado's comprehensive consumer privacy law, in force since 1 July 2023."
+        },
+        {
+            "term": "Controller",
+            "definition": "The person that, alone or jointly with others, determines the purpose and means of processing personal data."
+        },
+        {
+            "term": "Processor",
+            "definition": "A person that processes personal data on behalf of a controller."
+        },
+        {
+            "term": "Biometric identifier",
+            "definition": "Data generated by measuring a consumer's unique biological, physical or physiological characteristics, such as a fingerprint, voiceprint or facial geometry, that is used to identify the consumer."
+        },
+        {
+            "term": "Heightened risk of harm",
+            "definition": "Processing such as targeted advertising, selling personal data, certain profiling and processing of sensitive data, which requires a data protection assessment."
+        }
+    ],
+    "display_name": "Colorado Privacy Act (Colorado Revised Statutes 2024)",
+    "counts": {
+        "families": 8,
+        "controls": 41,
+        "objectives": 27
+    },
+    "families": [
+        {
+            "number": "6-1-1305",
+            "code": "§ 6-1-1305",
+            "name": "Responsibility according to role",
+            "controls": [
+                {
+                    "id": "6-1-1305(1)",
+                    "number": "6-1-1305(1)",
+                    "title": "",
+                    "text": "Controllers and processors shall meet their respective obligations established under this part 13.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1305(2)",
+                    "number": "6-1-1305(2)",
+                    "title": "",
+                    "text": "Processors shall adhere to the instructions of the controller and assist the controller to meet its obligations under this part 13. Taking into account the nature of processing and the information available to the processor, the processor shall assist the controller by: (a) Taking appropriate technical and organizational measures, insofar as this is possible, for the fulfillment of the controller's obligation to respond to consumer requests to exercise their rights pursuant to section 6-1-1306; (b) Helping to meet the controller's obligations in relation to the security of processing the personal data and in relation to the notification of a breach of the security of the system pursuant to section 6-1-716; and (c) Providing information to the controller necessary to enable the controller to conduct and document any data protection assessments required by section 6-1-1309. The controller and processor are each responsible for only the measures allocated to them.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6-1-1305(2)(a)",
+                            "text": "Taking appropriate technical and organizational measures, insofar as this is possible, for the fulfillment of the controller's obligation to respond to consumer requests to exercise their rights pursuant to section 6-1-1306;",
+                            "description": "Processors shall adhere to the instructions of the controller and assist the controller to meet its obligations under this part 13. Taking into account the nature of processing and the information available to the processor, the processor shall assist the controller by: taking appropriate technical and organizational measures, insofar as this is possible, for the fulfillment of the controller's obligation to respond to consumer requests to exercise their rights pursuant to section 6-1-1306.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1305(2)(b)",
+                            "text": "Helping to meet the controller's obligations in relation to the security of processing the personal data and in relation to the notification of a breach of the security of the system pursuant to section 6-1-716; and",
+                            "description": "Processors shall adhere to the instructions of the controller and assist the controller to meet its obligations under this part 13. Taking into account the nature of processing and the information available to the processor, the processor shall assist the controller by: helping to meet the controller's obligations in relation to the security of processing the personal data and in relation to the notification of a breach of the security of the system pursuant to section 6-1-716.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1305(2)(c)",
+                            "text": "Providing information to the controller necessary to enable the controller to conduct and document any data protection assessments required by section 6-1-1309. The controller and processor are each responsible for only the measures allocated to them.",
+                            "description": "Processors shall adhere to the instructions of the controller and assist the controller to meet its obligations under this part 13. Taking into account the nature of processing and the information available to the processor, the processor shall assist the controller by: providing information to the controller necessary to enable the controller to conduct and document any data protection assessments required by section 6-1-1309. The controller and processor are each responsible for only the measures allocated to them.",
+                            "source": "crs"
+                        }
+                    ],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1305(3)",
+                    "number": "6-1-1305(3)",
+                    "title": "",
+                    "text": "Notwithstanding the instructions of the controller, a processor shall: (a) Ensure that each person processing the personal data is subject to a duty of confidentiality with respect to the data; and (b) Engage a subcontractor only after providing the controller with an opportunity to object and pursuant to a written contract in accordance with subsection (5) of this section that requires the subcontractor to meet the obligations of the processor with respect to the personal data.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6-1-1305(3)(a)",
+                            "text": "Ensure that each person processing the personal data is subject to a duty of confidentiality with respect to the data; and",
+                            "description": "Notwithstanding the instructions of the controller, a processor shall: ensure that each person processing the personal data is subject to a duty of confidentiality with respect to the data.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1305(3)(b)",
+                            "text": "Engage a subcontractor only after providing the controller with an opportunity to object and pursuant to a written contract in accordance with subsection (5) of this section that requires the subcontractor to meet the obligations of the processor with respect to the personal data.",
+                            "description": "Notwithstanding the instructions of the controller, a processor shall: engage a subcontractor only after providing the controller with an opportunity to object and pursuant to a written contract in accordance with subsection (5) of this section that requires the subcontractor to meet the obligations of the processor with respect to the personal data.",
+                            "source": "crs"
+                        }
+                    ],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1305(4)",
+                    "number": "6-1-1305(4)",
+                    "title": "",
+                    "text": "Taking into account the context of processing, the controller and the processor shall implement appropriate technical and organizational measures to ensure a level of security appropriate to the risk and establish a clear allocation of the responsibilities between them to implement the measures.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1305(5)",
+                    "number": "6-1-1305(5)",
+                    "title": "",
+                    "text": "Processing by a processor must be governed by a contract between the controller and the processor that is binding on both parties and that sets out: (a) The processing instructions to which the processor is bound, including the nature and purpose of the processing; (b) The type of personal data subject to the processing, and the duration of the processing; (c) The requirements imposed by this subsection (5) and subsections (3) and (4) of this section; and (d) The following requirements: (I) At the choice of the controller, the processor shall delete or return all personal data to the controller as requested at the end of the provision of services, unless retention of the personal data is required by law; (II) (A) The processor shall make available to the controller all information necessary to demonstrate compliance with the obligations in this part 13; and (B) The processor shall allow for, and contribute to, reasonable audits and inspections by the controller or the controller's designated auditor. Alternatively, the processor may, with the controller's consent, arrange for a qualified and independent auditor to conduct, at least annually and at the processor's expense, an audit of the processor's policies and technical and organizational measures in support of the obligations under this part 13 using an appropriate and accepted control standard or framework and audit procedure for the audits as applicable. The processor shall provide a report of the audit to the controller upon request.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6-1-1305(5)(a)",
+                            "text": "The processing instructions to which the processor is bound, including the nature and purpose of the processing;",
+                            "description": "Processing by a processor must be governed by a contract between the controller and the processor that is binding on both parties and that sets out: the processing instructions to which the processor is bound, including the nature and purpose of the processing.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1305(5)(b)",
+                            "text": "The type of personal data subject to the processing, and the duration of the processing;",
+                            "description": "Processing by a processor must be governed by a contract between the controller and the processor that is binding on both parties and that sets out: the type of personal data subject to the processing, and the duration of the processing.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1305(5)(c)",
+                            "text": "The requirements imposed by this subsection (5) and subsections (3) and (4) of this section; and",
+                            "description": "Processing by a processor must be governed by a contract between the controller and the processor that is binding on both parties and that sets out: the requirements imposed by this subsection (5) and subsections (3) and (4) of this section.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1305(5)(d)",
+                            "text": "The following requirements: (I) At the choice of the controller, the processor shall delete or return all personal data to the controller as requested at the end of the provision of services, unless retention of the personal data is required by law; (II) (A) The processor shall make available to the controller all information necessary to demonstrate compliance with the obligations in this part 13; and (B) The processor shall allow for, and contribute to, reasonable audits and inspections by the controller or the controller's designated auditor. Alternatively, the processor may, with the controller's consent, arrange for a qualified and independent auditor to conduct, at least annually and at the processor's expense, an audit of the processor's policies and technical and organizational measures in support of the obligations under this part 13 using an appropriate and accepted control standard or framework and audit procedure for the audits as applicable. The processor shall provide a report of the audit to the controller upon request.",
+                            "source": "crs"
+                        }
+                    ],
+                    "source": "crs"
+                }
+            ]
+        },
+        {
+            "number": "6-1-1305.5",
+            "code": "§ 6-1-1305.5",
+            "name": "Responsibility according to role - processing data of minors",
+            "controls": [
+                {
+                    "id": "6-1-1305.5(1)",
+                    "number": "6-1-1305.5(1)",
+                    "title": "",
+                    "text": "A processor shall adhere to the instructions of a controller and shall assist the controller to meet the controller's obligations under sections 6- 1-1308.5 and 6-1-1309.5, taking into account the nature of the processing and the information available to the processor. The processor shall assist the controller by: (a) Taking appropriate technical and organizational measures, insofar as this is possible, for the fulfillment of the controller's obligations under section 6-1-1308.5; and (b) Providing information to enable the controller to conduct and document data protection assessments pursuant to section 6-1-1309.5.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6-1-1305.5(1)(a)",
+                            "text": "Taking appropriate technical and organizational measures, insofar as this is possible, for the fulfillment of the controller's obligations under section 6-1-1308.5; and",
+                            "description": "The processor shall assist the controller by: taking appropriate technical and organizational measures, insofar as this is possible, for the fulfillment of the controller's obligations under section 6-1-1308.5.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1305.5(1)(b)",
+                            "text": "Providing information to enable the controller to conduct and document data protection assessments pursuant to section 6-1-1309.5.",
+                            "description": "The processor shall assist the controller by: providing information to enable the controller to conduct and document data protection assessments pursuant to section 6-1-1309.5.",
+                            "source": "crs"
+                        }
+                    ],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1305.5(2)",
+                    "number": "6-1-1305.5(2)",
+                    "title": "",
+                    "text": "A contract between a controller and a processor must satisfy the requirements in section 6-1-1305 (5).",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                }
+            ]
+        },
+        {
+            "number": "6-1-1306",
+            "code": "§ 6-1-1306",
+            "name": "Consumer personal data rights",
+            "controls": [
+                {
+                    "id": "6-1-1306(1)",
+                    "number": "6-1-1306(1)",
+                    "title": "",
+                    "text": "Consumers may exercise the following rights by submitting a request using the methods specified by the controller in the privacy notice required under section 6-1-1308 (1)(a). The method must take into account the ways in which consumers normally interact with the controller, the need for secure and reliable communication relating to the request, and the ability of the controller to authenticate the identity of the consumer making the request. Controllers shall not require a consumer to create a new account in order to exercise consumer rights pursuant to this section but may require a consumer to use an existing account. A consumer may submit a request at any time to a controller specifying which of the following rights the consumer wishes to exercise: (a) (I) A consumer has the right to opt out of the processing of personal data concerning the consumer for purposes of: (A) Targeted advertising; (B) The sale of personal data; or (C) Profiling in furtherance of decisions that produce legal or similarly significant effects concerning a consumer. (II) A consumer may authorize another person, acting on the consumer's behalf, to opt out of the processing of the consumer's personal data for one or more of the purposes specified in subsection (1)(a)(I) of this section, including through a technology indicating the consumer's intent to opt out such as a web link indicating a preference or browser setting, browser extension, or global device setting. A controller shall comply with an opt-out request received from a person authorized by the consumer to act on the consumer's behalf if the controller is able to authenticate, with commercially reasonable effort, the identity of the consumer and the authorized agent's authority to act on the consumer's behalf. (III) A controller that processes personal data for purposes of targeted advertising or the sale of personal data shall provide a clear and conspicuous method to exercise the right to opt out of the processing of personal data concerning the consumer pursuant to subsection (1)(a)(I) of this section. The controller shall provide the opt-out method clearly and conspicuously in any privacy notice required to be provided to consumers under this part 13, and in a clear, conspicuous, and readily accessible location outside the privacy notice. (IV) (A) Repealed. (B) Effective July 1, 2024, a controller that processes personal data for purposes of targeted advertising or the sale of personal data shall allow consumers to exercise the right to opt out of the processing of personal data concerning the consumer for purposes of targeted advertising or the sale of personal data pursuant to subsections (1)(a)(I)(A) and (1)(a)(I)(B) of this section by controllers through a user-selected universal opt-out mechanism that meets the technical specifications established by the attorney general pursuant to section 6-1-1313. (C) Notwithstanding a consumer's decision to exercise the right to opt out of the processing of personal data through a universal opt-out mechanism pursuant to subsection (1)(a)(IV)(B) of this section, a controller may enable the consumer to consent, through a web page, application, or a similar method, to the processing of the consumer's personal data for purposes of targeted advertising or the sale of personal data, and the consent takes precedence over any choice reflected through the universal opt-out mechanism. Before obtaining a consumer's consent to process personal data for purposes of targeted advertising or the sale of personal data pursuant to this subsection (1)(a)(IV)(C), a controller shall provide the consumer with a clear and conspicuous notice informing the consumer about the choices available under this section, describing the categories of personal data to be processed and the purposes for which they will be processed, and explaining how and where the consumer may withdraw consent. The web page, application, or other means by which a controller obtains a consumer's consent to process personal data for purposes of targeted advertising or the sale of personal data must also allow the consumer to revoke the consent as easily as it is affirmatively provided. (b) Right of access. A consumer has the right to confirm whether a controller is processing personal data concerning the consumer and to access the consumer's personal data. (c) Right to correction. A consumer has the right to correct inaccuracies in the consumer's personal data, taking into account the nature of the personal data and the purposes of the processing of the consumer's personal data. (d) Right to deletion. A consumer has the right to delete personal data concerning the consumer. (e) Right to data portability. When exercising the right to access personal data pursuant to subsection (1)(b) of this section, a consumer has the right to obtain the personal data in a portable and, to the extent technically feasible, readily usable format that allows the consumer to transmit the data to another entity without hindrance. A consumer may exercise this right no more than two times per calendar year. Nothing in this subsection (1)(e) requires a controller to provide the data to the consumer in a manner that would disclose the controller's trade secrets.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1306(2)(a)",
+                    "number": "6-1-1306(2)(a)",
+                    "title": "Responding to consumer requests",
+                    "text": "A controller shall inform a consumer of any action taken on a request under subsection (1) of this section without undue delay and, in any event, within forty-five days after receipt of the request. The controller may extend the forty- five-day period by forty-five additional days where reasonably necessary, taking into account the complexity and number of the requests. The controller shall inform the consumer of an extension within forty-five days after receipt of the request, together with the reasons for the delay.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1306(2)(b)",
+                    "number": "6-1-1306(2)(b)",
+                    "title": "Responding to consumer requests",
+                    "text": "If a controller does not take action on the request of a consumer, the controller shall inform the consumer, without undue delay and, at the latest, within forty-five days after receipt of the request, of the reasons for not taking action and instructions for how to appeal the decision with the controller as described in subsection (3) of this section.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1306(2)(c)",
+                    "number": "6-1-1306(2)(c)",
+                    "title": "Responding to consumer requests",
+                    "text": "Upon request, a controller shall provide to the consumer the information specified in this section free of charge; except that, for a second or subsequent request within a twelve-month period, the controller may charge an amount calculated in the manner specified in section 24-72- 205 (5)(a).",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1306(3)(a)",
+                    "number": "6-1-1306(3)(a)",
+                    "title": "",
+                    "text": "A controller shall establish an internal process whereby consumers may appeal a refusal to take action on a request to exercise any of the rights under subsection (1) of this section within a reasonable period after the consumer's receipt of the notice sent by the controller under subsection (2)(b) of this section. The appeal process must be conspicuously available and as easy to use as the process for submitting a request under this section.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1306(3)(b)",
+                    "number": "6-1-1306(3)(b)",
+                    "title": "",
+                    "text": "Within forty-five days after receipt of an appeal, a controller shall inform the consumer of any action taken or not taken in response to the appeal, along with a written explanation of the reasons in support of the response. The controller may extend the forty-five- day period by sixty additional days where reasonably necessary, taking into account the complexity and number of requests serving as the basis for the appeal. The controller shall inform the consumer of an extension within forty-five days after receipt of the appeal, together with the reasons for the delay.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1306(3)(c)",
+                    "number": "6-1-1306(3)(c)",
+                    "title": "",
+                    "text": "The controller shall inform the consumer of the consumer's ability to contact the attorney general if the consumer has concerns about the result of the appeal.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                }
+            ]
+        },
+        {
+            "number": "6-1-1307",
+            "code": "§ 6-1-1307",
+            "name": "Processing de-identified data",
+            "controls": [
+                {
+                    "id": "6-1-1307(2)",
+                    "number": "6-1-1307(2)",
+                    "title": "",
+                    "text": "A controller that uses de-identified data shall exercise reasonable oversight to monitor compliance with any contractual commitments to which the de-identified data are subject and shall take appropriate steps to address any breaches of contractual commitments.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                }
+            ]
+        },
+        {
+            "number": "6-1-1308",
+            "code": "§ 6-1-1308",
+            "name": "Duties of controllers",
+            "controls": [
+                {
+                    "id": "6-1-1308(1)(a)",
+                    "number": "6-1-1308(1)(a)",
+                    "title": "Duty of transparency",
+                    "text": "A controller shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes: (I) The categories of personal data collected or processed by the controller or a processor; (II) The purposes for which the categories of personal data are processed; (III) How and where consumers may exercise the rights pursuant to section 6-1-1306, including the controller's contact information and how a consumer may appeal a controller's action with regard to the consumer's request; (IV) The categories of personal data that the controller shares with third parties, if any; and (V) The categories of third parties, if any, with whom the controller shares personal data.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6-1-1308(1)(a)(I)",
+                            "text": "The categories of personal data collected or processed by the controller or a processor;",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes: the categories of personal data collected or processed by the controller or a processor.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1308(1)(a)(II)",
+                            "text": "The purposes for which the categories of personal data are processed;",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes: the purposes for which the categories of personal data are processed.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1308(1)(a)(III)",
+                            "text": "How and where consumers may exercise the rights pursuant to section 6-1-1306, including the controller's contact information and how a consumer may appeal a controller's action with regard to the consumer's request;",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes: how and where consumers may exercise the rights pursuant to section 6-1-1306, including the controller's contact information and how a consumer may appeal a controller's action with regard to the consumer's request.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1308(1)(a)(IV)",
+                            "text": "The categories of personal data that the controller shares with third parties, if any; and",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes: the categories of personal data that the controller shares with third parties, if any.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1308(1)(a)(V)",
+                            "text": "The categories of third parties, if any, with whom the controller shares personal data.",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes: the categories of third parties, if any, with whom the controller shares personal data.",
+                            "source": "crs"
+                        }
+                    ],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1308(1)(b)",
+                    "number": "6-1-1308(1)(b)",
+                    "title": "Duty of transparency",
+                    "text": "If a controller sells personal data to third parties or processes personal data for targeted advertising, the controller shall clearly and conspicuously disclose the sale or processing, as well as the manner in which a consumer may exercise the right to opt out of the sale or processing.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1308(1)(c)",
+                    "number": "6-1-1308(1)(c)",
+                    "title": "Duty of transparency",
+                    "text": "A controller shall not: (I) Require a consumer to create a new account in order to exercise a right; or (II) Based solely on the exercise of a right and unrelated to feasibility or the value of a service, increase the cost of, or decrease the availability of, the product or service.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1308(2)",
+                    "number": "6-1-1308(2)",
+                    "title": "Duty of purpose specification",
+                    "text": "A controller shall specify the express purposes for which personal data are collected and processed.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1308(3)",
+                    "number": "6-1-1308(3)",
+                    "title": "Duty of data minimization",
+                    "text": "A controller's collection of personal data must be adequate, relevant, and limited to what is reasonably necessary in relation to the specified purposes for which the data are processed.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1308(4)",
+                    "number": "6-1-1308(4)",
+                    "title": "Duty to avoid secondary use",
+                    "text": "A controller shall not process personal data for purposes that are not reasonably necessary to or compatible with the specified purposes for which the personal data are processed, unless the controller first obtains the consumer's consent.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1308(5)",
+                    "number": "6-1-1308(5)",
+                    "title": "Duty of care",
+                    "text": "A controller shall take reasonable measures to secure personal data during both storage and use from unauthorized acquisition. The data security practices must be appropriate to the volume, scope, and nature of the personal data processed and the nature of the business.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1308(6)",
+                    "number": "6-1-1308(6)",
+                    "title": "Duty to avoid unlawful discrimination",
+                    "text": "A controller shall not process personal data in violation of state or federal laws that prohibit unlawful discrimination against consumers.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1308(7)",
+                    "number": "6-1-1308(7)",
+                    "title": "Duty regarding sensitive data",
+                    "text": "A controller shall not process a consumer's sensitive data without first obtaining the consumer's consent or, in the case of the processing of personal data concerning a known child, without first obtaining consent from the child's parent or lawful guardian.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                }
+            ]
+        },
+        {
+            "number": "6-1-1308.5",
+            "code": "§ 6-1-1308.5",
+            "name": "Duties of controllers - duty of care - rebuttable presumption",
+            "controls": [
+                {
+                    "id": "6-1-1308.5(1)(a)",
+                    "number": "6-1-1308.5(1)(a)",
+                    "title": "",
+                    "text": "A controller that offers any online service, product, or feature to a consumer whom the controller actually knows or willfully disregards is a minor shall use reasonable care to avoid any heightened risk of harm to minors caused by the online service, product, or feature.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1308.5(2)",
+                    "number": "6-1-1308.5(2)",
+                    "title": "",
+                    "text": "Unless a controller has obtained consent in accordance with subsection (3) of this section, a controller that offers any online service, product, or feature to a consumer whom the controller actually knows or willfully disregards is a minor shall not: (a) Process a minor's personal data: (I) For the purposes of: (A) Targeted advertising; (B) The sale of personal data; or (C) Profiling in furtherance of decisions that produce legal or similarly significant effects concerning a consumer; (II) For any processing purpose other than the processing purpose that the controller disclosed at the time the controller collected the minor's personal data or that is reasonably necessary for, and compatible with, the processing purpose that the controller disclosed at the time the controller collected the minor's personal data; or (III) For longer than is reasonably necessary to provide the online service, product, or feature; (b) Use any system design feature to significantly increase, sustain, or extend a minor's use of the online service, product, or feature; or (c) Collect a minor's precise geolocation data unless: (I) The minor's precise geolocation data is reasonably necessary for the controller to provide the online service, product, or feature; (II) The controller only collects and retains the minor's precise geolocation data for the time necessary to provide the online service, product, or feature; and (III) The controller provides to the minor a signal indicating that the controller is collecting the minor's precise geolocation data and makes the signal available to the minor for the entire duration of the collection of the minor's precise geolocation data; except that this subsection (2)(c)(III) does not apply to any service or application that is used by and under the direction of a ski area operator, as defined in section 33-44-103 (7).",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1308.5(3)(a)",
+                    "number": "6-1-1308.5(3)(a)",
+                    "title": "",
+                    "text": "A controller shall not engage in the activities described in subsection (2) of this section unless the controller obtains: (I) The minor's consent; or (II) (A) If the minor is a child, the consent of the minor's parent or legal guardian. (B) A controller that complies with the verifiable parental consent requirements established in the \"Children's Online Privacy Protection Act of 1998\", 15 U.S.C. sec. 6501 et seq., as amended, and the regulations, rules, guidance, and exemptions adopted pursuant to said act, as amended, is deemed to have satisfied any requirement to obtain parental consent under this subsection (3)(a)(II).",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1308.5(3)(b)",
+                    "number": "6-1-1308.5(3)(b)",
+                    "title": "",
+                    "text": "(I) A controller that offers any online service, product, or feature to a consumer whom that controller actually knows or willfully disregards is a minor shall not: (A) Provide any consent mechanism that is designed to substantially subvert or impair, or is manipulated with the effect of substantially subverting or impairing, user autonomy, decision-making, or choice; or (B) Except as provided in subsection (3)(b)(II) of this section, offer any direct messaging apparatus for use by a minor without providing readily accessible and easy-to-use safeguards to limit the ability of an adult to send unsolicited communications to the minor with whom the adult is not connected. (II) Subsection (3)(b)(I)(B) of this section does not apply to an online service, product, or feature of which the predominant or exclusive function is: (A) Electronic mail; or (B) Direct messaging consisting of text, photos, or videos that are sent between devices by electronic means, where messages are shared between the sender and the recipient, only visible to the sender and the recipient, and not posted publicly.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                }
+            ]
+        },
+        {
+            "number": "6-1-1309",
+            "code": "§ 6-1-1309",
+            "name": "Data protection assessments - attorney general access and evaluation - definition",
+            "controls": [
+                {
+                    "id": "6-1-1309(1)",
+                    "number": "6-1-1309(1)",
+                    "title": "",
+                    "text": "A controller shall not conduct processing that presents a heightened risk of harm to a consumer without conducting and documenting a data protection assessment of each of its processing activities that involve personal data acquired on or after July 1, 2023, that present a heightened risk of harm to a consumer.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1309(3)",
+                    "number": "6-1-1309(3)",
+                    "title": "",
+                    "text": "Data protection assessments must identify and weigh the benefits that may flow, directly and indirectly, from the processing to the controller, the consumer, other stakeholders, and the public against the potential risks to the rights of the consumer associated with the processing, as mitigated by safeguards that the controller can employ to reduce the risks. The controller shall factor into this assessment the use of de-identified data and the reasonable expectations of consumers, as well as the context of the processing and the relationship between the controller and the consumer whose personal data will be processed.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1309(4)",
+                    "number": "6-1-1309(4)",
+                    "title": "",
+                    "text": "A controller shall make the data protection assessment available to the attorney general upon request. The attorney general may evaluate the data protection assessment for compliance with the duties contained in section 6-1-1308 and with other laws, including this article 1. Data protection assessments are confidential and exempt from public inspection and copying under the \"Colorado Open Records Act\", part 2 of article 72 of title 24. The disclosure of a data protection assessment pursuant to a request from the attorney general under this subsection (4) does not constitute a waiver of any attorney-client privilege or work-product protection that might otherwise exist with respect to the assessment and any information contained in the assessment.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                }
+            ]
+        },
+        {
+            "number": "6-1-1314",
+            "code": "§ 6-1-1314",
+            "name": "Biometric data and biometric identifiers - controllers - duties and requirements - written policy - prohibited acts - right to correct biometric identifiers - right to access biometric identifiers - remedies and civil actions - rules - definitions",
+            "controls": [
+                {
+                    "id": "6-1-1314(2)(a)",
+                    "number": "6-1-1314(2)(a)",
+                    "title": "Written policy required",
+                    "text": "A controller that controls or processes one or more biometric identifiers shall adopt a written policy that: (I) Establishes a retention schedule for biometric identifiers and biometric data; (II) Includes a protocol for responding to a data security incident that may compromise the security of biometric identifiers or biometric data, including a process for notifying a consumer when the security of the consumer's biometric identifier or biometric data has been breached, pursuant to section 6-1-716; and (III) Includes guidelines that require the deletion of a biometric identifier on or before the earliest of the following dates: (A) The date upon which the initial purpose for collecting the biometric identifier has been satisfied; (B) Twenty-four months after the consumer last interacted with the controller; or (C) The earliest reasonably feasible date, which date must be no more than forty-five days after a controller determines that storage of the biometric identifier is no longer necessary, adequate, or relevant to the express processing purpose identified by a review conducted by the controller at least once annually. The controller may extend the forty-five-day period described in this subsection (2)(a)(III)(C) by up to forty-five additional days if such an extension is reasonably necessary, taking into account the complexity and number of biometric identifiers required to be deleted.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6-1-1314(2)(a)(I)",
+                            "text": "Establishes a retention schedule for biometric identifiers and biometric data;",
+                            "description": "A controller that controls or processes one or more biometric identifiers shall adopt a written policy that: establishes a retention schedule for biometric identifiers and biometric data.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1314(2)(a)(II)",
+                            "text": "Includes a protocol for responding to a data security incident that may compromise the security of biometric identifiers or biometric data, including a process for notifying a consumer when the security of the consumer's biometric identifier or biometric data has been breached, pursuant to section 6-1-716; and",
+                            "description": "A controller that controls or processes one or more biometric identifiers shall adopt a written policy that: includes a protocol for responding to a data security incident that may compromise the security of biometric identifiers or biometric data, including a process for notifying a consumer when the security of the consumer's biometric identifier or biometric data has been breached, pursuant to section 6-1-716.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1314(2)(a)(III)",
+                            "text": "Includes guidelines that require the deletion of a biometric identifier on or before the earliest of the following dates: (A) The date upon which the initial purpose for collecting the biometric identifier has been satisfied; (B) Twenty-four months after the consumer last interacted with the controller; or (C) The earliest reasonably feasible date, which date must be no more than forty-five days after a controller determines that storage of the biometric identifier is no longer necessary, adequate, or relevant to the express processing purpose identified by a review conducted by the controller at least once annually. The controller may extend the forty-five-day period described in this subsection (2)(a)(III)(C) by up to forty-five additional days if such an extension is reasonably necessary, taking into account the complexity and number of biometric identifiers required to be deleted.",
+                            "source": "crs"
+                        }
+                    ],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1314(2)(b)",
+                    "number": "6-1-1314(2)(b)",
+                    "title": "Written policy required",
+                    "text": "A controller shall make its policy adopted pursuant to subsection (2)(a) of this section available to the public; except that a controller is not required to make available to the public: (I) A written policy that applies only to current employees of the controller; (II) A written policy that is used solely by employees and agents of the controller for the operation of the controller; or (III) The internal protocol for responding to a data security incident that may compromise the security of biometric identifiers or biometric data.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1314(3)",
+                    "number": "6-1-1314(3)",
+                    "title": "Processors - security breach protocols",
+                    "text": "A processor of biometric identifiers or biometric data must have a protocol for responding to a data security incident that may compromise the security of biometric identifiers or biometric data, including a process for notifying the controller when the security of a consumer's biometric identifier or biometric data has been breached, pursuant to section 6-1-716.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1314(4)(a)",
+                    "number": "6-1-1314(4)(a)",
+                    "title": "Collection and retention of biometric identifiers - requirements - prohibited acts",
+                    "text": "A controller shall not collect or process a biometric identifier of a consumer unless the controller first: (I) Satisfies all duties required by section 6-1-1308; (II) Informs the consumer or the consumer's legally authorized representative in a clear, reasonably accessible, and understandable manner that a biometric identifier is being collected; (III) Informs the consumer or the consumer's legally authorized representative in a clear, reasonably accessible, and understandable manner of the specific purpose for which a biometric identifier is being collected and the length of time that the controller will retain the biometric identifier; and (IV) Informs the consumer or the consumer's legally authorized representative in a clear, reasonably accessible, and understandable manner if the biometric identifier will be disclosed, redisclosed, or otherwise disseminated to a processor and the specific purpose for which the biometric identifier is being shared with a processor.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6-1-1314(4)(a)(I)",
+                            "text": "Satisfies all duties required by section 6-1-1308;",
+                            "description": "A controller shall not collect or process a biometric identifier of a consumer unless the controller first: satisfies all duties required by section 6-1-1308.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1314(4)(a)(II)",
+                            "text": "Informs the consumer or the consumer's legally authorized representative in a clear, reasonably accessible, and understandable manner that a biometric identifier is being collected;",
+                            "description": "A controller shall not collect or process a biometric identifier of a consumer unless the controller first: informs the consumer or the consumer's legally authorized representative in a clear, reasonably accessible, and understandable manner that a biometric identifier is being collected.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1314(4)(a)(III)",
+                            "text": "Informs the consumer or the consumer's legally authorized representative in a clear, reasonably accessible, and understandable manner of the specific purpose for which a biometric identifier is being collected and the length of time that the controller will retain the biometric identifier; and",
+                            "description": "A controller shall not collect or process a biometric identifier of a consumer unless the controller first: informs the consumer or the consumer's legally authorized representative in a clear, reasonably accessible, and understandable manner of the specific purpose for which a biometric identifier is being collected and the length of time that the controller will retain the biometric identifier.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1314(4)(a)(IV)",
+                            "text": "Informs the consumer or the consumer's legally authorized representative in a clear, reasonably accessible, and understandable manner if the biometric identifier will be disclosed, redisclosed, or otherwise disseminated to a processor and the specific purpose for which the biometric identifier is being shared with a processor.",
+                            "description": "A controller shall not collect or process a biometric identifier of a consumer unless the controller first: informs the consumer or the consumer's legally authorized representative in a clear, reasonably accessible, and understandable manner if the biometric identifier will be disclosed, redisclosed, or otherwise disseminated to a processor and the specific purpose for which the biometric identifier is being shared with a processor.",
+                            "source": "crs"
+                        }
+                    ],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1314(4)(b)",
+                    "number": "6-1-1314(4)(b)",
+                    "title": "Collection and retention of biometric identifiers - requirements - prohibited acts",
+                    "text": "A controller that processes a consumer's biometric identifier shall not: (I) Sell, lease, or trade the biometric identifier with any entity; or (II) Disclose, redisclose, or otherwise disseminate the biometric identifier unless: (A) The consumer or the consumer's legally authorized representative consents to the disclosure, redisclosure, or other dissemination; (B) The disclosure, redisclosure, or other dissemination is requested or authorized by the consumer or the consumer's legally authorized representative for the purpose of completing a financial transaction; (C) The disclosure, redisclosure, or other dissemination is to a processor and is necessary for the purpose for which the biometric identifier was collected and to which the consumer or the consumer's legally authorized representative consented; or (D) The disclosure, redisclosure, or other dissemination is required by state or federal law.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1314(4)(c)",
+                    "number": "6-1-1314(4)(c)",
+                    "title": "Collection and retention of biometric identifiers - requirements - prohibited acts",
+                    "text": "A controller shall not: (I) Refuse to provide a good or service to a consumer based on the consumer's refusal to consent to the controller's collection, use, disclosure, transfer, sale, retention, or processing of a biometric identifier unless the collection, use, disclosure, transfer, sale, retention, or processing of the biometric identifier is necessary to provide the good or service; (II) Charge a different price or rate for a good or service or provide a different level of quality of a good or service to any consumer who exercises the consumer's rights under this part 13; or (III) Purchase a biometric identifier unless the controller pays the consumer for the collection of the consumer's biometric identifier, the purchase is unrelated to the provision of a product or service to the consumer, and the controller has obtained consent as described in subsection (4)(a) of this section.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1314(4)(d)",
+                    "number": "6-1-1314(4)(d)",
+                    "title": "Collection and retention of biometric identifiers - requirements - prohibited acts",
+                    "text": "A controller or processor shall store, transmit, and protect from disclosure all biometric identifiers using the standard of care within the controller's industry and in accordance with sections 6-1-1305 (4) and 6-1-1308 (5).",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1314(4)(e)",
+                    "number": "6-1-1314(4)(e)",
+                    "title": "Collection and retention of biometric identifiers - requirements - prohibited acts",
+                    "text": "A controller shall obtain consent from a consumer or from the consumer's legally authorized representative before collecting the consumer's biometric data, as required by section 6-1-1308 (7).",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1314(5)(a)",
+                    "number": "6-1-1314(5)(a)",
+                    "title": "Right to access biometric data - applicability - definition",
+                    "text": "Except as described in subsection (5)(b) of this section, at the request of a consumer or a consumer's legally authorized representative, a controller that collects the consumer's biometric data shall disclose to the consumer, free of charge, the category or description of the consumer's biometric data and the following information: (I) The source from which the controller collected the biometric data; (II) The purpose for which the controller collected or processed the biometric data and any associated personal data; (III) The identity of any third party with which the controller disclosed or discloses the biometric data and the purposes for disclosing; and (IV) The category or a description of the specific biometric data that the controller discloses to third parties.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6-1-1314(5)(a)(I)",
+                            "text": "The source from which the controller collected the biometric data;",
+                            "description": "Except as described in subsection (5)(b) of this section, at the request of a consumer or a consumer's legally authorized representative, a controller that collects the consumer's biometric data shall disclose to the consumer, free of charge, the category or description of the consumer's biometric data and the following information: the source from which the controller collected the biometric data.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1314(5)(a)(II)",
+                            "text": "The purpose for which the controller collected or processed the biometric data and any associated personal data;",
+                            "description": "Except as described in subsection (5)(b) of this section, at the request of a consumer or a consumer's legally authorized representative, a controller that collects the consumer's biometric data shall disclose to the consumer, free of charge, the category or description of the consumer's biometric data and the following information: the purpose for which the controller collected or processed the biometric data and any associated personal data.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1314(5)(a)(III)",
+                            "text": "The identity of any third party with which the controller disclosed or discloses the biometric data and the purposes for disclosing; and",
+                            "description": "Except as described in subsection (5)(b) of this section, at the request of a consumer or a consumer's legally authorized representative, a controller that collects the consumer's biometric data shall disclose to the consumer, free of charge, the category or description of the consumer's biometric data and the following information: the identity of any third party with which the controller disclosed or discloses the biometric data and the purposes for disclosing.",
+                            "source": "crs"
+                        },
+                        {
+                            "id": "6-1-1314(5)(a)(IV)",
+                            "text": "The category or a description of the specific biometric data that the controller discloses to third parties.",
+                            "description": "Except as described in subsection (5)(b) of this section, at the request of a consumer or a consumer's legally authorized representative, a controller that collects the consumer's biometric data shall disclose to the consumer, free of charge, the category or description of the consumer's biometric data and the following information: the category or a description of the specific biometric data that the controller discloses to third parties.",
+                            "source": "crs"
+                        }
+                    ],
+                    "source": "crs"
+                },
+                {
+                    "id": "6-1-1314(6)(a)",
+                    "number": "6-1-1314(6)(a)",
+                    "title": "Use of consent by employers",
+                    "text": "An employer may require as a condition of employment that an employee or a prospective employee consent to allowing the employer to collect and process the employee's or the prospective employee's biometric identifier only to: (I) Permit access to secure physical locations and secure electronic hardware and software applications; except that an employer shall not obtain the employee's or prospective employee's consent to retain biometric data that is used for current employee location tracking or the tracking of how much time the employee spends using a hardware or software application; (II) Record the commencement and conclusion of the employee's full work day, including meal breaks and rest breaks in excess of thirty minutes; (III) Improve or monitor workplace safety or security or ensure the safety or security of employees; or (IV) Improve or monitor the safety or security of the public in the event of an emergency or crisis situation.",
+                    "type": "provision",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "crs"
+                }
+            ]
+        }
+    ]
+}

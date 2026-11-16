@@ -1,0 +1,143 @@
+{
+    "key": "us-co-cpa",
+    "name": "Colorado Privacy Act",
+    "version": "Colorado Revised Statutes 2024",
+    "full_name": "Colorado Privacy Act (Colorado Revised Statutes, Title 6, Article 1, Part 13, sections 6-1-1301 to 6-1-1314)",
+    "issuing_body": "State of Colorado; published by the Office of Legislative Legal Services",
+    "standard_codes": [
+        "US-CO-CPA"
+    ],
+    "aliases": [
+        "CPA",
+        "Colorado CPA",
+        "Colorado Privacy Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against Part 13 of Article 1 of Title 6 in the Colorado Revised Statutes 2024 printout, which includes the minors' provisions effective 1 October 2025 and the biometric provisions effective 1 July 2025. Amendments made in the 2025 legislative session are not in that edition. The Colorado Privacy Act Rules (4 CCR 904-3) add detail and are not part of this assessment.",
+    "sources": [
+        {
+            "id": "crs",
+            "title": "Colorado Revised Statutes 2024, Title 6, Consumer and Commercial Affairs (uncertified printout)",
+            "version": "Colorado Revised Statutes 2024",
+            "publisher": "Colorado Office of Legislative Legal Services",
+            "url": "https://leg.colorado.gov/sites/default/files/images/olls/crs2024-title-06.pdf",
+            "file": "us-co-cpa/crs2024-title-06.pdf",
+            "sha256": "560ff6d64b5afdf2a3bc5ac917a392269d16270a029b252ff8f7957deb38b423"
+        }
+    ],
+    "source_of": {
+        "controls": "crs",
+        "objectives": "crs"
+    },
+    "control_flags": {
+        "objectives": "The items under a provision, only where every one must be met."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "crs",
+            "cite": "C.R.S. 6-1-1305 to 6-1-1314"
+        },
+        {
+            "id": "thresholds",
+            "type": "applicability",
+            "summary": "The Act applies to a business that conducts business in Colorado and controls or processes personal data of 100,000 or more consumers in a year, or earns revenue from selling personal data of 25,000 or more consumers.",
+            "source": "crs",
+            "cite": "C.R.S. 6-1-1304(1)",
+            "quote": "Controls or processes the personal data of one hundred thousand consumers or more during a calendar year;"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "6-1-1306(2)(a)",
+            "days": 45,
+            "from": "receipt of the request",
+            "summary": "A consumer request is acted on within 45 days of receipt; the period may be extended once by 45 days.",
+            "source": "crs",
+            "cite": "C.R.S. 6-1-1306(2)(a)",
+            "quote": "within forty-five days after receipt of the request."
+        },
+        {
+            "id": "appeal_deadline",
+            "type": "deadline",
+            "control": "6-1-1306(3)(b)",
+            "days": 45,
+            "from": "receipt of the appeal",
+            "summary": "An appeal is decided and the consumer told the outcome, with reasons, within 45 days of receipt.",
+            "source": "crs",
+            "cite": "C.R.S. 6-1-1306(3)(b)",
+            "quote": "Within forty-five days after receipt of an appeal, a controller shall inform the consumer"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "A violation is a deceptive trade practice under the Colorado Consumer Protection Act, enforced by the attorney general and district attorneys, with civil penalties under that Act.",
+            "source": "crs",
+            "cite": "C.R.S. 6-1-1311(1)(c)",
+            "quote": "a violation of this part 13 is a deceptive trade practice."
+        }
+    ],
+    "glossary": [
+        {
+            "term": "CPA",
+            "definition": "The Colorado Privacy Act, Colorado's comprehensive consumer privacy law, in force since 1 July 2023."
+        },
+        {
+            "term": "Controller",
+            "definition": "The person that, alone or jointly with others, determines the purpose and means of processing personal data."
+        },
+        {
+            "term": "Processor",
+            "definition": "A person that processes personal data on behalf of a controller."
+        },
+        {
+            "term": "Biometric identifier",
+            "definition": "Data generated by measuring a consumer's unique biological, physical or physiological characteristics, such as a fingerprint, voiceprint or facial geometry, that is used to identify the consumer."
+        },
+        {
+            "term": "Heightened risk of harm",
+            "definition": "Processing such as targeted advertising, selling personal data, certain profiling and processing of sensitive data, which requires a data protection assessment."
+        }
+    ]
+}
