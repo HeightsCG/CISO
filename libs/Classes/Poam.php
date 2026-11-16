@@ -148,6 +148,8 @@ class Poam
         'nist-csf-2' => 'plan_handling',
         'tsa-aviation-cyber' => 'plan_handling',
         'hipaa-security' => 'none',
+        'hipaa-breach' => 'none',
+        'hipaa-privacy' => 'none',
         'ftc-safeguards' => 'none',
         'nydfs-500' => 'none',
         'soc2' => 'none',

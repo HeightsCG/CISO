@@ -1,0 +1,502 @@
+{
+    "key": "hipaa-breach",
+    "name": "HIPAA Breach Notification Rule",
+    "version": "45 CFR 164 Subpart D",
+    "full_name": "HIPAA Breach Notification Rule: Notification in the Case of Breach of Unsecured Protected Health Information (45 CFR Part 164, Subpart D)",
+    "issuing_body": "U.S. Department of Health and Human Services (HHS)",
+    "standard_codes": [
+        "HIPAA-BREACH"
+    ],
+    "aliases": [
+        "HIPAA",
+        "PHI",
+        "Breach Notification Rule"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "cfr164d",
+            "title": "45 CFR Part 164, Subpart D, Notification in the Case of Breach of Unsecured Protected Health Information",
+            "version": "eCFR as of 29 October 2026",
+            "publisher": "eCFR, Office of the Federal Register",
+            "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-10-29/title-45.xml?part=164&subpart=D",
+            "file": "hipaa/45-cfr-164-subpart-d.xml",
+            "date": "2026-10-29",
+            "sha256": "3ea6f9e9836e0b7f8a6e300089312460abeeb53c4c20b39f1718b35f34c96949"
+        }
+    ],
+    "source_of": {
+        "controls": "cfr164d",
+        "objectives": "cfr164d"
+    },
+    "control_flags": {
+        "requirement_type": "standard, implementation_specification, or requirement (a duty the rule states without labelling it a standard: 164.412 and 164.414).",
+        "parent": "Implementation specifications only: the standard of the same section.",
+        "objectives": "The numbered paragraphs directly beneath a requirement. For 164.412 the two objectives are alternatives: which one applies depends on whether the law enforcement statement is written or oral."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable standards, implementation specifications and requirements that are implemented. The Breach Notification Rule itself defines no score; this percentage is an HCG measure of readiness to notify."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "cfr164d",
+            "cite": "45 CFR 164 Subpart D"
+        },
+        {
+            "id": "presumed_breach",
+            "type": "applicability",
+            "summary": "An impermissible acquisition, access, use or disclosure of protected health information is presumed to be a breach unless a risk assessment of at least the four listed factors shows a low probability that the information was compromised.",
+            "source": "cfr164d",
+            "cite": "45 CFR 164.402",
+            "quote": "is presumed to be a breach unless the covered entity or business associate, as applicable, demonstrates that there is a low probability that the protected health information has been compromised based on a risk assessment of at least the following factors:"
+        },
+        {
+            "id": "individual_notice_deadline",
+            "type": "deadline",
+            "days": 60,
+            "from": "discovery of the breach",
+            "summary": "Individuals are notified without unreasonable delay and no later than 60 calendar days after the breach is discovered.",
+            "source": "cfr164d",
+            "cite": "45 CFR 164.404(b)",
+            "quote": "without unreasonable delay and in no case later than 60 calendar days after discovery of a breach."
+        },
+        {
+            "id": "media_notice_threshold",
+            "type": "threshold",
+            "count": 500,
+            "summary": "A breach involving more than 500 residents of a State or jurisdiction also requires notice to prominent media outlets serving it.",
+            "source": "cfr164d",
+            "cite": "45 CFR 164.406(a)",
+            "quote": "For a breach of unsecured protected health information involving more than 500 residents of a State or jurisdiction, a covered entity shall, following the discovery of the breach as provided in § 164.404(a)(2), notify prominent media outlets serving the State or jurisdiction."
+        },
+        {
+            "id": "secretary_notice_large",
+            "type": "threshold",
+            "count": 500,
+            "summary": "A breach involving 500 or more individuals is reported to the Secretary at the same time as individuals are notified.",
+            "source": "cfr164d",
+            "cite": "45 CFR 164.408(b)",
+            "quote": "provide the notification required by paragraph (a) of this section contemporaneously with the notice required by § 164.404(a) and in the manner specified on the HHS Web site."
+        },
+        {
+            "id": "secretary_notice_annual",
+            "type": "deadline",
+            "days": 60,
+            "from": "the end of the calendar year of discovery",
+            "summary": "Breaches involving fewer than 500 individuals are logged and reported to the Secretary no later than 60 days after the end of the calendar year in which they were discovered.",
+            "source": "cfr164d",
+            "cite": "45 CFR 164.408(c)",
+            "quote": "not later than 60 days after the end of each calendar year, provide the notification required by paragraph (a) of this section for breaches discovered during the preceding calendar year"
+        },
+        {
+            "id": "business_associate_deadline",
+            "type": "deadline",
+            "days": 60,
+            "from": "discovery of the breach by the business associate",
+            "summary": "A business associate notifies the covered entity without unreasonable delay and no later than 60 calendar days after it discovers the breach.",
+            "source": "cfr164d",
+            "cite": "45 CFR 164.410(b)",
+            "quote": "a business associate shall provide the notification required by paragraph (a) of this section without unreasonable delay and in no case later than 60 calendar days after discovery of a breach."
+        },
+        {
+            "id": "burden_of_proof",
+            "type": "applicability",
+            "summary": "The covered entity or business associate carries the burden of showing that every required notification was made, or that the use or disclosure was not a breach.",
+            "source": "cfr164d",
+            "cite": "45 CFR 164.414(b)",
+            "quote": "shall have the burden of demonstrating that all notifications were made as required by this subpart or that the use or disclosure did not constitute a breach, as defined at § 164.402."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "HIPAA",
+            "definition": "Health Insurance Portability and Accountability Act of 1996, whose Breach Notification Rule requires notice when unsecured protected health information is breached."
+        },
+        {
+            "term": "PHI",
+            "definition": "Protected health information: individually identifiable health information held or transmitted by a covered entity or its business associate."
+        },
+        {
+            "term": "Unsecured PHI",
+            "definition": "Protected health information that has not been made unusable, unreadable or indecipherable to unauthorized persons through a technology or methodology specified by the Secretary."
+        },
+        {
+            "term": "HHS",
+            "definition": "U.S. Department of Health and Human Services, which issues and enforces the HIPAA rules through its Office for Civil Rights (OCR)."
+        },
+        {
+            "term": "Business associate",
+            "definition": "A person or organization that creates, receives, maintains or transmits protected health information on behalf of a covered entity."
+        }
+    ],
+    "display_name": "HIPAA Breach Notification Rule (45 CFR 164 Subpart D)",
+    "counts": {
+        "families": 6,
+        "controls": 16,
+        "objectives": 13
+    },
+    "families": [
+        {
+            "number": "164.404",
+            "code": "",
+            "name": "Notification to individuals",
+            "controls": [
+                {
+                    "id": "164.404(a)",
+                    "number": "164.404(a)",
+                    "title": "Notification to individuals",
+                    "text": "(1) General rule. A covered entity shall, following the discovery of a breach of unsecured protected health information, notify each individual whose unsecured protected health information has been, or is reasonably believed by the covered entity to have been, accessed, acquired, used, or disclosed as a result of such breach. (2) Breaches treated as discovered. For purposes of paragraph (a)(1) of this section, §§ 164.406(a), and 164.408(a), a breach shall be treated as discovered by a covered entity as of the first day on which such breach is known to the covered entity, or, by exercising reasonable diligence would have been known to the covered entity. A covered entity shall be deemed to have knowledge of a breach if such breach is known, or by exercising reasonable diligence would have been known, to any person, other than the person committing the breach, who is a workforce member or agent of the covered entity (determined in accordance with the federal common law of agency).",
+                    "type": "standard",
+                    "requirement_type": "standard",
+                    "parent": "",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "164.404(a)(1)",
+                            "text": "General rule. A covered entity shall, following the discovery of a breach of unsecured protected health information, notify each individual whose unsecured protected health information has been, or is reasonably believed by the covered entity to have been, accessed, acquired, used, or disclosed as a result of such breach.",
+                            "source": "cfr164d"
+                        },
+                        {
+                            "id": "164.404(a)(2)",
+                            "text": "Breaches treated as discovered. For purposes of paragraph (a)(1) of this section, §§ 164.406(a), and 164.408(a), a breach shall be treated as discovered by a covered entity as of the first day on which such breach is known to the covered entity, or, by exercising reasonable diligence would have been known to the covered entity. A covered entity shall be deemed to have knowledge of a breach if such breach is known, or by exercising reasonable diligence would have been known, to any person, other than the person committing the breach, who is a workforce member or agent of the covered entity (determined in accordance with the federal common law of agency).",
+                            "source": "cfr164d"
+                        }
+                    ],
+                    "source": "cfr164d"
+                },
+                {
+                    "id": "164.404(b)",
+                    "number": "164.404(b)",
+                    "title": "Timeliness of notification",
+                    "text": "Except as provided in § 164.412, a covered entity shall provide the notification required by paragraph (a) of this section without unreasonable delay and in no case later than 60 calendar days after discovery of a breach.",
+                    "type": "implementation_specification",
+                    "requirement_type": "implementation_specification",
+                    "parent": "164.404(a)",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cfr164d"
+                },
+                {
+                    "id": "164.404(c)",
+                    "number": "164.404(c)",
+                    "title": "Content of notification",
+                    "text": "(1) Elements. The notification required by paragraph (a) of this section shall include, to the extent possible: (A) A brief description of what happened, including the date of the breach and the date of the discovery of the breach, if known; (B) A description of the types of unsecured protected health information that were involved in the breach (such as whether full name, social security number, date of birth, home address, account number, diagnosis, disability code, or other types of information were involved); (C) Any steps individuals should take to protect themselves from potential harm resulting from the breach; (D) A brief description of what the covered entity involved is doing to investigate the breach, to mitigate harm to individuals, and to protect against any further breaches; and (E) Contact procedures for individuals to ask questions or learn additional information, which shall include a toll-free telephone number, an e-mail address, Web site, or postal address. (2) Plain language requirement. The notification required by paragraph (a) of this section shall be written in plain language.",
+                    "type": "implementation_specification",
+                    "requirement_type": "implementation_specification",
+                    "parent": "164.404(a)",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "164.404(c)(1)",
+                            "text": "Elements. The notification required by paragraph (a) of this section shall include, to the extent possible: (A) A brief description of what happened, including the date of the breach and the date of the discovery of the breach, if known; (B) A description of the types of unsecured protected health information that were involved in the breach (such as whether full name, social security number, date of birth, home address, account number, diagnosis, disability code, or other types of information were involved); (C) Any steps individuals should take to protect themselves from potential harm resulting from the breach; (D) A brief description of what the covered entity involved is doing to investigate the breach, to mitigate harm to individuals, and to protect against any further breaches; and (E) Contact procedures for individuals to ask questions or learn additional information, which shall include a toll-free telephone number, an e-mail address, Web site, or postal address.",
+                            "source": "cfr164d"
+                        },
+                        {
+                            "id": "164.404(c)(2)",
+                            "text": "Plain language requirement. The notification required by paragraph (a) of this section shall be written in plain language.",
+                            "source": "cfr164d"
+                        }
+                    ],
+                    "source": "cfr164d"
+                },
+                {
+                    "id": "164.404(d)",
+                    "number": "164.404(d)",
+                    "title": "Methods of individual notification",
+                    "text": "The notification required by paragraph (a) of this section shall be provided in the following form: (1) Written notice. (i) Written notification by first-class mail to the individual at the last known address of the individual or, if the individual agrees to electronic notice and such agreement has not been withdrawn, by electronic mail. The notification may be provided in one or more mailings as information is available. (ii) If the covered entity knows the individual is deceased and has the address of the next of kin or personal representative of the individual (as specified under § 164.502(g)(4) of subpart E), written notification by first-class mail to either the next of kin or personal representative of the individual. The notification may be provided in one or more mailings as information is available. (2) Substitute notice. In the case in which there is insufficient or out-of-date contact information that precludes written notification to the individual under paragraph (d)(1)(i) of this section, a substitute form of notice reasonably calculated to reach the individual shall be provided. Substitute notice need not be provided in the case in which there is insufficient or out-of-date contact information that precludes written notification to the next of kin or personal representative of the individual under paragraph (d)(1)(ii). (i) In the case in which there is insufficient or out-of-date contact information for fewer than 10 individuals, then such substitute notice may be provided by an alternative form of written notice, telephone, or other means. (ii) In the case in which there is insufficient or out-of-date contact information for 10 or more individuals, then such substitute notice shall: (A) Be in the form of either a conspicuous posting for a period of 90 days on the home page of the Web site of the covered entity involved, or conspicuous notice in major print or broadcast media in geographic areas where the individuals affected by the breach likely reside; and (B) Include a toll-free phone number that remains active for at least 90 days where an individual can learn whether the individual's unsecured protected health information may be included in the breach. (3) Additional notice in urgent situations. In any case deemed by the covered entity to require urgency because of possible imminent misuse of unsecured protected health information, the covered entity may provide information to individuals by telephone or other means, as appropriate, in addition to notice provided under paragraph (d)(1) of this section.",
+                    "type": "implementation_specification",
+                    "requirement_type": "implementation_specification",
+                    "parent": "164.404(a)",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "164.404(d)(1)",
+                            "text": "Written notice. (i) Written notification by first-class mail to the individual at the last known address of the individual or, if the individual agrees to electronic notice and such agreement has not been withdrawn, by electronic mail. The notification may be provided in one or more mailings as information is available. (ii) If the covered entity knows the individual is deceased and has the address of the next of kin or personal representative of the individual (as specified under § 164.502(g)(4) of subpart E), written notification by first-class mail to either the next of kin or personal representative of the individual. The notification may be provided in one or more mailings as information is available.",
+                            "source": "cfr164d"
+                        },
+                        {
+                            "id": "164.404(d)(2)",
+                            "text": "Substitute notice. In the case in which there is insufficient or out-of-date contact information that precludes written notification to the individual under paragraph (d)(1)(i) of this section, a substitute form of notice reasonably calculated to reach the individual shall be provided. Substitute notice need not be provided in the case in which there is insufficient or out-of-date contact information that precludes written notification to the next of kin or personal representative of the individual under paragraph (d)(1)(ii). (i) In the case in which there is insufficient or out-of-date contact information for fewer than 10 individuals, then such substitute notice may be provided by an alternative form of written notice, telephone, or other means. (ii) In the case in which there is insufficient or out-of-date contact information for 10 or more individuals, then such substitute notice shall: (A) Be in the form of either a conspicuous posting for a period of 90 days on the home page of the Web site of the covered entity involved, or conspicuous notice in major print or broadcast media in geographic areas where the individuals affected by the breach likely reside; and (B) Include a toll-free phone number that remains active for at least 90 days where an individual can learn whether the individual's unsecured protected health information may be included in the breach.",
+                            "source": "cfr164d"
+                        },
+                        {
+                            "id": "164.404(d)(3)",
+                            "text": "Additional notice in urgent situations. In any case deemed by the covered entity to require urgency because of possible imminent misuse of unsecured protected health information, the covered entity may provide information to individuals by telephone or other means, as appropriate, in addition to notice provided under paragraph (d)(1) of this section.",
+                            "source": "cfr164d"
+                        }
+                    ],
+                    "source": "cfr164d"
+                }
+            ]
+        },
+        {
+            "number": "164.406",
+            "code": "",
+            "name": "Notification to the media",
+            "controls": [
+                {
+                    "id": "164.406(a)",
+                    "number": "164.406(a)",
+                    "title": "Notification to the media",
+                    "text": "For a breach of unsecured protected health information involving more than 500 residents of a State or jurisdiction, a covered entity shall, following the discovery of the breach as provided in § 164.404(a)(2), notify prominent media outlets serving the State or jurisdiction.",
+                    "type": "standard",
+                    "requirement_type": "standard",
+                    "parent": "",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cfr164d"
+                },
+                {
+                    "id": "164.406(b)",
+                    "number": "164.406(b)",
+                    "title": "Timeliness of notification",
+                    "text": "Except as provided in § 164.412, a covered entity shall provide the notification required by paragraph (a) of this section without unreasonable delay and in no case later than 60 calendar days after discovery of a breach.",
+                    "type": "implementation_specification",
+                    "requirement_type": "implementation_specification",
+                    "parent": "164.406(a)",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cfr164d"
+                },
+                {
+                    "id": "164.406(c)",
+                    "number": "164.406(c)",
+                    "title": "Content of notification",
+                    "text": "The notification required by paragraph (a) of this section shall meet the requirements of § 164.404(c).",
+                    "type": "implementation_specification",
+                    "requirement_type": "implementation_specification",
+                    "parent": "164.406(a)",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cfr164d"
+                }
+            ]
+        },
+        {
+            "number": "164.408",
+            "code": "",
+            "name": "Notification to the Secretary",
+            "controls": [
+                {
+                    "id": "164.408(a)",
+                    "number": "164.408(a)",
+                    "title": "Notification to the Secretary",
+                    "text": "A covered entity shall, following the discovery of a breach of unsecured protected health information as provided in § 164.404(a)(2), notify the Secretary.",
+                    "type": "standard",
+                    "requirement_type": "standard",
+                    "parent": "",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cfr164d"
+                },
+                {
+                    "id": "164.408(b)",
+                    "number": "164.408(b)",
+                    "title": "Breaches involving 500 or more individuals",
+                    "text": "For breaches of unsecured protected health information involving 500 or more individuals, a covered entity shall, except as provided in § 164.412, provide the notification required by paragraph (a) of this section contemporaneously with the notice required by § 164.404(a) and in the manner specified on the HHS Web site.",
+                    "type": "implementation_specification",
+                    "requirement_type": "implementation_specification",
+                    "parent": "164.408(a)",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cfr164d"
+                },
+                {
+                    "id": "164.408(c)",
+                    "number": "164.408(c)",
+                    "title": "Breaches involving less than 500 individuals",
+                    "text": "For breaches of unsecured protected health information involving less than 500 individuals, a covered entity shall maintain a log or other documentation of such breaches and, not later than 60 days after the end of each calendar year, provide the notification required by paragraph (a) of this section for breaches discovered during the preceding calendar year, in the manner specified on the HHS web site.",
+                    "type": "implementation_specification",
+                    "requirement_type": "implementation_specification",
+                    "parent": "164.408(a)",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cfr164d"
+                }
+            ]
+        },
+        {
+            "number": "164.410",
+            "code": "",
+            "name": "Notification by a business associate",
+            "controls": [
+                {
+                    "id": "164.410(a)",
+                    "number": "164.410(a)",
+                    "title": "Notification by a business associate",
+                    "text": "(1) General rule. A business associate shall, following the discovery of a breach of unsecured protected health information, notify the covered entity of such breach. (2) Breaches treated as discovered. For purposes of paragraph (a)(1) of this section, a breach shall be treated as discovered by a business associate as of the first day on which such breach is known to the business associate or, by exercising reasonable diligence, would have been known to the business associate. A business associate shall be deemed to have knowledge of a breach if the breach is known, or by exercising reasonable diligence would have been known, to any person, other than the person committing the breach, who is an employee, officer, or other agent of the business associate (determined in accordance with the Federal common law of agency).",
+                    "type": "standard",
+                    "requirement_type": "standard",
+                    "parent": "",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "164.410(a)(1)",
+                            "text": "General rule. A business associate shall, following the discovery of a breach of unsecured protected health information, notify the covered entity of such breach.",
+                            "source": "cfr164d"
+                        },
+                        {
+                            "id": "164.410(a)(2)",
+                            "text": "Breaches treated as discovered. For purposes of paragraph (a)(1) of this section, a breach shall be treated as discovered by a business associate as of the first day on which such breach is known to the business associate or, by exercising reasonable diligence, would have been known to the business associate. A business associate shall be deemed to have knowledge of a breach if the breach is known, or by exercising reasonable diligence would have been known, to any person, other than the person committing the breach, who is an employee, officer, or other agent of the business associate (determined in accordance with the Federal common law of agency).",
+                            "source": "cfr164d"
+                        }
+                    ],
+                    "source": "cfr164d"
+                },
+                {
+                    "id": "164.410(b)",
+                    "number": "164.410(b)",
+                    "title": "Timeliness of notification",
+                    "text": "Except as provided in § 164.412, a business associate shall provide the notification required by paragraph (a) of this section without unreasonable delay and in no case later than 60 calendar days after discovery of a breach.",
+                    "type": "implementation_specification",
+                    "requirement_type": "implementation_specification",
+                    "parent": "164.410(a)",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cfr164d"
+                },
+                {
+                    "id": "164.410(c)",
+                    "number": "164.410(c)",
+                    "title": "Content of notification",
+                    "text": "(1) The notification required by paragraph (a) of this section shall include, to the extent possible, the identification of each individual whose unsecured protected health information has been, or is reasonably believed by the business associate to have been, accessed, acquired, used, or disclosed during the breach. (2) A business associate shall provide the covered entity with any other available information that the covered entity is required to include in notification to the individual under § 164.404(c) at the time of the notification required by paragraph (a) of this section or promptly thereafter as information becomes available.",
+                    "type": "implementation_specification",
+                    "requirement_type": "implementation_specification",
+                    "parent": "164.410(a)",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "164.410(c)(1)",
+                            "text": "The notification required by paragraph (a) of this section shall include, to the extent possible, the identification of each individual whose unsecured protected health information has been, or is reasonably believed by the business associate to have been, accessed, acquired, used, or disclosed during the breach.",
+                            "source": "cfr164d"
+                        },
+                        {
+                            "id": "164.410(c)(2)",
+                            "text": "A business associate shall provide the covered entity with any other available information that the covered entity is required to include in notification to the individual under § 164.404(c) at the time of the notification required by paragraph (a) of this section or promptly thereafter as information becomes available.",
+                            "source": "cfr164d"
+                        }
+                    ],
+                    "source": "cfr164d"
+                }
+            ]
+        },
+        {
+            "number": "164.412",
+            "code": "",
+            "name": "Law enforcement delay",
+            "controls": [
+                {
+                    "id": "164.412",
+                    "number": "164.412",
+                    "title": "Law enforcement delay",
+                    "text": "If a law enforcement official states to a covered entity or business associate that a notification, notice, or posting required under this subpart would impede a criminal investigation or cause damage to national security, a covered entity or business associate shall: (a) If the statement is in writing and specifies the time for which a delay is required, delay such notification, notice, or posting for the time period specified by the official; or (b) If the statement is made orally, document the statement, including the identity of the official making the statement, and delay the notification, notice, or posting temporarily and no longer than 30 days from the date of the oral statement, unless a written statement as described in paragraph (a) of this section is submitted during that time.",
+                    "type": "requirement",
+                    "requirement_type": "requirement",
+                    "parent": "",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "164.412(a)",
+                            "text": "If the statement is in writing and specifies the time for which a delay is required, delay such notification, notice, or posting for the time period specified by the official; or",
+                            "description": "If a law enforcement official states to a covered entity or business associate that a notification, notice, or posting required under this subpart would impede a criminal investigation or cause damage to national security, a covered entity or business associate shall if the statement is in writing and specifies the time for which a delay is required, delay such notification, notice, or posting for the time period specified by the official. Alternatively, the requirement can be met as the objectives that follow describe.",
+                            "source": "cfr164d"
+                        },
+                        {
+                            "id": "164.412(b)",
+                            "text": "If the statement is made orally, document the statement, including the identity of the official making the statement, and delay the notification, notice, or posting temporarily and no longer than 30 days from the date of the oral statement, unless a written statement as described in paragraph (a) of this section is submitted during that time.",
+                            "description": "If a law enforcement official states to a covered entity or business associate that a notification, notice, or posting required under this subpart would impede a criminal investigation or cause damage to national security, a covered entity or business associate shall if the statement is made orally, document the statement, including the identity of the official making the statement, and delay the notification, notice, or posting temporarily and no longer than 30 days from the date of the oral statement, unless a written statement as described in paragraph (a) of this section is submitted during that time.",
+                            "source": "cfr164d"
+                        }
+                    ],
+                    "source": "cfr164d"
+                }
+            ]
+        },
+        {
+            "number": "164.414",
+            "code": "",
+            "name": "Administrative requirements and burden of proof",
+            "controls": [
+                {
+                    "id": "164.414(a)",
+                    "number": "164.414(a)",
+                    "title": "Administrative requirements",
+                    "text": "A covered entity is required to comply with the administrative requirements of § 164.530(b), (d), (e), (g), (h), (i), and (j) with respect to the requirements of this subpart.",
+                    "type": "requirement",
+                    "requirement_type": "requirement",
+                    "parent": "",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cfr164d"
+                },
+                {
+                    "id": "164.414(b)",
+                    "number": "164.414(b)",
+                    "title": "Burden of proof",
+                    "text": "In the event of a use or disclosure in violation of subpart E, the covered entity or business associate, as applicable, shall have the burden of demonstrating that all notifications were made as required by this subpart or that the use or disclosure did not constitute a breach, as defined at § 164.402.",
+                    "type": "requirement",
+                    "requirement_type": "requirement",
+                    "parent": "",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cfr164d"
+                }
+            ]
+        }
+    ]
+}

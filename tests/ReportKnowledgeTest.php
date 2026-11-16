@@ -262,6 +262,12 @@ return array(
     'Knowledge: every shipped framework classifies cleanly with no topic above 35%' => function () use ($stored) {
         $topics = ReportKnowledge::topics();
 
+        // A rule about one subject is expected to sit in that subject's topic.
+        $single_subject = array(
+            'hipaa-breach' => 'incident',
+            'hipaa-privacy' => 'privacy'
+        );
+
         foreach (glob(ROOT.'/frameworks/*.json') as $file) {
             $definition = json_decode(file_get_contents($file), true);
             $counts = array();
@@ -280,6 +286,13 @@ return array(
             Assert::true($total > 0, basename($file).' has no controls');
             arsort($counts);
             $top = array_key_first($counts);
+            $subject = $single_subject[basename($file, '.json')] ?? null;
+
+            if ($subject !== null) {
+                Assert::same($subject, $top, basename($file).' main topic');
+                continue;
+            }
+
             Assert::true($counts[$top] / $total <= 0.35, basename($file).': '.$top.' takes '.$counts[$top].' of '.$total);
         }
     },

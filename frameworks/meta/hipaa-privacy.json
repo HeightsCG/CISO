@@ -1,0 +1,163 @@
+{
+    "key": "hipaa-privacy",
+    "name": "HIPAA Privacy Rule",
+    "version": "45 CFR 164 Subpart E",
+    "full_name": "HIPAA Privacy Rule: Privacy of Individually Identifiable Health Information (45 CFR Part 164, Subpart E)",
+    "issuing_body": "U.S. Department of Health and Human Services (HHS)",
+    "standard_codes": [
+        "HIPAA-PRIVACY"
+    ],
+    "aliases": [
+        "HIPAA",
+        "PHI",
+        "Privacy Rule"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "cfr164e",
+            "title": "45 CFR Part 164, Subpart E, Privacy of Individually Identifiable Health Information",
+            "version": "eCFR as of 29 October 2026",
+            "publisher": "eCFR, Office of the Federal Register",
+            "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-10-29/title-45.xml?part=164&subpart=E",
+            "file": "hipaa/45-cfr-164-subpart-e.xml",
+            "date": "2026-10-29",
+            "sha256": "68e0a1f098347fbd987f4f6433dd28a3c0986193b044b99906e86403c1c84b29"
+        }
+    ],
+    "source_of": {
+        "controls": "cfr164e",
+        "objectives": "cfr164e"
+    },
+    "control_flags": {
+        "requirement_type": "standard or implementation_specification, exactly as the rule heads the paragraph.",
+        "parent": "Implementation specifications only: the standard before them in the same section.",
+        "objectives": "The paragraphs directly beneath a standard or specification. Many standards in 164.502 to 164.514 permit a use or disclosure rather than require an action; they are assessed on whether the entity's uses and disclosures stay within the conditions stated."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable standards and implementation specifications that are implemented. The Privacy Rule itself defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A standard or implementation specification is met only when every element it lists is met.",
+            "source": "cfr164e",
+            "cite": "45 CFR 164 Subpart E"
+        },
+        {
+            "id": "minimum_necessary",
+            "type": "applicability",
+            "summary": "Uses, disclosures and requests are limited to the minimum protected health information necessary for their purpose.",
+            "source": "cfr164e",
+            "cite": "45 CFR 164.502(b)",
+            "quote": "must make reasonable efforts to limit protected health information to the minimum necessary to accomplish the intended purpose of the use, disclosure, or request."
+        },
+        {
+            "id": "access_deadline",
+            "type": "deadline",
+            "days": 30,
+            "from": "receipt of the request",
+            "summary": "A request for access is acted on no later than 30 days after it is received.",
+            "source": "cfr164e",
+            "cite": "45 CFR 164.524(b)(2)(i)",
+            "quote": "the covered entity must act on a request for access no later than 30 days after receipt of the request"
+        },
+        {
+            "id": "amendment_deadline",
+            "type": "deadline",
+            "days": 60,
+            "from": "receipt of the request",
+            "summary": "A request for amendment is acted on no later than 60 days after it is received.",
+            "source": "cfr164e",
+            "cite": "45 CFR 164.526(b)(2)(i)",
+            "quote": "The covered entity must act on the individual's request for an amendment no later than 60 days after receipt of such a request"
+        },
+        {
+            "id": "accounting_deadline",
+            "type": "deadline",
+            "days": 60,
+            "from": "receipt of the request",
+            "summary": "A request for an accounting of disclosures is acted on no later than 60 days after it is received.",
+            "source": "cfr164e",
+            "cite": "45 CFR 164.528(c)(1)",
+            "quote": "The covered entity must act on the individual's request for an accounting, no later than 60 days after receipt of such a request"
+        },
+        {
+            "id": "privacy_official",
+            "type": "applicability",
+            "summary": "A privacy official is designated to develop and implement the entity's privacy policies and procedures.",
+            "source": "cfr164e",
+            "cite": "45 CFR 164.530(a)(1)(i)",
+            "quote": "A covered entity must designate a privacy official who is responsible for the development and implementation of the policies and procedures of the entity."
+        },
+        {
+            "id": "documentation_retention",
+            "type": "retention",
+            "years": 6,
+            "from": "creation, or the date last in effect, whichever is later",
+            "summary": "Privacy Rule documentation is kept for six years from creation or from when it was last in effect, whichever is later.",
+            "source": "cfr164e",
+            "cite": "45 CFR 164.530(j)(2)",
+            "quote": "A covered entity must retain the documentation required by paragraph (j)(1) of this section for six years from the date of its creation or the date when it last was in effect, whichever is later."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "HIPAA",
+            "definition": "Health Insurance Portability and Accountability Act of 1996, whose Privacy Rule governs how protected health information may be used and disclosed and the rights individuals have over it."
+        },
+        {
+            "term": "PHI",
+            "definition": "Protected health information: individually identifiable health information held or transmitted by a covered entity or its business associate."
+        },
+        {
+            "term": "TPO",
+            "definition": "Treatment, payment and health care operations: the purposes for which protected health information may be used and disclosed without an authorization."
+        },
+        {
+            "term": "HHS",
+            "definition": "U.S. Department of Health and Human Services, which issues and enforces the HIPAA rules through its Office for Civil Rights (OCR)."
+        },
+        {
+            "term": "Business associate",
+            "definition": "A person or organization that creates, receives, maintains or transmits protected health information on behalf of a covered entity."
+        }
+    ]
+}

@@ -1,0 +1,171 @@
+{
+    "key": "hipaa-breach",
+    "name": "HIPAA Breach Notification Rule",
+    "version": "45 CFR 164 Subpart D",
+    "full_name": "HIPAA Breach Notification Rule: Notification in the Case of Breach of Unsecured Protected Health Information (45 CFR Part 164, Subpart D)",
+    "issuing_body": "U.S. Department of Health and Human Services (HHS)",
+    "standard_codes": [
+        "HIPAA-BREACH"
+    ],
+    "aliases": [
+        "HIPAA",
+        "PHI",
+        "Breach Notification Rule"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "cfr164d",
+            "title": "45 CFR Part 164, Subpart D, Notification in the Case of Breach of Unsecured Protected Health Information",
+            "version": "eCFR as of 29 October 2026",
+            "publisher": "eCFR, Office of the Federal Register",
+            "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-10-29/title-45.xml?part=164&subpart=D",
+            "file": "hipaa/45-cfr-164-subpart-d.xml",
+            "date": "2026-10-29",
+            "sha256": "3ea6f9e9836e0b7f8a6e300089312460abeeb53c4c20b39f1718b35f34c96949"
+        }
+    ],
+    "source_of": {
+        "controls": "cfr164d",
+        "objectives": "cfr164d"
+    },
+    "control_flags": {
+        "requirement_type": "standard, implementation_specification, or requirement (a duty the rule states without labelling it a standard: 164.412 and 164.414).",
+        "parent": "Implementation specifications only: the standard of the same section.",
+        "objectives": "The numbered paragraphs directly beneath a requirement. For 164.412 the two objectives are alternatives: which one applies depends on whether the law enforcement statement is written or oral."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable standards, implementation specifications and requirements that are implemented. The Breach Notification Rule itself defines no score; this percentage is an HCG measure of readiness to notify."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "cfr164d",
+            "cite": "45 CFR 164 Subpart D"
+        },
+        {
+            "id": "presumed_breach",
+            "type": "applicability",
+            "summary": "An impermissible acquisition, access, use or disclosure of protected health information is presumed to be a breach unless a risk assessment of at least the four listed factors shows a low probability that the information was compromised.",
+            "source": "cfr164d",
+            "cite": "45 CFR 164.402",
+            "quote": "is presumed to be a breach unless the covered entity or business associate, as applicable, demonstrates that there is a low probability that the protected health information has been compromised based on a risk assessment of at least the following factors:"
+        },
+        {
+            "id": "individual_notice_deadline",
+            "type": "deadline",
+            "days": 60,
+            "from": "discovery of the breach",
+            "summary": "Individuals are notified without unreasonable delay and no later than 60 calendar days after the breach is discovered.",
+            "source": "cfr164d",
+            "cite": "45 CFR 164.404(b)",
+            "quote": "without unreasonable delay and in no case later than 60 calendar days after discovery of a breach."
+        },
+        {
+            "id": "media_notice_threshold",
+            "type": "threshold",
+            "count": 500,
+            "summary": "A breach involving more than 500 residents of a State or jurisdiction also requires notice to prominent media outlets serving it.",
+            "source": "cfr164d",
+            "cite": "45 CFR 164.406(a)",
+            "quote": "For a breach of unsecured protected health information involving more than 500 residents of a State or jurisdiction, a covered entity shall, following the discovery of the breach as provided in § 164.404(a)(2), notify prominent media outlets serving the State or jurisdiction."
+        },
+        {
+            "id": "secretary_notice_large",
+            "type": "threshold",
+            "count": 500,
+            "summary": "A breach involving 500 or more individuals is reported to the Secretary at the same time as individuals are notified.",
+            "source": "cfr164d",
+            "cite": "45 CFR 164.408(b)",
+            "quote": "provide the notification required by paragraph (a) of this section contemporaneously with the notice required by § 164.404(a) and in the manner specified on the HHS Web site."
+        },
+        {
+            "id": "secretary_notice_annual",
+            "type": "deadline",
+            "days": 60,
+            "from": "the end of the calendar year of discovery",
+            "summary": "Breaches involving fewer than 500 individuals are logged and reported to the Secretary no later than 60 days after the end of the calendar year in which they were discovered.",
+            "source": "cfr164d",
+            "cite": "45 CFR 164.408(c)",
+            "quote": "not later than 60 days after the end of each calendar year, provide the notification required by paragraph (a) of this section for breaches discovered during the preceding calendar year"
+        },
+        {
+            "id": "business_associate_deadline",
+            "type": "deadline",
+            "days": 60,
+            "from": "discovery of the breach by the business associate",
+            "summary": "A business associate notifies the covered entity without unreasonable delay and no later than 60 calendar days after it discovers the breach.",
+            "source": "cfr164d",
+            "cite": "45 CFR 164.410(b)",
+            "quote": "a business associate shall provide the notification required by paragraph (a) of this section without unreasonable delay and in no case later than 60 calendar days after discovery of a breach."
+        },
+        {
+            "id": "burden_of_proof",
+            "type": "applicability",
+            "summary": "The covered entity or business associate carries the burden of showing that every required notification was made, or that the use or disclosure was not a breach.",
+            "source": "cfr164d",
+            "cite": "45 CFR 164.414(b)",
+            "quote": "shall have the burden of demonstrating that all notifications were made as required by this subpart or that the use or disclosure did not constitute a breach, as defined at § 164.402."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "HIPAA",
+            "definition": "Health Insurance Portability and Accountability Act of 1996, whose Breach Notification Rule requires notice when unsecured protected health information is breached."
+        },
+        {
+            "term": "PHI",
+            "definition": "Protected health information: individually identifiable health information held or transmitted by a covered entity or its business associate."
+        },
+        {
+            "term": "Unsecured PHI",
+            "definition": "Protected health information that has not been made unusable, unreadable or indecipherable to unauthorized persons through a technology or methodology specified by the Secretary."
+        },
+        {
+            "term": "HHS",
+            "definition": "U.S. Department of Health and Human Services, which issues and enforces the HIPAA rules through its Office for Civil Rights (OCR)."
+        },
+        {
+            "term": "Business associate",
+            "definition": "A person or organization that creates, receives, maintains or transmits protected health information on behalf of a covered entity."
+        }
+    ]
+}
