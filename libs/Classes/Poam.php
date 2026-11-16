@@ -160,6 +160,7 @@ class Poam
         'au-privacy' => 'none',
         'sg-pdpa' => 'none',
         'us-va-cdpa' => 'none',
+        'us-ct-dpa' => 'none',
         'nydfs-500' => 'none',
         'nis2' => 'none',
         'dora' => 'none',

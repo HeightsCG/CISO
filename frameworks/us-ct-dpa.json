@@ -1,0 +1,675 @@
+{
+    "key": "us-ct-dpa",
+    "name": "Connecticut Data Privacy Act",
+    "version": "General Statutes as published November 2026",
+    "full_name": "Connecticut Data Privacy Act and the online privacy duties toward minors (Connecticut General Statutes, Chapter 743jj, sections 42-515 to 42-529e)",
+    "issuing_body": "State of Connecticut; published by the Connecticut General Assembly",
+    "standard_codes": [
+        "US-CT-DPA"
+    ],
+    "aliases": [
+        "CTDPA",
+        "Connecticut CTDPA",
+        "Connecticut Data Privacy Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against Chapter 743jj of the Connecticut General Statutes as published by the General Assembly in November 2026.",
+    "sources": [
+        {
+            "id": "cgs",
+            "title": "Connecticut General Statutes, Chapter 743jj, Data Privacy and Security (chapter page)",
+            "version": "as published November 2026",
+            "publisher": "Connecticut General Assembly",
+            "url": "https://www.cga.ct.gov/current/pub/chap_743jj.htm",
+            "file": "us-ct-dpa/chap_743jj.htm",
+            "sha256": "ff6266b5a7ba0087ec489b463e1cff1cca3dd7be874a488aec01585d5396e633"
+        }
+    ],
+    "source_of": {
+        "controls": "cgs",
+        "objectives": "cgs"
+    },
+    "control_flags": {
+        "objectives": "The numbered items a subsection lists inline, only where every one must be met."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "cgs",
+            "cite": "Conn. Gen. Stat. 42-518 to 42-529c"
+        },
+        {
+            "id": "thresholds",
+            "type": "applicability",
+            "summary": "Part I applies to businesses that controlled or processed personal data of at least 100,000 consumers in the preceding year, or of at least 25,000 consumers while deriving over 25% of gross revenue from selling personal data.",
+            "source": "cgs",
+            "cite": "Conn. Gen. Stat. 42-516",
+            "quote": "controlled or processed the personal data of not less than"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "42-518(c)",
+            "days": 45,
+            "from": "receipt of the request",
+            "summary": "A consumer rights request is answered without undue delay and within 45 days of receipt; the period may be extended once by 45 days.",
+            "source": "cgs",
+            "cite": "Conn. Gen. Stat. 42-518(c)(1)",
+            "quote": "not later than forty-five days after receipt of the request."
+        },
+        {
+            "id": "appeal_deadline",
+            "type": "deadline",
+            "control": "42-518(d)",
+            "days": 60,
+            "from": "receipt of the appeal",
+            "summary": "An appeal of a refused request is decided and answered in writing within 60 days of receipt.",
+            "source": "cgs",
+            "cite": "Conn. Gen. Stat. 42-518(d)",
+            "quote": "Not later than sixty days after receipt of an appeal, a controller shall inform the consumer in writing"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "A violation is an unfair trade practice under the Connecticut Unfair Trade Practices Act, enforced by the Attorney General.",
+            "source": "cgs",
+            "cite": "Conn. Gen. Stat. 42-525",
+            "quote": "unfair trade practice for purposes of section"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "CTDPA",
+            "definition": "The Connecticut Data Privacy Act, Connecticut's comprehensive consumer privacy law, in force since 1 July 2023."
+        },
+        {
+            "term": "Controller",
+            "definition": "The person that, alone or jointly with others, determines the purpose and means of processing personal data."
+        },
+        {
+            "term": "Processor",
+            "definition": "A person that processes personal data on behalf of a controller."
+        },
+        {
+            "term": "Consumer health data",
+            "definition": "Personal data a controller uses to identify a consumer's physical or mental health condition or diagnosis, including gender-affirming and reproductive or sexual health data."
+        },
+        {
+            "term": "Heightened risk of harm to minors",
+            "definition": "Processing of a minor's personal data in a way that presents a reasonably foreseeable risk of unfair treatment, financial or physical injury, or intrusion on the minor's privacy; Part II requires assessments and safeguards for it."
+        }
+    ],
+    "display_name": "Connecticut Data Privacy Act (General Statutes as published November 2026)",
+    "counts": {
+        "families": 11,
+        "controls": 25,
+        "objectives": 30
+    },
+    "families": [
+        {
+            "number": "42-518",
+            "code": "Sec. 42-518",
+            "name": "Consumers' rights. Compliance by Controllers. Appeals",
+            "part": "Part I",
+            "controls": [
+                {
+                    "id": "42-518(c)",
+                    "number": "42-518(c)",
+                    "text": "Except as otherwise provided in sections 42-515 to 42-525, inclusive, a controller shall comply with a request by a consumer to exercise the consumer rights authorized pursuant to said sections as follows: (1) A controller shall respond to the consumer without undue delay, but not later than forty-five days after receipt of the request. The controller may extend the response period by forty-five additional days when reasonably necessary, considering the complexity and number of the consumer's requests, provided the controller informs the consumer of any such extension within the initial forty-five-day response period and of the reason for the extension. (2) If a controller declines to take action regarding the consumer's request, the controller shall inform the consumer without undue delay, but not later than forty-five days after receipt of the request, of the justification for declining to take action and instructions for how to appeal the decision. (3) Information provided in response to a consumer request shall be provided by a controller, free of charge, once per consumer during any twelve-month period. If requests from a consumer are manifestly unfounded, excessive or repetitive, the controller may charge the consumer a reasonable fee to cover the administrative costs of complying with the request or decline to act on the request. The controller bears the burden of demonstrating the manifestly unfounded, excessive or repetitive nature of the request. (4) If a controller is unable to authenticate a request to exercise any of the rights afforded under subdivisions (1) to (4), inclusive, of subsection (a) of this section using commercially reasonable efforts, the controller shall not be required to comply with a request to initiate an action pursuant to this section and shall provide notice to the consumer that the controller is unable to authenticate the request to exercise such right or rights until such consumer provides additional information reasonably necessary to authenticate such consumer and such consumer's request to exercise such right or rights. A controller shall not be required to authenticate an opt-out request, but a controller may deny an opt-out request if the controller has a good faith, reasonable and documented belief that such request is fraudulent. If a controller denies an opt-out request because the controller believes such request is fraudulent, the controller shall send a notice to the person who made such request disclosing that such controller believes such request is fraudulent, why such controller believes such request is fraudulent and that such controller shall not comply with such request. (5) A controller that has obtained personal data about a consumer from a source other than the consumer shall be deemed in compliance with a consumer's request to delete such data pursuant to subdivision (3) of subsection (a) of this section by (A) retaining a record of the deletion request and the minimum data necessary for the purpose of ensuring the consumer's personal data remains deleted from the controller's records and not using such retained data for any other purpose pursuant to the provisions of sections 42-515 to 42-525, inclusive, or (B) opting the consumer out of the processing of such personal data for any purpose except for those exempted pursuant to the provisions of sections 42-515 to 42-525, inclusive.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                },
+                {
+                    "id": "42-518(d)",
+                    "number": "42-518(d)",
+                    "text": "A controller shall establish a process for a consumer to appeal the controller's refusal to take action on a request within a reasonable period of time after the consumer's receipt of the decision. The appeal process shall be conspicuously available and similar to the process for submitting requests to initiate action pursuant to this section. Not later than sixty days after receipt of an appeal, a controller shall inform the consumer in writing of any action taken or not taken in response to the appeal, including a written explanation of the reasons for the decisions. If the appeal is denied, the controller shall also provide the consumer with an online mechanism, if available, or other method through which the consumer may contact the Attorney General to submit a complaint.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                }
+            ]
+        },
+        {
+            "number": "42-519",
+            "code": "Sec. 42-519",
+            "name": "Authorized agents and consumer opt-out",
+            "part": "Part I",
+            "controls": [
+                {
+                    "id": "42-519",
+                    "number": "42-519",
+                    "text": "A consumer may designate another person to serve as the consumer's authorized agent, and act on such consumer's behalf, to opt out of the processing of such consumer's personal data for one or more of the purposes specified in subdivision (5) of subsection (a) of section 42-518. The consumer may designate such authorized agent by way of, among other things, a technology, including, but not limited to, an Internet link or a browser setting, browser extension or global device setting, indicating such consumer's intent to opt out of such processing. A controller shall comply with an opt-out request received from an authorized agent if the controller is able to verify, with commercially reasonable effort, the identity of the consumer and the authorized agent's authority to act on such consumer's behalf.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                }
+            ]
+        },
+        {
+            "number": "42-520",
+            "code": "Sec. 42-520",
+            "name": "Controllers' duties. Sale of personal data to third parties. Notice and disclosure to consumers. Consumer opt-out",
+            "part": "Part I",
+            "controls": [
+                {
+                    "id": "42-520(a)",
+                    "number": "42-520(a)",
+                    "text": "A controller shall: (1) Limit the collection of personal data to what is adequate, relevant and reasonably necessary in relation to the purposes for which such data is processed, as disclosed to the consumer; (2) except as otherwise provided in sections 42-515 to 42-525, inclusive, not process personal data for purposes that are neither reasonably necessary to, nor compatible with, the disclosed purposes for which such personal data is processed, as disclosed to the consumer, unless the controller obtains the consumer's consent; (3) establish, implement and maintain reasonable administrative, technical and physical data security practices to protect the confidentiality, integrity and accessibility of personal data appropriate to the volume and nature of the personal data at issue; (4) not process sensitive data concerning a consumer without obtaining the consumer's consent, or, in the case of the processing of sensitive data concerning a known child, without processing such data in accordance with COPPA; (5) not process personal data in violation of the laws of this state and federal laws that prohibit unlawful discrimination against consumers; (6) provide an effective mechanism for a consumer to revoke the consumer's consent under this section that is at least as easy as the mechanism by which the consumer provided the consumer's consent and, upon revocation of such consent, cease to process the data as soon as practicable, but not later than fifteen days after the receipt of such request; and (7) not process the personal data of a consumer for purposes of targeted advertising, or sell the consumer's personal data without the consumer's consent, under circumstances where a controller has actual knowledge, or wilfully disregards, that the consumer is at least thirteen years of age but younger than sixteen years of age. A controller shall not discriminate against a consumer for exercising any of the consumer rights contained in sections 42-515 to 42-525, inclusive, including denying goods or services, charging different prices or rates for goods or services or providing a different level of quality of goods or services to the consumer.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "42-520(a)(1)",
+                            "text": "Limit the collection of personal data to what is adequate, relevant and reasonably necessary in relation to the purposes for which such data is processed, as disclosed to the consumer;",
+                            "description": "A controller shall: limit the collection of personal data to what is adequate, relevant and reasonably necessary in relation to the purposes for which such data is processed, as disclosed to the consumer.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-520(a)(2)",
+                            "text": "except as otherwise provided in sections 42-515 to 42-525, inclusive, not process personal data for purposes that are neither reasonably necessary to, nor compatible with, the disclosed purposes for which such personal data is processed, as disclosed to the consumer, unless the controller obtains the consumer's consent;",
+                            "description": "A controller shall: except as otherwise provided in sections 42-515 to 42-525, inclusive, not process personal data for purposes that are neither reasonably necessary to, nor compatible with, the disclosed purposes for which such personal data is processed, as disclosed to the consumer, unless the controller obtains the consumer's consent.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-520(a)(3)",
+                            "text": "establish, implement and maintain reasonable administrative, technical and physical data security practices to protect the confidentiality, integrity and accessibility of personal data appropriate to the volume and nature of the personal data at issue;",
+                            "description": "A controller shall: establish, implement and maintain reasonable administrative, technical and physical data security practices to protect the confidentiality, integrity and accessibility of personal data appropriate to the volume and nature of the personal data at issue.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-520(a)(4)",
+                            "text": "not process sensitive data concerning a consumer without obtaining the consumer's consent, or, in the case of the processing of sensitive data concerning a known child, without processing such data in accordance with COPPA;",
+                            "description": "A controller shall: not process sensitive data concerning a consumer without obtaining the consumer's consent, or, in the case of the processing of sensitive data concerning a known child, without processing such data in accordance with COPPA.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-520(a)(5)",
+                            "text": "not process personal data in violation of the laws of this state and federal laws that prohibit unlawful discrimination against consumers;",
+                            "description": "A controller shall: not process personal data in violation of the laws of this state and federal laws that prohibit unlawful discrimination against consumers.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-520(a)(6)",
+                            "text": "provide an effective mechanism for a consumer to revoke the consumer's consent under this section that is at least as easy as the mechanism by which the consumer provided the consumer's consent and, upon revocation of such consent, cease to process the data as soon as practicable, but not later than fifteen days after the receipt of such request;",
+                            "description": "A controller shall: provide an effective mechanism for a consumer to revoke the consumer's consent under this section that is at least as easy as the mechanism by which the consumer provided the consumer's consent and, upon revocation of such consent, cease to process the data as soon as practicable, but not later than fifteen days after the receipt of such request.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-520(a)(7)",
+                            "text": "not process the personal data of a consumer for purposes of targeted advertising, or sell the consumer's personal data without the consumer's consent, under circumstances where a controller has actual knowledge, or wilfully disregards, that the consumer is at least thirteen years of age but younger than sixteen years of age. A controller shall not discriminate against a consumer for exercising any of the consumer rights contained in sections 42-515 to 42-525, inclusive, including denying goods or services, charging different prices or rates for goods or services or providing a different level of quality of goods or services to the consumer.",
+                            "source": "cgs"
+                        }
+                    ],
+                    "source": "cgs"
+                },
+                {
+                    "id": "42-520(c)",
+                    "number": "42-520(c)",
+                    "text": "A controller shall provide consumers with a reasonably accessible, clear and meaningful privacy notice that includes: (1) The categories of personal data processed by the controller; (2) the purpose for processing personal data; (3) how consumers may exercise their consumer rights, including how a consumer may appeal a controller's decision with regard to the consumer's request; (4) the categories of personal data that the controller shares with third parties, if any; (5) the categories of third parties, if any, with which the controller shares personal data; and (6) an active electronic mail address or other online mechanism that the consumer may use to contact the controller.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "42-520(c)(1)",
+                            "text": "The categories of personal data processed by the controller;",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear and meaningful privacy notice that includes: the categories of personal data processed by the controller.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-520(c)(2)",
+                            "text": "the purpose for processing personal data;",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear and meaningful privacy notice that includes: the purpose for processing personal data.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-520(c)(3)",
+                            "text": "how consumers may exercise their consumer rights, including how a consumer may appeal a controller's decision with regard to the consumer's request;",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear and meaningful privacy notice that includes: how consumers may exercise their consumer rights, including how a consumer may appeal a controller's decision with regard to the consumer's request.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-520(c)(4)",
+                            "text": "the categories of personal data that the controller shares with third parties, if any;",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear and meaningful privacy notice that includes: the categories of personal data that the controller shares with third parties, if any.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-520(c)(5)",
+                            "text": "the categories of third parties, if any, with which the controller shares personal data;",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear and meaningful privacy notice that includes: the categories of third parties, if any, with which the controller shares personal data.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-520(c)(6)",
+                            "text": "an active electronic mail address or other online mechanism that the consumer may use to contact the controller.",
+                            "description": "A controller shall provide consumers with a reasonably accessible, clear and meaningful privacy notice that includes: an active electronic mail address or other online mechanism that the consumer may use to contact the controller.",
+                            "source": "cgs"
+                        }
+                    ],
+                    "source": "cgs"
+                },
+                {
+                    "id": "42-520(d)",
+                    "number": "42-520(d)",
+                    "text": "If a controller sells personal data to third parties or processes personal data for targeted advertising, the controller shall clearly and conspicuously disclose such processing, as well as the manner in which a consumer may exercise the right to opt out of such processing.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                },
+                {
+                    "id": "42-520(e)",
+                    "number": "42-520(e)",
+                    "text": "(1) A controller shall establish, and shall describe in a privacy notice, one or more secure and reliable means for consumers to submit a request to exercise their consumer rights pursuant to sections 42-515 to 42-525, inclusive. Such means shall take into account the ways in which consumers normally interact with the controller, the need for secure and reliable communication of such requests and the ability of the controller to verify the identity of the consumer making the request. A controller shall not require a consumer to create a new account in order to exercise consumer rights, but may require a consumer to use an existing account. Any such means shall include: (A) (i) Providing a clear and conspicuous link on the controller's Internet web site to an Internet web page that enables a consumer, or an agent of the consumer, to opt out of the targeted advertising or sale of the consumer's personal data; and (ii) Not later than January 1, 2025, allowing a consumer to opt out of any processing of the consumer's personal data for the purposes of targeted advertising, or any sale of such personal data, through an opt-out preference signal sent, with such consumer's consent, by a platform, technology or mechanism to the controller indicating such consumer's intent to opt out of any such processing or sale. Such platform, technology or mechanism shall: (I) Not unfairly disadvantage another controller; (II) Not make use of a default setting, but, rather, require the consumer to make an affirmative, freely given and unambiguous choice to opt out of any processing of such consumer's personal data pursuant to sections 42-515 to 42-525, inclusive; (III) Be consumer-friendly and easy to use by the average consumer; (IV) Be as consistent as possible with any other similar platform, technology or mechanism required by any federal or state law or regulation; and (V) Enable the controller to accurately determine whether the consumer is a resident of this state and whether the consumer has made a legitimate request to opt out of any sale of such consumer's personal data or targeted advertising. (B) If a consumer's decision to opt out of any processing of the consumer's personal data for the purposes of targeted advertising, or any sale of such personal data, through an opt-out preference signal sent in accordance with the provisions of subparagraph (A) of this subdivision conflicts with the consumer's existing controller-specific privacy setting or voluntary participation in a controller's bona fide loyalty, rewards, premium features, discounts or club card program, the controller shall comply with such consumer's opt-out preference signal but may notify such consumer of such conflict and provide to such consumer the choice to confirm such controller-specific privacy setting or participation in such program. (2) If a controller responds to consumer opt‐out requests received pursuant to subparagraph (A) of subdivision (1) of this subsection by informing the consumer of a charge for the use of any product or service, the controller shall present the terms of any financial incentive offered pursuant to subsection (b) of this section for the retention, use, sale or sharing of the consumer's personal data.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                }
+            ]
+        },
+        {
+            "number": "42-521",
+            "code": "Sec. 42-521",
+            "name": "Processors' duties. Contracts between controllers and processors",
+            "part": "Part I",
+            "controls": [
+                {
+                    "id": "42-521(a)",
+                    "number": "42-521(a)",
+                    "text": "A processor shall adhere to the instructions of a controller and shall assist the controller in meeting the controller's obligations under sections 42-515 to 42-525, inclusive. Such assistance shall include: (1) Taking into account the nature of processing and the information available to the processor, by appropriate technical and organizational measures, insofar as is reasonably practicable, to fulfill the controller's obligation to respond to consumer rights requests; (2) taking into account the nature of processing and the information available to the processor, by assisting the controller in meeting the controller's obligations in relation to the security of processing the personal data and in relation to the notification of a breach of security, as defined in section 36a-701b, of the system of the processor, in order to meet the controller's obligations; and (3) providing necessary information to enable the controller to conduct and document data protection assessments.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "42-521(a)(1)",
+                            "text": "Taking into account the nature of processing and the information available to the processor, by appropriate technical and organizational measures, insofar as is reasonably practicable, to fulfill the controller's obligation to respond to consumer rights requests;",
+                            "description": "A processor shall adhere to the instructions of a controller and shall assist the controller in meeting the controller's obligations under sections 42-515 to 42-525, inclusive. Such assistance shall include: taking into account the nature of processing and the information available to the processor, by appropriate technical and organizational measures, insofar as is reasonably practicable, to fulfill the controller's obligation to respond to consumer rights requests.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-521(a)(2)",
+                            "text": "taking into account the nature of processing and the information available to the processor, by assisting the controller in meeting the controller's obligations in relation to the security of processing the personal data and in relation to the notification of a breach of security, as defined in section 36a-701b, of the system of the processor, in order to meet the controller's obligations;",
+                            "description": "A processor shall adhere to the instructions of a controller and shall assist the controller in meeting the controller's obligations under sections 42-515 to 42-525, inclusive. Such assistance shall include: taking into account the nature of processing and the information available to the processor, by assisting the controller in meeting the controller's obligations in relation to the security of processing the personal data and in relation to the notification of a breach of security, as defined in section 36a-701b, of the system of the processor, in order to meet the controller's obligations.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-521(a)(3)",
+                            "text": "providing necessary information to enable the controller to conduct and document data protection assessments.",
+                            "description": "A processor shall adhere to the instructions of a controller and shall assist the controller in meeting the controller's obligations under sections 42-515 to 42-525, inclusive. Such assistance shall include: providing necessary information to enable the controller to conduct and document data protection assessments.",
+                            "source": "cgs"
+                        }
+                    ],
+                    "source": "cgs"
+                },
+                {
+                    "id": "42-521(b)",
+                    "number": "42-521(b)",
+                    "text": "A contract between a controller and a processor shall govern the processor's data processing procedures with respect to processing performed on behalf of the controller. The contract shall be binding and clearly set forth instructions for processing data, the nature and purpose of processing, the type of data subject to processing, the duration of processing and the rights and obligations of both parties. The contract shall also require that the processor: (1) Ensure that each person processing personal data is subject to a duty of confidentiality with respect to the data; (2) at the controller's direction, delete or return all personal data to the controller as requested at the end of the provision of services, unless retention of the personal data is required by law; (3) upon the reasonable request of the controller, make available to the controller all information in its possession necessary to demonstrate the processor's compliance with the obligations in sections 42-515 to 42-525, inclusive; (4) after providing the controller an opportunity to object, engage any subcontractor pursuant to a written contract that requires the subcontractor to meet the obligations of the processor with respect to the personal data; and (5) allow, and cooperate with, reasonable assessments by the controller or the controller's designated assessor, or the processor may arrange for a qualified and independent assessor to conduct an assessment of the processor's policies and technical and organizational measures in support of the obligations under sections 42-515 to 42-525, inclusive, using an appropriate and accepted control standard or framework and assessment procedure for such assessments. The processor shall provide a report of such assessment to the controller upon request.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "42-521(b)(1)",
+                            "text": "Ensure that each person processing personal data is subject to a duty of confidentiality with respect to the data;",
+                            "description": "The contract shall also require that the processor: ensure that each person processing personal data is subject to a duty of confidentiality with respect to the data.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-521(b)(2)",
+                            "text": "at the controller's direction, delete or return all personal data to the controller as requested at the end of the provision of services, unless retention of the personal data is required by law;",
+                            "description": "The contract shall also require that the processor: at the controller's direction, delete or return all personal data to the controller as requested at the end of the provision of services, unless retention of the personal data is required by law.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-521(b)(3)",
+                            "text": "upon the reasonable request of the controller, make available to the controller all information in its possession necessary to demonstrate the processor's compliance with the obligations in sections 42-515 to 42-525, inclusive;",
+                            "description": "The contract shall also require that the processor: upon the reasonable request of the controller, make available to the controller all information in its possession necessary to demonstrate the processor's compliance with the obligations in sections 42-515 to 42-525, inclusive.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-521(b)(4)",
+                            "text": "after providing the controller an opportunity to object, engage any subcontractor pursuant to a written contract that requires the subcontractor to meet the obligations of the processor with respect to the personal data;",
+                            "description": "The contract shall also require that the processor: after providing the controller an opportunity to object, engage any subcontractor pursuant to a written contract that requires the subcontractor to meet the obligations of the processor with respect to the personal data.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-521(b)(5)",
+                            "text": "allow, and cooperate with, reasonable assessments by the controller or the controller's designated assessor, or the processor may arrange for a qualified and independent assessor to conduct an assessment of the processor's policies and technical and organizational measures in support of the obligations under sections 42-515 to 42-525, inclusive, using an appropriate and accepted control standard or framework and assessment procedure for such assessments. The processor shall provide a report of such assessment to the controller upon request.",
+                            "source": "cgs"
+                        }
+                    ],
+                    "source": "cgs"
+                }
+            ]
+        },
+        {
+            "number": "42-522",
+            "code": "Sec. 42-522",
+            "name": "Controllers' data protection assessments. Disclosure to Attorney General",
+            "part": "Part I",
+            "controls": [
+                {
+                    "id": "42-522(a)",
+                    "number": "42-522(a)",
+                    "text": "A controller shall conduct and document a data protection assessment for each of the controller's processing activities that presents a heightened risk of harm to a consumer. For the purposes of this section, processing that presents a heightened risk of harm to a consumer includes: (1) The processing of personal data for the purposes of targeted advertising; (2) the sale of personal data; (3) the processing of personal data for the purposes of profiling, where such profiling presents a reasonably foreseeable risk of (A) unfair or deceptive treatment of, or unlawful disparate impact on, consumers, (B) financial, physical or reputational injury to consumers, (C) a physical or other intrusion upon the solitude or seclusion, or the private affairs or concerns, of consumers, where such intrusion would be offensive to a reasonable person, or (D) other substantial injury to consumers; and (4) the processing of sensitive data.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                },
+                {
+                    "id": "42-522(b)",
+                    "number": "42-522(b)",
+                    "text": "Data protection assessments conducted pursuant to subsection (a) of this section shall identify and weigh the benefits that may flow, directly and indirectly, from the processing to the controller, the consumer, other stakeholders and the public against the potential risks to the rights of the consumer associated with such processing, as mitigated by safeguards that can be employed by the controller to reduce such risks. The controller shall factor into any such data protection assessment the use of de-identified data and the reasonable expectations of consumers, as well as the context of the processing and the relationship between the controller and the consumer whose personal data will be processed.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                },
+                {
+                    "id": "42-522(c)",
+                    "number": "42-522(c)",
+                    "text": "The Attorney General may require that a controller disclose any data protection assessment that is relevant to an investigation conducted by the Attorney General, and the controller shall make the data protection assessment available to the Attorney General. The Attorney General may evaluate the data protection assessment for compliance with the responsibilities set forth in sections 42-515 to 42-525, inclusive. Data protection assessments shall be confidential and shall be exempt from disclosure under the Freedom of Information Act, as defined in section 1-200. To the extent any information contained in a data protection assessment disclosed to the Attorney General includes information subject to attorney-client privilege or work product protection, such disclosure shall not constitute a waiver of such privilege or protection.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                }
+            ]
+        },
+        {
+            "number": "42-523",
+            "code": "Sec. 42-523",
+            "name": "De-identified and pseudonymous data. Controllers' duties. Exceptions. Applicability of consumers' rights. Disclosure and oversight",
+            "part": "Part I",
+            "controls": [
+                {
+                    "id": "42-523(a)",
+                    "number": "42-523(a)",
+                    "text": "Any controller in possession of de-identified data shall: (1) Take reasonable measures to ensure that the data cannot be associated with an individual; (2) publicly commit to maintaining and using de-identified data without attempting to re-identify the data; and (3) contractually obligate any recipients of the de-identified data to comply with all provisions of sections 42-515 to 42-525, inclusive.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "42-523(a)(1)",
+                            "text": "Take reasonable measures to ensure that the data cannot be associated with an individual;",
+                            "description": "Any controller in possession of de-identified data shall: take reasonable measures to ensure that the data cannot be associated with an individual.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-523(a)(2)",
+                            "text": "publicly commit to maintaining and using de-identified data without attempting to re-identify the data;",
+                            "description": "Any controller in possession of de-identified data shall: publicly commit to maintaining and using de-identified data without attempting to re-identify the data.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-523(a)(3)",
+                            "text": "contractually obligate any recipients of the de-identified data to comply with all provisions of sections 42-515 to 42-525, inclusive.",
+                            "description": "Any controller in possession of de-identified data shall: contractually obligate any recipients of the de-identified data to comply with all provisions of sections 42-515 to 42-525, inclusive.",
+                            "source": "cgs"
+                        }
+                    ],
+                    "source": "cgs"
+                },
+                {
+                    "id": "42-523(e)",
+                    "number": "42-523(e)",
+                    "text": "A controller that discloses pseudonymous data or de-identified data shall exercise reasonable oversight to monitor compliance with any contractual commitments to which the pseudonymous data or de-identified data is subject and shall take appropriate steps to address any breaches of those contractual commitments.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                }
+            ]
+        },
+        {
+            "number": "42-526",
+            "code": "Sec. 42-526",
+            "name": "Consumer health data privacy. Disclosure, access and geofencing. Exemptions",
+            "part": "Part I",
+            "controls": [
+                {
+                    "id": "42-526(a)",
+                    "number": "42-526(a)",
+                    "text": "(1) Except as provided in subsection (b) of this section, subsections (b) and (c) of section 42-517 and section 42-524, no person shall: (A) Provide any employee or contractor with access to consumer health data unless the employee or contractor is subject to a contractual or statutory duty of confidentiality; (B) provide any processor with access to consumer health data unless such person and processor comply with section 42-521; (C) use a geofence to establish a virtual boundary that is within one thousand seven hundred fifty feet of any mental health facility or reproductive or sexual health facility for the purpose of identifying, tracking, collecting data from or sending any notification to a consumer regarding the consumer's consumer health data; or (D) sell, or offer to sell, consumer health data without first obtaining the consumer's consent. (2) Notwithstanding section 42-516, the provisions of subsection (a) of this section, and the provisions of section 42-515, and sections 42-517 to 42-525, inclusive, concerning consumer health data and consumer health data controllers, apply to persons that conduct business in this state and persons that produce products or services that are targeted to residents of this state.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                }
+            ]
+        },
+        {
+            "number": "42-528",
+            "code": "Sec. 42-528",
+            "name": "Social media platforms and minors. Request to unpublish or delete minor's account. Enforcement. Penalty",
+            "part": "Part I",
+            "controls": [
+                {
+                    "id": "42-528(b)",
+                    "number": "42-528(b)",
+                    "text": "(1) Not later than fifteen business days after a social media platform receives a request from a minor or, if the minor is younger than sixteen years of age, from such minor's parent or legal guardian to unpublish such minor's social media platform account, the social media platform shall unpublish such minor's social media platform account. (2) Not later than forty-five business days after a social media platform receives a request from a minor or, if the minor is younger than sixteen years of age, from such minor's parent or legal guardian to delete such minor's social media platform account, the social media platform shall delete such minor's social media platform account and cease processing such minor's personal data except where the preservation of such minor's social media platform account or personal data is otherwise permitted or required by applicable law, including, but not limited to, sections 42-515 to 42-525, inclusive. A social media platform may extend such forty-five business day period by an additional forty-five business days if such extension is reasonably necessary considering the complexity and number of the consumer's requests, provided the social media platform informs the minor or, if the minor is younger than sixteen years of age, such minor's parent or legal guardian within the initial forty-five business day response period of such extension and the reason for such extension. (3) A social media platform shall establish, and shall describe in a privacy notice, one or more secure and reliable means for submitting a request pursuant to this subsection. A social media platform that provides a mechanism for a minor or, if the minor is younger than sixteen years of age, the minor's parent or legal guardian to initiate a process to delete or unpublish such minor's social media platform account shall be deemed to be in compliance with the provisions of this subsection.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                },
+                {
+                    "id": "42-528(c)",
+                    "number": "42-528(c)",
+                    "text": "If a social media platform is unable to authenticate a request submitted under subsection (b) of this section, the social media platform shall (1) not be required to comply with such request, and (2) provide a notice to the consumer who submitted such request disclosing that such social media platform (A) is unable to authenticate such request, and (B) will not be able to authenticate such request until such consumer provides the additional information that is reasonably necessary to authenticate such request.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                }
+            ]
+        },
+        {
+            "number": "42-529a",
+            "code": "Sec. 42-529a",
+            "name": "Controllers' duties. Consumer consent",
+            "part": "Part II",
+            "controls": [
+                {
+                    "id": "42-529a(a)",
+                    "number": "42-529a(a)",
+                    "text": "Each controller that offers any online service, product or feature to consumers whom such controller has actual knowledge, or wilfully disregards, are minors shall use reasonable care to avoid any heightened risk of harm to minors caused by such online service, product or feature. In any enforcement action brought by the Attorney General pursuant to section 42-529e, there shall be a rebuttable presumption that a controller used reasonable care as required under this section if the controller complied with the provisions of section 42-529b concerning data protection assessments.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                },
+                {
+                    "id": "42-529a(b)",
+                    "number": "42-529a(b)",
+                    "text": "(1) Subject to the consent requirement established in subdivision (3) of this subsection, no controller that offers any online service, product or feature to consumers whom such controller has actual knowledge, or wilfully disregards, are minors shall: (A) Process any minor's personal data (i) for the purposes of (I) targeted advertising, (II) any sale of personal data, or (III) profiling in furtherance of any fully automated decision made by such controller that produces any legal or similarly significant effect concerning the provision or denial by such controller of any financial or lending services, housing, insurance, education enrollment or opportunity, criminal justice, employment opportunity, health care services or access to essential goods or services, (ii) unless such processing is reasonably necessary to provide such online service, product or feature, (iii) for any processing purpose (I) other than the processing purpose that the controller disclosed at the time such controller collected such personal data, or (II) that is reasonably necessary for, and compatible with, the processing purpose described in subparagraph (A)(iii)(I) of this subdivision, or (iv) for longer than is reasonably necessary to provide such online service, product or feature; or (B) use any system design feature to significantly increase, sustain or extend any minor's use of such online service, product or feature. The provisions of this subdivision shall not apply to any service or application that is used by and under the direction of an educational entity, including, but not limited to, a learning management system or a student engagement program. (2) Subject to the consent requirement established in subdivision (3) of this subsection, no controller that offers an online service, product or feature to consumers whom such controller has actual knowledge, or wilfully disregards, are minors shall collect a minor's precise geolocation data unless: (A) Such precise geolocation data is reasonably necessary for the controller to provide such online service, product or feature and, if such data is necessary to provide such online service, product or feature, such controller may only collect such data for the time necessary to provide such online service, product or feature; and (B) the controller provides to the minor a signal indicating that such controller is collecting such precise geolocation data, which signal shall be available to such minor for the entire duration of such collection. (3) No controller shall engage in the activities described in subdivisions (1) and (2) of this subsection unless the controller obtains the minor's consent or, if the minor is younger than thirteen years of age, the consent of such minor's parent or legal guardian. A controller that complies with the verifiable parental consent requirements established in the Children's Online Privacy Protection Act of 1998, 15 USC 6501 et seq., and the regulations, rules, guidance and exemptions adopted pursuant to said act, as said act and such regulations, rules, guidance and exemptions may be amended from time to time, shall be deemed to have satisfied any requirement to obtain parental consent under this subdivision.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                },
+                {
+                    "id": "42-529a(c)",
+                    "number": "42-529a(c)",
+                    "text": "(1) No controller that offers any online service, product or feature to consumers whom such controller has actual knowledge, or wilfully disregards, are minors shall: (A) Provide any consent mechanism that is designed to substantially subvert or impair, or is manipulated with the effect of substantially subverting or impairing, user autonomy, decision-making or choice; or (B) except as provided in subdivision (2) of this subsection, offer any direct messaging apparatus for use by minors without providing readily accessible and easy-to-use safeguards to limit the ability of adults to send unsolicited communications to minors with whom they are not connected. (2) The provisions of subparagraph (B) of subdivision (1) of this subsection shall not apply to services where the predominant or exclusive function is: (A) Electronic mail; or (B) direct messaging consisting of text, photos or videos that are sent between devices by electronic means, where messages are (i) shared between the sender and the recipient, (ii) only visible to the sender and the recipient, and (iii) not posted publicly.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                }
+            ]
+        },
+        {
+            "number": "42-529b",
+            "code": "Sec. 42-529b",
+            "name": "Controllers' data protections assessments. Review, record keeping, confidentiality and disclosure. Risk mitigation plan",
+            "part": "Part II",
+            "controls": [
+                {
+                    "id": "42-529b(a)",
+                    "number": "42-529b(a)",
+                    "text": "Each controller that, on or after October 1, 2024, offers any online service, product or feature to consumers whom such controller has actual knowledge, or wilfully disregards, are minors shall conduct a data protection assessment for such online service, product or feature: (1) In a manner that is consistent with the requirements established in section 42-522; and (2) that addresses (A) the purpose of such online service, product or feature, (B) the categories of minors' personal data that such online service, product or feature processes, (C) the purposes for which such controller processes minors' personal data with respect to such online service, product or feature, and (D) any heightened risk of harm to minors that is a reasonably foreseeable result of offering such online service, product or feature to minors.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "42-529b(a)(1)",
+                            "text": "In a manner that is consistent with the requirements established in section 42-522;",
+                            "description": "Each controller that, on or after October 1, 2024, offers any online service, product or feature to consumers whom such controller has actual knowledge, or wilfully disregards, are minors shall conduct a data protection assessment for such online service, product or feature: in a manner that is consistent with the requirements established in section 42-522.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-529b(a)(2)",
+                            "text": "that addresses (A) the purpose of such online service, product or feature, (B) the categories of minors' personal data that such online service, product or feature processes, (C) the purposes for which such controller processes minors' personal data with respect to such online service, product or feature, and (D) any heightened risk of harm to minors that is a reasonably foreseeable result of offering such online service, product or feature to minors.",
+                            "description": "Each controller that, on or after October 1, 2024, offers any online service, product or feature to consumers whom such controller has actual knowledge, or wilfully disregards, are minors shall conduct a data protection assessment for such online service, product or feature: that addresses (A) the purpose of such online service, product or feature, (B) the categories of minors' personal data that such online service, product or feature processes, (C) the purposes for which such controller processes minors' personal data with respect to such online service, product or feature, and (D) any heightened risk of harm to minors that is a reasonably foreseeable result of offering such online service, product or feature to minors.",
+                            "source": "cgs"
+                        }
+                    ],
+                    "source": "cgs"
+                },
+                {
+                    "id": "42-529b(b)",
+                    "number": "42-529b(b)",
+                    "text": "Each controller that conducts a data protection assessment pursuant to subsection (a) of this section shall: (1) Review such data protection assessment as necessary to account for any material change to the processing operations of the online service, product or feature that is the subject of such data protection assessment; and (2) maintain documentation concerning such data protection assessment for the longer of (A) the three-year period beginning on the date on which such processing operations cease, or (B) as long as such controller offers such online service, product or feature.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "42-529b(b)(1)",
+                            "text": "Review such data protection assessment as necessary to account for any material change to the processing operations of the online service, product or feature that is the subject of such data protection assessment;",
+                            "description": "Each controller that conducts a data protection assessment pursuant to subsection (a) of this section shall: review such data protection assessment as necessary to account for any material change to the processing operations of the online service, product or feature that is the subject of such data protection assessment.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-529b(b)(2)",
+                            "text": "maintain documentation concerning such data protection assessment for the longer of (A) the three-year period beginning on the date on which such processing operations cease, or (B) as long as such controller offers such online service, product or feature.",
+                            "description": "Each controller that conducts a data protection assessment pursuant to subsection (a) of this section shall: maintain documentation concerning such data protection assessment for the longer of (A) the three-year period beginning on the date on which such processing operations cease, or (B) as long as such controller offers such online service, product or feature.",
+                            "source": "cgs"
+                        }
+                    ],
+                    "source": "cgs"
+                },
+                {
+                    "id": "42-529b(e)",
+                    "number": "42-529b(e)",
+                    "text": "If any controller conducts a data protection assessment pursuant to subsection (a) of this section and determines that the online service, product or feature that is the subject of such assessment poses a heightened risk of harm to minors, such controller shall establish and implement a plan to mitigate or eliminate such risk.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                }
+            ]
+        },
+        {
+            "number": "42-529c",
+            "code": "Sec. 42-529c",
+            "name": "Processors' duties. Contracts between controllers and processors",
+            "part": "Part II",
+            "controls": [
+                {
+                    "id": "42-529c(a)",
+                    "number": "42-529c(a)",
+                    "text": "A processor shall adhere to the instructions of a controller, and shall: (1) Assist the controller in meeting the controller's obligations under sections 42-529 to 42-529e, inclusive, taking into account (A) the nature of the processing, (B) the information available to the processor by appropriate technical and organizational measures, and (C) whether such assistance is reasonably practicable and necessary to assist the controller in meeting such obligations; and (2) provide any information that is necessary to enable the controller to conduct and document data protection assessments.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "42-529c(a)(1)",
+                            "text": "Assist the controller in meeting the controller's obligations under sections 42-529 to 42-529e, inclusive, taking into account (A) the nature of the processing, (B) the information available to the processor by appropriate technical and organizational measures, and (C) whether such assistance is reasonably practicable and necessary to assist the controller in meeting such obligations;",
+                            "description": "A processor shall adhere to the instructions of a controller, and shall: assist the controller in meeting the controller's obligations under sections 42-529 to 42-529e, inclusive, taking into account (A) the nature of the processing, (B) the information available to the processor by appropriate technical and organizational measures, and (C) whether such assistance is reasonably practicable and necessary to assist the controller in meeting such obligations.",
+                            "source": "cgs"
+                        },
+                        {
+                            "id": "42-529c(a)(2)",
+                            "text": "provide any information that is necessary to enable the controller to conduct and document data protection assessments.",
+                            "description": "A processor shall adhere to the instructions of a controller, and shall: provide any information that is necessary to enable the controller to conduct and document data protection assessments.",
+                            "source": "cgs"
+                        }
+                    ],
+                    "source": "cgs"
+                },
+                {
+                    "id": "42-529c(b)",
+                    "number": "42-529c(b)",
+                    "text": "A contract between a controller and a processor shall satisfy the requirements established in subsection (b) of section 42-521.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "cgs"
+                }
+            ]
+        }
+    ]
+}

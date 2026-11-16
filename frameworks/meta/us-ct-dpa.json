@@ -1,0 +1,143 @@
+{
+    "key": "us-ct-dpa",
+    "name": "Connecticut Data Privacy Act",
+    "version": "General Statutes as published November 2026",
+    "full_name": "Connecticut Data Privacy Act and the online privacy duties toward minors (Connecticut General Statutes, Chapter 743jj, sections 42-515 to 42-529e)",
+    "issuing_body": "State of Connecticut; published by the Connecticut General Assembly",
+    "standard_codes": [
+        "US-CT-DPA"
+    ],
+    "aliases": [
+        "CTDPA",
+        "Connecticut CTDPA",
+        "Connecticut Data Privacy Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against Chapter 743jj of the Connecticut General Statutes as published by the General Assembly in November 2026.",
+    "sources": [
+        {
+            "id": "cgs",
+            "title": "Connecticut General Statutes, Chapter 743jj, Data Privacy and Security (chapter page)",
+            "version": "as published November 2026",
+            "publisher": "Connecticut General Assembly",
+            "url": "https://www.cga.ct.gov/current/pub/chap_743jj.htm",
+            "file": "us-ct-dpa/chap_743jj.htm",
+            "sha256": "ff6266b5a7ba0087ec489b463e1cff1cca3dd7be874a488aec01585d5396e633"
+        }
+    ],
+    "source_of": {
+        "controls": "cgs",
+        "objectives": "cgs"
+    },
+    "control_flags": {
+        "objectives": "The numbered items a subsection lists inline, only where every one must be met."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "cgs",
+            "cite": "Conn. Gen. Stat. 42-518 to 42-529c"
+        },
+        {
+            "id": "thresholds",
+            "type": "applicability",
+            "summary": "Part I applies to businesses that controlled or processed personal data of at least 100,000 consumers in the preceding year, or of at least 25,000 consumers while deriving over 25% of gross revenue from selling personal data.",
+            "source": "cgs",
+            "cite": "Conn. Gen. Stat. 42-516",
+            "quote": "controlled or processed the personal data of not less than"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "42-518(c)",
+            "days": 45,
+            "from": "receipt of the request",
+            "summary": "A consumer rights request is answered without undue delay and within 45 days of receipt; the period may be extended once by 45 days.",
+            "source": "cgs",
+            "cite": "Conn. Gen. Stat. 42-518(c)(1)",
+            "quote": "not later than forty-five days after receipt of the request."
+        },
+        {
+            "id": "appeal_deadline",
+            "type": "deadline",
+            "control": "42-518(d)",
+            "days": 60,
+            "from": "receipt of the appeal",
+            "summary": "An appeal of a refused request is decided and answered in writing within 60 days of receipt.",
+            "source": "cgs",
+            "cite": "Conn. Gen. Stat. 42-518(d)",
+            "quote": "Not later than sixty days after receipt of an appeal, a controller shall inform the consumer in writing"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "A violation is an unfair trade practice under the Connecticut Unfair Trade Practices Act, enforced by the Attorney General.",
+            "source": "cgs",
+            "cite": "Conn. Gen. Stat. 42-525",
+            "quote": "unfair trade practice for purposes of section"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "CTDPA",
+            "definition": "The Connecticut Data Privacy Act, Connecticut's comprehensive consumer privacy law, in force since 1 July 2023."
+        },
+        {
+            "term": "Controller",
+            "definition": "The person that, alone or jointly with others, determines the purpose and means of processing personal data."
+        },
+        {
+            "term": "Processor",
+            "definition": "A person that processes personal data on behalf of a controller."
+        },
+        {
+            "term": "Consumer health data",
+            "definition": "Personal data a controller uses to identify a consumer's physical or mental health condition or diagnosis, including gender-affirming and reproductive or sexual health data."
+        },
+        {
+            "term": "Heightened risk of harm to minors",
+            "definition": "Processing of a minor's personal data in a way that presents a reasonably foreseeable risk of unfair treatment, financial or physical injury, or intrusion on the minor's privacy; Part II requires assessments and safeguards for it."
+        }
+    ]
+}
