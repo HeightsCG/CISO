@@ -1,0 +1,933 @@
+{
+    "key": "au-privacy",
+    "name": "Australian Privacy Act",
+    "version": "compilation No. 104",
+    "full_name": "Privacy Act 1988 (Cth): the Australian Privacy Principles (Schedule 1) and the notifiable data breaches scheme (Part IIIC)",
+    "issuing_body": "Parliament of Australia; compiled by the Office of Parliamentary Counsel",
+    "standard_codes": [
+        "AU-PRIVACY"
+    ],
+    "aliases": [
+        "Privacy Act 1988",
+        "Australian Privacy Principles",
+        "APPs",
+        "Notifiable Data Breaches"
+    ],
+    "content_licence": "open",
+    "notice": "Assessed against compilation No. 104 of the Privacy Act 1988 (registered 17 June 2026, in force from 4 June 2026). Amendments commencing on 10 December 2026 add transparency duties for automated decisions to APP 1 and are not in this compilation. Contains material from the Federal Register of Legislation licensed under CC BY 4.0.",
+    "sources": [
+        {
+            "id": "privacyact",
+            "title": "Privacy Act 1988, compilation No. 104 (C2026C00227), Word version",
+            "version": "compilation No. 104, in force from 4 June 2026",
+            "publisher": "Federal Register of Legislation, Office of Parliamentary Counsel",
+            "url": "https://www.legislation.gov.au/C2004A03712/2026-06-04/2026-06-04/text/original/word",
+            "file": "au-privacy/C2026C00227.docx",
+            "date": "2026-06-04",
+            "sha256": "877b0f717e01d69b071ac3a93a48019bf8a9073322b751fb9b8553f1583bdf7d"
+        }
+    ],
+    "source_of": {
+        "controls": "privacyact",
+        "objectives": "privacyact"
+    },
+    "control_flags": {
+        "objectives": "The lettered paragraphs of a requirement, only where every one must be met. Where the paragraphs are alternatives or conditions, the requirement is assessed whole."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "principle",
+        "families": "principles",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "privacyact",
+            "cite": "Privacy Act 1988, Schedule 1 and Part IIIC"
+        },
+        {
+            "id": "agency_or_organisation",
+            "type": "applicability",
+            "summary": "Some principles bind agencies and organisations differently; a requirement written for the kind of APP entity the client is not is marked not applicable.",
+            "source": "privacyact",
+            "cite": "APP 3.1 and 3.2",
+            "quote": "If an APP entity is an agency, the entity must not collect personal information (other than sensitive information) unless"
+        },
+        {
+            "id": "access_deadline_agency",
+            "type": "deadline",
+            "control": "APP 12.4",
+            "days": 30,
+            "from": "the request being made",
+            "summary": "An agency responds to a request for access within 30 days; an organisation within a reasonable period.",
+            "source": "privacyact",
+            "cite": "APP 12.4(a)",
+            "quote": "if the entity is an agency-within 30 days after the request is made"
+        },
+        {
+            "id": "breach_assessment",
+            "type": "deadline",
+            "control": "s 26WH(2)",
+            "days": 30,
+            "from": "becoming aware of grounds to suspect an eligible data breach",
+            "summary": "A suspected eligible data breach is assessed, and the assessment completed within 30 days of becoming aware of it.",
+            "source": "privacyact",
+            "cite": "s 26WH(2)(b)",
+            "quote": "take all reasonable steps to ensure that the assessment is completed within 30 days after the entity becomes aware as mentioned in paragraph (1)(a)."
+        },
+        {
+            "id": "breach_notification",
+            "type": "applicability",
+            "control": "s 26WL(3)",
+            "summary": "An eligible data breach is notified to the Commissioner and to affected individuals as soon as practicable.",
+            "source": "privacyact",
+            "cite": "s 26WL(3)",
+            "quote": "The entity must comply with subsection (2) as soon as practicable after the completion of the preparation of the statement."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "A serious interference with privacy by a body corporate can attract a civil penalty of up to the greatest of $50 million, three times the benefit obtained, or 30% of adjusted turnover in the breach period.",
+            "source": "privacyact",
+            "cite": "Privacy Act 1988 s 13G(3)",
+            "quote": "The amount of the penalty for a contravention of subsection (1) by a body corporate is an amount not more than the greatest of the following:"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "APP",
+            "definition": "Australian Privacy Principle: one of the thirteen principles in Schedule 1 of the Privacy Act 1988 that govern how APP entities handle personal information."
+        },
+        {
+            "term": "APP entity",
+            "definition": "An Australian Government agency, or an organisation (generally a business with annual turnover above $3 million, or one of the smaller businesses the Act names), that must comply with the APPs."
+        },
+        {
+            "term": "Eligible data breach",
+            "definition": "Unauthorised access to, disclosure of or loss of personal information that is likely to result in serious harm to an individual, where remedial action has not removed that likelihood."
+        },
+        {
+            "term": "Commissioner",
+            "definition": "The Australian Information Commissioner, who receives data breach statements and regulates compliance with the Act."
+        },
+        {
+            "term": "Sensitive information",
+            "definition": "Information about racial or ethnic origin, political opinions, religious beliefs, sexual orientation, criminal record and similar matters, and health, genetic and biometric information."
+        }
+    ],
+    "display_name": "Australian Privacy Act (compilation No. 104)",
+    "counts": {
+        "families": 14,
+        "controls": 42,
+        "objectives": 31
+    },
+    "families": [
+        {
+            "number": "APP 1",
+            "code": "APP 1",
+            "name": "Open and transparent management of personal information",
+            "part": "Schedule 1, Part 1: Consideration of personal information privacy",
+            "controls": [
+                {
+                    "id": "APP 1.2",
+                    "number": "APP 1.2",
+                    "title": "Compliance with the Australian Privacy Principles etc.",
+                    "text": "An APP entity must take such steps as are reasonable in the circumstances to implement practices, procedures and systems relating to the entity's functions or activities that: (a) will ensure that the entity complies with the Australian Privacy Principles and a registered APP code (if any) that binds the entity; and (b) will enable the entity to deal with inquiries or complaints from individuals about the entity's compliance with the Australian Privacy Principles or such a code.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "APP 1.2(a)",
+                            "text": "will ensure that the entity complies with the Australian Privacy Principles and a registered APP code (if any) that binds the entity; and",
+                            "description": "An APP entity must take such steps as are reasonable in the circumstances to implement practices, procedures and systems relating to the entity's functions or activities that: will ensure that the entity complies with the Australian Privacy Principles and a registered APP code (if any) that binds the entity.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "APP 1.2(b)",
+                            "text": "will enable the entity to deal with inquiries or complaints from individuals about the entity's compliance with the Australian Privacy Principles or such a code.",
+                            "description": "An APP entity must take such steps as are reasonable in the circumstances to implement practices, procedures and systems relating to the entity's functions or activities that: will enable the entity to deal with inquiries or complaints from individuals about the entity's compliance with the Australian Privacy Principles or such a code.",
+                            "source": "privacyact"
+                        }
+                    ],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 1.3",
+                    "number": "APP 1.3",
+                    "title": "APP Privacy policy",
+                    "text": "An APP entity must have a clearly expressed and up-to-date policy (the APP privacy policy) about the management of personal information by the entity.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 1.4",
+                    "number": "APP 1.4",
+                    "title": "",
+                    "text": "Without limiting subclause 1.3, the APP privacy policy of the APP entity must contain the following information: (a) the kinds of personal information that the entity collects and holds; (b) how the entity collects and holds personal information; (c) the purposes for which the entity collects, holds, uses and discloses personal information; (d) how an individual may access personal information about the individual that is held by the entity and seek the correction of such information; (e) how an individual may complain about a breach of the Australian Privacy Principles, or a registered APP code (if any) that binds the entity, and how the entity will deal with such a complaint; (f) whether the entity is likely to disclose personal information to overseas recipients; (g) if the entity is likely to disclose personal information to overseas recipients-the countries in which such recipients are likely to be located if it is practicable to specify those countries in the policy.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "APP 1.4(a)",
+                            "text": "the kinds of personal information that the entity collects and holds;",
+                            "description": "Without limiting subclause 1.3, the APP privacy policy of the APP entity must contain the following information: the kinds of personal information that the entity collects and holds.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "APP 1.4(b)",
+                            "text": "how the entity collects and holds personal information;",
+                            "description": "Without limiting subclause 1.3, the APP privacy policy of the APP entity must contain the following information: how the entity collects and holds personal information.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "APP 1.4(c)",
+                            "text": "the purposes for which the entity collects, holds, uses and discloses personal information;",
+                            "description": "Without limiting subclause 1.3, the APP privacy policy of the APP entity must contain the following information: the purposes for which the entity collects, holds, uses and discloses personal information.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "APP 1.4(d)",
+                            "text": "how an individual may access personal information about the individual that is held by the entity and seek the correction of such information;",
+                            "description": "Without limiting subclause 1.3, the APP privacy policy of the APP entity must contain the following information: how an individual may access personal information about the individual that is held by the entity and seek the correction of such information.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "APP 1.4(e)",
+                            "text": "how an individual may complain about a breach of the Australian Privacy Principles, or a registered APP code (if any) that binds the entity, and how the entity will deal with such a complaint;",
+                            "description": "Without limiting subclause 1.3, the APP privacy policy of the APP entity must contain the following information: how an individual may complain about a breach of the Australian Privacy Principles, or a registered APP code (if any) that binds the entity, and how the entity will deal with such a complaint.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "APP 1.4(f)",
+                            "text": "whether the entity is likely to disclose personal information to overseas recipients;",
+                            "description": "Without limiting subclause 1.3, the APP privacy policy of the APP entity must contain the following information: whether the entity is likely to disclose personal information to overseas recipients.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "APP 1.4(g)",
+                            "text": "if the entity is likely to disclose personal information to overseas recipients-the countries in which such recipients are likely to be located if it is practicable to specify those countries in the policy.",
+                            "description": "Without limiting subclause 1.3, the APP privacy policy of the APP entity must contain the following information: if the entity is likely to disclose personal information to overseas recipients-the countries in which such recipients are likely to be located if it is practicable to specify those countries in the policy.",
+                            "source": "privacyact"
+                        }
+                    ],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 1.5",
+                    "number": "APP 1.5",
+                    "title": "Availability of APP privacy policy etc.",
+                    "text": "An APP entity must take such steps as are reasonable in the circumstances to make its APP privacy policy available: (a) free of charge; and (b) in such form as is appropriate.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "APP 1.5(a)",
+                            "text": "free of charge; and",
+                            "description": "An APP entity must take such steps as are reasonable in the circumstances to make its APP privacy policy available: free of charge.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "APP 1.5(b)",
+                            "text": "in such form as is appropriate.",
+                            "description": "An APP entity must take such steps as are reasonable in the circumstances to make its APP privacy policy available: in such form as is appropriate.",
+                            "source": "privacyact"
+                        }
+                    ],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 1.6",
+                    "number": "APP 1.6",
+                    "title": "",
+                    "text": "If a person or body requests a copy of the APP privacy policy of an APP entity in a particular form, the entity must take such steps as are reasonable in the circumstances to give the person or body a copy in that form.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                }
+            ]
+        },
+        {
+            "number": "APP 2",
+            "code": "APP 2",
+            "name": "Anonymity and pseudonymity",
+            "part": "Schedule 1, Part 1: Consideration of personal information privacy",
+            "controls": [
+                {
+                    "id": "APP 2.1",
+                    "number": "APP 2.1",
+                    "title": "",
+                    "text": "Individuals must have the option of not identifying themselves, or of using a pseudonym, when dealing with an APP entity in relation to a particular matter.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                }
+            ]
+        },
+        {
+            "number": "APP 3",
+            "code": "APP 3",
+            "name": "Collection of solicited personal information",
+            "part": "Schedule 1, Part 2: Collection of personal information",
+            "controls": [
+                {
+                    "id": "APP 3.1",
+                    "number": "APP 3.1",
+                    "title": "Personal information other than sensitive information",
+                    "text": "If an APP entity is an agency, the entity must not collect personal information (other than sensitive information) unless the information is reasonably necessary for, or directly related to, one or more of the entity's functions or activities.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 3.2",
+                    "number": "APP 3.2",
+                    "title": "",
+                    "text": "If an APP entity is an organisation, the entity must not collect personal information (other than sensitive information) unless the information is reasonably necessary for one or more of the entity's functions or activities.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 3.3",
+                    "number": "APP 3.3",
+                    "title": "Sensitive information",
+                    "text": "An APP entity must not collect sensitive information about an individual unless: (a) the individual consents to the collection of the information and: (i) if the entity is an agency-the information is reasonably necessary for, or directly related to, one or more of the entity's functions or activities; or (ii) if the entity is an organisation-the information is reasonably necessary for one or more of the entity's functions or activities; or (b) subclause 3.4 applies in relation to the information.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 3.5",
+                    "number": "APP 3.5",
+                    "title": "Means of collection",
+                    "text": "An APP entity must collect personal information only by lawful and fair means.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 3.6",
+                    "number": "APP 3.6",
+                    "title": "",
+                    "text": "An APP entity must collect personal information about an individual only from the individual unless: (a) if the entity is an agency: (i) the individual consents to the collection of the information from someone other than the individual; or (ii) the entity is required or authorised by or under an Australian law, or a court/tribunal order, to collect the information from someone other than the individual; or (b) it is unreasonable or impracticable to do so.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                }
+            ]
+        },
+        {
+            "number": "APP 4",
+            "code": "APP 4",
+            "name": "Dealing with unsolicited personal information",
+            "part": "Schedule 1, Part 2: Collection of personal information",
+            "controls": [
+                {
+                    "id": "APP 4.1",
+                    "number": "APP 4.1",
+                    "title": "",
+                    "text": "If: (a) an APP entity receives personal information; and (b) the entity did not solicit the information; the entity must, within a reasonable period after receiving the information, determine whether or not the entity could have collected the information under Australian Privacy Principle 3 if the entity had solicited the information.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 4.3",
+                    "number": "APP 4.3",
+                    "title": "",
+                    "text": "If: (a) the APP entity determines that the entity could not have collected the personal information; and (b) the information is not contained in a Commonwealth record; the entity must, as soon as practicable but only if it is lawful and reasonable to do so, destroy the information or ensure that the information is de-identified.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                }
+            ]
+        },
+        {
+            "number": "APP 5",
+            "code": "APP 5",
+            "name": "Notification of the collection of personal information",
+            "part": "Schedule 1, Part 2: Collection of personal information",
+            "controls": [
+                {
+                    "id": "APP 5.1",
+                    "number": "APP 5.1",
+                    "title": "",
+                    "text": "At or before the time or, if that is not practicable, as soon as practicable after, an APP entity collects personal information about an individual, the entity must take such steps (if any) as are reasonable in the circumstances: (a) to notify the individual of such matters referred to in subclause 5.2 as are reasonable in the circumstances; or (b) to otherwise ensure that the individual is aware of any such matters.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                }
+            ]
+        },
+        {
+            "number": "APP 6",
+            "code": "APP 6",
+            "name": "Use or disclosure of personal information",
+            "part": "Schedule 1, Part 3: Dealing with personal information",
+            "controls": [
+                {
+                    "id": "APP 6.1",
+                    "number": "APP 6.1",
+                    "title": "Use or disclosure",
+                    "text": "If an APP entity holds personal information about an individual that was collected for a particular purpose (the primary purpose), the entity must not use or disclose the information for another purpose (the secondary purpose) unless: (a) the individual has consented to the use or disclosure of the information; or (b) subclause 6.2 or 6.3 applies in relation to the use or disclosure of the information.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 6.4",
+                    "number": "APP 6.4",
+                    "title": "",
+                    "text": "If: (a) the APP entity is an organisation; and (b) subsection 16B(2) applied in relation to the collection of the personal information by the entity; the entity must take such steps as are reasonable in the circumstances to ensure that the information is de-identified before the entity discloses it in accordance with subclause 6.1 or 6.2.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 6.5",
+                    "number": "APP 6.5",
+                    "title": "Written note of use or disclosure",
+                    "text": "If an APP entity uses or discloses personal information in accordance with paragraph 6.2(e), the entity must make a written note of the use or disclosure.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                }
+            ]
+        },
+        {
+            "number": "APP 7",
+            "code": "APP 7",
+            "name": "Direct marketing",
+            "part": "Schedule 1, Part 3: Dealing with personal information",
+            "controls": [
+                {
+                    "id": "APP 7.1",
+                    "number": "APP 7.1",
+                    "title": "Direct marketing",
+                    "text": "If an organisation holds personal information about an individual, the organisation must not use or disclose the information for the purpose of direct marketing.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 7.7",
+                    "number": "APP 7.7",
+                    "title": "",
+                    "text": "If an individual makes a request under subclause 7.6, the first organisation must not charge the individual for the making of, or to give effect to, the request and: (a) if the request is of a kind referred to in paragraph 7.6(c) or (d)-the first organisation must give effect to the request within a reasonable period after the request is made; and (b) if the request is of a kind referred to in paragraph 7.6(e)-the organisation must, within a reasonable period after the request is made, notify the individual of its source unless it is impracticable or unreasonable to do so.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "APP 7.7(a)",
+                            "text": "if the request is of a kind referred to in paragraph 7.6(c) or (d)-the first organisation must give effect to the request within a reasonable period after the request is made; and",
+                            "description": "If an individual makes a request under subclause 7.6, the first organisation must not charge the individual for the making of, or to give effect to, the request and: if the request is of a kind referred to in paragraph 7.6(c) or (d)-the first organisation must give effect to the request within a reasonable period after the request is made.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "APP 7.7(b)",
+                            "text": "if the request is of a kind referred to in paragraph 7.6(e)-the organisation must, within a reasonable period after the request is made, notify the individual of its source unless it is impracticable or unreasonable to do so.",
+                            "description": "If an individual makes a request under subclause 7.6, the first organisation must not charge the individual for the making of, or to give effect to, the request and: if the request is of a kind referred to in paragraph 7.6(e)-the organisation must, within a reasonable period after the request is made, notify the individual of its source unless it is impracticable or unreasonable to do so.",
+                            "source": "privacyact"
+                        }
+                    ],
+                    "source": "privacyact"
+                }
+            ]
+        },
+        {
+            "number": "APP 8",
+            "code": "APP 8",
+            "name": "Cross-border disclosure of personal information",
+            "part": "Schedule 1, Part 3: Dealing with personal information",
+            "controls": [
+                {
+                    "id": "APP 8.1",
+                    "number": "APP 8.1",
+                    "title": "",
+                    "text": "Before an APP entity discloses personal information about an individual to a person (the overseas recipient): (a) who is not in Australia or an external Territory; and (b) who is not the entity or the individual; the entity must take such steps as are reasonable in the circumstances to ensure that the overseas recipient does not breach the Australian Privacy Principles (other than Australian Privacy Principle 1) in relation to the information.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                }
+            ]
+        },
+        {
+            "number": "APP 9",
+            "code": "APP 9",
+            "name": "Adoption, use or disclosure of government related identifiers",
+            "part": "Schedule 1, Part 3: Dealing with personal information",
+            "controls": [
+                {
+                    "id": "APP 9.1",
+                    "number": "APP 9.1",
+                    "title": "Adoption of government related identifiers",
+                    "text": "An organisation must not adopt a government related identifier of an individual as its own identifier of the individual unless: (a) the adoption of the government related identifier is required or authorised by or under an Australian law or a court/tribunal order; or (b) subclause 9.3 applies in relation to the adoption.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 9.2",
+                    "number": "APP 9.2",
+                    "title": "Use or disclosure of government related identifiers",
+                    "text": "An organisation must not use or disclose a government related identifier of an individual unless: (a) the use or disclosure of the identifier is reasonably necessary for the organisation to verify the identity of the individual for the purposes of the organisation's activities or functions; or (b) the use or disclosure of the identifier is reasonably necessary for the organisation to fulfil its obligations to an agency or a State or Territory authority; or (c) the use or disclosure of the identifier is required or authorised by or under an Australian law or a court/tribunal order; or (d) a permitted general situation (other than the situation referred to in item 4 or 5 of the table in subsection 16A(1)) exists in relation to the use or disclosure of the identifier; or (e) the organisation reasonably believes that the use or disclosure of the identifier is reasonably necessary for one or more enforcement related activities conducted by, or on behalf of, an enforcement body; or (f) subclause 9.3 applies in relation to the use or disclosure.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                }
+            ]
+        },
+        {
+            "number": "APP 10",
+            "code": "APP 10",
+            "name": "Quality of personal information",
+            "part": "Schedule 1, Part 4: Integrity of personal information",
+            "controls": [
+                {
+                    "id": "APP 10.1",
+                    "number": "APP 10.1",
+                    "title": "",
+                    "text": "An APP entity must take such steps (if any) as are reasonable in the circumstances to ensure that the personal information that the entity collects is accurate, up-to-date and complete.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 10.2",
+                    "number": "APP 10.2",
+                    "title": "",
+                    "text": "An APP entity must take such steps (if any) as are reasonable in the circumstances to ensure that the personal information that the entity uses or discloses is, having regard to the purpose of the use or disclosure, accurate, up-to-date, complete and relevant.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                }
+            ]
+        },
+        {
+            "number": "APP 11",
+            "code": "APP 11",
+            "name": "Security of personal information",
+            "part": "Schedule 1, Part 4: Integrity of personal information",
+            "controls": [
+                {
+                    "id": "APP 11.1",
+                    "number": "APP 11.1",
+                    "title": "",
+                    "text": "If an APP entity holds personal information, the entity must take such steps as are reasonable in the circumstances to protect the information: (a) from misuse, interference and loss; and (b) from unauthorised access, modification or disclosure.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "APP 11.1(a)",
+                            "text": "from misuse, interference and loss; and",
+                            "description": "If an APP entity holds personal information, the entity must take such steps as are reasonable in the circumstances to protect the information: from misuse, interference and loss.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "APP 11.1(b)",
+                            "text": "from unauthorised access, modification or disclosure.",
+                            "description": "If an APP entity holds personal information, the entity must take such steps as are reasonable in the circumstances to protect the information: from unauthorised access, modification or disclosure.",
+                            "source": "privacyact"
+                        }
+                    ],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 11.2",
+                    "number": "APP 11.2",
+                    "title": "",
+                    "text": "If: (a) an APP entity holds personal information about an individual; and (b) the entity no longer needs the information for any purpose for which the information may be used or disclosed by the entity under this Schedule; and (c) the information is not contained in a Commonwealth record; and (d) the entity is not required by or under an Australian law, or a court/tribunal order, to retain the information; the entity must take such steps as are reasonable in the circumstances to destroy the information or to ensure that the information is de-identified.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                }
+            ]
+        },
+        {
+            "number": "APP 12",
+            "code": "APP 12",
+            "name": "Access to personal information",
+            "part": "Schedule 1, Part 5: Access to, and correction of, personal information",
+            "controls": [
+                {
+                    "id": "APP 12.1",
+                    "number": "APP 12.1",
+                    "title": "Access",
+                    "text": "If an APP entity holds personal information about an individual, the entity must, on request by the individual, give the individual access to the information.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 12.4",
+                    "number": "APP 12.4",
+                    "title": "Dealing with requests for access",
+                    "text": "The APP entity must: (a) respond to the request for access to the personal information: (i) if the entity is an agency-within 30 days after the request is made; or (ii) if the entity is an organisation-within a reasonable period after the request is made; and (b) give access to the information in the manner requested by the individual, if it is reasonable and practicable to do so.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "APP 12.4(a)",
+                            "text": "respond to the request for access to the personal information: (i) if the entity is an agency-within 30 days after the request is made; or (ii) if the entity is an organisation-within a reasonable period after the request is made; and",
+                            "description": "The APP entity must: respond to the request for access to the personal information: (i) if the entity is an agency-within 30 days after the request is made; or (ii) if the entity is an organisation-within a reasonable period after the request is made.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "APP 12.4(b)",
+                            "text": "give access to the information in the manner requested by the individual, if it is reasonable and practicable to do so.",
+                            "description": "The APP entity must: give access to the information in the manner requested by the individual, if it is reasonable and practicable to do so.",
+                            "source": "privacyact"
+                        }
+                    ],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 12.5",
+                    "number": "APP 12.5",
+                    "title": "Other means of access",
+                    "text": "If the APP entity refuses: (a) to give access to the personal information because of subclause 12.2 or 12.3; or (b) to give access in the manner requested by the individual; the entity must take such steps (if any) as are reasonable in the circumstances to give access in a way that meets the needs of the entity and the individual.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 12.7",
+                    "number": "APP 12.7",
+                    "title": "Access charges",
+                    "text": "If the APP entity is an agency, the entity must not charge the individual for the making of the request or for giving access to the personal information.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 12.8",
+                    "number": "APP 12.8",
+                    "title": "",
+                    "text": "If: (a) the APP entity is an organisation; and (b) the entity charges the individual for giving access to the personal information; the charge must not be excessive and must not apply to the making of the request.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 12.9",
+                    "number": "APP 12.9",
+                    "title": "Refusal to give access",
+                    "text": "If the APP entity refuses to give access to the personal information because of subclause 12.2 or 12.3, or to give access in the manner requested by the individual, the entity must give the individual a written notice that sets out: (a) the reasons for the refusal except to the extent that, having regard to the grounds for the refusal, it would be unreasonable to do so; and (b) the mechanisms available to complain about the refusal; and (c) any other matter prescribed by the regulations.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "APP 12.9(a)",
+                            "text": "the reasons for the refusal except to the extent that, having regard to the grounds for the refusal, it would be unreasonable to do so; and",
+                            "description": "If the APP entity refuses to give access to the personal information because of subclause 12.2 or 12.3, or to give access in the manner requested by the individual, the entity must give the individual a written notice that sets out: the reasons for the refusal except to the extent that, having regard to the grounds for the refusal, it would be unreasonable to do so.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "APP 12.9(b)",
+                            "text": "the mechanisms available to complain about the refusal; and",
+                            "description": "If the APP entity refuses to give access to the personal information because of subclause 12.2 or 12.3, or to give access in the manner requested by the individual, the entity must give the individual a written notice that sets out: the mechanisms available to complain about the refusal.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "APP 12.9(c)",
+                            "text": "any other matter prescribed by the regulations.",
+                            "description": "If the APP entity refuses to give access to the personal information because of subclause 12.2 or 12.3, or to give access in the manner requested by the individual, the entity must give the individual a written notice that sets out: any other matter prescribed by the regulations.",
+                            "source": "privacyact"
+                        }
+                    ],
+                    "source": "privacyact"
+                }
+            ]
+        },
+        {
+            "number": "APP 13",
+            "code": "APP 13",
+            "name": "Correction of personal information",
+            "part": "Schedule 1, Part 5: Access to, and correction of, personal information",
+            "controls": [
+                {
+                    "id": "APP 13.1",
+                    "number": "APP 13.1",
+                    "title": "Correction",
+                    "text": "If: (a) an APP entity holds personal information about an individual; and (b) either: (i) the entity is satisfied that, having regard to a purpose for which the information is held, the information is inaccurate, out-of-date, incomplete, irrelevant or misleading; or (ii) the individual requests the entity to correct the information; the entity must take such steps (if any) as are reasonable in the circumstances to correct that information to ensure that, having regard to the purpose for which it is held, the information is accurate, up-to-date, complete, relevant and not misleading.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 13.2",
+                    "number": "APP 13.2",
+                    "title": "Notification of correction to third parties",
+                    "text": "If: (a) the APP entity corrects personal information about an individual that the entity previously disclosed to another APP entity; and (b) the individual requests the entity to notify the other APP entity of the correction; the entity must take such steps (if any) as are reasonable in the circumstances to give that notification unless it is impracticable or unlawful to do so.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 13.3",
+                    "number": "APP 13.3",
+                    "title": "Refusal to correct information",
+                    "text": "If the APP entity refuses to correct the personal information as requested by the individual, the entity must give the individual a written notice that sets out: (a) the reasons for the refusal except to the extent that it would be unreasonable to do so; and (b) the mechanisms available to complain about the refusal; and (c) any other matter prescribed by the regulations.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "APP 13.3(a)",
+                            "text": "the reasons for the refusal except to the extent that it would be unreasonable to do so; and",
+                            "description": "If the APP entity refuses to correct the personal information as requested by the individual, the entity must give the individual a written notice that sets out: the reasons for the refusal except to the extent that it would be unreasonable to do so.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "APP 13.3(b)",
+                            "text": "the mechanisms available to complain about the refusal; and",
+                            "description": "If the APP entity refuses to correct the personal information as requested by the individual, the entity must give the individual a written notice that sets out: the mechanisms available to complain about the refusal.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "APP 13.3(c)",
+                            "text": "any other matter prescribed by the regulations.",
+                            "description": "If the APP entity refuses to correct the personal information as requested by the individual, the entity must give the individual a written notice that sets out: any other matter prescribed by the regulations.",
+                            "source": "privacyact"
+                        }
+                    ],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 13.4",
+                    "number": "APP 13.4",
+                    "title": "Request to associate a statement",
+                    "text": "If: (a) the APP entity refuses to correct the personal information as requested by the individual; and (b) the individual requests the entity to associate with the information a statement that the information is inaccurate, out-of-date, incomplete, irrelevant or misleading; the entity must take such steps as are reasonable in the circumstances to associate the statement in such a way that will make the statement apparent to users of the information.",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "APP 13.5",
+                    "number": "APP 13.5",
+                    "title": "Dealing with requests",
+                    "text": "If a request is made under subclause 13.1 or 13.4, the APP entity: (a) must respond to the request: (i) if the entity is an agency-within 30 days after the request is made; or (ii) if the entity is an organisation-within a reasonable period after the request is made; and (b) must not charge the individual for the making of the request, for correcting the personal information or for associating the statement with the personal information (as the case may be).",
+                    "type": "subclause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                }
+            ]
+        },
+        {
+            "number": "Part IIIC",
+            "code": "Part IIIC",
+            "name": "Notification of eligible data breaches",
+            "part": "Part IIIC",
+            "controls": [
+                {
+                    "id": "s 26WH(2)",
+                    "number": "s 26WH(2)",
+                    "title": "Assessment",
+                    "text": "The entity must: (a) carry out a reasonable and expeditious assessment of whether there are reasonable grounds to believe that the relevant circumstances amount to an eligible data breach of the entity; and (b) take all reasonable steps to ensure that the assessment is completed within 30 days after the entity becomes aware as mentioned in paragraph (1)(a).",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "s 26WH(2)(a)",
+                            "text": "carry out a reasonable and expeditious assessment of whether there are reasonable grounds to believe that the relevant circumstances amount to an eligible data breach of the entity; and",
+                            "description": "The entity must: carry out a reasonable and expeditious assessment of whether there are reasonable grounds to believe that the relevant circumstances amount to an eligible data breach of the entity.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "s 26WH(2)(b)",
+                            "text": "take all reasonable steps to ensure that the assessment is completed within 30 days after the entity becomes aware as mentioned in paragraph (1)(a).",
+                            "description": "The entity must: take all reasonable steps to ensure that the assessment is completed within 30 days after the entity becomes aware as mentioned in paragraph (1)(a).",
+                            "source": "privacyact"
+                        }
+                    ],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "s 26WK(2)",
+                    "number": "s 26WK(2)",
+                    "title": "Statement",
+                    "text": "The entity must: (a) both: (i) prepare a statement that complies with subsection (3); and (ii) give a copy of the statement to the Commissioner; and (b) do so as soon as practicable after the entity becomes so aware.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "s 26WK(2)(a)",
+                            "text": "both: (i) prepare a statement that complies with subsection (3); and (ii) give a copy of the statement to the Commissioner; and",
+                            "description": "The entity must: both: (i) prepare a statement that complies with subsection (3); and (ii) give a copy of the statement to the Commissioner.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "s 26WK(2)(b)",
+                            "text": "do so as soon as practicable after the entity becomes so aware.",
+                            "description": "The entity must: do so as soon as practicable after the entity becomes so aware.",
+                            "source": "privacyact"
+                        }
+                    ],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "s 26WK(3)",
+                    "number": "s 26WK(3)",
+                    "title": "",
+                    "text": "The statement referred to in subparagraph (2)(a)(i) must set out: (a) the identity and contact details of the entity; and (b) a description of the eligible data breach that the entity has reasonable grounds to believe has happened; and (c) the particular kind or kinds of information concerned; and (d) recommendations about the steps that individuals should take in response to the eligible data breach that the entity has reasonable grounds to believe has happened.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "s 26WK(3)(a)",
+                            "text": "the identity and contact details of the entity; and",
+                            "description": "The statement referred to in subparagraph (2)(a)(i) must set out: the identity and contact details of the entity.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "s 26WK(3)(b)",
+                            "text": "a description of the eligible data breach that the entity has reasonable grounds to believe has happened; and",
+                            "description": "The statement referred to in subparagraph (2)(a)(i) must set out: a description of the eligible data breach that the entity has reasonable grounds to believe has happened.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "s 26WK(3)(c)",
+                            "text": "the particular kind or kinds of information concerned; and",
+                            "description": "The statement referred to in subparagraph (2)(a)(i) must set out: the particular kind or kinds of information concerned.",
+                            "source": "privacyact"
+                        },
+                        {
+                            "id": "s 26WK(3)(d)",
+                            "text": "recommendations about the steps that individuals should take in response to the eligible data breach that the entity has reasonable grounds to believe has happened.",
+                            "description": "The statement referred to in subparagraph (2)(a)(i) must set out: recommendations about the steps that individuals should take in response to the eligible data breach that the entity has reasonable grounds to believe has happened.",
+                            "source": "privacyact"
+                        }
+                    ],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "s 26WL(2)",
+                    "number": "s 26WL(2)",
+                    "title": "Notification",
+                    "text": "The entity must: (a) if it is practicable for the entity to notify the contents of the statement to each of the individuals to whom the relevant information relates-take such steps as are reasonable in the circumstances to notify the contents of the statement to each of the individuals to whom the relevant information relates; or (b) if it is practicable for the entity to notify the contents of the statement to each of the individuals who are at risk from the eligible data breach-take such steps as are reasonable in the circumstances to notify the contents of the statement to each of the individuals who are at risk from the eligible data breach; or (c) if neither paragraph (a) nor (b) applies: (i) publish a copy of the statement on the entity's website (if any); and (ii) take reasonable steps to publicise the contents of the statement.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                },
+                {
+                    "id": "s 26WL(3)",
+                    "number": "s 26WL(3)",
+                    "title": "",
+                    "text": "The entity must comply with subsection (2) as soon as practicable after the completion of the preparation of the statement.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "privacyact"
+                }
+            ]
+        }
+    ]
+}

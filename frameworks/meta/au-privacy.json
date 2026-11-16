@@ -1,0 +1,154 @@
+{
+    "key": "au-privacy",
+    "name": "Australian Privacy Act",
+    "version": "compilation No. 104",
+    "full_name": "Privacy Act 1988 (Cth): the Australian Privacy Principles (Schedule 1) and the notifiable data breaches scheme (Part IIIC)",
+    "issuing_body": "Parliament of Australia; compiled by the Office of Parliamentary Counsel",
+    "standard_codes": [
+        "AU-PRIVACY"
+    ],
+    "aliases": [
+        "Privacy Act 1988",
+        "Australian Privacy Principles",
+        "APPs",
+        "Notifiable Data Breaches"
+    ],
+    "content_licence": "open",
+    "notice": "Assessed against compilation No. 104 of the Privacy Act 1988 (registered 17 June 2026, in force from 4 June 2026). Amendments commencing on 10 December 2026 add transparency duties for automated decisions to APP 1 and are not in this compilation. Contains material from the Federal Register of Legislation licensed under CC BY 4.0.",
+    "sources": [
+        {
+            "id": "privacyact",
+            "title": "Privacy Act 1988, compilation No. 104 (C2026C00227), Word version",
+            "version": "compilation No. 104, in force from 4 June 2026",
+            "publisher": "Federal Register of Legislation, Office of Parliamentary Counsel",
+            "url": "https://www.legislation.gov.au/C2004A03712/2026-06-04/2026-06-04/text/original/word",
+            "file": "au-privacy/C2026C00227.docx",
+            "date": "2026-06-04",
+            "sha256": "877b0f717e01d69b071ac3a93a48019bf8a9073322b751fb9b8553f1583bdf7d"
+        }
+    ],
+    "source_of": {
+        "controls": "privacyact",
+        "objectives": "privacyact"
+    },
+    "control_flags": {
+        "objectives": "The lettered paragraphs of a requirement, only where every one must be met. Where the paragraphs are alternatives or conditions, the requirement is assessed whole."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "principle",
+        "families": "principles",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "privacyact",
+            "cite": "Privacy Act 1988, Schedule 1 and Part IIIC"
+        },
+        {
+            "id": "agency_or_organisation",
+            "type": "applicability",
+            "summary": "Some principles bind agencies and organisations differently; a requirement written for the kind of APP entity the client is not is marked not applicable.",
+            "source": "privacyact",
+            "cite": "APP 3.1 and 3.2",
+            "quote": "If an APP entity is an agency, the entity must not collect personal information (other than sensitive information) unless"
+        },
+        {
+            "id": "access_deadline_agency",
+            "type": "deadline",
+            "control": "APP 12.4",
+            "days": 30,
+            "from": "the request being made",
+            "summary": "An agency responds to a request for access within 30 days; an organisation within a reasonable period.",
+            "source": "privacyact",
+            "cite": "APP 12.4(a)",
+            "quote": "if the entity is an agency-within 30 days after the request is made"
+        },
+        {
+            "id": "breach_assessment",
+            "type": "deadline",
+            "control": "s 26WH(2)",
+            "days": 30,
+            "from": "becoming aware of grounds to suspect an eligible data breach",
+            "summary": "A suspected eligible data breach is assessed, and the assessment completed within 30 days of becoming aware of it.",
+            "source": "privacyact",
+            "cite": "s 26WH(2)(b)",
+            "quote": "take all reasonable steps to ensure that the assessment is completed within 30 days after the entity becomes aware as mentioned in paragraph (1)(a)."
+        },
+        {
+            "id": "breach_notification",
+            "type": "applicability",
+            "control": "s 26WL(3)",
+            "summary": "An eligible data breach is notified to the Commissioner and to affected individuals as soon as practicable.",
+            "source": "privacyact",
+            "cite": "s 26WL(3)",
+            "quote": "The entity must comply with subsection (2) as soon as practicable after the completion of the preparation of the statement."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "A serious interference with privacy by a body corporate can attract a civil penalty of up to the greatest of $50 million, three times the benefit obtained, or 30% of adjusted turnover in the breach period.",
+            "source": "privacyact",
+            "cite": "Privacy Act 1988 s 13G(3)",
+            "quote": "The amount of the penalty for a contravention of subsection (1) by a body corporate is an amount not more than the greatest of the following:"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "APP",
+            "definition": "Australian Privacy Principle: one of the thirteen principles in Schedule 1 of the Privacy Act 1988 that govern how APP entities handle personal information."
+        },
+        {
+            "term": "APP entity",
+            "definition": "An Australian Government agency, or an organisation (generally a business with annual turnover above $3 million, or one of the smaller businesses the Act names), that must comply with the APPs."
+        },
+        {
+            "term": "Eligible data breach",
+            "definition": "Unauthorised access to, disclosure of or loss of personal information that is likely to result in serious harm to an individual, where remedial action has not removed that likelihood."
+        },
+        {
+            "term": "Commissioner",
+            "definition": "The Australian Information Commissioner, who receives data breach statements and regulates compliance with the Act."
+        },
+        {
+            "term": "Sensitive information",
+            "definition": "Information about racial or ethnic origin, political opinions, religious beliefs, sexual orientation, criminal record and similar matters, and health, genetic and biometric information."
+        }
+    ]
+}

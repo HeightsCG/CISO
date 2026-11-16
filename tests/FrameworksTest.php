@@ -20,6 +20,13 @@ $source_text = function (array $source): string {
             $text = Source::xml_text($file);
         } elseif (substr($file, -4) === '.pdf') {
             $text = Source::pdf_text($file);
+        } elseif (substr($file, -5) === '.docx') {
+            $zip = new ZipArchive();
+            $zip->open(Source::path($file));
+            $xml = $zip->getFromName('word/document.xml');
+            $zip->close();
+            $xml = str_replace(array('<w:noBreakHyphen/>', '<w:tab/>'), array('-', ' '), $xml);
+            $text = html_entity_decode(strip_tags(preg_replace('/<w:p[ >]/', "\n$0", $xml)), ENT_QUOTES | ENT_XML1, 'UTF-8');
         } elseif (substr($file, -5) === '.xlsx') {
             $text = '';
 

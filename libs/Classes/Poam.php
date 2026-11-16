@@ -157,6 +157,7 @@ class Poam
         'coppa' => 'none',
         'ccpa' => 'none',
         'pipeda' => 'none',
+        'au-privacy' => 'none',
         'nydfs-500' => 'none',
         'nis2' => 'none',
         'dora' => 'none',
