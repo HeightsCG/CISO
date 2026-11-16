@@ -1,0 +1,165 @@
+{
+    "key": "uk-gdpr",
+    "name": "UK GDPR",
+    "version": "revised to 30 September 2026",
+    "full_name": "Regulation (EU) 2016/679 on the protection of natural persons with regard to the processing of personal data, as it forms part of the law of the United Kingdom (United Kingdom General Data Protection Regulation)",
+    "issuing_body": "Parliament of the United Kingdom; published by The National Archives on legislation.gov.uk",
+    "standard_codes": [
+        "UK-GDPR"
+    ],
+    "aliases": [
+        "United Kingdom General Data Protection Regulation",
+        "UK General Data Protection Regulation"
+    ],
+    "content_licence": "open",
+    "notice": "Assessed against the UK GDPR as revised on legislation.gov.uk to 30 September 2026. The Data Protection Act 2018 supplements it and is not part of this assessment. Contains public sector information licensed under the Open Government Licence v3.0.",
+    "sources": [
+        {
+            "id": "ukgdpr",
+            "title": "Regulation (EU) 2016/679 (United Kingdom General Data Protection Regulation), revised text",
+            "snapshot_note": "The snapshot is the published XML with one change: legislation.gov.uk's editorial annotation identifiers, written key- followed by 32 hexadecimal characters, are renamed ref-. Code hosts read the original form as leaked API keys and refuse the file. The legal text is untouched.",
+            "version": "legislation.gov.uk revised text, valid from 30 September 2026",
+            "publisher": "The National Archives, legislation.gov.uk",
+            "url": "https://www.legislation.gov.uk/eur/2016/679/data.xml",
+            "file": "uk-gdpr/eur-2016-679.xml",
+            "date": "2026-09-30",
+            "sha256": "ca0043c09424753167e509363379ac6a67c3517e812a066089f4f6a9030234f6"
+        }
+    ],
+    "source_of": {
+        "controls": "ukgdpr",
+        "objectives": "ukgdpr"
+    },
+    "control_flags": {
+        "objectives": "The lettered points of the paragraph. In paragraphs that list alternatives (the lawful bases of Article 6(1), the exceptions of Article 9(2), the derogations of Article 49(1)) the points are options, of which the applicable ones are assessed and the rest marked not applicable.",
+        "paragraphs_in_text": "On each article: how many paragraphs the revised text prints for it. The ones not built are powers to make regulations, functions of the Information Commission, or interpretive provisions."
+    },
+    "terminology": {
+        "control": "obligation",
+        "controls": "obligations",
+        "family": "article",
+        "families": "articles",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable obligations that are implemented. The UK GDPR defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "An obligation is met only when every applicable element it lists is met.",
+            "source": "ukgdpr",
+            "cite": "UK GDPR"
+        },
+        {
+            "id": "accountability",
+            "type": "applicability",
+            "summary": "The controller is responsible for compliance with the processing principles and must be able to demonstrate it.",
+            "source": "ukgdpr",
+            "cite": "Article 5(2)",
+            "quote": "The controller shall be responsible for, and be able to demonstrate compliance with, paragraph 1"
+        },
+        {
+            "id": "breach_notification",
+            "type": "deadline",
+            "control": "Art. 33(1)",
+            "hours": 72,
+            "from": "the controller becoming aware of the breach",
+            "summary": "A personal data breach is notified to the Information Commission without undue delay and, where feasible, within 72 hours of the controller becoming aware of it, unless it is unlikely to result in a risk to individuals.",
+            "source": "ukgdpr",
+            "cite": "Article 33(1)",
+            "quote": "not later than 72 hours after having become aware of it"
+        },
+        {
+            "id": "dpo_designation",
+            "type": "applicability",
+            "control": "Art. 37(1)",
+            "summary": "A data protection officer is mandatory for public authorities and for organisations whose core activities are large-scale regular and systematic monitoring or large-scale processing of special category or criminal offence data.",
+            "source": "ukgdpr",
+            "cite": "Article 37(1)",
+            "quote": "The controller and the processor shall designate a data protection officer in any case where:"
+        },
+        {
+            "id": "automated_decision_safeguards",
+            "type": "applicability",
+            "control": "Art. 22C(2)",
+            "summary": "Where a significant decision is taken solely by automated processing, the controller applies the safeguards of Article 22C, including information, the chance to make representations, human intervention and the means to contest the decision.",
+            "source": "ukgdpr",
+            "cite": "Article 22C(2)",
+            "quote": "The safeguards must consist of or include measures which"
+        },
+        {
+            "id": "transfer_condition",
+            "type": "applicability",
+            "control": "Art. 44A(1)",
+            "summary": "Personal data may be transferred outside the United Kingdom only where the transfer is approved by regulations, made subject to appropriate safeguards, or covered by a derogation.",
+            "source": "ukgdpr",
+            "cite": "Article 44A(1)",
+            "quote": "A controller or processor may transfer personal data to a third country or an international organisation only if"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "UK GDPR",
+            "definition": "The General Data Protection Regulation as retained in United Kingdom law after EU exit and amended since, including by the Data (Use and Access) Act 2025."
+        },
+        {
+            "term": "Controller",
+            "definition": "The organisation that decides why and how personal data are processed."
+        },
+        {
+            "term": "Processor",
+            "definition": "An organisation that processes personal data on behalf of a controller."
+        },
+        {
+            "term": "Data subject",
+            "definition": "The identified or identifiable person the personal data relate to."
+        },
+        {
+            "term": "Commission",
+            "definition": "The Information Commission, the United Kingdom's data protection regulator (formerly the Information Commissioner). In the UK GDPR \"the Commission\" means this body, not the European Commission."
+        },
+        {
+            "term": "DPIA",
+            "definition": "Data protection impact assessment: an assessment of the effect of planned processing on the protection of personal data, required where the processing is likely to result in a high risk."
+        },
+        {
+            "term": "DPO",
+            "definition": "Data protection officer: the person designated to advise on and monitor compliance with the Regulation."
+        },
+        {
+            "term": "Recognised legitimate interest",
+            "definition": "A lawful basis in Article 6(1)(ea) for processing that is necessary for one of the purposes listed in Annex 1, such as safeguarding national security or responding to an emergency."
+        }
+    ]
+}

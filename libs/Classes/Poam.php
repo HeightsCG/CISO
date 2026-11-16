@@ -158,6 +158,7 @@ class Poam
         'nis2' => 'none',
         'dora' => 'none',
         'gdpr' => 'none',
+        'uk-gdpr' => 'none',
         'eu-ai-act' => 'none',
         'eu-cra' => 'none',
         'soc2' => 'none',
