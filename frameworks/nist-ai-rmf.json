@@ -1,0 +1,1123 @@
+{
+    "key": "nist-ai-rmf",
+    "name": "NIST AI RMF",
+    "version": "1.0",
+    "full_name": "Artificial Intelligence Risk Management Framework (AI RMF 1.0)",
+    "issuing_body": "National Institute of Standards and Technology (NIST)",
+    "standard_codes": [
+        "NIST-AI-RMF"
+    ],
+    "aliases": [
+        "AI RMF",
+        "AI Risk Management Framework",
+        "NIST AI 100-1"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "ai1001",
+            "title": "NIST AI 100-1, Artificial Intelligence Risk Management Framework (AI RMF 1.0)",
+            "version": "1.0 (January 2023)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf",
+            "file": "ai-rmf/NIST.AI.100-1.pdf",
+            "sha256": "7576edb531d9848825814ee88e28b1795d3a84b435b4b797d3670eafdc4a89f1"
+        },
+        {
+            "id": "playbook",
+            "title": "NIST AI RMF Playbook, machine-readable export",
+            "version": "as published 11 June 2026",
+            "publisher": "NIST Trustworthy and Responsible AI Resource Center",
+            "url": "https://airc.nist.gov/docs/playbook.json",
+            "file": "ai-rmf/playbook.json",
+            "sha256": "aecbee3d3c8820816d295b11d10fb61324b17c25c2ff39ee95e2aa5654555bba"
+        }
+    ],
+    "source_of": {
+        "controls": "ai1001",
+        "guidance": "playbook"
+    },
+    "terminology": {
+        "control": "subcategory",
+        "controls": "subcategories",
+        "family": "category",
+        "families": "categories",
+        "objective": "suggested action",
+        "objectives": "suggested actions",
+        "plan": "action plan",
+        "plan_short": "action plan",
+        "score": "Implementation index"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Achieved"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Achieved"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Achieved"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable subcategories whose outcome is achieved, with a partially achieved outcome counting as half. The AI RMF defines no score, tiers or maturity levels; this index is an HCG measure of progress between a Current and a Target Profile."
+    },
+    "rules": [
+        {
+            "id": "voluntary",
+            "type": "applicability",
+            "summary": "The framework is voluntary and applies to organizations of any size and sector.",
+            "source": "ai1001",
+            "cite": "NIST AI 100-1, Executive Summary",
+            "quote": "The Framework is intended to be voluntary, rights-preserving, non-sector-specific, and use-case agnostic"
+        },
+        {
+            "id": "select_outcomes",
+            "type": "applicability",
+            "summary": "An organization may apply all categories and subcategories or select the ones that suit its resources and capabilities, so a subcategory can be out of scope.",
+            "source": "ai1001",
+            "cite": "NIST AI 100-1, section 5",
+            "quote": "Framework users may apply these functions as best suits their needs for managing AI risks based on their resources and capabilities."
+        },
+        {
+            "id": "govern_cross_cutting",
+            "type": "applicability",
+            "summary": "GOVERN applies across the whole of AI risk management and supports the other three functions.",
+            "source": "ai1001",
+            "cite": "NIST AI 100-1, section 5.1",
+            "quote": "GOVERN is a cross-cutting function that is infused throughout AI risk management and enables the other functions of the process."
+        },
+        {
+            "id": "risk_tolerance",
+            "type": "applicability",
+            "summary": "The framework does not set risk tolerance; the organization defines its own.",
+            "source": "ai1001",
+            "cite": "NIST AI 100-1, section 1.2.2",
+            "quote": "While the AI RMF can be used to prioritize risk, it does not prescribe risk tolerance."
+        },
+        {
+            "id": "extent_achieved",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A Current Profile records how AI risk is managed today in terms of current outcomes, so an outcome can be partially achieved. In the implementation index a partially achieved outcome counts as half. This is an HCG convention: the AI RMF itself defines no score.",
+            "source": "ai1001",
+            "cite": "NIST AI 100-1, section 6",
+            "quote": "An AI RMF Current Profile indicates how AI is currently being managed and the related risks in terms of current outcomes."
+        },
+        {
+            "id": "gap_action_plan",
+            "type": "applicability",
+            "summary": "Gaps between the Current and Target Profiles are addressed through action plans.",
+            "source": "ai1001",
+            "cite": "NIST AI 100-1, section 6",
+            "quote": "Action plans can be developed to address these gaps to fulfill outcomes in a given category or subcategory."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "AI RMF",
+            "definition": "The NIST Artificial Intelligence Risk Management Framework, a voluntary set of outcomes for managing the risks of AI systems, arranged by Function, Category and Subcategory."
+        },
+        {
+            "term": "AI actor",
+            "definition": "A person or organization that plays an active role in the AI system lifecycle, including those that deploy or operate AI."
+        },
+        {
+            "term": "TEVV",
+            "definition": "Test, evaluation, verification and validation: the activities that check an AI system performs as intended throughout its lifecycle."
+        },
+        {
+            "term": "Profile",
+            "definition": "An implementation of the AI RMF functions, categories and subcategories for a specific setting; a Current Profile describes how AI risk is managed today and a Target Profile the outcomes wanted."
+        },
+        {
+            "term": "NIST",
+            "definition": "National Institute of Standards and Technology, the U.S. agency that publishes the AI RMF."
+        }
+    ],
+    "display_name": "NIST AI RMF (1.0)",
+    "counts": {
+        "families": 19,
+        "controls": 72,
+        "objectives": 0
+    },
+    "families": [
+        {
+            "number": "GOVERN 1",
+            "code": "GOVERN 1",
+            "name": "Policies, processes, procedures, and practices across the organization related to the mapping, measuring, and managing of AI risks are in place, transparent, and implemented effectively.",
+            "function": "GOVERN",
+            "function_code": "GOVERN",
+            "controls": [
+                {
+                    "id": "GOVERN 1.1",
+                    "number": "GOVERN 1.1",
+                    "text": "Legal and regulatory requirements involving AI are understood, managed, and documented.",
+                    "guidance": "Maintain awareness of the applicable legal and regulatory considerations and requirements specific to industry, sector, and business purpose, as well as the application context of the deployed AI system.\nAlign risk management efforts with applicable legal standards.\nMaintain policies for training (and re-training) organizational staff about necessary legal or regulatory considerations that may impact AI-related design, development and deployment activities.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "GOVERN 1.2",
+                    "number": "GOVERN 1.2",
+                    "text": "The characteristics of trustworthy AI are integrated into organizational policies, processes, procedures, and practices.",
+                    "guidance": "Organizational AI risk management policies should be designed to:\nDefine key terms and concepts related to AI systems and the scope of their purposes and intended uses.\nConnect AI governance to existing organizational governance and risk controls.\nAlign to broader data governance policies and practices, particularly the use of sensitive or otherwise risky data.\nDetail standards for experimental design, data quality, and model training.\nOutline and document risk mapping and measurement processes and standards.\nDetail model testing and validation processes.\nDetail review processes for legal and risk functions.\nEstablish the frequency of and detail for monitoring, auditing and review processes.\nOutline change management requirements.\nOutline processes for internal and external stakeholder engagement.\nEstablish whistleblower policies to facilitate reporting of serious AI system concerns.\nDetail and test incident response plans.\nVerify that formal AI risk management policies align to existing legal standards, and industry best practices and norms.\nEstablish AI risk management policies that broadly align to AI system trustworthy characteristics.\nVerify that formal AI risk management policies include currently deployed and third-party AI systems.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "GOVERN 1.3",
+                    "number": "GOVERN 1.3",
+                    "text": "Processes, procedures, and practices are in place to determine the needed level of risk management activities based on the organization's risk tolerance.",
+                    "guidance": "Establish policies to define mechanisms for measuring or understanding an AI system's potential impacts, e.g., via regular impact assessments at key stages in the AI lifecycle, connected to system impacts and frequency of system updates.\nEstablish policies to define mechanisms for measuring or understanding the likelihood of an AI system's impacts and their magnitude at key stages in the AI lifecycle.\nEstablish policies that define assessment scales for measuring potential AI system impact. Scales may be qualitative, such as red-amber-green (RAG), or may entail simulations or econometric approaches.\nEstablish policies for assigning an overall risk measurement approach for an AI system, or its important components, e.g., via multiplication or combination of a mapped risk's impact and likelihood (risk ≈ impact x likelihood).\nEstablish policies to assign systems to uniform risk scales that are valid across the organization's AI portfolio (e.g. documentation templates), and acknowledge risk tolerance and risk levels may change over the lifecycle of an AI system.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "GOVERN 1.4",
+                    "number": "GOVERN 1.4",
+                    "text": "The risk management process and its outcomes are established through transparent policies, procedures, and other controls based on organizational risk priorities.",
+                    "guidance": "Establish and regularly review documentation policies that, among others, address information related to:\nAI actors contact informations\nBusiness justification\nScope and usages\nExpected and potential risks and impacts\nAssumptions and limitations\nDescription and characterization of training data\nAlgorithmic methodology\nEvaluated alternative approaches\nDescription of output data\nTesting and validation results (including explanatory visualizations and information)\nDown- and up-stream dependencies\nPlans for deployment, monitoring, and change management\nStakeholder engagement plans\nVerify documentation policies for AI systems are standardized across the organization and remain current.\nEstablish policies for a model documentation inventory system and regularly review its completeness, usability, and efficacy.\nEstablish mechanisms to regularly review the efficacy of risk management processes.\nIdentify AI actors responsible for evaluating efficacy of risk management processes and approaches, and for course-correction based on results.\nEstablish policies and processes regarding public disclosure of the use of AI and risk management material such as impact assessments, audits, model documentation and validation and testing results.\nDocument and review the use and efficacy of different types of transparency tools and follow industry standards at the time a model is in use.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "GOVERN 1.5",
+                    "number": "GOVERN 1.5",
+                    "text": "Ongoing monitoring and periodic review of the risk management process and its outcomes are planned and organizational roles and responsibilities clearly defined, including determining the frequency of periodic review.",
+                    "guidance": "Establish policies to allocate appropriate resources and capacity for assessing impacts of AI systems on individuals, communities and society.\nEstablish policies and procedures for monitoring and addressing AI system performance and trustworthiness, including bias and security problems, across the lifecycle of the system.\nEstablish policies for AI system incident response, or confirm that existing incident response policies apply to AI systems.\nEstablish policies to define organizational functions and personnel responsible for AI system monitoring and incident response activities.\nEstablish mechanisms to enable the sharing of feedback from impacted individuals or communities about negative impacts from AI systems.\nEstablish mechanisms to provide recourse for impacted individuals or communities to contest problematic AI system outcomes.\nEstablish opt-out mechanisms.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "GOVERN 1.6",
+                    "number": "GOVERN 1.6",
+                    "text": "Mechanisms are in place to inventory AI systems and are resourced according to organizational risk priorities.",
+                    "guidance": "Establish policies that define the creation and maintenance of AI system inventories.\nEstablish policies that define a specific individual or team that is responsible for maintaining the inventory.\nEstablish policies that define which models or systems are inventoried, with preference to inventorying all models or systems, or minimally, to high risk models or systems, or systems deployed in high-stakes settings.\nEstablish policies that define model or system attributes to be inventoried, e.g, documentation, links to source code, incident response plans, data dictionaries, AI actor contact information.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "GOVERN 1.7",
+                    "number": "GOVERN 1.7",
+                    "text": "Processes and procedures are in place for decommissioning and phasing out AI systems safely and in a manner that does not increase risks or decrease the organization's trustworthiness.",
+                    "guidance": "Establish policies for decommissioning AI systems. Such policies typically address:\nUser and community concerns, and reputational risks.\nBusiness continuity and financial risks.\nUp and downstream system dependencies.\nRegulatory requirements (e.g., data retention).\nPotential future legal, regulatory, security or forensic investigations.\nMigration to the replacement system, if appropriate.\nEstablish policies that delineate where and for how long decommissioned systems, models and related artifacts are stored.\nEstablish practices to track accountability and consider how decommission and other adaptations or changes in system deployment contribute to downstream impacts for individuals, groups and communities.\nEstablish policies that address ancillary data or artifacts that must be preserved for fulsome understanding or execution of the decommissioned AI system, e.g., predictions, explanations, intermediate input feature representations, usernames and passwords, etc.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "GOVERN 2",
+            "code": "GOVERN 2",
+            "name": "Accountability structures are in place so that the appropriate teams and individuals are empowered, responsible, and trained for mapping, measuring, and managing AI risks.",
+            "function": "GOVERN",
+            "function_code": "GOVERN",
+            "controls": [
+                {
+                    "id": "GOVERN 2.1",
+                    "number": "GOVERN 2.1",
+                    "text": "Roles and responsibilities and lines of communication related to mapping, measuring, and managing AI risks are documented and are clear to individuals and teams throughout the organization.",
+                    "guidance": "Establish policies that define the AI risk management roles and responsibilities for positions directly and indirectly related to AI systems, including, but not limited to\nBoards of directors or advisory committees\nSenior management\nAI audit functions\nProduct management\nProject management\nAI design\nAI development\nHuman-AI interaction\nAI testing and evaluation\nAI acquisition and procurement\nImpact assessment functions\nOversight functions\nEstablish policies that promote regular communication among AI actors participating in AI risk management efforts.\nEstablish policies that separate management of AI system development functions from AI system testing functions, to enable independent course-correction of AI systems.\nEstablish policies to identify, increase the transparency of, and prevent conflicts of interest in AI risk management efforts.\nEstablish policies to counteract confirmation bias and market incentives that may hinder AI risk management efforts.\nEstablish policies that incentivize AI actors to collaborate with existing legal, oversight, compliance, or enterprise risk functions in their AI risk management activities.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "GOVERN 2.2",
+                    "number": "GOVERN 2.2",
+                    "text": "The organization's personnel and partners receive AI risk management training to enable them to perform their duties and responsibilities consistent with related policies, procedures, and agreements.",
+                    "guidance": "Establish policies for personnel addressing ongoing education about:\nApplicable laws and regulations for AI systems.\nPotential negative impacts that may arise from AI systems.\nOrganizational AI policies.\nTrustworthy AI characteristics.\nEnsure that trainings are suitable across AI actor sub-groups - for AI actors carrying out technical tasks (e.g., developers, operators, etc.) as compared to AI actors in oversight roles (e.g., legal, compliance, audit, etc.).\nEnsure that trainings comprehensively address technical and socio-technical aspects of AI risk management.\nVerify that organizational AI policies include mechanisms for internal AI personnel to acknowledge and commit to their roles and responsibilities.\nVerify that organizational policies address change management and include mechanisms to communicate and acknowledge substantial AI system changes.\nDefine paths along internal and external chains of accountability to escalate risk concerns.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "GOVERN 2.3",
+                    "number": "GOVERN 2.3",
+                    "text": "Executive leadership of the organization takes responsibility for decisions about risks associated with AI system development and deployment.",
+                    "guidance": "Organizational management can:\nDeclare risk tolerances for developing or using AI systems.\nSupport AI risk management efforts, and play an active role in such efforts.\nIntegrate a risk and harm prevention mindset throughout the AI lifecycle as part of organizational culture\nSupport competent risk management executives.\nDelegate the power, resources, and authorization to perform risk management to each appropriate level throughout the management chain.\nOrganizations can establish board committees for AI risk management and oversight functions and integrate those functions within the organization's broader enterprise risk management approaches.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "GOVERN 3",
+            "code": "GOVERN 3",
+            "name": "Workforce diversity, equity, inclusion, and accessibility processes are prioritized in the mapping, measuring, and managing of AI risks throughout the lifecycle.",
+            "function": "GOVERN",
+            "function_code": "GOVERN",
+            "controls": [
+                {
+                    "id": "GOVERN 3.1",
+                    "number": "GOVERN 3.1",
+                    "text": "Decision-making related to mapping, measuring, and managing AI risks throughout the lifecycle is informed by a diverse team (e.g., diversity of demographics, disciplines, experience, expertise, and backgrounds).",
+                    "guidance": "Organizational management can:\nDefine policies and hiring practices at the outset that promote interdisciplinary roles, competencies, skills, and capacity for AI efforts.\nDefine policies and hiring practices that lead to demographic and domain expertise diversity; empower staff with necessary resources and support, and facilitate the contribution of staff feedback and concerns without fear of reprisal.\nEstablish policies that facilitate inclusivity and the integration of new insights into existing practice.\nSeek external expertise to supplement organizational diversity, equity, inclusion, and accessibility where internal expertise is lacking.\nEstablish policies that incentivize AI actors to collaborate with existing nondiscrimination, accessibility and accommodation, and human resource functions, employee resource group (ERGs), and diversity, equity, inclusion, and accessibility (DEIA) initiatives.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "GOVERN 3.2",
+                    "number": "GOVERN 3.2",
+                    "text": "Policies and procedures are in place to define and differentiate roles and responsibilities for human-AI configurations and oversight of AI systems.",
+                    "guidance": "Establish policies and procedures that define and differentiate the various human roles and responsibilities when using, interacting with, or monitoring AI systems.\nEstablish procedures for capturing and tracking risk information related to human-AI configurations and associated outcomes.\nEstablish policies for the development of proficiency standards for AI actors carrying out system operation tasks and system oversight tasks.\nEstablish specified risk management training protocols for AI actors carrying out system operation tasks and system oversight tasks.\nEstablish policies and procedures regarding AI actor roles, and responsibilities for human oversight of deployed systems.\nEstablish policies and procedures defining human-AI configurations (configurations where AI systems are explicitly designated and treated as team members in primarily human teams) in relation to organizational risk tolerances, and associated documentation.\nEstablish policies to enhance the explanation, interpretation, and overall transparency of AI systems.\nEstablish policies for managing risks regarding known difficulties in human-AI configurations, human-AI teaming, and AI system user experience and user interactions (UI/UX).",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "GOVERN 4",
+            "code": "GOVERN 4",
+            "name": "Organizational teams are committed to a culture that considers and communicates AI risk.",
+            "function": "GOVERN",
+            "function_code": "GOVERN",
+            "controls": [
+                {
+                    "id": "GOVERN 4.1",
+                    "number": "GOVERN 4.1",
+                    "text": "Organizational policies and practices are in place to foster a critical thinking and safety-first mindset in the design, development, deployment, and uses of AI systems to minimize potential negative impacts.",
+                    "guidance": "Establish policies that require inclusion of oversight functions (legal, compliance, risk management) from the outset of the system design process.\nEstablish policies that promote effective challenge of AI system design, implementation, and deployment decisions, via mechanisms such as the three lines of defense, model audits, or red-teaming - to minimize workplace risks such as groupthink.\nEstablish policies that incentivize safety-first mindset and general critical thinking and review at an organizational and procedural level.\nEstablish whistleblower protections for insiders who report on perceived serious problems with AI systems.\nEstablish policies to integrate a harm and risk prevention mindset throughout the AI lifecycle.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "GOVERN 4.2",
+                    "number": "GOVERN 4.2",
+                    "text": "Organizational teams document the risks and potential impacts of the AI technology they design, develop, deploy, evaluate, and use, and they communicate about the impacts more broadly.",
+                    "guidance": "Establish impact assessment policies and processes for AI systems used by the organization.\nAlign organizational impact assessment activities with relevant regulatory or legal requirements.\nVerify that impact assessment activities are appropriate to evaluate the potential negative impact of a system and how quickly a system changes, and that assessments are applied on a regular basis.\nUtilize impact assessments to inform broader evaluations of AI system risk.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "GOVERN 4.3",
+                    "number": "GOVERN 4.3",
+                    "text": "Organizational practices are in place to enable AI testing, identification of incidents, and information sharing.",
+                    "guidance": "Establish policies and procedures to facilitate and equip AI system testing.\nEstablish organizational commitment to identifying AI system limitations and sharing of insights about limitations within appropriate AI actor groups.\nEstablish policies for reporting and documenting incident response.\nEstablish policies and processes regarding public disclosure of incidents and information sharing.\nEstablish guidelines for incident handling related to AI system risks and performance.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "GOVERN 5",
+            "code": "GOVERN 5",
+            "name": "Processes are in place for robust engagement with relevant AI actors.",
+            "function": "GOVERN",
+            "function_code": "GOVERN",
+            "controls": [
+                {
+                    "id": "GOVERN 5.1",
+                    "number": "GOVERN 5.1",
+                    "text": "Organizational policies and practices are in place to collect, consider, prioritize, and integrate feedback from those external to the team that developed or deployed the AI system regarding the potential individual and societal impacts related to AI risks.",
+                    "guidance": "Establish AI risk management policies that explicitly address mechanisms for collecting, evaluating, and incorporating stakeholder and user feedback that could include:\nRecourse mechanisms for faulty AI system outputs.\nBug bounties.\nHuman-centered design.\nUser-interaction and experience research.\nParticipatory stakeholder engagement with individuals and communities that may experience negative impacts.\nVerify that stakeholder feedback is considered and addressed, including environmental concerns, and across the entire population of intended users, including historically excluded populations, people with disabilities, older people, and those with limited access to the internet and other basic technologies.\nClarify the organization's principles as they apply to AI systems - considering those which have been proposed publicly - to inform external stakeholders of the organization's values. Consider publishing or adopting AI principles.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "GOVERN 5.2",
+                    "number": "GOVERN 5.2",
+                    "text": "Mechanisms are established to enable the team that developed or deployed AI systems to regularly incorporate adjudicated feedback from relevant AI actors into system design and implementation.",
+                    "guidance": "Explicitly acknowledge that AI systems, and the use of AI, present inherent costs and risks along with potential benefits.\nDefine reasonable risk tolerances for AI systems informed by laws, regulation, best practices, or industry standards.\nEstablish policies that ensure all relevant AI actors are provided with meaningful opportunities to provide feedback on system design and implementation.\nEstablish policies that define how to assign AI systems to established risk tolerance levels by combining system impact assessments with the likelihood that an impact occurs. Such assessment often entails some combination of:\nEconometric evaluations of impacts and impact likelihoods to assess AI system risk.\nRed-amber-green (RAG) scales for impact severity and likelihood to assess AI system risk.\nEstablishment of policies for allocating risk management resources along established risk tolerance levels, with higher-risk systems receiving more risk management resources and oversight.\nEstablishment of policies for approval, conditional approval, and disapproval of the design, implementation, and deployment of AI systems.\nEstablish policies facilitating the early decommissioning of AI systems that surpass an organization's ability to reasonably mitigate risks.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "GOVERN 6",
+            "code": "GOVERN 6",
+            "name": "Policies and procedures are in place to address AI risks and benefits arising from third-party software and data and other supply chain issues.",
+            "function": "GOVERN",
+            "function_code": "GOVERN",
+            "controls": [
+                {
+                    "id": "GOVERN 6.1",
+                    "number": "GOVERN 6.1",
+                    "text": "Policies and procedures are in place that address AI risks associated with third-party entities, including risks of infringement of a third-party's intellectual property or other rights.",
+                    "guidance": "Collaboratively establish policies that address third-party AI systems and data.\nEstablish policies related to:\nTransparency into third-party system functions, including knowledge about training data, training and inference algorithms, and assumptions and limitations.\nThorough testing of third-party AI systems. (See MEASURE for more detail)\nRequirements for clear and complete instructions for third-party system usage.\nEvaluate policies for third-party technology.\nEstablish policies that address supply chain, full product lifecycle and associated processes, including legal, ethical, and other issues concerning procurement and use of third-party software or hardware systems and data.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "GOVERN 6.2",
+                    "number": "GOVERN 6.2",
+                    "text": "Contingency processes are in place to handle failures or incidents in third-party data or AI systems deemed to be high-risk.",
+                    "guidance": "Establish policies for handling third-party system failures to include consideration of redundancy mechanisms for vital third-party AI systems.\nVerify that incident response plans address third-party AI systems.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "MAP 1",
+            "code": "MAP 1",
+            "name": "Context is established and understood.",
+            "function": "MAP",
+            "function_code": "MAP",
+            "controls": [
+                {
+                    "id": "MAP 1.1",
+                    "number": "MAP 1.1",
+                    "text": "Intended purposes, potentially beneficial uses, context-specific laws, norms and expectations, and prospective settings in which the AI system will be deployed are understood and documented. Considerations include: the specific set or types of users along with their expectations; potential positive and negative impacts of system uses to individuals, communities, organizations, society, and the planet; assumptions and related limitations about AI system purposes, uses, and risks across the development or product AI lifecycle; and related TEVV and system metrics.",
+                    "guidance": "Maintain awareness of industry, technical, and applicable legal standards.\nExamine trustworthiness of AI system design and consider, non-AI solutions\nConsider intended AI system design tasks along with unanticipated purposes in collaboration with human factors and socio-technical domain experts.\nDefine and document the task, purpose, minimum functionality, and benefits of the AI system to inform considerations about whether the utility of the project or its lack of.\nIdentify whether there are non-AI or non-technology alternatives that will lead to more trustworthy outcomes.\nExamine how changes in system performance affect downstream events such as decision-making (e.g: changes in an AI model objective function create what types of impacts in how many candidates do/do not get a job interview).\nDetermine actions to map and track post-decommissioning stages of AI deployment and potential negative or positive impacts to individuals, groups and communities.\nDetermine the end user and organizational requirements, including business and technical requirements.\nDetermine and delineate the expected and acceptable AI system context of use, including:\nsocial norms\nImpacted individuals, groups, and communities\npotential positive and negative impacts to individuals, groups, communities, organizations, and society\noperational environment\nPerform context analysis related to time frame, safety concerns, geographic area, physical environment, ecosystems, social environment, and cultural norms within the intended setting (or conditions that closely approximate the intended setting.\nGain and maintain awareness about evaluating scientific claims related to AI system performance and benefits before launching into system design.\nIdentify human-AI interaction and/or roles, such as whether the application will support or replace human decision making.\nPlan for risks related to human-AI configurations, and document requirements, roles, and responsibilities for human oversight of deployed systems.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MAP 1.2",
+                    "number": "MAP 1.2",
+                    "text": "Interdisciplinary AI actors, competencies, skills, and capacities for establishing context reflect demographic diversity and broad domain and user experience expertise, and their participation is documented. Opportunities for interdisciplinary collaboration are prioritized.",
+                    "guidance": "Establish interdisciplinary teams to reflect a wide range of skills, competencies, and capabilities for AI efforts. Verify that team membership includes demographic diversity, broad domain expertise, and lived experiences. Document team composition.\nCreate and empower interdisciplinary expert teams to capture, learn, and engage the interdependencies of deployed AI systems and related terminologies and concepts from disciplines outside of AI practice such as law, sociology, psychology, anthropology, public policy, systems design, and engineering.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MAP 1.3",
+                    "number": "MAP 1.3",
+                    "text": "The organization's mission and relevant goals for AI technology are understood and documented.",
+                    "guidance": "Build transparent practices into AI system development processes.\nReview the documented system purpose from a socio-technical perspective and in consideration of societal values.\nDetermine possible misalignment between societal values and stated organizational principles and code of ethics.\nFlag latent incentives that may contribute to negative impacts.\nEvaluate AI system purpose in consideration of potential risks, societal values, and stated organizational principles.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MAP 1.4",
+                    "number": "MAP 1.4",
+                    "text": "The business value or context of business use has been clearly defined or - in the case of assessing existing AI systems - re-evaluated.",
+                    "guidance": "Document business value or context of business use\nReconcile documented concerns about the system's purpose within the business context of use compared to the organization's stated values, mission statements, social responsibility commitments, and AI principles.\nReconsider the design, implementation strategy, or deployment of AI systems with potential impacts that do not reflect institutional values.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MAP 1.5",
+                    "number": "MAP 1.5",
+                    "text": "Organizational risk tolerances are determined and documented.",
+                    "guidance": "Utilize existing regulations and guidelines for risk criteria, tolerance and response established by organizational, domain, discipline, sector, or professional requirements.\nEstablish risk tolerance levels for AI systems and allocate the appropriate oversight resources to each level.\nEstablish risk criteria in consideration of different sources of risk, (e.g., financial, operational, safety and wellbeing, business, reputational, and model risks) and different levels of risk (e.g., from negligible to critical).\nIdentify maximum allowable risk tolerance above which the system will not be deployed, or will need to be prematurely decommissioned, within the contextual or application setting.\nArticulate and analyze tradeoffs across trustworthiness characteristics as relevant to proposed context of use. When tradeoffs arise, document them and plan for traceable actions (e.g.: impact mitigation, removal of system from development or use) to inform management decisions.\nReview uses of AI systems for \"off-label\" purposes, especially in settings that organizations have deemed as high-risk. Document decisions, risk-related trade-offs, and system limitations.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MAP 1.6",
+                    "number": "MAP 1.6",
+                    "text": "System requirements (e.g., \"the system shall respect the privacy of its users\") are elicited from and understood by relevant AI actors. Design decisions take socio-technical implications into account to address AI risks.",
+                    "guidance": "Proactively incorporate trustworthy characteristics into system requirements.\nEstablish mechanisms for regular communication and feedback between relevant AI actors and internal or external stakeholders related to system design or deployment decisions.\nDevelop and standardize practices to assess potential impacts at all stages of the AI lifecycle, and in collaboration with interdisciplinary experts, actors external to the team that developed or deployed the AI system, and potentially impacted communities .\nInclude potentially impacted groups, communities and external entities (e.g. civil society organizations, research institutes, local community groups, and trade associations) in the formulation of priorities, definitions and outcomes during impact assessment activities.\nConduct qualitative interviews with end user(s) to regularly evaluate expectations and design plans related to Human-AI configurations and tasks.\nAnalyze dependencies between contextual factors and system requirements. List potential impacts that may arise from not fully considering the importance of trustworthiness characteristics in any decision making.\nFollow responsible design techniques in tasks such as software engineering, product management, and participatory engagement. Some examples for eliciting and documenting stakeholder requirements include product requirement documents (PRDs), user stories, user interaction/user experience (UI/UX) research, systems engineering, ethnography and related field methods.\nConduct user research to understand individuals, groups and communities that will be impacted by the AI, their values & context, and the role of systemic and historical biases. Integrate learnings into decisions about data selection and representation.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "MAP 2",
+            "code": "MAP 2",
+            "name": "Categorization of the AI system is performed.",
+            "function": "MAP",
+            "function_code": "MAP",
+            "controls": [
+                {
+                    "id": "MAP 2.1",
+                    "number": "MAP 2.1",
+                    "text": "The specific tasks and methods used to implement the tasks that the AI system will support are defined (e.g., classifiers, generative models, recommenders).",
+                    "guidance": "Define and document AI system's existing and potential learning task(s) along with known assumptions and limitations.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MAP 2.2",
+                    "number": "MAP 2.2",
+                    "text": "Information about the AI system's knowledge limits and how system output may be utilized and overseen by humans is documented. Documentation provides sufficient information to assist relevant AI actors when making decisions and taking subsequent actions.",
+                    "guidance": "Document settings, environments and conditions that are outside the AI system's intended use.\nDesign for end user workflows and toolsets, concept of operations, and explainability and interpretability criteria in conjunction with end user(s) and associated qualitative feedback.\nPlan and test human-AI configurations under close to real-world conditions and document results.\nFollow stakeholder feedback processes to determine whether a system achieved its documented purpose within a given use context, and whether end users can correctly comprehend system outputs or results.\nDocument dependencies on upstream data and other AI systems, including if the specified system is an upstream dependency for another AI system or other data.\nDocument connections the AI system or data will have to external networks (including the internet), financial markets, and critical infrastructure that have potential for negative externalities. Identify and document negative impacts as part of considering the broader risk thresholds and subsequent go/no-go deployment as well as post-deployment decommissioning decisions.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MAP 2.3",
+                    "number": "MAP 2.3",
+                    "text": "Scientific integrity and TEVV considerations are identified and documented, including those related to experimental design, data collection and selection (e.g., availability, representativeness, suitability), system trustworthiness, and construct validation.",
+                    "guidance": "Identify and document experiment design and statistical techniques that are valid for testing complex socio-technical systems like AI, which involve human factors, emergent properties, and dynamic context(s) of use.\nDevelop and apply TEVV protocols for models, system and its subcomponents, deployment, and operation.\nDemonstrate and document that AI system performance and validation metrics are interpretable and unambiguous for downstream decision making tasks, and take socio-technical factors such as context of use into consideration.\nIdentify and document assumptions, techniques, and metrics used for testing and evaluation throughout the AI lifecycle including experimental design techniques for data collection, selection, and management practices in accordance with data governance policies established in GOVERN.\nIdentify testing modules that can be incorporated throughout the AI lifecycle, and verify that processes enable corroboration by independent evaluators.\nEstablish mechanisms for regular communication and feedback among relevant AI actors and internal or external stakeholders related to the validity of design and deployment assumptions.\nEstablish mechanisms for regular communication and feedback between relevant AI actors and internal or external stakeholders related to the development of TEVV approaches throughout the lifecycle to detect and assess potentially harmful impacts\nDocument assumptions made and techniques used in data selection, curation, preparation and analysis, including:\nidentification of constructs and proxy targets,\ndevelopment of indices - especially those operationalizing concepts that are inherently unobservable (e.g. \"hireability,\" \"criminality.\" \"lendability\").\nMap adherence to policies that address data and construct validity, bias, privacy and security for AI systems and verify documentation, oversight, and processes.\nIdentify and document transparent methods (e.g. causal discovery methods) for inferring causal relationships between constructs being modeled and dataset attributes or proxies.\nIdentify and document processes to understand and trace test and training data lineage and its metadata resources for mapping risks.\nDocument known limitations, risk mitigation efforts associated with, and methods used for, training data collection, selection, labeling, cleaning, and analysis (e.g. treatment of missing, spurious, or outlier data; biased estimators).\nEstablish and document practices to check for capabilities that are in excess of those that are planned for, such as emergent properties, and to revisit prior risk management steps in light of any new capabilities.\nEstablish processes to test and verify that design assumptions about the set of deployment contexts continue to be accurate and sufficiently complete.\nWork with domain experts and other external AI actors to:\nGain and maintain contextual awareness and knowledge about how human behavior, organizational factors and dynamics, and society influence, and are represented in, datasets, processes, models, and system output.\nIdentify participatory approaches for responsible Human-AI configurations and oversight tasks, taking into account sources of cognitive bias.\nIdentify techniques to manage and mitigate sources of bias (systemic, computational, human- cognitive) in computational models and systems, and the assumptions and decisions in their development..\nInvestigate and document potential negative impacts due related to the full product lifecycle and associated processes that may conflict with organizational values and principles.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "MAP 3",
+            "code": "MAP 3",
+            "name": "AI capabilities, targeted usage, goals, and expected benefits and costs compared with appropriate benchmarks are understood.",
+            "function": "MAP",
+            "function_code": "MAP",
+            "controls": [
+                {
+                    "id": "MAP 3.1",
+                    "number": "MAP 3.1",
+                    "text": "Potential benefits of intended AI system functionality and performance are examined and documented.",
+                    "guidance": "Utilize participatory approaches and engage with system end users to understand and document AI systems' potential benefits, efficacy and interpretability of AI task output.\nMaintain awareness and documentation of the individuals, groups, or communities who make up the system's internal and external stakeholders.\nVerify that appropriate skills and practices are available in-house for carrying out participatory activities such as eliciting, capturing, and synthesizing user, operator and external feedback, and translating it for AI design and development functions.\nEstablish mechanisms for regular communication and feedback between relevant AI actors and internal or external stakeholders related to system design or deployment decisions.\nConsider performance to human baseline metrics or other standard benchmarks.\nIncorporate feedback from end users, and potentially impacted individuals and communities about perceived system benefits .",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MAP 3.2",
+                    "number": "MAP 3.2",
+                    "text": "Potential costs, including non-monetary costs, which result from expected or realized AI errors or system functionality and trustworthiness - as connected to organizational risk tolerance - are examined and documented.",
+                    "guidance": "Perform context analysis to map potential negative impacts arising from not integrating trustworthiness characteristics. When negative impacts are not direct or obvious, AI actors can engage with stakeholders external to the team that developed or deployed the AI system, and potentially impacted communities, to examine and document:\nWho could be harmed?\nWhat could be harmed?\nWhen could harm arise?\nHow could harm arise?\nIdentify and implement procedures for regularly evaluating the qualitative and quantitative costs of internal and external AI system failures. Develop actions to prevent, detect, and/or correct potential risks and related impacts. Regularly evaluate failure costs to inform go/no-go deployment decisions throughout the AI system lifecycle.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MAP 3.3",
+                    "number": "MAP 3.3",
+                    "text": "Targeted application scope is specified and documented based on the system's capability, established context, and AI system categorization.",
+                    "guidance": "Consider narrowing contexts for system deployment, including factors related to:\nHow outcomes may directly or indirectly affect users, groups, communities and the environment.\nLength of time the system is deployed in between re-trainings.\nGeographical regions in which the system operates.\nDynamics related to community standards or likelihood of system misuse or abuses (either purposeful or unanticipated).\nHow AI system features and capabilities can be utilized within other applications, or in place of other existing processes.\nEngage AI actors from legal and procurement functions when specifying target application scope.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MAP 3.4",
+                    "number": "MAP 3.4",
+                    "text": "Processes for operator and practitioner proficiency with AI system performance and trustworthiness - and relevant technical standards and certifications - are defined, assessed, and documented.",
+                    "guidance": "Identify and declare AI system features and capabilities that may affect downstream AI actors' decision-making in deployment and operational settings for example how system features and capabilities may activate known risks in various human-AI configurations, such as selective adherence.\nIdentify skills and proficiency requirements for operators, practitioners and other domain experts that interact with AI systems,Develop AI system operational documentation for AI actors in deployed and operational environments, including information about known risks, mitigation criteria, and trustworthy characteristics enumerated in Map-1.\nDefine and develop training materials for proposed end users, practitioners and operators about AI system use and known limitations.\nDefine and develop certification procedures for operating AI systems within defined contexts of use, and information about what exceeds operational boundaries.\nInclude operators, practitioners and end users in AI system prototyping and testing activities to help inform operational boundaries and acceptable performance. Conduct testing activities under scenarios similar to deployment conditions.\nVerify model output provided to AI system operators, practitioners and end users is interactive, and specified to context and user requirements defined in MAP-1.\nVerify AI system output is interpretable and unambiguous for downstream decision making tasks.\nDesign AI system explanation complexity to match the level of problem and context complexity.\nVerify that design principles are in place for safe operation by AI actors in decision-making environments.\nDevelop approaches to track human-AI configurations, operator, and practitioner outcomes for integration into continual improvement.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MAP 3.5",
+                    "number": "MAP 3.5",
+                    "text": "Processes for human oversight are defined, assessed, and documented in accordance with organizational policies from the GOVERN function.",
+                    "guidance": "Identify and document AI systems' features and capabilities that require human oversight, in relation to operational and societal contexts, trustworthy characteristics, and risks identified in MAP-1.\nEstablish practices for AI systems' oversight in accordance with policies developed in GOVERN-1.\nDefine and develop training materials for relevant AI Actors about AI system performance, context of use, known limitations and negative impacts, and suggested warning labels.\nInclude relevant AI Actors in AI system prototyping and testing activities. Conduct testing activities under scenarios similar to deployment conditions.\nEvaluate AI system oversight practices for validity and reliability. When oversight practices undergo extensive updates or adaptations, retest, evaluate results, and course correct as necessary.\nVerify that model documents contain interpretable descriptions of system mechanisms, enabling oversight personnel to make informed, risk-based decisions about system risks.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "MAP 4",
+            "code": "MAP 4",
+            "name": "Risks and benefits are mapped for all components of the AI system including third-party software and data.",
+            "function": "MAP",
+            "function_code": "MAP",
+            "controls": [
+                {
+                    "id": "MAP 4.1",
+                    "number": "MAP 4.1",
+                    "text": "Approaches for mapping AI technology and legal risks of its components - including the use of third-party data or software - are in place, followed, and documented, as are risks of infringement of a third party's intellectual property or other rights.",
+                    "guidance": "Review audit reports, testing results, product roadmaps, warranties, terms of service, end user license agreements, contracts, and other documentation related to third-party entities to assist in value assessment and risk management activities.\nReview third-party software release schedules and software change management plans (hotfixes, patches, updates, forward- and backward- compatibility guarantees) for irregularities that may contribute to AI system risks.\nInventory third-party material (hardware, open-source software, foundation models, open source data, proprietary software, proprietary data, etc.) required for system implementation and maintenance.\nReview redundancies related to third-party technology and personnel to assess potential risks due to lack of adequate support.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MAP 4.2",
+                    "number": "MAP 4.2",
+                    "text": "Internal risk controls for components of the AI system, including third-party AI technologies, are identified and documented.",
+                    "guidance": "Track third-parties preventing or hampering risk-mapping as indications of increased risk.\nSupply resources such as model documentation templates and software safelists to assist in third-party technology inventory and approval activities.\nReview third-party material (including data and models) for risks related to bias, data privacy, and security vulnerabilities.\nApply traditional technology risk controls - such as procurement, security, and data privacy controls - to all acquired third-party technologies.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "MAP 5",
+            "code": "MAP 5",
+            "name": "Impacts to individuals, groups, communities, organizations, and society are characterized.",
+            "function": "MAP",
+            "function_code": "MAP",
+            "controls": [
+                {
+                    "id": "MAP 5.1",
+                    "number": "MAP 5.1",
+                    "text": "Likelihood and magnitude of each identified impact (both potentially beneficial and harmful) based on expected use, past uses of AI systems in similar contexts, public incident reports, feedback from those external to the team that developed or deployed the AI system, or other data are identified and documented.",
+                    "guidance": "Establish assessment scales for measuring AI systems' impact. Scales may be qualitative, such as red-amber-green (RAG), or may entail simulations or econometric approaches. Document and apply scales uniformly across the organization's AI portfolio.\nApply TEVV regularly at key stages in the AI lifecycle, connected to system impacts and frequency of system updates.\nIdentify and document likelihood and magnitude of system benefits and negative impacts in relation to trustworthiness characteristics.\nEstablish processes for red teaming to identify and connect system limitations to AI lifecycle stage(s) and potential downstream impacts",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MAP 5.2",
+                    "number": "MAP 5.2",
+                    "text": "Practices and personnel for supporting regular engagement with relevant AI actors and integrating feedback about positive, negative, and unanticipated impacts are in place and documented.",
+                    "guidance": "Establish and document stakeholder engagement processes at the earliest stages of system formulation to identify potential impacts from the AI system on individuals, groups, communities, organizations, and society.\nEmploy methods such as value sensitive design (VSD) to identify misalignments between organizational and societal values, and system implementation and impact.\nIdentify approaches to engage, capture, and incorporate input from system end users and other key stakeholders to assist with continuous monitoring for potential impacts and emergent risks.\nIncorporate quantitative, qualitative, and mixed methods in the assessment and documentation of potential impacts to individuals, groups, communities, organizations, and society.\nIdentify a team (internal or external) that is independent of AI design and development functions to assess AI system benefits, positive and negative impacts and their likelihood and magnitude.\nEvaluate and document stakeholder feedback to assess potential impacts for actionable insights regarding trustworthiness characteristics and changes in design approaches and principles.\nDevelop TEVV procedures that incorporate socio-technical elements and methods and plan to normalize across organizational culture. Regularly review and refine TEVV processes.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "MEASURE 1",
+            "code": "MEASURE 1",
+            "name": "Appropriate methods and metrics are identified and applied.",
+            "function": "MEASURE",
+            "function_code": "MEASURE",
+            "controls": [
+                {
+                    "id": "MEASURE 1.1",
+                    "number": "MEASURE 1.1",
+                    "text": "Approaches and metrics for measurement of AI risks enumerated during the MAP function are selected for implementation starting with the most significant AI risks. The risks or trustworthiness characteristics that will not - or cannot - be measured are properly documented.",
+                    "guidance": "Establish approaches for detecting, tracking and measuring known risks, errors, incidents or negative impacts.\nIdentify testing procedures and metrics to demonstrate whether or not the system is fit for purpose and functioning as claimed.\nIdentify testing procedures and metrics to demonstrate AI system trustworthiness\nDefine acceptable limits for system performance (e.g. distribution of errors), and include course correction suggestions if/when the system performs beyond acceptable limits.\nDefine metrics for, and regularly assess, AI actor competency for effective system operation,\nIdentify transparency metrics to assess whether stakeholders have access to necessary information about system design, development, deployment, use, and evaluation.\nUtilize accountability metrics to determine whether AI designers, developers, and deployers maintain clear and transparent lines of responsibility and are open to inquiries.\nDocument metric selection criteria and include considered but unused metrics.\nMonitor AI system external inputs including training data, models developed for other contexts, system components reused from other contexts, and third-party tools and resources.\nReport metrics to inform assessments of system generalizability and reliability.\nAssess and document pre- vs post-deployment system performance. Include existing and emergent risks.\nDocument risks or trustworthiness characteristics identified in the Map function that will not be measured, including justification for non- measurement.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 1.2",
+                    "number": "MEASURE 1.2",
+                    "text": "Appropriateness of AI metrics and effectiveness of existing controls are regularly assessed and updated, including reports of errors and potential impacts on affected communities.",
+                    "guidance": "Assess external validity of all measurements (e.g., the degree to which measurements taken in one context can generalize to other contexts).\nAssess effectiveness of existing metrics and controls on a regular basis throughout the AI system lifecycle.\nDocument reports of errors, incidents and negative impacts and assess sufficiency and efficacy of existing metrics for repairs, and upgrades\nDevelop new metrics when existing metrics are insufficient or ineffective for implementing repairs and upgrades.\nDevelop and utilize metrics to monitor, characterize and track external inputs, including any third-party tools.\nDetermine frequency and scope for sharing metrics and related information with stakeholders and impacted communities.\nUtilize stakeholder feedback processes established in the Map function to capture, act upon and share feedback from end users and potentially impacted communities.\nCollect and report software quality metrics such as rates of bug occurrence and severity, time to response, and time to repair (See Manage 4.3).",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 1.3",
+                    "number": "MEASURE 1.3",
+                    "text": "Internal experts who did not serve as front-line developers for the system and/or independent assessors are involved in regular assessments and updates. Domain experts, users, AI actors external to the team that developed or deployed the AI system, and affected communities are consulted in support of assessments as necessary per organizational risk tolerance.",
+                    "guidance": "Evaluate TEVV processes regarding incentives to identify risks and impacts.\nUtilize separate testing teams established in the Govern function (2.1 and 4.1) to enable independent decisions and course-correction for AI systems. Track processes and measure and document change in performance.\nPlan and evaluate AI system prototypes with end user populations early and continuously in the AI lifecycle. Document test outcomes and course correct.\nAssess independence and stature of TEVV and oversight AI actors, to ensure they have the required levels of independence and resources to perform assurance, compliance, and feedback tasks effectively\nEvaluate interdisciplinary and demographically diverse internal team established in Map 1.2\nEvaluate effectiveness of external stakeholder feedback mechanisms, specifically related to processes for eliciting, evaluating and integrating input from diverse groups.\nEvaluate effectiveness of external stakeholder feedback mechanisms for enhancing AI actor visibility and decision making regarding AI system risks and trustworthy characteristics.\nIdentify and utilize participatory approaches for assessing impacts that may arise from changes in system deployment (e.g., introducing new technology, decommissioning algorithms and models, adapting system, model or algorithm)",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "MEASURE 2",
+            "code": "MEASURE 2",
+            "name": "AI systems are evaluated for trustworthy characteristics.",
+            "function": "MEASURE",
+            "function_code": "MEASURE",
+            "controls": [
+                {
+                    "id": "MEASURE 2.1",
+                    "number": "MEASURE 2.1",
+                    "text": "Test sets, metrics, and details about the tools used during TEVV are documented.",
+                    "guidance": "Leverage existing industry best practices for transparency and documentation of all possible aspects of measurements. Examples include: data sheet for data sets, model cards\nRegularly assess the effectiveness of tools used to document measurement approaches, test sets, metrics, processes and materials used\nUpdate the tools as needed",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 2.2",
+                    "number": "MEASURE 2.2",
+                    "text": "Evaluations involving human subjects meet applicable requirements (including human subject protection) and are representative of the relevant population.",
+                    "guidance": "Follow human subjects research requirements as established by organizational and disciplinary requirements, including informed consent and compensation, during dataset collection activities.\nAnalyze differences between intended and actual population of users or data subjects, including likelihood for errors, incidents or negative impacts.\nUtilize disaggregated evaluation methods (e.g. by race, age, gender, ethnicity, ability, region) to improve AI system performance when deployed in real world settings.\nEstablish thresholds and alert procedures for dataset representativeness within the context of use.\nConstruct datasets in close collaboration with experts with knowledge of the context of use.\nFollow intellectual property and privacy rights related to datasets and their use, including for the subjects represented in the data.\nEvaluate data representativeness through\ninvestigating known failure modes,\nassessing data quality and diverse sourcing,\napplying public benchmarks,\ntraditional bias testing,\nchaos engineering,\nstakeholder feedback\nUse informed consent for individuals providing data used in system testing and evaluation.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 2.3",
+                    "number": "MEASURE 2.3",
+                    "text": "AI system performance or assurance criteria are measured qualitatively or quantitatively and demonstrated for conditions similar to deployment setting(s). Measures are documented.",
+                    "guidance": "Conduct regular and sustained engagement with potentially impacted communities\nMaintain a demographically diverse and multidisciplinary and collaborative internal team\nRegularly test and evaluate systems in non-optimized conditions, and in collaboration with AI actors in user interaction and user experience (UI/UX) roles.\nEvaluate feedback from stakeholder engagement activities, in collaboration with human factors and socio-technical experts.\nCollaborate with socio-technical, human factors, and UI/UX experts to identify notable characteristics in context of use that can be translated into system testing scenarios.\nMeasure AI systems prior to deployment in conditions similar to expected scenarios.\nMeasure and document performance criteria such as validity (false positive rate, false negative rate, etc.) and efficiency (training times, prediction latency, etc.) related to ground truth within the deployment context of use.\nMeasure assurance criteria such as AI actor competency and experience.\nDocument differences between measurement setting and the deployment environment(s).",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 2.4",
+                    "number": "MEASURE 2.4",
+                    "text": "The functionality and behavior of the AI system and its components - as identified in the MAP function - are monitored when in production.",
+                    "guidance": "Monitor and document how metrics and performance indicators observed in production differ from the same metrics collected during pre-deployment testing. When differences are observed, consider error propagation and feedback loop risks.\nUtilize hypothesis testing or human domain expertise to measure monitored distribution differences in new input or output data relative to test environments\nMonitor for anomalies using approaches such as control limits, confidence intervals, integrity constraints and ML algorithms. When anomalies are observed, consider error propagation and feedback loop risks.\nVerify alerts are in place for when distributions in new input data or generated predictions observed in production differ from pre-deployment test outcomes, or when anomalies are detected.\nAssess the accuracy and quality of generated outputs against new collected ground-truth information as it becomes available.\nUtilize human review to track processing of unexpected data and reliability of generated outputs; warn system users when outputs may be unreliable. Verify that human overseers responsible for these processes have clearly defined responsibilities and training for specified tasks.\nCollect uses cases from the operational environment for system testing and monitoring activities in accordance with organizational policies and regulatory or disciplinary requirements (e.g. informed consent, institutional review board approval, human research protections),",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 2.5",
+                    "number": "MEASURE 2.5",
+                    "text": "The AI system to be deployed is demonstrated to be valid and reliable. Limitations of the generalizability beyond the conditions under which the technology was developed are documented.",
+                    "guidance": "Define the operating conditions and socio-technical context under which the AI system will be validated.\nDefine and document processes to establish the system's operational conditions and limits.\nEstablish or identify, and document approaches to measure forms of validity, including:\nconstruct validity (the test is measuring the concept it claims to measure)\ninternal validity (relationship being tested is not influenced by other factors or variables)\nexternal validity (results are generalizable beyond the training condition)\nthe use of experimental design principles and statistical analyses and modeling.\nAssess and document system variance. Standard approaches include confidence intervals, standard deviation, standard error, bootstrapping, or cross-validation.\nEstablish or identify, and document robustness measures.\nEstablish or identify, and document reliability measures.\nEstablish practices to specify and document the assumptions underlying measurement models to ensure proxies accurately reflect the concept being measured.\nUtilize standard software testing approaches (e.g. unit, integration, functional and chaos testing, computer-generated test cases, etc.)\nUtilize standard statistical methods to test bias, inferential associations, correlation, and covariance in adopted measurement models.\nUtilize standard statistical methods to test variance and reliability of system outcomes.\nMonitor operating conditions for system performance outside of defined limits.\nIdentify TEVV approaches for exploring AI system limitations, including testing scenarios that differ from the operational environment. Consult experts with knowledge of specific context of use.\nDefine post-alert actions. Possible actions may include:\nalerting other relevant AI actors before action,\nrequesting subsequent human review of action,\nalerting downstream users and stakeholder that the system is operating outside it's defined validity limits,\ntracking and mitigating possible error propagation\naction logging\nLog input data and relevant system configuration information whenever there is an attempt to use the system beyond its well-defined range of system validity.\nModify the system over time to extend its range of system validity to new operating conditions.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 2.6",
+                    "number": "MEASURE 2.6",
+                    "text": "The AI system is evaluated regularly for safety risks - as identified in the MAP function. The AI system to be deployed is demonstrated to be safe, its residual negative risk does not exceed the risk tolerance, and it can fail safely, particularly if made to operate beyond its knowledge limits. Safety metrics reflect system reliability and robustness, real-time monitoring, and response times for AI system failures.",
+                    "guidance": "Thoroughly measure system performance in development and deployment contexts, and under stress conditions.\nEmploy test data assessments and simulations before proceeding to production testing. Track multiple performance quality and error metrics.\nStress-test system performance under likely scenarios (e.g., concept drift, high load) and beyond known limitations, in consultation with domain experts.\nTest the system under conditions similar to those related to past known incidents or near-misses and measure system performance and safety characteristics\nApply chaos engineering approaches to test systems in extreme conditions and gauge unexpected responses.\nDocument the range of conditions under which the system has been tested and demonstrated to fail safely.\nMeasure and monitor system performance in real-time to enable rapid response when AI system incidents are detected.\nCollect pertinent safety statistics (e.g., out-of-range performance, incident response times, system down time, injuries, etc.) in anticipation of potential information sharing with impacted communities or as required by AI system oversight personnel.\nAlign measurement to the goal of continuous improvement. Seek to increase the range of conditions under which the system is able to fail safely through system modifications in response to in-production testing and events.\nDocument, practice and measure incident response plans for AI system incidents, including measuring response and down times.\nCompare documented safety testing and monitoring information with established risk tolerances on an on-going basis.\nConsult MANAGE for detailed information related to managing safety risks.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 2.7",
+                    "number": "MEASURE 2.7",
+                    "text": "AI system security and resilience - as identified in the MAP function - are evaluated and documented.",
+                    "guidance": "Establish and track AI system security tests and metrics (e.g., red-teaming activities, frequency and rate of anomalous events, system down-time, incident response times, time-to-bypass, etc.).\nUse red-team exercises to actively test the system under adversarial or stress conditions, measure system response, assess failure modes or determine if system can return to normal function after an unexpected adverse event.\nDocument red-team exercise results as part of continuous improvement efforts, including the range of security test conditions and results.\nUse red-teaming exercises to evaluate potential mismatches between claimed and actual system performance.\nUse countermeasures (e.g, authentication, throttling, differential privacy, robust ML approaches) to increase the range of security conditions under which the system is able to return to normal function.\nModify system security procedures and countermeasures to increase robustness and resilience to attacks in response to testing and events experienced in production.\nVerify that information about errors and attack patterns is shared with incident databases, other organizations with similar systems, and system users and stakeholders (MANAGE-4.1).\nDevelop and maintain information sharing practices with AI actors from other organizations to learn from common attacks.\nVerify that third party AI resources and personnel undergo security audits and screenings. Risk indicators may include failure of third parties to provide relevant security information.\nUtilize watermarking technologies as a deterrent to data and model extraction attacks.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 2.8",
+                    "number": "MEASURE 2.8",
+                    "text": "Risks associated with transparency and accountability - as identified in the MAP function - are examined and documented.",
+                    "guidance": "Instrument the system for measurement and tracking, e.g., by maintaining histories, audit logs and other information that can be used by AI actors to review and evaluate possible sources of error, bias, or vulnerability.\nCalibrate controls for users in close collaboration with experts in user interaction and user experience (UI/UX), human computer interaction (HCI), and/or human-AI teaming.\nTest provided explanations for calibration with different audiences including operators, end users, decision makers and decision subjects (individuals for whom decisions are being made), and to enable recourse for consequential system decisions that affect end users or subjects.\nMeasure and document human oversight of AI systems:\nDocument the degree of oversight that is provided by specified AI actors regarding AI system output.\nMaintain statistics about downstream actions by end users and operators such as system overrides.\nMaintain statistics about and document reported errors or complaints, time to respond, and response types.\nMaintain and report statistics about adjudication activities.\nTrack, document, and measure organizational accountability regarding AI systems via policy exceptions and escalations, and document \"go\" and \"no/go\" decisions made by accountable parties.\nTrack and audit the effectiveness of organizational mechanisms related to AI risk management, including:\nLines of communication between AI actors, executive leadership, users and impacted communities.\nRoles and responsibilities for AI actors and executive leadership.\nOrganizational accountability roles, e.g., chief model risk officers, AI oversight committees, responsible or ethical AI directors, etc.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 2.9",
+                    "number": "MEASURE 2.9",
+                    "text": "The AI model is explained, validated, and documented, and AI system output is interpreted within its context - as identified in the MAP function - to inform responsible use and governance.",
+                    "guidance": "Verify systems are developed to produce explainable models, post-hoc explanations and audit logs.\nWhen possible or available, utilize approaches that are inherently explainable, such as traditional and penalized generalized linear models , decision trees, nearest-neighbor and prototype-based approaches, rule-based models, generalized additive models , explainable boosting machines and neural additive models.\nTest explanation methods and resulting explanations prior to deployment to gain feedback from relevant AI actors, end users, and potentially impacted individuals or groups about whether explanations are accurate, clear, and understandable.\nDocument AI model details including model type (e.g., convolutional neural network, reinforcement learning, decision tree, random forest, etc.) data features, training algorithms, proposed uses, decision thresholds, training data, evaluation data, and ethical considerations.\nEstablish, document, and report performance and error metrics across demographic groups and other segments relevant to the deployment context.\nExplain systems using a variety of methods, e.g., visualizations, model extraction, feature importance, and others. Since explanations may not accurately summarize complex systems, test explanations according to properties such as fidelity, consistency, robustness, and interpretability.\nAssess the characteristics of system explanations according to properties such as fidelity (local and global), ambiguity, interpretability, interactivity, consistency, and resilience to attack/manipulation.\nTest the quality of system explanations with end-users and other groups.\nSecure model development processes to avoid vulnerability to external manipulation such as gaming explanation processes.\nTest for changes in models over time, including for models that adjust in response to production data.\nUse transparency tools such as data statements and model cards to document explanatory and validation information.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 2.10",
+                    "number": "MEASURE 2.10",
+                    "text": "Privacy risk of the AI system - as identified in the MAP function - is examined and documented.",
+                    "guidance": "Specify privacy-related values, frameworks, and attributes that are applicable in the context of use through direct engagement with end users and potentially impacted groups and communities.\nDocument collection, use, management, and disclosure of personally sensitive information in datasets, in accordance with privacy and data governance policies\nQuantify privacy-level data aspects such as the ability to identify individuals or groups (e.g. k-anonymity metrics, l-diversity, t-closeness).\nEstablish and document protocols (authorization, duration, type) and access controls for training sets or production data containing personally sensitive information, in accordance with privacy and data governance policies.\nMonitor internal queries to production data for detecting patterns that isolate personal records.\nMonitor PSI disclosures and inference of sensitive or legally protected attributes\nAssess the risk of manipulation from overly customized content. Evaluate information presented to representative users at various points along axes of difference between individuals (e.g. individuals of different ages, genders, races, political affiliation, etc.).\nUse privacy-enhancing techniques such as differential privacy, when publicly sharing dataset information.\nCollaborate with privacy experts, AI end users and operators, and other domain experts to determine optimal differential privacy metrics within contexts of use.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 2.11",
+                    "number": "MEASURE 2.11",
+                    "text": "Fairness and bias - as identified in the MAP function - are evaluated and results are documented.",
+                    "guidance": "Conduct fairness assessments to manage computational and statistical forms of bias which include the following steps:\nIdentify types of harms, including allocational, representational, quality of service, stereotyping, or erasure\nIdentify across, within, and intersecting groups that might be harmed\nQuantify harms using both a general fairness metric, if appropriate (e.g. demographic parity, equalized odds, equal opportunity, statistical hypothesis tests), and custom, context-specific metrics developed in collaboration with affected communities\nAnalyze quantified harms for contextually significant differences across groups, within groups, and among intersecting groups\nRefine identification of within-group and intersectional group disparities.\nEvaluate underlying data distributions and employ sensitivity analysis during the analysis of quantified harms.\nEvaluate quality metrics including false positive rates and false negative rates.\nConsider biases affecting small groups, within-group or intersectional communities, or single individuals.\nUnderstand and consider sources of bias in training and TEVV data:\nDifferences in distributions of outcomes across and within groups, including intersecting groups.\nCompleteness, representativeness and balance of data sources.\nIdentify input data features that may serve as proxies for demographic group membership (i.e., credit score, ZIP code) or otherwise give rise to emergent bias within AI systems.\nForms of systemic bias in images, text (or word embeddings), audio or other complex or unstructured data.\nLeverage impact assessments to identify and classify system impacts and harms to end users, other individuals, and groups with input from potentially impacted communities.\nIdentify the classes of individuals, groups, or environmental ecosystems which might be impacted through direct engagement with potentially impacted communities.\nEvaluate systems in regards to disability inclusion, including consideration of disability status in bias testing, and discriminatory screen out processes that may arise from non-inclusive design or deployment decisions.\nDevelop objective functions in consideration of systemic biases, in-group/out-group dynamics.\nUse context-specific fairness metrics to examine how system performance varies across groups, within groups, and/or for intersecting groups. Metrics may include statistical parity, error-rate equality, statistical parity difference, equal opportunity difference, average absolute odds difference, standardized mean difference, percentage point differences.\nCustomize fairness metrics to specific context of use to examine how system performance and potential harms vary within contextual norms.\nDefine acceptable levels of difference in performance in accordance with established organizational governance policies, business requirements, regulatory compliance, legal frameworks, and ethical standards within the context of use\nDefine the actions to be taken if disparity levels rise above acceptable levels.\nIdentify groups within the expected population that may require disaggregated analysis, in collaboration with impacted communities.\nLeverage experts with knowledge in the specific context of use to investigate substantial measurement differences and identify root causes for those differences.\nMonitor system outputs for performance or bias issues that exceed established tolerance levels.\nEnsure periodic model updates; test and recalibrate with updated and more representative data to stay within acceptable levels of difference.\nApply pre-processing data transformations to address factors related to demographic balance and data representativeness.\nApply in-processing to balance model performance quality with bias considerations.\nApply post-processing mathematical/computational techniques to model results in close collaboration with impact assessors, socio-technical experts, and other AI actors with expertise in the context of use.\nApply model selection approaches with transparent and deliberate consideration of bias management and other trustworthy characteristics.\nCollect and share information about differences in outcomes for the identified groups.\nConsider mediations to mitigate differences, especially those that can be traced to past patterns of unfair or biased human decision making.\nUtilize human-centered design practices to generate deeper focus on societal impacts and counter human-cognitive biases within the AI lifecycle.\nEvaluate practices along the lifecycle to identify potential sources of human-cognitive bias such as availability, observational, and confirmation bias, and to make implicit decision making processes more explicit and open to investigation.\nWork with human factors experts to evaluate biases in the presentation of system output to end users, operators and practitioners.\nUtilize processes to enhance contextual awareness, such as diverse internal staff and stakeholder engagement.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 2.12",
+                    "number": "MEASURE 2.12",
+                    "text": "Environmental impact and sustainability of AI model training and management activities - as identified in the MAP function - are assessed and documented.",
+                    "guidance": "Include environmental impact indicators in AI system design and development plans, including reducing consumption and improving efficiencies.\nIdentify and implement key indicators of AI system energy and water consumption and efficiency, and/or GHG emissions.\nEstablish measurable baselines for sustainable AI system operation in accordance with organizational policies, regulatory compliance, legal frameworks, and environmental protection and sustainability norms.\nAssess tradeoffs between AI system performance and sustainable operations in accordance with organizational principles and policies, regulatory compliance, legal frameworks, and environmental protection and sustainability norms.\nIdentify and establish acceptable resource consumption and efficiency, and GHG emissions levels, along with actions to be taken if indicators rise above acceptable levels.\nEstimate AI system emissions levels throughout the AI lifecycle via carbon calculators or similar process.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 2.13",
+                    "number": "MEASURE 2.13",
+                    "text": "Effectiveness of the employed TEVV metrics and processes in the MEASURE function are evaluated and documented.",
+                    "guidance": "Review selected system metrics and associated TEVV processes to determine if they are able to sustain system improvements, including the identification and removal of errors.\nRegularly evaluate system metrics for utility, and consider descriptive approaches in place of overly complex methods.\nReview selected system metrics for acceptability within the end user and impacted community of interest.\nAssess effectiveness of metrics for identifying and measuring risks.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "MEASURE 3",
+            "code": "MEASURE 3",
+            "name": "Mechanisms for tracking identified AI risks over time are in place.",
+            "function": "MEASURE",
+            "function_code": "MEASURE",
+            "controls": [
+                {
+                    "id": "MEASURE 3.1",
+                    "number": "MEASURE 3.1",
+                    "text": "Approaches, personnel, and documentation are in place to regularly identify and track existing, unanticipated, and emergent AI risks based on factors such as intended and actual performance in deployed contexts.",
+                    "guidance": "Compare AI system risks with:\nsimpler or traditional models\nhuman baseline performance\nother manual performance benchmarks\nCompare end user and community feedback about deployed AI systems to internal measures of system performance.\nAssess effectiveness of metrics for identifying and measuring emergent risks.\nMeasure error response times and track response quality.\nElicit and track feedback from AI actors in user support roles about the type of metrics, explanations and other system information required for fulsome resolution of system issues. Consider:\nInstances where explanations are insufficient for investigating possible error sources or identifying responses.\nSystem metrics, including system logs and explanations, for identifying and diagnosing sources of system error.\nElicit and track feedback from AI actors in incident response and support roles about the adequacy of staffing and resources to perform their duties in an effective and timely manner.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 3.2",
+                    "number": "MEASURE 3.2",
+                    "text": "Risk tracking approaches are considered for settings where AI risks are difficult to assess using currently available measurement techniques or where metrics are not yet available.",
+                    "guidance": "Establish processes for tracking emergent risks that may not be measurable with current approaches. Some processes may include:\nRecourse mechanisms for faulty AI system outputs.\nBug bounties.\nHuman-centered design approaches.\nUser-interaction and experience research.\nParticipatory stakeholder engagement with affected or potentially impacted individuals and communities.\nIdentify AI actors responsible for tracking emergent risks and inventory methods.\nDetermine and document the rate of occurrence and severity level for complex or difficult-to-measure risks when:\nPrioritizing new measurement approaches for deployment tasks.\nAllocating AI system risk management resources.\nEvaluating AI system improvements.\nMaking go/no-go decisions for subsequent system iterations.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 3.3",
+                    "number": "MEASURE 3.3",
+                    "text": "Feedback processes for end users and impacted communities to report problems and appeal system outcomes are established and integrated into AI system evaluation metrics.",
+                    "guidance": "Measure efficacy of end user and operator error reporting processes.\nCategorize and analyze type and rate of end user appeal requests and results.\nMeasure feedback activity participation rates and awareness of feedback activity availability.\nUtilize feedback to analyze measurement approaches and determine subsequent courses of action.\nEvaluate measurement approaches to determine efficacy for enhancing organizational understanding of real world impacts.\nAnalyze end user and community feedback in close collaboration with domain experts.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "MEASURE 4",
+            "code": "MEASURE 4",
+            "name": "Feedback about efficacy of measurement is gathered and assessed.",
+            "function": "MEASURE",
+            "function_code": "MEASURE",
+            "controls": [
+                {
+                    "id": "MEASURE 4.1",
+                    "number": "MEASURE 4.1",
+                    "text": "Measurement approaches for identifying AI risks are connected to deployment context(s) and informed through consultation with domain experts and other end users. Approaches are documented.",
+                    "guidance": "Support mechanisms for capturing feedback from system end users (including domain experts, operators, and practitioners). Successful approaches are:\nconducted in settings where end users are able to openly share their doubts and insights about AI system output, and in connection to their specific context of use (including setting and task-specific lines of inquiry)\ndeveloped and implemented by human-factors and socio-technical domain experts and researchers\ndesigned to ensure control of interviewer and end user subjectivity and biases\nIdentify and document approaches\nfor evaluating and integrating elicited feedback from system end users\nin collaboration with human-factors and socio-technical domain experts,\nto actively inform a process of continual improvement.\nEvaluate feedback from end users alongside evaluated feedback from impacted communities (MEASURE 3.3).\nUtilize end user feedback to investigate how selected metrics and measurement approaches interact with organizational and operational contexts.\nAnalyze and document system-internal measurement processes in comparison to collected end user feedback.\nIdentify and implement approaches to measure effectiveness and satisfaction with end user elicitation techniques, and document results.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 4.2",
+                    "number": "MEASURE 4.2",
+                    "text": "Measurement results regarding AI system trustworthiness in deployment context(s) and across the AI lifecycle are informed by input from domain experts and relevant AI actors to validate whether the system is performing consistently as intended. Results are documented.",
+                    "guidance": "Integrate feedback from end users, operators, and affected individuals and communities from Map function as inputs to assess AI system trustworthiness characteristics. Ensure both positive and negative feedback is being assessed.\nEvaluate feedback in connection with AI system trustworthiness characteristics from Measure 2.5 to 2.11.\nEvaluate feedback regarding end user satisfaction with, and confidence in, AI system performance including whether output is considered valid and reliable, and explainable and interpretable.\nIdentify mechanisms to confirm/support AI system output (e.g. recommendations), and end user perspectives about that output.\nMeasure frequency of AI systems' override decisions, evaluate and document results, and feed insights back into continual improvement processes.\nConsult AI actors in impact assessment, human factors and socio-technical tasks to assist with analysis and interpretation of results.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MEASURE 4.3",
+                    "number": "MEASURE 4.3",
+                    "text": "Measurable performance improvements or declines based on consultations with relevant AI actors, including affected communities, and field data about contextrelevant risks and trustworthiness characteristics are identified and documented.",
+                    "guidance": "Develop baseline quantitative measures for trustworthy characteristics.\nDelimit and characterize baseline operation values and states.\nUtilize qualitative approaches to augment and complement quantitative baseline measures, in close coordination with impact assessment, human factors and socio-technical AI actors.\nMonitor and assess measurements as part of continual improvement to identify potential system adjustments or modifications\nPerform and document sensitivity analysis to characterize actual and expected variance in performance after applying system or procedural updates.\nDocument decisions related to the sensitivity analysis and record expected influence on system performance and identified risks.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "MANAGE 1",
+            "code": "MANAGE 1",
+            "name": "AI risks based on assessments and other analytical output from the MAP and MEASURE functions are prioritized, responded to, and managed.",
+            "function": "MANAGE",
+            "function_code": "MANAGE",
+            "controls": [
+                {
+                    "id": "MANAGE 1.1",
+                    "number": "MANAGE 1.1",
+                    "text": "A determination is made as to whether the AI system achieves its intended purposes and stated objectives and whether its development or deployment should proceed.",
+                    "guidance": "Consider trustworthiness characteristics when evaluating AI systems' negative risks and benefits.\nUtilize TEVV outputs from map and measure functions when considering risk treatment.\nRegularly track and monitor negative risks and benefits throughout the AI system lifecycle including in post-deployment monitoring.\nRegularly assess and document system performance relative to trustworthiness characteristics and tradeoffs between negative risks and opportunities.\nEvaluate tradeoffs in connection with real-world use cases and impacts and as enumerated in Map function outcomes.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MANAGE 1.2",
+                    "number": "MANAGE 1.2",
+                    "text": "Treatment of documented AI risks is prioritized based on impact, likelihood, and available resources or methods.",
+                    "guidance": "Assign risk management resources relative to established risk tolerance. AI systems with lower risk tolerances receive greater oversight, mitigation and management resources.\nDocument AI risk tolerance determination practices and resource decisions.\nRegularly review risk tolerances and re-calibrate, as needed, in accordance with information from AI system monitoring and assessment .",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MANAGE 1.3",
+                    "number": "MANAGE 1.3",
+                    "text": "Responses to the AI risks deemed high priority, as identified by the MAP function, are developed, planned, and documented. Risk response options can include mitigating, transferring, avoiding, or accepting.",
+                    "guidance": "Observe regulatory and established organizational, sector, discipline, or professional standards and requirements for applying risk tolerances within the organization.\nDocument procedures for acting on AI system risks related to trustworthiness characteristics.\nPrioritize risks involving physical safety, legal liabilities, regulatory compliance, and negative impacts on individuals, groups, or society.\nIdentify risk response plans and resources and organizational teams for carrying out response functions.\nStore risk management and system documentation in an organized, secure repository that is accessible by relevant AI Actors and appropriate personnel.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MANAGE 1.4",
+                    "number": "MANAGE 1.4",
+                    "text": "Negative residual risks (defined as the sum of all unmitigated risks) to both downstream acquirers of AI systems and end users are documented.",
+                    "guidance": "Document residual risks within risk response plans, denoting risks that have been accepted, transferred, or subject to minimal mitigation.\nEstablish procedures for disclosing residual risks to relevant downstream AI actors .\nInform relevant downstream AI actors of requirements for safe operation, known limitations, and suggested warning labels as identified in MAP 3.4.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "MANAGE 2",
+            "code": "MANAGE 2",
+            "name": "Strategies to maximize AI benefits and minimize negative impacts are planned, prepared, implemented, documented, and informed by input from relevant AI actors.",
+            "function": "MANAGE",
+            "function_code": "MANAGE",
+            "controls": [
+                {
+                    "id": "MANAGE 2.1",
+                    "number": "MANAGE 2.1",
+                    "text": "Resources required to manage AI risks are taken into account - along with viable non-AI alternative systems, approaches, or methods - to reduce the magnitude or likelihood of potential impacts.",
+                    "guidance": "Plan and implement risk management practices in accordance with established organizational risk tolerances.\nVerify risk management teams are resourced to carry out functions, including\nEstablishing processes for considering methods that are not automated; semi-automated; or other procedural alternatives for AI functions.\nEnhance AI system transparency mechanisms for AI teams.\nEnable exploration of AI system limitations by AI teams.\nIdentify, assess, and catalog past failed designs and negative impacts or outcomes to avoid known failure modes.\nIdentify resource allocation approaches for managing risks in systems:\ndeemed high-risk,\nthat self-update (adaptive, online, reinforcement self-supervised learning or similar),\ntrained without access to ground truth (unsupervised, semi-supervised, learning or similar),\nwith high uncertainty or where risk management is insufficient.\nRegularly seek and integrate external expertise and perspectives to supplement organizational diversity (e.g. demographic, disciplinary), equity, inclusion, and accessibility where internal capacity is lacking.\nEnable and encourage regular, open communication and feedback among AI actors and internal or external stakeholders related to system design or deployment decisions.\nPrepare and document plans for continuous monitoring and feedback mechanisms.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MANAGE 2.2",
+                    "number": "MANAGE 2.2",
+                    "text": "Mechanisms are in place and applied to sustain the value of deployed AI systems.",
+                    "guidance": "Establish risk controls considering trustworthiness characteristics, including:\nData management, quality, and privacy (e.g. minimization, rectification or deletion requests) controls as part of organizational data governance policies.\nMachine learning and end-point security countermeasures (e.g., robust models, differential privacy, authentication, throttling).\nBusiness rules that augment, limit or restrict AI system outputs within certain contexts\nUtilizing domain expertise related to deployment context for continuous improvement and TEVV across the AI lifecycle.\nDevelopment and regular tracking of human-AI teaming configurations.\nModel assessment and test, evaluation, validation and verification (TEVV) protocols.\nUse of standardized documentation and transparency mechanisms.\nSoftware quality assurance practices across AI lifecycle.\nMechanisms to explore system limitations and avoid past failed designs or deployments.\nEstablish mechanisms to capture feedback from system end users and potentially impacted groups while system is in deployment.\nEstablish mechanisms to capture feedback from system end users and potentially impacted groups about how changes in system deployment (e.g., introducing new technology, decommissioning algorithms and models, adapting system, model or algorithm) may create negative impacts that are not visible along the AI lifecycle.\nReview insurance policies, warranties, or contracts for legal or oversight requirements for risk transfer procedures.\nDocument risk tolerance decisions and risk acceptance procedures.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MANAGE 2.3",
+                    "number": "MANAGE 2.3",
+                    "text": "Procedures are followed to respond to and recover from a previously unknown risk when it is identified.",
+                    "guidance": "Protocols, resources, and metrics are in place for continual monitoring of AI systems' performance, trustworthiness, and alignment with contextual norms and values\nEstablish and regularly review treatment and response plans for incidents, negative impacts, or outcomes.\nEstablish and maintain procedures to regularly monitor system components for drift, decontextualization, or other AI system behavior factors,\nEstablish and maintain procedures for capturing feedback about negative impacts.\nVerify contingency processes to handle any negative impacts associated with mission-critical AI systems, and to deactivate systems.\nEnable preventive and post-hoc exploration of AI system limitations by relevant AI actor groups.\nDecommission systems that exceed risk tolerances.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MANAGE 2.4",
+                    "number": "MANAGE 2.4",
+                    "text": "Mechanisms are in place and applied, and responsibilities are assigned and understood, to supersede, disengage, or deactivate AI systems that demonstrate performance or outcomes inconsistent with intended use.",
+                    "guidance": "Regularly review established procedures for AI system bypass actions, including plans for redundant or backup systems to ensure continuity of operational and/or business functionality.\nRegularly review Identify system incident thresholds for activating bypass or deactivation responses.\nApply change management processes to understand the upstream and downstream consequences of bypassing or deactivating an AI system or AI system components.\nApply protocols, resources and metrics for decisions to supersede, bypass or deactivate AI systems or AI system components.\nPreserve materials for forensic, regulatory, and legal review.\nConduct internal root cause analysis and process reviews of bypass or deactivation events.\nDecommission and preserve system components that cannot be updated to meet criteria for redeployment.\nEstablish criteria for redeploying updated system components, in consideration of trustworthy characteristics",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "MANAGE 3",
+            "code": "MANAGE 3",
+            "name": "AI risks and benefits from third-party entities are managed.",
+            "function": "MANAGE",
+            "function_code": "MANAGE",
+            "controls": [
+                {
+                    "id": "MANAGE 3.1",
+                    "number": "MANAGE 3.1",
+                    "text": "AI risks and benefits from third-party resources are regularly monitored, and risk controls are applied and documented.",
+                    "guidance": "Have legal requirements been addressed?\nApply organizational risk tolerance to third-party AI systems.\nApply and document organizational risk management plans and practices to third-party AI technology, personnel, or other resources.\nIdentify and maintain documentation for third-party AI systems and components.\nEstablish testing, evaluation, validation and verification processes for third-party AI systems which address the needs for transparency without exposing proprietary algorithms .\nEstablish processes to identify beneficial use and risk indicators in third-party systems or components, such as inconsistent software release schedule, sparse documentation, and incomplete software change management (e.g., lack of forward or backward compatibility).\nOrganizations can establish processes for third parties to report known and potential vulnerabilities, risks or biases in supplied resources.\nVerify contingency processes for handling negative impacts associated with mission-critical third-party AI systems.\nMonitor third-party AI systems for potential negative impacts and risks associated with trustworthiness characteristics.\nDecommission third-party systems that exceed risk tolerances.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MANAGE 3.2",
+                    "number": "MANAGE 3.2",
+                    "text": "Pre-trained models which are used for development are monitored as part of AI system regular monitoring and maintenance.",
+                    "guidance": "Identify pre-trained models within AI system inventory for risk tracking.\nEstablish processes to independently and continually monitor performance and trustworthiness of pre-trained models, and as part of third-party risk tracking.\nMonitor performance and trustworthiness of AI system components connected to pre-trained models, and as part of third-party risk tracking.\nIdentify, document and remediate risks arising from AI system components and pre-trained models per organizational risk management procedures, and as part of third-party risk tracking.\nDecommission AI system components and pre-trained models which exceed risk tolerances, and as part of third-party risk tracking.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        },
+        {
+            "number": "MANAGE 4",
+            "code": "MANAGE 4",
+            "name": "Risk treatments, including response and recovery, and communication plans for the identified and measured AI risks are documented and monitored regularly.",
+            "function": "MANAGE",
+            "function_code": "MANAGE",
+            "controls": [
+                {
+                    "id": "MANAGE 4.1",
+                    "number": "MANAGE 4.1",
+                    "text": "Post-deployment AI system monitoring plans are implemented, including mechanisms for capturing and evaluating input from users and other relevant AI actors, appeal and override, decommissioning, incident response, recovery, and change management.",
+                    "guidance": "Establish and maintain procedures to monitor AI system performance for risks and negative and positive impacts associated with trustworthiness characteristics.\nPerform post-deployment TEVV tasks to evaluate AI system validity and reliability, bias and fairness, privacy, and security and resilience.\nEvaluate AI system trustworthiness in conditions similar to deployment context of use, and prior to deployment.\nEstablish and implement red-teaming exercises at a prescribed cadence, and evaluate their efficacy.\nEstablish procedures for tracking dataset modifications such as data deletion or rectification requests.\nEstablish mechanisms for regular communication and feedback between relevant AI actors and internal or external stakeholders to capture information about system performance, trustworthiness and impact.\nShare information about errors, near-misses, and attack patterns with incident databases, other organizations with similar systems, and system users and stakeholders.\nRespond to and document detected or reported negative impacts or issues in AI system performance and trustworthiness.\nDecommission systems that exceed establish risk tolerances.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MANAGE 4.2",
+                    "number": "MANAGE 4.2",
+                    "text": "Measurable activities for continual improvements are integrated into AI system updates and include regular engagement with interested parties, including relevant AI actors.",
+                    "guidance": "Integrate trustworthiness characteristics into protocols and metrics used for continual improvement.\nEstablish processes for evaluating and integrating feedback into AI system improvements.\nAssess and evaluate alignment of proposed improvements with relevant regulatory and legal frameworks\nAssess and evaluate alignment of proposed improvements connected to the values and norms within the context of use.\nDocument the basis for decisions made relative to tradeoffs between trustworthy characteristics, system risks, and system opportunities",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                },
+                {
+                    "id": "MANAGE 4.3",
+                    "number": "MANAGE 4.3",
+                    "text": "Incidents and errors are communicated to relevant AI actors, including affected communities. Processes for tracking, responding to, and recovering from incidents and errors are followed and documented.",
+                    "guidance": "Establish procedures to regularly share information about errors, incidents and negative impacts with relevant stakeholders, operators, practitioners and users, and impacted parties.\nMaintain a database of reported errors, near-misses, incidents and negative impacts including date reported, number of reports, assessment of impact and severity, and responses.\nMaintain a database of system changes, reason for change, and details of how the change was made, tested and deployed.\nMaintain version history information and metadata to enable continuous improvement processes.\nVerify that relevant AI actors responsible for identifying complex or emergent risks are properly resourced and empowered.",
+                    "type": "subcategory",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ai1001"
+                }
+            ]
+        }
+    ]
+}

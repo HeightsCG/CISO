@@ -146,6 +146,7 @@ class Poam
         'nist-800-53-r5' => 'plan_handling',
         'nist-800-171-r3' => 'plan_handling',
         'nist-csf-2' => 'plan_handling',
+        'nist-ai-rmf' => 'none',
         'tsa-aviation-cyber' => 'plan_handling',
         'hipaa-security' => 'none',
         'hipaa-breach' => 'none',

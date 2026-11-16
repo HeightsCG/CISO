@@ -1,0 +1,152 @@
+{
+    "key": "nist-ai-rmf",
+    "name": "NIST AI RMF",
+    "version": "1.0",
+    "full_name": "Artificial Intelligence Risk Management Framework (AI RMF 1.0)",
+    "issuing_body": "National Institute of Standards and Technology (NIST)",
+    "standard_codes": [
+        "NIST-AI-RMF"
+    ],
+    "aliases": [
+        "AI RMF",
+        "AI Risk Management Framework",
+        "NIST AI 100-1"
+    ],
+    "content_licence": "public_domain",
+    "sources": [
+        {
+            "id": "ai1001",
+            "title": "NIST AI 100-1, Artificial Intelligence Risk Management Framework (AI RMF 1.0)",
+            "version": "1.0 (January 2023)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf",
+            "file": "ai-rmf/NIST.AI.100-1.pdf",
+            "sha256": "7576edb531d9848825814ee88e28b1795d3a84b435b4b797d3670eafdc4a89f1"
+        },
+        {
+            "id": "playbook",
+            "title": "NIST AI RMF Playbook, machine-readable export",
+            "version": "as published 11 June 2026",
+            "publisher": "NIST Trustworthy and Responsible AI Resource Center",
+            "url": "https://airc.nist.gov/docs/playbook.json",
+            "file": "ai-rmf/playbook.json",
+            "sha256": "aecbee3d3c8820816d295b11d10fb61324b17c25c2ff39ee95e2aa5654555bba"
+        }
+    ],
+    "source_of": {
+        "controls": "ai1001",
+        "guidance": "playbook"
+    },
+    "terminology": {
+        "control": "subcategory",
+        "controls": "subcategories",
+        "family": "category",
+        "families": "categories",
+        "objective": "suggested action",
+        "objectives": "suggested actions",
+        "plan": "action plan",
+        "plan_short": "action plan",
+        "score": "Implementation index"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Achieved"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Achieved"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Achieved"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable subcategories whose outcome is achieved, with a partially achieved outcome counting as half. The AI RMF defines no score, tiers or maturity levels; this index is an HCG measure of progress between a Current and a Target Profile."
+    },
+    "rules": [
+        {
+            "id": "voluntary",
+            "type": "applicability",
+            "summary": "The framework is voluntary and applies to organizations of any size and sector.",
+            "source": "ai1001",
+            "cite": "NIST AI 100-1, Executive Summary",
+            "quote": "The Framework is intended to be voluntary, rights-preserving, non-sector-specific, and use-case agnostic"
+        },
+        {
+            "id": "select_outcomes",
+            "type": "applicability",
+            "summary": "An organization may apply all categories and subcategories or select the ones that suit its resources and capabilities, so a subcategory can be out of scope.",
+            "source": "ai1001",
+            "cite": "NIST AI 100-1, section 5",
+            "quote": "Framework users may apply these functions as best suits their needs for managing AI risks based on their resources and capabilities."
+        },
+        {
+            "id": "govern_cross_cutting",
+            "type": "applicability",
+            "summary": "GOVERN applies across the whole of AI risk management and supports the other three functions.",
+            "source": "ai1001",
+            "cite": "NIST AI 100-1, section 5.1",
+            "quote": "GOVERN is a cross-cutting function that is infused throughout AI risk management and enables the other functions of the process."
+        },
+        {
+            "id": "risk_tolerance",
+            "type": "applicability",
+            "summary": "The framework does not set risk tolerance; the organization defines its own.",
+            "source": "ai1001",
+            "cite": "NIST AI 100-1, section 1.2.2",
+            "quote": "While the AI RMF can be used to prioritize risk, it does not prescribe risk tolerance."
+        },
+        {
+            "id": "extent_achieved",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A Current Profile records how AI risk is managed today in terms of current outcomes, so an outcome can be partially achieved. In the implementation index a partially achieved outcome counts as half. This is an HCG convention: the AI RMF itself defines no score.",
+            "source": "ai1001",
+            "cite": "NIST AI 100-1, section 6",
+            "quote": "An AI RMF Current Profile indicates how AI is currently being managed and the related risks in terms of current outcomes."
+        },
+        {
+            "id": "gap_action_plan",
+            "type": "applicability",
+            "summary": "Gaps between the Current and Target Profiles are addressed through action plans.",
+            "source": "ai1001",
+            "cite": "NIST AI 100-1, section 6",
+            "quote": "Action plans can be developed to address these gaps to fulfill outcomes in a given category or subcategory."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "AI RMF",
+            "definition": "The NIST Artificial Intelligence Risk Management Framework, a voluntary set of outcomes for managing the risks of AI systems, arranged by Function, Category and Subcategory."
+        },
+        {
+            "term": "AI actor",
+            "definition": "A person or organization that plays an active role in the AI system lifecycle, including those that deploy or operate AI."
+        },
+        {
+            "term": "TEVV",
+            "definition": "Test, evaluation, verification and validation: the activities that check an AI system performs as intended throughout its lifecycle."
+        },
+        {
+            "term": "Profile",
+            "definition": "An implementation of the AI RMF functions, categories and subcategories for a specific setting; a Current Profile describes how AI risk is managed today and a Target Profile the outcomes wanted."
+        },
+        {
+            "term": "NIST",
+            "definition": "National Institute of Standards and Technology, the U.S. agency that publishes the AI RMF."
+        }
+    ]
+}
