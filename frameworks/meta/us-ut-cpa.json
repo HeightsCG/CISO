@@ -1,0 +1,140 @@
+{
+    "key": "us-ut-cpa",
+    "name": "Utah Consumer Privacy Act",
+    "version": "Utah Code through the 2026 General Session",
+    "full_name": "Utah Consumer Privacy Act (Utah Code, Title 13, Chapter 61)",
+    "issuing_body": "State of Utah; published by the Office of Legislative Research and General Counsel",
+    "standard_codes": [
+        "US-UT-CPA"
+    ],
+    "aliases": [
+        "UCPA",
+        "Utah UCPA",
+        "Utah Consumer Privacy Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against Title 13, Chapter 61 of the Utah Code as published by the Utah Legislature, including amendments through the 2026 General Session. Part 5 (motor vehicle data privacy) takes effect on 1 January 2027 and is not included.",
+    "sources": [
+        {
+            "id": "ucode",
+            "title": "Utah Code, Title 13, Chapter 61, Utah Consumer Privacy Act (chapter XML)",
+            "version": "C13-61_2022050420231231, amended through the 2026 General Session",
+            "publisher": "Utah State Legislature",
+            "url": "https://le.utah.gov/xcode/Title13/Chapter61/C13-61_2022050420231231.xml",
+            "file": "us-ut-cpa/C13-61.xml",
+            "sha256": "dc0da7da61823718b16a7a9acf5ca274e27609fb65db32c520338205809e8b7a"
+        }
+    ],
+    "source_of": {
+        "controls": "ucode",
+        "objectives": "ucode"
+    },
+    "control_flags": {
+        "objectives": "The subsections beneath a requirement whose lead-in states the duty; each is required unless the lead-in makes them a choice."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "ucode",
+            "cite": "Utah Code 13-61-203 to 13-61-303"
+        },
+        {
+            "id": "thresholds",
+            "type": "applicability",
+            "summary": "The Act applies to a business with annual revenue of $25 million or more that does business in Utah or targets Utah residents and either controls or processes personal data of 100,000 or more consumers a year, or earns over 50% of gross revenue from selling personal data of 25,000 or more consumers.",
+            "source": "ucode",
+            "cite": "Utah Code 13-61-102(1)",
+            "quote": "has annual revenue of $25,000,000 or more;"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "13-61-203(2)(a)",
+            "days": 45,
+            "from": "receipt of the request",
+            "summary": "A consumer request is acted on, and the consumer told of the action, within 45 days of receipt; the period may be extended once by 45 days.",
+            "source": "ucode",
+            "cite": "Utah Code 13-61-203(2)(a)",
+            "quote": "Within 45 days after the day on which a controller receives a request to exercise a right, the controller shall:"
+        },
+        {
+            "id": "cure_period",
+            "type": "applicability",
+            "summary": "At least 30 days before enforcement the attorney general gives written notice; a violation cured within that period, with a written statement, is not pursued.",
+            "source": "ucode",
+            "cite": "Utah Code 13-61-402(3)",
+            "quote": "At least 30 days before the day on which the attorney general initiates an enforcement action against a controller or processor, the attorney general shall provide the controller or processor:"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "A violation not cured after notice can lead to actual damages to consumers and up to $7,500 for each violation, recovered by the attorney general.",
+            "source": "ucode",
+            "cite": "Utah Code 13-61-402(4)",
+            "quote": ", an amount not to exceed $7,500."
+        }
+    ],
+    "glossary": [
+        {
+            "term": "UCPA",
+            "definition": "The Utah Consumer Privacy Act, Utah's comprehensive consumer privacy law, in force since 31 December 2023."
+        },
+        {
+            "term": "Controller",
+            "definition": "The person that, alone or jointly with others, determines the purpose and means of processing personal data."
+        },
+        {
+            "term": "Processor",
+            "definition": "A person that processes personal data on behalf of a controller."
+        },
+        {
+            "term": "Sensitive data",
+            "definition": "Personal data revealing racial or ethnic origin, religious beliefs, health diagnosis, sexual orientation, citizenship or immigration status; genetic or biometric data used to identify a person; data of a known child; and precise geolocation data."
+        },
+        {
+            "term": "Pseudonymous data",
+            "definition": "Personal data that cannot be attributed to a specific individual without additional information that is kept separately under appropriate safeguards."
+        }
+    ]
+}

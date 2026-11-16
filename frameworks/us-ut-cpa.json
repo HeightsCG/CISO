@@ -1,0 +1,450 @@
+{
+    "key": "us-ut-cpa",
+    "name": "Utah Consumer Privacy Act",
+    "version": "Utah Code through the 2026 General Session",
+    "full_name": "Utah Consumer Privacy Act (Utah Code, Title 13, Chapter 61)",
+    "issuing_body": "State of Utah; published by the Office of Legislative Research and General Counsel",
+    "standard_codes": [
+        "US-UT-CPA"
+    ],
+    "aliases": [
+        "UCPA",
+        "Utah UCPA",
+        "Utah Consumer Privacy Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against Title 13, Chapter 61 of the Utah Code as published by the Utah Legislature, including amendments through the 2026 General Session. Part 5 (motor vehicle data privacy) takes effect on 1 January 2027 and is not included.",
+    "sources": [
+        {
+            "id": "ucode",
+            "title": "Utah Code, Title 13, Chapter 61, Utah Consumer Privacy Act (chapter XML)",
+            "version": "C13-61_2022050420231231, amended through the 2026 General Session",
+            "publisher": "Utah State Legislature",
+            "url": "https://le.utah.gov/xcode/Title13/Chapter61/C13-61_2022050420231231.xml",
+            "file": "us-ut-cpa/C13-61.xml",
+            "sha256": "dc0da7da61823718b16a7a9acf5ca274e27609fb65db32c520338205809e8b7a"
+        }
+    ],
+    "source_of": {
+        "controls": "ucode",
+        "objectives": "ucode"
+    },
+    "control_flags": {
+        "objectives": "The subsections beneath a requirement whose lead-in states the duty; each is required unless the lead-in makes them a choice."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "ucode",
+            "cite": "Utah Code 13-61-203 to 13-61-303"
+        },
+        {
+            "id": "thresholds",
+            "type": "applicability",
+            "summary": "The Act applies to a business with annual revenue of $25 million or more that does business in Utah or targets Utah residents and either controls or processes personal data of 100,000 or more consumers a year, or earns over 50% of gross revenue from selling personal data of 25,000 or more consumers.",
+            "source": "ucode",
+            "cite": "Utah Code 13-61-102(1)",
+            "quote": "has annual revenue of $25,000,000 or more;"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "13-61-203(2)(a)",
+            "days": 45,
+            "from": "receipt of the request",
+            "summary": "A consumer request is acted on, and the consumer told of the action, within 45 days of receipt; the period may be extended once by 45 days.",
+            "source": "ucode",
+            "cite": "Utah Code 13-61-203(2)(a)",
+            "quote": "Within 45 days after the day on which a controller receives a request to exercise a right, the controller shall:"
+        },
+        {
+            "id": "cure_period",
+            "type": "applicability",
+            "summary": "At least 30 days before enforcement the attorney general gives written notice; a violation cured within that period, with a written statement, is not pursued.",
+            "source": "ucode",
+            "cite": "Utah Code 13-61-402(3)",
+            "quote": "At least 30 days before the day on which the attorney general initiates an enforcement action against a controller or processor, the attorney general shall provide the controller or processor:"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "A violation not cured after notice can lead to actual damages to consumers and up to $7,500 for each violation, recovered by the attorney general.",
+            "source": "ucode",
+            "cite": "Utah Code 13-61-402(4)",
+            "quote": ", an amount not to exceed $7,500."
+        }
+    ],
+    "glossary": [
+        {
+            "term": "UCPA",
+            "definition": "The Utah Consumer Privacy Act, Utah's comprehensive consumer privacy law, in force since 31 December 2023."
+        },
+        {
+            "term": "Controller",
+            "definition": "The person that, alone or jointly with others, determines the purpose and means of processing personal data."
+        },
+        {
+            "term": "Processor",
+            "definition": "A person that processes personal data on behalf of a controller."
+        },
+        {
+            "term": "Sensitive data",
+            "definition": "Personal data revealing racial or ethnic origin, religious beliefs, health diagnosis, sexual orientation, citizenship or immigration status; genetic or biometric data used to identify a person; data of a known child; and precise geolocation data."
+        },
+        {
+            "term": "Pseudonymous data",
+            "definition": "Personal data that cannot be attributed to a specific individual without additional information that is kept separately under appropriate safeguards."
+        }
+    ],
+    "display_name": "Utah Consumer Privacy Act (Utah Code through the 2026 General Session)",
+    "counts": {
+        "families": 4,
+        "controls": 14,
+        "objectives": 21
+    },
+    "families": [
+        {
+            "number": "13-61-203",
+            "code": "§ 13-61-203",
+            "name": "Controller's response to requests",
+            "controls": [
+                {
+                    "id": "13-61-203(1)",
+                    "number": "13-61-203(1)",
+                    "text": "Subject to the other provisions of this chapter, a controller shall comply with a consumer's request under Section 13-61-202 to exercise a right.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ucode"
+                },
+                {
+                    "id": "13-61-203(2)(a)",
+                    "number": "13-61-203(2)(a)",
+                    "text": "Within 45 days after the day on which a controller receives a request to exercise a right, the controller shall: (i) take action on the consumer's request; and (ii) inform the consumer of any action taken on the consumer's request.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "13-61-203(2)(a)(i)",
+                            "text": "take action on the consumer's request; and",
+                            "description": "Within 45 days after the day on which a controller receives a request to exercise a right, the controller shall take action on the consumer's request.",
+                            "source": "ucode"
+                        },
+                        {
+                            "id": "13-61-203(2)(a)(ii)",
+                            "text": "inform the consumer of any action taken on the consumer's request.",
+                            "description": "Within 45 days after the day on which a controller receives a request to exercise a right, the controller shall inform the consumer of any action taken on the consumer's request.",
+                            "source": "ucode"
+                        }
+                    ],
+                    "source": "ucode"
+                },
+                {
+                    "id": "13-61-203(2)(c)",
+                    "number": "13-61-203(2)(c)",
+                    "text": "If a controller extends the initial 45-day period, before the initial 45-day period expires, the controller shall: (i) inform the consumer of the extension, including the length of the extension; and (ii) provide the reasons the extension is reasonably necessary as described in Subsection (2)(b).",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ucode"
+                },
+                {
+                    "id": "13-61-203(3)",
+                    "number": "13-61-203(3)",
+                    "text": "If, in accordance with this section, a controller chooses not to take action on a consumer's request, the controller shall within 45 days after the day on which the controller receives the request, inform the consumer of the reasons for not taking action.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ucode"
+                },
+                {
+                    "id": "13-61-203(4)(a)",
+                    "number": "13-61-203(4)(a)",
+                    "text": "A controller may not charge a fee for information in response to a request, unless the request is the consumer's second or subsequent request during the same 12-month period.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ucode"
+                }
+            ]
+        },
+        {
+            "number": "13-61-301",
+            "code": "§ 13-61-301",
+            "name": "Responsibility according to role",
+            "controls": [
+                {
+                    "id": "13-61-301(1)",
+                    "number": "13-61-301(1)",
+                    "text": "A processor shall: (a) adhere to the controller's instructions; and (b) taking into account the nature of the processing and information available to the processor, by appropriate technical and organizational measures, insofar as reasonably practicable, assist the controller in meeting the controller's obligations, including obligations related to the security of processing personal data and notification of a breach of security system described in Section 13-44-202.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "13-61-301(1)(a)",
+                            "text": "adhere to the controller's instructions; and",
+                            "description": "A processor shall adhere to the controller's instructions.",
+                            "source": "ucode"
+                        },
+                        {
+                            "id": "13-61-301(1)(b)",
+                            "text": "taking into account the nature of the processing and information available to the processor, by appropriate technical and organizational measures, insofar as reasonably practicable, assist the controller in meeting the controller's obligations, including obligations related to the security of processing personal data and notification of a breach of security system described in Section 13-44-202.",
+                            "description": "A processor shall taking into account the nature of the processing and information available to the processor, by appropriate technical and organizational measures, insofar as reasonably practicable, assist the controller in meeting the controller's obligations, including obligations related to the security of processing personal data and notification of a breach of security system described in Section 13-44-202.",
+                            "source": "ucode"
+                        }
+                    ],
+                    "source": "ucode"
+                },
+                {
+                    "id": "13-61-301(2)",
+                    "number": "13-61-301(2)",
+                    "text": "Before a processor performs processing on behalf of a controller, the processor and controller shall enter into a contract that: (a) clearly sets forth instructions for processing personal data, the nature and purpose of the processing, the type of data subject to processing, the duration of the processing, and the parties' rights and obligations; (b) requires the processor to ensure each person processing personal data is subject to a duty of confidentiality with respect to the personal data; and (c) requires the processor to engage any subcontractor pursuant to a written contract that requires the subcontractor to meet the same obligations as the processor with respect to the personal data.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "13-61-301(2)(a)",
+                            "text": "clearly sets forth instructions for processing personal data, the nature and purpose of the processing, the type of data subject to processing, the duration of the processing, and the parties' rights and obligations;",
+                            "description": "Before a processor performs processing on behalf of a controller, the processor and controller shall enter into a contract that clearly sets forth instructions for processing personal data, the nature and purpose of the processing, the type of data subject to processing, the duration of the processing, and the parties' rights and obligations.",
+                            "source": "ucode"
+                        },
+                        {
+                            "id": "13-61-301(2)(b)",
+                            "text": "requires the processor to ensure each person processing personal data is subject to a duty of confidentiality with respect to the personal data; and",
+                            "description": "Before a processor performs processing on behalf of a controller, the processor and controller shall enter into a contract that requires the processor to ensure each person processing personal data is subject to a duty of confidentiality with respect to the personal data.",
+                            "source": "ucode"
+                        },
+                        {
+                            "id": "13-61-301(2)(c)",
+                            "text": "requires the processor to engage any subcontractor pursuant to a written contract that requires the subcontractor to meet the same obligations as the processor with respect to the personal data.",
+                            "description": "Before a processor performs processing on behalf of a controller, the processor and controller shall enter into a contract that requires the processor to engage any subcontractor pursuant to a written contract that requires the subcontractor to meet the same obligations as the processor with respect to the personal data.",
+                            "source": "ucode"
+                        }
+                    ],
+                    "source": "ucode"
+                }
+            ]
+        },
+        {
+            "number": "13-61-302",
+            "code": "§ 13-61-302",
+            "name": "Responsibilities of controllers -- Transparency -- Purpose specification and data minimization -- Consent for secondary use -- Security -- Nondiscrimination -- Nonretaliation -- Nonwaiver of consumer rights",
+            "controls": [
+                {
+                    "id": "13-61-302(1)(a)",
+                    "number": "13-61-302(1)(a)",
+                    "text": "A controller shall provide consumers with a reasonably accessible and clear privacy notice that includes: (i) the categories of personal data processed by the controller; (ii) the purposes for which the categories of personal data are processed; (iii) how consumers may exercise a right; (iv) the categories of personal data that the controller shares with third parties, if any; and (v) the categories of third parties, if any, with whom the controller shares personal data.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "13-61-302(1)(a)(i)",
+                            "text": "the categories of personal data processed by the controller;",
+                            "description": "A controller shall provide consumers with a reasonably accessible and clear privacy notice that includes the categories of personal data processed by the controller.",
+                            "source": "ucode"
+                        },
+                        {
+                            "id": "13-61-302(1)(a)(ii)",
+                            "text": "the purposes for which the categories of personal data are processed;",
+                            "description": "A controller shall provide consumers with a reasonably accessible and clear privacy notice that includes the purposes for which the categories of personal data are processed.",
+                            "source": "ucode"
+                        },
+                        {
+                            "id": "13-61-302(1)(a)(iii)",
+                            "text": "how consumers may exercise a right;",
+                            "description": "A controller shall provide consumers with a reasonably accessible and clear privacy notice that includes how consumers may exercise a right.",
+                            "source": "ucode"
+                        },
+                        {
+                            "id": "13-61-302(1)(a)(iv)",
+                            "text": "the categories of personal data that the controller shares with third parties, if any; and",
+                            "description": "A controller shall provide consumers with a reasonably accessible and clear privacy notice that includes the categories of personal data that the controller shares with third parties, if any.",
+                            "source": "ucode"
+                        },
+                        {
+                            "id": "13-61-302(1)(a)(v)",
+                            "text": "the categories of third parties, if any, with whom the controller shares personal data.",
+                            "description": "A controller shall provide consumers with a reasonably accessible and clear privacy notice that includes the categories of third parties, if any, with whom the controller shares personal data.",
+                            "source": "ucode"
+                        }
+                    ],
+                    "source": "ucode"
+                },
+                {
+                    "id": "13-61-302(1)(b)",
+                    "number": "13-61-302(1)(b)",
+                    "text": "If a controller sells a consumer's personal data to one or more third parties or engages in targeted advertising, the controller shall clearly and conspicuously disclose to the consumer the manner in which the consumer may exercise the right to opt out of the: (i) sale of the consumer's personal data; or (ii) processing for targeted advertising.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ucode"
+                },
+                {
+                    "id": "13-61-302(2)(a)",
+                    "number": "13-61-302(2)(a)",
+                    "text": "A controller shall establish, implement, and maintain reasonable administrative, technical, and physical data security practices designed to: (i) protect the confidentiality and integrity of personal data; and (ii) reduce reasonably foreseeable risks of harm to consumers relating to the processing of personal data.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "13-61-302(2)(a)(i)",
+                            "text": "protect the confidentiality and integrity of personal data; and",
+                            "description": "A controller shall establish, implement, and maintain reasonable administrative, technical, and physical data security practices designed to protect the confidentiality and integrity of personal data.",
+                            "source": "ucode"
+                        },
+                        {
+                            "id": "13-61-302(2)(a)(ii)",
+                            "text": "reduce reasonably foreseeable risks of harm to consumers relating to the processing of personal data.",
+                            "description": "A controller shall establish, implement, and maintain reasonable administrative, technical, and physical data security practices designed to reduce reasonably foreseeable risks of harm to consumers relating to the processing of personal data.",
+                            "source": "ucode"
+                        }
+                    ],
+                    "source": "ucode"
+                },
+                {
+                    "id": "13-61-302(2)(b)",
+                    "number": "13-61-302(2)(b)",
+                    "text": "Considering the controller's business size, scope, and type, a controller shall use data security practices that are appropriate for the volume and nature of the personal data at issue.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ucode"
+                },
+                {
+                    "id": "13-61-302(3)",
+                    "number": "13-61-302(3)",
+                    "text": "Except as otherwise provided in this chapter, a controller may not process sensitive data collected from a consumer without: (a) first presenting the consumer with clear notice and an opportunity to opt out of the processing; or (b) in the case of the processing of personal data concerning a known child, processing the data in accordance with the federal Children's Online Privacy Protection Act, 15 U.S.C. Sec. 6501 et seq., and the act's implementing regulations and exemptions.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "13-61-302(3)(a)",
+                            "text": "first presenting the consumer with clear notice and an opportunity to opt out of the processing; or",
+                            "description": "Except as otherwise provided in this chapter, a controller may not process sensitive data collected from a consumer without first presenting the consumer with clear notice and an opportunity to opt out of the processing.",
+                            "source": "ucode"
+                        },
+                        {
+                            "id": "13-61-302(3)(b)",
+                            "text": "in the case of the processing of personal data concerning a known child, processing the data in accordance with the federal Children's Online Privacy Protection Act, 15 U.S.C. Sec. 6501 et seq., and the act's implementing regulations and exemptions.",
+                            "description": "Except as otherwise provided in this chapter, a controller may not process sensitive data collected from a consumer without in the case of the processing of personal data concerning a known child, processing the data in accordance with the federal Children's Online Privacy Protection Act, 15 U.S.C. Sec. 6501 et seq., and the act's implementing regulations and exemptions.",
+                            "source": "ucode"
+                        }
+                    ],
+                    "source": "ucode"
+                },
+                {
+                    "id": "13-61-302(4)(a)",
+                    "number": "13-61-302(4)(a)",
+                    "text": "A controller may not discriminate against a consumer for exercising a right by: (i) denying a good or service to the consumer; (ii) charging the consumer a different price or rate for a good or service; or (iii) providing the consumer a different level of quality of a good or service.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "13-61-302(4)(a)(i)",
+                            "text": "denying a good or service to the consumer;",
+                            "description": "A controller may not discriminate against a consumer for exercising a right by denying a good or service to the consumer.",
+                            "source": "ucode"
+                        },
+                        {
+                            "id": "13-61-302(4)(a)(ii)",
+                            "text": "charging the consumer a different price or rate for a good or service; or",
+                            "description": "A controller may not discriminate against a consumer for exercising a right by charging the consumer a different price or rate for a good or service.",
+                            "source": "ucode"
+                        },
+                        {
+                            "id": "13-61-302(4)(a)(iii)",
+                            "text": "providing the consumer a different level of quality of a good or service.",
+                            "description": "A controller may not discriminate against a consumer for exercising a right by providing the consumer a different level of quality of a good or service.",
+                            "source": "ucode"
+                        }
+                    ],
+                    "source": "ucode"
+                }
+            ]
+        },
+        {
+            "number": "13-61-303",
+            "code": "§ 13-61-303",
+            "name": "Processing deidentified data or pseudonymous data",
+            "controls": [
+                {
+                    "id": "13-61-303(3)",
+                    "number": "13-61-303(3)",
+                    "text": "A controller who uses pseudonymous data or deidentified data shall take reasonable steps to ensure the controller: (a) complies with any contractual obligations to which the pseudonymous data or deidentified data are subject; and (b) promptly addresses any breach of a contractual obligation described in Subsection (3)(a).",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "13-61-303(3)(a)",
+                            "text": "complies with any contractual obligations to which the pseudonymous data or deidentified data are subject; and",
+                            "description": "A controller who uses pseudonymous data or deidentified data shall take reasonable steps to ensure the controller complies with any contractual obligations to which the pseudonymous data or deidentified data are subject.",
+                            "source": "ucode"
+                        },
+                        {
+                            "id": "13-61-303(3)(b)",
+                            "text": "promptly addresses any breach of a contractual obligation described in Subsection (3)(a).",
+                            "description": "A controller who uses pseudonymous data or deidentified data shall take reasonable steps to ensure the controller promptly addresses any breach of a contractual obligation described in Subsection (3)(a).",
+                            "source": "ucode"
+                        }
+                    ],
+                    "source": "ucode"
+                }
+            ]
+        }
+    ]
+}
