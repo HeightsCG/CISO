@@ -1,0 +1,140 @@
+{
+    "key": "us-va-cdpa",
+    "name": "Virginia Consumer Data Protection Act",
+    "version": "Code of Virginia, as published November 2026",
+    "full_name": "Virginia Consumer Data Protection Act (Code of Virginia, Title 59.1, Chapter 53, sections 59.1-575 to 59.1-584)",
+    "issuing_body": "Commonwealth of Virginia; published by the Division of Legislative Automated Systems",
+    "standard_codes": [
+        "US-VA-CDPA"
+    ],
+    "aliases": [
+        "VCDPA",
+        "Virginia CDPA",
+        "Consumer Data Protection Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against Chapter 53 of Title 59.1 of the Code of Virginia as published on the Legislative Information System in November 2026.",
+    "sources": [
+        {
+            "id": "vacode",
+            "title": "Code of Virginia, Title 59.1, Chapter 53, Consumer Data Protection Act (chapter page)",
+            "version": "as published November 2026, including 2025 c. 703",
+            "publisher": "Virginia Division of Legislative Automated Systems",
+            "url": "https://law.lis.virginia.gov/vacodefull/title59.1/chapter53/",
+            "file": "us-va-cdpa/va-code-59.1-chapter-53.html",
+            "sha256": "e2a798dfbade2dc897d19c140505f09781c88d723e1b59f878c01d5626f89750"
+        }
+    ],
+    "source_of": {
+        "controls": "vacode",
+        "objectives": "vacode"
+    },
+    "control_flags": {
+        "objectives": "The numbered items of a subsection, only where every one must be met."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "vacode",
+            "cite": "Code of Virginia 59.1-577 to 59.1-581"
+        },
+        {
+            "id": "thresholds",
+            "type": "applicability",
+            "summary": "The Act applies to a business that, in a calendar year, controls or processes personal data of at least 100,000 Virginia consumers, or of at least 25,000 consumers while deriving over 50% of gross revenue from selling personal data.",
+            "source": "vacode",
+            "cite": "59.1-576(A)",
+            "quote": "control or process personal data of at least 100,000 consumers"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "59.1-577(B)",
+            "days": 45,
+            "from": "receipt of the request",
+            "summary": "A consumer rights request is answered within 45 days of receipt; the period may be extended once by 45 days with notice to the consumer.",
+            "source": "vacode",
+            "cite": "59.1-577(B)(1)",
+            "quote": "within 45 days of receipt of the request submitted pursuant to the methods described in subsection A."
+        },
+        {
+            "id": "cure_period",
+            "type": "applicability",
+            "summary": "Before suing, the Attorney General gives 30 days written notice; a violation cured within that period, with a written statement, is not pursued.",
+            "source": "vacode",
+            "cite": "59.1-584(B)",
+            "quote": "Prior to initiating any action under this chapter, the Attorney General shall provide a controller or processor 30 days"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "The Attorney General can seek an injunction and civil penalties of up to $7,500 for each violation.",
+            "source": "vacode",
+            "cite": "59.1-584(C)",
+            "quote": "civil penalties of up to $7,500 for each violation under this chapter."
+        }
+    ],
+    "glossary": [
+        {
+            "term": "VCDPA",
+            "definition": "The Virginia Consumer Data Protection Act, Virginia's comprehensive consumer privacy law, in force since 1 January 2023."
+        },
+        {
+            "term": "Controller",
+            "definition": "The person that, alone or jointly with others, determines the purpose and means of processing personal data."
+        },
+        {
+            "term": "Processor",
+            "definition": "A person that processes personal data on behalf of a controller."
+        },
+        {
+            "term": "Sensitive data",
+            "definition": "Personal data revealing racial or ethnic origin, religious beliefs, health diagnosis, sexual orientation, citizenship or immigration status; genetic or biometric data used to identify a person; data of a known child; and precise geolocation data."
+        },
+        {
+            "term": "Data protection assessment",
+            "definition": "A documented assessment, required before targeted advertising, sale of personal data, certain profiling and processing of sensitive data, that weighs the benefits of processing against the risks to consumers."
+        }
+    ]
+}

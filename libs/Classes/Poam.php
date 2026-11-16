@@ -159,6 +159,7 @@ class Poam
         'pipeda' => 'none',
         'au-privacy' => 'none',
         'sg-pdpa' => 'none',
+        'us-va-cdpa' => 'none',
         'nydfs-500' => 'none',
         'nis2' => 'none',
         'dora' => 'none',

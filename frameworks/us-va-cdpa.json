@@ -1,0 +1,602 @@
+{
+    "key": "us-va-cdpa",
+    "name": "Virginia Consumer Data Protection Act",
+    "version": "Code of Virginia, as published November 2026",
+    "full_name": "Virginia Consumer Data Protection Act (Code of Virginia, Title 59.1, Chapter 53, sections 59.1-575 to 59.1-584)",
+    "issuing_body": "Commonwealth of Virginia; published by the Division of Legislative Automated Systems",
+    "standard_codes": [
+        "US-VA-CDPA"
+    ],
+    "aliases": [
+        "VCDPA",
+        "Virginia CDPA",
+        "Consumer Data Protection Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against Chapter 53 of Title 59.1 of the Code of Virginia as published on the Legislative Information System in November 2026.",
+    "sources": [
+        {
+            "id": "vacode",
+            "title": "Code of Virginia, Title 59.1, Chapter 53, Consumer Data Protection Act (chapter page)",
+            "version": "as published November 2026, including 2025 c. 703",
+            "publisher": "Virginia Division of Legislative Automated Systems",
+            "url": "https://law.lis.virginia.gov/vacodefull/title59.1/chapter53/",
+            "file": "us-va-cdpa/va-code-59.1-chapter-53.html",
+            "sha256": "e2a798dfbade2dc897d19c140505f09781c88d723e1b59f878c01d5626f89750"
+        }
+    ],
+    "source_of": {
+        "controls": "vacode",
+        "objectives": "vacode"
+    },
+    "control_flags": {
+        "objectives": "The numbered items of a subsection, only where every one must be met."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "vacode",
+            "cite": "Code of Virginia 59.1-577 to 59.1-581"
+        },
+        {
+            "id": "thresholds",
+            "type": "applicability",
+            "summary": "The Act applies to a business that, in a calendar year, controls or processes personal data of at least 100,000 Virginia consumers, or of at least 25,000 consumers while deriving over 50% of gross revenue from selling personal data.",
+            "source": "vacode",
+            "cite": "59.1-576(A)",
+            "quote": "control or process personal data of at least 100,000 consumers"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "59.1-577(B)",
+            "days": 45,
+            "from": "receipt of the request",
+            "summary": "A consumer rights request is answered within 45 days of receipt; the period may be extended once by 45 days with notice to the consumer.",
+            "source": "vacode",
+            "cite": "59.1-577(B)(1)",
+            "quote": "within 45 days of receipt of the request submitted pursuant to the methods described in subsection A."
+        },
+        {
+            "id": "cure_period",
+            "type": "applicability",
+            "summary": "Before suing, the Attorney General gives 30 days written notice; a violation cured within that period, with a written statement, is not pursued.",
+            "source": "vacode",
+            "cite": "59.1-584(B)",
+            "quote": "Prior to initiating any action under this chapter, the Attorney General shall provide a controller or processor 30 days"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "The Attorney General can seek an injunction and civil penalties of up to $7,500 for each violation.",
+            "source": "vacode",
+            "cite": "59.1-584(C)",
+            "quote": "civil penalties of up to $7,500 for each violation under this chapter."
+        }
+    ],
+    "glossary": [
+        {
+            "term": "VCDPA",
+            "definition": "The Virginia Consumer Data Protection Act, Virginia's comprehensive consumer privacy law, in force since 1 January 2023."
+        },
+        {
+            "term": "Controller",
+            "definition": "The person that, alone or jointly with others, determines the purpose and means of processing personal data."
+        },
+        {
+            "term": "Processor",
+            "definition": "A person that processes personal data on behalf of a controller."
+        },
+        {
+            "term": "Sensitive data",
+            "definition": "Personal data revealing racial or ethnic origin, religious beliefs, health diagnosis, sexual orientation, citizenship or immigration status; genetic or biometric data used to identify a person; data of a known child; and precise geolocation data."
+        },
+        {
+            "term": "Data protection assessment",
+            "definition": "A documented assessment, required before targeted advertising, sale of personal data, certain profiling and processing of sensitive data, that weighs the benefits of processing against the risks to consumers."
+        }
+    ],
+    "display_name": "Virginia Consumer Data Protection Act (Code of Virginia, as published November 2026)",
+    "counts": {
+        "families": 6,
+        "controls": 19,
+        "objectives": 37
+    },
+    "families": [
+        {
+            "number": "59.1-577",
+            "code": "§ 59.1-577",
+            "name": "Personal data rights; consumers",
+            "controls": [
+                {
+                    "id": "59.1-577(A)",
+                    "number": "59.1-577(A)",
+                    "text": "A consumer may invoke the consumer rights authorized pursuant to this subsection at any time by submitting a request to a controller specifying the consumer rights the consumer wishes to invoke. A known child's parent or legal guardian may invoke such consumer rights on behalf of the child regarding processing personal data belonging to the known child. A controller shall comply with an authenticated consumer request to exercise the right: 1. To confirm whether or not a controller is processing the consumer's personal data and to access such personal data; 2. To correct inaccuracies in the consumer's personal data, taking into account the nature of the personal data and the purposes of the processing of the consumer's personal data; 3. To delete personal data provided by or obtained about the consumer; 4. To obtain a copy of the consumer's personal data that the consumer previously provided to the controller in a portable and, to the extent technically feasible, readily usable format that allows the consumer to transmit the data to another controller without hindrance, where the processing is carried out by automated means; and 5. To opt out of the processing of the personal data for purposes of (i) targeted advertising, (ii) the sale of personal data, or (iii) profiling in furtherance of decisions that produce legal or similarly significant effects concerning the consumer.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "59.1-577(A)(1)",
+                            "text": "To confirm whether or not a controller is processing the consumer's personal data and to access such personal data;",
+                            "description": "A controller shall comply with an authenticated consumer request to exercise the right: to confirm whether or not a controller is processing the consumer's personal data and to access such personal data.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-577(A)(2)",
+                            "text": "To correct inaccuracies in the consumer's personal data, taking into account the nature of the personal data and the purposes of the processing of the consumer's personal data;",
+                            "description": "A controller shall comply with an authenticated consumer request to exercise the right: to correct inaccuracies in the consumer's personal data, taking into account the nature of the personal data and the purposes of the processing of the consumer's personal data.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-577(A)(3)",
+                            "text": "To delete personal data provided by or obtained about the consumer;",
+                            "description": "A controller shall comply with an authenticated consumer request to exercise the right: to delete personal data provided by or obtained about the consumer.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-577(A)(4)",
+                            "text": "To obtain a copy of the consumer's personal data that the consumer previously provided to the controller in a portable and, to the extent technically feasible, readily usable format that allows the consumer to transmit the data to another controller without hindrance, where the processing is carried out by automated means; and",
+                            "description": "A controller shall comply with an authenticated consumer request to exercise the right: to obtain a copy of the consumer's personal data that the consumer previously provided to the controller in a portable and, to the extent technically feasible, readily usable format that allows the consumer to transmit the data to another controller without hindrance, where the processing is carried out by automated means.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-577(A)(5)",
+                            "text": "To opt out of the processing of the personal data for purposes of (i) targeted advertising, (ii) the sale of personal data, or (iii) profiling in furtherance of decisions that produce legal or similarly significant effects concerning the consumer.",
+                            "description": "A controller shall comply with an authenticated consumer request to exercise the right: to opt out of the processing of the personal data for purposes of (i) targeted advertising, (ii) the sale of personal data, or (iii) profiling in furtherance of decisions that produce legal or similarly significant effects concerning the consumer.",
+                            "source": "vacode"
+                        }
+                    ],
+                    "source": "vacode"
+                },
+                {
+                    "id": "59.1-577(B)",
+                    "number": "59.1-577(B)",
+                    "text": "Except as otherwise provided in this chapter, a controller shall comply with a request by a consumer to exercise the consumer rights authorized pursuant to subsection A as follows: 1. A controller shall respond to the consumer without undue delay, but in all cases within 45 days of receipt of the request submitted pursuant to the methods described in subsection A. The response period may be extended once by 45 additional days when reasonably necessary, taking into account the complexity and number of the consumer's requests, so long as the controller informs the consumer of any such extension within the initial 45-day response period, together with the reason for the extension. 2. If a controller declines to take action regarding the consumer's request, the controller shall inform the consumer without undue delay, but in all cases and at the latest within 45 days of receipt of the request, of the justification for declining to take action and instructions for how to appeal the decision pursuant to subsection C. 3. Information provided in response to a consumer request shall be provided by a controller free of charge, up to twice annually per consumer. If requests from a consumer are manifestly unfounded, excessive, or repetitive, the controller may charge the consumer a reasonable fee to cover the administrative costs of complying with the request or decline to act on the request. The controller bears the burden of demonstrating the manifestly unfounded, excessive, or repetitive nature of the request. 4. If a controller is unable to authenticate the request using commercially reasonable efforts, the controller shall not be required to comply with a request to initiate an action under subsection A and may request that the consumer provide additional information reasonably necessary to authenticate the consumer and the consumer's request. 5. A controller that has obtained personal data about a consumer from a source other than the consumer shall be deemed in compliance with a consumer's request to delete such data pursuant to subdivision A 3 by either (i) retaining a record of the deletion request and the minimum data necessary for the purpose of ensuring the consumer's personal data remains deleted from the business's records and not using such retained data for any other purpose pursuant to the provisions of this chapter or (ii) opting the consumer out of the processing of such personal data for any purpose except for those exempted pursuant to the provisions of this chapter.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "59.1-577(B)(1)",
+                            "text": "A controller shall respond to the consumer without undue delay, but in all cases within 45 days of receipt of the request submitted pursuant to the methods described in subsection A. The response period may be extended once by 45 additional days when reasonably necessary, taking into account the complexity and number of the consumer's requests, so long as the controller informs the consumer of any such extension within the initial 45-day response period, together with the reason for the extension.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-577(B)(2)",
+                            "text": "If a controller declines to take action regarding the consumer's request, the controller shall inform the consumer without undue delay, but in all cases and at the latest within 45 days of receipt of the request, of the justification for declining to take action and instructions for how to appeal the decision pursuant to subsection C.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-577(B)(3)",
+                            "text": "Information provided in response to a consumer request shall be provided by a controller free of charge, up to twice annually per consumer. If requests from a consumer are manifestly unfounded, excessive, or repetitive, the controller may charge the consumer a reasonable fee to cover the administrative costs of complying with the request or decline to act on the request. The controller bears the burden of demonstrating the manifestly unfounded, excessive, or repetitive nature of the request.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-577(B)(4)",
+                            "text": "If a controller is unable to authenticate the request using commercially reasonable efforts, the controller shall not be required to comply with a request to initiate an action under subsection A and may request that the consumer provide additional information reasonably necessary to authenticate the consumer and the consumer's request.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-577(B)(5)",
+                            "text": "A controller that has obtained personal data about a consumer from a source other than the consumer shall be deemed in compliance with a consumer's request to delete such data pursuant to subdivision A 3 by either (i) retaining a record of the deletion request and the minimum data necessary for the purpose of ensuring the consumer's personal data remains deleted from the business's records and not using such retained data for any other purpose pursuant to the provisions of this chapter or (ii) opting the consumer out of the processing of such personal data for any purpose except for those exempted pursuant to the provisions of this chapter.",
+                            "source": "vacode"
+                        }
+                    ],
+                    "source": "vacode"
+                },
+                {
+                    "id": "59.1-577(C)",
+                    "number": "59.1-577(C)",
+                    "text": "A controller shall establish a process for a consumer to appeal the controller's refusal to take action on a request within a reasonable period of time after the consumer's receipt of the decision pursuant to subdivision B 2. The appeal process shall be conspicuously available and similar to the process for submitting requests to initiate action pursuant to subsection A. Within 60 days of receipt of an appeal, a controller shall inform the consumer in writing of any action taken or not taken in response to the appeal, including a written explanation of the reasons for the decisions. If the appeal is denied, the controller shall also provide the consumer with an online mechanism, if available, or other method through which the consumer may contact the Attorney General to submit a complaint.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "vacode"
+                }
+            ]
+        },
+        {
+            "number": "59.1-577.1",
+            "code": "§ 59.1-577.1",
+            "name": "Social media platforms; responsibilities and prohibitions related to minors",
+            "controls": [
+                {
+                    "id": "59.1-577.1(B)",
+                    "number": "59.1-577.1(B)",
+                    "text": "Any controller or processor that operates a social media platform shall (i) use commercially reasonable methods, such as a neutral age screen mechanism, to determine whether a user is a minor and (ii) limit a minor's use of such social media platform to one hour per day, per service or application, and allow a parent to give verifiable parental consent to increase or decrease the daily time limit.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "vacode"
+                },
+                {
+                    "id": "59.1-577.1(C)",
+                    "number": "59.1-577.1(C)",
+                    "text": "Information collected for the purpose of determining a user's age shall not be used for any purpose other than age determination and provision of age-appropriate experiences. For purposes of this section, any controller or processor that operates a social media platform shall treat a user as a minor if the user's device communicates or signals that the user is or shall be treated as a minor, including through a browser plug-in or privacy setting, device setting, or other mechanism.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "vacode"
+                },
+                {
+                    "id": "59.1-577.1(E)",
+                    "number": "59.1-577.1(E)",
+                    "text": "No controller or processor that operates a social media platform shall withhold, degrade, lower the quality of, or increase the price of any online service, product, or feature to a user due to the controller or processor not being permitted to provide use of such social media platform beyond the one hour per day, per service or application, daily time limit under subsection B. However, nothing in this section shall be construed as (i) requiring a social media platform to provide an online service, product, or feature that requires the personal information of a known minor or (ii) prohibiting a social media platform from offering a different price, rate, level, quality, or selection of goods or services to a known minor, including offering goods or services for no fee, if such behavior is reasonably related to the exercise of rights pursuant to or compliance with the requirements of this chapter.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "vacode"
+                }
+            ]
+        },
+        {
+            "number": "59.1-578",
+            "code": "§ 59.1-578",
+            "name": "Data controller responsibilities; transparency",
+            "controls": [
+                {
+                    "id": "59.1-578(A)",
+                    "number": "59.1-578(A)",
+                    "text": "A controller shall: 1. Limit the collection of personal data to what is adequate, relevant, and reasonably necessary in relation to the purposes for which such data is processed, as disclosed to the consumer; 2. Except as otherwise provided in this chapter, not process personal data for purposes that are neither reasonably necessary to nor compatible with the disclosed purposes for which such personal data is processed, as disclosed to the consumer, unless the controller obtains the consumer's consent; 3. Establish, implement, and maintain reasonable administrative, technical, and physical data security practices to protect the confidentiality, integrity, and accessibility of personal data. Such data security practices shall be appropriate to the volume and nature of the personal data at issue; 4. Not process personal data in violation of state and federal laws that prohibit unlawful discrimination against consumers. A controller shall not discriminate against a consumer for exercising any of the consumer rights contained in this chapter, including denying goods or services, charging different prices or rates for goods or services, or providing a different level of quality of goods and services to the consumer. However, nothing in this subdivision shall be construed to require a controller to provide a product or service that requires the personal data of a consumer that the controller does not collect or maintain or to prohibit a controller from offering a different price, rate, level, quality, or selection of goods or services to a consumer, including offering goods or services for no fee, if the consumer has exercised his right to opt out pursuant to § 59.1-577 or the offer is related to a consumer's voluntary participation in a bona fide loyalty, rewards, premium features, discounts, or club card program; 5. Not process sensitive data concerning a consumer without obtaining the consumer's consent, or, in the case of the processing of sensitive data concerning a known child, without processing such data in accordance with the federal Children's Online Privacy Protection Act (15 U.S.C. § 6501 et seq.); and 6. Not sell or offer for sale precise geolocation data concerning a consumer.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "59.1-578(A)(1)",
+                            "text": "Limit the collection of personal data to what is adequate, relevant, and reasonably necessary in relation to the purposes for which such data is processed, as disclosed to the consumer;",
+                            "description": "A controller shall: limit the collection of personal data to what is adequate, relevant, and reasonably necessary in relation to the purposes for which such data is processed, as disclosed to the consumer.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-578(A)(2)",
+                            "text": "Except as otherwise provided in this chapter, not process personal data for purposes that are neither reasonably necessary to nor compatible with the disclosed purposes for which such personal data is processed, as disclosed to the consumer, unless the controller obtains the consumer's consent;",
+                            "description": "A controller shall: except as otherwise provided in this chapter, not process personal data for purposes that are neither reasonably necessary to nor compatible with the disclosed purposes for which such personal data is processed, as disclosed to the consumer, unless the controller obtains the consumer's consent.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-578(A)(3)",
+                            "text": "Establish, implement, and maintain reasonable administrative, technical, and physical data security practices to protect the confidentiality, integrity, and accessibility of personal data. Such data security practices shall be appropriate to the volume and nature of the personal data at issue;",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-578(A)(4)",
+                            "text": "Not process personal data in violation of state and federal laws that prohibit unlawful discrimination against consumers. A controller shall not discriminate against a consumer for exercising any of the consumer rights contained in this chapter, including denying goods or services, charging different prices or rates for goods or services, or providing a different level of quality of goods and services to the consumer. However, nothing in this subdivision shall be construed to require a controller to provide a product or service that requires the personal data of a consumer that the controller does not collect or maintain or to prohibit a controller from offering a different price, rate, level, quality, or selection of goods or services to a consumer, including offering goods or services for no fee, if the consumer has exercised his right to opt out pursuant to § 59.1-577 or the offer is related to a consumer's voluntary participation in a bona fide loyalty, rewards, premium features, discounts, or club card program;",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-578(A)(5)",
+                            "text": "Not process sensitive data concerning a consumer without obtaining the consumer's consent, or, in the case of the processing of sensitive data concerning a known child, without processing such data in accordance with the federal Children's Online Privacy Protection Act (15 U.S.C. § 6501 et seq.); and",
+                            "description": "A controller shall: not process sensitive data concerning a consumer without obtaining the consumer's consent, or, in the case of the processing of sensitive data concerning a known child, without processing such data in accordance with the federal Children's Online Privacy Protection Act (15 U.S.C. § 6501 et seq.).",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-578(A)(6)",
+                            "text": "Not sell or offer for sale precise geolocation data concerning a consumer.",
+                            "description": "A controller shall: not sell or offer for sale precise geolocation data concerning a consumer.",
+                            "source": "vacode"
+                        }
+                    ],
+                    "source": "vacode"
+                },
+                {
+                    "id": "59.1-578(C)",
+                    "number": "59.1-578(C)",
+                    "text": "Controllers shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes: 1. The categories of personal data processed by the controller; 2. The purpose for processing personal data; 3. How consumers may exercise their consumer rights pursuant § 59.1-577, including how a consumer may appeal a controller's decision with regard to the consumer's request; 4. The categories of personal data that the controller shares with third parties, if any; and 5. The categories of third parties, if any, with whom the controller shares personal data.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "59.1-578(C)(1)",
+                            "text": "The categories of personal data processed by the controller;",
+                            "description": "Controllers shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes: the categories of personal data processed by the controller.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-578(C)(2)",
+                            "text": "The purpose for processing personal data;",
+                            "description": "Controllers shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes: the purpose for processing personal data.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-578(C)(3)",
+                            "text": "How consumers may exercise their consumer rights pursuant § 59.1-577, including how a consumer may appeal a controller's decision with regard to the consumer's request;",
+                            "description": "Controllers shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes: how consumers may exercise their consumer rights pursuant § 59.1-577, including how a consumer may appeal a controller's decision with regard to the consumer's request.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-578(C)(4)",
+                            "text": "The categories of personal data that the controller shares with third parties, if any; and",
+                            "description": "Controllers shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes: the categories of personal data that the controller shares with third parties, if any.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-578(C)(5)",
+                            "text": "The categories of third parties, if any, with whom the controller shares personal data.",
+                            "description": "Controllers shall provide consumers with a reasonably accessible, clear, and meaningful privacy notice that includes: the categories of third parties, if any, with whom the controller shares personal data.",
+                            "source": "vacode"
+                        }
+                    ],
+                    "source": "vacode"
+                },
+                {
+                    "id": "59.1-578(D)",
+                    "number": "59.1-578(D)",
+                    "text": "If a controller sells personal data to third parties or processes personal data for targeted advertising, the controller shall clearly and conspicuously disclose such processing, as well as the manner in which a consumer may exercise the right to opt out of such processing.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "vacode"
+                },
+                {
+                    "id": "59.1-578(E)",
+                    "number": "59.1-578(E)",
+                    "text": "A controller shall establish, and shall describe in a privacy notice, one or more secure and reliable means for consumers to submit a request to exercise their consumer rights under this chapter. Such means shall take into account the ways in which consumers normally interact with the controller, the need for secure and reliable communication of such requests, and the ability of the controller to authenticate the identity of the consumer making the request. Controllers shall not require a consumer to create a new account in order to exercise consumer rights pursuant to § 59.1-577 but may require a consumer to use an existing account.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "vacode"
+                },
+                {
+                    "id": "59.1-578(F)",
+                    "number": "59.1-578(F)",
+                    "text": "1. Subject to the consent requirement established by subdivision 3, no controller shall process any personal data collected from a known child: a. For the purposes of (i) targeted advertising, (ii) the sale of such personal data, or (iii) profiling in furtherance of decisions that produce legal or similarly significant effects concerning a consumer; b. Unless such processing is reasonably necessary to provide the online service, product, or feature; c. For any processing purpose other than the processing purpose that the controller disclosed at the time such controller collected such personal data or that is reasonably necessary for and compatible with such disclosed purpose; or d. For longer than is reasonably necessary to provide the online service, product, or feature. 2. Subject to the consent requirement established by subdivision 3, no controller shall collect precise geolocation data from a known child unless (i) such precise geolocation data is reasonably necessary for the controller to provide an online service, product, or feature and, if such data is necessary to provide such online service, product, or feature, such controller shall only collect such data for the time necessary to provide such online service, product, or feature and (ii) the controller provides to the known child a signal indicating that such controller is collecting such precise geolocation data, which signal shall be available to such known child for the entire duration of such collection. 3. No controller shall engage in the activities described in subdivisions 1 or 2 unless the controller obtains consent from the child's parent or legal guardian in accordance with the federal Children's Online Privacy Protection Act (15 U.S.C. § 6501 et seq.).",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "vacode"
+                }
+            ]
+        },
+        {
+            "number": "59.1-579",
+            "code": "§ 59.1-579",
+            "name": "Responsibility according to role; controller and processor",
+            "controls": [
+                {
+                    "id": "59.1-579(A)",
+                    "number": "59.1-579(A)",
+                    "text": "A processor shall adhere to the instructions of a controller and shall assist the controller in meeting its obligations under this chapter. Such assistance shall include: 1. Taking into account the nature of processing and the information available to the processor, by appropriate technical and organizational measures, insofar as this is reasonably practicable, to fulfill the controller's obligation to respond to consumer rights requests pursuant to § 59.1-577. 2. Taking into account the nature of processing and the information available to the processor, by assisting the controller in meeting the controller's obligations in relation to the security of processing the personal data and in relation to the notification of a breach of security of the system of the processor pursuant to § 18.2-186.6 in order to meet the controller's obligations. 3. Providing necessary information to enable the controller to conduct and document data protection assessments pursuant to § 59.1-580.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "59.1-579(A)(1)",
+                            "text": "Taking into account the nature of processing and the information available to the processor, by appropriate technical and organizational measures, insofar as this is reasonably practicable, to fulfill the controller's obligation to respond to consumer rights requests pursuant to § 59.1-577.",
+                            "description": "A processor shall adhere to the instructions of a controller and shall assist the controller in meeting its obligations under this chapter. Such assistance shall include: taking into account the nature of processing and the information available to the processor, by appropriate technical and organizational measures, insofar as this is reasonably practicable, to fulfill the controller's obligation to respond to consumer rights requests pursuant to § 59.1-577.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-579(A)(2)",
+                            "text": "Taking into account the nature of processing and the information available to the processor, by assisting the controller in meeting the controller's obligations in relation to the security of processing the personal data and in relation to the notification of a breach of security of the system of the processor pursuant to § 18.2-186.6 in order to meet the controller's obligations.",
+                            "description": "A processor shall adhere to the instructions of a controller and shall assist the controller in meeting its obligations under this chapter. Such assistance shall include: taking into account the nature of processing and the information available to the processor, by assisting the controller in meeting the controller's obligations in relation to the security of processing the personal data and in relation to the notification of a breach of security of the system of the processor pursuant to § 18.2-186.6 in order to meet the controller's obligations.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-579(A)(3)",
+                            "text": "Providing necessary information to enable the controller to conduct and document data protection assessments pursuant to § 59.1-580.",
+                            "description": "A processor shall adhere to the instructions of a controller and shall assist the controller in meeting its obligations under this chapter. Such assistance shall include: providing necessary information to enable the controller to conduct and document data protection assessments pursuant to § 59.1-580.",
+                            "source": "vacode"
+                        }
+                    ],
+                    "source": "vacode"
+                },
+                {
+                    "id": "59.1-579(B)",
+                    "number": "59.1-579(B)",
+                    "text": "A contract between a controller and a processor shall govern the processor's data processing procedures with respect to processing performed on behalf of the controller. The contract shall be binding and clearly set forth instructions for processing data, the nature and purpose of processing, the type of data subject to processing, the duration of processing, and the rights and obligations of both parties. The contract shall also include requirements that the processor shall: 1. Ensure that each person processing personal data is subject to a duty of confidentiality with respect to the data; 2. At the controller's direction, delete or return all personal data to the controller as requested at the end of the provision of services, unless retention of the personal data is required by law; 3. Upon the reasonable request of the controller, make available to the controller all information in its possession necessary to demonstrate the processor's compliance with the obligations in this chapter; 4. Allow, and cooperate with, reasonable assessments by the controller or the controller's designated assessor; alternatively, the processor may arrange for a qualified and independent assessor to conduct an assessment of the processor's policies and technical and organizational measures in support of the obligations under this chapter using an appropriate and accepted control standard or framework and assessment procedure for such assessments. The processor shall provide a report of such assessment to the controller upon request; and 5. Engage any subcontractor pursuant to a written contract in accordance with subsection C that requires the subcontractor to meet the obligations of the processor with respect to the personal data.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "59.1-579(B)(1)",
+                            "text": "Ensure that each person processing personal data is subject to a duty of confidentiality with respect to the data;",
+                            "description": "The contract shall also include requirements that the processor shall: ensure that each person processing personal data is subject to a duty of confidentiality with respect to the data.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-579(B)(2)",
+                            "text": "At the controller's direction, delete or return all personal data to the controller as requested at the end of the provision of services, unless retention of the personal data is required by law;",
+                            "description": "The contract shall also include requirements that the processor shall: at the controller's direction, delete or return all personal data to the controller as requested at the end of the provision of services, unless retention of the personal data is required by law.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-579(B)(3)",
+                            "text": "Upon the reasonable request of the controller, make available to the controller all information in its possession necessary to demonstrate the processor's compliance with the obligations in this chapter;",
+                            "description": "The contract shall also include requirements that the processor shall: upon the reasonable request of the controller, make available to the controller all information in its possession necessary to demonstrate the processor's compliance with the obligations in this chapter.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-579(B)(4)",
+                            "text": "Allow, and cooperate with, reasonable assessments by the controller or the controller's designated assessor; alternatively, the processor may arrange for a qualified and independent assessor to conduct an assessment of the processor's policies and technical and organizational measures in support of the obligations under this chapter using an appropriate and accepted control standard or framework and assessment procedure for such assessments. The processor shall provide a report of such assessment to the controller upon request; and",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-579(B)(5)",
+                            "text": "Engage any subcontractor pursuant to a written contract in accordance with subsection C that requires the subcontractor to meet the obligations of the processor with respect to the personal data.",
+                            "description": "The contract shall also include requirements that the processor shall: engage any subcontractor pursuant to a written contract in accordance with subsection C that requires the subcontractor to meet the obligations of the processor with respect to the personal data.",
+                            "source": "vacode"
+                        }
+                    ],
+                    "source": "vacode"
+                }
+            ]
+        },
+        {
+            "number": "59.1-580",
+            "code": "§ 59.1-580",
+            "name": "Data protection assessments",
+            "controls": [
+                {
+                    "id": "59.1-580(A)",
+                    "number": "59.1-580(A)",
+                    "text": "A controller shall conduct and document a data protection assessment of each of the following processing activities involving personal data: 1. The processing of personal data for purposes of targeted advertising; 2. The sale of personal data; 3. The processing of personal data for purposes of profiling, where such profiling presents a reasonably foreseeable risk of (i) unfair or deceptive treatment of, or unlawful disparate impact on, consumers; (ii) financial, physical, or reputational injury to consumers; (iii) a physical or other intrusion upon the solitude or seclusion, or the private affairs or concerns, of consumers, where such intrusion would be offensive to a reasonable person; or (iv) other substantial injury to consumers; 4. The processing of sensitive data; and 5. Any processing activities involving personal data that present a heightened risk of harm to consumers.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "59.1-580(A)(1)",
+                            "text": "The processing of personal data for purposes of targeted advertising;",
+                            "description": "A controller shall conduct and document a data protection assessment of each of the following processing activities involving personal data: the processing of personal data for purposes of targeted advertising.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-580(A)(2)",
+                            "text": "The sale of personal data;",
+                            "description": "A controller shall conduct and document a data protection assessment of each of the following processing activities involving personal data: the sale of personal data.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-580(A)(3)",
+                            "text": "The processing of personal data for purposes of profiling, where such profiling presents a reasonably foreseeable risk of (i) unfair or deceptive treatment of, or unlawful disparate impact on, consumers; (ii) financial, physical, or reputational injury to consumers; (iii) a physical or other intrusion upon the solitude or seclusion, or the private affairs or concerns, of consumers, where such intrusion would be offensive to a reasonable person; or (iv) other substantial injury to consumers;",
+                            "description": "A controller shall conduct and document a data protection assessment of each of the following processing activities involving personal data: the processing of personal data for purposes of profiling, where such profiling presents a reasonably foreseeable risk of (i) unfair or deceptive treatment of, or unlawful disparate impact on, consumers; (ii) financial, physical, or reputational injury to consumers; (iii) a physical or other intrusion upon the solitude or seclusion, or the private affairs or concerns, of consumers, where such intrusion would be offensive to a reasonable person; or (iv) other substantial injury to consumers.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-580(A)(4)",
+                            "text": "The processing of sensitive data; and",
+                            "description": "A controller shall conduct and document a data protection assessment of each of the following processing activities involving personal data: the processing of sensitive data.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-580(A)(5)",
+                            "text": "Any processing activities involving personal data that present a heightened risk of harm to consumers.",
+                            "description": "A controller shall conduct and document a data protection assessment of each of the following processing activities involving personal data: any processing activities involving personal data that present a heightened risk of harm to consumers.",
+                            "source": "vacode"
+                        }
+                    ],
+                    "source": "vacode"
+                },
+                {
+                    "id": "59.1-580(B)",
+                    "number": "59.1-580(B)",
+                    "text": "Each controller that offers any online service, product, or feature directed to consumers whom such controller has actual knowledge are children shall conduct a data protection assessment for such online service, product, or feature that addresses (i) the purpose of such online service, product, or feature; (ii) the categories of known children's personal data that such online service, product, or feature processes; and (iii) the purposes for which such controller processes known children's personal data with respect to such online service, product, or feature.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "vacode"
+                },
+                {
+                    "id": "59.1-580(C)",
+                    "number": "59.1-580(C)",
+                    "text": "Data protection assessments conducted pursuant to this section shall identify and weigh the benefits that may flow, directly and indirectly, from the processing to the controller, the consumer, other stakeholders, and the public against the potential risks to the rights of the consumer associated with such processing, as mitigated by safeguards that can be employed by the controller to reduce such risks. The use of de-identified data and the reasonable expectations of consumers, as well as the context of the processing and the relationship between the controller and the consumer whose personal data will be processed, shall be factored into this assessment by the controller.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "vacode"
+                },
+                {
+                    "id": "59.1-580(D)",
+                    "number": "59.1-580(D)",
+                    "text": "The Attorney General may request, pursuant to a civil investigative demand, that a controller disclose any data protection assessment that is relevant to an investigation conducted by the Attorney General, and the controller shall make the data protection assessment available to the Attorney General. The Attorney General may evaluate the data protection assessment for compliance with the responsibilities set forth in § 59.1-578. Data protection assessments shall be confidential and exempt from public inspection and copying under the Virginia Freedom of Information Act (§ 2.2-3700 et seq.). The disclosure of a data protection assessment pursuant to a request from the Attorney General shall not constitute a waiver of attorney-client privilege or work product protection with respect to the assessment and any information contained in the assessment.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "vacode"
+                }
+            ]
+        },
+        {
+            "number": "59.1-581",
+            "code": "§ 59.1-581",
+            "name": "Processing de-identified data; exemptions",
+            "controls": [
+                {
+                    "id": "59.1-581(A)",
+                    "number": "59.1-581(A)",
+                    "text": "The controller in possession of de-identified data shall: 1. Take reasonable measures to ensure that the data cannot be associated with a natural person; 2. Publicly commit to maintaining and using de-identified data without attempting to re-identify the data; and 3. Contractually obligate any recipients of the de-identified data to comply with all provisions of this chapter.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "59.1-581(A)(1)",
+                            "text": "Take reasonable measures to ensure that the data cannot be associated with a natural person;",
+                            "description": "The controller in possession of de-identified data shall: take reasonable measures to ensure that the data cannot be associated with a natural person.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-581(A)(2)",
+                            "text": "Publicly commit to maintaining and using de-identified data without attempting to re-identify the data; and",
+                            "description": "The controller in possession of de-identified data shall: publicly commit to maintaining and using de-identified data without attempting to re-identify the data.",
+                            "source": "vacode"
+                        },
+                        {
+                            "id": "59.1-581(A)(3)",
+                            "text": "Contractually obligate any recipients of the de-identified data to comply with all provisions of this chapter.",
+                            "description": "The controller in possession of de-identified data shall: contractually obligate any recipients of the de-identified data to comply with all provisions of this chapter.",
+                            "source": "vacode"
+                        }
+                    ],
+                    "source": "vacode"
+                },
+                {
+                    "id": "59.1-581(E)",
+                    "number": "59.1-581(E)",
+                    "text": "A controller that discloses pseudonymous data or de-identified data shall exercise reasonable oversight to monitor compliance with any contractual commitments to which the pseudonymous data or de-identified data is subject and shall take appropriate steps to address any breaches of those contractual commitments.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "vacode"
+                }
+            ]
+        }
+    ]
+}

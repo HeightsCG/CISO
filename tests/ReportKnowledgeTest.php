@@ -273,7 +273,8 @@ return array(
             'ccpa' => 'privacy',
             'pipeda' => 'privacy',
             'au-privacy' => 'privacy',
-            'sg-pdpa' => 'privacy'
+            'sg-pdpa' => 'privacy',
+            'us-va-cdpa' => 'privacy'
         );
 
         foreach (glob(ROOT.'/frameworks/*.json') as $file) {
