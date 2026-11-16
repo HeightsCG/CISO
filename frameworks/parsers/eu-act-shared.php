@@ -167,6 +167,80 @@ class EuAct {
         return self::clean(implode(' ', $pieces));
     }
 
+    /**
+     * An annex (<div id="anx_I">) as a list of parts. A part has a `title` (the "Part I ..."
+     * heading, or '' when the annex is not divided), a `lead` (the sentence that
+     * introduces its items) and `items`: ['label' => '(2)' or '1.', 'text' => the item's
+     * own words, 'points' => its lettered sub-items as ['label', 'text']].
+     */
+    public function annex(string $id): array
+    {
+        $root = $this->xpath->query('//*[@id="'.$id.'"]')->item(0);
+
+        if ($root === null) {
+            throw new RuntimeException('Annex '.$id.' not found');
+        }
+
+        $parts = array();
+        $current = null;
+
+        foreach ($root->childNodes as $child) {
+            if ($child->nodeType !== XML_ELEMENT_NODE) {
+                continue;
+            }
+
+            $class = $child->getAttribute('class');
+
+            if ($class === 'oj-doc-ti') {
+                continue;
+            }
+
+            if ($class === 'oj-ti-grseq-1' || $current === null) {
+                $parts[] = array(
+                    'title' => $class === 'oj-ti-grseq-1' ? self::clean($child->textContent) : '',
+                    'lead' => '',
+                    'items' => array()
+                );
+                $current = count($parts) - 1;
+
+                if ($class === 'oj-ti-grseq-1') {
+                    continue;
+                }
+            }
+
+            if ($child->nodeName !== 'table') {
+                $parts[$current]['lead'] = trim($parts[$current]['lead'].' '.self::clean($child->textContent));
+                continue;
+            }
+
+            // The label is the cell before the last; the last cell holds the text and any nested points.
+            $cells = $this->xpath->query('./tbody/tr/td | ./tr/td', $child);
+            $content = $cells->item($cells->length - 1);
+            $own = array();
+            $points = array();
+
+            foreach ($content->childNodes as $piece) {
+                if ($piece->nodeName === 'table') {
+                    $inner = $this->xpath->query('./tbody/tr/td | ./tr/td', $piece);
+                    $points[] = array(
+                        'label' => self::clean($inner->item($inner->length - 2)->textContent),
+                        'text' => $this->cell($inner->item($inner->length - 1))
+                    );
+                } elseif ($piece->nodeType === XML_ELEMENT_NODE || $piece->nodeType === XML_TEXT_NODE) {
+                    $own[] = self::clean($piece->textContent);
+                }
+            }
+
+            $parts[$current]['items'][] = array(
+                'label' => self::clean($cells->item($cells->length - 2)->textContent),
+                'text' => self::clean(implode(' ', array_filter($own, 'strlen'))),
+                'points' => $points
+            );
+        }
+
+        return $parts;
+    }
+
     private function parts(DOMNode $node, bool $skip_heading = false): array
     {
         $parts = array();

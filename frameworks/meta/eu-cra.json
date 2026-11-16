@@ -1,0 +1,227 @@
+{
+    "key": "eu-cra",
+    "name": "EU Cyber Resilience Act",
+    "version": "EU 2024/2847",
+    "full_name": "Regulation (EU) 2024/2847 of the European Parliament and of the Council on horizontal cybersecurity requirements for products with digital elements (Cyber Resilience Act)",
+    "issuing_body": "European Parliament and Council of the European Union",
+    "standard_codes": [
+        "EU-CRA"
+    ],
+    "aliases": [
+        "CRA",
+        "Cyber Resilience Act",
+        "Regulation 2024/2847"
+    ],
+    "content_licence": "open",
+    "notice": "Assessed against the text of the Regulation as published in the Official Journal on 20 November 2024. Harmonised standards and Commission acts adopted under it specify these requirements further and are not part of this assessment.",
+    "sources": [
+        {
+            "id": "reg2847",
+            "title": "Regulation (EU) 2024/2847 (Cyber Resilience Act), Official Journal L, 20.11.2024",
+            "version": "OJ L, 2024/2847, 20 November 2024",
+            "publisher": "Publications Office of the European Union",
+            "url": "http://publications.europa.eu/resource/celex/32024R2847",
+            "file": "eu-cra/reg-2024-2847.html",
+            "sha256": "fe0cca4a0caec50e7cf5a91432b94a19b211f86be8584fdba56372bdcea571ed"
+        }
+    ],
+    "source_of": {
+        "controls": "reg2847",
+        "objectives": "reg2847"
+    },
+    "control_flags": {
+        "role": "On each group: the economic operator it binds (manufacturer, importer, distributor, open-source software steward, or any). Groups for a role the organisation does not hold are not applicable.",
+        "type": "paragraph (a paragraph of an article) or requirement (an item of an annex).",
+        "objectives": "The lettered points of a paragraph or annex item."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Regulation defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every applicable element it lists is met.",
+            "source": "reg2847",
+            "cite": "Regulation (EU) 2024/2847"
+        },
+        {
+            "id": "essential_requirements",
+            "type": "applicability",
+            "summary": "A manufacturer may place a product with digital elements on the market only if it meets the essential cybersecurity requirements of Annex I, Part I.",
+            "source": "reg2847",
+            "cite": "Article 13(1)",
+            "quote": "manufacturers shall ensure that it has been designed, developed and produced in accordance with the essential cybersecurity requirements set out in Part I of Annex I."
+        },
+        {
+            "id": "general_application",
+            "type": "effective_date",
+            "date": "2027-12-11",
+            "summary": "The Regulation applies from 11 December 2027.",
+            "source": "reg2847",
+            "cite": "Article 71(2)",
+            "quote": "This Regulation shall apply from 11 December 2027."
+        },
+        {
+            "id": "reporting_application",
+            "type": "effective_date",
+            "date": "2026-09-11",
+            "control": "Art. 14(1)",
+            "summary": "The reporting obligations of Article 14 apply from 11 September 2026.",
+            "source": "reg2847",
+            "cite": "Article 71(2)",
+            "quote": "However, Article 14 shall apply from 11 September 2026 and Chapter IV (Articles 35 to 51) shall apply from 11 June 2026."
+        },
+        {
+            "id": "vulnerability_early_warning",
+            "type": "deadline",
+            "control": "Art. 14(2)",
+            "hours": 24,
+            "from": "the manufacturer becoming aware of the actively exploited vulnerability",
+            "summary": "An actively exploited vulnerability is notified with an early warning within 24 hours of the manufacturer becoming aware of it.",
+            "source": "reg2847",
+            "cite": "Article 14(2)(a)",
+            "quote": "an early warning notification of an actively exploited vulnerability, without undue delay and in any event within 24 hours of the manufacturer becoming aware of it"
+        },
+        {
+            "id": "vulnerability_notification",
+            "type": "deadline",
+            "control": "Art. 14(2)",
+            "hours": 72,
+            "from": "the manufacturer becoming aware of the actively exploited vulnerability",
+            "summary": "A vulnerability notification follows within 72 hours of the manufacturer becoming aware of the actively exploited vulnerability.",
+            "source": "reg2847",
+            "cite": "Article 14(2)(b)",
+            "quote": "a vulnerability notification, without undue delay and in any event within 72 hours of the manufacturer becoming aware of the actively exploited vulnerability"
+        },
+        {
+            "id": "vulnerability_final_report",
+            "type": "deadline",
+            "control": "Art. 14(2)",
+            "days": 14,
+            "from": "a corrective or mitigating measure being available",
+            "summary": "A final report on an actively exploited vulnerability is submitted no later than 14 days after a corrective or mitigating measure is available.",
+            "source": "reg2847",
+            "cite": "Article 14(2)(c)",
+            "quote": "a final report, no later than 14 days after a corrective or mitigating measure is available"
+        },
+        {
+            "id": "incident_early_warning",
+            "type": "deadline",
+            "control": "Art. 14(4)",
+            "hours": 24,
+            "from": "the manufacturer becoming aware of the severe incident",
+            "summary": "A severe incident affecting the product's security is notified with an early warning within 24 hours and an incident notification within 72 hours of the manufacturer becoming aware of it.",
+            "source": "reg2847",
+            "cite": "Article 14(4)(a)",
+            "quote": "an early warning notification of a severe incident having an impact on the security of the product with digital elements, without undue delay and in any event within 24 hours of the manufacturer becoming aware of it"
+        },
+        {
+            "id": "incident_final_report",
+            "type": "deadline",
+            "control": "Art. 14(4)",
+            "months": 1,
+            "from": "submission of the incident notification",
+            "summary": "A final report on a severe incident is submitted within one month of the incident notification.",
+            "source": "reg2847",
+            "cite": "Article 14(4)(c)",
+            "quote": "a final report, within one month after the submission of the incident notification under point (b)"
+        },
+        {
+            "id": "support_period",
+            "type": "applicability",
+            "control": "Art. 13(8)",
+            "summary": "Vulnerabilities are handled for a support period of at least five years, or the expected time in use if that is shorter.",
+            "source": "reg2847",
+            "cite": "Article 13(8)",
+            "quote": "Without prejudice to the second subparagraph, the support period shall be at least five years."
+        },
+        {
+            "id": "documentation_retention",
+            "type": "retention",
+            "control": "Art. 13(13)",
+            "years": 10,
+            "from": "the product being placed on the market",
+            "summary": "The technical documentation and the EU declaration of conformity are kept for at least 10 years after the product is placed on the market, or for the support period if longer.",
+            "source": "reg2847",
+            "cite": "Article 13(13)",
+            "quote": "for at least 10 years after the product with digital elements has been placed on the market or for the support period, whichever is longer."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "Failing the essential cybersecurity requirements of Annex I or the manufacturer obligations of Articles 13 and 14 can be fined up to EUR 15 million or 2.5% of total worldwide annual turnover, whichever is higher.",
+            "source": "reg2847",
+            "cite": "Article 64(2)",
+            "quote": "Non-compliance with the essential cybersecurity requirements set out in Annex I and the obligations set out in Articles 13 and 14 shall be subject to administrative fines of up to EUR"
+        },
+        {
+            "summary": "Failing the obligations of importers, distributors and other economic operators can be fined up to EUR 10 million or 2% of total worldwide annual turnover, whichever is higher.",
+            "source": "reg2847",
+            "cite": "Article 64(3)",
+            "quote": "Non-compliance with the obligations set out in Articles 18 to 23, Article 28, Article 30(1) to (4), Article 31(1) to (4), Article 32(1), (2) and (3), Article 33(5), and Articles 39, 41, 47, 49 and 53 shall be subject to administrative fines of up to EUR"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "CRA",
+            "definition": "The Cyber Resilience Act, Regulation (EU) 2024/2847, the European Union's law setting cybersecurity requirements for products with digital elements."
+        },
+        {
+            "term": "Product with digital elements",
+            "definition": "A software or hardware product and its remote data processing solutions, including components placed on the market separately."
+        },
+        {
+            "term": "Manufacturer",
+            "definition": "The organisation that develops or manufactures a product with digital elements, or has it designed, developed or manufactured, and markets it under its own name or trademark."
+        },
+        {
+            "term": "Support period",
+            "definition": "The period during which a manufacturer must ensure that vulnerabilities of a product with digital elements are handled effectively."
+        },
+        {
+            "term": "SBOM",
+            "definition": "Software bill of materials: a formal record of the components included in the software elements of a product and their supply chain relationships."
+        },
+        {
+            "term": "CSIRT",
+            "definition": "Computer security incident response team; the CSIRT designated as coordinator receives vulnerability and incident notifications."
+        }
+    ]
+}
