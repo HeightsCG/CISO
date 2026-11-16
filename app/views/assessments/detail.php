@@ -1426,6 +1426,10 @@ $(document).ready(function () {
         var score_value = score.percentage === null ? '0%' : Math.round(score.percentage) + '%';
         var score_lines = [];
 
+        if (score.percentage === null) {
+            score_lines.push('Not scored yet');
+        }
+
         if (score.percentage !== null && !score.complete) {
             score_lines.push('Provisional | ' + assessed + ' of ' + in_scope + ' assessed');
         }
@@ -1460,7 +1464,7 @@ $(document).ready(function () {
             + dash_kpi(
                 'Gaps',
                 gaps,
-                gaps > 0 ? (counts['Not Implemented'] || 0) + ' not implemented, ' + (counts['Partially Implemented'] || 0) + ' partial' : '',
+                gaps > 0 ? (counts['Not Implemented'] || 0) + ' not implemented, ' + (counts['Partially Implemented'] || 0) + ' partial' : 'None',
                 gaps > 0 ? 'is-gap' : ''
             )
             + dash_kpi(
