@@ -1,0 +1,236 @@
+{
+    "key": "eu-ai-act",
+    "name": "EU AI Act",
+    "version": "EU 2024/1689",
+    "full_name": "Regulation (EU) 2024/1689 of the European Parliament and of the Council laying down harmonised rules on artificial intelligence (Artificial Intelligence Act)",
+    "issuing_body": "European Parliament and Council of the European Union",
+    "standard_codes": [
+        "EU-AI-ACT"
+    ],
+    "aliases": [
+        "AI Act",
+        "Artificial Intelligence Act",
+        "Regulation 2024/1689"
+    ],
+    "content_licence": "open",
+    "notice": "Assessed against the text of the Regulation as published in the Official Journal on 12 July 2024. Application dates are those of Article 113 as published; a later amending act may have changed them.",
+    "sources": [
+        {
+            "id": "reg1689",
+            "title": "Regulation (EU) 2024/1689 (Artificial Intelligence Act), Official Journal L, 12.7.2024",
+            "version": "OJ L, 2024/1689, 12 July 2024",
+            "publisher": "Publications Office of the European Union",
+            "url": "http://publications.europa.eu/resource/celex/32024R1689",
+            "file": "eu-ai-act/reg-2024-1689.html",
+            "sha256": "8f0b656302f9864cc87e040c371f209a9d65ae1a6cecc25ca5eb737e872d721a"
+        }
+    ],
+    "source_of": {
+        "controls": "reg1689",
+        "objectives": "reg1689"
+    },
+    "control_flags": {
+        "role": "On each article: the operator it binds (provider, deployer, importer, distributor, or any). Articles for a role the organisation does not hold are not applicable.",
+        "system_type": "On each article: all (any AI system), prohibited (the banned practices), high_risk, certain (the systems Article 50 names), general_purpose, or general_purpose_systemic. Articles for a kind of system the organisation does not provide or deploy are not applicable.",
+        "objectives": "The lettered points of the paragraph. A paragraph that holds two lists is assessed whole."
+    },
+    "terminology": {
+        "control": "obligation",
+        "controls": "obligations",
+        "family": "article",
+        "families": "articles",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable obligations that are implemented. The Regulation defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "An obligation is met only when every applicable element it lists is met.",
+            "source": "reg1689",
+            "cite": "Regulation (EU) 2024/1689"
+        },
+        {
+            "id": "high_risk_classification",
+            "type": "applicability",
+            "applies_to": "high_risk",
+            "summary": "The high-risk obligations apply to AI systems that are safety components of products under the Union harmonisation legislation in Annex I and require third-party conformity assessment, and to the systems listed in Annex III.",
+            "source": "reg1689",
+            "cite": "Article 6(2)",
+            "quote": "In addition to the high-risk AI systems referred to in paragraph 1, AI systems referred to in Annex III shall be considered to be high-risk."
+        },
+        {
+            "id": "general_application",
+            "type": "effective_date",
+            "date": "2026-08-02",
+            "summary": "The Regulation applies from 2 August 2026, except as stated for specific chapters.",
+            "source": "reg1689",
+            "cite": "Article 113",
+            "quote": "It shall apply from 2 August 2026."
+        },
+        {
+            "id": "early_application",
+            "type": "effective_date",
+            "date": "2025-02-02",
+            "applies_to": "all, prohibited",
+            "summary": "AI literacy and the prohibited practices (Chapters I and II) apply from 2 February 2025.",
+            "source": "reg1689",
+            "cite": "Article 113(a)",
+            "quote": "Chapters I and II shall apply from 2 February 2025;"
+        },
+        {
+            "id": "gpai_application",
+            "type": "effective_date",
+            "date": "2025-08-02",
+            "applies_to": "general_purpose, general_purpose_systemic",
+            "summary": "The obligations for general-purpose AI models (Chapter V) apply from 2 August 2025.",
+            "source": "reg1689",
+            "cite": "Article 113(b)",
+            "quote": "Chapter III Section 4, Chapter V, Chapter VII and Chapter XII and Article 78 shall apply from 2 August 2025, with the exception of Article 101;"
+        },
+        {
+            "id": "product_safety_application",
+            "type": "effective_date",
+            "date": "2027-08-02",
+            "summary": "For AI systems that are high-risk under Article 6(1) (safety components of regulated products) the obligations apply from 2 August 2027.",
+            "source": "reg1689",
+            "cite": "Article 113(c)",
+            "quote": "Article 6(1) and the corresponding obligations in this Regulation shall apply from 2 August 2027."
+        },
+        {
+            "id": "serious_incident_report",
+            "type": "deadline",
+            "control": "Art. 73(2)",
+            "days": 15,
+            "from": "becoming aware of the serious incident",
+            "summary": "A serious incident is reported immediately once a causal link is established and no later than 15 days after becoming aware of it.",
+            "source": "reg1689",
+            "cite": "Article 73(2)",
+            "quote": "not later than 15 days after the provider or, where applicable, the deployer, becomes aware of the serious incident."
+        },
+        {
+            "id": "widespread_incident_report",
+            "type": "deadline",
+            "control": "Art. 73(3)",
+            "days": 2,
+            "from": "becoming aware of the incident",
+            "summary": "A widespread infringement or a serious and irreversible disruption of critical infrastructure is reported no later than two days after becoming aware of it.",
+            "source": "reg1689",
+            "cite": "Article 73(3)",
+            "quote": "the report referred to in paragraph 1 of this Article shall be provided immediately, and not later than two days after the provider or, where applicable, the deployer becomes aware of that incident."
+        },
+        {
+            "id": "death_report",
+            "type": "deadline",
+            "control": "Art. 73(4)",
+            "days": 10,
+            "from": "becoming aware of the serious incident",
+            "summary": "Where a person has died, the report is made no later than 10 days after becoming aware of the serious incident.",
+            "source": "reg1689",
+            "cite": "Article 73(4)",
+            "quote": "but not later than 10 days after the date on which the provider or, where applicable, the deployer becomes aware of the serious incident."
+        },
+        {
+            "id": "documentation_retention",
+            "type": "retention",
+            "control": "Art. 18(1)",
+            "years": 10,
+            "from": "the system being placed on the market or put into service",
+            "summary": "Providers keep the technical documentation, quality management documentation, notified body documents and the EU declaration of conformity for 10 years after the system is placed on the market or put into service.",
+            "source": "reg1689",
+            "cite": "Article 18(1)",
+            "quote": "keep at the disposal of the national competent authorities:"
+        },
+        {
+            "id": "log_retention",
+            "type": "retention",
+            "control": "Art. 19(1)",
+            "months": 6,
+            "from": "the log being generated",
+            "summary": "Automatically generated logs are kept for a period appropriate to the system's intended purpose, of at least six months.",
+            "source": "reg1689",
+            "cite": "Article 19(1)",
+            "quote": "the logs shall be kept for a period appropriate to the intended purpose of the high-risk AI system, of at least six months"
+        },
+        {
+            "id": "open_source_models",
+            "type": "applicability",
+            "control": "Art. 53(1)",
+            "summary": "Providers of general-purpose AI models released under a free and open-source licence with public parameters are exempt from the documentation duties of Article 53(1)(a) and (b), unless the model has systemic risk.",
+            "source": "reg1689",
+            "cite": "Article 53(2)",
+            "quote": "The obligations set out in paragraph 1, points (a) and (b), shall not apply to providers of AI models that are released under a free and open-source licence"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "Engaging in a prohibited AI practice can be fined up to EUR 35 million or 7% of total worldwide annual turnover, whichever is higher.",
+            "source": "reg1689",
+            "cite": "Article 99(3)",
+            "quote": "Non-compliance with the prohibition of the AI practices referred to in Article 5 shall be subject to administrative fines of up to EUR"
+        },
+        {
+            "summary": "Failing the obligations of providers, importers, distributors and deployers, or the Article 50 transparency obligations, can be fined up to EUR 15 million or 3% of total worldwide annual turnover, whichever is higher.",
+            "source": "reg1689",
+            "cite": "Article 99(4)",
+            "quote": "Non-compliance with any of the following provisions related to operators or notified bodies, other than those laid down in Articles 5, shall be subject to administrative fines of up to EUR"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "AI Act",
+            "definition": "Regulation (EU) 2024/1689, the European Union's law setting rules for AI systems and general-purpose AI models according to the risk they pose."
+        },
+        {
+            "term": "Provider",
+            "definition": "The organisation that develops an AI system or general-purpose AI model, or has one developed, and places it on the market or puts it into service under its own name."
+        },
+        {
+            "term": "Deployer",
+            "definition": "The organisation that uses an AI system under its authority in the course of a professional activity."
+        },
+        {
+            "term": "High-risk AI system",
+            "definition": "An AI system that is a safety component of a regulated product, or that is used in one of the areas listed in Annex III, such as employment, education, essential services, law enforcement and critical infrastructure."
+        },
+        {
+            "term": "General-purpose AI model",
+            "definition": "An AI model that can competently perform a wide range of distinct tasks and can be integrated into many downstream systems."
+        },
+        {
+            "term": "AI Office",
+            "definition": "The European Commission's function for supervising general-purpose AI models and supporting implementation of the Regulation."
+        }
+    ]
+}

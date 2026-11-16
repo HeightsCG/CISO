@@ -221,13 +221,15 @@ class EuAct {
 
     /**
      * One control per paragraph: the full text, and each lettered point as an objective
-     * whose description joins it to the subparagraph that introduces it.
+     * whose description joins it to the subparagraph that introduces it. A paragraph
+     * with two lists has no objectives.
      */
     public static function control(string $id, array $parts): array
     {
         $text = array();
         $objectives = array();
         $lead = '';
+        $two_lists = false;
 
         foreach ($parts as $part) {
             if (!isset($part['label'])) {
@@ -248,11 +250,16 @@ class EuAct {
 
             foreach ($objectives as $earlier) {
                 if ($earlier['id'] === $objective['id']) {
-                    throw new RuntimeException($objective['id'].' appears twice: the paragraph holds two lists');
+                    $two_lists = true;
                 }
             }
 
             $objectives[] = $objective;
+        }
+
+        // A paragraph that holds two lists would give two points the same citation: it stays one control.
+        if ($two_lists) {
+            $objectives = array();
         }
 
         return array(
