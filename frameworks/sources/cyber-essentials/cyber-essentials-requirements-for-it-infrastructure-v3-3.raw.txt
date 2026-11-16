@@ -1,0 +1,790 @@
+This information is exempt under the Freedom of Information Act 2000 (FOIA) and may be exempt under other
+UK information legislation. Refer any FOIA queries to ncscinfoleg@ncsc.gov.uk. All material is UK Crown
+Copyright. April 2026
+Cyber Essentials:Requirements
+for IT Infrastructurev3.3Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+1
+All material is UK Crown Copyright ©
+Cyber Essentials:Requirements for
+ITInfrastructure v3.3
+Contents
+What’s new in this version..............................................................................................................................................3
+A. Introducing the technical controls................................................................................................................3
+B. Definitions....................................................................................................................................................................................4
+C. Backing up your data...................................................................................................................................................5
+D. Scope...............................................................................................................................................................................................6
+Cyber Essentials scope overview...................................................................................................................6
+Asset management and Cyber Essentials...........................................................................................7
+(i) Bring your own device (BYOD)...............................................................................................................8
+(ii) Home and remote working.....................................................................................................................9
+(iii) Wireless devices..................................................................................................................................................9
+(iv) Cloud services.......................................................................................................................................................9
+(v) Accounts used by third parties and managed infrastructure.....................11
+(vi) Devices used by third parties..............................................................................................................11
+(vii) Software development............................................................................................................................12
+E. Requirements by technical control theme........................................................................................13
+1. Firewalls....................................................................................................................................................................................13
+Aim................................................................................................................................................................................................13
+Introduction........................................................................................................................................................................13
+Requirements...................................................................................................................................................................13
+2. Secure Configuration.............................................................................................................................................14
+Aim................................................................................................................................................................................................14
+Introduction........................................................................................................................................................................15
+Requirements...................................................................................................................................................................15
+3. Security Update Management...................................................................................................................16
+Aim................................................................................................................................................................................................16Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+2
+All material is UK Crown Copyright ©
+Introduction........................................................................................................................................................................16
+Requirements...................................................................................................................................................................17
+4. User Access Control.................................................................................................................................................18
+Aim................................................................................................................................................................................................18
+Introduction........................................................................................................................................................................18
+Requirements...................................................................................................................................................................19
+Passwordless authentication.....................................................................................................................20
+Multi-factor authentication (MFA)........................................................................................................20
+Password-based authentication.............................................................................................................21
+5. Malware protection................................................................................................................................................23
+Aim..............................................................................................................................................................................................23
+Introduction......................................................................................................................................................................23
+Requirements.................................................................................................................................................................23
+F. Further guidance.............................................................................................................................................................24
+Zero trust and Cyber Essentials.....................................................................................................................24Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+3
+All material is UK Crown Copyright ©
+What’snewinthisversion
+• Definition for ‘cloud services’ provided
+• Updated definition for Passwordless Authentication to include FIDO2
+• Definitive statement that cloud services cannot be excluded from
+scope
+• Software Security Code of Practice introduced in Software
+Development section
+• Scope criteria no longer refers to ‘untrusted connections'
+• Importance of backing up data is emphasised
+A.Introducingthetechnicalcontrols
+We have organised the requirements under five technical controls:
+1. Firewalls
+2. Secure Configuration
+3. Security Update Management
+4. User Access Control
+5. Malware Protection
+As a Cyber Essentials scheme applicant organisation, it's your responsibility
+to make sure that your organisation meets all the requirements. You might
+also be required to supply evidence before your Certification Body can
+award certification at the level for which you’re applying.
+What you should do first:
+• Establish the boundaryof scope for your organisation, and then
+determinewhatis in scope within thisboundary.
+• Review each of the five technical control themes and the controls
+theyembodyas requirements.
+• Take the necessary steps to ensure thatyour organisationmeets
+everyrequirement it needs for the scope you have determined.Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+4
+All material is UK Crown Copyright ©
+B.Definitions
+Applicantrefers to the organisation which is seeking certification, or
+sometimes the individual who is acting as the main point of contact,
+depending on context
+Cloud service means an on-demand, scalable service, hosted on shared
+infrastructure, and accessible via the internet. For the purposes of Cyber
+Essentials, a cloud service will be accessed via an account (which may be
+credentials issued by your organisation, or an email address used for
+business purposes), and will store or process data for your organisation
+A corporate VPN is a virtual private network that connects back to your
+office location, or to a virtual or cloud firewall. You must administer the
+VPN so that you can apply the firewall controls
+Devices includes all types of hosts, networking equipment, servers,
+networks, and end user devices such as desktop computers, laptops, thin
+clients, tablets and smartphones - whether physical or virtual
+Licensed and supported software is software that you have a legal right
+to use and that a vendor has committed to support by providing regular
+vulnerability fixes. The vendor must provide the future date when they will
+stop providing these. (Note that the vendor doesn’t need to have created
+the software originally, but they must be able to modify the original
+software to create fixes)
+Multi-Factor Authentication (MFA)is a method of authenticating a user
+which uses two or more verification factors
+Organisational data includes any electronic data belonging to your
+organisation, for example, emails, documents, database data, financial
+data
+Organisational service includes any software applications, cloud
+applications, cloud services, user interactive desktops and mobile device
+management (MDM) solutions that your organisation owns or subscribes
+to. For example: web applications, Microsoft 365, Google Workspace,
+mobile device management containers, Citrix Desktop, Virtual Desktop
+solutions or IP telephonyCyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+5
+All material is UK Crown Copyright ©
+Passwordlessauthentication is a method to establish a user's identity
+that uses a factor other than knowledge. Examples include but are not
+limited to: FIDO2 authenticators, biometric data, security keys or tokens,
+one-time codes, QR codes, and push notifications.
+Scope means the networks, hardware and software assets, and cloud
+services that are included in the assessment
+Servers are devices that provide organisational data or services to other
+devices as part of your organisation’s business
+Software includes operating systems, commercial off-the-shelf
+applications, extensions, interpreters, scripts, libraries, network software
+and firewall and router firmware
+A sub-set is part of the organisation whose network is segregated from
+the rest of the organisation by a firewall or VLAN
+Vulnerabilityfixes include patches, updates, registry fixes, configuration
+changes, scripts or any other mechanism approved by the vendor to fix a
+known vulnerability
+C.Backingupyour data
+Backing up your data is not a technical requirement of Cyber Essentials.
+However, we highly recommend implementing an appropriate backup
+solution.
+Backing up means creating a copy of your information and saving it to
+another device or to cloud storage (online).
+Backing up regularly means you will always have a recent version of your
+information saved. This will help you recover quicker if your data is lost or
+stolen.
+If automatic backups are available, you should consider turning them on.
+This will regularly save your information into cloud storage, without you
+having to remember.Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+6
+All material is UK Crown Copyright ©
+If you back up your information to a USB stick or an external hard drive,
+disconnect it from your computer when a backup isn’t being done.
+D.Scope
+CyberEssentialsscope overview
+Your assessment and certification should cover the whole of the IT
+infrastructure used to carry out your organisation’s business, or if
+necessary, a well-defined and separately managed sub-set. Either way,
+you must clearly define the scope boundary, namely: the business unit
+managing it, the network boundary and physical location. You must agree
+the scope with the Certification Body before assessment begins.
+A sub-set can be used to define what is in scope or what is outof scope for
+your Cyber Essentials certification.
+Please note: Organisations that choose a scope which includes their whole
+IT infrastructure achieve the best protection and maximise their customers'
+confidence.
+Where parts of an organisation’s infrastructure have been excluded from
+scope, you will need to justify the reason for a partial scope to your
+assessor.
+The requirements apply to all devices and software in scope and which
+meet any of these conditions:
+• can accept incoming network connections from internet-connected
+devices
+• can establish outbound connections to devices via the internet
+• control the flow of data between any of the above devices and the
+internetCyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+7
+All material is UK Crown Copyright ©
+A scope that doesn’t include end-user devices isn’t acceptable.
+If your organisation’s data or services are hosted on cloud services, these
+services must be in scope. Cloud services cannot be excluded from scope.
+Asset management andCyberEssentials
+Asset management isn’t a specific Cyber Essentials control, but effective
+asset management can help meet all five controls, so it should be
+considered as a core security function.
+Most business operations depend on some aspect of asset management,
+and cyber security shouldn’t be considered in isolation, or as the primary
+consumer of asset information. These functions include IT operations,
+financial accounting, managing software licences, procurement and
+logistics. They may not all need the same information, but there will be
+overlaps and dependencies between the respective requirements.
+Integrating and coordinating asset management across your organisation
+will help reduce or manage any conflicts between these functions.
+Effective asset management doesn’t mean making lists or databases that
+are never used. It means creating, establishing and maintaining
+authoritative and accurate information about your assets that enables
+both day-to-day operations and efficient decision making when you need
+it. In particular, it will help you track and control devices as they're
+introduced into your business.
+The NCSC has comprehensive guidance for organisations on asset
+management.Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+8
+All material is UK Crown Copyright ©
+Figure 1: Scope of the requirements for IT infrastructure
+(i)Bringyourowndevice(BYOD)
+In addition to mobile or remote devices owned by the organisation, user-
+owned devices which access organisational data or services (as defined
+above) are in scope. However, all mobile or remote devices used only for
+the purpose of:
+• native voice applications
+• native text applications
+• multi-factor authentication (MFA) applications are outof scope.
+Traditionally, user devices were managed centrally, which ensured
+consistency across the organisation. Certifying security controls in this way
+is more straightforward as there is a standard build or reference.
+BYOD complicates matters, as users are given more freedom to ‘customise’
+their experience making consistent implementation of the controls more
+challenging. Using the organisational data and services definitions to
+enforce strong access policies should remove some of this ambiguity.Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+9
+All material is UK Crown Copyright ©
+For further information and advice on the use of BYOD please see the
+NCSC’s guidance.
+(ii)Homeandremoteworking
+Our default approach is that all corporate or BYOD home/remote working
+devices used for your organisation’s business are in scope for Cyber
+Essentials.
+If your organisation gives the home/remote worker a router, that router is
+then also in scope.
+All other routers are outof scope which means you need to apply Cyber
+Essentials firewall controls (such as a software firewall) on user devices.
+If the home/remote worker is using a corporate VPN, their internet
+boundary is on the company firewall or virtual/cloud firewall.
+(iii)Wirelessdevices
+Wireless devices (including wireless access points) are:
+• in scope if they can communicate with other devices via the internet
+• outof scope if it's not possible for an attacker to attack directly via
+the internet (the Cyber Essentials scheme isn’t concerned with
+attacks that can only be launched within the signal range of the
+wireless device)
+• outof scope if they are part of an ISP router at the home or remote
+location
+(iv)Cloudservices
+If your organisation’s data or services are hosted on cloud services, these
+services must be in scope.
+For cloud services, the applicantorganisation is alwaysresponsible for
+ensuring all controls are implemented, but some of the controls can be
+implemented by the cloud service provider. Who implements which control
+depends on the type of cloud service. We consider three different types of
+cloud service:Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+10
+All material is UK Crown Copyright ©
+• Infrastructure as aService (IaaS) – the cloud provider delivers virtual
+servers and network equipment that, much like physical equipment,
+your organisation configures and manages. Examples of IaaS include
+Rackspace, Google Compute Engine, or Amazon EC2
+• Platform as a Service (PaaS) – the cloud provider delivers and
+manages the underlying infrastructure, and your organisation
+provides and manages the applications. Examples of PaaS include
+Azure Web Apps and Amazon Web Services Lambda
+• Software asa Service (SaaS) – the cloud provider delivers
+applications, and your organisation then configures the services. You
+must still make sure that the service is configured securely. Examples
+of SaaS include Microsoft 365, Dropbox and Gmail
+Who implements the controls will vary, depending how the cloud service is
+designed. The table below explains who might typically be expected to
+implement each control:
+Requirement IaaS PaaS SaaS
+Firewalls
+Both your
+organisation and
+the cloud
+provider
+The cloud provider
+and sometimes
+also your
+organisation
+The cloud
+provider
+Secure
+Configuration
+Both your
+organisation and
+the cloud
+provider
+Both your
+organisation and
+the cloud provider
+Both your
+organisation and
+the cloud
+provider
+SecurityUpdate
+Management
+Both your
+organisation and
+the cloud
+provider
+Both your
+organisation and
+the cloud provider
+The cloud
+provider
+User Access
+Control
+Your
+organisation
+Your organisation
+Your
+organisation
+Malware
+Protection
+Both your
+organisation and
+the cloud
+provider
+The cloud provider
+and sometimes
+also your
+organisation
+The cloud
+providerCyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+11
+All material is UK Crown Copyright ©
+Table 1: Explanation of who may typically implement each control
+In cases where the cloud provider implements one of the controls on your
+behalf, you must make sure that the cloud provider has committed to
+implementing this via contractual clauses or documents referenced by
+contract, such as security statements or privacy statements. Cloud
+providers will often explain how they implement security in documents
+published in their trust centres, referencing a ‘shared responsibility model.’
+(v)Accountsusedbythirdpartiesandmanaged
+infrastructure
+All accounts that your organisation owns are in scope, even when those
+accounts are used by a third party, such as a supplier, contractor or
+Managed Service Provider (MSP) to manage or support your infrastructure.
+If you’re using externally managed services (such as remote
+administration), you must be able to confirm that the Cyber Essentials
+technical controls are being met and be able to demonstrate this in your
+assessment answers.
+(vi)Devicesusedbythirdparties
+All end user devices your organisation owns that are loaned to a third party
+must be included in the assessment scope.
+For devices not owned by your organisation, the table below explains what
+is in and out of scope:Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+12
+All material is UK Crown Copyright ©
+Role
+Owned byyour
+organisation
+Owned bya
+third party
+BYOD
+Employee ✓ N/A ✓
+Volunteer ✓ N/A ✓
+Trustee ✓ N/A ✓
+Universityresearch
+assistant
+✓ N/A ✓
+Student ✓ N/A ✘
+MSP administrator ✓ ✘ ✘
+Third partycontractor ✓ ✘ ✘
+Customer ✓ ✘ ✘
+Table 2: What is in and out of scope for devices not owned by your
+organisation
+Key: ✓ In scope ✘ Out of scope
+For devices out of scope of the assessment, your organisation is still
+responsible for confirming that the devices interacting with organisational
+services and data are configured correctly. It's up to you how to achieve
+this, as it falls outside of the assessment scope.
+(vii)Softwaredevelopment
+Publicly available commercial web applications (rather than apps
+developed in-house) are in scope by default. Bespoke and custom
+components of web applications are out of scope. The best way to mitigate
+vulnerabilities in applications is robust development and testing in line with
+commercial best practice. See the Software Security Code of Practice for
+further details.Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+13
+All material is UK Crown Copyright ©
+E.Requirementsbytechnicalcontroltheme
+1.Firewalls
+Applies to: boundary firewalls, desktop computers, laptops, routers, servers,
+IaaS, PaaS, SaaS
+Aim
+To make sure that only secure and necessary network services can be
+accessed from the internet.
+Introduction
+All devices run network services to allow them to communicate with other
+devices and services. By restricting access to these services, you reduce
+your exposure to attacks. You can do this using firewalls or network devices
+with firewall functionality. For cloud services, you can achieve this using
+data flow policies.
+A boundary firewall is a network device which can restrict the inbound and
+outbound network traffic to services on its network of computers and
+mobile devices. It can help protect against cyber attacks by implementing
+restrictions, known as ‘firewall rules,’ which can allow or block traffic
+depending on its source, destination and type of communication protocol.
+Alternatively, if your organisation doesn't control the network to which a
+device connects, you must configure a software firewall on the device. This
+works in the same way as a boundary firewall but only protects the single
+device on which it’s configured. This approach allows for more tailored
+rules and means that the rules apply to the device wherever it's used. But
+you should note that this creates a greater administrative overhead when
+managing firewall rules.
+Requirements
+You must protect every device in scope with a correctly configured firewall
+(or network device with firewall functionality).Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+14
+All material is UK Crown Copyright ©
+Information: Most desktop and laptop operating systems now come with a
+software firewall pre-installed, we advise that these are turned on in
+preference to a third-party firewall application.
+For all firewalls (or network devices with firewall functionality), your
+organisation must:
+• change default administrative passwords to a strong and unique
+password (see password-based authentication) – or disable remote
+administrative access entirely
+• prevent access to the administrative interface (used to manage
+firewall configuration) from the internet, unless there is a clear and
+documented business need, and the interface is protected by one of
+the following controls:
+o multi-factor authentication (see MFA details below)
+o an IP allow list that limits access to a small range of trusted
+addresses combined with a properly managed password
+authentication approach
+• block unauthenticated inbound connections by default
+• ensure inbound firewall rules are approved and documented by an
+authorised person, and include the business need in the
+documentation
+• remove or disable unnecessary firewall rules, when they are no
+longer needed
+Make sure you use a software firewall on devices which are used on
+untrusted networks, such as public wifi hotspots.
+2.SecureConfiguration
+Applies to: servers, desktop computers, laptops, tablets, mobile phones,
+thin clients, IaaS, PaaS, SaaS
+Aim
+Ensure that computers and network devices are properly configured to:
+• reduce vulnerabilitiesCyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+15
+All material is UK Crown Copyright ©
+• provide only the services required to fulfil their role
+Introduction
+The default configurations of computers and network devices aren’t always
+secure. Standard out-of-the-box configurations often include one or more
+weak points such as:
+• an administrative account with a pre-set, publicly known default
+password or without multi-factor authentication enabled
+• pre-enabled but unnecessary user accounts (sometimes with
+special access privileges)
+• pre-installed but unnecessary applications or services
+These default installations can allow attackers to gain unauthorised access
+to your organisation’s sensitive information.
+But by applying some simple technical controls when installing computers
+and network devices, you can minimise vulnerabilities and protect against
+common types of attack.
+Requirements
+Computersandnetwork devices
+Your organisation must proactively manage your computers and network
+devices. You must regularly:
+• remove and disable unnecessary user accounts (such as guest
+accounts and administrative accounts that won’t be used)
+• change any default or guessable account passwords (see
+password-based authentication)
+• remove or disable unnecessary software (including applications,
+system utilities and network services)
+• disable any auto-run feature which allows file execution without user
+authorisation (such as when they are downloaded)
+• ensure users are authenticated before allowing them access to
+organisational data or services
+• ensure appropriate device locking controls (see ‘device unlocking’,
+below) for users that are physically presentCyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+16
+All material is UK Crown Copyright ©
+Device unlocking credentials
+If a device requires a user’s physical presence to access a device’s services
+(such as logging on to a laptop or unlocking a mobile phone), a credential
+such as a biometric, password or PIN must be in place before a user can
+gain access to the services.
+You must protect your chosen authentication method (which can be
+biometric authentication, password or PIN) against brute-force attacks.
+When it's possible to configure, you should apply one of the following:
+• ‘throttling' the rate of attempts, so that the length of time the user
+must wait between attempts increases with each unsuccessful
+attempt. You should allow no more than 10 guesses in 5 minutes
+• locking devices after no more than 10 unsuccessful attempts
+When the vendor doesn't allow you to configure the above, use the vendor’s
+default setting.
+Technical controls must be used to manage the quality of credentials. If
+credentials are just to unlock a device, use a minimum password or PIN
+length of at least 6 characters. When the device unlocking credentials are
+also used for authentication, you must apply the full password
+requirements to the credentials described in User Access Controls.
+3.SecurityUpdateManagement
+Applies to: servers, desktop computers, laptops, tablets, mobile phones,
+firewalls, routers, IaaS, PaaS, SaaS
+Aim
+Ensure that devices and software are not vulnerable to known security
+issues for which fixes are available.
+Introduction
+Any device that runs software can contain security flaws, known as
+vulnerabilities.Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+17
+All material is UK Crown Copyright ©
+Vulnerabilities are regularly discovered in all sorts of software. Once
+discovered, malicious individuals or groups move quickly to misuse (or
+‘exploit’) vulnerabilities to attack computers and networks.
+Product vendors provide fixes for vulnerabilities identified in products that
+they still support, in the form of patches, security updates, registry fixes,
+scripts, configuration changes or any other mechanism prescribed by the
+vendor to fix a known vulnerability. These may be made available to
+customers immediately or on a regular release schedule (perhaps
+monthly).
+Requirements
+You must make sure that all software in scope is kept up to date. All
+software on in-scope devices must:
+• be licensed and supported
+• be removed from devices when it becomes unsupported, or
+removed from scope by using a defined sub-set that prevents all
+traffic to or from the internet
+• have automatic updates enabled where possible
+• be updated, including vulnerability fixes, within 14 days* of release,
+where:
+o the update fixes vulnerabilities described by the vendor as
+‘critical’ or ‘high risk’
+o the update addresses vulnerabilities with a CVSS v3 base score
+of 7 or above
+o there are no details of the level of vulnerabilities that the
+update fixes provided by the vendor
+Please note: For optimum security we strongly recommend (but it’s not
+mandatory) that all released updates are applied within 14 days of release.
+*It's important that updates are applied as soon as possible. 14 days is
+considered a reasonable period to be able to implement this requirement.
+Any longer would constitute a serious security risk while a shorter period
+may not be practical.
+Information: If the vendor uses different terms to describe the severity of
+vulnerabilities, see the precise definition in the Common VulnerabilityCyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+18
+All material is UK Crown Copyright ©
+Scoring System (CVSS). For the purposes of the Cyber Essentials scheme,
+‘critical’ or ‘high risk’ vulnerabilities are those with a CVSS v3 base score of 7
+or above, or are identified by the vendor as 'critical or high risk'.
+Caution: Some vendors release security updates for multiple issues with
+differing severity levels as a single update. If such an update covers any
+‘critical’ or ‘high risk’ issues then it must be installed within 14 days.
+4.UserAccess Control
+Applies to: servers, desktop computers, laptops, tablets, mobile phones,
+IaaS, PaaS, SaaS
+Aim
+Ensure that user accounts:
+• are assigned to authorised individuals only
+• provide access to only those applications, computers and networks
+that the user needs to carry out their role
+Introduction
+Every active user account in your organisation facilitates access to devices
+and applications, and to sensitive business information. By making sure
+that only authorised individuals have user accounts, and that they're only
+granted as much access as they need to carry out their role, you reduce
+the risk of information being stolen or damaged.
+Compared to normal user accounts, accounts with special access
+privileges have enhanced access to devices, applications and information.
+If these accounts are compromised, an attacker could take advantage of
+their greater access to corrupt information on a large scale, disrupt
+business processes or gain unauthorised access to other devices in the
+organisation.
+Administrative accounts are especially highly privileged, for example. These
+accounts typically allow the user to:Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+19
+All material is UK Crown Copyright ©
+• execute software that can make significant and security-related
+changes to the operating system
+• make changes to the operating system for some or all users
+• create new accounts and allocate privileges
+All types of administrators will have this kind of account, including domain
+administrators and local administrators.
+This is important because if a user opens a malicious URL or email
+attachment, the malware would typically be executed with the same
+privilege level of the user’s account. This is why it’s important to take special
+care allocating and using privileged accounts.
+Example: Jody is logged in with an administrative account. If Jody opens a
+malicious URL or email attachment, any associated malware is likely to
+acquire administrative privileges. Unfortunately, this is exactly what
+happens. Using Jody’s administrative privileges, a type of malware known
+as ransomware encrypts all of the data on the network and then demands
+a ransom. The ransomware was able to encrypt far more data than would
+have been possible with standard user privileges, making the problem that
+much more serious.
+Requirements
+Your organisation must be in control of your user accounts and the access
+privileges that allow access to your organisational data and services. It’s
+important to note that this also includes third party accounts – for
+example, accounts used by your support services. You also need to
+understand how user accounts authenticate and manage the
+authentication accordingly.
+This means your organisation must:
+• have in place a process to create and approve user accounts
+• authenticate users with unique credentials before granting access to
+applications or devices
+• remove or disable user accounts when they’re no longer required (for
+example, when a user leaves the organisation or after a defined
+period of account inactivity)Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+20
+All material is UK Crown Copyright ©
+• implement MFA, where available – authentication to cloud services
+must always use MFA
+• use separate accounts to perform administrative activities only (no
+emailing, web browsing or other standard user activities that may
+expose administrative privileges to avoidable risks)
+• remove or disable special access privileges when no longer required
+(when a member of staff changes role, for example)
+Passwordlessauthentication
+Passwordless authentication is a method of verifying identity without using
+traditional passwords.
+Common examples of passwordless authentication include:
+• Passkeys: Passwordless login technology based on public-key
+cryptography used to securely authenticate a user. This includes
+FIDO2 authenticators which are considered as Passkeys. FIDO2
+authenticators are regarded as MFA because user authentication is
+performed. FIDO2 is a set of standards that define cryptographic
+authentication using public key credentials and protocols to provide
+more secure alternatives to passwords for accessing online services
+• Biometricauthentication: Uses biological traits of the user such as
+fingerprints or facial features to confirm their identity
+• Securitykeys or tokens: Physical hardware devices such as USB
+security keys or smart cards
+• Push notifications: A prompt on a smartphone to approve or deny a
+login attempt
+• One-time codes: Temporary codes are sent via email, SMS, or a
+mobile app
+This helps to avoid many of the problems with traditional passwords which
+can be forgotten, stolen, or brute-forced.
+Multi-factor authentication (MFA)
+As well as providing an extra layer of security for passwords that aren’t
+protected by the other technical controls, you should always use multi-Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+21
+All material is UK Crown Copyright ©
+factor authentication to give administrative accounts extra security, and
+accounts that are accessible from the internet.
+The password element of the multi-factor authentication approach must
+have a password length of at least 8 characters, with no maximum length
+restrictions.
+There are four types of additional factor to consider:
+• a managed/enterprise device
+• an app on a trusted device
+• a physically separate token
+• a known or trusted account
+Additional factors should be chosen so that they are usable and
+accessible. You might need to carry out user testing to decide what is best
+for your users. For more information see NCSC’s guidance on MFA.
+Information: SMS is not the most secure type of MFA but still offers a huge
+advantage over not using any MFA at all. Any multi-factor authentication is
+better than not having it at all. However, if there are alternatives available
+that will work for your situation, we recommend you use these instead of
+SMS.
+Password-based authentication
+All user accounts require the user to authenticate.
+Where authentication is carried out using a password, you should put in
+place the following protective measures:
+• Passwords are protected against brute-force password guessing by
+implementing at least one of:
+o multi-factor authentication (see above)
+o ‘throttling' the rate of attempts, so that the length of time the
+user must wait between attempts increases with each
+unsuccessful attempt. You should allow no more than 10
+guesses in 5 minutes
+o locking devices after no more than 10 unsuccessful attemptsCyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+22
+All material is UK Crown Copyright ©
+• Use technical controls to manage the quality of passwords. This will
+include one of the following:
+o Using multi-factor authentication (see above)
+o A minimum password length of at least 12 characters, with no
+maximum length restrictions
+o A minimum password length of at least 8 characters, with no
+maximum length restrictions and use automatic blocking of
+common passwords using a deny list
+• Support users to choose unique passwords for their work accounts
+by:
+o educating people about avoiding common passwords, such as
+a pet's name, common keyboard patterns or passwords they
+have used elsewhere. This could include teaching people to
+use the password generator feature built into some password
+managers
+o encouraging people to choose longer passwords by promoting
+the use of multiple words (a minimum of three) to create a
+password (such as the NCSC’s guidance on using three
+random words)
+o providing usable secure storage for passwords (for example a
+password manager or secure locked cabinet) with clear
+information about how and when it can be used
+o not enforcing regular password expiry
+o not enforcing password complexity requirements
+You should also make sure there is an established process in place to
+change passwords promptly if you know or suspect a password or account
+has been compromised.Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+23
+All material is UK Crown Copyright ©
+5.Malwareprotection
+Applies to: Servers, desktop computers, laptops, tablets, mobile phones,
+IaaS, PaaS, SaaS
+Aim
+To restrict execution of known malware and untrusted software, from
+causing damage or accessing data.
+Introduction
+Malware, such as computer viruses, worms and ransomware, is software
+that has been written and distributed deliberately to perform malicious
+actions. Potential sources include: malicious email attachments,
+downloads (including those from application stores), and direct installation
+of unauthorised software.
+If a system is infected, your organisation is likely to suffer from problems like
+malfunctioning systems, data loss, or onward infection that goes unseen
+until it causes harm elsewhere.
+You can largely avoid the potential for harm by:
+• preventing malware from being delivered to devices
+• preventing malware from running on devices
+Example: Acme Corporation implements code signing alongside a rule
+that allows only vetted applications from the device application store to
+execute on devices. Unsigned and unapproved applications will not run on
+devices. The fact that users can only install trusted (allow-listed)
+applications leads to a reduced risk of malware infection.
+Requirements
+You must make sure that a malware protection mechanism is active on all
+devices in scope. For each device, you must use at least one of the options
+listed below. In most modern products these options are built into the
+software supplied. Alternatively, you can purchase products from a third-
+party provider. In all cases the software must be active, kept up to date inCyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+24
+All material is UK Crown Copyright ©
+accordance with the vendor’s instructions, and configured to work as
+detailed below:
+Anti-malwaresoftware (option for in scope devices running Windows or
+MacOSincluding servers, desktop computers, laptops)
+If you use anti-malware software to protect your device it must be
+configured to:
+• be updated in line with vendor recommendations
+• prevent malware from running
+• prevent the execution of malicious code
+• prevent connections to malicious websites over the internet
+Application allowlisting (option forall in scope devices)
+Only approved applications, restricted by code signing, are allowed to
+execute on devices. You must:
+• actively approve such applications before deploying them to devices
+• maintain a current list of approved applications, users must not be
+able to install any application that is unsigned or has an invalid
+signature
+F.Further guidance
+Zero trustandCyber Essentials
+Network architecture is changing. More services are moving to the cloud
+and use of Software as a Service (SaaS) continues to grow.
+At the same time, many organisations are embracing flexible working,
+which means lots of different device types may connect to your systems
+from many locations. It's also increasingly common for organisations to
+share data with their partners and guest users, which requires more
+granular access control policies.Cyber Essentials: Requirements for IT Infrastructure v3.3
+April 2026
+25
+All material is UK Crown Copyright ©
+Zero trust architecture is designed to cope with these changing conditions
+by enabling an improved user experience for remote access and data
+sharing.
+A zero trust architecture is an approach to system design where inherent
+trust in the network is removed. Instead the network is assumed to be
+hostile, and each access request is verified based on an access policy.
+Confidence in a request is achieved by building context, which relies on
+strong authentication, authorisation, device health, and value of the data
+being accessed.
+As organisations move towards zero trust architecture models, we have
+considered it in this context, and are confident that implementing the
+technical controls doesn't prevent you using a zero trust architecture as
+defined by the NCSC guidance.

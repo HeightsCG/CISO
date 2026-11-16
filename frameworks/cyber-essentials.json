@@ -1,0 +1,520 @@
+{
+    "key": "cyber-essentials",
+    "name": "Cyber Essentials",
+    "version": "v3.3",
+    "full_name": "Cyber Essentials: Requirements for IT Infrastructure v3.3",
+    "issuing_body": "National Cyber Security Centre (NCSC), United Kingdom",
+    "standard_codes": [
+        "CYBER-ESSENTIALS"
+    ],
+    "aliases": [
+        "Cyber Essentials",
+        "Cyber Essentials Plus",
+        "CE"
+    ],
+    "content_licence": "open",
+    "notice": "Contains public sector information licensed under the Open Government Licence v3.0 (Cyber Essentials: Requirements for IT Infrastructure v3.3, UK Crown Copyright, April 2026). Cyber Essentials prints no requirement numbers; the numbers here (1.1, 1.2 ...) are assigned by HCG in document order. This assessment does not replace certification by a Cyber Essentials certification body.",
+    "sources": [
+        {
+            "id": "ce33",
+            "title": "Cyber Essentials: Requirements for IT Infrastructure v3.3",
+            "version": "v3.3 (April 2026)",
+            "publisher": "National Cyber Security Centre",
+            "url": "https://www.ncsc.gov.uk/files/cyber-essentials-requirements-for-it-infrastructure-v3-3.pdf",
+            "file": "cyber-essentials/cyber-essentials-requirements-for-it-infrastructure-v3-3.pdf",
+            "sha256": "e5a857de99cba9e1c0e3d2c9ac5d626edf7215e1c5b906fc18b4ef1a34684923"
+        }
+    ],
+    "source_of": {
+        "controls": "ce33",
+        "objectives": "ce33"
+    },
+    "control_flags": {
+        "force": "must, or should for a paragraph that says only should but introduces a list of measures (the password-based authentication measures).",
+        "applies_to": "On each theme: the kinds of device and service the theme covers, as printed.",
+        "objectives": "The bulleted items of a requirement, with sub-bullets kept inside their item."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "control theme",
+        "families": "control themes",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Readiness score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Compliant"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Compliant"
+        },
+        {
+            "key": "not_met",
+            "label": "Non-compliant"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are met. Cyber Essentials is pass or fail: certification needs every applicable requirement met. This percentage is an HCG measure of readiness."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "ce33",
+            "cite": "Cyber Essentials v3.3, section E"
+        },
+        {
+            "id": "pass_fail",
+            "type": "pass",
+            "summary": "Certification requires every applicable requirement to be met; there is no partial pass.",
+            "source": "ce33",
+            "cite": "Cyber Essentials v3.3, section E",
+            "quote": "You must protect every device in scope with a correctly configured firewall"
+        },
+        {
+            "id": "patch_window",
+            "type": "deadline",
+            "control": "3.1",
+            "days": 14,
+            "from": "release of the update",
+            "summary": "Critical or high-risk security updates (CVSS v3 7 or above, or where the vendor gives no severity) are applied within 14 days of release.",
+            "source": "ce33",
+            "cite": "Cyber Essentials v3.3, Security Update Management",
+            "quote": "be updated, including vulnerability fixes, within 14 days* of release,"
+        },
+        {
+            "id": "cloud_mfa",
+            "type": "applicability",
+            "control": "4.2",
+            "summary": "Authentication to cloud services always uses multi-factor authentication.",
+            "source": "ce33",
+            "cite": "Cyber Essentials v3.3, User Access Control",
+            "quote": "authentication to cloud services must always use MFA"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "Cyber Essentials",
+            "definition": "The UK government-backed scheme, run by the NCSC, certifying that an organisation has five basic technical controls in place to protect against common internet-based attacks."
+        },
+        {
+            "term": "NCSC",
+            "definition": "The National Cyber Security Centre, the UK's technical authority for cyber security."
+        },
+        {
+            "term": "MFA",
+            "definition": "Multi-factor authentication: proving identity with more than one kind of factor, such as a password and a code from a trusted device."
+        },
+        {
+            "term": "CVSS",
+            "definition": "Common Vulnerability Scoring System; Cyber Essentials treats a CVSS v3 base score of 7 or above as critical or high risk."
+        }
+    ],
+    "display_name": "Cyber Essentials (v3.3)",
+    "counts": {
+        "families": 5,
+        "controls": 14,
+        "objectives": 32
+    },
+    "families": [
+        {
+            "number": "1",
+            "code": "CE 1",
+            "name": "Firewalls",
+            "applies_to": "boundary firewalls, desktop computers, laptops, routers, servers, IaaS, PaaS, SaaS",
+            "aim": "",
+            "controls": [
+                {
+                    "id": "1.1",
+                    "number": "1.1",
+                    "title": "Firewalls",
+                    "text": "You must protect every device in scope with a correctly configured firewall (or network device with firewall functionality).",
+                    "type": "requirement",
+                    "force": "must",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ce33"
+                },
+                {
+                    "id": "1.2",
+                    "number": "1.2",
+                    "title": "Firewalls",
+                    "text": "For all firewalls (or network devices with firewall functionality), your organisation must: • change default administrative passwords to a strong and unique password (see password-based authentication) - or disable remote administrative access entirely • prevent access to the administrative interface (used to manage firewall configuration) from the internet, unless there is a clear and documented business need, and the interface is protected by one of the following controls: - multi-factor authentication (see MFA details below) - an IP allow list that limits access to a small range of trusted addresses combined with a properly managed password authentication approach • block unauthenticated inbound connections by default • ensure inbound firewall rules are approved and documented by an authorised person, and include the business need in the documentation • remove or disable unnecessary firewall rules, when they are no longer needed",
+                    "type": "requirement",
+                    "force": "must",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1.2.a",
+                            "text": "change default administrative passwords to a strong and unique password (see password-based authentication) - or disable remote administrative access entirely",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "1.2.b",
+                            "text": "prevent access to the administrative interface (used to manage firewall configuration) from the internet, unless there is a clear and documented business need, and the interface is protected by one of the following controls: - multi-factor authentication (see MFA details below) - an IP allow list that limits access to a small range of trusted addresses combined with a properly managed password authentication approach",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "1.2.c",
+                            "text": "block unauthenticated inbound connections by default",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "1.2.d",
+                            "text": "ensure inbound firewall rules are approved and documented by an authorised person, and include the business need in the documentation",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "1.2.e",
+                            "text": "remove or disable unnecessary firewall rules, when they are no longer needed",
+                            "source": "ce33"
+                        }
+                    ],
+                    "source": "ce33"
+                }
+            ]
+        },
+        {
+            "number": "2",
+            "code": "CE 2",
+            "name": "Secure Configuration",
+            "applies_to": "servers, desktop computers, laptops, tablets, mobile phones, thin clients, IaaS, PaaS, SaaS",
+            "aim": "",
+            "controls": [
+                {
+                    "id": "2.1",
+                    "number": "2.1",
+                    "title": "Computers and network devices",
+                    "text": "Your organisation must proactively manage your computers and network devices. You must regularly: • remove and disable unnecessary user accounts (such as guest accounts and administrative accounts that won't be used) • change any default or guessable account passwords (see password-based authentication) • remove or disable unnecessary software (including applications, system utilities and network services) • disable any auto-run feature which allows file execution without user authorisation (such as when they are downloaded) • ensure users are authenticated before allowing them access to organisational data or services • ensure appropriate device locking controls (see 'device unlocking', below) for users that are physically present",
+                    "type": "requirement",
+                    "force": "must",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2.1.a",
+                            "text": "remove and disable unnecessary user accounts (such as guest accounts and administrative accounts that won't be used)",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "2.1.b",
+                            "text": "change any default or guessable account passwords (see password-based authentication)",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "2.1.c",
+                            "text": "remove or disable unnecessary software (including applications, system utilities and network services)",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "2.1.d",
+                            "text": "disable any auto-run feature which allows file execution without user authorisation (such as when they are downloaded)",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "2.1.e",
+                            "text": "ensure users are authenticated before allowing them access to organisational data or services",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "2.1.f",
+                            "text": "ensure appropriate device locking controls (see 'device unlocking', below) for users that are physically present",
+                            "source": "ce33"
+                        }
+                    ],
+                    "source": "ce33"
+                },
+                {
+                    "id": "2.2",
+                    "number": "2.2",
+                    "title": "Device unlocking credentials",
+                    "text": "If a device requires a user's physical presence to access a device's services (such as logging on to a laptop or unlocking a mobile phone), a credential such as a biometric, password or PIN must be in place before a user can gain access to the services.",
+                    "type": "requirement",
+                    "force": "must",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ce33"
+                },
+                {
+                    "id": "2.3",
+                    "number": "2.3",
+                    "title": "Device unlocking credentials",
+                    "text": "You must protect your chosen authentication method (which can be biometric authentication, password or PIN) against brute-force attacks. When it's possible to configure, you should apply one of the following: • 'throttling' the rate of attempts, so that the length of time the user must wait between attempts increases with each unsuccessful attempt. You should allow no more than 10 guesses in 5 minutes • locking devices after no more than 10 unsuccessful attempts",
+                    "type": "requirement",
+                    "force": "must",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2.3.a",
+                            "text": "'throttling' the rate of attempts, so that the length of time the user must wait between attempts increases with each unsuccessful attempt. You should allow no more than 10 guesses in 5 minutes",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "2.3.b",
+                            "text": "locking devices after no more than 10 unsuccessful attempts",
+                            "source": "ce33"
+                        }
+                    ],
+                    "source": "ce33"
+                },
+                {
+                    "id": "2.4",
+                    "number": "2.4",
+                    "title": "Device unlocking credentials",
+                    "text": "Technical controls must be used to manage the quality of credentials. If credentials are just to unlock a device, use a minimum password or PIN length of at least 6 characters. When the device unlocking credentials are also used for authentication, you must apply the full password requirements to the credentials described in User Access Controls.",
+                    "type": "requirement",
+                    "force": "must",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ce33"
+                }
+            ]
+        },
+        {
+            "number": "3",
+            "code": "CE 3",
+            "name": "Security Update Management",
+            "applies_to": "servers, desktop computers, laptops, tablets, mobile phones, firewalls, routers, IaaS, PaaS, SaaS",
+            "aim": "",
+            "controls": [
+                {
+                    "id": "3.1",
+                    "number": "3.1",
+                    "title": "Security Update Management",
+                    "text": "You must make sure that all software in scope is kept up to date. All software on in-scope devices must: • be licensed and supported • be removed from devices when it becomes unsupported, or removed from scope by using a defined sub-set that prevents all traffic to or from the internet • have automatic updates enabled where possible • be updated, including vulnerability fixes, within 14 days* of release, where: - the update fixes vulnerabilities described by the vendor as 'critical' or 'high risk' - the update addresses vulnerabilities with a CVSS v3 base score of 7 or above - there are no details of the level of vulnerabilities that the update fixes provided by the vendor",
+                    "type": "requirement",
+                    "force": "must",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.1.a",
+                            "text": "be licensed and supported",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "3.1.b",
+                            "text": "be removed from devices when it becomes unsupported, or removed from scope by using a defined sub-set that prevents all traffic to or from the internet",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "3.1.c",
+                            "text": "have automatic updates enabled where possible",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "3.1.d",
+                            "text": "be updated, including vulnerability fixes, within 14 days* of release, where: - the update fixes vulnerabilities described by the vendor as 'critical' or 'high risk' - the update addresses vulnerabilities with a CVSS v3 base score of 7 or above - there are no details of the level of vulnerabilities that the update fixes provided by the vendor",
+                            "source": "ce33"
+                        }
+                    ],
+                    "source": "ce33"
+                }
+            ]
+        },
+        {
+            "number": "4",
+            "code": "CE 4",
+            "name": "User Access Control",
+            "applies_to": "servers, desktop computers, laptops, tablets, mobile phones, IaaS, PaaS, SaaS",
+            "aim": "",
+            "controls": [
+                {
+                    "id": "4.1",
+                    "number": "4.1",
+                    "title": "User Access Control",
+                    "text": "Your organisation must be in control of your user accounts and the access privileges that allow access to your organisational data and services. It's important to note that this also includes third party accounts - for example, accounts used by your support services. You also need to understand how user accounts authenticate and manage the authentication accordingly.",
+                    "type": "requirement",
+                    "force": "must",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ce33"
+                },
+                {
+                    "id": "4.2",
+                    "number": "4.2",
+                    "title": "User Access Control",
+                    "text": "This means your organisation must: • have in place a process to create and approve user accounts • authenticate users with unique credentials before granting access to applications or devices • remove or disable user accounts when they're no longer required (for example, when a user leaves the organisation or after a defined period of account inactivity) • implement MFA, where available - authentication to cloud services must always use MFA • use separate accounts to perform administrative activities only (no emailing, web browsing or other standard user activities that may expose administrative privileges to avoidable risks) • remove or disable special access privileges when no longer required (when a member of staff changes role, for example)",
+                    "type": "requirement",
+                    "force": "must",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.2.a",
+                            "text": "have in place a process to create and approve user accounts",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "4.2.b",
+                            "text": "authenticate users with unique credentials before granting access to applications or devices",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "4.2.c",
+                            "text": "remove or disable user accounts when they're no longer required (for example, when a user leaves the organisation or after a defined period of account inactivity)",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "4.2.d",
+                            "text": "implement MFA, where available - authentication to cloud services must always use MFA",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "4.2.e",
+                            "text": "use separate accounts to perform administrative activities only (no emailing, web browsing or other standard user activities that may expose administrative privileges to avoidable risks)",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "4.2.f",
+                            "text": "remove or disable special access privileges when no longer required (when a member of staff changes role, for example)",
+                            "source": "ce33"
+                        }
+                    ],
+                    "source": "ce33"
+                },
+                {
+                    "id": "4.3",
+                    "number": "4.3",
+                    "title": "Multi-factor authentication (MFA)",
+                    "text": "The password element of the multi-factor authentication approach must have a password length of at least 8 characters, with no maximum length restrictions.",
+                    "type": "requirement",
+                    "force": "must",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ce33"
+                },
+                {
+                    "id": "4.4",
+                    "number": "4.4",
+                    "title": "Password-based authentication",
+                    "text": "Where authentication is carried out using a password, you should put in place the following protective measures: • Passwords are protected against brute-force password guessing by implementing at least one of: - multi-factor authentication (see above) - 'throttling' the rate of attempts, so that the length of time the user must wait between attempts increases with each unsuccessful attempt. You should allow no more than 10 guesses in 5 minutes - locking devices after no more than 10 unsuccessful attempts • Use technical controls to manage the quality of passwords. This will include one of the following: - Using multi-factor authentication (see above) - A minimum password length of at least 12 characters, with no maximum length restrictions - A minimum password length of at least 8 characters, with no maximum length restrictions and use automatic blocking of common passwords using a deny list • Support users to choose unique passwords for their work accounts by: - educating people about avoiding common passwords, such as a pet's name, common keyboard patterns or passwords they have used elsewhere. This could include teaching people to use the password generator feature built into some password managers - encouraging people to choose longer passwords by promoting the use of multiple words (a minimum of three) to create a password (such as the NCSC's guidance on using three random words) - providing usable secure storage for passwords (for example a password manager or secure locked cabinet) with clear information about how and when it can be used - not enforcing regular password expiry - not enforcing password complexity requirements",
+                    "type": "requirement",
+                    "force": "should",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.4.a",
+                            "text": "Passwords are protected against brute-force password guessing by implementing at least one of: - multi-factor authentication (see above) - 'throttling' the rate of attempts, so that the length of time the user must wait between attempts increases with each unsuccessful attempt. You should allow no more than 10 guesses in 5 minutes - locking devices after no more than 10 unsuccessful attempts",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "4.4.b",
+                            "text": "Use technical controls to manage the quality of passwords. This will include one of the following: - Using multi-factor authentication (see above) - A minimum password length of at least 12 characters, with no maximum length restrictions - A minimum password length of at least 8 characters, with no maximum length restrictions and use automatic blocking of common passwords using a deny list",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "4.4.c",
+                            "text": "Support users to choose unique passwords for their work accounts by: - educating people about avoiding common passwords, such as a pet's name, common keyboard patterns or passwords they have used elsewhere. This could include teaching people to use the password generator feature built into some password managers - encouraging people to choose longer passwords by promoting the use of multiple words (a minimum of three) to create a password (such as the NCSC's guidance on using three random words) - providing usable secure storage for passwords (for example a password manager or secure locked cabinet) with clear information about how and when it can be used - not enforcing regular password expiry - not enforcing password complexity requirements",
+                            "source": "ce33"
+                        }
+                    ],
+                    "source": "ce33"
+                }
+            ]
+        },
+        {
+            "number": "5",
+            "code": "CE 5",
+            "name": "Malware protection",
+            "applies_to": "Servers, desktop computers, laptops, tablets, mobile phones, IaaS, PaaS, SaaS",
+            "aim": "",
+            "controls": [
+                {
+                    "id": "5.1",
+                    "number": "5.1",
+                    "title": "Malware protection",
+                    "text": "You must make sure that a malware protection mechanism is active on all devices in scope. For each device, you must use at least one of the options listed below. In most modern products these options are built into the software supplied. Alternatively, you can purchase products from a third- party provider. In all cases the software must be active, kept up to date in",
+                    "type": "requirement",
+                    "force": "must",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ce33"
+                },
+                {
+                    "id": "5.2",
+                    "number": "5.2",
+                    "title": "Anti-malware software (option for in scope devices running Windows or MacOS including servers, desktop computers, laptops)",
+                    "text": "If you use anti-malware software to protect your device it must be configured to: • be updated in line with vendor recommendations • prevent malware from running • prevent the execution of malicious code • prevent connections to malicious websites over the internet",
+                    "type": "requirement",
+                    "force": "must",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "5.2.a",
+                            "text": "be updated in line with vendor recommendations",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "5.2.b",
+                            "text": "prevent malware from running",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "5.2.c",
+                            "text": "prevent the execution of malicious code",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "5.2.d",
+                            "text": "prevent connections to malicious websites over the internet",
+                            "source": "ce33"
+                        }
+                    ],
+                    "source": "ce33"
+                },
+                {
+                    "id": "5.3",
+                    "number": "5.3",
+                    "title": "Application allow listing (option for all in scope devices)",
+                    "text": "Only approved applications, restricted by code signing, are allowed to execute on devices. You must: • actively approve such applications before deploying them to devices • maintain a current list of approved applications, users must not be able to install any application that is unsigned or has an invalid signature",
+                    "type": "requirement",
+                    "force": "must",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "5.3.a",
+                            "text": "actively approve such applications before deploying them to devices",
+                            "source": "ce33"
+                        },
+                        {
+                            "id": "5.3.b",
+                            "text": "maintain a current list of approved applications, users must not be able to install any application that is unsigned or has an invalid signature",
+                            "source": "ce33"
+                        }
+                    ],
+                    "source": "ce33"
+                }
+            ]
+        }
+    ]
+}

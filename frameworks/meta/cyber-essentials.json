@@ -1,0 +1,131 @@
+{
+    "key": "cyber-essentials",
+    "name": "Cyber Essentials",
+    "version": "v3.3",
+    "full_name": "Cyber Essentials: Requirements for IT Infrastructure v3.3",
+    "issuing_body": "National Cyber Security Centre (NCSC), United Kingdom",
+    "standard_codes": [
+        "CYBER-ESSENTIALS"
+    ],
+    "aliases": [
+        "Cyber Essentials",
+        "Cyber Essentials Plus",
+        "CE"
+    ],
+    "content_licence": "open",
+    "notice": "Contains public sector information licensed under the Open Government Licence v3.0 (Cyber Essentials: Requirements for IT Infrastructure v3.3, UK Crown Copyright, April 2026). Cyber Essentials prints no requirement numbers; the numbers here (1.1, 1.2 ...) are assigned by HCG in document order. This assessment does not replace certification by a Cyber Essentials certification body.",
+    "sources": [
+        {
+            "id": "ce33",
+            "title": "Cyber Essentials: Requirements for IT Infrastructure v3.3",
+            "version": "v3.3 (April 2026)",
+            "publisher": "National Cyber Security Centre",
+            "url": "https://www.ncsc.gov.uk/files/cyber-essentials-requirements-for-it-infrastructure-v3-3.pdf",
+            "file": "cyber-essentials/cyber-essentials-requirements-for-it-infrastructure-v3-3.pdf",
+            "sha256": "e5a857de99cba9e1c0e3d2c9ac5d626edf7215e1c5b906fc18b4ef1a34684923"
+        }
+    ],
+    "source_of": {
+        "controls": "ce33",
+        "objectives": "ce33"
+    },
+    "control_flags": {
+        "force": "must, or should for a paragraph that says only should but introduces a list of measures (the password-based authentication measures).",
+        "applies_to": "On each theme: the kinds of device and service the theme covers, as printed.",
+        "objectives": "The bulleted items of a requirement, with sub-bullets kept inside their item."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "control theme",
+        "families": "control themes",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Readiness score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Compliant"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Compliant"
+        },
+        {
+            "key": "not_met",
+            "label": "Non-compliant"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are met. Cyber Essentials is pass or fail: certification needs every applicable requirement met. This percentage is an HCG measure of readiness."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "ce33",
+            "cite": "Cyber Essentials v3.3, section E"
+        },
+        {
+            "id": "pass_fail",
+            "type": "pass",
+            "summary": "Certification requires every applicable requirement to be met; there is no partial pass.",
+            "source": "ce33",
+            "cite": "Cyber Essentials v3.3, section E",
+            "quote": "You must protect every device in scope with a correctly configured firewall"
+        },
+        {
+            "id": "patch_window",
+            "type": "deadline",
+            "control": "3.1",
+            "days": 14,
+            "from": "release of the update",
+            "summary": "Critical or high-risk security updates (CVSS v3 7 or above, or where the vendor gives no severity) are applied within 14 days of release.",
+            "source": "ce33",
+            "cite": "Cyber Essentials v3.3, Security Update Management",
+            "quote": "be updated, including vulnerability fixes, within 14 days* of release,"
+        },
+        {
+            "id": "cloud_mfa",
+            "type": "applicability",
+            "control": "4.2",
+            "summary": "Authentication to cloud services always uses multi-factor authentication.",
+            "source": "ce33",
+            "cite": "Cyber Essentials v3.3, User Access Control",
+            "quote": "authentication to cloud services must always use MFA"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "Cyber Essentials",
+            "definition": "The UK government-backed scheme, run by the NCSC, certifying that an organisation has five basic technical controls in place to protect against common internet-based attacks."
+        },
+        {
+            "term": "NCSC",
+            "definition": "The National Cyber Security Centre, the UK's technical authority for cyber security."
+        },
+        {
+            "term": "MFA",
+            "definition": "Multi-factor authentication: proving identity with more than one kind of factor, such as a password and a code from a trusted device."
+        },
+        {
+            "term": "CVSS",
+            "definition": "Common Vulnerability Scoring System; Cyber Essentials treats a CVSS v3 base score of 7 or above as critical or high risk."
+        }
+    ]
+}

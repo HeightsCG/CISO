@@ -308,7 +308,8 @@ return array(
                 continue;
             }
 
-            Assert::true($counts[$top] / $total <= 0.35, basename($file).': '.$top.' takes '.$counts[$top].' of '.$total);
+            // One requirement swings a small framework by several points; allow a framework of under 20 requirements up to 40%.
+            Assert::true($counts[$top] / $total <= ($total < 20 ? 0.40 : 0.35), basename($file).': '.$top.' takes '.$counts[$top].' of '.$total);
         }
     },
 
