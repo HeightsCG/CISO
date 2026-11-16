@@ -1,0 +1,184 @@
+{
+    "key": "gdpr",
+    "name": "GDPR",
+    "version": "EU 2016/679",
+    "full_name": "Regulation (EU) 2016/679 of the European Parliament and of the Council on the protection of natural persons with regard to the processing of personal data and on the free movement of such data (General Data Protection Regulation)",
+    "issuing_body": "European Parliament and Council of the European Union",
+    "standard_codes": [
+        "GDPR"
+    ],
+    "aliases": [
+        "General Data Protection Regulation",
+        "Regulation 2016/679",
+        "EU GDPR"
+    ],
+    "content_licence": "open",
+    "notice": "Assessed against the text of the Regulation. Member State law adopted under it, and guidelines of the European Data Protection Board, may add to or specify these obligations.",
+    "sources": [
+        {
+            "id": "reg679",
+            "title": "Regulation (EU) 2016/679 (General Data Protection Regulation), consolidated text of 4 May 2016 including corrigenda",
+            "version": "Consolidated text 02016R0679-20160504",
+            "publisher": "Publications Office of the European Union",
+            "url": "http://publications.europa.eu/resource/celex/02016R0679-20160504",
+            "file": "gdpr/reg-2016-679-consolidated-2016-05-04.html",
+            "sha256": "a681ff22f32f125749af6e96947224369efc132edb8a95b12637e357df1056de"
+        }
+    ],
+    "source_of": {
+        "controls": "reg679",
+        "objectives": "reg679"
+    },
+    "control_flags": {
+        "objectives": "The lettered points of the paragraph. In paragraphs that list alternatives (the lawful bases of Article 6(1), the exceptions of Article 9(2), the derogations of Article 49(1)) the points are options, of which the applicable ones are assessed and the rest marked not applicable."
+    },
+    "terminology": {
+        "control": "obligation",
+        "controls": "obligations",
+        "family": "article",
+        "families": "articles",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable obligations that are implemented. The Regulation defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "An obligation is met only when every applicable element it lists is met.",
+            "source": "reg679",
+            "cite": "Regulation (EU) 2016/679"
+        },
+        {
+            "id": "accountability",
+            "type": "applicability",
+            "summary": "The controller is responsible for compliance with the processing principles and must be able to demonstrate it.",
+            "source": "reg679",
+            "cite": "Article 5(2)",
+            "quote": "The controller shall be responsible for, and be able to demonstrate compliance with, paragraph 1"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "Art. 12(3)",
+            "months": 1,
+            "from": "receipt of the request",
+            "summary": "A data subject's request is answered without undue delay and within one month of receipt; the period may be extended by two further months for complex or numerous requests.",
+            "source": "reg679",
+            "cite": "Article 12(3)",
+            "quote": "without undue delay and in any event within one month of receipt of the request."
+        },
+        {
+            "id": "breach_notification",
+            "type": "deadline",
+            "control": "Art. 33(1)",
+            "hours": 72,
+            "from": "the controller becoming aware of the breach",
+            "summary": "A personal data breach is notified to the supervisory authority without undue delay and, where feasible, within 72 hours of the controller becoming aware of it, unless it is unlikely to result in a risk to individuals.",
+            "source": "reg679",
+            "cite": "Article 33(1)",
+            "quote": "the controller shall without undue delay and, where feasible, not later than 72 hours after having become aware of it, notify the personal data breach to the supervisory authority competent in accordance with Article 55"
+        },
+        {
+            "id": "records_exemption",
+            "type": "applicability",
+            "control": "Art. 30(1)",
+            "summary": "Records of processing are not required of an organisation with fewer than 250 employees, unless its processing is likely to result in a risk to individuals, is not occasional, or includes special category or criminal offence data.",
+            "source": "reg679",
+            "cite": "Article 30(5)",
+            "quote": "The obligations referred to in paragraphs 1 and 2 shall not apply to an enterprise or an organisation employing fewer than 250 persons unless the processing it carries out is likely to result in a risk to the rights and freedoms of data subjects"
+        },
+        {
+            "id": "dpia_trigger",
+            "type": "applicability",
+            "control": "Art. 35(1)",
+            "summary": "A data protection impact assessment is required before processing that is likely to result in a high risk to individuals.",
+            "source": "reg679",
+            "cite": "Article 35(1)",
+            "quote": "the controller shall, prior to the processing, carry out an assessment of the impact of the envisaged processing operations on the protection of personal data."
+        },
+        {
+            "id": "dpo_designation",
+            "type": "applicability",
+            "control": "Art. 37(1)",
+            "summary": "A data protection officer is mandatory for public authorities and for organisations whose core activities are large-scale regular and systematic monitoring or large-scale processing of special category or criminal offence data.",
+            "source": "reg679",
+            "cite": "Article 37(1)",
+            "quote": "The controller and the processor shall designate a data protection officer in any case where:"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "Infringing the obligations of the controller and processor in Articles 8, 11, 25 to 39, 42 and 43 can be fined up to EUR 10 million or 2% of total worldwide annual turnover, whichever is higher.",
+            "source": "reg679",
+            "cite": "Article 83(4)",
+            "quote": "the obligations of the controller and the processor pursuant to Articles 8, 11, 25 to 39 and 42 and 43;"
+        },
+        {
+            "summary": "Infringing the processing principles, the conditions for consent, data subjects' rights or the transfer rules can be fined up to EUR 20 million or 4% of total worldwide annual turnover, whichever is higher.",
+            "source": "reg679",
+            "cite": "Article 83(5)",
+            "quote": "the basic principles for processing, including conditions for consent, pursuant to Articles 5, 6, 7 and 9;"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "GDPR",
+            "definition": "The General Data Protection Regulation, Regulation (EU) 2016/679, the European Union's law on the processing of personal data."
+        },
+        {
+            "term": "Controller",
+            "definition": "The organisation that decides why and how personal data are processed."
+        },
+        {
+            "term": "Processor",
+            "definition": "An organisation that processes personal data on behalf of a controller."
+        },
+        {
+            "term": "Data subject",
+            "definition": "The identified or identifiable person the personal data relate to."
+        },
+        {
+            "term": "DPIA",
+            "definition": "Data protection impact assessment: an assessment of the effect of planned processing on the protection of personal data, required where the processing is likely to result in a high risk."
+        },
+        {
+            "term": "DPO",
+            "definition": "Data protection officer: the person designated to advise on and monitor compliance with the Regulation."
+        },
+        {
+            "term": "Supervisory authority",
+            "definition": "The independent public authority a Member State establishes to monitor the application of the Regulation."
+        }
+    ]
+}

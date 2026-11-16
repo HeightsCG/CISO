@@ -8,6 +8,11 @@
  * elements and each lettered point is a two-cell <table>: label, then text (with nested
  * tables for sub-points). An article without numbered paragraphs has its <p> and
  * <table> elements directly under the article <div>.
+ *
+ * Consolidated texts (celex numbers that start with 0) use other markup: a numbered
+ * paragraph is <div class="norm"> holding <span class="no-parag">1.</span> and a content
+ * <div>; a point is <div class="grid-container"> with a label column and a text column.
+ * Both forms give the same result here.
  */
 class EuAct {
 
@@ -66,11 +71,100 @@ class EuAct {
             $found[$number] = $parts;
         }
 
+        if (count($found) > 0) {
+            return $found;
+        }
+
+        foreach ($this->xpath->query('./div[contains(concat(" ", @class, " "), " norm ")][./span[@class="no-parag"]]', $root) as $div) {
+            $number = (int) $this->xpath->query('./span[@class="no-parag"]', $div)->item(0)->textContent;
+            $content = $this->xpath->query('./div[contains(@class, "inline-element")]', $div)->item(0);
+
+            if ($number < 1 || $content === null || isset($found[$number])) {
+                throw new RuntimeException('Article '.$article.': unreadable paragraph number');
+            }
+
+            $found[$number] = $this->consolidated($content);
+        }
+
         if (count($found) === 0) {
-            $found[0] = $this->parts($root, true);
+            $found[0] = $this->xpath->query('./p[@class="title-article-norm"]', $root)->length > 0 ? $this->consolidated($root) : $this->parts($root, true);
         }
 
         return $found;
+    }
+
+    // Consolidation marks ("►C1 ... ◄") are not part of the legal text.
+    private static function unmarked(string $text): string
+    {
+        return self::clean(preg_replace('/►[A-Z]\d+|◄/u', ' ', $text));
+    }
+
+    private function consolidated(DOMNode $node): array
+    {
+        $parts = array();
+        $inline = '';
+
+        // Short paragraphs hold their text directly, without a <p>; gather it up to the next block.
+        $flush = function () use (&$parts, &$inline) {
+            $text = self::unmarked($inline);
+            $inline = '';
+
+            if ($text !== '') {
+                $parts[] = array(
+                    'text' => $text
+                );
+            }
+        };
+
+        foreach ($node->childNodes as $child) {
+            if ($child->nodeType === XML_TEXT_NODE) {
+                $inline .= $child->textContent;
+                continue;
+            }
+
+            if ($child->nodeType !== XML_ELEMENT_NODE) {
+                continue;
+            }
+
+            $class = ' '.$child->getAttribute('class').' ';
+
+            if (strpos($class, ' grid-container ') !== false) {
+                $flush();
+                $parts[] = array(
+                    'label' => self::unmarked($this->xpath->query('./div[contains(@class, "grid-list-column-1")]', $child)->item(0)->textContent),
+                    'text' => $this->consolidated_cell($this->xpath->query('./div[contains(@class, "grid-list-column-2")]', $child)->item(0))
+                );
+                continue;
+            }
+
+            if (strpos($class, ' title-article-norm ') !== false || strpos($class, ' eli-title ') !== false || strpos($class, ' modref ') !== false) {
+                continue;
+            }
+
+            if ($child->nodeName === 'p' || $child->nodeName === 'div') {
+                $flush();
+                $inline = $child->textContent;
+                $flush();
+                continue;
+            }
+
+            $inline .= $child->textContent;
+        }
+
+        $flush();
+
+        return $parts;
+    }
+
+    private function consolidated_cell(DOMNode $node): string
+    {
+        $pieces = array();
+
+        foreach ($this->consolidated($node) as $part) {
+            $pieces[] = isset($part['label']) ? $part['label'].' '.$part['text'] : $part['text'];
+        }
+
+        return self::clean(implode(' ', $pieces));
     }
 
     private function parts(DOMNode $node, bool $skip_heading = false): array
