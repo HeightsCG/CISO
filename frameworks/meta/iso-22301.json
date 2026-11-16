@@ -1,0 +1,129 @@
+{
+    "key": "iso-22301",
+    "name": "ISO 22301",
+    "version": "HCG control set 2026",
+    "full_name": "ISO 22301:2019 Security and resilience - Business continuity management systems - Requirements: HCG control set",
+    "issuing_body": "Heights Consulting Group, structured on ISO 22301:2019 (ISO/TC 292)",
+    "standard_codes": [
+        "ISO-22301"
+    ],
+    "aliases": [
+        "ISO 22301",
+        "BCMS",
+        "Business continuity management system",
+        "Business continuity"
+    ],
+    "content_licence": "hcg_authored",
+    "notice": "HCG control set based on ISO 22301:2019 and its 2024 amendment. Clause numbers and headings 4 to 10 are used for identification only; the standard's text is licensed by ISO and is not reproduced. Descriptions, guidance and test points are written by HCG. Certification requires assessment against the licensed standard by an accredited certification body.",
+    "sources": [
+        {
+            "id": "iso22301",
+            "title": "ISO 22301:2019 sample preview (contents list and opening clauses)",
+            "version": "Second edition, 2019-10",
+            "publisher": "ISO, distributed by iTeh Standards",
+            "url": "https://cdn.standards.iteh.ai/samples/75106/93796e84e77c4ea283721dff7333671e/ISO-22301-2019.pdf",
+            "file": "iso22301/iso-22301-2019-sample.pdf",
+            "sha256": "dac476d19cd5b17541dad7735e92e42a96feb37e9401d91f6174b37aca05aef6"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG ISO 22301 control set: descriptions, guidance and test points",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "iso22301",
+        "objectives": "hcg",
+        "guidance": "hcg"
+    },
+    "control_flags": {
+        "type": "clause for a requirement clause of the standard (official number and heading)."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "clause",
+        "families": "clauses",
+        "objective": "test point",
+        "objectives": "test points",
+        "plan": "Corrective action plan",
+        "plan_short": "Corrective action plan",
+        "score": "Conformity score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Conforms"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Conforms"
+        },
+        {
+            "key": "not_met",
+            "label": "Does Not Conform"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that conform, with partial conformity counting as half. ISO 22301 defines no score; certification depends on an audit finding no major nonconformity. This percentage is an HCG measure of readiness."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement conforms only when every HCG test point under it is met.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
+            "id": "clauses_mandatory",
+            "type": "applicability",
+            "summary": "Clauses 4 to 10 apply to every organization claiming conformity; none can be excluded. Scope exclusions are made through 4.3, not by excluding requirements.",
+            "source": "iso22301",
+            "cite": "ISO 22301:2019, 0.5 Contents of this document",
+            "quote": "Clauses 4 to 10 contain the requirements to be used to assess conformity to this document."
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "In the readiness score a partially conforming requirement counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "ISO 22301",
+            "definition": "The international standard for a business continuity management system (BCMS)."
+        },
+        {
+            "term": "BCMS",
+            "definition": "Business continuity management system: the policies, processes and capabilities an organization uses to prepare for, respond to and recover from disruptions."
+        },
+        {
+            "term": "Business impact analysis (BIA)",
+            "definition": "Analysis of the impact over time of a disruption to the organization's activities, used to set recovery priorities and timeframes."
+        },
+        {
+            "term": "Recovery time objective (RTO)",
+            "definition": "The period within which an activity or resource must be resumed after a disruption."
+        },
+        {
+            "term": "Exercise",
+            "definition": "A planned activity that tests or validates business continuity strategies, solutions and plans."
+        }
+    ]
+}

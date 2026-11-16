@@ -1,0 +1,405 @@
+{
+    "families": [
+        {
+            "code": "4",
+            "name": "Context of the organization",
+            "controls": [
+                {
+                    "id": "4.1",
+                    "title": "Understanding the organization and its context",
+                    "description": "The organization knows the internal and external issues that affect its purpose and its ability to keep delivering its products and services through a disruption.",
+                    "guidance": "Look for a current context analysis (for example a PESTLE or SWOT review) that names the issues relevant to continuity, such as supplier concentration, regional hazards, technology dependencies and, since the 2024 amendment, whether climate change is a relevant issue. It should be reviewed at least annually and feed the scope and risk assessment.",
+                    "objectives": [
+                        "Internal and external issues relevant to business continuity are documented.",
+                        "The analysis records whether climate change is a relevant issue for the organization.",
+                        "The context analysis has been reviewed within the last twelve months and is used as an input to scope and risk assessment."
+                    ]
+                },
+                {
+                    "id": "4.2",
+                    "title": "Understanding the needs and expectations of interested parties",
+                    "description": "The organization identifies who has a stake in its continuity, what they require, and which legal and regulatory requirements apply to continuity of its products and services.",
+                    "guidance": "Expect a register of interested parties (customers, regulators, staff, suppliers, insurers, owners) with their continuity requirements, and a register of applicable laws, regulations and contractual obligations that is kept current and communicated to the people who need it.",
+                    "objectives": [
+                        "Interested parties relevant to the BCMS and their requirements are recorded.",
+                        "Applicable legal, regulatory and contractual requirements for continuity are identified and documented.",
+                        "There is a process to keep legal and regulatory requirements up to date and to take them into account in the BCMS."
+                    ]
+                },
+                {
+                    "id": "4.3",
+                    "title": "Determining the scope of the business continuity management system",
+                    "description": "The boundaries of the BCMS are set and documented: which parts of the organization, locations, products and services it covers, and what is excluded and why.",
+                    "guidance": "Check for a scope statement that names the products and services, sites and activities in scope, explains any exclusions, and shows that exclusions do not affect the organization's ability to provide continuity that meets its requirements.",
+                    "objectives": [
+                        "A documented scope statement names the products, services, locations and activities covered by the BCMS.",
+                        "Exclusions are documented and justified.",
+                        "The scope takes account of the context, interested party requirements and the organization's mission and obligations."
+                    ]
+                },
+                {
+                    "id": "4.4",
+                    "title": "Business continuity management system",
+                    "description": "The organization has established and runs a BCMS, including the processes it needs and how they interact, and maintains and continually improves it.",
+                    "guidance": "Ask for a BCMS manual or process map that shows the business continuity processes, owners and interactions, and evidence that the system is operating rather than only documented.",
+                    "objectives": [
+                        "The BCMS processes and their interactions are defined.",
+                        "There is evidence the BCMS is operated, maintained and improved over time."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "5",
+            "name": "Leadership",
+            "controls": [
+                {
+                    "id": "5.1",
+                    "title": "Leadership and commitment",
+                    "description": "Top management actively leads the BCMS: it sets direction, integrates continuity into business processes, provides resources and holds people to account.",
+                    "guidance": "Look for named executive sponsorship, continuity on leadership meeting agendas, approved budgets and resources, and examples of top management directing or supporting BCMS activity.",
+                    "objectives": [
+                        "Top management has approved the business continuity policy and objectives and they align with the organization's strategy.",
+                        "Business continuity requirements are integrated into business processes.",
+                        "Top management provides the resources the BCMS needs and promotes continual improvement."
+                    ]
+                },
+                {
+                    "id": "5.2",
+                    "title": "Policy",
+                    "description": "A business continuity policy, approved by top management, sets the framework for objectives and commits the organization to meeting requirements and to continual improvement, and it is communicated.",
+                    "guidance": "Review the policy for fit with the organization's purpose, a commitment to applicable requirements and continual improvement, approval and version control, and evidence it has been communicated internally and is available to interested parties as appropriate.",
+                    "objectives": [
+                        "A documented business continuity policy is approved by top management and appropriate to the organization's purpose.",
+                        "The policy provides a framework for objectives and commits to meeting applicable requirements and to continual improvement.",
+                        "The policy is communicated within the organization and made available to interested parties as appropriate."
+                    ]
+                },
+                {
+                    "id": "5.3",
+                    "title": "Roles, responsibilities and authorities",
+                    "description": "Responsibilities and authorities for the BCMS are assigned and communicated, including who ensures conformity and who reports on performance to top management.",
+                    "guidance": "Expect a RACI or terms of reference naming the BCMS owner, business continuity coordinators and response team roles, with evidence that the people concerned know their roles.",
+                    "objectives": [
+                        "BCMS roles, responsibilities and authorities are documented and assigned to named people.",
+                        "Responsibility for reporting BCMS performance to top management is assigned.",
+                        "Role holders are aware of their responsibilities."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "6",
+            "name": "Planning",
+            "controls": [
+                {
+                    "id": "6.1",
+                    "title": "Actions to address risks and opportunities",
+                    "description": "The organization determines the risks and opportunities to the BCMS itself achieving its intended outcomes and plans and evaluates actions to address them.",
+                    "guidance": "This concerns risks to the management system (for example loss of the continuity manager, lack of funding, low engagement), distinct from the disruption risk assessment in 8.2.3. Look for a register of these risks and opportunities with planned actions integrated into BCMS processes.",
+                    "objectives": [
+                        "Risks and opportunities to the BCMS achieving its outcomes are identified, taking account of context and interested party requirements.",
+                        "Actions to address them are planned, integrated into BCMS processes and evaluated for effectiveness."
+                    ]
+                },
+                {
+                    "id": "6.2",
+                    "title": "Business continuity objectives and planning to achieve them",
+                    "description": "Measurable business continuity objectives are set, consistent with the policy, and plans say what will be done, by whom, with what resources and by when.",
+                    "guidance": "Look for objectives with measures and targets, owners, resources, due dates and a method for evaluating results, and evidence that they are monitored, communicated and updated.",
+                    "objectives": [
+                        "Business continuity objectives are documented, measurable where practicable and consistent with the policy.",
+                        "Each objective has an action plan with owner, resources, timescale and evaluation method.",
+                        "Progress on objectives is monitored and communicated."
+                    ]
+                },
+                {
+                    "id": "6.3",
+                    "title": "Planning changes to the business continuity management system",
+                    "description": "Changes to the BCMS are made in a planned way, considering their purpose, consequences, the integrity of the system and resources.",
+                    "guidance": "Check that significant BCMS changes (scope, structure, tools, ownership) go through a defined change process with impact assessment and approval.",
+                    "objectives": [
+                        "Changes to the BCMS are planned and approved, with their purpose, consequences and resource needs considered.",
+                        "The integrity of the BCMS is maintained during changes."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "7",
+            "name": "Support",
+            "controls": [
+                {
+                    "id": "7.1",
+                    "title": "Resources",
+                    "description": "The organization provides the people, funding, facilities and tools needed to establish, operate and improve the BCMS.",
+                    "guidance": "Look for a BCMS budget, staffing and tooling, and for management review records showing resource needs have been considered.",
+                    "objectives": [
+                        "Resources for the BCMS are identified and provided.",
+                        "Resource adequacy is reviewed, for example at management review."
+                    ]
+                },
+                {
+                    "id": "7.2",
+                    "title": "Competence",
+                    "description": "People doing work that affects business continuity performance are competent through education, training or experience, and competence gaps are closed and recorded.",
+                    "guidance": "Expect a competence matrix for BCMS and response roles, training records, and evidence that training effectiveness is evaluated.",
+                    "objectives": [
+                        "Competence requirements are defined for BCMS and response roles.",
+                        "Training or other actions close competence gaps and their effectiveness is evaluated.",
+                        "Records of competence are retained."
+                    ]
+                },
+                {
+                    "id": "7.3",
+                    "title": "Awareness",
+                    "description": "Everyone working under the organization's control knows the policy, their contribution to the BCMS, the implications of not conforming, and their own role before, during and after a disruption.",
+                    "guidance": "Look for awareness sessions, induction content and staff interviews showing people know the policy and what they would do in a disruption.",
+                    "objectives": [
+                        "Staff are aware of the business continuity policy and their contribution to the BCMS.",
+                        "Staff know their own role before, during and after a disruption."
+                    ]
+                },
+                {
+                    "id": "7.4",
+                    "title": "Communication",
+                    "description": "The organization has defined what it communicates about business continuity, when, with whom and how, including communications during disruptions.",
+                    "guidance": "Expect a communication plan covering routine BCMS communication and the arrangements, channels and tests for communication during a disruption, including with interested parties and authorities.",
+                    "objectives": [
+                        "A communication plan sets out what, when, with whom and how business continuity matters are communicated.",
+                        "Arrangements exist to communicate internally and externally during a disruption, and their availability is tested."
+                    ]
+                },
+                {
+                    "id": "7.5",
+                    "title": "Documented information",
+                    "description": "The documented information the BCMS requires is created with proper identification and approval, and is controlled so it is available when needed, protected and kept current.",
+                    "guidance": "Check document control: identification, versioning, review and approval, distribution, access, storage including offline or alternate-site availability during a disruption, retention and disposal.",
+                    "objectives": [
+                        "BCMS documents and records are identified, versioned, reviewed and approved.",
+                        "Documented information is available where and when needed, including during a disruption, and protected against loss or improper use.",
+                        "Retention and disposal of documented information is defined."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "8",
+            "name": "Operation",
+            "controls": [
+                {
+                    "id": "8.1",
+                    "title": "Operational planning and control",
+                    "description": "The processes needed to meet business continuity requirements are planned, run to defined criteria and controlled, including changes and outsourced processes.",
+                    "guidance": "Look for defined criteria for continuity processes, evidence they are carried out as planned, control of planned changes, and control over outsourced activities and the supply chain.",
+                    "objectives": [
+                        "Criteria for business continuity processes are defined and processes are run to them.",
+                        "Planned changes are controlled and the consequences of unintended changes are reviewed.",
+                        "Outsourced processes and the supply chain are controlled."
+                    ]
+                },
+                {
+                    "id": "8.2.2",
+                    "title": "Business impact analysis",
+                    "description": "A documented business impact analysis sets impact categories and criteria, identifies the activities that support products and services, assesses impacts over time, and sets recovery priorities and timeframes.",
+                    "guidance": "Review the BIA method and results: impact types and criteria, activities in scope, how impact grows over time, the maximum period before impacts become unacceptable, prioritized timeframes (such as RTOs) and the resources and dependencies each priority activity needs. It should be reviewed at planned intervals and after significant change.",
+                    "objectives": [
+                        "A documented BIA method defines impact types and criteria.",
+                        "Activities supporting products and services are identified and their impacts assessed over time.",
+                        "Prioritized recovery timeframes are set for each activity within the time impacts would become unacceptable.",
+                        "Dependencies, including suppliers and partners, and the resources priority activities need are identified."
+                    ]
+                },
+                {
+                    "id": "8.2.3",
+                    "title": "Risk assessment",
+                    "description": "The organization runs a documented risk assessment of disruption to its prioritized activities and the resources they depend on, and decides which risks need treatment.",
+                    "guidance": "Look for identification, analysis and evaluation of disruption risks to prioritized activities and their resources (people, premises, technology, information, suppliers), with treatment decisions linked to the BIA.",
+                    "objectives": [
+                        "Risks of disruption to prioritized activities and their resources are identified, analysed and evaluated.",
+                        "Risks requiring treatment are determined and linked to continuity strategies."
+                    ]
+                },
+                {
+                    "id": "8.3.2",
+                    "title": "Identification of strategies and solutions",
+                    "description": "Options for continuing and recovering prioritized activities within their timeframes are identified, based on the BIA and risk assessment.",
+                    "guidance": "Expect strategy options covering people, information and data, buildings and work environment, facilities and equipment, ICT, transport, finance and partners and suppliers, with options to reduce likelihood, shorten disruption and limit impact.",
+                    "objectives": [
+                        "Continuity and recovery options are identified for each prioritized activity within its timeframe.",
+                        "Options cover the full range of resources, including suppliers and partners."
+                    ]
+                },
+                {
+                    "id": "8.3.3",
+                    "title": "Selection of strategies and solutions",
+                    "description": "The organization selects the strategies and solutions it will use, based on how well they meet recovery requirements and on cost and risk, and documents the decision.",
+                    "guidance": "Look for a documented, approved strategy decision showing why options were selected, how they meet the timeframes and how residual risk was accepted.",
+                    "objectives": [
+                        "Selected strategies and solutions are documented and approved.",
+                        "Selection shows the chosen options meet prioritized timeframes and considers cost, benefit and residual risk."
+                    ]
+                },
+                {
+                    "id": "8.3.4",
+                    "title": "Resource requirements",
+                    "description": "The resources needed to implement the selected solutions are determined: people, information, premises, equipment, ICT, transport, finance and supplier support.",
+                    "guidance": "Check that each selected solution has its resource requirements recorded, for example minimum staff, alternate site capacity, recovery infrastructure and contracts.",
+                    "objectives": [
+                        "Resource requirements for each selected solution are documented.",
+                        "Arrangements are in place to make those resources available when needed."
+                    ]
+                },
+                {
+                    "id": "8.3.5",
+                    "title": "Implementation of solutions",
+                    "description": "Selected business continuity solutions are implemented and maintained so they are available when needed.",
+                    "guidance": "Verify that solutions exist in practice (alternate sites, backups and recovery environments, cross-training, supplier contracts) and that they are maintained as the organization changes.",
+                    "objectives": [
+                        "Selected solutions are implemented.",
+                        "Solutions are maintained and kept consistent with current requirements."
+                    ]
+                },
+                {
+                    "id": "8.4.1",
+                    "title": "General",
+                    "description": "The organization has a documented set of business continuity plans and procedures that cover warning, communication, response and recovery, and that are specific, flexible and practical.",
+                    "guidance": "Review the plan set for clear steps, defined activation criteria, flexibility for unexpected scenarios, focus on the impact of disruption, and effective use of selected solutions.",
+                    "objectives": [
+                        "Documented plans and procedures exist for managing a disruption and recovering activities.",
+                        "Plans set out specific, practical steps and clear activation criteria."
+                    ]
+                },
+                {
+                    "id": "8.4.2",
+                    "title": "Response structure",
+                    "description": "A response structure with named teams, roles, authorities and competent people is in place to manage a disruption, with procedures for activation, operation, coordination and communication.",
+                    "guidance": "Look for incident and crisis management team charters, membership with deputies, activation and escalation thresholds, a command and coordination model and contact lists that are current.",
+                    "objectives": [
+                        "Response teams are defined with roles, authorities, members and alternates.",
+                        "Teams have documented procedures for activation, operation, coordination and stand-down.",
+                        "Team members are competent and contact details are current."
+                    ]
+                },
+                {
+                    "id": "8.4.3",
+                    "title": "Warning and communication",
+                    "description": "Procedures exist to detect incidents, warn people at risk, and communicate with internal and external parties, including the media and authorities, during a disruption.",
+                    "guidance": "Check incident detection and monitoring, alerting of affected people, mechanisms for communicating with interested parties, records of decisions and communications, and testing of warning arrangements.",
+                    "objectives": [
+                        "Procedures cover detecting incidents and warning those potentially affected.",
+                        "Procedures cover communication with interested parties, authorities and the media during a disruption.",
+                        "Communication and warning arrangements are tested and records of communications are kept."
+                    ]
+                },
+                {
+                    "id": "8.4.4",
+                    "title": "Business continuity plans",
+                    "description": "Business continuity plans give the response teams the information they need to continue or recover prioritized activities within their timeframes.",
+                    "guidance": "Each plan should state its purpose and scope, activation criteria, roles, the actions to implement selected solutions, required information and resources, interdependencies, and how to communicate, and be available when needed.",
+                    "objectives": [
+                        "Plans exist for prioritized activities and state purpose, scope, objectives and activation criteria.",
+                        "Plans set out the actions, resources and information needed to continue or recover within the prioritized timeframes.",
+                        "Plans are available to the people who need them during a disruption."
+                    ]
+                },
+                {
+                    "id": "8.4.5",
+                    "title": "Recovery",
+                    "description": "Documented processes return the organization from temporary arrangements to normal or newly defined business operations after a disruption.",
+                    "guidance": "Look for recovery and return-to-normal procedures, including criteria for standing down, data and service restoration checks, and post-incident review.",
+                    "objectives": [
+                        "Documented processes restore and return activities from temporary measures to normal operations.",
+                        "Criteria for stand-down and post-incident review are defined."
+                    ]
+                },
+                {
+                    "id": "8.5",
+                    "title": "Exercise programme",
+                    "description": "A programme of exercises and tests validates business continuity strategies, solutions and plans over time, with post-exercise reports and follow-up actions.",
+                    "guidance": "Review the exercise programme and schedule, scenarios and objectives, coverage of plans and solutions over a cycle, exercise reports, and tracking of improvement actions to closure. Exercises should be run at planned intervals and after significant change.",
+                    "objectives": [
+                        "A documented exercise programme covers strategies, solutions and plans over a defined cycle.",
+                        "Exercises have defined objectives and scenarios and are run at planned intervals.",
+                        "Post-exercise reports record outcomes and improvement actions, which are tracked to closure."
+                    ]
+                },
+                {
+                    "id": "8.6",
+                    "title": "Evaluation of business continuity documentation and capabilities",
+                    "description": "The organization evaluates whether its BIA, risk assessment, strategies, solutions, plans and procedures remain suitable, adequate and effective, including those of key partners and suppliers.",
+                    "guidance": "Look for periodic reviews, post-incident and post-exercise reviews, evaluation of supplier continuity capabilities, and checks against legal and regulatory requirements, with resulting updates.",
+                    "objectives": [
+                        "Business continuity documentation and capabilities are evaluated at planned intervals and after incidents, exercises and significant change.",
+                        "The continuity capabilities of relevant partners and suppliers are evaluated.",
+                        "Evaluations result in documented updates where needed."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "9",
+            "name": "Performance evaluation",
+            "controls": [
+                {
+                    "id": "9.1",
+                    "title": "Monitoring, measurement, analysis and evaluation",
+                    "description": "The organization decides what to monitor and measure about BCMS performance, how and when, and analyses and evaluates the results.",
+                    "guidance": "Expect defined metrics (for example plan currency, exercise completion, training coverage, objective attainment), methods and frequency, and recorded analysis of results.",
+                    "objectives": [
+                        "What is monitored and measured, the methods and the frequency are defined.",
+                        "Results are analysed, evaluated and retained as evidence."
+                    ]
+                },
+                {
+                    "id": "9.2",
+                    "title": "Internal audit",
+                    "description": "Internal audits at planned intervals check that the BCMS conforms to the organization's own requirements and the standard and is effectively implemented.",
+                    "guidance": "Review the audit programme, auditor objectivity and independence, audit criteria and scope, reports to management, and follow-up of findings.",
+                    "objectives": [
+                        "An internal audit programme covers the BCMS at planned intervals.",
+                        "Auditors are objective and impartial, and results are reported to relevant management.",
+                        "Audit findings are followed up and corrected."
+                    ]
+                },
+                {
+                    "id": "9.3",
+                    "title": "Management review",
+                    "description": "Top management reviews the BCMS at planned intervals to confirm it remains suitable, adequate and effective, and decides on improvements and changes.",
+                    "guidance": "Look for management review minutes covering the required inputs (actions from previous reviews, changes in issues, performance, audit and exercise results, nonconformities, interested party feedback, risks, opportunities) and outputs (decisions on improvement, changes and resources).",
+                    "objectives": [
+                        "Management reviews are held at planned intervals and recorded.",
+                        "Reviews consider performance, audit and exercise results, nonconformities, changes and interested party feedback.",
+                        "Reviews result in decisions on improvement, changes to the BCMS and resources."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "10",
+            "name": "Improvement",
+            "controls": [
+                {
+                    "id": "10.1",
+                    "title": "Nonconformity and corrective action",
+                    "description": "When a nonconformity occurs, the organization reacts, finds the cause, takes corrective action and checks the action worked.",
+                    "guidance": "Expect a nonconformity and corrective action log with root cause analysis, actions, owners, due dates and effectiveness checks.",
+                    "objectives": [
+                        "Nonconformities are recorded with their causes.",
+                        "Corrective actions are taken and their effectiveness is reviewed."
+                    ]
+                },
+                {
+                    "id": "10.2",
+                    "title": "Continual improvement",
+                    "description": "The organization continually improves the suitability, adequacy and effectiveness of the BCMS.",
+                    "guidance": "Look for improvement actions drawn from audits, exercises, incidents, management review and performance data, and evidence they are implemented.",
+                    "objectives": [
+                        "Improvement opportunities are identified from audits, exercises, incidents and reviews.",
+                        "Improvement actions are implemented and tracked."
+                    ]
+                }
+            ]
+        }
+    ]
+}

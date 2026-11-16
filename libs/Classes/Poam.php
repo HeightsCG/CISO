@@ -171,6 +171,7 @@ class Poam
         'owasp-asvs-l3' => 'none',
         'cyber-essentials' => 'none',
         'iso-42001' => 'none',
+        'iso-22301' => 'none',
         'nydfs-500' => 'none',
         'nis2' => 'none',
         'dora' => 'none',

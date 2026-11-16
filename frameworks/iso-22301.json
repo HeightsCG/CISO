@@ -1,0 +1,1097 @@
+{
+    "key": "iso-22301",
+    "name": "ISO 22301",
+    "version": "HCG control set 2026",
+    "full_name": "ISO 22301:2019 Security and resilience - Business continuity management systems - Requirements: HCG control set",
+    "issuing_body": "Heights Consulting Group, structured on ISO 22301:2019 (ISO/TC 292)",
+    "standard_codes": [
+        "ISO-22301"
+    ],
+    "aliases": [
+        "ISO 22301",
+        "BCMS",
+        "Business continuity management system",
+        "Business continuity"
+    ],
+    "content_licence": "hcg_authored",
+    "notice": "HCG control set based on ISO 22301:2019 and its 2024 amendment. Clause numbers and headings 4 to 10 are used for identification only; the standard's text is licensed by ISO and is not reproduced. Descriptions, guidance and test points are written by HCG. Certification requires assessment against the licensed standard by an accredited certification body.",
+    "sources": [
+        {
+            "id": "iso22301",
+            "title": "ISO 22301:2019 sample preview (contents list and opening clauses)",
+            "version": "Second edition, 2019-10",
+            "publisher": "ISO, distributed by iTeh Standards",
+            "url": "https://cdn.standards.iteh.ai/samples/75106/93796e84e77c4ea283721dff7333671e/ISO-22301-2019.pdf",
+            "file": "iso22301/iso-22301-2019-sample.pdf",
+            "sha256": "dac476d19cd5b17541dad7735e92e42a96feb37e9401d91f6174b37aca05aef6"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG ISO 22301 control set: descriptions, guidance and test points",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "iso22301",
+        "objectives": "hcg",
+        "guidance": "hcg"
+    },
+    "control_flags": {
+        "type": "clause for a requirement clause of the standard (official number and heading)."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "clause",
+        "families": "clauses",
+        "objective": "test point",
+        "objectives": "test points",
+        "plan": "Corrective action plan",
+        "plan_short": "Corrective action plan",
+        "score": "Conformity score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Conforms"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Conforms"
+        },
+        {
+            "key": "not_met",
+            "label": "Does Not Conform"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that conform, with partial conformity counting as half. ISO 22301 defines no score; certification depends on an audit finding no major nonconformity. This percentage is an HCG measure of readiness."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement conforms only when every HCG test point under it is met.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
+            "id": "clauses_mandatory",
+            "type": "applicability",
+            "summary": "Clauses 4 to 10 apply to every organization claiming conformity; none can be excluded. Scope exclusions are made through 4.3, not by excluding requirements.",
+            "source": "iso22301",
+            "cite": "ISO 22301:2019, 0.5 Contents of this document",
+            "quote": "Clauses 4 to 10 contain the requirements to be used to assess conformity to this document."
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "In the readiness score a partially conforming requirement counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "ISO 22301",
+            "definition": "The international standard for a business continuity management system (BCMS)."
+        },
+        {
+            "term": "BCMS",
+            "definition": "Business continuity management system: the policies, processes and capabilities an organization uses to prepare for, respond to and recover from disruptions."
+        },
+        {
+            "term": "Business impact analysis (BIA)",
+            "definition": "Analysis of the impact over time of a disruption to the organization's activities, used to set recovery priorities and timeframes."
+        },
+        {
+            "term": "Recovery time objective (RTO)",
+            "definition": "The period within which an activity or resource must be resumed after a disruption."
+        },
+        {
+            "term": "Exercise",
+            "definition": "A planned activity that tests or validates business continuity strategies, solutions and plans."
+        }
+    ],
+    "display_name": "ISO 22301 (HCG control set 2026)",
+    "counts": {
+        "families": 7,
+        "controls": 34,
+        "objectives": 87
+    },
+    "families": [
+        {
+            "number": "4",
+            "code": "4",
+            "name": "Context of the organization",
+            "controls": [
+                {
+                    "id": "4.1",
+                    "number": "4.1",
+                    "title": "Understanding the organization and its context",
+                    "text": "",
+                    "description": "The organization knows the internal and external issues that affect its purpose and its ability to keep delivering its products and services through a disruption.",
+                    "guidance": "Look for a current context analysis (for example a PESTLE or SWOT review) that names the issues relevant to continuity, such as supplier concentration, regional hazards, technology dependencies and, since the 2024 amendment, whether climate change is a relevant issue. It should be reviewed at least annually and feed the scope and risk assessment.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.1.a",
+                            "text": "Internal and external issues relevant to business continuity are documented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.1.b",
+                            "text": "The analysis records whether climate change is a relevant issue for the organization.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.1.c",
+                            "text": "The context analysis has been reviewed within the last twelve months and is used as an input to scope and risk assessment.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "4.2",
+                    "number": "4.2",
+                    "title": "Understanding the needs and expectations of interested parties",
+                    "text": "",
+                    "description": "The organization identifies who has a stake in its continuity, what they require, and which legal and regulatory requirements apply to continuity of its products and services.",
+                    "guidance": "Expect a register of interested parties (customers, regulators, staff, suppliers, insurers, owners) with their continuity requirements, and a register of applicable laws, regulations and contractual obligations that is kept current and communicated to the people who need it.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.2.a",
+                            "text": "Interested parties relevant to the BCMS and their requirements are recorded.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.2.b",
+                            "text": "Applicable legal, regulatory and contractual requirements for continuity are identified and documented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.2.c",
+                            "text": "There is a process to keep legal and regulatory requirements up to date and to take them into account in the BCMS.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "4.3",
+                    "number": "4.3",
+                    "title": "Determining the scope of the business continuity management system",
+                    "text": "",
+                    "description": "The boundaries of the BCMS are set and documented: which parts of the organization, locations, products and services it covers, and what is excluded and why.",
+                    "guidance": "Check for a scope statement that names the products and services, sites and activities in scope, explains any exclusions, and shows that exclusions do not affect the organization's ability to provide continuity that meets its requirements.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.3.a",
+                            "text": "A documented scope statement names the products, services, locations and activities covered by the BCMS.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.3.b",
+                            "text": "Exclusions are documented and justified.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.3.c",
+                            "text": "The scope takes account of the context, interested party requirements and the organization's mission and obligations.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "4.4",
+                    "number": "4.4",
+                    "title": "Business continuity management system",
+                    "text": "",
+                    "description": "The organization has established and runs a BCMS, including the processes it needs and how they interact, and maintains and continually improves it.",
+                    "guidance": "Ask for a BCMS manual or process map that shows the business continuity processes, owners and interactions, and evidence that the system is operating rather than only documented.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.4.a",
+                            "text": "The BCMS processes and their interactions are defined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.4.b",
+                            "text": "There is evidence the BCMS is operated, maintained and improved over time.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                }
+            ]
+        },
+        {
+            "number": "5",
+            "code": "5",
+            "name": "Leadership",
+            "controls": [
+                {
+                    "id": "5.1",
+                    "number": "5.1",
+                    "title": "Leadership and commitment",
+                    "text": "",
+                    "description": "Top management actively leads the BCMS: it sets direction, integrates continuity into business processes, provides resources and holds people to account.",
+                    "guidance": "Look for named executive sponsorship, continuity on leadership meeting agendas, approved budgets and resources, and examples of top management directing or supporting BCMS activity.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "5.1.a",
+                            "text": "Top management has approved the business continuity policy and objectives and they align with the organization's strategy.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.1.b",
+                            "text": "Business continuity requirements are integrated into business processes.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.1.c",
+                            "text": "Top management provides the resources the BCMS needs and promotes continual improvement.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "5.2",
+                    "number": "5.2",
+                    "title": "Policy",
+                    "text": "",
+                    "description": "A business continuity policy, approved by top management, sets the framework for objectives and commits the organization to meeting requirements and to continual improvement, and it is communicated.",
+                    "guidance": "Review the policy for fit with the organization's purpose, a commitment to applicable requirements and continual improvement, approval and version control, and evidence it has been communicated internally and is available to interested parties as appropriate.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "5.2.a",
+                            "text": "A documented business continuity policy is approved by top management and appropriate to the organization's purpose.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.2.b",
+                            "text": "The policy provides a framework for objectives and commits to meeting applicable requirements and to continual improvement.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.2.c",
+                            "text": "The policy is communicated within the organization and made available to interested parties as appropriate.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "5.3",
+                    "number": "5.3",
+                    "title": "Roles, responsibilities and authorities",
+                    "text": "",
+                    "description": "Responsibilities and authorities for the BCMS are assigned and communicated, including who ensures conformity and who reports on performance to top management.",
+                    "guidance": "Expect a RACI or terms of reference naming the BCMS owner, business continuity coordinators and response team roles, with evidence that the people concerned know their roles.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "5.3.a",
+                            "text": "BCMS roles, responsibilities and authorities are documented and assigned to named people.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.3.b",
+                            "text": "Responsibility for reporting BCMS performance to top management is assigned.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.3.c",
+                            "text": "Role holders are aware of their responsibilities.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                }
+            ]
+        },
+        {
+            "number": "6",
+            "code": "6",
+            "name": "Planning",
+            "controls": [
+                {
+                    "id": "6.1",
+                    "number": "6.1",
+                    "title": "Actions to address risks and opportunities",
+                    "text": "",
+                    "description": "The organization determines the risks and opportunities to the BCMS itself achieving its intended outcomes and plans and evaluates actions to address them.",
+                    "guidance": "This concerns risks to the management system (for example loss of the continuity manager, lack of funding, low engagement), distinct from the disruption risk assessment in 8.2.3. Look for a register of these risks and opportunities with planned actions integrated into BCMS processes.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6.1.a",
+                            "text": "Risks and opportunities to the BCMS achieving its outcomes are identified, taking account of context and interested party requirements.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.b",
+                            "text": "Actions to address them are planned, integrated into BCMS processes and evaluated for effectiveness.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "6.2",
+                    "number": "6.2",
+                    "title": "Business continuity objectives and planning to achieve them",
+                    "text": "",
+                    "description": "Measurable business continuity objectives are set, consistent with the policy, and plans say what will be done, by whom, with what resources and by when.",
+                    "guidance": "Look for objectives with measures and targets, owners, resources, due dates and a method for evaluating results, and evidence that they are monitored, communicated and updated.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6.2.a",
+                            "text": "Business continuity objectives are documented, measurable where practicable and consistent with the policy.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.2.b",
+                            "text": "Each objective has an action plan with owner, resources, timescale and evaluation method.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.2.c",
+                            "text": "Progress on objectives is monitored and communicated.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "6.3",
+                    "number": "6.3",
+                    "title": "Planning changes to the business continuity management system",
+                    "text": "",
+                    "description": "Changes to the BCMS are made in a planned way, considering their purpose, consequences, the integrity of the system and resources.",
+                    "guidance": "Check that significant BCMS changes (scope, structure, tools, ownership) go through a defined change process with impact assessment and approval.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6.3.a",
+                            "text": "Changes to the BCMS are planned and approved, with their purpose, consequences and resource needs considered.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.3.b",
+                            "text": "The integrity of the BCMS is maintained during changes.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                }
+            ]
+        },
+        {
+            "number": "7",
+            "code": "7",
+            "name": "Support",
+            "controls": [
+                {
+                    "id": "7.1",
+                    "number": "7.1",
+                    "title": "Resources",
+                    "text": "",
+                    "description": "The organization provides the people, funding, facilities and tools needed to establish, operate and improve the BCMS.",
+                    "guidance": "Look for a BCMS budget, staffing and tooling, and for management review records showing resource needs have been considered.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.1.a",
+                            "text": "Resources for the BCMS are identified and provided.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.1.b",
+                            "text": "Resource adequacy is reviewed, for example at management review.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "7.2",
+                    "number": "7.2",
+                    "title": "Competence",
+                    "text": "",
+                    "description": "People doing work that affects business continuity performance are competent through education, training or experience, and competence gaps are closed and recorded.",
+                    "guidance": "Expect a competence matrix for BCMS and response roles, training records, and evidence that training effectiveness is evaluated.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.2.a",
+                            "text": "Competence requirements are defined for BCMS and response roles.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.2.b",
+                            "text": "Training or other actions close competence gaps and their effectiveness is evaluated.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.2.c",
+                            "text": "Records of competence are retained.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "7.3",
+                    "number": "7.3",
+                    "title": "Awareness",
+                    "text": "",
+                    "description": "Everyone working under the organization's control knows the policy, their contribution to the BCMS, the implications of not conforming, and their own role before, during and after a disruption.",
+                    "guidance": "Look for awareness sessions, induction content and staff interviews showing people know the policy and what they would do in a disruption.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.3.a",
+                            "text": "Staff are aware of the business continuity policy and their contribution to the BCMS.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.3.b",
+                            "text": "Staff know their own role before, during and after a disruption.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "7.4",
+                    "number": "7.4",
+                    "title": "Communication",
+                    "text": "",
+                    "description": "The organization has defined what it communicates about business continuity, when, with whom and how, including communications during disruptions.",
+                    "guidance": "Expect a communication plan covering routine BCMS communication and the arrangements, channels and tests for communication during a disruption, including with interested parties and authorities.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.4.a",
+                            "text": "A communication plan sets out what, when, with whom and how business continuity matters are communicated.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.4.b",
+                            "text": "Arrangements exist to communicate internally and externally during a disruption, and their availability is tested.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "7.5",
+                    "number": "7.5",
+                    "title": "Documented information",
+                    "text": "",
+                    "description": "The documented information the BCMS requires is created with proper identification and approval, and is controlled so it is available when needed, protected and kept current.",
+                    "guidance": "Check document control: identification, versioning, review and approval, distribution, access, storage including offline or alternate-site availability during a disruption, retention and disposal.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.5.a",
+                            "text": "BCMS documents and records are identified, versioned, reviewed and approved.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.5.b",
+                            "text": "Documented information is available where and when needed, including during a disruption, and protected against loss or improper use.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.5.c",
+                            "text": "Retention and disposal of documented information is defined.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                }
+            ]
+        },
+        {
+            "number": "8",
+            "code": "8",
+            "name": "Operation",
+            "controls": [
+                {
+                    "id": "8.1",
+                    "number": "8.1",
+                    "title": "Operational planning and control",
+                    "text": "",
+                    "description": "The processes needed to meet business continuity requirements are planned, run to defined criteria and controlled, including changes and outsourced processes.",
+                    "guidance": "Look for defined criteria for continuity processes, evidence they are carried out as planned, control of planned changes, and control over outsourced activities and the supply chain.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.1.a",
+                            "text": "Criteria for business continuity processes are defined and processes are run to them.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.1.b",
+                            "text": "Planned changes are controlled and the consequences of unintended changes are reviewed.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.1.c",
+                            "text": "Outsourced processes and the supply chain are controlled.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "8.2.2",
+                    "number": "8.2.2",
+                    "title": "Business impact analysis",
+                    "text": "",
+                    "description": "A documented business impact analysis sets impact categories and criteria, identifies the activities that support products and services, assesses impacts over time, and sets recovery priorities and timeframes.",
+                    "guidance": "Review the BIA method and results: impact types and criteria, activities in scope, how impact grows over time, the maximum period before impacts become unacceptable, prioritized timeframes (such as RTOs) and the resources and dependencies each priority activity needs. It should be reviewed at planned intervals and after significant change.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.2.2.a",
+                            "text": "A documented BIA method defines impact types and criteria.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.2.2.b",
+                            "text": "Activities supporting products and services are identified and their impacts assessed over time.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.2.2.c",
+                            "text": "Prioritized recovery timeframes are set for each activity within the time impacts would become unacceptable.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.2.2.d",
+                            "text": "Dependencies, including suppliers and partners, and the resources priority activities need are identified.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "8.2.3",
+                    "number": "8.2.3",
+                    "title": "Risk assessment",
+                    "text": "",
+                    "description": "The organization runs a documented risk assessment of disruption to its prioritized activities and the resources they depend on, and decides which risks need treatment.",
+                    "guidance": "Look for identification, analysis and evaluation of disruption risks to prioritized activities and their resources (people, premises, technology, information, suppliers), with treatment decisions linked to the BIA.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.2.3.a",
+                            "text": "Risks of disruption to prioritized activities and their resources are identified, analysed and evaluated.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.2.3.b",
+                            "text": "Risks requiring treatment are determined and linked to continuity strategies.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "8.3.2",
+                    "number": "8.3.2",
+                    "title": "Identification of strategies and solutions",
+                    "text": "",
+                    "description": "Options for continuing and recovering prioritized activities within their timeframes are identified, based on the BIA and risk assessment.",
+                    "guidance": "Expect strategy options covering people, information and data, buildings and work environment, facilities and equipment, ICT, transport, finance and partners and suppliers, with options to reduce likelihood, shorten disruption and limit impact.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.3.2.a",
+                            "text": "Continuity and recovery options are identified for each prioritized activity within its timeframe.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.3.2.b",
+                            "text": "Options cover the full range of resources, including suppliers and partners.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "8.3.3",
+                    "number": "8.3.3",
+                    "title": "Selection of strategies and solutions",
+                    "text": "",
+                    "description": "The organization selects the strategies and solutions it will use, based on how well they meet recovery requirements and on cost and risk, and documents the decision.",
+                    "guidance": "Look for a documented, approved strategy decision showing why options were selected, how they meet the timeframes and how residual risk was accepted.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.3.3.a",
+                            "text": "Selected strategies and solutions are documented and approved.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.3.3.b",
+                            "text": "Selection shows the chosen options meet prioritized timeframes and considers cost, benefit and residual risk.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "8.3.4",
+                    "number": "8.3.4",
+                    "title": "Resource requirements",
+                    "text": "",
+                    "description": "The resources needed to implement the selected solutions are determined: people, information, premises, equipment, ICT, transport, finance and supplier support.",
+                    "guidance": "Check that each selected solution has its resource requirements recorded, for example minimum staff, alternate site capacity, recovery infrastructure and contracts.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.3.4.a",
+                            "text": "Resource requirements for each selected solution are documented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.3.4.b",
+                            "text": "Arrangements are in place to make those resources available when needed.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "8.3.5",
+                    "number": "8.3.5",
+                    "title": "Implementation of solutions",
+                    "text": "",
+                    "description": "Selected business continuity solutions are implemented and maintained so they are available when needed.",
+                    "guidance": "Verify that solutions exist in practice (alternate sites, backups and recovery environments, cross-training, supplier contracts) and that they are maintained as the organization changes.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.3.5.a",
+                            "text": "Selected solutions are implemented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.3.5.b",
+                            "text": "Solutions are maintained and kept consistent with current requirements.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "8.4.1",
+                    "number": "8.4.1",
+                    "title": "General",
+                    "text": "",
+                    "description": "The organization has a documented set of business continuity plans and procedures that cover warning, communication, response and recovery, and that are specific, flexible and practical.",
+                    "guidance": "Review the plan set for clear steps, defined activation criteria, flexibility for unexpected scenarios, focus on the impact of disruption, and effective use of selected solutions.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.4.1.a",
+                            "text": "Documented plans and procedures exist for managing a disruption and recovering activities.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.4.1.b",
+                            "text": "Plans set out specific, practical steps and clear activation criteria.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "8.4.2",
+                    "number": "8.4.2",
+                    "title": "Response structure",
+                    "text": "",
+                    "description": "A response structure with named teams, roles, authorities and competent people is in place to manage a disruption, with procedures for activation, operation, coordination and communication.",
+                    "guidance": "Look for incident and crisis management team charters, membership with deputies, activation and escalation thresholds, a command and coordination model and contact lists that are current.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.4.2.a",
+                            "text": "Response teams are defined with roles, authorities, members and alternates.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.4.2.b",
+                            "text": "Teams have documented procedures for activation, operation, coordination and stand-down.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.4.2.c",
+                            "text": "Team members are competent and contact details are current.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "8.4.3",
+                    "number": "8.4.3",
+                    "title": "Warning and communication",
+                    "text": "",
+                    "description": "Procedures exist to detect incidents, warn people at risk, and communicate with internal and external parties, including the media and authorities, during a disruption.",
+                    "guidance": "Check incident detection and monitoring, alerting of affected people, mechanisms for communicating with interested parties, records of decisions and communications, and testing of warning arrangements.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.4.3.a",
+                            "text": "Procedures cover detecting incidents and warning those potentially affected.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.4.3.b",
+                            "text": "Procedures cover communication with interested parties, authorities and the media during a disruption.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.4.3.c",
+                            "text": "Communication and warning arrangements are tested and records of communications are kept.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "8.4.4",
+                    "number": "8.4.4",
+                    "title": "Business continuity plans",
+                    "text": "",
+                    "description": "Business continuity plans give the response teams the information they need to continue or recover prioritized activities within their timeframes.",
+                    "guidance": "Each plan should state its purpose and scope, activation criteria, roles, the actions to implement selected solutions, required information and resources, interdependencies, and how to communicate, and be available when needed.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.4.4.a",
+                            "text": "Plans exist for prioritized activities and state purpose, scope, objectives and activation criteria.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.4.4.b",
+                            "text": "Plans set out the actions, resources and information needed to continue or recover within the prioritized timeframes.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.4.4.c",
+                            "text": "Plans are available to the people who need them during a disruption.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "8.4.5",
+                    "number": "8.4.5",
+                    "title": "Recovery",
+                    "text": "",
+                    "description": "Documented processes return the organization from temporary arrangements to normal or newly defined business operations after a disruption.",
+                    "guidance": "Look for recovery and return-to-normal procedures, including criteria for standing down, data and service restoration checks, and post-incident review.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.4.5.a",
+                            "text": "Documented processes restore and return activities from temporary measures to normal operations.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.4.5.b",
+                            "text": "Criteria for stand-down and post-incident review are defined.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "8.5",
+                    "number": "8.5",
+                    "title": "Exercise programme",
+                    "text": "",
+                    "description": "A programme of exercises and tests validates business continuity strategies, solutions and plans over time, with post-exercise reports and follow-up actions.",
+                    "guidance": "Review the exercise programme and schedule, scenarios and objectives, coverage of plans and solutions over a cycle, exercise reports, and tracking of improvement actions to closure. Exercises should be run at planned intervals and after significant change.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.5.a",
+                            "text": "A documented exercise programme covers strategies, solutions and plans over a defined cycle.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.5.b",
+                            "text": "Exercises have defined objectives and scenarios and are run at planned intervals.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.5.c",
+                            "text": "Post-exercise reports record outcomes and improvement actions, which are tracked to closure.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "8.6",
+                    "number": "8.6",
+                    "title": "Evaluation of business continuity documentation and capabilities",
+                    "text": "",
+                    "description": "The organization evaluates whether its BIA, risk assessment, strategies, solutions, plans and procedures remain suitable, adequate and effective, including those of key partners and suppliers.",
+                    "guidance": "Look for periodic reviews, post-incident and post-exercise reviews, evaluation of supplier continuity capabilities, and checks against legal and regulatory requirements, with resulting updates.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.6.a",
+                            "text": "Business continuity documentation and capabilities are evaluated at planned intervals and after incidents, exercises and significant change.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.6.b",
+                            "text": "The continuity capabilities of relevant partners and suppliers are evaluated.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.6.c",
+                            "text": "Evaluations result in documented updates where needed.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                }
+            ]
+        },
+        {
+            "number": "9",
+            "code": "9",
+            "name": "Performance evaluation",
+            "controls": [
+                {
+                    "id": "9.1",
+                    "number": "9.1",
+                    "title": "Monitoring, measurement, analysis and evaluation",
+                    "text": "",
+                    "description": "The organization decides what to monitor and measure about BCMS performance, how and when, and analyses and evaluates the results.",
+                    "guidance": "Expect defined metrics (for example plan currency, exercise completion, training coverage, objective attainment), methods and frequency, and recorded analysis of results.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "9.1.a",
+                            "text": "What is monitored and measured, the methods and the frequency are defined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.1.b",
+                            "text": "Results are analysed, evaluated and retained as evidence.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "9.2",
+                    "number": "9.2",
+                    "title": "Internal audit",
+                    "text": "",
+                    "description": "Internal audits at planned intervals check that the BCMS conforms to the organization's own requirements and the standard and is effectively implemented.",
+                    "guidance": "Review the audit programme, auditor objectivity and independence, audit criteria and scope, reports to management, and follow-up of findings.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "9.2.a",
+                            "text": "An internal audit programme covers the BCMS at planned intervals.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.2.b",
+                            "text": "Auditors are objective and impartial, and results are reported to relevant management.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.2.c",
+                            "text": "Audit findings are followed up and corrected.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "9.3",
+                    "number": "9.3",
+                    "title": "Management review",
+                    "text": "",
+                    "description": "Top management reviews the BCMS at planned intervals to confirm it remains suitable, adequate and effective, and decides on improvements and changes.",
+                    "guidance": "Look for management review minutes covering the required inputs (actions from previous reviews, changes in issues, performance, audit and exercise results, nonconformities, interested party feedback, risks, opportunities) and outputs (decisions on improvement, changes and resources).",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "9.3.a",
+                            "text": "Management reviews are held at planned intervals and recorded.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.3.b",
+                            "text": "Reviews consider performance, audit and exercise results, nonconformities, changes and interested party feedback.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.3.c",
+                            "text": "Reviews result in decisions on improvement, changes to the BCMS and resources.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                }
+            ]
+        },
+        {
+            "number": "10",
+            "code": "10",
+            "name": "Improvement",
+            "controls": [
+                {
+                    "id": "10.1",
+                    "number": "10.1",
+                    "title": "Nonconformity and corrective action",
+                    "text": "",
+                    "description": "When a nonconformity occurs, the organization reacts, finds the cause, takes corrective action and checks the action worked.",
+                    "guidance": "Expect a nonconformity and corrective action log with root cause analysis, actions, owners, due dates and effectiveness checks.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "10.1.a",
+                            "text": "Nonconformities are recorded with their causes.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "10.1.b",
+                            "text": "Corrective actions are taken and their effectiveness is reviewed.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                },
+                {
+                    "id": "10.2",
+                    "number": "10.2",
+                    "title": "Continual improvement",
+                    "text": "",
+                    "description": "The organization continually improves the suitability, adequacy and effectiveness of the BCMS.",
+                    "guidance": "Look for improvement actions drawn from audits, exercises, incidents, management review and performance data, and evidence they are implemented.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "10.2.a",
+                            "text": "Improvement opportunities are identified from audits, exercises, incidents and reviews.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "10.2.b",
+                            "text": "Improvement actions are implemented and tracked.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso22301"
+                }
+            ]
+        }
+    ]
+}
