@@ -163,6 +163,7 @@ class Poam
         'us-ct-dpa' => 'none',
         'us-co-cpa' => 'none',
         'us-tx-dpsa' => 'none',
+        'us-or-cpa' => 'none',
         'nydfs-500' => 'none',
         'nis2' => 'none',
         'dora' => 'none',

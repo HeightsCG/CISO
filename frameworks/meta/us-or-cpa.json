@@ -1,0 +1,143 @@
+{
+    "key": "us-or-cpa",
+    "name": "Oregon Consumer Privacy Act",
+    "version": "ORS 2025 edition",
+    "full_name": "Oregon Consumer Privacy Act (Oregon Revised Statutes 646A.570 to 646A.589)",
+    "issuing_body": "State of Oregon; published by the Oregon Legislature",
+    "standard_codes": [
+        "US-OR-CPA"
+    ],
+    "aliases": [
+        "OCPA",
+        "Oregon OCPA",
+        "Oregon Consumer Privacy Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against ORS 646A.570 to 646A.589 as published in the Oregon Revised Statutes chapter 646A page of the Oregon Legislature.",
+    "sources": [
+        {
+            "id": "ors",
+            "title": "Oregon Revised Statutes, chapter 646A (chapter page)",
+            "version": "2025 edition, as published November 2026",
+            "publisher": "Oregon Legislature, Legislative Counsel Committee",
+            "url": "https://www.oregonlegislature.gov/bills_laws/ors/ors646a.html",
+            "file": "us-or-cpa/ors646a.html",
+            "sha256": "306c4aedd2e9d201389b4f90ede3c3d3373b7f62ec2d0cd497c5dcbd3f656de1"
+        }
+    ],
+    "source_of": {
+        "controls": "ors",
+        "objectives": "ors"
+    },
+    "control_flags": {
+        "objectives": "The lettered paragraphs of a subsection whose lead-in states the duty; each is required unless the lead-in makes them a choice."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "ors",
+            "cite": "ORS 646A.574 to 646A.586"
+        },
+        {
+            "id": "thresholds",
+            "type": "applicability",
+            "summary": "The Act applies to a business that conducts business in Oregon or serves Oregon residents and, in a calendar year, controls or processes personal data of 100,000 or more consumers, or of 25,000 or more while earning over 25% of gross revenue from selling personal data.",
+            "source": "ors",
+            "cite": "ORS 646A.572(1)",
+            "quote": "100,000 or more consumers"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "646A.576(5)",
+            "days": 45,
+            "from": "receipt of the request",
+            "summary": "A consumer request is answered without undue delay and within 45 days of receipt; the period may be extended once by 45 days.",
+            "source": "ors",
+            "cite": "ORS 646A.576(5)(a)",
+            "quote": "not later than 45 days after receiving the request"
+        },
+        {
+            "id": "assessment_retention",
+            "type": "retention",
+            "control": "646A.586(6)",
+            "years": 5,
+            "from": "the assessment",
+            "summary": "Data protection assessments are kept for at least five years.",
+            "source": "ors",
+            "cite": "ORS 646A.586(6)",
+            "quote": "A controller shall retain for at least five years all data protection assessments"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "The Attorney General can seek a civil penalty of up to $7,500 for each violation, or an injunction.",
+            "source": "ors",
+            "cite": "ORS 646A.589(4)(a)",
+            "quote": "civil penalty of not more than $7,500 for each violation"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "OCPA",
+            "definition": "The Oregon Consumer Privacy Act, Oregon's comprehensive consumer privacy law, in force since 1 July 2024."
+        },
+        {
+            "term": "Controller",
+            "definition": "The person that, alone or jointly with others, determines the purpose and means of processing personal data."
+        },
+        {
+            "term": "Processor",
+            "definition": "A person that processes personal data on behalf of a controller."
+        },
+        {
+            "term": "Sensitive data",
+            "definition": "Personal data revealing racial or ethnic origin, religious beliefs, health diagnosis, sexual orientation, citizenship or immigration status; genetic or biometric data used to identify a person; data of a known child; and precise geolocation data."
+        },
+        {
+            "term": "Data protection assessment",
+            "definition": "A documented assessment, required before targeted advertising, sale of personal data, certain profiling and processing of sensitive data, that weighs the benefits of processing against the risks to consumers."
+        }
+    ]
+}

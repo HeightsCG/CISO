@@ -1,0 +1,611 @@
+{
+    "key": "us-or-cpa",
+    "name": "Oregon Consumer Privacy Act",
+    "version": "ORS 2025 edition",
+    "full_name": "Oregon Consumer Privacy Act (Oregon Revised Statutes 646A.570 to 646A.589)",
+    "issuing_body": "State of Oregon; published by the Oregon Legislature",
+    "standard_codes": [
+        "US-OR-CPA"
+    ],
+    "aliases": [
+        "OCPA",
+        "Oregon OCPA",
+        "Oregon Consumer Privacy Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against ORS 646A.570 to 646A.589 as published in the Oregon Revised Statutes chapter 646A page of the Oregon Legislature.",
+    "sources": [
+        {
+            "id": "ors",
+            "title": "Oregon Revised Statutes, chapter 646A (chapter page)",
+            "version": "2025 edition, as published November 2026",
+            "publisher": "Oregon Legislature, Legislative Counsel Committee",
+            "url": "https://www.oregonlegislature.gov/bills_laws/ors/ors646a.html",
+            "file": "us-or-cpa/ors646a.html",
+            "sha256": "306c4aedd2e9d201389b4f90ede3c3d3373b7f62ec2d0cd497c5dcbd3f656de1"
+        }
+    ],
+    "source_of": {
+        "controls": "ors",
+        "objectives": "ors"
+    },
+    "control_flags": {
+        "objectives": "The lettered paragraphs of a subsection whose lead-in states the duty; each is required unless the lead-in makes them a choice."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement is met only when every element it lists is met.",
+            "source": "ors",
+            "cite": "ORS 646A.574 to 646A.586"
+        },
+        {
+            "id": "thresholds",
+            "type": "applicability",
+            "summary": "The Act applies to a business that conducts business in Oregon or serves Oregon residents and, in a calendar year, controls or processes personal data of 100,000 or more consumers, or of 25,000 or more while earning over 25% of gross revenue from selling personal data.",
+            "source": "ors",
+            "cite": "ORS 646A.572(1)",
+            "quote": "100,000 or more consumers"
+        },
+        {
+            "id": "request_deadline",
+            "type": "deadline",
+            "control": "646A.576(5)",
+            "days": 45,
+            "from": "receipt of the request",
+            "summary": "A consumer request is answered without undue delay and within 45 days of receipt; the period may be extended once by 45 days.",
+            "source": "ors",
+            "cite": "ORS 646A.576(5)(a)",
+            "quote": "not later than 45 days after receiving the request"
+        },
+        {
+            "id": "assessment_retention",
+            "type": "retention",
+            "control": "646A.586(6)",
+            "years": 5,
+            "from": "the assessment",
+            "summary": "Data protection assessments are kept for at least five years.",
+            "source": "ors",
+            "cite": "ORS 646A.586(6)",
+            "quote": "A controller shall retain for at least five years all data protection assessments"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "The Attorney General can seek a civil penalty of up to $7,500 for each violation, or an injunction.",
+            "source": "ors",
+            "cite": "ORS 646A.589(4)(a)",
+            "quote": "civil penalty of not more than $7,500 for each violation"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "OCPA",
+            "definition": "The Oregon Consumer Privacy Act, Oregon's comprehensive consumer privacy law, in force since 1 July 2024."
+        },
+        {
+            "term": "Controller",
+            "definition": "The person that, alone or jointly with others, determines the purpose and means of processing personal data."
+        },
+        {
+            "term": "Processor",
+            "definition": "A person that processes personal data on behalf of a controller."
+        },
+        {
+            "term": "Sensitive data",
+            "definition": "Personal data revealing racial or ethnic origin, religious beliefs, health diagnosis, sexual orientation, citizenship or immigration status; genetic or biometric data used to identify a person; data of a known child; and precise geolocation data."
+        },
+        {
+            "term": "Data protection assessment",
+            "definition": "A documented assessment, required before targeted advertising, sale of personal data, certain profiling and processing of sensitive data, that weighs the benefits of processing against the risks to consumers."
+        }
+    ],
+    "display_name": "Oregon Consumer Privacy Act (ORS 2025 edition)",
+    "counts": {
+        "families": 6,
+        "controls": 17,
+        "objectives": 41
+    },
+    "families": [
+        {
+            "number": "646A.574",
+            "code": "ORS 646A.574",
+            "name": "Consumer requests for personal data; requirement to correct inaccuracies; requirement to delete personal data; conditions under which consumer may opt out of personal data processing; format for providing copy of personal data to consumer",
+            "controls": [
+                {
+                    "id": "646A.574(2)",
+                    "number": "646A.574(2)",
+                    "text": "A controller that provides a copy of personal data to a consumer under subsection (1)(a)(C) of this section shall provide the personal data in a portable and, to the extent technically feasible, readily usable format that allows the consumer to transmit the personal data to another person without hindrance.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ors"
+                }
+            ]
+        },
+        {
+            "number": "646A.576",
+            "code": "ORS 646A.576",
+            "name": "Method for requesting personal data; persons who may request personal data on consumer's behalf; designation by consumer; duties of controller; process for appealing controller's refusal of consumer request",
+            "controls": [
+                {
+                    "id": "646A.576(2)",
+                    "number": "646A.576(2)",
+                    "text": "A controller may not require a consumer to create an account for the purpose described in subsection (1) of this section, but the controller may require the consumer to use an account the consumer created previously.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ors"
+                },
+                {
+                    "id": "646A.576(4)",
+                    "number": "646A.576(4)",
+                    "text": "A consumer may designate another person to act on the consumer's behalf as the consumer's authorized agent for the purpose of opting out of a controller's processing of the consumer's personal data, as provided in ORS 646A.574 (1)(d). The consumer may designate an authorized agent by means of an internet link, browser setting, browser extension, global device setting or other technology that enables the consumer to opt out of the controller's processing of the consumer's personal data. A controller shall comply with an opt-out request the controller receives from an authorized agent if the controller can verify, with commercially reasonable effort, the identity of the consumer and the authorized agent's authority to act on the consumer's behalf.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ors"
+                },
+                {
+                    "id": "646A.576(5)",
+                    "number": "646A.576(5)",
+                    "text": "Except as otherwise provided in ORS 646A.570 to 646A.589, in responding to a request under subsection (1) of this section, a controller shall: (a) Respond to a request from a consumer without undue delay and not later than 45 days after receiving the request. The controller may extend the period within which the controller responds by an additional 45 days if the extension is reasonably necessary to comply with the consumer's request, taking into consideration the complexity of the request and the number of requests the consumer makes. A controller that intends to extend the period for responding shall notify the consumer within the initial 45-day response period and explain the reason for the extension. (b) Notify the consumer without undue delay and not later than 45 days after receiving the consumer's request if the controller declines to take action on the request. The controller in the notice shall explain the justification for not taking action and include instructions for appealing the controller's decision. (c) Provide information the consumer requests once during any 12-month period without charge to the consumer. A controller may charge a reasonable fee to cover the administrative costs of complying with a second or subsequent request within the 12-month period, unless the purpose of the second or subsequent request is to verify that the controller corrected inaccuracies in, or deleted, the consumer's personal data in compliance with the consumer's request. (d) Notify the consumer if the controller cannot, using commercially reasonable methods, authenticate the consumer's request without additional information from the consumer. A controller that sends a notification under this paragraph does not have to comply with the request until the consumer provides the information necessary to authenticate the request. (e) Comply with a request under ORS 646A.574 (1)(d) to opt out of the controller's processing of the consumer's personal data without requiring authentication, except that: (A) A controller may ask for additional information necessary to comply with the request, such as information that is necessary to identify the consumer that requested to opt out. (B) A controller may deny a request to opt out if the controller has a good-faith, reasonable and documented belief that the request is fraudulent. If the controller denies a request under this subparagraph, the controller shall notify the consumer that the controller believes the request is fraudulent, stating in the notice that the controller will not comply with the request.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "646A.576(5)(a)",
+                            "text": "Respond to a request from a consumer without undue delay and not later than 45 days after receiving the request. The controller may extend the period within which the controller responds by an additional 45 days if the extension is reasonably necessary to comply with the consumer's request, taking into consideration the complexity of the request and the number of requests the consumer makes. A controller that intends to extend the period for responding shall notify the consumer within the initial 45-day response period and explain the reason for the extension.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.576(5)(b)",
+                            "text": "Notify the consumer without undue delay and not later than 45 days after receiving the consumer's request if the controller declines to take action on the request. The controller in the notice shall explain the justification for not taking action and include instructions for appealing the controller's decision.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.576(5)(c)",
+                            "text": "Provide information the consumer requests once during any 12-month period without charge to the consumer. A controller may charge a reasonable fee to cover the administrative costs of complying with a second or subsequent request within the 12-month period, unless the purpose of the second or subsequent request is to verify that the controller corrected inaccuracies in, or deleted, the consumer's personal data in compliance with the consumer's request.",
+                            "description": "Except as otherwise provided in ORS 646A.570 to 646A.589, in responding to a request under subsection (1) of this section, a controller shall provide information the consumer requests once during any 12-month period without charge to the consumer. A controller may charge a reasonable fee to cover the administrative costs of complying with a second or subsequent request within the 12-month period, unless the purpose of the second or subsequent request is to verify that the controller corrected inaccuracies in, or deleted, the consumer's personal data in compliance with the consumer's request.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.576(5)(d)",
+                            "text": "Notify the consumer if the controller cannot, using commercially reasonable methods, authenticate the consumer's request without additional information from the consumer. A controller that sends a notification under this paragraph does not have to comply with the request until the consumer provides the information necessary to authenticate the request.",
+                            "description": "Except as otherwise provided in ORS 646A.570 to 646A.589, in responding to a request under subsection (1) of this section, a controller shall notify the consumer if the controller cannot, using commercially reasonable methods, authenticate the consumer's request without additional information from the consumer. A controller that sends a notification under this paragraph does not have to comply with the request until the consumer provides the information necessary to authenticate the request.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.576(5)(e)",
+                            "text": "Comply with a request under ORS 646A.574 (1)(d) to opt out of the controller's processing of the consumer's personal data without requiring authentication, except that: (A) A controller may ask for additional information necessary to comply with the request, such as information that is necessary to identify the consumer that requested to opt out. (B) A controller may deny a request to opt out if the controller has a good-faith, reasonable and documented belief that the request is fraudulent. If the controller denies a request under this subparagraph, the controller shall notify the consumer that the controller believes the request is fraudulent, stating in the notice that the controller will not comply with the request.",
+                            "source": "ors"
+                        }
+                    ],
+                    "source": "ors"
+                },
+                {
+                    "id": "646A.576(6)",
+                    "number": "646A.576(6)",
+                    "text": "A controller shall establish a process by means of which a consumer may appeal the controller's refusal to take action on a request under subsection (1) of this section. The controller's process must: (a) Allow a reasonable period of time after the consumer receives the controller's refusal within which to appeal; (b) Be conspicuously available to the consumer; (c) Be similar to the manner in which a consumer must submit a request under subsection (1) of this section; and (d) Require the controller to approve or deny the appeal within 45 days after the date on which the controller received the appeal and to notify the consumer in writing of the controller's decision and the reasons for the decision. If the controller denies the appeal, the notice must provide or specify information that enables the consumer to contact the Attorney General to submit a complaint.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "646A.576(6)(a)",
+                            "text": "Allow a reasonable period of time after the consumer receives the controller's refusal within which to appeal;",
+                            "description": "A controller shall establish a process by means of which a consumer may appeal the controller's refusal to take action on a request under subsection (1) of this section. The controller's process must allow a reasonable period of time after the consumer receives the controller's refusal within which to appeal.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.576(6)(b)",
+                            "text": "Be conspicuously available to the consumer;",
+                            "description": "A controller shall establish a process by means of which a consumer may appeal the controller's refusal to take action on a request under subsection (1) of this section. The controller's process must be conspicuously available to the consumer.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.576(6)(c)",
+                            "text": "Be similar to the manner in which a consumer must submit a request under subsection (1) of this section; and",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.576(6)(d)",
+                            "text": "Require the controller to approve or deny the appeal within 45 days after the date on which the controller received the appeal and to notify the consumer in writing of the controller's decision and the reasons for the decision. If the controller denies the appeal, the notice must provide or specify information that enables the consumer to contact the Attorney General to submit a complaint.",
+                            "source": "ors"
+                        }
+                    ],
+                    "source": "ors"
+                }
+            ]
+        },
+        {
+            "number": "646A.578",
+            "code": "ORS 646A.578",
+            "name": "Duties of controller; prohibitions; privacy notice to consumer",
+            "controls": [
+                {
+                    "id": "646A.578(1)",
+                    "number": "646A.578(1)",
+                    "text": "A controller shall: (a) Specify in the privacy notice described in subsection (4) of this section the express purposes for which the controller is collecting and processing personal data; (b) Limit the controller's collection of personal data to only the personal data that is adequate, relevant and reasonably necessary to serve the purposes the controller specified in paragraph (a) of this subsection; (c) Establish, implement and maintain for personal data the same safeguards described in ORS 646A.622 that are required for protecting personal information, as defined in ORS 646A.602, such that the controller's safeguards protect the confidentiality, integrity and accessibility of the personal data to the extent appropriate for the volume and nature of the personal data; and (d) Provide an effective means by which a consumer may revoke consent a consumer gave under ORS 646A.570 to 646A.589 to the controller's processing of the consumer's personal data. The means must be at least as easy as the means by which the consumer provided consent. Once the consumer revokes consent, the controller shall cease processing the personal data as soon as is practicable, but not later than 15 days after receiving the revocation.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "646A.578(1)(a)",
+                            "text": "Specify in the privacy notice described in subsection (4) of this section the express purposes for which the controller is collecting and processing personal data;",
+                            "description": "A controller shall specify in the privacy notice described in subsection (4) of this section the express purposes for which the controller is collecting and processing personal data.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(1)(b)",
+                            "text": "Limit the controller's collection of personal data to only the personal data that is adequate, relevant and reasonably necessary to serve the purposes the controller specified in paragraph (a) of this subsection;",
+                            "description": "A controller shall limit the controller's collection of personal data to only the personal data that is adequate, relevant and reasonably necessary to serve the purposes the controller specified in paragraph (a) of this subsection.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(1)(c)",
+                            "text": "Establish, implement and maintain for personal data the same safeguards described in ORS 646A.622 that are required for protecting personal information, as defined in ORS 646A.602, such that the controller's safeguards protect the confidentiality, integrity and accessibility of the personal data to the extent appropriate for the volume and nature of the personal data; and",
+                            "description": "A controller shall establish, implement and maintain for personal data the same safeguards described in ORS 646A.622 that are required for protecting personal information, as defined in ORS 646A.602, such that the controller's safeguards protect the confidentiality, integrity and accessibility of the personal data to the extent appropriate for the volume and nature of the personal data.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(1)(d)",
+                            "text": "Provide an effective means by which a consumer may revoke consent a consumer gave under ORS 646A.570 to 646A.589 to the controller's processing of the consumer's personal data. The means must be at least as easy as the means by which the consumer provided consent. Once the consumer revokes consent, the controller shall cease processing the personal data as soon as is practicable, but not later than 15 days after receiving the revocation.",
+                            "source": "ors"
+                        }
+                    ],
+                    "source": "ors"
+                },
+                {
+                    "id": "646A.578(2)",
+                    "number": "646A.578(2)",
+                    "text": "A controller may not: (a) Process personal data for purposes that are not reasonably necessary for and compatible with the purposes the controller specified in subsection (1)(a) of this section, unless the controller obtains the consumer's consent. (b) Process sensitive data about a consumer without first obtaining the consumer's consent or, if the controller knows the consumer is a child, without processing the sensitive data in accordance with the Children's Online Privacy Protection Act of 1998, 15 U.S.C. 6501 et seq. and the regulations, rules and guidance adopted under the Act, all as in effect on January 1, 2024. (c) Process a consumer's personal data for the purposes of targeted advertising or of profiling the consumer in furtherance of decisions that produce legal effects or effects of similar significance if the controller has actual knowledge that, or willfully disregards whether, the consumer is under 16 years of age. (d) Sell personal data that: (A) Pertains to a consumer if the controller has actual knowledge that, or willfully disregards whether, the consumer is under 16 years of age; or (B) Accurately identifies within a radius of 1,750 feet a consumer's present or past location, or the present or past location of a device that links or is linkable to a consumer by means of technology that includes, but is not limited to, a global positioning system that provides latitude and longitude coordinates, except that personal data that is not subject to sale under this subparagraph does not include the content of communications or any data generated by or connected to advanced utility metering infrastructure systems or equipment for use by a utility. (e) Discriminate against a consumer that exercises a right provided to the consumer under ORS 646A.570 to 646A.589 by means such as denying goods or services, charging different prices or rates for goods or services or providing a different level of quality or selection of goods or services to the consumer.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "646A.578(2)(a)",
+                            "text": "Process personal data for purposes that are not reasonably necessary for and compatible with the purposes the controller specified in subsection (1)(a) of this section, unless the controller obtains the consumer's consent.",
+                            "description": "A controller may not process personal data for purposes that are not reasonably necessary for and compatible with the purposes the controller specified in subsection (1)(a) of this section, unless the controller obtains the consumer's consent.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(2)(b)",
+                            "text": "Process sensitive data about a consumer without first obtaining the consumer's consent or, if the controller knows the consumer is a child, without processing the sensitive data in accordance with the Children's Online Privacy Protection Act of 1998, 15 U.S.C. 6501 et seq. and the regulations, rules and guidance adopted under the Act, all as in effect on January 1, 2024.",
+                            "description": "A controller may not process sensitive data about a consumer without first obtaining the consumer's consent or, if the controller knows the consumer is a child, without processing the sensitive data in accordance with the Children's Online Privacy Protection Act of 1998, 15 U.S.C. 6501 et seq. and the regulations, rules and guidance adopted under the Act, all as in effect on January 1, 2024.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(2)(c)",
+                            "text": "Process a consumer's personal data for the purposes of targeted advertising or of profiling the consumer in furtherance of decisions that produce legal effects or effects of similar significance if the controller has actual knowledge that, or willfully disregards whether, the consumer is under 16 years of age.",
+                            "description": "A controller may not process a consumer's personal data for the purposes of targeted advertising or of profiling the consumer in furtherance of decisions that produce legal effects or effects of similar significance if the controller has actual knowledge that, or willfully disregards whether, the consumer is under 16 years of age.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(2)(d)",
+                            "text": "Sell personal data that: (A) Pertains to a consumer if the controller has actual knowledge that, or willfully disregards whether, the consumer is under 16 years of age; or (B) Accurately identifies within a radius of 1,750 feet a consumer's present or past location, or the present or past location of a device that links or is linkable to a consumer by means of technology that includes, but is not limited to, a global positioning system that provides latitude and longitude coordinates, except that personal data that is not subject to sale under this subparagraph does not include the content of communications or any data generated by or connected to advanced utility metering infrastructure systems or equipment for use by a utility.",
+                            "description": "A controller may not sell personal data that: (A) Pertains to a consumer if the controller has actual knowledge that, or willfully disregards whether, the consumer is under 16 years of age; or (B) Accurately identifies within a radius of 1,750 feet a consumer's present or past location, or the present or past location of a device that links or is linkable to a consumer by means of technology that includes, but is not limited to, a global positioning system that provides latitude and longitude coordinates, except that personal data that is not subject to sale under this subparagraph does not include the content of communications or any data generated by or connected to advanced utility metering infrastructure systems or equipment for use by a utility.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(2)(e)",
+                            "text": "Discriminate against a consumer that exercises a right provided to the consumer under ORS 646A.570 to 646A.589 by means such as denying goods or services, charging different prices or rates for goods or services or providing a different level of quality or selection of goods or services to the consumer.",
+                            "description": "A controller may not discriminate against a consumer that exercises a right provided to the consumer under ORS 646A.570 to 646A.589 by means such as denying goods or services, charging different prices or rates for goods or services or providing a different level of quality or selection of goods or services to the consumer.",
+                            "source": "ors"
+                        }
+                    ],
+                    "source": "ors"
+                },
+                {
+                    "id": "646A.578(4)",
+                    "number": "646A.578(4)",
+                    "text": "A controller shall provide to consumers a reasonably accessible, clear and meaningful privacy notice that: (a) Lists the categories of personal data, including the categories of sensitive data, that the controller processes; (b) Describes the controller's purposes for processing the personal data; (c) Describes how a consumer may exercise the consumer's rights under ORS 646A.570 to 646A.589, including how a consumer may appeal a controller's denial of a consumer's request under ORS 646A.576; (d) Lists all categories of personal data, including the categories of sensitive data, that the controller shares with third parties; (e) Describes all categories of third parties with which the controller shares personal data at a level of detail that enables the consumer to understand what type of entity each third party is and, to the extent possible, how each third party may process personal data; (f) Specifies an electronic mail address or other online method by which a consumer can contact the controller that the controller actively monitors; (g) Identifies the controller, including any business name under which the controller registered with the Secretary of State and any assumed business name that the controller uses in this state; (h) Provides a clear and conspicuous description of any processing of personal data in which the controller engages for the purpose of targeted advertising or for the purpose of profiling the consumer in furtherance of decisions that produce legal effects or effects of similar significance, and a procedure by which the consumer may opt out of this type of processing; and (i) Describes the method or methods the controller has established for a consumer to submit a request under ORS 646A.576 (1).",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "646A.578(4)(a)",
+                            "text": "Lists the categories of personal data, including the categories of sensitive data, that the controller processes;",
+                            "description": "A controller shall provide to consumers a reasonably accessible, clear and meaningful privacy notice that lists the categories of personal data, including the categories of sensitive data, that the controller processes.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(4)(b)",
+                            "text": "Describes the controller's purposes for processing the personal data;",
+                            "description": "A controller shall provide to consumers a reasonably accessible, clear and meaningful privacy notice that describes the controller's purposes for processing the personal data.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(4)(c)",
+                            "text": "Describes how a consumer may exercise the consumer's rights under ORS 646A.570 to 646A.589, including how a consumer may appeal a controller's denial of a consumer's request under ORS 646A.576;",
+                            "description": "A controller shall provide to consumers a reasonably accessible, clear and meaningful privacy notice that describes how a consumer may exercise the consumer's rights under ORS 646A.570 to 646A.589, including how a consumer may appeal a controller's denial of a consumer's request under ORS 646A.576.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(4)(d)",
+                            "text": "Lists all categories of personal data, including the categories of sensitive data, that the controller shares with third parties;",
+                            "description": "A controller shall provide to consumers a reasonably accessible, clear and meaningful privacy notice that lists all categories of personal data, including the categories of sensitive data, that the controller shares with third parties.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(4)(e)",
+                            "text": "Describes all categories of third parties with which the controller shares personal data at a level of detail that enables the consumer to understand what type of entity each third party is and, to the extent possible, how each third party may process personal data;",
+                            "description": "A controller shall provide to consumers a reasonably accessible, clear and meaningful privacy notice that describes all categories of third parties with which the controller shares personal data at a level of detail that enables the consumer to understand what type of entity each third party is and, to the extent possible, how each third party may process personal data.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(4)(f)",
+                            "text": "Specifies an electronic mail address or other online method by which a consumer can contact the controller that the controller actively monitors;",
+                            "description": "A controller shall provide to consumers a reasonably accessible, clear and meaningful privacy notice that specifies an electronic mail address or other online method by which a consumer can contact the controller that the controller actively monitors.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(4)(g)",
+                            "text": "Identifies the controller, including any business name under which the controller registered with the Secretary of State and any assumed business name that the controller uses in this state;",
+                            "description": "A controller shall provide to consumers a reasonably accessible, clear and meaningful privacy notice that identifies the controller, including any business name under which the controller registered with the Secretary of State and any assumed business name that the controller uses in this state.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(4)(h)",
+                            "text": "Provides a clear and conspicuous description of any processing of personal data in which the controller engages for the purpose of targeted advertising or for the purpose of profiling the consumer in furtherance of decisions that produce legal effects or effects of similar significance, and a procedure by which the consumer may opt out of this type of processing; and",
+                            "description": "A controller shall provide to consumers a reasonably accessible, clear and meaningful privacy notice that provides a clear and conspicuous description of any processing of personal data in which the controller engages for the purpose of targeted advertising or for the purpose of profiling the consumer in furtherance of decisions that produce legal effects or effects of similar significance, and a procedure by which the consumer may opt out of this type of processing.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(4)(i)",
+                            "text": "Describes the method or methods the controller has established for a consumer to submit a request under ORS 646A.576 (1).",
+                            "description": "A controller shall provide to consumers a reasonably accessible, clear and meaningful privacy notice that describes the method or methods the controller has established for a consumer to submit a request under ORS 646A.576 (1).",
+                            "source": "ors"
+                        }
+                    ],
+                    "source": "ors"
+                },
+                {
+                    "id": "646A.578(5)",
+                    "number": "646A.578(5)",
+                    "text": "The method or methods described in subsection (4)(i) of this section for submitting a consumer's request to a controller must: (a) Take into account: (A) Ways in which consumers normally interact with the controller; (B) A need for security and reliability in communications related to the request; and (C) The controller's ability to authenticate the identity of the consumer that makes the request; (b) Provide a clear and conspicuous link to a webpage where the consumer or an authorized agent may opt out from a controller's processing of the consumer's personal data as described in ORS 646A.574 (1)(d) or, solely if the controller does not have a capacity needed for linking to a webpage, provide another method the consumer can use to opt out; and (c) Allow a consumer or authorized agent to send a signal to the controller that indicates the consumer's preference to opt out of the sale of personal data or targeted advertising under ORS 646A.574 (1)(d) by means of a platform, technology or mechanism that: (A) Does not unfairly disadvantage another controller; (B) Does not use a default setting but instead requires the consumer or authorized agent to make an affirmative, voluntary and unambiguous choice to opt out; (C) Is consumer friendly and easy for an average consumer to use; (D) Is as consistent as possible with similar platforms, technologies or mechanisms required under federal or state laws or regulations; and (E) Enables the controller to accurately determine whether the consumer is a resident of this state and has made a legitimate request under ORS 646A.576 to opt out as described in ORS 646A.574 (1)(d).",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "646A.578(5)(a)",
+                            "text": "Take into account: (A) Ways in which consumers normally interact with the controller; (B) A need for security and reliability in communications related to the request; and (C) The controller's ability to authenticate the identity of the consumer that makes the request;",
+                            "description": "The method or methods described in subsection (4)(i) of this section for submitting a consumer's request to a controller must take into account: (A) Ways in which consumers normally interact with the controller; (B) A need for security and reliability in communications related to the request; and (C) The controller's ability to authenticate the identity of the consumer that makes the request.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(5)(b)",
+                            "text": "Provide a clear and conspicuous link to a webpage where the consumer or an authorized agent may opt out from a controller's processing of the consumer's personal data as described in ORS 646A.574 (1)(d) or, solely if the controller does not have a capacity needed for linking to a webpage, provide another method the consumer can use to opt out; and",
+                            "description": "The method or methods described in subsection (4)(i) of this section for submitting a consumer's request to a controller must provide a clear and conspicuous link to a webpage where the consumer or an authorized agent may opt out from a controller's processing of the consumer's personal data as described in ORS 646A.574 (1)(d) or, solely if the controller does not have a capacity needed for linking to a webpage, provide another method the consumer can use to opt out.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.578(5)(c)",
+                            "text": "Allow a consumer or authorized agent to send a signal to the controller that indicates the consumer's preference to opt out of the sale of personal data or targeted advertising under ORS 646A.574 (1)(d) by means of a platform, technology or mechanism that: (A) Does not unfairly disadvantage another controller; (B) Does not use a default setting but instead requires the consumer or authorized agent to make an affirmative, voluntary and unambiguous choice to opt out; (C) Is consumer friendly and easy for an average consumer to use; (D) Is as consistent as possible with similar platforms, technologies or mechanisms required under federal or state laws or regulations; and (E) Enables the controller to accurately determine whether the consumer is a resident of this state and has made a legitimate request under ORS 646A.576 to opt out as described in ORS 646A.574 (1)(d).",
+                            "description": "The method or methods described in subsection (4)(i) of this section for submitting a consumer's request to a controller must allow a consumer or authorized agent to send a signal to the controller that indicates the consumer's preference to opt out of the sale of personal data or targeted advertising under ORS 646A.574 (1)(d) by means of a platform, technology or mechanism that: (A) Does not unfairly disadvantage another controller; (B) Does not use a default setting but instead requires the consumer or authorized agent to make an affirmative, voluntary and unambiguous choice to opt out; (C) Is consumer friendly and easy for an average consumer to use; (D) Is as consistent as possible with similar platforms, technologies or mechanisms required under federal or state laws or regulations; and (E) Enables the controller to accurately determine whether the consumer is a resident of this state and has made a legitimate request under ORS 646A.576 to opt out as described in ORS 646A.574 (1)(d).",
+                            "source": "ors"
+                        }
+                    ],
+                    "source": "ors"
+                },
+                {
+                    "id": "646A.578(6)",
+                    "number": "646A.578(6)",
+                    "text": "If a consumer or authorized agent uses a method described in subsection (5) of this section to opt out of a controller's processing of the consumer's personal data under ORS 646A.574 (1)(d) and the decision conflicts with a consumer's voluntary participation in a bona fide reward, club card or loyalty program or a program that provides premium features or discounts in return for the consumer's consent to the controller's processing of the consumer's personal data, the controller may either comply with the request to opt out or notify the consumer of the conflict and ask the consumer to affirm that the consumer intends to withdraw from the bona fide reward, club card or loyalty program or the program that provides premium features or discounts. If the consumer affirms that the consumer intends to withdraw, the controller shall comply with the request to opt out.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ors"
+                }
+            ]
+        },
+        {
+            "number": "646A.581",
+            "code": "ORS 646A.581",
+            "name": "Duties of processor of personal data; contract between controller and processor; liabilities of controller and processor",
+            "controls": [
+                {
+                    "id": "646A.581(1)",
+                    "number": "646A.581(1)",
+                    "text": "A processor shall adhere to a controller's instructions and shall assist the controller in meeting the controller's obligations under ORS 646A.570 to 646A.589. In assisting the controller, the processor must: (a) Enable the controller to respond to requests from consumers under ORS 646A.576 by means that take into account how the processor processes personal data and the information available to the processor and that use appropriate technical and organizational measures to the extent reasonably practicable; (b) Adopt administrative, technical and physical safeguards that are reasonably designed to protect the security and confidentiality of the personal data the processor processes, taking into account how the processor processes the personal data and the information available to the processor; and (c) Provide information reasonably necessary for the controller to conduct and document data protection assessments.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "646A.581(1)(a)",
+                            "text": "Enable the controller to respond to requests from consumers under ORS 646A.576 by means that take into account how the processor processes personal data and the information available to the processor and that use appropriate technical and organizational measures to the extent reasonably practicable;",
+                            "description": "A processor shall adhere to a controller's instructions and shall assist the controller in meeting the controller's obligations under ORS 646A.570 to 646A.589. In assisting the controller, the processor must enable the controller to respond to requests from consumers under ORS 646A.576 by means that take into account how the processor processes personal data and the information available to the processor and that use appropriate technical and organizational measures to the extent reasonably practicable.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.581(1)(b)",
+                            "text": "Adopt administrative, technical and physical safeguards that are reasonably designed to protect the security and confidentiality of the personal data the processor processes, taking into account how the processor processes the personal data and the information available to the processor; and",
+                            "description": "A processor shall adhere to a controller's instructions and shall assist the controller in meeting the controller's obligations under ORS 646A.570 to 646A.589. In assisting the controller, the processor must adopt administrative, technical and physical safeguards that are reasonably designed to protect the security and confidentiality of the personal data the processor processes, taking into account how the processor processes the personal data and the information available to the processor.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.581(1)(c)",
+                            "text": "Provide information reasonably necessary for the controller to conduct and document data protection assessments.",
+                            "description": "A processor shall adhere to a controller's instructions and shall assist the controller in meeting the controller's obligations under ORS 646A.570 to 646A.589. In assisting the controller, the processor must provide information reasonably necessary for the controller to conduct and document data protection assessments.",
+                            "source": "ors"
+                        }
+                    ],
+                    "source": "ors"
+                },
+                {
+                    "id": "646A.581(2)",
+                    "number": "646A.581(2)",
+                    "text": "The processor shall enter into a contract with the controller that governs how the processor processes personal data on the controller's behalf. The contract must: (a) Be valid and binding on both parties; (b) Set forth clear instructions for processing data, the nature and purpose of the processing, the type of data that is subject to processing and the duration of the processing; (c) Specify the rights and obligations of both parties with respect to the subject matter of the contract; (d) Ensure that each person that processes personal data is subject to a duty of confidentiality with respect to the personal data; (e) Require the processor to delete the personal data or return the personal data to the controller at the controller's direction or at the end of the provision of services, unless a law requires the processor to retain the personal data; (f) Require the processor to make available to the controller, at the controller's request, all information the controller needs to verify that the processor has complied with all obligations the processor has under ORS 646A.570 to 646A.589; (g) Require the processor to enter into a subcontract with a person the processor engages to assist with processing personal data on the controller's behalf and in the subcontract require the subcontractor to meet the processor's obligations under the processor's contract with the controller; and (h) Allow the controller, the controller's designee or a qualified and independent person the processor engages, in accordance with an appropriate and accepted control standard, framework or procedure, to assess the processor's policies and technical and organizational measures for complying with the processor's obligations under ORS 646A.570 to 646A.589, and require the processor to cooperate with the assessment and, at the controller's request, report the results of the assessment to the controller.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "646A.581(2)(a)",
+                            "text": "Be valid and binding on both parties;",
+                            "description": "The processor shall enter into a contract with the controller that governs how the processor processes personal data on the controller's behalf. The contract must be valid and binding on both parties.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.581(2)(b)",
+                            "text": "Set forth clear instructions for processing data, the nature and purpose of the processing, the type of data that is subject to processing and the duration of the processing;",
+                            "description": "The processor shall enter into a contract with the controller that governs how the processor processes personal data on the controller's behalf. The contract must set forth clear instructions for processing data, the nature and purpose of the processing, the type of data that is subject to processing and the duration of the processing.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.581(2)(c)",
+                            "text": "Specify the rights and obligations of both parties with respect to the subject matter of the contract;",
+                            "description": "The processor shall enter into a contract with the controller that governs how the processor processes personal data on the controller's behalf. The contract must specify the rights and obligations of both parties with respect to the subject matter of the contract.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.581(2)(d)",
+                            "text": "Ensure that each person that processes personal data is subject to a duty of confidentiality with respect to the personal data;",
+                            "description": "The processor shall enter into a contract with the controller that governs how the processor processes personal data on the controller's behalf. The contract must ensure that each person that processes personal data is subject to a duty of confidentiality with respect to the personal data.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.581(2)(e)",
+                            "text": "Require the processor to delete the personal data or return the personal data to the controller at the controller's direction or at the end of the provision of services, unless a law requires the processor to retain the personal data;",
+                            "description": "The processor shall enter into a contract with the controller that governs how the processor processes personal data on the controller's behalf. The contract must require the processor to delete the personal data or return the personal data to the controller at the controller's direction or at the end of the provision of services, unless a law requires the processor to retain the personal data.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.581(2)(f)",
+                            "text": "Require the processor to make available to the controller, at the controller's request, all information the controller needs to verify that the processor has complied with all obligations the processor has under ORS 646A.570 to 646A.589;",
+                            "description": "The processor shall enter into a contract with the controller that governs how the processor processes personal data on the controller's behalf. The contract must require the processor to make available to the controller, at the controller's request, all information the controller needs to verify that the processor has complied with all obligations the processor has under ORS 646A.570 to 646A.589.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.581(2)(g)",
+                            "text": "Require the processor to enter into a subcontract with a person the processor engages to assist with processing personal data on the controller's behalf and in the subcontract require the subcontractor to meet the processor's obligations under the processor's contract with the controller; and",
+                            "description": "The processor shall enter into a contract with the controller that governs how the processor processes personal data on the controller's behalf. The contract must require the processor to enter into a subcontract with a person the processor engages to assist with processing personal data on the controller's behalf and in the subcontract require the subcontractor to meet the processor's obligations under the processor's contract with the controller.",
+                            "source": "ors"
+                        },
+                        {
+                            "id": "646A.581(2)(h)",
+                            "text": "Allow the controller, the controller's designee or a qualified and independent person the processor engages, in accordance with an appropriate and accepted control standard, framework or procedure, to assess the processor's policies and technical and organizational measures for complying with the processor's obligations under ORS 646A.570 to 646A.589, and require the processor to cooperate with the assessment and, at the controller's request, report the results of the assessment to the controller.",
+                            "description": "The processor shall enter into a contract with the controller that governs how the processor processes personal data on the controller's behalf. The contract must allow the controller, the controller's designee or a qualified and independent person the processor engages, in accordance with an appropriate and accepted control standard, framework or procedure, to assess the processor's policies and technical and organizational measures for complying with the processor's obligations under ORS 646A.570 to 646A.589, and require the processor to cooperate with the assessment and, at the controller's request, report the results of the assessment to the controller.",
+                            "source": "ors"
+                        }
+                    ],
+                    "source": "ors"
+                },
+                {
+                    "id": "646A.581(4)",
+                    "number": "646A.581(4)",
+                    "text": "(a) For purposes of determining obligations under ORS 646A.570 to 646A.589, a person is a controller with respect to processing a set of personal data, and is subject to an action under ORS 646A.589 to punish a violation of ORS 646A.570 to 646A.589, if the person: (A) Does not need to adhere to another person's instructions to process the personal data; (B) Does not adhere to another person's instructions with respect to processing the personal data when the person is obligated to do so; or (C) Begins at any point to determine the purposes and means for processing the personal data, alone or in concert with another person. (b) A determination under this subsection is a fact-based determination that must take account of the context in which a set of personal data is processed. (c) A processor that adheres to a controller's instructions with respect to a specific processing of personal data remains a processor.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ors"
+                }
+            ]
+        },
+        {
+            "number": "646A.583",
+            "code": "ORS 646A.583",
+            "name": "Controller's use of deidentified data; exclusions",
+            "controls": [
+                {
+                    "id": "646A.583(1)",
+                    "number": "646A.583(1)",
+                    "text": "(a) A controller that possesses deidentified data shall: (A) Take reasonable measures to ensure that the deidentified data cannot be associated with an individual; (B) Publicly commit to maintaining and using deidentified data without attempting to reidentify the deidentified data; and (C) Enter into a contract with a recipient of the deidentified data and provide in the contract that the recipient must comply with the controller's obligations under ORS 646A.570 to 646A.589. (b) A controller that discloses deidentified data shall exercise reasonable oversight to monitor compliance with any contractual commitments to which the deidentified data is subject and shall take appropriate steps to address any breaches of the contractual commitments. (c) This section does not prohibit a controller from attempting to reidentify deidentified data solely for the purpose of testing the controller's methods for deidentifying data.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ors"
+                }
+            ]
+        },
+        {
+            "number": "646A.586",
+            "code": "ORS 646A.586",
+            "name": "Data protection assessment for processing activities with heightened risk of harm; criteria for conducting data protection assessment; provision to Attorney General; retention of records; confidentiality",
+            "controls": [
+                {
+                    "id": "646A.586(1)",
+                    "number": "646A.586(1)",
+                    "text": "(a) A controller shall conduct and document a data protection assessment for each of the controller's processing activities that presents a heightened risk of harm to a consumer. (b) Processing activities that present a heightened risk of harm to a consumer include: (A) Processing personal data for the purpose of targeted advertising; (B) Processing sensitive data; (C) Selling personal data; and (D) Using the personal data for purposes of profiling, if the profiling presents a reasonably foreseeable risk of: (i) Unfair or deceptive treatment of, or unlawful disparate impact on, consumers; (ii) Financial, physical or reputational injury to consumers; (iii) Physical or other types of intrusion upon a consumer's solitude, seclusion or private affairs or concerns, if the intrusion would be offensive to a reasonable person; or (iv) Other substantial injury to consumers. (c) A single data protection assessment may address a comparable set of processing operations that present a similar heightened risk of harm.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ors"
+                },
+                {
+                    "id": "646A.586(2)",
+                    "number": "646A.586(2)",
+                    "text": "A data protection assessment shall identify and weigh how processing personal data may directly or indirectly benefit the controller, the consumer, other stakeholders and the public against potential risks to the consumer, taking into account how safeguards the controller employs can mitigate the risks. In conducting the assessment, the controller shall consider how deidentified data might reduce risks, the reasonable expectations of consumers, the context in which the data is processed and the relationship between the controller and the consumers whose personal data the controller will process.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ors"
+                },
+                {
+                    "id": "646A.586(6)",
+                    "number": "646A.586(6)",
+                    "text": "A controller shall retain for at least five years all data protection assessments the controller conducts under this section.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "ors"
+                }
+            ]
+        }
+    ]
+}

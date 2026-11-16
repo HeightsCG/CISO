@@ -37,6 +37,11 @@ $source_text = function (array $source): string {
             $text = file_get_contents(Source::path($file));
         }
 
+        // Older Word exports (the Oregon statutes) are Windows-1252, which normalise() cannot read as UTF-8.
+        if (!mb_check_encoding($text, 'UTF-8')) {
+            $text = mb_convert_encoding($text, 'UTF-8', 'Windows-1252');
+        }
+
         $cache[$file] = Source::normalise($text);
     }
 
