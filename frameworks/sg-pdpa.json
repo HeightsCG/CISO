@@ -1,0 +1,851 @@
+{
+    "key": "sg-pdpa",
+    "name": "Singapore PDPA",
+    "version": "2020 Rev. Ed., in force from 16 October 2026",
+    "full_name": "Personal Data Protection Act 2012 (Singapore), 2020 Revised Edition: Parts 3 to 6A",
+    "issuing_body": "Parliament of Singapore; published by the Attorney-General's Chambers on Singapore Statutes Online",
+    "standard_codes": [
+        "SG-PDPA"
+    ],
+    "aliases": [
+        "PDPA",
+        "Personal Data Protection Act 2012",
+        "Singapore Personal Data Protection Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against the informal consolidation of the Personal Data Protection Act 2012 in force from 16 October 2026. The Personal Data Protection Regulations 2021 prescribe details of transfers, access requests and breach notifications and are not part of this assessment. The Do Not Call provisions (Part 9) are not included.",
+    "sources": [
+        {
+            "id": "pdpa",
+            "title": "Personal Data Protection Act 2012, 2020 Revised Edition, informal consolidation (PDF)",
+            "version": "version in force from 16 October 2026",
+            "publisher": "Attorney-General's Chambers, Singapore Statutes Online",
+            "url": "https://sso.agc.gov.sg/Act/PDPA2012?ViewType=Pdf",
+            "file": "sg-pdpa/PDPA2012-2026-10-16.pdf",
+            "date": "2026-10-16",
+            "sha256": "04aa3475bbe5df3a16cc010da05726abdf07f4987534d0695df6cc589bd3cf59"
+        }
+    ],
+    "source_of": {
+        "controls": "pdpa",
+        "objectives": "pdpa"
+    },
+    "control_flags": {
+        "objectives": "The lettered paragraphs of a requirement, only where every one must be met."
+    },
+    "terminology": {
+        "control": "obligation",
+        "controls": "obligations",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable obligations that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "An obligation is met only when every element it lists is met.",
+            "source": "pdpa",
+            "cite": "Personal Data Protection Act 2012, Parts 3 to 6A"
+        },
+        {
+            "id": "data_protection_officer",
+            "type": "applicability",
+            "control": "s 11(3)",
+            "summary": "An organisation designates at least one individual responsible for its compliance with the Act and makes that person's business contact information public.",
+            "source": "pdpa",
+            "cite": "s 11(3)",
+            "quote": "An organisation must designate one or more individuals to be responsible for ensuring that the organisation complies with this Act."
+        },
+        {
+            "id": "reasonable_security",
+            "type": "applicability",
+            "control": "s 24",
+            "summary": "Personal data is protected by reasonable security arrangements against unauthorised access and similar risks, and against loss of storage media.",
+            "source": "pdpa",
+            "cite": "s 24",
+            "quote": "An organisation must protect personal data in its possession or under its control by making reasonable security arrangements"
+        },
+        {
+            "id": "breach_assessment",
+            "type": "applicability",
+            "control": "s 26C(2)",
+            "summary": "A suspected data breach is assessed in a reasonable and expeditious manner to decide whether it is notifiable.",
+            "source": "pdpa",
+            "cite": "s 26C(2)",
+            "quote": "an assessment of whether the data breach is a notifiable data breach."
+        },
+        {
+            "id": "breach_notification",
+            "type": "deadline",
+            "control": "s 26D(1)",
+            "days": 3,
+            "from": "the assessment that the breach is notifiable",
+            "summary": "A notifiable data breach is reported to the Commission as soon as practicable and no later than 3 calendar days after the organisation assesses it as notifiable.",
+            "source": "pdpa",
+            "cite": "s 26D(1)",
+            "quote": "no later than 3 calendar days after the day the organisation makes that assessment."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "The Commission can impose a financial penalty of up to 10% of annual turnover in Singapore for an organisation whose turnover there exceeds $10 million, and up to $1 million in any other case.",
+            "source": "pdpa",
+            "cite": "s 48J(3)",
+            "quote": "10% of the annual turnover in Singapore of the organisation;"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "PDPA",
+            "definition": "The Personal Data Protection Act 2012, Singapore's general law on the collection, use, disclosure and care of personal data by organisations."
+        },
+        {
+            "term": "Commission",
+            "definition": "The Personal Data Protection Commission, which administers and enforces the Act."
+        },
+        {
+            "term": "Organisation",
+            "definition": "Any individual, company, association or body of persons, whether or not formed or recognised under Singapore law; public agencies are excluded."
+        },
+        {
+            "term": "Data intermediary",
+            "definition": "An organisation that processes personal data on behalf of another organisation."
+        },
+        {
+            "term": "Notifiable data breach",
+            "definition": "A data breach that results in, or is likely to result in, significant harm to an affected individual, or that is of a significant scale (500 or more individuals)."
+        }
+    ],
+    "display_name": "Singapore PDPA (2020 Rev. Ed., in force from 16 October 2026)",
+    "counts": {
+        "families": 18,
+        "controls": 40,
+        "objectives": 23
+    },
+    "families": [
+        {
+            "number": "11",
+            "code": "s 11",
+            "name": "Compliance with Act",
+            "part": "Part 3: General rules with respect to protection of and accountability for personal data",
+            "controls": [
+                {
+                    "id": "s 11(1)",
+                    "number": "s 11(1)",
+                    "text": "In meeting its responsibilities under this Act, an organisation must consider what a reasonable person would consider appropriate in the circumstances.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 11(3)",
+                    "number": "s 11(3)",
+                    "text": "An organisation must designate one or more individuals to be responsible for ensuring that the organisation complies with this Act.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 11(5)",
+                    "number": "s 11(5)",
+                    "text": "An organisation must make available to the public the business contact information of at least one of the individuals designated under subsection (3) or delegated under subsection (4).",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "12",
+            "code": "s 12",
+            "name": "Policies and practices",
+            "part": "Part 3: General rules with respect to protection of and accountability for personal data",
+            "controls": [
+                {
+                    "id": "s 12",
+                    "number": "s 12",
+                    "text": "An organisation must - (a) develop and implement policies and practices that are necessary for the organisation to meet the obligations of the organisation under this Act; (b) develop a process to receive and respond to complaints that may arise with respect to the application of this Act; (c) communicate to its staff information about the organisation's policies and practices mentioned in paragraph (a); and (d) make information available on request about - (i) the policies and practices mentioned in paragraph (a); and (ii) the complaint process mentioned in paragraph (b).",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "s 12(a)",
+                            "text": "develop and implement policies and practices that are necessary for the organisation to meet the obligations of the organisation under this Act;",
+                            "description": "An organisation must develop and implement policies and practices that are necessary for the organisation to meet the obligations of the organisation under this Act.",
+                            "source": "pdpa"
+                        },
+                        {
+                            "id": "s 12(b)",
+                            "text": "develop a process to receive and respond to complaints that may arise with respect to the application of this Act;",
+                            "description": "An organisation must develop a process to receive and respond to complaints that may arise with respect to the application of this Act.",
+                            "source": "pdpa"
+                        },
+                        {
+                            "id": "s 12(c)",
+                            "text": "communicate to its staff information about the organisation's policies and practices mentioned in paragraph (a); and",
+                            "description": "An organisation must communicate to its staff information about the organisation's policies and practices mentioned in paragraph (a).",
+                            "source": "pdpa"
+                        },
+                        {
+                            "id": "s 12(d)",
+                            "text": "make information available on request about - (i) the policies and practices mentioned in paragraph (a); and (ii) the complaint process mentioned in paragraph (b).",
+                            "description": "An organisation must make information available on request about - (i) the policies and practices mentioned in paragraph (a); and (ii) the complaint process mentioned in paragraph (b).",
+                            "source": "pdpa"
+                        }
+                    ],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "13",
+            "code": "s 13",
+            "name": "Consent required",
+            "part": "Part 4: Collection, use and disclosure of personal data",
+            "controls": [
+                {
+                    "id": "s 13",
+                    "number": "s 13",
+                    "text": "An organisation must not, on or after 2 July 2014, collect, use or disclose personal data about an individual unless - (a) the individual gives, or is deemed to have given, his or her consent under this Act to the collection, use or disclosure, as the case may be; or (b) the collection, use or disclosure (as the case may be) without the individual's consent is required or authorised under this Act or any other written law.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "14",
+            "code": "s 14",
+            "name": "Provision of consent",
+            "part": "Part 4: Collection, use and disclosure of personal data",
+            "controls": [
+                {
+                    "id": "s 14(2)",
+                    "number": "s 14(2)",
+                    "text": "An organisation must not - (a) as a condition of providing a product or service, require an individual to consent to the collection, use or disclosure of personal data about the individual beyond what is reasonable to provide the product or service to that individual; or (b) obtain or attempt to obtain consent for collecting, using or disclosing personal data by providing false or misleading information with respect to the collection, use or disclosure of the personal data, or using deceptive or misleading practices. (3) Any consent given in any of the circumstances in subsection (2) is not validly given for the purposes of this Act. (4) In this Act, references to consent given, or deemed to have been given, by an individual for the collection, use or disclosure of personal data about the individual include consent given, or deemed to have been given, by any person validly acting on that individual's behalf for the collection, use or disclosure of such personal data.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "15A",
+            "code": "s 15A",
+            "name": "Deemed consent by notification",
+            "part": "Part 4: Collection, use and disclosure of personal data",
+            "controls": [
+                {
+                    "id": "s 15A(4)",
+                    "number": "s 15A(4)",
+                    "text": "For the purposes of subsection (2)(a), the organisation must, before collecting, using or disclosing any personal data about the individual - (a) conduct an assessment to determine that the proposed collection, use or disclosure of the personal data is not likely to have an adverse effect on the individual; (b) take reasonable steps to bring the following information to the attention of the individual: (i) the organisation's intention to collect, use or disclose the personal data; (ii) the purpose for which the personal data will be collected, used or disclosed; (iii) a reasonable period within which, and a reasonable manner by which, the individual may notify the organisation that the individual does not consent to the organisation's proposed collection, use or disclosure of the personal data; and (c) satisfy any other prescribed requirements.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "s 15A(4)(a)",
+                            "text": "conduct an assessment to determine that the proposed collection, use or disclosure of the personal data is not likely to have an adverse effect on the individual;",
+                            "description": "For the purposes of subsection (2)(a), the organisation must, before collecting, using or disclosing any personal data about the individual conduct an assessment to determine that the proposed collection, use or disclosure of the personal data is not likely to have an adverse effect on the individual.",
+                            "source": "pdpa"
+                        },
+                        {
+                            "id": "s 15A(4)(b)",
+                            "text": "take reasonable steps to bring the following information to the attention of the individual: (i) the organisation's intention to collect, use or disclose the personal data; (ii) the purpose for which the personal data will be collected, used or disclosed; (iii) a reasonable period within which, and a reasonable manner by which, the individual may notify the organisation that the individual does not consent to the organisation's proposed collection, use or disclosure of the personal data; and",
+                            "description": "For the purposes of subsection (2)(a), the organisation must, before collecting, using or disclosing any personal data about the individual take reasonable steps to bring the following information to the attention of the individual: (i) the organisation's intention to collect, use or disclose the personal data; (ii) the purpose for which the personal data will be collected, used or disclosed; (iii) a reasonable period within which, and a reasonable manner by which, the individual may notify the organisation that the individual does not consent to the organisation's proposed collection, use or disclosure of the personal data.",
+                            "source": "pdpa"
+                        },
+                        {
+                            "id": "s 15A(4)(c)",
+                            "text": "satisfy any other prescribed requirements.",
+                            "description": "For the purposes of subsection (2)(a), the organisation must, before collecting, using or disclosing any personal data about the individual satisfy any other prescribed requirements.",
+                            "source": "pdpa"
+                        }
+                    ],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 15A(5)",
+                    "number": "s 15A(5)",
+                    "text": "The organisation must, in respect of the assessment mentioned in subsection (4)(a) - (a) identify any adverse effect that the proposed collection, use or disclosure of the personal data for the purpose concerned is likely to have on the individual; (b) identify and implement reasonable measures to - (i) eliminate the adverse effect; (ii) reduce the likelihood that the adverse effect will occur; or (iii) mitigate the adverse effect; and (c) comply with any other prescribed requirements.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "s 15A(5)(a)",
+                            "text": "identify any adverse effect that the proposed collection, use or disclosure of the personal data for the purpose concerned is likely to have on the individual;",
+                            "description": "The organisation must, in respect of the assessment mentioned in subsection (4)(a) identify any adverse effect that the proposed collection, use or disclosure of the personal data for the purpose concerned is likely to have on the individual.",
+                            "source": "pdpa"
+                        },
+                        {
+                            "id": "s 15A(5)(b)",
+                            "text": "identify and implement reasonable measures to - (i) eliminate the adverse effect; (ii) reduce the likelihood that the adverse effect will occur; or (iii) mitigate the adverse effect; and",
+                            "description": "The organisation must, in respect of the assessment mentioned in subsection (4)(a) identify and implement reasonable measures to - (i) eliminate the adverse effect; (ii) reduce the likelihood that the adverse effect will occur; or (iii) mitigate the adverse effect.",
+                            "source": "pdpa"
+                        },
+                        {
+                            "id": "s 15A(5)(c)",
+                            "text": "comply with any other prescribed requirements.",
+                            "description": "The organisation must, in respect of the assessment mentioned in subsection (4)(a) comply with any other prescribed requirements.",
+                            "source": "pdpa"
+                        }
+                    ],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "16",
+            "code": "s 16",
+            "name": "Withdrawal of consent",
+            "part": "Part 4: Collection, use and disclosure of personal data",
+            "controls": [
+                {
+                    "id": "s 16(2)",
+                    "number": "s 16(2)",
+                    "text": "On receipt of the notice mentioned in subsection (1), the organisation concerned must inform the individual of the likely consequences of withdrawing his or her consent.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 16(3)",
+                    "number": "s 16(3)",
+                    "text": "An organisation must not prohibit an individual from withdrawing his or her consent to the collection, use or disclosure of personal data about the individual, but this section does not affect any legal consequences arising from such withdrawal.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 16(4)",
+                    "number": "s 16(4)",
+                    "text": "Subject to section 25, if an individual withdraws consent to the collection, use or disclosure of personal data about the individual by an organisation for any purpose, the organisation must cease (and cause its data intermediaries and agents to cease) collecting, using or disclosing the personal data (as the case may be) unless such collection, use or disclosure (as the case may be) without the individual's consent is required or authorised under this Act or other written law.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "18",
+            "code": "s 18",
+            "name": "Limitation of purpose and extent",
+            "part": "Part 4: Collection, use and disclosure of personal data",
+            "controls": [
+                {
+                    "id": "s 18",
+                    "number": "s 18",
+                    "text": "An organisation may collect, use or disclose personal data about an individual only for purposes - (a) that a reasonable person would consider appropriate in the circumstances; and (b) that the individual has been informed of under section 20, if applicable.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "s 18(a)",
+                            "text": "that a reasonable person would consider appropriate in the circumstances; and",
+                            "description": "An organisation may collect, use or disclose personal data about an individual only for purposes that a reasonable person would consider appropriate in the circumstances.",
+                            "source": "pdpa"
+                        },
+                        {
+                            "id": "s 18(b)",
+                            "text": "that the individual has been informed of under section 20, if applicable.",
+                            "description": "An organisation may collect, use or disclose personal data about an individual only for purposes that the individual has been informed of under section 20, if applicable.",
+                            "source": "pdpa"
+                        }
+                    ],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "20",
+            "code": "s 20",
+            "name": "Notification of purpose",
+            "part": "Part 4: Collection, use and disclosure of personal data",
+            "controls": [
+                {
+                    "id": "s 20(1)",
+                    "number": "s 20(1)",
+                    "text": "For the purposes of sections 14(1)(a) and 18(b), an organisation must inform the individual of - (a) the purposes for the collection, use or disclosure of the personal data (as the case may be) on or before collecting the personal data; (b) any other purpose of the use or disclosure of the personal data of which the individual has not been informed under paragraph (a), before the use or disclosure of the personal data for that purpose; and (c) on request by the individual, the business contact information of a person who is able to answer on behalf of the organisation the individual's questions about the collection, use or disclosure of the personal data.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "s 20(1)(a)",
+                            "text": "the purposes for the collection, use or disclosure of the personal data (as the case may be) on or before collecting the personal data;",
+                            "description": "For the purposes of sections 14(1)(a) and 18(b), an organisation must inform the individual of the purposes for the collection, use or disclosure of the personal data (as the case may be) on or before collecting the personal data.",
+                            "source": "pdpa"
+                        },
+                        {
+                            "id": "s 20(1)(b)",
+                            "text": "any other purpose of the use or disclosure of the personal data of which the individual has not been informed under paragraph (a), before the use or disclosure of the personal data for that purpose; and",
+                            "description": "For the purposes of sections 14(1)(a) and 18(b), an organisation must inform the individual of any other purpose of the use or disclosure of the personal data of which the individual has not been informed under paragraph (a), before the use or disclosure of the personal data for that purpose.",
+                            "source": "pdpa"
+                        },
+                        {
+                            "id": "s 20(1)(c)",
+                            "text": "on request by the individual, the business contact information of a person who is able to answer on behalf of the organisation the individual's questions about the collection, use or disclosure of the personal data.",
+                            "description": "For the purposes of sections 14(1)(a) and 18(b), an organisation must inform the individual of on request by the individual, the business contact information of a person who is able to answer on behalf of the organisation the individual's questions about the collection, use or disclosure of the personal data.",
+                            "source": "pdpa"
+                        }
+                    ],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 20(2)",
+                    "number": "s 20(2)",
+                    "text": "An organisation, on or before collecting personal data about an individual from another organisation without the individual's consent, must provide the other organisation with sufficient information regarding the purpose of the collection to allow that other organisation to determine whether the disclosure would be in accordance with this Act.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 20(4)",
+                    "number": "s 20(4)",
+                    "text": "Despite subsection (3), an organisation must comply with subsection (5) on or before collecting, using or disclosing personal data about an individual for the purpose of or in relation to the organisation - (a) entering into an employment relationship with the individual or appointing the individual to any office; or (b) managing or terminating the employment relationship with or appointment of the individual.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 20(5)",
+                    "number": "s 20(5)",
+                    "text": "For the purposes of subsection (4), the organisation must inform the individual of the following: (a) the purpose for which the organisation is collecting, using or disclosing (as the case may be) the personal data about the individual; (b) on request by the individual, the business contact information of a person who is able to answer the individual's questions about that collection, use or disclosure (as the case may be) on behalf of the organisation.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "21",
+            "code": "s 21",
+            "name": "Access to personal data",
+            "part": "Part 5: Access to and correction of personal data",
+            "controls": [
+                {
+                    "id": "s 21(1)",
+                    "number": "s 21(1)",
+                    "text": "Subject to subsections (2), (3) and (4), on request of an individual, an organisation must, as soon as reasonably possible, provide the individual with - (a) personal data about the individual that is in the possession or under the control of the organisation; and (b) information about the ways in which the personal data mentioned in paragraph (a) has been or may have been used or disclosed by the organisation within a year before the date of the request.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "s 21(1)(a)",
+                            "text": "personal data about the individual that is in the possession or under the control of the organisation; and",
+                            "description": "Subject to subsections (2), (3) and (4), on request of an individual, an organisation must, as soon as reasonably possible, provide the individual with personal data about the individual that is in the possession or under the control of the organisation.",
+                            "source": "pdpa"
+                        },
+                        {
+                            "id": "s 21(1)(b)",
+                            "text": "information about the ways in which the personal data mentioned in paragraph (a) has been or may have been used or disclosed by the organisation within a year before the date of the request.",
+                            "description": "Subject to subsections (2), (3) and (4), on request of an individual, an organisation must, as soon as reasonably possible, provide the individual with information about the ways in which the personal data mentioned in paragraph (a) has been or may have been used or disclosed by the organisation within a year before the date of the request.",
+                            "source": "pdpa"
+                        }
+                    ],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 21(3)",
+                    "number": "s 21(3)",
+                    "text": "Subject to subsection (3A), an organisation must not provide an individual with the individual's personal data or other information under subsection (1) if the provision of that personal data or other information (as the case may be) could reasonably be expected to - (a) threaten the safety or physical or mental health of an individual other than the individual who made the request; (b) cause immediate or grave harm to the safety or to the physical or mental health of the individual who made the request; (c) reveal personal data about another individual; (d) reveal the identity of an individual who has provided personal data about another individual and the individual providing the personal data does not consent to the disclosure of his or her identity; or (e) be contrary to the national interest.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 21(4)",
+                    "number": "s 21(4)",
+                    "text": "An organisation must not inform any individual under subsection (1)(b) that the organisation has disclosed personal data about the individual to a prescribed law enforcement agency if the disclosure was made under this Act or any other written law without the individual's consent.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 21(5)",
+                    "number": "s 21(5)",
+                    "text": "If an organisation is able to provide the individual with the individual's personal data and other information requested under subsection (1) without the personal data or other information excluded under subsections (2), (3) and (4), the organisation must provide the individual with access to the personal data and other information without the personal data or other information excluded under subsections (2), (3) and (4).",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 21(6)",
+                    "number": "s 21(6)",
+                    "text": "Where - (a) an individual makes a request under subsection (1) to an organisation on or after 1 February 2021; and (b) the organisation, by reason of subsection (2) or (3), does not provide an individual with the individual's personal data or other information requested under subsection (1), the organisation must, within the prescribed time and in accordance with the prescribed requirements, notify the individual of the rejection.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 21(7)",
+                    "number": "s 21(7)",
+                    "text": "Where - (a) an individual makes a request under subsection (1) to an organisation on or after 1 February 2021; and (b) the organisation provides the individual, in accordance with subsection (5), with the individual's personal data or other information requested under subsection (1), the organisation must notify the individual of the exclusion, under subsection (2) or (3), of any of the personal data or other information so requested.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "22",
+            "code": "s 22",
+            "name": "Correction of personal data",
+            "part": "Part 5: Access to and correction of personal data",
+            "controls": [
+                {
+                    "id": "s 22(2)",
+                    "number": "s 22(2)",
+                    "text": "Unless the organisation is satisfied on reasonable grounds that a correction should not be made, the organisation must - (a) correct the personal data as soon as practicable; and (b) subject to subsection (3), send the corrected personal data to every other organisation to which the personal data was disclosed by the organisation within a year before the date the correction was made, unless that other organisation does not need the corrected personal data for any legal or business purpose.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "s 22(2)(a)",
+                            "text": "correct the personal data as soon as practicable; and",
+                            "description": "Unless the organisation is satisfied on reasonable grounds that a correction should not be made, the organisation must correct the personal data as soon as practicable.",
+                            "source": "pdpa"
+                        },
+                        {
+                            "id": "s 22(2)(b)",
+                            "text": "subject to subsection (3), send the corrected personal data to every other organisation to which the personal data was disclosed by the organisation within a year before the date the correction was made, unless that other organisation does not need the corrected personal data for any legal or business purpose.",
+                            "description": "Unless the organisation is satisfied on reasonable grounds that a correction should not be made, the organisation must subject to subsection (3), send the corrected personal data to every other organisation to which the personal data was disclosed by the organisation within a year before the date the correction was made, unless that other organisation does not need the corrected personal data for any legal or business purpose.",
+                            "source": "pdpa"
+                        }
+                    ],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 22(3)",
+                    "number": "s 22(3)",
+                    "text": "An organisation (not being a credit bureau) may, if the individual consents, send the corrected personal data only to specific organisations to which the personal data was disclosed by the organisation within a year before the date the correction was made.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 22(4)",
+                    "number": "s 22(4)",
+                    "text": "When an organisation is notified under subsection (2)(b) or (3) of a correction of personal data, the organisation must correct the personal data in its possession or under its control unless the organisation is satisfied on reasonable grounds that the correction should not be made.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 22(5)",
+                    "number": "s 22(5)",
+                    "text": "If no correction is made under subsection (2)(a) or (4), the organisation must annotate the personal data in its possession or under its control with the correction that was requested but not made.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "22A",
+            "code": "s 22A",
+            "name": "Preservation of copies of personal data",
+            "part": "Part 5: Access to and correction of personal data",
+            "controls": [
+                {
+                    "id": "s 22A(1)",
+                    "number": "s 22A(1)",
+                    "text": "Where - (a) an individual, on or after 1 February 2021, makes a request under section 21(1)(a) to an organisation to provide personal data about the individual that is in the possession or under the control of the organisation; and (b) the organisation refuses to provide that personal data, the organisation must preserve, for not less than the prescribed period, a copy of the personal data concerned. (2) The organisation must ensure that the copy of the personal data it preserves for the purposes of subsection (1) is a complete and accurate copy of the personal data concerned.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "23",
+            "code": "s 23",
+            "name": "Accuracy of personal data",
+            "part": "Part 6: Care of personal data",
+            "controls": [
+                {
+                    "id": "s 23",
+                    "number": "s 23",
+                    "text": "An organisation must make a reasonable effort to ensure that personal data collected by or on behalf of the organisation is accurate and complete, if the personal data - (a) is likely to be used by the organisation to make a decision that affects the individual to whom the personal data relates; or (b) is likely to be disclosed by the organisation to another organisation.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "24",
+            "code": "s 24",
+            "name": "Protection of personal data",
+            "part": "Part 6: Care of personal data",
+            "controls": [
+                {
+                    "id": "s 24",
+                    "number": "s 24",
+                    "text": "An organisation must protect personal data in its possession or under its control by making reasonable security arrangements to prevent - (a) unauthorised access, collection, use, disclosure, copying, modification or disposal, or similar risks; and (b) the loss of any storage medium or device on which personal data is stored.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "s 24(a)",
+                            "text": "unauthorised access, collection, use, disclosure, copying, modification or disposal, or similar risks; and",
+                            "description": "An organisation must protect personal data in its possession or under its control by making reasonable security arrangements to prevent unauthorised access, collection, use, disclosure, copying, modification or disposal, or similar risks.",
+                            "source": "pdpa"
+                        },
+                        {
+                            "id": "s 24(b)",
+                            "text": "the loss of any storage medium or device on which personal data is stored.",
+                            "description": "An organisation must protect personal data in its possession or under its control by making reasonable security arrangements to prevent the loss of any storage medium or device on which personal data is stored.",
+                            "source": "pdpa"
+                        }
+                    ],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "25",
+            "code": "s 25",
+            "name": "Retention of personal data",
+            "part": "Part 6: Care of personal data",
+            "controls": [
+                {
+                    "id": "s 25",
+                    "number": "s 25",
+                    "text": "An organisation must cease to retain its documents containing personal data, or remove the means by which the personal data can be associated with particular individuals, as soon as it is reasonable to assume that - (a) the purpose for which that personal data was collected is no longer being served by retention of the personal data; and (b) retention is no longer necessary for legal or business purposes.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "s 25(a)",
+                            "text": "the purpose for which that personal data was collected is no longer being served by retention of the personal data; and",
+                            "description": "An organisation must cease to retain its documents containing personal data, or remove the means by which the personal data can be associated with particular individuals, as soon as it is reasonable to assume that the purpose for which that personal data was collected is no longer being served by retention of the personal data.",
+                            "source": "pdpa"
+                        },
+                        {
+                            "id": "s 25(b)",
+                            "text": "retention is no longer necessary for legal or business purposes.",
+                            "description": "An organisation must cease to retain its documents containing personal data, or remove the means by which the personal data can be associated with particular individuals, as soon as it is reasonable to assume that retention is no longer necessary for legal or business purposes.",
+                            "source": "pdpa"
+                        }
+                    ],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "26",
+            "code": "s 26",
+            "name": "Transfer of personal data outside Singapore",
+            "part": "Part 6: Care of personal data",
+            "controls": [
+                {
+                    "id": "s 26(1)",
+                    "number": "s 26(1)",
+                    "text": "An organisation must not transfer any personal data to a country or territory outside Singapore except in accordance with requirements prescribed under this Act to ensure that organisations provide a standard of protection to personal data so transferred that is comparable to the protection under this Act.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "26C",
+            "code": "s 26C",
+            "name": "Duty to conduct assessment of data breach",
+            "part": "Part 6A: Notification of data breaches",
+            "controls": [
+                {
+                    "id": "s 26C(2)",
+                    "number": "s 26C(2)",
+                    "text": "Subject to subsection (3), where an organisation has reason to believe that a data breach affecting personal data in its possession or under its control has occurred, the organisation must conduct, in a reasonable and expeditious manner, an assessment of whether the data breach is a notifiable data breach.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 26C(3)",
+                    "number": "s 26C(3)",
+                    "text": "Where a data intermediary (other than a data intermediary mentioned in section 26E) has reason to believe that a data breach has occurred in relation to personal data that the data intermediary is processing on behalf of and for the purposes of another organisation - (a) the data intermediary must, without undue delay, notify that other organisation of the occurrence of the data breach; and (b) that other organisation must, upon notification by the data intermediary, conduct an assessment of whether the data breach is a notifiable data breach.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 26C(4)",
+                    "number": "s 26C(4)",
+                    "text": "The organisation must carry out the assessment mentioned in subsection (2) or (3)(b) in accordance with any prescribed requirements.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "26D",
+            "code": "s 26D",
+            "name": "Duty to notify occurrence of notifiable data breach",
+            "part": "Part 6A: Notification of data breaches",
+            "controls": [
+                {
+                    "id": "s 26D(1)",
+                    "number": "s 26D(1)",
+                    "text": "Where an organisation assesses, in accordance with section 26C, that a data breach is a notifiable data breach, the organisation must notify the Commission as soon as is practicable, but in any case no later than 3 calendar days after the day the organisation makes that assessment.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 26D(2)",
+                    "number": "s 26D(2)",
+                    "text": "Subject to subsections (5), (6) and (7), on or after notifying the Commission under subsection (1), the organisation must also notify each affected individual affected by a notifiable data breach mentioned in section 26B(1)(a) in any manner that is reasonable in the circumstances.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 26D(3)",
+                    "number": "s 26D(3)",
+                    "text": "The notification under subsection (1) or (2) must contain, to the best of the knowledge and belief of the organisation at the time it notifies the Commission or affected individual (as the case may be), all the information that is prescribed for this purpose.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 26D(4)",
+                    "number": "s 26D(4)",
+                    "text": "The notification under subsection (1) must be made in the form and submitted in the manner required by the Commission.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                },
+                {
+                    "id": "s 26D(6)",
+                    "number": "s 26D(6)",
+                    "text": "An organisation must not notify any affected individual in accordance with subsection (2) if - (a) a prescribed law enforcement agency so instructs; or (b) the Commission so directs.",
+                    "type": "subsection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                }
+            ]
+        },
+        {
+            "number": "26E",
+            "code": "s 26E",
+            "name": "Obligations of data intermediary of public agency",
+            "part": "Part 6A: Notification of data breaches",
+            "controls": [
+                {
+                    "id": "s 26E",
+                    "number": "s 26E",
+                    "text": "Where an organisation - (a) is a data intermediary processing personal data on behalf of and for the purposes of a public agency; and (b) has reason to believe that a data breach has occurred in relation to that personal data, the organisation must, without undue delay, notify the public agency of the occurrence of the data breach.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "pdpa"
+                }
+            ]
+        }
+    ]
+}

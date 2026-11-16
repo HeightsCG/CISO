@@ -1,0 +1,152 @@
+{
+    "key": "sg-pdpa",
+    "name": "Singapore PDPA",
+    "version": "2020 Rev. Ed., in force from 16 October 2026",
+    "full_name": "Personal Data Protection Act 2012 (Singapore), 2020 Revised Edition: Parts 3 to 6A",
+    "issuing_body": "Parliament of Singapore; published by the Attorney-General's Chambers on Singapore Statutes Online",
+    "standard_codes": [
+        "SG-PDPA"
+    ],
+    "aliases": [
+        "PDPA",
+        "Personal Data Protection Act 2012",
+        "Singapore Personal Data Protection Act"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against the informal consolidation of the Personal Data Protection Act 2012 in force from 16 October 2026. The Personal Data Protection Regulations 2021 prescribe details of transfers, access requests and breach notifications and are not part of this assessment. The Do Not Call provisions (Part 9) are not included.",
+    "sources": [
+        {
+            "id": "pdpa",
+            "title": "Personal Data Protection Act 2012, 2020 Revised Edition, informal consolidation (PDF)",
+            "version": "version in force from 16 October 2026",
+            "publisher": "Attorney-General's Chambers, Singapore Statutes Online",
+            "url": "https://sso.agc.gov.sg/Act/PDPA2012?ViewType=Pdf",
+            "file": "sg-pdpa/PDPA2012-2026-10-16.pdf",
+            "date": "2026-10-16",
+            "sha256": "04aa3475bbe5df3a16cc010da05726abdf07f4987534d0695df6cc589bd3cf59"
+        }
+    ],
+    "source_of": {
+        "controls": "pdpa",
+        "objectives": "pdpa"
+    },
+    "control_flags": {
+        "objectives": "The lettered paragraphs of a requirement, only where every one must be met."
+    },
+    "terminology": {
+        "control": "obligation",
+        "controls": "obligations",
+        "family": "section",
+        "families": "sections",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable obligations that are implemented. The Act defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "An obligation is met only when every element it lists is met.",
+            "source": "pdpa",
+            "cite": "Personal Data Protection Act 2012, Parts 3 to 6A"
+        },
+        {
+            "id": "data_protection_officer",
+            "type": "applicability",
+            "control": "s 11(3)",
+            "summary": "An organisation designates at least one individual responsible for its compliance with the Act and makes that person's business contact information public.",
+            "source": "pdpa",
+            "cite": "s 11(3)",
+            "quote": "An organisation must designate one or more individuals to be responsible for ensuring that the organisation complies with this Act."
+        },
+        {
+            "id": "reasonable_security",
+            "type": "applicability",
+            "control": "s 24",
+            "summary": "Personal data is protected by reasonable security arrangements against unauthorised access and similar risks, and against loss of storage media.",
+            "source": "pdpa",
+            "cite": "s 24",
+            "quote": "An organisation must protect personal data in its possession or under its control by making reasonable security arrangements"
+        },
+        {
+            "id": "breach_assessment",
+            "type": "applicability",
+            "control": "s 26C(2)",
+            "summary": "A suspected data breach is assessed in a reasonable and expeditious manner to decide whether it is notifiable.",
+            "source": "pdpa",
+            "cite": "s 26C(2)",
+            "quote": "an assessment of whether the data breach is a notifiable data breach."
+        },
+        {
+            "id": "breach_notification",
+            "type": "deadline",
+            "control": "s 26D(1)",
+            "days": 3,
+            "from": "the assessment that the breach is notifiable",
+            "summary": "A notifiable data breach is reported to the Commission as soon as practicable and no later than 3 calendar days after the organisation assesses it as notifiable.",
+            "source": "pdpa",
+            "cite": "s 26D(1)",
+            "quote": "no later than 3 calendar days after the day the organisation makes that assessment."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "consequences": [
+        {
+            "summary": "The Commission can impose a financial penalty of up to 10% of annual turnover in Singapore for an organisation whose turnover there exceeds $10 million, and up to $1 million in any other case.",
+            "source": "pdpa",
+            "cite": "s 48J(3)",
+            "quote": "10% of the annual turnover in Singapore of the organisation;"
+        }
+    ],
+    "glossary": [
+        {
+            "term": "PDPA",
+            "definition": "The Personal Data Protection Act 2012, Singapore's general law on the collection, use, disclosure and care of personal data by organisations."
+        },
+        {
+            "term": "Commission",
+            "definition": "The Personal Data Protection Commission, which administers and enforces the Act."
+        },
+        {
+            "term": "Organisation",
+            "definition": "Any individual, company, association or body of persons, whether or not formed or recognised under Singapore law; public agencies are excluded."
+        },
+        {
+            "term": "Data intermediary",
+            "definition": "An organisation that processes personal data on behalf of another organisation."
+        },
+        {
+            "term": "Notifiable data breach",
+            "definition": "A data breach that results in, or is likely to result in, significant harm to an affected individual, or that is of a significant scale (500 or more individuals)."
+        }
+    ]
+}
