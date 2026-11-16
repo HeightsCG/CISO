@@ -1,0 +1,1302 @@
+{
+    "key": "iso-27701",
+    "name": "ISO/IEC 27701",
+    "version": "HCG control set 2026",
+    "full_name": "ISO/IEC 27701:2025 Information security, cybersecurity and privacy protection - Privacy information management systems - Requirements and guidance: HCG control set",
+    "issuing_body": "Heights Consulting Group, structured on ISO/IEC 27701:2025 (ISO/IEC JTC 1/SC 27)",
+    "standard_codes": [
+        "ISO-27701"
+    ],
+    "aliases": [
+        "ISO 27701",
+        "ISO/IEC 27701",
+        "PIMS",
+        "Privacy information management system"
+    ],
+    "content_licence": "hcg_authored",
+    "notice": "HCG control set based on ISO/IEC 27701:2025, the stand-alone second edition. Clause numbers and headings 4 to 10 are used for identification only; the standard's text is licensed by ISO and IEC and is not reproduced. Controls marked HCG are written by HCG for the standard's PII controller, PII processor and security control areas and do not carry the standard's Annex A numbering. Certification requires assessment against the licensed standard by an accredited certification body.",
+    "sources": [
+        {
+            "id": "iso27701",
+            "title": "ISO/IEC 27701:2025 sample preview, as adopted in SIST EN ISO/IEC 27701:2025 (contents list and opening clauses)",
+            "version": "Second edition, 2025-10",
+            "publisher": "ISO/IEC, distributed by iTeh Standards",
+            "url": "https://cdn.standards.iteh.ai/samples/sist/sist-en-iso-iec-27701-2025/a848bc3cf9384b97a58ffeebec4b0212/sist-en-iso-iec-27701-2025.pdf",
+            "file": "iso27701/iso-iec-27701-2025-sample.pdf",
+            "sha256": "d4e5906001f32614d8c38239fce36c41835397e212fcda01b6add5d67c0f8658"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG ISO/IEC 27701 control set: descriptions, guidance, test points and PII controller, processor and security controls",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "iso27701",
+        "objectives": "hcg",
+        "guidance": "hcg"
+    },
+    "control_flags": {
+        "type": "clause for a requirement clause of the standard (official number and heading), or hcg for an HCG-written control in one of the PII controller, PII processor or security control areas."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "clause",
+        "families": "clauses",
+        "objective": "test point",
+        "objectives": "test points",
+        "plan": "Corrective action plan",
+        "plan_short": "Corrective action plan",
+        "score": "Conformity score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Conforms"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Conforms"
+        },
+        {
+            "key": "not_met",
+            "label": "Does Not Conform"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that conform, with partial conformity counting as half. ISO/IEC 27701 defines no score; certification depends on an audit finding no major nonconformity. This percentage is an HCG measure of readiness."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement conforms only when every HCG test point under it is met.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
+            "id": "clauses_mandatory",
+            "type": "applicability",
+            "summary": "Clauses 4 to 10 apply to every organization claiming conformity; none can be excluded.",
+            "source": "hcg",
+            "cite": "ISO/IEC 27701:2025, clauses 4 to 10"
+        },
+        {
+            "id": "role_applicability",
+            "type": "applicability",
+            "summary": "The PII controller areas apply where the organization acts as a PII controller and the PII processor areas where it acts as a PII processor; an organization in both roles is assessed against both. Areas excluded in the statement of applicability with justification are marked not applicable.",
+            "source": "iso27701",
+            "cite": "ISO/IEC 27701:2025, 1 Scope",
+            "quote": "This document is intended for personally identifiable information (PII) controllers and PII processors holding responsibility and accountability for PII processing."
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "In the readiness score a partially conforming requirement counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "ISO/IEC 27701",
+            "definition": "The international standard for a privacy information management system (PIMS). The 2025 edition is a stand-alone management system standard; the 2019 edition was an extension to ISO/IEC 27001."
+        },
+        {
+            "term": "PIMS",
+            "definition": "Privacy information management system."
+        },
+        {
+            "term": "PII",
+            "definition": "Personally identifiable information: any information that can identify, or be linked to, a natural person."
+        },
+        {
+            "term": "PII controller",
+            "definition": "An organization that determines the purposes and means of processing PII."
+        },
+        {
+            "term": "PII processor",
+            "definition": "An organization that processes PII on behalf of, and on the instructions of, a PII controller."
+        },
+        {
+            "term": "PII principal",
+            "definition": "The natural person to whom the PII relates."
+        },
+        {
+            "term": "Statement of applicability",
+            "definition": "The record of which reference controls an organization applies, which it excludes, and why."
+        }
+    ],
+    "display_name": "ISO/IEC 27701 (HCG control set 2026)",
+    "counts": {
+        "families": 16,
+        "controls": 42,
+        "objectives": 90
+    },
+    "families": [
+        {
+            "number": "4",
+            "code": "4",
+            "name": "Context of the organization",
+            "controls": [
+                {
+                    "id": "4.1",
+                    "number": "4.1",
+                    "title": "Understanding the organization and its context",
+                    "text": "",
+                    "description": "The organization knows the internal and external issues that affect its privacy information management system, including its role as a PII controller, a PII processor or both.",
+                    "guidance": "Look for a context analysis that records whether the organization acts as PII controller, joint controller, processor or subprocessor for each processing activity, and the legal, regulatory, contractual and technology factors that shape its privacy obligations.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.1.a",
+                            "text": "Internal and external issues relevant to privacy and PII processing are documented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.1.b",
+                            "text": "The organization has determined its role (PII controller, joint controller, PII processor or subprocessor) for each processing activity.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.1.c",
+                            "text": "The context analysis is reviewed at planned intervals.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "4.2",
+                    "number": "4.2",
+                    "title": "Understanding the needs and expectations of interested parties",
+                    "text": "",
+                    "description": "The organization identifies the parties with an interest in its PII processing, including PII principals, customers, regulators and partners, and the requirements they impose.",
+                    "guidance": "Expect a register of interested parties with their privacy requirements, and a register of applicable privacy laws, regulations, contracts and codes of conduct kept current.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.2.a",
+                            "text": "Interested parties, including PII principals, and their privacy requirements are recorded.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.2.b",
+                            "text": "Applicable privacy laws, regulations, contractual obligations and judicial decisions are identified and kept current.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "4.3",
+                    "number": "4.3",
+                    "title": "Determining the scope of the privacy information management system",
+                    "text": "",
+                    "description": "The boundaries of the PIMS are set and documented, covering the PII processing, systems, locations and roles in scope.",
+                    "guidance": "Check for a scope statement that names the processing activities and roles in scope and justifies any exclusions, and that is consistent with the records of PII processing.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.3.a",
+                            "text": "A documented scope statement names the PII processing, roles, systems and locations covered.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.3.b",
+                            "text": "Exclusions are documented and justified.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "4.4",
+                    "number": "4.4",
+                    "title": "Privacy information management system",
+                    "text": "",
+                    "description": "The organization has established and operates a PIMS, including its processes and their interactions, and maintains and continually improves it.",
+                    "guidance": "Ask for a PIMS manual or process map and evidence that the processes operate. Where an ISMS also exists, check how the two are integrated.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.4.a",
+                            "text": "PIMS processes and their interactions are defined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "4.4.b",
+                            "text": "There is evidence the PIMS is operated, maintained and improved.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                }
+            ]
+        },
+        {
+            "number": "5",
+            "code": "5",
+            "name": "Leadership",
+            "controls": [
+                {
+                    "id": "5.1",
+                    "number": "5.1",
+                    "title": "Leadership and commitment",
+                    "text": "",
+                    "description": "Top management leads the PIMS, integrates privacy into business processes, provides resources and promotes continual improvement.",
+                    "guidance": "Look for executive sponsorship, privacy on leadership agendas, approved resources and examples of top management direction.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "5.1.a",
+                            "text": "Top management has approved the privacy policy and objectives and they align with the organization's strategy.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.1.b",
+                            "text": "Privacy requirements are integrated into business processes and resourced.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "5.2",
+                    "number": "5.2",
+                    "title": "Privacy policy",
+                    "text": "",
+                    "description": "A privacy policy approved by top management sets the framework for privacy objectives, commits to meeting applicable requirements and continual improvement, and is communicated.",
+                    "guidance": "Review the policy for approval, version control, commitments to applicable privacy requirements and improvement, and evidence of communication internally and to interested parties as appropriate.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "5.2.a",
+                            "text": "A documented privacy policy is approved by top management.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.2.b",
+                            "text": "The policy commits to applicable privacy requirements and continual improvement and frames privacy objectives.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.2.c",
+                            "text": "The policy is communicated and available to interested parties as appropriate.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "5.3",
+                    "number": "5.3",
+                    "title": "Roles, responsibilities and authorities",
+                    "text": "",
+                    "description": "Responsibilities and authorities for the PIMS and for privacy are assigned and communicated, including a point of contact for PII principals and, where required, a data protection officer.",
+                    "guidance": "Expect documented privacy roles (PIMS owner, privacy lead or DPO, data owners), a published contact point for PII principals and evidence that role holders know their responsibilities.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "5.3.a",
+                            "text": "PIMS and privacy roles, responsibilities and authorities are documented and assigned.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.3.b",
+                            "text": "A point of contact for PII principals, and a data protection officer where required, is designated.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "5.3.c",
+                            "text": "Responsibility for reporting PIMS performance to top management is assigned.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                }
+            ]
+        },
+        {
+            "number": "6",
+            "code": "6",
+            "name": "Planning",
+            "controls": [
+                {
+                    "id": "6.1.1",
+                    "number": "6.1.1",
+                    "title": "General",
+                    "text": "",
+                    "description": "The organization determines the risks and opportunities to the PIMS achieving its intended outcomes and plans actions to address them.",
+                    "guidance": "Look for a register of risks and opportunities to the management system itself, with planned actions integrated into PIMS processes and evaluated for effectiveness.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6.1.1.a",
+                            "text": "Risks and opportunities to the PIMS are identified, taking account of context and interested party requirements.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.1.b",
+                            "text": "Actions are planned, integrated into PIMS processes and evaluated.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "6.1.2",
+                    "number": "6.1.2",
+                    "title": "Privacy risk assessment",
+                    "text": "",
+                    "description": "A defined privacy risk assessment process identifies, analyses and evaluates risks to PII principals and to the organization arising from PII processing, and produces consistent results.",
+                    "guidance": "Review the method: risk criteria, acceptance criteria, identification of risks to PII principals (not only to the organization), likelihood and consequence analysis, and links to privacy impact assessments.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6.1.2.a",
+                            "text": "A documented privacy risk assessment process defines risk and acceptance criteria.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.2.b",
+                            "text": "Risks to PII principals arising from PII processing are identified, analysed and evaluated.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.2.c",
+                            "text": "The process produces consistent, valid and comparable results.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "6.1.3",
+                    "number": "6.1.3",
+                    "title": "Privacy risk treatment",
+                    "text": "",
+                    "description": "The organization selects treatment options for privacy risks, determines the controls needed, compares them with the reference controls, and records the result in a statement of applicability with a treatment plan approved by risk owners.",
+                    "guidance": "Expect a statement of applicability covering every reference control with inclusion or exclusion and justification, a privacy risk treatment plan, and risk owner approval of the plan and residual risks.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6.1.3.a",
+                            "text": "Risk treatment options and necessary controls are determined for privacy risks.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.3.b",
+                            "text": "A statement of applicability lists the reference controls with justification for inclusion or exclusion.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.1.3.c",
+                            "text": "A privacy risk treatment plan is approved by risk owners, who accept residual risk.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "6.2",
+                    "number": "6.2",
+                    "title": "Privacy objectives and planning to achieve them",
+                    "text": "",
+                    "description": "Measurable privacy objectives are set, consistent with the policy, with plans that say what will be done, by whom, with what resources and by when.",
+                    "guidance": "Look for objectives with measures, owners, resources, due dates and evaluation methods, and evidence they are monitored and communicated.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6.2.a",
+                            "text": "Privacy objectives are documented, measurable where practicable and consistent with the policy.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "6.2.b",
+                            "text": "Each objective has an action plan and its progress is monitored.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "6.3",
+                    "number": "6.3",
+                    "title": "Planning of changes",
+                    "text": "",
+                    "description": "Changes to the PIMS are carried out in a planned way.",
+                    "guidance": "Check that significant changes to the PIMS go through a defined change process with impact assessment and approval.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "6.3.a",
+                            "text": "Changes to the PIMS are planned, assessed and approved before they are made.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                }
+            ]
+        },
+        {
+            "number": "7",
+            "code": "7",
+            "name": "Support",
+            "controls": [
+                {
+                    "id": "7.1",
+                    "number": "7.1",
+                    "title": "Resources",
+                    "text": "",
+                    "description": "The organization provides the people, budget and tools needed to establish, operate and improve the PIMS.",
+                    "guidance": "Look for a privacy budget, staffing and tooling, and management review of resource adequacy.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.1.a",
+                            "text": "Resources for the PIMS are identified and provided.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.1.b",
+                            "text": "Resource adequacy is reviewed.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "7.2",
+                    "number": "7.2",
+                    "title": "Competence",
+                    "text": "",
+                    "description": "People whose work affects privacy performance are competent, and competence gaps are closed and recorded.",
+                    "guidance": "Expect a competence matrix for privacy roles, training records and evaluation of training effectiveness.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.2.a",
+                            "text": "Competence requirements are defined for privacy roles.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.2.b",
+                            "text": "Training or other actions close gaps and records of competence are retained.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "7.3",
+                    "number": "7.3",
+                    "title": "Awareness",
+                    "text": "",
+                    "description": "Everyone working under the organization's control knows the privacy policy, their contribution to the PIMS and the consequences of not following privacy requirements, including for PII principals.",
+                    "guidance": "Look for privacy awareness training at induction and periodically, with completion tracking and staff able to describe how to handle PII and report incidents.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.3.a",
+                            "text": "Staff complete privacy awareness training at induction and at planned intervals.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.3.b",
+                            "text": "Staff know the privacy policy, their contribution and the consequences of non-conformity.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "7.4",
+                    "number": "7.4",
+                    "title": "Communication",
+                    "text": "",
+                    "description": "The organization has defined what it communicates about privacy, when, with whom and how, internally and externally.",
+                    "guidance": "Expect a communication plan covering staff, PII principals, customers, processors and authorities.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.4.a",
+                            "text": "A communication plan sets out privacy communications, audiences, timing and channels.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "7.5",
+                    "number": "7.5",
+                    "title": "Documented information",
+                    "text": "",
+                    "description": "The documented information the PIMS requires is created, approved and controlled so it is available, protected and current.",
+                    "guidance": "Check document control: identification, versioning, review and approval, access, retention and disposal of PIMS documents and records.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.5.a",
+                            "text": "PIMS documents and records are identified, versioned, reviewed and approved.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.5.b",
+                            "text": "Documented information is available when needed, protected and retained and disposed of as defined.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                }
+            ]
+        },
+        {
+            "number": "8",
+            "code": "8",
+            "name": "Operation",
+            "controls": [
+                {
+                    "id": "8.1",
+                    "number": "8.1",
+                    "title": "Operational planning and control",
+                    "text": "",
+                    "description": "The processes needed to meet privacy requirements are planned, run to defined criteria and controlled, including changes and externally provided processes.",
+                    "guidance": "Look for defined criteria for privacy processes, evidence they operate as planned, change control, and control of outsourced processing and processors.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.1.a",
+                            "text": "Criteria for privacy processes are defined and processes run to them.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.1.b",
+                            "text": "Planned changes are controlled and externally provided processes are controlled.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "8.2",
+                    "number": "8.2",
+                    "title": "Privacy risk assessment",
+                    "text": "",
+                    "description": "Privacy risk assessments are carried out at planned intervals and when significant changes are proposed or occur, and the results are retained.",
+                    "guidance": "Check the schedule and records of privacy risk assessments and privacy impact assessments, including those triggered by new processing, systems or suppliers.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.2.a",
+                            "text": "Privacy risk assessments are performed at planned intervals and on significant change.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.2.b",
+                            "text": "Results are documented and retained.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "8.3",
+                    "number": "8.3",
+                    "title": "Privacy risk treatment",
+                    "text": "",
+                    "description": "The privacy risk treatment plan is implemented and the results are retained.",
+                    "guidance": "Verify that planned treatments and controls have been implemented as scheduled, with evidence and status tracking.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "8.3.a",
+                            "text": "The privacy risk treatment plan is implemented and its progress tracked.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "8.3.b",
+                            "text": "Results of privacy risk treatment are documented and retained.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                }
+            ]
+        },
+        {
+            "number": "9",
+            "code": "9",
+            "name": "Performance evaluation",
+            "controls": [
+                {
+                    "id": "9.1",
+                    "number": "9.1",
+                    "title": "Monitoring, measurement, analysis and evaluation",
+                    "text": "",
+                    "description": "The organization decides what to monitor and measure about privacy performance and PIMS effectiveness, and analyses and evaluates the results.",
+                    "guidance": "Expect defined privacy metrics (for example request response times, incidents, training completion, assessment coverage), methods, frequency and recorded analysis.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "9.1.a",
+                            "text": "What is monitored and measured, the methods and the frequency are defined.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.1.b",
+                            "text": "Results are analysed, evaluated and retained.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "9.2",
+                    "number": "9.2",
+                    "title": "Internal audit",
+                    "text": "",
+                    "description": "Internal audits at planned intervals check that the PIMS conforms to the organization's requirements and the standard and is effectively implemented.",
+                    "guidance": "Review the audit programme, auditor objectivity, criteria and scope, reporting and follow-up of findings.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "9.2.a",
+                            "text": "An internal audit programme covers the PIMS at planned intervals with objective auditors.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.2.b",
+                            "text": "Audit results are reported and findings are followed up.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "9.3",
+                    "number": "9.3",
+                    "title": "Management review",
+                    "text": "",
+                    "description": "Top management reviews the PIMS at planned intervals and decides on improvements and changes.",
+                    "guidance": "Look for minutes covering previous actions, changes in issues and requirements, privacy performance, audit results, nonconformities, risk treatment status and feedback, with decisions on improvements and changes.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "9.3.a",
+                            "text": "Management reviews are held at planned intervals and recorded.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "9.3.b",
+                            "text": "Reviews consider privacy performance, audit results, nonconformities and changes, and result in decisions.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                }
+            ]
+        },
+        {
+            "number": "10",
+            "code": "10",
+            "name": "Improvement",
+            "controls": [
+                {
+                    "id": "10.1",
+                    "number": "10.1",
+                    "title": "Continual improvement",
+                    "text": "",
+                    "description": "The organization continually improves the suitability, adequacy and effectiveness of the PIMS.",
+                    "guidance": "Look for improvement actions from audits, incidents, requests, reviews and performance data, implemented and tracked.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "10.1.a",
+                            "text": "Improvement opportunities are identified and acted on.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                },
+                {
+                    "id": "10.2",
+                    "number": "10.2",
+                    "title": "Nonconformity and corrective action",
+                    "text": "",
+                    "description": "When a nonconformity occurs, the organization reacts, finds the cause, takes corrective action and checks the action worked.",
+                    "guidance": "Expect a corrective action log with root cause, actions, owners, dates and effectiveness checks.",
+                    "type": "clause",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "10.2.a",
+                            "text": "Nonconformities are recorded with their causes.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "10.2.b",
+                            "text": "Corrective actions are taken and their effectiveness reviewed.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "iso27701"
+                }
+            ]
+        },
+        {
+            "number": "HCG-CC",
+            "code": "HCG-CC",
+            "name": "PII controllers: conditions for collection and processing (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-CC-01",
+                    "number": "HCG-CC-01",
+                    "title": "Purpose, lawful basis and consent",
+                    "text": "",
+                    "description": "For each processing activity the controller has identified and documented specific purposes and a lawful basis, and, where consent is the basis, obtains and records it in a way that can be demonstrated.",
+                    "guidance": "Review the processing purposes and lawful basis per activity, consent wording and capture mechanisms, consent records and withdrawal handling.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-CC-01.a",
+                            "text": "Purposes and the lawful basis are documented for each processing activity.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-CC-01.b",
+                            "text": "Where consent is relied on, it is obtained, recorded and can be withdrawn as easily as it was given.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-CC-02",
+                    "number": "HCG-CC-02",
+                    "title": "Privacy impact assessment and records of processing",
+                    "text": "",
+                    "description": "The controller assesses privacy impact before new or changed processing, maintains records of processing, and has contracts with processors that set out their obligations.",
+                    "guidance": "Look for a PIA procedure with trigger criteria and completed assessments, a current record of processing activities (purposes, categories, recipients, transfers, retention, security), and processor contracts with privacy clauses.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-CC-02.a",
+                            "text": "Privacy impact assessments are completed for new or changed processing that meets defined triggers.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-CC-02.b",
+                            "text": "Records of PII processing are complete and current.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-CC-02.c",
+                            "text": "Contracts with PII processors set out their privacy obligations, and joint controller responsibilities are agreed in writing.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HCG-CP",
+            "code": "HCG-CP",
+            "name": "PII controllers: obligations to PII principals (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-CP-01",
+                    "number": "HCG-CP-01",
+                    "title": "Notice to PII principals",
+                    "text": "",
+                    "description": "PII principals receive clear, timely information about the processing of their PII: who processes it, why, on what basis, with whom it is shared, for how long and how to exercise their rights.",
+                    "guidance": "Review privacy notices at each collection point for completeness, plain language and timing, including notice when PII is obtained from third parties.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-CP-01.a",
+                            "text": "Privacy notices are provided at or before collection and cover purposes, basis, recipients, retention and rights.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-CP-01.b",
+                            "text": "Notices are clear, accessible and kept current.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-CP-02",
+                    "number": "HCG-CP-02",
+                    "title": "Rights requests and automated decisions",
+                    "text": "",
+                    "description": "The controller lets PII principals access, correct, erase, object to and obtain copies of their PII, responds within defined timeframes, informs recipients of changes, and handles automated decision-making appropriately.",
+                    "guidance": "Look for a rights request procedure with identity verification, timeframes, a request log, evidence of on-time responses, notification of third parties, and safeguards for automated decisions affecting individuals.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-CP-02.a",
+                            "text": "A documented procedure handles access, correction, erasure, objection and portability requests with identity verification.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-CP-02.b",
+                            "text": "Requests are logged and answered within defined timeframes.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-CP-02.c",
+                            "text": "Recipients are told of corrections or erasures, and automated decisions affecting PII principals have safeguards.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HCG-CD",
+            "code": "HCG-CD",
+            "name": "PII controllers: privacy by design and by default (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-CD-01",
+                    "number": "HCG-CD-01",
+                    "title": "Minimization and accuracy",
+                    "text": "",
+                    "description": "The controller limits collection and processing to what is needed for the identified purposes and keeps PII accurate and up to date.",
+                    "guidance": "Check data minimization reviews of forms and systems, default settings that limit processing, and data quality controls.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-CD-01.a",
+                            "text": "Collection and processing are limited to what is needed for each purpose, including by default settings.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-CD-01.b",
+                            "text": "PII is kept accurate, complete and up to date.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-CD-02",
+                    "number": "HCG-CD-02",
+                    "title": "Retention, de-identification and disposal",
+                    "text": "",
+                    "description": "PII is kept no longer than needed, then deleted, anonymized or de-identified, including temporary files, using defined disposal methods.",
+                    "guidance": "Review the retention schedule, deletion and de-identification jobs, temporary file handling and disposal records.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-CD-02.a",
+                            "text": "A retention schedule sets retention periods for each category of PII.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-CD-02.b",
+                            "text": "PII and temporary files are deleted or de-identified at the end of retention using defined methods, and this is evidenced.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HCG-CS",
+            "code": "HCG-CS",
+            "name": "PII controllers: sharing, transfer and disclosure (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-CS-01",
+                    "number": "HCG-CS-01",
+                    "title": "Transfers between jurisdictions",
+                    "text": "",
+                    "description": "The controller identifies the basis for transferring PII between jurisdictions, records the countries and organizations PII may be transferred to, and applies required safeguards.",
+                    "guidance": "Look for a transfer register with destinations, transfer mechanisms (such as adequacy or contractual clauses) and transfer impact assessments where required.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-CS-01.a",
+                            "text": "Cross-border transfers are recorded with their destinations and legal basis.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-CS-01.b",
+                            "text": "Required safeguards are in place for each transfer.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-CS-02",
+                    "number": "HCG-CS-02",
+                    "title": "Records of disclosures to third parties",
+                    "text": "",
+                    "description": "Disclosures of PII to third parties are recorded, including what was disclosed, to whom and when.",
+                    "guidance": "Check a disclosure log covering third-party and law enforcement disclosures and the approval process for them.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-CS-02.a",
+                            "text": "Disclosures of PII to third parties are approved and recorded with what, to whom and when.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HCG-PC",
+            "code": "HCG-PC",
+            "name": "PII processors: conditions for processing (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-PC-01",
+                    "number": "HCG-PC-01",
+                    "title": "Customer agreements and instructions",
+                    "text": "",
+                    "description": "The processor's contracts with customers set out its role, and it processes PII only on the customer's documented instructions and for the agreed purposes.",
+                    "guidance": "Review customer contracts or data processing agreements, how instructions are captured, and how the processor tells the customer when an instruction appears to break the law.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-PC-01.a",
+                            "text": "Customer contracts define the processor's role and privacy obligations.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-PC-01.b",
+                            "text": "PII is processed only on documented customer instructions and for the agreed purposes.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-PC-01.c",
+                            "text": "The customer is told when an instruction appears to infringe applicable law.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-PC-02",
+                    "number": "HCG-PC-02",
+                    "title": "No marketing use and records of processing",
+                    "text": "",
+                    "description": "The processor does not use customer PII for its own marketing or advertising without consent, and keeps records of the processing it carries out for customers.",
+                    "guidance": "Check policy and technical controls preventing secondary use, and the processor's record of processing per customer.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-PC-02.a",
+                            "text": "Customer PII is not used for marketing or advertising without the required consent.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-PC-02.b",
+                            "text": "Records of processing carried out on behalf of each customer are maintained.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HCG-PP",
+            "code": "HCG-PP",
+            "name": "PII processors: obligations to PII principals (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-PP-01",
+                    "number": "HCG-PP-01",
+                    "title": "Supporting the customer's obligations",
+                    "text": "",
+                    "description": "The processor gives the customer the means to meet its obligations to PII principals, such as access, correction and erasure, within agreed timeframes.",
+                    "guidance": "Look for product features or support procedures that let customers fulfil rights requests, and contract terms on response times and handling of requests received directly from PII principals.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-PP-01.a",
+                            "text": "The processor provides the customer with the means to fulfil PII principals' rights.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-PP-01.b",
+                            "text": "Requests received directly from PII principals are passed to the customer as agreed.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HCG-PD",
+            "code": "HCG-PD",
+            "name": "PII processors: privacy by design and by default (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-PD-01",
+                    "number": "HCG-PD-01",
+                    "title": "Temporary files and return or disposal",
+                    "text": "",
+                    "description": "The processor disposes of temporary files within defined periods and returns or securely disposes of PII at the end of the contract, with a policy shared with the customer.",
+                    "guidance": "Review temporary file cleanup, the return and disposal policy, and evidence of end-of-contract return or deletion.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-PD-01.a",
+                            "text": "Temporary files containing PII are disposed of within a defined period.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-PD-01.b",
+                            "text": "PII is returned, transferred or securely disposed of at contract end under a policy made available to the customer.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-PD-02",
+                    "number": "HCG-PD-02",
+                    "title": "Transmission controls",
+                    "text": "",
+                    "description": "PII transmitted over networks is protected so it reaches its intended destination.",
+                    "guidance": "Check encryption in transit and controls that ensure PII is delivered only to intended destinations.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-PD-02.a",
+                            "text": "PII transmitted over data transmission networks is protected and reaches only its intended destination.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HCG-PS",
+            "code": "HCG-PS",
+            "name": "PII processors: transfer, disclosure and subcontracting (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-PS-01",
+                    "number": "HCG-PS-01",
+                    "title": "Transfers and legally binding disclosures",
+                    "text": "",
+                    "description": "The processor tells the customer about cross-border transfers and the countries involved, records disclosures, and notifies the customer of legally binding disclosure requests unless prohibited.",
+                    "guidance": "Review transfer notifications, the list of countries where PII may be processed, the disclosure log and the procedure for law enforcement requests.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-PS-01.a",
+                            "text": "The customer is told of transfers and of the countries where PII may be processed, before changes are made.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-PS-01.b",
+                            "text": "Legally binding disclosure requests are notified to the customer unless prohibited, and disclosures are recorded.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-PS-02",
+                    "number": "HCG-PS-02",
+                    "title": "Subcontractors",
+                    "text": "",
+                    "description": "The processor discloses its subcontractors to the customer, engages them only as the contract allows, binds them to equivalent obligations, and notifies changes.",
+                    "guidance": "Look for a subprocessor list available to customers, change notification with an opportunity to object, and flow-down clauses in subprocessor contracts.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-PS-02.a",
+                            "text": "Subcontracted processors are disclosed to the customer and engaged only as the contract allows.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-PS-02.b",
+                            "text": "Subcontractors are bound to equivalent privacy obligations.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-PS-02.c",
+                            "text": "Customers are notified of changes to subcontractors with an opportunity to object.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HCG-SEC",
+            "code": "HCG-SEC",
+            "name": "Information security for PII (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-SEC-01",
+                    "number": "HCG-SEC-01",
+                    "title": "Security of PII processing",
+                    "text": "",
+                    "description": "Information security controls protect PII in proportion to the risk: access control, encryption, logging, secure development, backup and supplier security.",
+                    "guidance": "Where an ISO/IEC 27001 ISMS exists, check that its scope and statement of applicability cover PII processing. Otherwise, assess access control, encryption, logging and monitoring, secure development, backup and restore, and supplier security for PII systems.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-SEC-01.a",
+                            "text": "Access to PII is restricted to authorized people on a least-privilege basis and reviewed.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-SEC-01.b",
+                            "text": "PII is encrypted where risk requires, in storage and in transit.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-SEC-01.c",
+                            "text": "Access to and processing of PII is logged and logs are reviewed.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HCG-SEC-02",
+                    "number": "HCG-SEC-02",
+                    "title": "PII breach management",
+                    "text": "",
+                    "description": "Incidents involving PII are identified, assessed, recorded and notified to customers, authorities and PII principals as required, within the required timeframes.",
+                    "guidance": "Review the breach response procedure, the breach register (description, consequences, notifications made), notification timeframes and processor-to-controller notification terms.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HCG-SEC-02.a",
+                            "text": "A documented procedure covers identifying, assessing and responding to PII breaches.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-SEC-02.b",
+                            "text": "Breaches are recorded with their consequences and the notifications made.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HCG-SEC-02.c",
+                            "text": "Notifications to customers, authorities and PII principals are made within required timeframes.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        }
+    ]
+}

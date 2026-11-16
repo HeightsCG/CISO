@@ -1,0 +1,144 @@
+{
+    "key": "iso-27701",
+    "name": "ISO/IEC 27701",
+    "version": "HCG control set 2026",
+    "full_name": "ISO/IEC 27701:2025 Information security, cybersecurity and privacy protection - Privacy information management systems - Requirements and guidance: HCG control set",
+    "issuing_body": "Heights Consulting Group, structured on ISO/IEC 27701:2025 (ISO/IEC JTC 1/SC 27)",
+    "standard_codes": [
+        "ISO-27701"
+    ],
+    "aliases": [
+        "ISO 27701",
+        "ISO/IEC 27701",
+        "PIMS",
+        "Privacy information management system"
+    ],
+    "content_licence": "hcg_authored",
+    "notice": "HCG control set based on ISO/IEC 27701:2025, the stand-alone second edition. Clause numbers and headings 4 to 10 are used for identification only; the standard's text is licensed by ISO and IEC and is not reproduced. Controls marked HCG are written by HCG for the standard's PII controller, PII processor and security control areas and do not carry the standard's Annex A numbering. Certification requires assessment against the licensed standard by an accredited certification body.",
+    "sources": [
+        {
+            "id": "iso27701",
+            "title": "ISO/IEC 27701:2025 sample preview, as adopted in SIST EN ISO/IEC 27701:2025 (contents list and opening clauses)",
+            "version": "Second edition, 2025-10",
+            "publisher": "ISO/IEC, distributed by iTeh Standards",
+            "url": "https://cdn.standards.iteh.ai/samples/sist/sist-en-iso-iec-27701-2025/a848bc3cf9384b97a58ffeebec4b0212/sist-en-iso-iec-27701-2025.pdf",
+            "file": "iso27701/iso-iec-27701-2025-sample.pdf",
+            "sha256": "d4e5906001f32614d8c38239fce36c41835397e212fcda01b6add5d67c0f8658"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG ISO/IEC 27701 control set: descriptions, guidance, test points and PII controller, processor and security controls",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "iso27701",
+        "objectives": "hcg",
+        "guidance": "hcg"
+    },
+    "control_flags": {
+        "type": "clause for a requirement clause of the standard (official number and heading), or hcg for an HCG-written control in one of the PII controller, PII processor or security control areas."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "clause",
+        "families": "clauses",
+        "objective": "test point",
+        "objectives": "test points",
+        "plan": "Corrective action plan",
+        "plan_short": "Corrective action plan",
+        "score": "Conformity score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Conforms"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Conforms"
+        },
+        {
+            "key": "not_met",
+            "label": "Does Not Conform"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable requirements that conform, with partial conformity counting as half. ISO/IEC 27701 defines no score; certification depends on an audit finding no major nonconformity. This percentage is an HCG measure of readiness."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A requirement conforms only when every HCG test point under it is met.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
+            "id": "clauses_mandatory",
+            "type": "applicability",
+            "summary": "Clauses 4 to 10 apply to every organization claiming conformity; none can be excluded.",
+            "source": "hcg",
+            "cite": "ISO/IEC 27701:2025, clauses 4 to 10"
+        },
+        {
+            "id": "role_applicability",
+            "type": "applicability",
+            "summary": "The PII controller areas apply where the organization acts as a PII controller and the PII processor areas where it acts as a PII processor; an organization in both roles is assessed against both. Areas excluded in the statement of applicability with justification are marked not applicable.",
+            "source": "iso27701",
+            "cite": "ISO/IEC 27701:2025, 1 Scope",
+            "quote": "This document is intended for personally identifiable information (PII) controllers and PII processors holding responsibility and accountability for PII processing."
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "In the readiness score a partially conforming requirement counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "ISO/IEC 27701",
+            "definition": "The international standard for a privacy information management system (PIMS). The 2025 edition is a stand-alone management system standard; the 2019 edition was an extension to ISO/IEC 27001."
+        },
+        {
+            "term": "PIMS",
+            "definition": "Privacy information management system."
+        },
+        {
+            "term": "PII",
+            "definition": "Personally identifiable information: any information that can identify, or be linked to, a natural person."
+        },
+        {
+            "term": "PII controller",
+            "definition": "An organization that determines the purposes and means of processing PII."
+        },
+        {
+            "term": "PII processor",
+            "definition": "An organization that processes PII on behalf of, and on the instructions of, a PII controller."
+        },
+        {
+            "term": "PII principal",
+            "definition": "The natural person to whom the PII relates."
+        },
+        {
+            "term": "Statement of applicability",
+            "definition": "The record of which reference controls an organization applies, which it excludes, and why."
+        }
+    ]
+}

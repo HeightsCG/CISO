@@ -172,6 +172,7 @@ class Poam
         'cyber-essentials' => 'none',
         'iso-42001' => 'none',
         'iso-22301' => 'none',
+        'iso-27701' => 'none',
         'nydfs-500' => 'none',
         'nis2' => 'none',
         'dora' => 'none',

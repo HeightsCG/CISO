@@ -3171,6 +3171,10 @@ class ApiController extends Controller {
         echo json_encode($this->standards_model->load_standards(Session::get('company_id')));
     }
 
+    public function load_framework_libraryAction() {
+        echo json_encode($this->standards_model->framework_library(Session::get('company_id')));
+    }
+
     public function save_standardAction() {
 
         $response = array(

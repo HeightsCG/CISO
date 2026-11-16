@@ -85,6 +85,10 @@ $(document).ready(function () {
                     <i class="fa-thin fa-clipboard-check"></i>
                     <span>Assessments</span>
                 </a>
+                <a class="shell__link<?php echo $this->controller == 'frameworks' ? ' is-active' : ''; ?>" href="/frameworks">
+                    <i class="fa-thin fa-books"></i>
+                    <span>Frameworks</span>
+                </a>
                 <?php if (Session::get('global_admin') === 1) { ?>
                 <a class="shell__link<?php echo in_array($this->controller, array('admin', 'standards', 'users'), true) ? ' is-active' : ''; ?>" href="/admin">
                     <i class="fa-thin fa-user-shield"></i>

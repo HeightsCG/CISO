@@ -44,6 +44,38 @@ class StandardsModel extends Model {
         return parent::select($sql, $where);
     }
 
+    public function framework_library($company_id)
+    {
+        $where = array(
+            'company_id' => $company_id
+        );
+        $sql = "SELECT
+                    s.id,
+                    s.standard_name,
+                    s.full_name,
+                    s.issuing_body,
+                    s.version,
+                    COUNT(sc.id) AS control_count
+                FROM
+                    standards s
+                    LEFT JOIN standard_controls sc ON sc.standard_id = s.id and sc.deleted = 0
+                WHERE
+                    s.company_id = :company_id
+                    and
+                    s.standard_status = 'Active'
+                    and
+                    s.deleted = 0
+                GROUP BY
+                    s.id,
+                    s.standard_name,
+                    s.full_name,
+                    s.issuing_body,
+                    s.version
+                ORDER BY
+                    s.standard_name";
+        return parent::select($sql, $where);
+    }
+
     /**
      * Archived standards are deliberately excluded: anywhere in the app that asks a
      * user to pick a standard must only offer the ones still in force.
