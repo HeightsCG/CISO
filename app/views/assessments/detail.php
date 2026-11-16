@@ -1423,7 +1423,7 @@ $(document).ready(function () {
             }
         }
 
-        var score_value = score.percentage === null ? 'Not yet scored' : Math.round(score.percentage) + '%';
+        var score_value = score.percentage === null ? '0%' : Math.round(score.percentage) + '%';
         var score_lines = [];
 
         if (score.percentage !== null && !score.complete) {
@@ -1460,7 +1460,7 @@ $(document).ready(function () {
             + dash_kpi(
                 'Gaps',
                 gaps,
-                (counts['Not Implemented'] || 0) + ' not implemented, ' + (counts['Partially Implemented'] || 0) + ' partial',
+                gaps > 0 ? (counts['Not Implemented'] || 0) + ' not implemented, ' + (counts['Partially Implemented'] || 0) + ' partial' : '',
                 gaps > 0 ? 'is-gap' : ''
             )
             + dash_kpi(
@@ -1500,7 +1500,7 @@ $(document).ready(function () {
             html += '<li class="adash__family">'
                 + '<span class="adash__family-name" title="' + esc(fam.name) + '">' + esc(fam.name) + '</span>'
                 + '<span class="dash__bar adash__family-bar">' + bar + '</span>'
-                + '<span class="adash__family-pct">' + (fam.percentage === null ? 'Not yet scored' : Math.round(fam.percentage) + '%') + '</span>'
+                + '<span class="adash__family-pct">' + (fam.percentage === null ? '0%' : Math.round(fam.percentage) + '%') + '</span>'
                 + '</li>';
         }
 
