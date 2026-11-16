@@ -1,0 +1,1134 @@
+{
+    "key": "owasp-asvs-l1",
+    "name": "OWASP ASVS Level 1",
+    "version": "5.0.0",
+    "full_name": "OWASP Application Security Verification Standard 5.0.0, Level 1",
+    "issuing_body": "OWASP Foundation, ASVS project",
+    "standard_codes": [
+        "OWASP-ASVS-L1"
+    ],
+    "aliases": [
+        "ASVS",
+        "OWASP ASVS",
+        "Application Security Verification Standard"
+    ],
+    "content_licence": "open",
+    "notice": "OWASP Application Security Verification Standard 5.0.0 by the OWASP Foundation, licensed under Creative Commons Attribution-ShareAlike 4.0. Requirement text is reproduced from the standard.",
+    "sources": [
+        {
+            "id": "asvs",
+            "title": "OWASP Application Security Verification Standard 5.0.0 (JSON release)",
+            "version": "5.0.0 (May 2025)",
+            "publisher": "OWASP Foundation",
+            "url": "https://github.com/OWASP/ASVS/releases/download/v5.0.0_release/OWASP_Application_Security_Verification_Standard_5.0.0_en.json",
+            "file": "owasp-asvs/OWASP_Application_Security_Verification_Standard_5.0.0_en.json",
+            "sha256": "bcdbec214d70abcfad9284a31d4f9e5134305831d628aad3aa85d7e26626cb35"
+        }
+    ],
+    "source_of": {
+        "controls": "asvs"
+    },
+    "control_flags": {
+        "level": "The lowest ASVS level that includes the requirement (1, 2 or 3). Levels are cumulative.",
+        "section": "The ASVS section the requirement belongs to (V1.1), with section_name."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "chapter",
+        "families": "chapters",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Verification score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Verified"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Verified"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Verified"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable Level 1 requirements that are verified. ASVS defines no score; an application meets Level 1 only when every applicable requirement at that level is verified, and this percentage is an HCG measure of progress toward that."
+    },
+    "rules": [
+        {
+            "id": "level_definition",
+            "type": "applicability",
+            "summary": "Level 1 is the minimum: requirements that are critical or basic first-layer defences against common attacks, most of which can be checked without access to source code.",
+            "source": "asvs",
+            "cite": "OWASP ASVS 5.0.0, levels"
+        },
+        {
+            "id": "cumulative_levels",
+            "type": "applicability",
+            "summary": "A requirement belongs to every level from the one it names upward; this Level 1 assessment holds 70 requirements.",
+            "source": "asvs",
+            "cite": "OWASP ASVS 5.0.0, requirement levels"
+        },
+        {
+            "id": "not_applicable",
+            "type": "na_handling",
+            "summary": "A requirement for a feature the application does not have (for example WebRTC, OAuth or file upload) is marked not applicable rather than failed.",
+            "source": "asvs",
+            "cite": "OWASP ASVS 5.0.0"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "ASVS",
+            "definition": "The OWASP Application Security Verification Standard, a list of security requirements for designing, building and testing web applications and services."
+        },
+        {
+            "term": "OWASP",
+            "definition": "The Open Worldwide Application Security Project, a nonprofit foundation that publishes open application security standards and tools."
+        },
+        {
+            "term": "Verification level",
+            "definition": "One of three cumulative ASVS levels that set how many requirements apply, chosen by the risk the application carries."
+        }
+    ],
+    "display_name": "OWASP ASVS Level 1 (5.0.0)",
+    "counts": {
+        "families": 15,
+        "controls": 70,
+        "objectives": 0
+    },
+    "families": [
+        {
+            "number": "V1",
+            "code": "V1",
+            "name": "Encoding and Sanitization",
+            "controls": [
+                {
+                    "id": "V1.2.1",
+                    "number": "V1.2.1",
+                    "text": "Verify that output encoding for an HTTP response, HTML document, or XML document is relevant for the context required, such as encoding the relevant characters for HTML elements, HTML attributes, HTML comments, CSS, or HTTP header fields, to avoid changing the message or document structure.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V1.2",
+                    "section_name": "Injection Prevention",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V1.2.2",
+                    "number": "V1.2.2",
+                    "text": "Verify that when dynamically building URLs, untrusted data is encoded according to its context (e.g., URL encoding or base64url encoding for query or path parameters). Ensure that only safe URL protocols are permitted (e.g., disallow javascript: or data:).",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V1.2",
+                    "section_name": "Injection Prevention",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V1.2.3",
+                    "number": "V1.2.3",
+                    "text": "Verify that output encoding or escaping is used when dynamically building JavaScript content (including JSON), to avoid changing the message or document structure (to avoid JavaScript and JSON injection).",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V1.2",
+                    "section_name": "Injection Prevention",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V1.2.4",
+                    "number": "V1.2.4",
+                    "text": "Verify that data selection or database queries (e.g., SQL, HQL, NoSQL, Cypher) use parameterized queries, ORMs, entity frameworks, or are otherwise protected from SQL Injection and other database injection attacks. This is also relevant when writing stored procedures.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V1.2",
+                    "section_name": "Injection Prevention",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V1.2.5",
+                    "number": "V1.2.5",
+                    "text": "Verify that the application protects against OS command injection and that operating system calls use parameterized OS queries or use contextual command line output encoding.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V1.2",
+                    "section_name": "Injection Prevention",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V1.3.1",
+                    "number": "V1.3.1",
+                    "text": "Verify that all untrusted HTML input from WYSIWYG editors or similar is sanitized using a well-known and secure HTML sanitization library or framework feature.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V1.3",
+                    "section_name": "Sanitization",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V1.3.2",
+                    "number": "V1.3.2",
+                    "text": "Verify that the application avoids the use of eval() or other dynamic code execution features such as Spring Expression Language (SpEL). Where there is no alternative, any user input being included must be sanitized before being executed.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V1.3",
+                    "section_name": "Sanitization",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V1.5.1",
+                    "number": "V1.5.1",
+                    "text": "Verify that the application configures XML parsers to use a restrictive configuration and that unsafe features such as resolving external entities are disabled to prevent XML eXternal Entity (XXE) attacks.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V1.5",
+                    "section_name": "Safe Deserialization",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                }
+            ]
+        },
+        {
+            "number": "V2",
+            "code": "V2",
+            "name": "Validation and Business Logic",
+            "controls": [
+                {
+                    "id": "V2.1.1",
+                    "number": "V2.1.1",
+                    "text": "Verify that the application's documentation defines input validation rules for how to check the validity of data items against an expected structure. This could be common data formats such as credit card numbers, email addresses, telephone numbers, or it could be an internal data format.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V2.1",
+                    "section_name": "Validation and Business Logic Documentation",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V2.2.1",
+                    "number": "V2.2.1",
+                    "text": "Verify that input is validated to enforce business or functional expectations for that input. This should either use positive validation against an allow list of values, patterns, and ranges, or be based on comparing the input to an expected structure and logical limits according to predefined rules. For L1, this can focus on input which is used to make specific business or security decisions. For L2 and up, this should apply to all input.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V2.2",
+                    "section_name": "Input Validation",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V2.2.2",
+                    "number": "V2.2.2",
+                    "text": "Verify that the application is designed to enforce input validation at a trusted service layer. While client-side validation improves usability and should be encouraged, it must not be relied upon as a security control.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V2.2",
+                    "section_name": "Input Validation",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V2.3.1",
+                    "number": "V2.3.1",
+                    "text": "Verify that the application will only process business logic flows for the same user in the expected sequential step order and without skipping steps.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V2.3",
+                    "section_name": "Business Logic Security",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                }
+            ]
+        },
+        {
+            "number": "V3",
+            "code": "V3",
+            "name": "Web Frontend Security",
+            "controls": [
+                {
+                    "id": "V3.2.1",
+                    "number": "V3.2.1",
+                    "text": "Verify that security controls are in place to prevent browsers from rendering content or functionality in HTTP responses in an incorrect context (e.g., when an API, a user-uploaded file or other resource is requested directly). Possible controls could include: not serving the content unless HTTP request header fields (such as Sec-Fetch-\\*) indicate it is the correct context, using the sandbox directive of the Content-Security-Policy header field or using the attachment disposition type in the Content-Disposition header field.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V3.2",
+                    "section_name": "Unintended Content Interpretation",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V3.2.2",
+                    "number": "V3.2.2",
+                    "text": "Verify that content intended to be displayed as text, rather than rendered as HTML, is handled using safe rendering functions (such as createTextNode or textContent) to prevent unintended execution of content such as HTML or JavaScript.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V3.2",
+                    "section_name": "Unintended Content Interpretation",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V3.3.1",
+                    "number": "V3.3.1",
+                    "text": "Verify that cookies have the 'Secure' attribute set, and if the '\\__Host-' prefix is not used for the cookie name, the '__Secure-' prefix must be used for the cookie name.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V3.3",
+                    "section_name": "Cookie Setup",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V3.4.1",
+                    "number": "V3.4.1",
+                    "text": "Verify that a Strict-Transport-Security header field is included on all responses to enforce an HTTP Strict Transport Security (HSTS) policy. A maximum age of at least 1 year must be defined, and for L2 and up, the policy must apply to all subdomains as well.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V3.4",
+                    "section_name": "Browser Security Mechanism Headers",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V3.4.2",
+                    "number": "V3.4.2",
+                    "text": "Verify that the Cross-Origin Resource Sharing (CORS) Access-Control-Allow-Origin header field is a fixed value by the application, or if the Origin HTTP request header field value is used, it is validated against an allowlist of trusted origins. When 'Access-Control-Allow-Origin: *' needs to be used, verify that the response does not include any sensitive information.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V3.4",
+                    "section_name": "Browser Security Mechanism Headers",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V3.5.1",
+                    "number": "V3.5.1",
+                    "text": "Verify that, if the application does not rely on the CORS preflight mechanism to prevent disallowed cross-origin requests to use sensitive functionality, these requests are validated to ensure they originate from the application itself. This may be done by using and validating anti-forgery tokens or requiring extra HTTP header fields that are not CORS-safelisted request-header fields. This is to defend against browser-based request forgery attacks, commonly known as cross-site request forgery (CSRF).",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V3.5",
+                    "section_name": "Browser Origin Separation",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V3.5.2",
+                    "number": "V3.5.2",
+                    "text": "Verify that, if the application relies on the CORS preflight mechanism to prevent disallowed cross-origin use of sensitive functionality, it is not possible to call the functionality with a request which does not trigger a CORS-preflight request. This may require checking the values of the 'Origin' and 'Content-Type' request header fields or using an extra header field that is not a CORS-safelisted header-field.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V3.5",
+                    "section_name": "Browser Origin Separation",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V3.5.3",
+                    "number": "V3.5.3",
+                    "text": "Verify that HTTP requests to sensitive functionality use appropriate HTTP methods such as POST, PUT, PATCH, or DELETE, and not methods defined by the HTTP specification as \"safe\" such as HEAD, OPTIONS, or GET. Alternatively, strict validation of the Sec-Fetch-* request header fields can be used to ensure that the request did not originate from an inappropriate cross-origin call, a navigation request, or a resource load (such as an image source) where this is not expected.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V3.5",
+                    "section_name": "Browser Origin Separation",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                }
+            ]
+        },
+        {
+            "number": "V4",
+            "code": "V4",
+            "name": "API and Web Service",
+            "controls": [
+                {
+                    "id": "V4.1.1",
+                    "number": "V4.1.1",
+                    "text": "Verify that every HTTP response with a message body contains a Content-Type header field that matches the actual content of the response, including the charset parameter to specify safe character encoding (e.g., UTF-8, ISO-8859-1) according to IANA Media Types, such as \"text/\", \"/+xml\" and \"/xml\".",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V4.1",
+                    "section_name": "Generic Web Service Security",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V4.4.1",
+                    "number": "V4.4.1",
+                    "text": "Verify that WebSocket over TLS (WSS) is used for all WebSocket connections.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V4.4",
+                    "section_name": "WebSocket",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                }
+            ]
+        },
+        {
+            "number": "V5",
+            "code": "V5",
+            "name": "File Handling",
+            "controls": [
+                {
+                    "id": "V5.2.1",
+                    "number": "V5.2.1",
+                    "text": "Verify that the application will only accept files of a size which it can process without causing a loss of performance or a denial of service attack.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V5.2",
+                    "section_name": "File Upload and Content",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V5.2.2",
+                    "number": "V5.2.2",
+                    "text": "Verify that when the application accepts a file, either on its own or within an archive such as a zip file, it checks if the file extension matches an expected file extension and validates that the contents correspond to the type represented by the extension. This includes, but is not limited to, checking the initial 'magic bytes', performing image re-writing, and using specialized libraries for file content validation. For L1, this can focus just on files which are used to make specific business or security decisions. For L2 and up, this must apply to all files being accepted.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V5.2",
+                    "section_name": "File Upload and Content",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V5.3.1",
+                    "number": "V5.3.1",
+                    "text": "Verify that files uploaded or generated by untrusted input and stored in a public folder, are not executed as server-side program code when accessed directly with an HTTP request.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V5.3",
+                    "section_name": "File Storage",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V5.3.2",
+                    "number": "V5.3.2",
+                    "text": "Verify that when the application creates file paths for file operations, instead of user-submitted filenames, it uses internally generated or trusted data, or if user-submitted filenames or file metadata must be used, strict validation and sanitization must be applied. This is to protect against path traversal, local or remote file inclusion (LFI, RFI), and server-side request forgery (SSRF) attacks.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V5.3",
+                    "section_name": "File Storage",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                }
+            ]
+        },
+        {
+            "number": "V6",
+            "code": "V6",
+            "name": "Authentication",
+            "controls": [
+                {
+                    "id": "V6.1.1",
+                    "number": "V6.1.1",
+                    "text": "Verify that application documentation defines how controls such as rate limiting, anti-automation, and adaptive response, are used to defend against attacks such as credential stuffing and password brute force. The documentation must make clear how these controls are configured and prevent malicious account lockout.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V6.1",
+                    "section_name": "Authentication Documentation",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V6.2.1",
+                    "number": "V6.2.1",
+                    "text": "Verify that user set passwords are at least 8 characters in length although a minimum of 15 characters is strongly recommended.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V6.2",
+                    "section_name": "Password Security",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V6.2.2",
+                    "number": "V6.2.2",
+                    "text": "Verify that users can change their password.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V6.2",
+                    "section_name": "Password Security",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V6.2.3",
+                    "number": "V6.2.3",
+                    "text": "Verify that password change functionality requires the user's current and new password.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V6.2",
+                    "section_name": "Password Security",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V6.2.4",
+                    "number": "V6.2.4",
+                    "text": "Verify that passwords submitted during account registration or password change are checked against an available set of, at least, the top 3000 passwords which match the application's password policy, e.g. minimum length.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V6.2",
+                    "section_name": "Password Security",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V6.2.5",
+                    "number": "V6.2.5",
+                    "text": "Verify that passwords of any composition can be used, without rules limiting the type of characters permitted. There must be no requirement for a minimum number of upper or lower case characters, numbers, or special characters.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V6.2",
+                    "section_name": "Password Security",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V6.2.6",
+                    "number": "V6.2.6",
+                    "text": "Verify that password input fields use type=password to mask the entry. Applications may allow the user to temporarily view the entire masked password, or the last typed character of the password.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V6.2",
+                    "section_name": "Password Security",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V6.2.7",
+                    "number": "V6.2.7",
+                    "text": "Verify that \"paste\" functionality, browser password helpers, and external password managers are permitted.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V6.2",
+                    "section_name": "Password Security",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V6.2.8",
+                    "number": "V6.2.8",
+                    "text": "Verify that the application verifies the user's password exactly as received from the user, without any modifications such as truncation or case transformation.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V6.2",
+                    "section_name": "Password Security",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V6.3.1",
+                    "number": "V6.3.1",
+                    "text": "Verify that controls to prevent attacks such as credential stuffing and password brute force are implemented according to the application's security documentation.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V6.3",
+                    "section_name": "General Authentication Security",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V6.3.2",
+                    "number": "V6.3.2",
+                    "text": "Verify that default user accounts (e.g., \"root\", \"admin\", or \"sa\") are not present in the application or are disabled.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V6.3",
+                    "section_name": "General Authentication Security",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V6.4.1",
+                    "number": "V6.4.1",
+                    "text": "Verify that system generated initial passwords or activation codes are securely randomly generated, follow the existing password policy, and expire after a short period of time or after they are initially used. These initial secrets must not be permitted to become the long term password.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V6.4",
+                    "section_name": "Authentication Factor Lifecycle and Recovery",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V6.4.2",
+                    "number": "V6.4.2",
+                    "text": "Verify that password hints or knowledge-based authentication (so-called \"secret questions\") are not present.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V6.4",
+                    "section_name": "Authentication Factor Lifecycle and Recovery",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                }
+            ]
+        },
+        {
+            "number": "V7",
+            "code": "V7",
+            "name": "Session Management",
+            "controls": [
+                {
+                    "id": "V7.2.1",
+                    "number": "V7.2.1",
+                    "text": "Verify that the application performs all session token verification using a trusted, backend service.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V7.2",
+                    "section_name": "Fundamental Session Management Security",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V7.2.2",
+                    "number": "V7.2.2",
+                    "text": "Verify that the application uses either self-contained or reference tokens that are dynamically generated for session management, i.e. not using static API secrets and keys.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V7.2",
+                    "section_name": "Fundamental Session Management Security",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V7.2.3",
+                    "number": "V7.2.3",
+                    "text": "Verify that if reference tokens are used to represent user sessions, they are unique and generated using a cryptographically secure pseudo-random number generator (CSPRNG) and possess at least 128 bits of entropy.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V7.2",
+                    "section_name": "Fundamental Session Management Security",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V7.2.4",
+                    "number": "V7.2.4",
+                    "text": "Verify that the application generates a new session token on user authentication, including re-authentication, and terminates the current session token.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V7.2",
+                    "section_name": "Fundamental Session Management Security",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V7.4.1",
+                    "number": "V7.4.1",
+                    "text": "Verify that when session termination is triggered (such as logout or expiration), the application disallows any further use of the session. For reference tokens or stateful sessions, this means invalidating the session data at the application backend. Applications using self-contained tokens will need a solution such as maintaining a list of terminated tokens, disallowing tokens produced before a per-user date and time or rotating a per-user signing key.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V7.4",
+                    "section_name": "Session Termination",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V7.4.2",
+                    "number": "V7.4.2",
+                    "text": "Verify that the application terminates all active sessions when a user account is disabled or deleted (such as an employee leaving the company).",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V7.4",
+                    "section_name": "Session Termination",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                }
+            ]
+        },
+        {
+            "number": "V8",
+            "code": "V8",
+            "name": "Authorization",
+            "controls": [
+                {
+                    "id": "V8.1.1",
+                    "number": "V8.1.1",
+                    "text": "Verify that authorization documentation defines rules for restricting function-level and data-specific access based on consumer permissions and resource attributes.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V8.1",
+                    "section_name": "Authorization Documentation",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V8.2.1",
+                    "number": "V8.2.1",
+                    "text": "Verify that the application ensures that function-level access is restricted to consumers with explicit permissions.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V8.2",
+                    "section_name": "General Authorization Design",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V8.2.2",
+                    "number": "V8.2.2",
+                    "text": "Verify that the application ensures that data-specific access is restricted to consumers with explicit permissions to specific data items to mitigate insecure direct object reference (IDOR) and broken object level authorization (BOLA).",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V8.2",
+                    "section_name": "General Authorization Design",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V8.3.1",
+                    "number": "V8.3.1",
+                    "text": "Verify that the application enforces authorization rules at a trusted service layer and doesn't rely on controls that an untrusted consumer could manipulate, such as client-side JavaScript.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V8.3",
+                    "section_name": "Operation Level Authorization",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                }
+            ]
+        },
+        {
+            "number": "V9",
+            "code": "V9",
+            "name": "Self-contained Tokens",
+            "controls": [
+                {
+                    "id": "V9.1.1",
+                    "number": "V9.1.1",
+                    "text": "Verify that self-contained tokens are validated using their digital signature or MAC to protect against tampering before accepting the token's contents.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V9.1",
+                    "section_name": "Token source and integrity",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V9.1.2",
+                    "number": "V9.1.2",
+                    "text": "Verify that only algorithms on an allowlist can be used to create and verify self-contained tokens, for a given context. The allowlist must include the permitted algorithms, ideally only either symmetric or asymmetric algorithms, and must not include the 'None' algorithm. If both symmetric and asymmetric must be supported, additional controls will be needed to prevent key confusion.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V9.1",
+                    "section_name": "Token source and integrity",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V9.1.3",
+                    "number": "V9.1.3",
+                    "text": "Verify that key material that is used to validate self-contained tokens is from trusted pre-configured sources for the token issuer, preventing attackers from specifying untrusted sources and keys. For JWTs and other JWS structures, headers such as 'jku', 'x5u', and 'jwk' must be validated against an allowlist of trusted sources.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V9.1",
+                    "section_name": "Token source and integrity",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V9.2.1",
+                    "number": "V9.2.1",
+                    "text": "Verify that, if a validity time span is present in the token data, the token and its content are accepted only if the verification time is within this validity time span. For example, for JWTs, the claims 'nbf' and 'exp' must be verified.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V9.2",
+                    "section_name": "Token content",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                }
+            ]
+        },
+        {
+            "number": "V10",
+            "code": "V10",
+            "name": "OAuth and OIDC",
+            "controls": [
+                {
+                    "id": "V10.4.1",
+                    "number": "V10.4.1",
+                    "text": "Verify that the authorization server validates redirect URIs based on a client-specific allowlist of pre-registered URIs using exact string comparison.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V10.4",
+                    "section_name": "OAuth Authorization Server",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V10.4.2",
+                    "number": "V10.4.2",
+                    "text": "Verify that, if the authorization server returns the authorization code in the authorization response, it can be used only once for a token request. For the second valid request with an authorization code that has already been used to issue an access token, the authorization server must reject a token request and revoke any issued tokens related to the authorization code.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V10.4",
+                    "section_name": "OAuth Authorization Server",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V10.4.3",
+                    "number": "V10.4.3",
+                    "text": "Verify that the authorization code is short-lived. The maximum lifetime can be up to 10 minutes for L1 and L2 applications and up to 1 minute for L3 applications.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V10.4",
+                    "section_name": "OAuth Authorization Server",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V10.4.4",
+                    "number": "V10.4.4",
+                    "text": "Verify that for a given client, the authorization server only allows the usage of grants that this client needs to use. Note that the grants 'token' (Implicit flow) and 'password' (Resource Owner Password Credentials flow) must no longer be used.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V10.4",
+                    "section_name": "OAuth Authorization Server",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V10.4.5",
+                    "number": "V10.4.5",
+                    "text": "Verify that the authorization server mitigates refresh token replay attacks for public clients, preferably using sender-constrained refresh tokens, i.e., Demonstrating Proof of Possession (DPoP) or Certificate-Bound Access Tokens using mutual TLS (mTLS). For L1 and L2 applications, refresh token rotation may be used. If refresh token rotation is used, the authorization server must invalidate the refresh token after usage, and revoke all refresh tokens for that authorization if an already used and invalidated refresh token is provided.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V10.4",
+                    "section_name": "OAuth Authorization Server",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                }
+            ]
+        },
+        {
+            "number": "V11",
+            "code": "V11",
+            "name": "Cryptography",
+            "controls": [
+                {
+                    "id": "V11.3.1",
+                    "number": "V11.3.1",
+                    "text": "Verify that insecure block modes (e.g., ECB) and weak padding schemes (e.g., PKCS#1 v1.5) are not used.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V11.3",
+                    "section_name": "Encryption Algorithms",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V11.3.2",
+                    "number": "V11.3.2",
+                    "text": "Verify that only approved ciphers and modes such as AES with GCM are used.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V11.3",
+                    "section_name": "Encryption Algorithms",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V11.4.1",
+                    "number": "V11.4.1",
+                    "text": "Verify that only approved hash functions are used for general cryptographic use cases, including digital signatures, HMAC, KDF, and random bit generation. Disallowed hash functions, such as MD5, must not be used for any cryptographic purpose.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V11.4",
+                    "section_name": "Hashing and Hash-based Functions",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                }
+            ]
+        },
+        {
+            "number": "V12",
+            "code": "V12",
+            "name": "Secure Communication",
+            "controls": [
+                {
+                    "id": "V12.1.1",
+                    "number": "V12.1.1",
+                    "text": "Verify that only the latest recommended versions of the TLS protocol are enabled, such as TLS 1.2 and TLS 1.3. The latest version of the TLS protocol must be the preferred option.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V12.1",
+                    "section_name": "General TLS Security Guidance",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V12.2.1",
+                    "number": "V12.2.1",
+                    "text": "Verify that TLS is used for all connectivity between a client and external facing, HTTP-based services, and does not fall back to insecure or unencrypted communications.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V12.2",
+                    "section_name": "HTTPS Communication with External Facing Services",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V12.2.2",
+                    "number": "V12.2.2",
+                    "text": "Verify that external facing services use publicly trusted TLS certificates.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V12.2",
+                    "section_name": "HTTPS Communication with External Facing Services",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                }
+            ]
+        },
+        {
+            "number": "V13",
+            "code": "V13",
+            "name": "Configuration",
+            "controls": [
+                {
+                    "id": "V13.4.1",
+                    "number": "V13.4.1",
+                    "text": "Verify that the application is deployed either without any source control metadata, including the .git or .svn folders, or in a way that these folders are inaccessible both externally and to the application itself.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V13.4",
+                    "section_name": "Unintended Information Leakage",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                }
+            ]
+        },
+        {
+            "number": "V14",
+            "code": "V14",
+            "name": "Data Protection",
+            "controls": [
+                {
+                    "id": "V14.2.1",
+                    "number": "V14.2.1",
+                    "text": "Verify that sensitive data is only sent to the server in the HTTP message body or header fields, and that the URL and query string do not contain sensitive information, such as an API key or session token.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V14.2",
+                    "section_name": "General Data Protection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V14.3.1",
+                    "number": "V14.3.1",
+                    "text": "Verify that authenticated data is cleared from client storage, such as the browser DOM, after the client or session is terminated. The 'Clear-Site-Data' HTTP response header field may be able to help with this but the client-side should also be able to clear up if the server connection is not available when the session is terminated.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V14.3",
+                    "section_name": "Client-side Data Protection",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                }
+            ]
+        },
+        {
+            "number": "V15",
+            "code": "V15",
+            "name": "Secure Coding and Architecture",
+            "controls": [
+                {
+                    "id": "V15.1.1",
+                    "number": "V15.1.1",
+                    "text": "Verify that application documentation defines risk based remediation time frames for 3rd party component versions with vulnerabilities and for updating libraries in general, to minimize the risk from these components.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V15.1",
+                    "section_name": "Secure Coding and Architecture Documentation",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V15.2.1",
+                    "number": "V15.2.1",
+                    "text": "Verify that the application only contains components which have not breached the documented update and remediation time frames.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V15.2",
+                    "section_name": "Security Architecture and Dependencies",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                },
+                {
+                    "id": "V15.3.1",
+                    "number": "V15.3.1",
+                    "text": "Verify that the application only returns the required subset of fields from a data object. For example, it should not return an entire data object, as some individual fields should not be accessible to users.",
+                    "type": "requirement",
+                    "level": 1,
+                    "section": "V15.3",
+                    "section_name": "Defensive Coding",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "asvs"
+                }
+            ]
+        }
+    ]
+}

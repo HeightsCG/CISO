@@ -1,0 +1,111 @@
+{
+    "key": "owasp-asvs-l1",
+    "name": "OWASP ASVS Level 1",
+    "version": "5.0.0",
+    "full_name": "OWASP Application Security Verification Standard 5.0.0, Level 1",
+    "issuing_body": "OWASP Foundation, ASVS project",
+    "standard_codes": [
+        "OWASP-ASVS-L1"
+    ],
+    "aliases": [
+        "ASVS",
+        "OWASP ASVS",
+        "Application Security Verification Standard"
+    ],
+    "content_licence": "open",
+    "notice": "OWASP Application Security Verification Standard 5.0.0 by the OWASP Foundation, licensed under Creative Commons Attribution-ShareAlike 4.0. Requirement text is reproduced from the standard.",
+    "sources": [
+        {
+            "id": "asvs",
+            "title": "OWASP Application Security Verification Standard 5.0.0 (JSON release)",
+            "version": "5.0.0 (May 2025)",
+            "publisher": "OWASP Foundation",
+            "url": "https://github.com/OWASP/ASVS/releases/download/v5.0.0_release/OWASP_Application_Security_Verification_Standard_5.0.0_en.json",
+            "file": "owasp-asvs/OWASP_Application_Security_Verification_Standard_5.0.0_en.json",
+            "sha256": "bcdbec214d70abcfad9284a31d4f9e5134305831d628aad3aa85d7e26626cb35"
+        }
+    ],
+    "source_of": {
+        "controls": "asvs"
+    },
+    "control_flags": {
+        "level": "The lowest ASVS level that includes the requirement (1, 2 or 3). Levels are cumulative.",
+        "section": "The ASVS section the requirement belongs to (V1.1), with section_name."
+    },
+    "terminology": {
+        "control": "requirement",
+        "controls": "requirements",
+        "family": "chapter",
+        "families": "chapters",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Verification score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Verified"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Verified"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Verified"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable Level 1 requirements that are verified. ASVS defines no score; an application meets Level 1 only when every applicable requirement at that level is verified, and this percentage is an HCG measure of progress toward that."
+    },
+    "rules": [
+        {
+            "id": "level_definition",
+            "type": "applicability",
+            "summary": "Level 1 is the minimum: requirements that are critical or basic first-layer defences against common attacks, most of which can be checked without access to source code.",
+            "source": "asvs",
+            "cite": "OWASP ASVS 5.0.0, levels"
+        },
+        {
+            "id": "cumulative_levels",
+            "type": "applicability",
+            "summary": "A requirement belongs to every level from the one it names upward; this Level 1 assessment holds 70 requirements.",
+            "source": "asvs",
+            "cite": "OWASP ASVS 5.0.0, requirement levels"
+        },
+        {
+            "id": "not_applicable",
+            "type": "na_handling",
+            "summary": "A requirement for a feature the application does not have (for example WebRTC, OAuth or file upload) is marked not applicable rather than failed.",
+            "source": "asvs",
+            "cite": "OWASP ASVS 5.0.0"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "ASVS",
+            "definition": "The OWASP Application Security Verification Standard, a list of security requirements for designing, building and testing web applications and services."
+        },
+        {
+            "term": "OWASP",
+            "definition": "The Open Worldwide Application Security Project, a nonprofit foundation that publishes open application security standards and tools."
+        },
+        {
+            "term": "Verification level",
+            "definition": "One of three cumulative ASVS levels that set how many requirements apply, chosen by the risk the application carries."
+        }
+    ]
+}
