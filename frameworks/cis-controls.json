@@ -1,0 +1,1296 @@
+{
+    "key": "cis-controls",
+    "name": "CIS Controls",
+    "version": "HCG control set 2026",
+    "full_name": "CIS Critical Security Controls v8.1 readiness: HCG control set organized by the 18 CIS Controls",
+    "issuing_body": "Heights Consulting Group, organized on the CIS Critical Security Controls v8.1 (Center for Internet Security)",
+    "standard_codes": [
+        "CIS-CONTROLS"
+    ],
+    "aliases": [
+        "CIS Controls",
+        "CIS CSC",
+        "CIS Critical Security Controls",
+        "CIS v8.1",
+        "CIS 18"
+    ],
+    "content_licence": "hcg_authored",
+    "notice": "HCG readiness control set organized by the 18 CIS Critical Security Controls v8.1. The names of the 18 Controls are taken from CIS's public list; the Safeguards, their numbering and the Implementation Group assignments are published by CIS under a non-commercial licence and are not reproduced. Controls here are HCG-written, carry HCG numbering, and note the lowest Implementation Group they correspond to.",
+    "sources": [
+        {
+            "id": "cis",
+            "title": "The 18 CIS Critical Security Controls (public list)",
+            "version": "v8.1",
+            "publisher": "Center for Internet Security",
+            "url": "https://www.cisecurity.org/controls/cis-controls-list",
+            "file": "cis/cis-controls-list.html",
+            "sha256": "0fb6d1ea94315794ff9111db160ea8defa90efd1b96e458ed90516ef33b3595f"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG CIS Controls readiness control set: controls, guidance and test points",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "hcg",
+        "objectives": "hcg",
+        "guidance": "hcg"
+    },
+    "control_flags": {
+        "type": "hcg for an HCG-written readiness control."
+    },
+    "terminology": {
+        "control": "control",
+        "controls": "controls",
+        "family": "theme",
+        "families": "themes",
+        "objective": "test point",
+        "objectives": "test points",
+        "plan": "Corrective action plan",
+        "plan_short": "Corrective action plan",
+        "score": "Implementation score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable controls implemented, with partial implementation counting as half. CIS defines no certification score; this percentage is an HCG readiness measure."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A control is implemented only when every HCG test point under it is met.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
+            "id": "implementation_groups",
+            "type": "applicability",
+            "summary": "Controls apply according to the organization's target Implementation Group: an IG1 organization is assessed on controls marked IG1; IG2 adds those marked IG2; IG3 adds those marked IG3. Controls above the target group are marked not applicable.",
+            "source": "cis",
+            "cite": "CIS Controls list, cisecurity.org",
+            "quote": "The CIS Critical Security Controls (CIS Controls) are a prescriptive, prioritized, and simplified set of best practices"
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "In the implementation score a partially implemented control counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "CIS Controls",
+            "definition": "A prioritized set of 18 cybersecurity controls published by the Center for Internet Security."
+        },
+        {
+            "term": "Safeguard",
+            "definition": "A specific action within a CIS Control. Version 8.1 has 153 Safeguards."
+        },
+        {
+            "term": "Implementation Group (IG)",
+            "definition": "CIS's tiers for prioritizing Safeguards: IG1 is essential cyber hygiene for every organization, IG2 adds Safeguards for organizations with more complex IT, and IG3 adds Safeguards for organizations facing sophisticated attacks."
+        }
+    ],
+    "display_name": "CIS Controls (HCG control set 2026)",
+    "counts": {
+        "families": 18,
+        "controls": 40,
+        "objectives": 96
+    },
+    "families": [
+        {
+            "number": "CIS-01",
+            "code": "CIS-01",
+            "name": "Inventory and Control of Enterprise Assets",
+            "controls": [
+                {
+                    "id": "CIS-01-01",
+                    "number": "CIS-01-01",
+                    "title": "Enterprise asset inventory",
+                    "text": "",
+                    "description": "A detailed inventory of all enterprise assets (end-user devices, servers, network devices, IoT and cloud assets) is kept current, with owner and location.",
+                    "guidance": "Compare the inventory with network discovery, DHCP, MDM and cloud console data, and check it is reviewed at least every six months. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-01-01.a",
+                            "text": "An inventory records every enterprise asset with owner, location and network address.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-01-01.b",
+                            "text": "The inventory is reviewed and updated at least every six months.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-01-02",
+                    "number": "CIS-01-02",
+                    "title": "Unauthorized assets and discovery",
+                    "text": "",
+                    "description": "Unauthorized assets are found and removed, quarantined or added to the inventory, using active or passive discovery.",
+                    "guidance": "Look for discovery tool output, a process for handling unknown devices, and evidence of action taken. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-01-02.a",
+                            "text": "Unauthorized assets are addressed at least weekly.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-01-02.b",
+                            "text": "An active or passive discovery tool identifies assets on the network.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-02",
+            "code": "CIS-02",
+            "name": "Inventory and Control of Software Assets",
+            "controls": [
+                {
+                    "id": "CIS-02-01",
+                    "number": "CIS-02-01",
+                    "title": "Software inventory",
+                    "text": "",
+                    "description": "An inventory of installed software is kept, and only supported software is authorized for use.",
+                    "guidance": "Review the software inventory or asset management tool and check for end-of-life software and exceptions. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-02-01.a",
+                            "text": "A software inventory records title, publisher, version and business purpose.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-02-01.b",
+                            "text": "Unsupported software is removed or has a documented exception with mitigations.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-02-02",
+                    "number": "CIS-02-02",
+                    "title": "Unauthorized software and allowlisting",
+                    "text": "",
+                    "description": "Unauthorized software is detected and removed, and application allowlisting limits what can run.",
+                    "guidance": "Check software inventory tooling, removal of unauthorized software and allowlisting of applications, libraries and scripts on higher-risk assets. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-02-02.a",
+                            "text": "Unauthorized software is removed or documented as an exception at least monthly.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-02-02.b",
+                            "text": "Allowlisting controls which applications and scripts can run.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-03",
+            "code": "CIS-03",
+            "name": "Data Protection",
+            "controls": [
+                {
+                    "id": "CIS-03-01",
+                    "number": "CIS-03-01",
+                    "title": "Data management and inventory",
+                    "text": "",
+                    "description": "A data management process covers sensitivity, ownership, retention and disposal, and a data inventory identifies sensitive data.",
+                    "guidance": "Review the data management process, data inventory, retention schedule and disposal records. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-03-01.a",
+                            "text": "A documented data management process covers handling, retention and disposal.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-03-01.b",
+                            "text": "A data inventory identifies where sensitive data is held.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-03-01.c",
+                            "text": "Data is retained and securely disposed of according to schedule.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-03-02",
+                    "number": "CIS-03-02",
+                    "title": "Access to data and encryption",
+                    "text": "",
+                    "description": "Access to data is restricted by need to know, and sensitive data is encrypted on end-user devices, removable media, in transit and at rest.",
+                    "guidance": "Check data access control lists, full-disk encryption on laptops, and encryption in transit and at rest for sensitive data. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-03-02.a",
+                            "text": "Data access is configured on need to know.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-03-02.b",
+                            "text": "End-user devices holding sensitive data use full-disk encryption.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-03-02.c",
+                            "text": "Sensitive data is encrypted in transit and at rest.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-03-03",
+                    "number": "CIS-03-03",
+                    "title": "Data classification, segmentation and leakage prevention",
+                    "text": "",
+                    "description": "Data is classified, processing of sensitive data is segmented, and data loss prevention detects unauthorized transfers.",
+                    "guidance": "Review the classification scheme, data flows, segmentation of systems processing sensitive data and DLP tooling. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-03-03.a",
+                            "text": "A data classification scheme is documented and applied.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-03-03.b",
+                            "text": "Data flows of sensitive data are documented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-03-03.c",
+                            "text": "Data loss prevention or equivalent monitoring is in place for sensitive data.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-04",
+            "code": "CIS-04",
+            "name": "Secure Configuration of Enterprise Assets and Software",
+            "controls": [
+                {
+                    "id": "CIS-04-01",
+                    "number": "CIS-04-01",
+                    "title": "Secure configuration process",
+                    "text": "",
+                    "description": "Secure configuration baselines exist for enterprise assets and software, and are applied and maintained.",
+                    "guidance": "Review documented baselines (for example derived from CIS Benchmarks) and configuration compliance scans. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-04-01.a",
+                            "text": "Documented secure configurations exist for each asset and software type.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-04-01.b",
+                            "text": "Configurations are applied and checked for drift.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-04-02",
+                    "number": "CIS-04-02",
+                    "title": "Hardening essentials",
+                    "text": "",
+                    "description": "Firewalls are enabled, default accounts are managed, unnecessary services are disabled, and devices lock after inactivity.",
+                    "guidance": "Sample assets for host firewalls, session locking, default account changes and disabled services, and check secure management protocols. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-04-02.a",
+                            "text": "Host-based firewalls or port filtering are enabled on servers and end-user devices.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-04-02.b",
+                            "text": "Default accounts are disabled or have changed credentials.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-04-02.c",
+                            "text": "Sessions lock automatically after a defined period of inactivity.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-04-03",
+                    "number": "CIS-04-03",
+                    "title": "Remote wipe and DNS",
+                    "text": "",
+                    "description": "Portable devices can be remotely wiped, and trusted DNS servers are used.",
+                    "guidance": "Check MDM remote wipe capability and DNS configuration of enterprise assets. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-04-03.a",
+                            "text": "Lost or stolen portable devices can be remotely wiped.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-04-03.b",
+                            "text": "Enterprise assets use trusted DNS servers.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-05",
+            "code": "CIS-05",
+            "name": "Account Management",
+            "controls": [
+                {
+                    "id": "CIS-05-01",
+                    "number": "CIS-05-01",
+                    "title": "Account inventory and lifecycle",
+                    "text": "",
+                    "description": "An inventory of all accounts is kept, and accounts are created, reviewed and disabled through a defined process, including dormant accounts.",
+                    "guidance": "Compare the account inventory with HR records, check dormant account handling and quarterly reviews. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-05-01.a",
+                            "text": "An inventory lists user, administrator and service accounts with owners.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-05-01.b",
+                            "text": "Dormant accounts are disabled after a defined period of inactivity.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-05-01.c",
+                            "text": "Accounts are reviewed at least quarterly.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-05-02",
+                    "number": "CIS-05-02",
+                    "title": "Passwords and administrator accounts",
+                    "text": "",
+                    "description": "Unique passwords are used for every account, and administrator activity uses dedicated accounts.",
+                    "guidance": "Check password policy, password manager use, and separation of administrator and everyday accounts. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-05-02.a",
+                            "text": "Each account has a unique password meeting the documented policy.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-05-02.b",
+                            "text": "Administrators use dedicated privileged accounts separate from their everyday accounts.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-06",
+            "code": "CIS-06",
+            "name": "Access Control Management",
+            "controls": [
+                {
+                    "id": "CIS-06-01",
+                    "number": "CIS-06-01",
+                    "title": "Granting and revoking access",
+                    "text": "",
+                    "description": "Access is granted through a defined, approved process and revoked promptly on termination or role change.",
+                    "guidance": "Sample joiners, movers and leavers for approval and timely revocation. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-06-01.a",
+                            "text": "Access requests are approved before access is granted.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-06-01.b",
+                            "text": "Access is revoked promptly on termination or role change.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-06-02",
+                    "number": "CIS-06-02",
+                    "title": "Multi-factor authentication",
+                    "text": "",
+                    "description": "Multi-factor authentication is required for externally exposed applications, remote network access and administrative access.",
+                    "guidance": "Check MFA enforcement in identity providers, VPN and administrative consoles, and any exemptions. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-06-02.a",
+                            "text": "MFA is enforced for externally exposed applications.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-06-02.b",
+                            "text": "MFA is enforced for remote network access.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-06-02.c",
+                            "text": "MFA is enforced for all administrative access.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-06-03",
+                    "number": "CIS-06-03",
+                    "title": "Centralized and role-based access",
+                    "text": "",
+                    "description": "Authentication and access control are centralized, and access is granted through defined roles reviewed periodically.",
+                    "guidance": "Review directory or SSO integration of applications and role definitions with review evidence. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-06-03.a",
+                            "text": "Authentication is centralized through a directory or SSO service.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-06-03.b",
+                            "text": "Access is assigned through defined roles that are reviewed periodically.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-07",
+            "code": "CIS-07",
+            "name": "Continuous Vulnerability Management",
+            "controls": [
+                {
+                    "id": "CIS-07-01",
+                    "number": "CIS-07-01",
+                    "title": "Vulnerability management process",
+                    "text": "",
+                    "description": "A vulnerability management process defines scanning, prioritization and remediation timeframes, and operating systems and applications are patched automatically or on schedule.",
+                    "guidance": "Review the documented process, patch management tooling and patch compliance reports. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-07-01.a",
+                            "text": "A documented vulnerability management process is reviewed annually.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-07-01.b",
+                            "text": "Operating system and application patches are applied at least monthly.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-07-02",
+                    "number": "CIS-07-02",
+                    "title": "Vulnerability scanning and remediation",
+                    "text": "",
+                    "description": "Internal and external vulnerability scans run at defined intervals, and findings are remediated on a risk basis.",
+                    "guidance": "Review scan schedules, authenticated scan coverage and remediation tracking. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-07-02.a",
+                            "text": "Authenticated internal scans run at least quarterly.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-07-02.b",
+                            "text": "External scans of exposed assets run at least monthly.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-07-02.c",
+                            "text": "Detected vulnerabilities are remediated within documented timeframes.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-08",
+            "code": "CIS-08",
+            "name": "Audit Log Management",
+            "controls": [
+                {
+                    "id": "CIS-08-01",
+                    "number": "CIS-08-01",
+                    "title": "Audit logging",
+                    "text": "",
+                    "description": "An audit log management process defines what is logged, and logging is enabled across enterprise assets with enough storage.",
+                    "guidance": "Review the logging standard and check log configuration on a sample of assets. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-08-01.a",
+                            "text": "A documented process defines logging requirements.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-08-01.b",
+                            "text": "Audit logging is enabled on enterprise assets.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-08-01.c",
+                            "text": "Log storage is sufficient for the retention period.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-08-02",
+                    "number": "CIS-08-02",
+                    "title": "Log collection, review and retention",
+                    "text": "",
+                    "description": "Logs are collected centrally, time-synchronized, reviewed for anomalies and retained for at least 90 days.",
+                    "guidance": "Check central log management, time synchronization, review records and retention settings. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-08-02.a",
+                            "text": "Logs are collected centrally with synchronized timestamps.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-08-02.b",
+                            "text": "Logs are reviewed at defined intervals to detect anomalies.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-08-02.c",
+                            "text": "Logs are retained for at least 90 days.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-09",
+            "code": "CIS-09",
+            "name": "Email and Web Browser Protections",
+            "controls": [
+                {
+                    "id": "CIS-09-01",
+                    "number": "CIS-09-01",
+                    "title": "Browser and email client hygiene",
+                    "text": "",
+                    "description": "Only supported browsers and email clients are allowed, and DNS filtering blocks access to known malicious domains.",
+                    "guidance": "Check allowed browsers and email clients and DNS filtering configuration. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-09-01.a",
+                            "text": "Only fully supported browsers and email clients are used.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-09-01.b",
+                            "text": "DNS filtering services block known malicious domains.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-09-02",
+                    "number": "CIS-09-02",
+                    "title": "Email security",
+                    "text": "",
+                    "description": "Email is protected with anti-spoofing (DMARC, SPF, DKIM), attachment filtering and URL filtering.",
+                    "guidance": "Check DMARC policy, mail gateway attachment and URL filtering settings. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-09-02.a",
+                            "text": "DMARC, SPF and DKIM are implemented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-09-02.b",
+                            "text": "Unnecessary file types are blocked at the email gateway.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-09-02.c",
+                            "text": "Network-based URL filtering is enforced.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-10",
+            "code": "CIS-10",
+            "name": "Malware Defenses",
+            "controls": [
+                {
+                    "id": "CIS-10-01",
+                    "number": "CIS-10-01",
+                    "title": "Anti-malware",
+                    "text": "",
+                    "description": "Anti-malware software is deployed, kept current automatically, and autorun of removable media is disabled.",
+                    "guidance": "Check the anti-malware console for coverage and signature currency, and autorun settings. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-10-01.a",
+                            "text": "Anti-malware software is deployed on all enterprise assets.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-10-01.b",
+                            "text": "Signatures update automatically.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-10-01.c",
+                            "text": "Autorun and autoplay for removable media are disabled.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-10-02",
+                    "number": "CIS-10-02",
+                    "title": "Central management and behavior-based protection",
+                    "text": "",
+                    "description": "Anti-malware is centrally managed, scans removable media, and uses behavior-based detection with anti-exploitation features enabled.",
+                    "guidance": "Review central management, removable media scanning and EDR or behavior-based features. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-10-02.a",
+                            "text": "Anti-malware is centrally managed.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-10-02.b",
+                            "text": "Behavior-based detection and anti-exploitation features are enabled.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-11",
+            "code": "CIS-11",
+            "name": "Data Recovery",
+            "controls": [
+                {
+                    "id": "CIS-11-01",
+                    "number": "CIS-11-01",
+                    "title": "Data recovery process and backups",
+                    "text": "",
+                    "description": "A data recovery process defines scope and priorities, and automated backups of in-scope assets run at least weekly.",
+                    "guidance": "Review the data recovery process, backup schedules and success monitoring. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-11-01.a",
+                            "text": "A documented data recovery process defines scope, priority and backup security.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-11-01.b",
+                            "text": "Automated backups of in-scope assets run at least weekly.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-11-02",
+                    "number": "CIS-11-02",
+                    "title": "Protected and isolated backups",
+                    "text": "",
+                    "description": "Recovery data is protected like the original data, and an isolated copy is maintained.",
+                    "guidance": "Check backup encryption, access restrictions and an offline, immutable or otherwise isolated copy. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-11-02.a",
+                            "text": "Backups are protected with controls equivalent to the original data.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-11-02.b",
+                            "text": "An isolated copy of recovery data is maintained.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-11-03",
+                    "number": "CIS-11-03",
+                    "title": "Recovery testing",
+                    "text": "",
+                    "description": "Data recovery is tested at least quarterly for a sample of in-scope assets.",
+                    "guidance": "Review restore test records and results. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-11-03.a",
+                            "text": "Restores are tested at least quarterly and results recorded.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-12",
+            "code": "CIS-12",
+            "name": "Network Infrastructure Management",
+            "controls": [
+                {
+                    "id": "CIS-12-01",
+                    "number": "CIS-12-01",
+                    "title": "Network infrastructure maintenance",
+                    "text": "",
+                    "description": "Network infrastructure is kept up to date, and network architecture is documented.",
+                    "guidance": "Check firmware and software versions of network devices and current network diagrams. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-12-01.a",
+                            "text": "Network devices run supported, up-to-date software.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-12-01.b",
+                            "text": "Network architecture and diagrams are documented and reviewed annually.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-12-02",
+                    "number": "CIS-12-02",
+                    "title": "Secure network architecture and administration",
+                    "text": "",
+                    "description": "Network architecture is segmented, network devices are managed through secure protocols and dedicated resources, and remote access requires authentication through a central service.",
+                    "guidance": "Review segmentation, secure management protocols, centralized network AAA and VPN configuration. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-12-02.a",
+                            "text": "The network is segmented by function and trust level.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-12-02.b",
+                            "text": "Network devices are administered over secure protocols with centralized authentication.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-12-02.c",
+                            "text": "Remote access requires a VPN and authentication before connecting to enterprise resources.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-13",
+            "code": "CIS-13",
+            "name": "Network Monitoring and Defense",
+            "controls": [
+                {
+                    "id": "CIS-13-01",
+                    "number": "CIS-13-01",
+                    "title": "Network monitoring and alerting",
+                    "text": "",
+                    "description": "Security events across the network are centralized and alerted on, and intrusion detection is deployed.",
+                    "guidance": "Review SIEM alerting, network and host intrusion detection, and alert handling. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-13-01.a",
+                            "text": "Security event alerting is centralized.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-13-01.b",
+                            "text": "Network-based intrusion detection is deployed on key segments.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-13-01.c",
+                            "text": "Alerts are triaged and investigated.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-13-02",
+                    "number": "CIS-13-02",
+                    "title": "Network access control and filtering",
+                    "text": "",
+                    "description": "Traffic between network segments is filtered, and access to the network is controlled at the port or application level.",
+                    "guidance": "Check inter-segment filtering, port-level access control and remote asset security requirements. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-13-02.a",
+                            "text": "Traffic between network segments is filtered.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-13-02.b",
+                            "text": "Access to the network is controlled at port or application level.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-14",
+            "code": "CIS-14",
+            "name": "Security Awareness and Skills Training",
+            "controls": [
+                {
+                    "id": "CIS-14-01",
+                    "number": "CIS-14-01",
+                    "title": "Security awareness program",
+                    "text": "",
+                    "description": "A security awareness program trains the workforce at hire and at least annually on social engineering, authentication, data handling and incident reporting.",
+                    "guidance": "Review training content, completion tracking and phishing simulations. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-14-01.a",
+                            "text": "Workforce members complete awareness training at hire and at least annually.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-14-01.b",
+                            "text": "Training covers social engineering, authentication, data handling and how to report incidents.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-14-02",
+                    "number": "CIS-14-02",
+                    "title": "Role-specific training",
+                    "text": "",
+                    "description": "People in security-relevant roles receive role-specific security training.",
+                    "guidance": "Check training records for administrators, developers and other specialist roles. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-14-02.a",
+                            "text": "Role-specific security training is delivered to people in security-relevant roles.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-15",
+            "code": "CIS-15",
+            "name": "Service Provider Management",
+            "controls": [
+                {
+                    "id": "CIS-15-01",
+                    "number": "CIS-15-01",
+                    "title": "Service provider inventory and policy",
+                    "text": "",
+                    "description": "An inventory of service providers is kept, with a classification and a policy for managing them.",
+                    "guidance": "Review the service provider inventory, classification by data sensitivity and criticality, and the management policy. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-15-01.a",
+                            "text": "An inventory of service providers records their classification and contact.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-15-01.b",
+                            "text": "A service provider management policy is documented.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-15-02",
+                    "number": "CIS-15-02",
+                    "title": "Contracts, assessment and decommissioning",
+                    "text": "",
+                    "description": "Contracts include security requirements, providers are assessed and monitored, and decommissioning includes data return or disposal.",
+                    "guidance": "Sample contracts for security clauses, assessment records and decommissioning evidence. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-15-02.a",
+                            "text": "Contracts include security requirements, including breach notification.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-15-02.b",
+                            "text": "Service providers are assessed and monitored according to their classification.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-15-02.c",
+                            "text": "Decommissioning ensures account deactivation and data disposal.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-16",
+            "code": "CIS-16",
+            "name": "Application Software Security",
+            "controls": [
+                {
+                    "id": "CIS-16-01",
+                    "number": "CIS-16-01",
+                    "title": "Secure development process",
+                    "text": "",
+                    "description": "A secure application development process covers design, secure coding, third-party components and vulnerability handling.",
+                    "guidance": "Review the secure development process, inventory of third-party components, and the process for receiving and fixing software vulnerabilities. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-16-01.a",
+                            "text": "A documented secure development process is followed.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-16-01.b",
+                            "text": "Third-party software components are inventoried and kept up to date.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-16-01.c",
+                            "text": "A process exists to accept and address reports of software vulnerabilities.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-16-02",
+                    "number": "CIS-16-02",
+                    "title": "Application security testing",
+                    "text": "",
+                    "description": "Applications are tested with static and dynamic analysis, and development and production environments are separated.",
+                    "guidance": "Check SAST and DAST use, code review and environment separation. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-16-02.a",
+                            "text": "Static and dynamic application security testing is performed.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-16-02.b",
+                            "text": "Production and non-production environments are separated.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-17",
+            "code": "CIS-17",
+            "name": "Incident Response Management",
+            "controls": [
+                {
+                    "id": "CIS-17-01",
+                    "number": "CIS-17-01",
+                    "title": "Incident response process",
+                    "text": "",
+                    "description": "Incident response roles are designated, contact information is maintained, and a process exists for the workforce to report incidents.",
+                    "guidance": "Review the named incident handler and deputies, contact lists and the reporting process. Implementation group: IG1 and above (essential cyber hygiene).",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-17-01.a",
+                            "text": "A person and a backup are designated to manage incident handling.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-17-01.b",
+                            "text": "Contact information for incident reporting and external parties is maintained.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-17-01.c",
+                            "text": "A process for reporting incidents is documented and communicated.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-17-02",
+                    "number": "CIS-17-02",
+                    "title": "Incident response plan and exercises",
+                    "text": "",
+                    "description": "An incident response plan defines roles, communication and recovery, and is exercised at least annually with post-incident reviews.",
+                    "guidance": "Review the plan, exercise records and post-incident reviews. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-17-02.a",
+                            "text": "A documented incident response plan defines roles, communication and recovery steps.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-17-02.b",
+                            "text": "Incident response exercises are conducted at least annually.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-17-02.c",
+                            "text": "Post-incident reviews are conducted and lessons applied.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "CIS-18",
+            "code": "CIS-18",
+            "name": "Penetration Testing",
+            "controls": [
+                {
+                    "id": "CIS-18-01",
+                    "number": "CIS-18-01",
+                    "title": "Penetration testing program",
+                    "text": "",
+                    "description": "A penetration testing program defines scope, frequency and handling of findings, and external penetration tests are performed at least annually.",
+                    "guidance": "Review the program, recent test reports and remediation tracking. Implementation group: IG2 and above.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-18-01.a",
+                            "text": "A penetration testing program is documented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-18-01.b",
+                            "text": "External penetration tests are performed at least annually.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-18-01.c",
+                            "text": "Findings are remediated according to the organization's remediation policy.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "CIS-18-02",
+                    "number": "CIS-18-02",
+                    "title": "Internal penetration testing",
+                    "text": "",
+                    "description": "Internal penetration tests are performed at least annually, and security measures are validated after testing.",
+                    "guidance": "Review internal test reports and changes to security measures that resulted. Implementation group: IG3 only.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CIS-18-02.a",
+                            "text": "Internal penetration tests are performed at least annually.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "CIS-18-02.b",
+                            "text": "Security measures are validated or modified based on test results.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,122 @@
+{
+    "key": "cis-controls",
+    "name": "CIS Controls",
+    "version": "HCG control set 2026",
+    "full_name": "CIS Critical Security Controls v8.1 readiness: HCG control set organized by the 18 CIS Controls",
+    "issuing_body": "Heights Consulting Group, organized on the CIS Critical Security Controls v8.1 (Center for Internet Security)",
+    "standard_codes": [
+        "CIS-CONTROLS"
+    ],
+    "aliases": [
+        "CIS Controls",
+        "CIS CSC",
+        "CIS Critical Security Controls",
+        "CIS v8.1",
+        "CIS 18"
+    ],
+    "content_licence": "hcg_authored",
+    "notice": "HCG readiness control set organized by the 18 CIS Critical Security Controls v8.1. The names of the 18 Controls are taken from CIS's public list; the Safeguards, their numbering and the Implementation Group assignments are published by CIS under a non-commercial licence and are not reproduced. Controls here are HCG-written, carry HCG numbering, and note the lowest Implementation Group they correspond to.",
+    "sources": [
+        {
+            "id": "cis",
+            "title": "The 18 CIS Critical Security Controls (public list)",
+            "version": "v8.1",
+            "publisher": "Center for Internet Security",
+            "url": "https://www.cisecurity.org/controls/cis-controls-list",
+            "file": "cis/cis-controls-list.html",
+            "sha256": "0fb6d1ea94315794ff9111db160ea8defa90efd1b96e458ed90516ef33b3595f"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG CIS Controls readiness control set: controls, guidance and test points",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "hcg",
+        "objectives": "hcg",
+        "guidance": "hcg"
+    },
+    "control_flags": {
+        "type": "hcg for an HCG-written readiness control."
+    },
+    "terminology": {
+        "control": "control",
+        "controls": "controls",
+        "family": "theme",
+        "families": "themes",
+        "objective": "test point",
+        "objectives": "test points",
+        "plan": "Corrective action plan",
+        "plan_short": "Corrective action plan",
+        "score": "Implementation score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable controls implemented, with partial implementation counting as half. CIS defines no certification score; this percentage is an HCG readiness measure."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A control is implemented only when every HCG test point under it is met.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
+            "id": "implementation_groups",
+            "type": "applicability",
+            "summary": "Controls apply according to the organization's target Implementation Group: an IG1 organization is assessed on controls marked IG1; IG2 adds those marked IG2; IG3 adds those marked IG3. Controls above the target group are marked not applicable.",
+            "source": "cis",
+            "cite": "CIS Controls list, cisecurity.org",
+            "quote": "The CIS Critical Security Controls (CIS Controls) are a prescriptive, prioritized, and simplified set of best practices"
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "In the implementation score a partially implemented control counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "CIS Controls",
+            "definition": "A prioritized set of 18 cybersecurity controls published by the Center for Internet Security."
+        },
+        {
+            "term": "Safeguard",
+            "definition": "A specific action within a CIS Control. Version 8.1 has 153 Safeguards."
+        },
+        {
+            "term": "Implementation Group (IG)",
+            "definition": "CIS's tiers for prioritizing Safeguards: IG1 is essential cyber hygiene for every organization, IG2 adds Safeguards for organizations with more complex IT, and IG3 adds Safeguards for organizations facing sophisticated attacks."
+        }
+    ]
+}
