@@ -1,15 +1,16 @@
 # CISO.aero
 
-> CISO.aero is a cybersecurity governance, risk and compliance (GRC) platform built for aviation. Consultants and in-house security teams use it to assess airlines, airports, MROs, design and production organisations and their suppliers against EASA Part-IS, TSA, CMMC, NIST and other frameworks, collect evidence once and reuse it across frameworks, and issue reports for leadership.
+> CISO.aero is a cybersecurity governance, risk and compliance (GRC) platform built for aviation. Consultants and in-house security teams use it to assess airlines, airports, MROs, design and production organisations and their suppliers against 63 frameworks, including EASA Part-IS, TSA, CMMC, NIST, ISO/IEC 27001 and SOC 2, collect evidence once and reuse it across frameworks, and issue reports for leadership.
 
 CISO.aero is a private, sign-in-only web application. The public pages are the home page at https://ciso.aero/ and the demo and pricing request page at https://ciso.aero/demo. Contact: support@ciso.aero.
 
 ## What it does
 
-- Control assessments: every requirement is broken into plain-English points of focus that the assessor marks met, not met or not applicable. The result for each control is calculated from those answers, so scoring is consistent between assessors.
-- Evidence vault: policies, configuration exports and other evidence are uploaded once per project, attached to the controls they prove, and reused across every framework the client is held to.
-- Framework mappings: controls are mapped between frameworks, so work done for one assessment carries into the next.
+- Control assessments: every requirement is broken into plain-English points that the assessor marks met, not met or not applicable. The result for each control is calculated from those answers, so scoring is consistent between assessors.
+- Evidence vault: policies, configuration exports and other evidence are uploaded once to each client's vault, attached to the controls they prove, and reused across every framework the client is held to.
+- Framework mappings: controls are linked between frameworks using published mappings, such as NIST's CSF 2.0 informative references and SP 800-171 analyses, so work done for one assessment carries into the next.
 - Reports: results, gap analysis, statement of applicability, remediation plan and executive summary, generated from the live assessment and downloadable as PDF, Word or Excel.
+- Plan of action and milestones (POA&M) tracking for findings, with milestones and closure evidence.
 - Client portal: each organization being assessed gets its own portal and sees only its own data.
 - Security: role-based access, account lockout and password-age policies per organization, one-way password hashing, encrypted connections and logged administrative access.
 
@@ -21,24 +22,71 @@ CISO.aero is a private, sign-in-only web application. The public pages are the h
 
 ## Frameworks supported
 
-- EASA Part-IS (Commission Regulations (EU) 2022/1645 and 2023/203)
-- TSA aviation cybersecurity requirements
-- CMMC 2.0
-- NIST Cybersecurity Framework (CSF) 2.0
-- NIST SP 800-171
-- NIST SP 800-53
+Aviation
+- EASA Part-IS: Part-IS.D.OR (Commission Delegated Regulation (EU) 2022/1645) and Part-IS.I.OR (Commission Implementing Regulation (EU) 2023/203)
+- TSA Aviation Cybersecurity (readiness assessment built on TSA's public statements; the detailed requirements are Sensitive Security Information)
+
+US federal
+- CMMC 2.0 (Levels 1, 2 and 3)
+- FedRAMP (Low, Moderate and High baselines)
+- NIST SP 800-53 Rev 5
+- NIST SP 800-171 (Rev 2 and Rev 3)
+- CISA Zero Trust Maturity Model
+
+Security
+- NIST CSF 2.0
 - ISO/IEC 27001
+- ISO/IEC 27017
+- ISO/IEC 27018
+- ISO 22301
 - SOC 2
+- CIS Controls
+- Cyber Essentials
+- Essential Eight
+- OWASP ASVS (Levels 1, 2 and 3)
+
+Industry
 - PCI DSS 4.0.1
-- FedRAMP
-- HIPAA Security Rule
-- NYDFS 23 NYCRR 500
+- HIPAA (Security, Privacy and Breach Notification Rules)
+- HITRUST CSF
+- NYDFS 500
 - FTC Safeguards Rule
+- SOX ITGC
+- DORA
+- NIS2
+- EU Cyber Resilience Act
+
+Privacy
+- GDPR
+- UK GDPR
+- CCPA
+- US state privacy laws (Colorado, Connecticut, Montana, Oregon, Texas, Utah and Virginia)
+- COPPA
+- LGPD
+- PIPEDA
+- Singapore PDPA
+- Australian Privacy Act
+- ISO/IEC 27701
+- NIST Privacy Framework
+
+AI
+- EU AI Act
+- ISO/IEC 42001
+- NIST AI RMF
+- NIST SP 800-218A
+
+NIST guidance
+- NIST SP 800-30
+- NIST SP 800-61
+- NIST SP 800-63
+- NIST SP 800-88
+- NIST SP 800-207
+- NIST SSDF
 
 ## How an engagement runs
 
-1. Set up the client: create the project, choose the frameworks that apply, and invite the client's team to their portal.
-2. Assess and collect evidence: work through each control, mark its points of focus, and attach evidence from the vault.
+1. Set up the client: add the client, start an assessment against each framework they answer to, and invite the client's team to their portal.
+2. Assess and collect evidence: work through each control, mark its points, and attach evidence from the vault.
 3. Report and follow through: issue the reports, agree remediation with leadership, and reassess against the baseline.
 
 ## Demo and pricing
@@ -47,5 +95,5 @@ Pricing is quoted on request, based on the size of the team and the number of or
 
 ## Links
 
-- [Home page](https://ciso.aero/): product overview and sign-in
+- [Home page](https://ciso.aero/): product overview, supported frameworks, FAQ and sign-in
 - [Book a demo or request pricing](https://ciso.aero/demo): request a live walkthrough or a price quote

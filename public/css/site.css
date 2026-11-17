@@ -7712,6 +7712,34 @@ table.data--light.reports__table {
     color: var(--text-secondary);
 }
 
+.land__faq {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 56px;
+}
+
+.land__faq-item {
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+}
+
+.land__faq-item .land__h3 {
+    font-size: 20px;
+}
+
+.land__faq-item p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 900px) {
+    .land__faq {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
 .land__close {
     padding: 96px 0;
     background: #FFFFFF;

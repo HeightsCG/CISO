@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <?php require Main::lib_path().'/Layout/analytics.php'; ?>
 <?php echo CSRF::meta(); ?>
-<?php echo Main::head_meta(Main::site_name().' | Aviation cybersecurity governance and compliance platform'); ?>
+<?php echo Main::head_meta(Main::site_name().' | Aviation cybersecurity governance and compliance platform', Main::landing_description()); ?>
 <?php echo Main::landing_meta(); ?>
 <title><?php echo Main::site_name(); ?> | Aviation cybersecurity governance and compliance platform</title>
 
@@ -170,6 +170,7 @@ $(document).ready(function () {
             <a href="#frameworks">Frameworks</a>
             <a href="#aviation">Aviation</a>
             <a href="#security">Security</a>
+            <a href="#faq">FAQ</a>
             <a href="/demo">Pricing</a>
         </nav>
         <a class="land__nav-demo" href="/demo">Book a Demo</a>
@@ -184,9 +185,9 @@ $(document).ready(function () {
     <div class="land__wrap land__hero-inner">
         <div class="land__hero-copy">
             <h1 class="land__title">Cybersecurity governance for aviation.</h1>
-            <p class="land__lede">Assess airlines, airports, MROs and their suppliers against EASA Part-IS, TSA, CMMC, NIST and more. Collect evidence once, map it across frameworks, and hand leadership a report they can act on.</p>
+            <p class="land__lede">Assess airlines, airports, MROs and their suppliers against EASA Part-IS, TSA, CMMC, NIST, ISO/IEC 27001, SOC 2 and more. Collect evidence once, map it across frameworks, and hand leadership a report they can act on.</p>
             <ul class="land__facts">
-                <li><strong>19</strong> frameworks ready to assess</li>
+                <li><strong><?php echo Main::framework_count(); ?></strong> frameworks ready to assess</li>
                 <li><strong>PDF, Word, Excel</strong> reports in one click</li>
                 <li><strong>Client portal</strong> for the organizations you serve</li>
             </ul>
@@ -326,6 +327,20 @@ $(document).ready(function () {
                 <li>Passwords stored only as one-way hashes</li>
                 <li>Encrypted connections and logged administrative access</li>
             </ul>
+        </div>
+    </div>
+</section>
+
+<section class="land__section" id="faq">
+    <div class="land__wrap">
+        <h2 class="land__h2">Questions aviation security teams ask</h2>
+        <div class="land__faq">
+            <?php foreach (Main::landing_faq() as $faq) { ?>
+            <div class="land__faq-item">
+                <h3 class="land__h3"><?php echo htmlspecialchars($faq[0], ENT_QUOTES, 'UTF-8'); ?></h3>
+                <p><?php echo htmlspecialchars($faq[1], ENT_QUOTES, 'UTF-8'); ?></p>
+            </div>
+            <?php } ?>
         </div>
     </div>
 </section>

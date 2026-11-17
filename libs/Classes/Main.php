@@ -126,6 +126,66 @@ class Main {
         return implode("\n", $tags)."\n";
     }
 
+    /** Number of frameworks in the shared library, for public copy. */
+    public static function framework_count(): int
+    {
+        return count(FrameworkLibrary::all());
+    }
+
+    /** The home page's meta description, kept to search-snippet length. */
+    public static function landing_description(): string
+    {
+        return 'Cybersecurity GRC platform for aviation. Assess airlines, airports, MROs and suppliers against EASA Part-IS, TSA, CMMC, NIST, ISO 27001 and '.(self::framework_count() - 5).' more frameworks.';
+    }
+
+    /**
+     * Questions and answers shown on the home page and published as FAQPage
+     * structured data, so the visible text and the markup never differ.
+     */
+    public static function landing_faq(): array
+    {
+        $count = self::framework_count();
+
+        return array(
+            array(
+                'What is CISO.aero?',
+                'CISO.aero is a cybersecurity governance, risk and compliance (GRC) platform built for aviation. Consultants and in-house security teams use it to assess organizations against cybersecurity frameworks, keep evidence in one vault, and issue reports for leadership.'
+            ),
+            array(
+                'Who uses CISO.aero?',
+                'Aviation cybersecurity consultants who assess several clients, and CISOs and compliance teams at airlines, airports, maintenance (MRO) organizations, design and production organizations and their suppliers.'
+            ),
+            array(
+                'Which frameworks does CISO.aero support?',
+                $count.' frameworks, including EASA Part-IS, TSA aviation cybersecurity requirements, CMMC 2.0, FedRAMP, NIST CSF 2.0, NIST SP 800-53 and SP 800-171, ISO/IEC 27001, SOC 2, PCI DSS 4.0.1, HIPAA, GDPR, DORA, NIS2 and the EU AI Act.'
+            ),
+            array(
+                'Does CISO.aero cover EASA Part-IS?',
+                'Yes. It assesses both Part-IS regulations requirement by requirement: Part-IS.D.OR in Commission Delegated Regulation (EU) 2022/1645, for design and production organizations and aerodrome operators, and Part-IS.I.OR in Commission Implementing Regulation (EU) 2023/203, for air operators, CAMOs, Part-145 maintenance organizations, training organizations and ATM/ANS providers.'
+            ),
+            array(
+                'Does CISO.aero cover TSA cybersecurity requirements for airports and aircraft operators?',
+                'Yes, as a readiness assessment. The detailed TSA requirements sit in security program amendments that are Sensitive Security Information, so the TSA controls in CISO.aero are built on the outcomes TSA has stated publicly. The operator\'s TSA-approved security program remains the governing document.'
+            ),
+            array(
+                'How are controls scored?',
+                'Every requirement is broken into plain-English points that the assessor marks met, not met or not applicable. The result for each control is calculated from those answers, so scores are consistent from one assessor to the next.'
+            ),
+            array(
+                'Can evidence be reused across frameworks?',
+                'Yes. Evidence is uploaded once to the client\'s vault and attached to the controls it proves. Controls are linked between frameworks using published mappings, such as NIST\'s CSF 2.0 informative references, so work done for one assessment carries into the next.'
+            ),
+            array(
+                'What reports does CISO.aero produce?',
+                'Results, gap analysis, statement of applicability, remediation plan and executive summary, generated from the assessment as it stands and downloadable as PDF, Word or Excel.'
+            ),
+            array(
+                'Can the organizations being assessed see their own results?',
+                'Yes. Each client gets its own portal, where its team sees only its own assessments, evidence and reports.'
+            )
+        );
+    }
+
     /**
      * Search and AI-crawler tags for the public landing page. Signed-out
      * visitors get the landing page on every URL, so only the root is
@@ -143,21 +203,11 @@ class Main {
             $robots = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
         }
 
-        $frameworks = array(
-            'EASA Part-IS',
-            'TSA Aviation Cybersecurity',
-            'CMMC 2.0',
-            'NIST CSF 2.0',
-            'NIST SP 800-171',
-            'NIST SP 800-53',
-            'ISO/IEC 27001',
-            'SOC 2',
-            'PCI DSS 4.0.1',
-            'FedRAMP',
-            'HIPAA Security Rule',
-            'NYDFS 500',
-            'FTC Safeguards Rule'
-        );
+        $frameworks = array();
+
+        foreach (FrameworkLibrary::catalogue() as $group) {
+            $frameworks = array_merge($frameworks, $group['names']);
+        }
 
         $graph = array(
             '@context' => 'https://schema.org',
@@ -206,7 +256,7 @@ class Main {
                     'applicationSubCategory' => 'Governance, risk and compliance (GRC)',
                     'operatingSystem'     => 'Web browser',
                     'image'               => $base.'/images/og-card.png',
-                    'description'         => 'Assess airlines, airports, MROs and their suppliers against EASA Part-IS, TSA, CMMC, NIST and more. Collect evidence once, map it across frameworks, and generate PDF, Word and Excel reports for leadership.',
+                    'description'         => 'Assess airlines, airports, MROs and their suppliers against '.self::framework_count().' cybersecurity frameworks, including EASA Part-IS, TSA, CMMC, NIST, ISO/IEC 27001 and SOC 2. Collect evidence once, map it across frameworks, and generate PDF, Word and Excel reports for leadership.',
                     'audience'            => array(
                         '@type'        => 'BusinessAudience',
                         'audienceType' => 'Aviation cybersecurity consultants, CISOs and compliance teams'
@@ -240,6 +290,30 @@ class Main {
                 )
             )
         );
+
+        if ($path === '/') {
+            $questions = array();
+
+            foreach (self::landing_faq() as $faq) {
+                $questions[] = array(
+                    '@type' => 'Question',
+                    'name' => $faq[0],
+                    'acceptedAnswer' => array(
+                        '@type' => 'Answer',
+                        'text' => $faq[1]
+                    )
+                );
+            }
+
+            $graph['@graph'][] = array(
+                '@type' => 'FAQPage',
+                '@id' => $home.'#faq',
+                'isPartOf' => array(
+                    '@id' => $home.'#website'
+                ),
+                'mainEntity' => $questions
+            );
+        }
 
         $tags = array(
             '<meta name="robots" content="'.self::attr($robots).'">',
