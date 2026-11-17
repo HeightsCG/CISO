@@ -171,7 +171,9 @@ class Crosswalk {
             $prefix = array(
                 'nist-800-53-r5' => 'SP 800-53 Rev 5.2.0',
                 'nist-800-171-r3' => 'SP 800-171 Rev 3',
-                'iso-27001-2022' => 'ISO/IEC 27001:2022'
+                'iso-27001-2022' => 'ISO/IEC 27001:2022',
+                'pci-dss-4' => 'PCI DSS',
+                'nist-ssdf' => 'SSDF'
             )[$set['to']];
 
             foreach (Source::xlsx_sheet('crosswalk/csf2-informative-references-all.xlsx', 'CSF 2.0') as $row) {
@@ -317,6 +319,70 @@ class Crosswalk {
                     $id,
                     'equivalent'
                 );
+            }
+        } elseif ($set['id'] === '61-csf') {
+            // SP 800-61r3 rows are the CSF 2.0 outcomes; Function and Category rows carry only guidance.
+            foreach (self::ids('nist-800-61') as $id => $control) {
+                if ($control['type'] === 'subcategory') {
+                    $pairs[] = array(
+                        $id,
+                        $id,
+                        'equivalent'
+                    );
+                }
+            }
+        } elseif ($set['id'] === '218a-ssdf') {
+            // Tasks NIST marks as new to the AI profile have no SSDF 1.1 counterpart.
+            foreach (self::ids('nist-800-218a') as $id => $control) {
+                if (strpos($control['text'], '[Not part of SSDF 1.1]') !== false) {
+                    continue;
+                }
+
+                $pairs[] = array(
+                    $id,
+                    $id,
+                    strpos($control['text'], '[Modified from SSDF 1.1]') !== false ? 'revised' : 'equivalent'
+                );
+            }
+        } elseif ($set['id'] === 'ukgdpr-gdpr') {
+            // Same article and paragraph numbers; text compared to tell unchanged from amended provisions.
+            $gdpr = self::ids('gdpr');
+
+            foreach (self::ids('uk-gdpr') as $id => $control) {
+                if (!isset($gdpr[$id])) {
+                    continue;
+                }
+
+                $pairs[] = array(
+                    $id,
+                    $id,
+                    Source::normalise($control['text']) === Source::normalise($gdpr[$id]['text']) ? 'equivalent' : 'revised'
+                );
+            }
+        } elseif (strpos($set['id'], 'asvs-') === 0) {
+            $to = self::ids($set['to']);
+
+            foreach (array_keys(self::ids($set['from'])) as $id) {
+                if (isset($to[$id])) {
+                    $pairs[] = array(
+                        $id,
+                        $id,
+                        'equivalent'
+                    );
+                }
+            }
+        } elseif ($set['id'] === '27017-27001' || $set['id'] === '27018-27001') {
+            // Controls 5.1 to 8.34 are the ISO/IEC 27002 controls, Annex A of ISO/IEC 27001; cloud-only (CLD) and HCG controls have none.
+            $annex = self::ids('iso-27001-2022');
+
+            foreach (self::ids($set['from']) as $id => $control) {
+                if ($control['type'] === 'clause' && isset($annex['A.'.$id])) {
+                    $pairs[] = array(
+                        $id,
+                        'A.'.$id,
+                        'extends'
+                    );
+                }
             }
         } else {
             throw new RuntimeException('No reader for crosswalk set '.$set['id']);

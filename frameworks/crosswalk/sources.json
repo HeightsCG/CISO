@@ -38,7 +38,7 @@
         },
         {
             "id": "definitions",
-            "title": "Framework definitions (shared control sets: CMMC uses SP 800-171 Rev 2, FedRAMP baselines use SP 800-53 Rev 5)",
+            "title": "Framework definitions (shared control sets: CMMC uses SP 800-171 Rev 2; FedRAMP baselines use SP 800-53 Rev 5; SP 800-61r3 profiles the CSF 2.0 outcomes; SP 800-218A profiles the SSDF tasks; UK GDPR keeps the GDPR's article numbering; OWASP ASVS levels share requirement numbers; ISO/IEC 27017 and 27018 give cloud guidance on the ISO/IEC 27002 controls in ISO/IEC 27001 Annex A)",
             "version": "as built"
         }
     ],
@@ -119,6 +119,69 @@
             "to": "nist-800-53-r5",
             "source": "definitions",
             "author": "FedRAMP (same controls)"
+        },
+        {
+            "id": "csf-pci",
+            "from": "nist-csf-2",
+            "to": "pci-dss-4",
+            "source": "csf2refs",
+            "author": "Published in the NIST CSF 2.0 Reference Tool; developed independently, not by NIST or PCI SSC"
+        },
+        {
+            "id": "csf-ssdf",
+            "from": "nist-csf-2",
+            "to": "nist-ssdf",
+            "source": "csf2refs",
+            "author": "NIST"
+        },
+        {
+            "id": "61-csf",
+            "from": "nist-800-61",
+            "to": "nist-csf-2",
+            "source": "definitions",
+            "author": "NIST SP 800-61r3 (CSF 2.0 Community Profile)"
+        },
+        {
+            "id": "218a-ssdf",
+            "from": "nist-800-218a",
+            "to": "nist-ssdf",
+            "source": "definitions",
+            "author": "NIST SP 800-218A (SSDF Community Profile)"
+        },
+        {
+            "id": "ukgdpr-gdpr",
+            "from": "uk-gdpr",
+            "to": "gdpr",
+            "source": "definitions",
+            "author": "UK GDPR (retained EU law, same article numbering)"
+        },
+        {
+            "id": "asvs-l1-l2",
+            "from": "owasp-asvs-l1",
+            "to": "owasp-asvs-l2",
+            "source": "definitions",
+            "author": "OWASP ASVS (same requirement numbers)"
+        },
+        {
+            "id": "asvs-l2-l3",
+            "from": "owasp-asvs-l2",
+            "to": "owasp-asvs-l3",
+            "source": "definitions",
+            "author": "OWASP ASVS (same requirement numbers)"
+        },
+        {
+            "id": "27017-27001",
+            "from": "iso-27017",
+            "to": "iso-27001-2022",
+            "source": "definitions",
+            "author": "ISO/IEC 27017 (cloud guidance on the ISO/IEC 27002 controls)"
+        },
+        {
+            "id": "27018-27001",
+            "from": "iso-27018",
+            "to": "iso-27001-2022",
+            "source": "definitions",
+            "author": "ISO/IEC 27018 (PII processor guidance on the ISO/IEC 27002 controls)"
         }
     ],
     "unresolved_allowed": [

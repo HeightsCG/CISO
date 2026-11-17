@@ -86,6 +86,26 @@ return array(
         }
     },
 
+    'profiles and level sets link every shared element' => function () use ($linked, $controls) {
+        Assert::same(106, count($linked('61-csf', 1)), 'SP 800-61r3 outcomes to CSF 2.0');
+        Assert::same(count($controls('owasp-asvs-l1')), count($linked('asvs-l1-l2', 1)), 'ASVS L1 within L2');
+        Assert::same(count($controls('owasp-asvs-l2')), count($linked('asvs-l2-l3', 1)), 'ASVS L2 within L3');
+        Assert::same(93, count($linked('27017-27001', 1)), 'ISO/IEC 27017 to Annex A');
+        Assert::same(93, count($linked('27018-27001', 1)), 'ISO/IEC 27018 to Annex A');
+    },
+
+    'UK GDPR links tell unchanged from amended provisions' => function () use ($crosswalk) {
+        $relationships = array();
+
+        foreach ($crosswalk()['links'] as $link) {
+            if ($link[0] === 'ukgdpr-gdpr') {
+                $relationships[$link[3]] = true;
+            }
+        }
+
+        Assert::true(isset($relationships['equivalent']) && isset($relationships['revised']), 'both equivalent and revised links');
+    },
+
     'every set has links' => function () use ($crosswalk) {
         $data = $crosswalk();
 
