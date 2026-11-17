@@ -285,7 +285,8 @@ return array(
             'iso-27701' => 'privacy',
             'nist-800-63' => 'identity',
             'nist-800-30' => 'risk',
-            'nist-800-88' => 'data_protection'
+            'nist-800-88' => 'data_protection',
+            'nist-800-218a' => 'sdlc'
         );
 
         foreach (glob(ROOT.'/frameworks/*.json') as $file) {

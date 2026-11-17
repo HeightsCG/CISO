@@ -1,0 +1,122 @@
+{
+    "key": "nist-800-218a",
+    "name": "NIST SP 800-218A",
+    "version": "July 2024",
+    "full_name": "NIST SP 800-218A Secure Software Development Practices for Generative AI and Dual-Use Foundation Models: SSDF Community Profile",
+    "issuing_body": "National Institute of Standards and Technology",
+    "standard_codes": [
+        "NIST-800-218A"
+    ],
+    "aliases": [
+        "SP 800-218A",
+        "SSDF AI profile",
+        "SSDF for AI",
+        "Secure AI model development"
+    ],
+    "content_licence": "public_domain",
+    "notice": "SP 800-218A is an SSDF Community Profile for AI model development. Each SSDF task carries NIST's AI-specific priority; its recommendations are the test points, and NIST's considerations, notes and informative references are shown as guidance. All text is quoted from the publication.",
+    "sources": [
+        {
+            "id": "sp800218a",
+            "title": "NIST SP 800-218A, Secure Software Development Practices for Generative AI and Dual-Use Foundation Models",
+            "version": "July 2024",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-218A.pdf",
+            "file": "nist800218a/NIST.SP.800-218A.pdf",
+            "sha256": "e088c8bc75716824dae7c36a987f408364638561d381ed001b5c12254a7b10d8"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG scoring conventions",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "sp800218a",
+        "objectives": "sp800218a",
+        "guidance": "sp800218a"
+    },
+    "control_flags": {
+        "type": "task: an SSDF task as profiled for AI model development.",
+        "priority": "NIST's AI model development priority for the task: High, Medium or Low."
+    },
+    "terminology": {
+        "control": "task",
+        "controls": "tasks",
+        "family": "practice",
+        "families": "practices",
+        "objective": "recommendation",
+        "objectives": "recommendations",
+        "plan": "Action plan",
+        "plan_short": "Action plan",
+        "score": "Secure AI development score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Performed"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Performed"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Performed"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable tasks performed, with partial performance counting as half. NIST defines no score; this is an HCG measure."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A task is performed only when each of its applicable recommendations is followed.",
+            "source": "hcg",
+            "cite": "HCG convention"
+        },
+        {
+            "id": "profile_scope",
+            "type": "applicability",
+            "summary": "The profile applies to producers of AI models, producers of AI systems that use those models, and acquirers of those systems; tasks outside the organization's role are marked not applicable.",
+            "source": "sp800218a",
+            "cite": "NIST SP 800-218A, section 1",
+            "quote": "This document is that companion resource."
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A partially performed task counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG scoring convention"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "SSDF",
+            "definition": "Secure Software Development Framework, NIST SP 800-218: practices for producing secure software."
+        },
+        {
+            "term": "Dual-use foundation model",
+            "definition": "An AI model trained on broad data, generally using self-supervision, with at least tens of billions of parameters, applicable across a wide range of contexts, that exhibits or could be modified to exhibit high performance at tasks posing serious security risks."
+        },
+        {
+            "term": "AI model weights",
+            "definition": "The numerical parameters learned during training that determine a model's outputs."
+        }
+    ]
+}
