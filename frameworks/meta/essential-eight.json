@@ -1,0 +1,125 @@
+{
+    "key": "essential-eight",
+    "name": "Essential Eight",
+    "version": "November 2023",
+    "full_name": "ASD Essential Eight Maturity Model (November 2023)",
+    "issuing_body": "Australian Signals Directorate, Australian Cyber Security Centre",
+    "standard_codes": [
+        "E8"
+    ],
+    "aliases": [
+        "Essential Eight",
+        "Essential 8",
+        "E8",
+        "ASD Essential Eight",
+        "ACSC Essential Eight"
+    ],
+    "content_licence": "open",
+    "notice": "Requirements are quoted from the ASD Essential Eight Maturity Model, published under a Creative Commons Attribution 4.0 licence (© Commonwealth of Australia). Each mitigation strategy has a control per maturity level; assess the controls for the target maturity level and mark the others not applicable.",
+    "sources": [
+        {
+            "id": "e8",
+            "title": "Essential Eight maturity model",
+            "version": "November 2023",
+            "publisher": "Australian Signals Directorate",
+            "url": "https://www.cyber.gov.au/sites/default/files/2026-10/Essential%20Eight%20maturity%20model%20%28November%202023%29.pdf",
+            "file": "essential-eight/essential-eight-maturity-model-november-2023.pdf",
+            "sha256": "e1e9552aba763b133bbc5122f6e1b905c89555465c45ffc716c7e0a3d9b247a9"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG scoring conventions",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "e8",
+        "objectives": "e8"
+    },
+    "control_flags": {
+        "type": "ml1, ml2 or ml3: the maturity level whose requirements the control holds."
+    },
+    "terminology": {
+        "control": "strategy level",
+        "controls": "strategy levels",
+        "family": "mitigation strategy",
+        "families": "mitigation strategies",
+        "objective": "requirement",
+        "objectives": "requirements",
+        "plan": "Uplift plan",
+        "plan_short": "Uplift plan",
+        "score": "Maturity readiness"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable strategy levels implemented, with partial counting as half. ASD measures maturity per strategy: a strategy is at a maturity level only when every requirement of that level is met. This percentage is an HCG readiness measure."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A strategy reaches a maturity level only when every requirement for that level is implemented.",
+            "source": "hcg",
+            "cite": "HCG convention, consistent with the maturity model"
+        },
+        {
+            "id": "target_level",
+            "type": "applicability",
+            "summary": "Organisations choose a target maturity level based on the tradecraft and targeting they aim to mitigate; only the controls for that level apply and the others are marked not applicable.",
+            "source": "e8",
+            "cite": "Essential Eight maturity model, Introduction",
+            "quote": "can be used to help determine a target maturity level to implement."
+        },
+        {
+            "id": "levels_complete",
+            "type": "applicability",
+            "summary": "Each maturity level's requirements are listed in full in its own appendix, so a level is assessed on its own list.",
+            "source": "e8",
+            "cite": "Essential Eight maturity model, Requirements for each maturity level",
+            "quote": "Requirements for Maturity Level One through to Maturity Level Three are outlined in Appendices A to C."
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A partially implemented strategy level counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG scoring convention"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "Essential Eight",
+            "definition": "ASD's eight prioritised mitigation strategies: patch applications, patch operating systems, multi-factor authentication, restrict administrative privileges, application control, restrict Microsoft Office macros, user application hardening and regular backups."
+        },
+        {
+            "term": "Maturity level",
+            "definition": "Maturity Level One to Three, each aimed at mitigating a higher level of adversary tradecraft and targeting; Maturity Level Zero means weaknesses remain."
+        }
+    ]
+}

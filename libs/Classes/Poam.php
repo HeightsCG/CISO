@@ -186,6 +186,7 @@ class Poam
         'nist-800-88' => 'none',
         'nist-800-218a' => 'none',
         'lgpd' => 'none',
+        'essential-eight' => 'none',
         'nydfs-500' => 'none',
         'nis2' => 'none',
         'dora' => 'none',
