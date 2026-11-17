@@ -1,0 +1,509 @@
+{
+    "families": [
+        {
+            "code": "HT-IPP",
+            "name": "Information Protection Program",
+            "controls": [
+                {
+                    "id": "HT-IPP-01",
+                    "title": "Information security program and governance",
+                    "description": "A documented information protection program, owned by a named executive, sets the scope, objectives, roles and resources for protecting the organization's information.",
+                    "guidance": "Look for a program charter or policy approved by management, a named security leader with defined authority, a governance forum that meets on a set schedule, and a budget or resource plan.",
+                    "objectives": [
+                        "A documented information protection program is approved by management and defines its scope.",
+                        "A named individual is accountable for the program with defined authority.",
+                        "Program performance is reported to senior management at planned intervals."
+                    ]
+                },
+                {
+                    "id": "HT-IPP-02",
+                    "title": "Policies and procedures",
+                    "description": "Security policies and supporting procedures cover each control area, are approved, communicated, and reviewed at least annually.",
+                    "guidance": "Review the policy set for coverage, approval, version history and review dates, and check that each policy is backed by operational procedures that staff actually follow.",
+                    "objectives": [
+                        "Policies cover each control area in scope and are approved.",
+                        "Procedures describe how each policy is carried out.",
+                        "Policies and procedures are reviewed at least annually and after significant change."
+                    ]
+                },
+                {
+                    "id": "HT-IPP-03",
+                    "title": "Scope, inheritance and shared responsibility",
+                    "description": "The assessment scope (organizational units, systems, facilities and data) is defined, and controls inherited from or shared with service providers are identified with their responsibility split.",
+                    "guidance": "Review the scoping worksheet and system inventory, and the control responsibility matrix showing which controls are performed by the organization, by a service provider, or shared.",
+                    "objectives": [
+                        "The scope of the assessment is documented, including systems, facilities and data types.",
+                        "Controls inherited from or shared with service providers are identified with the responsible party for each.",
+                        "Evidence of inherited controls (for example the provider's own assessment or report) is obtained."
+                    ]
+                },
+                {
+                    "id": "HT-IPP-04",
+                    "title": "Compliance with legal and contractual requirements",
+                    "description": "Applicable legal, regulatory and contractual security and privacy requirements are identified and their compliance is checked.",
+                    "guidance": "Look for a register of applicable requirements (for example HIPAA, state laws, contracts) and periodic compliance reviews or internal audits.",
+                    "objectives": [
+                        "Applicable legal, regulatory and contractual requirements are documented.",
+                        "Compliance with security policies and requirements is reviewed through internal audit or management review."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-EPP",
+            "name": "Endpoint Protection",
+            "controls": [
+                {
+                    "id": "HT-EPP-01",
+                    "title": "Malware protection",
+                    "description": "Endpoints and servers run malware protection that is centrally managed, kept up to date and cannot be disabled by users.",
+                    "guidance": "Check the endpoint protection console for coverage against the asset inventory, signature or engine currency, alert handling and tamper protection.",
+                    "objectives": [
+                        "Malware protection is installed on all in-scope endpoints and servers.",
+                        "Protection is kept current and centrally monitored, and alerts are handled.",
+                        "Users cannot disable or uninstall the protection."
+                    ]
+                },
+                {
+                    "id": "HT-EPP-02",
+                    "title": "Endpoint hardening and host firewall",
+                    "description": "Endpoints are built to a secure baseline with a host firewall enabled and unnecessary services removed.",
+                    "guidance": "Sample endpoints against the documented baseline: host firewall, disabled services, local administrator restrictions and disk encryption for laptops.",
+                    "objectives": [
+                        "Endpoints are configured to a documented secure baseline.",
+                        "Host firewalls are enabled and centrally managed.",
+                        "Laptops holding sensitive data use full-disk encryption."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-PMS",
+            "name": "Portable Media Security",
+            "controls": [
+                {
+                    "id": "HT-PMS-01",
+                    "title": "Removable media controls",
+                    "description": "Use of removable media is restricted, sensitive data on removable media is encrypted, and media is sanitized before disposal or reuse.",
+                    "guidance": "Review the media policy, device control settings that block or restrict USB storage, encryption of approved media and sanitization records.",
+                    "objectives": [
+                        "Use of removable media is restricted to approved, business-justified cases.",
+                        "Sensitive data written to removable media is encrypted.",
+                        "Media is sanitized or destroyed before disposal or reuse, and this is recorded."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-MDS",
+            "name": "Mobile Device Security",
+            "controls": [
+                {
+                    "id": "HT-MDS-01",
+                    "title": "Mobile device management",
+                    "description": "Mobile devices that access organizational data are enrolled in device management, which enforces screen lock, encryption and remote wipe.",
+                    "guidance": "Check the MDM console for enrolment coverage, enforced settings, jailbreak or root detection and remote wipe capability, and the bring-your-own-device policy.",
+                    "objectives": [
+                        "Mobile devices accessing organizational data are enrolled in device management.",
+                        "Screen lock, encryption and remote wipe are enforced.",
+                        "Lost or stolen devices are reported and wiped."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-WLS",
+            "name": "Wireless Security",
+            "controls": [
+                {
+                    "id": "HT-WLS-01",
+                    "title": "Wireless network protection",
+                    "description": "Wireless networks use strong encryption and authentication, guest wireless is separated from internal networks, and rogue access points are detected.",
+                    "guidance": "Review wireless configuration (WPA2/WPA3 Enterprise), segmentation of guest networks and records of rogue access point scans.",
+                    "objectives": [
+                        "Corporate wireless networks use strong encryption and individual authentication.",
+                        "Guest wireless is segregated from internal networks.",
+                        "Scans for rogue access points are performed at defined intervals."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-CFG",
+            "name": "Configuration Management",
+            "controls": [
+                {
+                    "id": "HT-CFG-01",
+                    "title": "Secure baselines",
+                    "description": "Secure configuration baselines exist for each system type and systems are checked for deviation.",
+                    "guidance": "Review baselines (for example derived from CIS benchmarks), configuration scanning results and handling of deviations.",
+                    "objectives": [
+                        "Documented secure baselines exist for operating systems, network devices, databases and cloud services in scope.",
+                        "Systems are checked against baselines and deviations are remediated or approved."
+                    ]
+                },
+                {
+                    "id": "HT-CFG-02",
+                    "title": "Change control",
+                    "description": "Changes to systems are requested, risk-assessed, tested, approved and recorded, with emergency changes reviewed afterwards.",
+                    "guidance": "Sample changes from the change log for request, testing, approval, segregation between developer and approver, and post-implementation review.",
+                    "objectives": [
+                        "Changes are documented, tested and approved before implementation.",
+                        "Emergency changes are reviewed and approved after the fact.",
+                        "Development, test and production environments are separated."
+                    ]
+                },
+                {
+                    "id": "HT-CFG-03",
+                    "title": "Asset inventory",
+                    "description": "An inventory of hardware, software and information assets in scope is maintained, with owners assigned.",
+                    "guidance": "Compare the inventory with discovery tools and sample assets for owner, classification and location.",
+                    "objectives": [
+                        "Hardware and software inventories are complete and current.",
+                        "Each asset has an assigned owner."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-VUL",
+            "name": "Vulnerability Management",
+            "controls": [
+                {
+                    "id": "HT-VUL-01",
+                    "title": "Vulnerability scanning and patching",
+                    "description": "Systems are scanned for vulnerabilities at defined intervals, and patches are applied within timeframes set by severity.",
+                    "guidance": "Review scan schedules and coverage, remediation timeframes by severity, and evidence that critical and high findings are fixed on time or formally accepted.",
+                    "objectives": [
+                        "Internal and external vulnerability scans are run at defined intervals across in-scope systems.",
+                        "Patches are applied within documented timeframes by severity.",
+                        "Exceptions are risk-accepted and tracked."
+                    ]
+                },
+                {
+                    "id": "HT-VUL-02",
+                    "title": "Penetration testing",
+                    "description": "Penetration tests of in-scope systems are performed at least annually and after significant change, and findings are remediated.",
+                    "guidance": "Review the latest test reports, tester independence, scope and remediation tracking.",
+                    "objectives": [
+                        "Penetration tests are performed at least annually by qualified, independent testers.",
+                        "Findings are tracked to remediation and retested."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-NET",
+            "name": "Network Protection",
+            "controls": [
+                {
+                    "id": "HT-NET-01",
+                    "title": "Network segmentation and boundary protection",
+                    "description": "Networks are segmented by function and sensitivity, and boundary devices restrict traffic to what is needed.",
+                    "guidance": "Review network diagrams, firewall rule sets and rule review records, and segmentation of systems holding sensitive data.",
+                    "objectives": [
+                        "Network diagrams are current and show segmentation and data flows.",
+                        "Firewall rules restrict traffic to approved services and are reviewed at least every six months.",
+                        "Systems holding sensitive data are segregated from general networks."
+                    ]
+                },
+                {
+                    "id": "HT-NET-02",
+                    "title": "Remote access",
+                    "description": "Remote access to internal networks uses encrypted connections and multi-factor authentication and is logged.",
+                    "guidance": "Check VPN or zero trust access configuration, MFA enforcement, session timeouts and logging.",
+                    "objectives": [
+                        "Remote access uses encrypted channels and multi-factor authentication.",
+                        "Remote sessions are logged and time out after inactivity."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-TXP",
+            "name": "Transmission Protection",
+            "controls": [
+                {
+                    "id": "HT-TXP-01",
+                    "title": "Encryption in transit",
+                    "description": "Sensitive data sent over public or untrusted networks is encrypted using current protocols, including email and file transfer.",
+                    "guidance": "Check TLS configuration of external services, secure email and file transfer methods, and disabled weak protocols and ciphers.",
+                    "objectives": [
+                        "Sensitive data transmitted over public networks is encrypted with current protocols.",
+                        "Weak protocols and ciphers are disabled.",
+                        "Secure methods are used for email and file transfer of sensitive data."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-PWD",
+            "name": "Password Management",
+            "controls": [
+                {
+                    "id": "HT-PWD-01",
+                    "title": "Password and authenticator management",
+                    "description": "Passwords meet length and complexity requirements, are stored securely, and are changed when compromise is suspected, and default credentials are changed.",
+                    "guidance": "Review password policy settings in the directory and key applications, storage of credentials, password manager use and handling of default and shared accounts.",
+                    "objectives": [
+                        "Password policy settings enforce documented length and complexity requirements.",
+                        "Default passwords are changed before systems go into use.",
+                        "Passwords are stored and transmitted only in protected form."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-ACC",
+            "name": "Access Control",
+            "controls": [
+                {
+                    "id": "HT-ACC-01",
+                    "title": "User provisioning and deprovisioning",
+                    "description": "User access is requested, approved and granted on least privilege, and removed promptly when people leave or change roles.",
+                    "guidance": "Sample joiners, movers and leavers for approval records and timely removal, comparing HR records with directory accounts.",
+                    "objectives": [
+                        "Access is approved before it is granted and follows least privilege.",
+                        "Access is removed within a defined period of termination or role change."
+                    ]
+                },
+                {
+                    "id": "HT-ACC-02",
+                    "title": "Access reviews",
+                    "description": "User and privileged access is reviewed at defined intervals by owners, and inappropriate access is removed.",
+                    "guidance": "Review evidence of completed access reviews for in-scope systems and the removals that resulted.",
+                    "objectives": [
+                        "User access to in-scope systems is reviewed at least annually, and privileged access more often.",
+                        "Inappropriate access found in reviews is removed and recorded."
+                    ]
+                },
+                {
+                    "id": "HT-ACC-03",
+                    "title": "Privileged access and multi-factor authentication",
+                    "description": "Privileged accounts are restricted, separate from day-to-day accounts and protected by multi-factor authentication.",
+                    "guidance": "Check the list of privileged accounts, use of separate admin accounts, MFA on privileged and remote access, and segregation of duties.",
+                    "objectives": [
+                        "Privileged access is limited to named people with a business need.",
+                        "Privileged and remote access requires multi-factor authentication.",
+                        "Incompatible duties are segregated."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-LOG",
+            "name": "Audit Logging and Monitoring",
+            "controls": [
+                {
+                    "id": "HT-LOG-01",
+                    "title": "Audit logging",
+                    "description": "Security-relevant events are logged on in-scope systems, logs are protected from change and retained for a defined period.",
+                    "guidance": "Check log sources against the inventory, logged event types (logons, privileged actions, changes to sensitive data), log integrity protection and retention.",
+                    "objectives": [
+                        "Security-relevant events are logged on in-scope systems.",
+                        "Logs are protected from unauthorized change and retained for a defined period.",
+                        "System clocks are synchronized."
+                    ]
+                },
+                {
+                    "id": "HT-LOG-02",
+                    "title": "Monitoring and alerting",
+                    "description": "Logs are collected centrally and reviewed or monitored for suspicious activity, with alerts investigated.",
+                    "guidance": "Review the SIEM or log management setup, alert rules, review frequency and evidence of alert investigation.",
+                    "objectives": [
+                        "Logs are aggregated centrally and monitored for suspicious activity.",
+                        "Alerts are investigated and escalated as incidents where warranted."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-ETA",
+            "name": "Education, Training and Awareness",
+            "controls": [
+                {
+                    "id": "HT-ETA-01",
+                    "title": "Security and privacy training",
+                    "description": "Workforce members receive security and privacy training at onboarding and at least annually, with role-based training for those with security duties.",
+                    "guidance": "Review training content, completion records, phishing exercises and role-based training for administrators and developers.",
+                    "objectives": [
+                        "Security and privacy awareness training is completed at onboarding and annually.",
+                        "Role-based training is provided to people with security responsibilities.",
+                        "Completion is tracked and followed up."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-TPA",
+            "name": "Third Party Assurance",
+            "controls": [
+                {
+                    "id": "HT-TPA-01",
+                    "title": "Third-party risk assessment",
+                    "description": "Third parties that access, process or host the organization's sensitive information are identified, risk-assessed before engagement and reassessed periodically.",
+                    "guidance": "Review the third-party inventory, risk tiering, due diligence questionnaires or assurance reports obtained, and reassessment schedule.",
+                    "objectives": [
+                        "An inventory of third parties with access to sensitive information is maintained.",
+                        "Third parties are risk-assessed before engagement and periodically after.",
+                        "Assurance evidence (for example certifications or audit reports) is obtained and reviewed."
+                    ]
+                },
+                {
+                    "id": "HT-TPA-02",
+                    "title": "Third-party agreements",
+                    "description": "Agreements with third parties set security and privacy requirements, breach notification, right to audit and return or destruction of data.",
+                    "guidance": "Sample contracts and business associate agreements for required security clauses.",
+                    "objectives": [
+                        "Contracts with third parties include security, privacy and breach notification requirements.",
+                        "Business associate agreements are in place where required."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-INC",
+            "name": "Incident Management",
+            "controls": [
+                {
+                    "id": "HT-INC-01",
+                    "title": "Incident response plan",
+                    "description": "A documented incident response plan defines roles, severity levels, escalation, containment, notification and recovery, and is tested at least annually.",
+                    "guidance": "Review the plan, the incident response team and contacts, breach notification procedures and evidence of tabletop or other tests.",
+                    "objectives": [
+                        "A documented incident response plan defines roles, severity levels and escalation.",
+                        "The plan covers breach notification to individuals, regulators and partners as required.",
+                        "The plan is tested at least annually and updated from lessons learned."
+                    ]
+                },
+                {
+                    "id": "HT-INC-02",
+                    "title": "Incident handling and reporting",
+                    "description": "Workforce members know how to report incidents, and incidents are recorded, investigated, contained and reviewed.",
+                    "guidance": "Review the incident register and a sample of incidents for timely response, root cause and lessons learned.",
+                    "objectives": [
+                        "Workforce members are told how to report suspected incidents.",
+                        "Incidents are recorded with their handling, root cause and lessons learned."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-BCD",
+            "name": "Business Continuity and Disaster Recovery",
+            "controls": [
+                {
+                    "id": "HT-BCD-01",
+                    "title": "Continuity and recovery planning",
+                    "description": "Business impact analysis sets recovery priorities, and business continuity and disaster recovery plans are documented and tested.",
+                    "guidance": "Review the BIA, recovery time and point objectives, the plans and test results.",
+                    "objectives": [
+                        "A business impact analysis sets recovery time and point objectives for critical systems.",
+                        "Business continuity and disaster recovery plans are documented and tested at least annually."
+                    ]
+                },
+                {
+                    "id": "HT-BCD-02",
+                    "title": "Backup",
+                    "description": "Backups of critical data and systems are performed, protected, stored separately and tested for restoration.",
+                    "guidance": "Check backup schedules and success monitoring, encryption and offsite or immutable copies, and restore test records.",
+                    "objectives": [
+                        "Backups of critical data run on a defined schedule and failures are followed up.",
+                        "Backups are encrypted and a copy is stored separately from production.",
+                        "Restores are tested at defined intervals."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-RSK",
+            "name": "Risk Management",
+            "controls": [
+                {
+                    "id": "HT-RSK-01",
+                    "title": "Risk assessment",
+                    "description": "A formal risk assessment of in-scope systems and information is performed at least annually and after significant change, using a defined method.",
+                    "guidance": "Review the risk methodology, the most recent assessment and how threats and vulnerabilities to sensitive data were evaluated.",
+                    "objectives": [
+                        "A documented risk assessment method defines likelihood, impact and acceptance criteria.",
+                        "Risk assessments are performed at least annually and after significant change."
+                    ]
+                },
+                {
+                    "id": "HT-RSK-02",
+                    "title": "Risk treatment and corrective action plans",
+                    "description": "Risks are treated, accepted or transferred by authorized people, and gaps are tracked in corrective action plans to closure.",
+                    "guidance": "Review the risk register, acceptance approvals and corrective action plans with owners, dates and status.",
+                    "objectives": [
+                        "Risks have a treatment decision approved by an authorized owner.",
+                        "Corrective action plans record owner, target date and status for each gap and are tracked to closure."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-PHY",
+            "name": "Physical and Environmental Security",
+            "controls": [
+                {
+                    "id": "HT-PHY-01",
+                    "title": "Physical access",
+                    "description": "Physical access to facilities and areas holding sensitive systems or information is restricted, logged and reviewed, and visitors are escorted.",
+                    "guidance": "Inspect access controls for data centres and secure areas, badge access reviews and visitor logs. For cloud-hosted systems, rely on the provider's assurance evidence.",
+                    "objectives": [
+                        "Access to secure areas is restricted to authorized people and reviewed.",
+                        "Visitors are logged and escorted."
+                    ]
+                },
+                {
+                    "id": "HT-PHY-02",
+                    "title": "Environmental protection and equipment",
+                    "description": "Facilities housing systems are protected against fire, water, power and temperature risks, and equipment is maintained and disposed of securely.",
+                    "guidance": "Check fire suppression, power protection, environmental monitoring, maintenance records and secure disposal records.",
+                    "objectives": [
+                        "Environmental protections are in place and maintained for facilities housing in-scope systems.",
+                        "Equipment is disposed of or reused only after data is securely removed."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HT-PRV",
+            "name": "Data Protection and Privacy",
+            "controls": [
+                {
+                    "id": "HT-PRV-01",
+                    "title": "Data classification and handling",
+                    "description": "Information is classified by sensitivity and handled, labelled, retained and disposed of according to its classification.",
+                    "guidance": "Review the classification scheme, handling rules, data inventory or flow maps for sensitive data, and retention schedule.",
+                    "objectives": [
+                        "A classification scheme with handling rules is documented and communicated.",
+                        "Locations and flows of sensitive data are documented.",
+                        "Data is retained and disposed of according to a retention schedule."
+                    ]
+                },
+                {
+                    "id": "HT-PRV-02",
+                    "title": "Encryption at rest and data loss prevention",
+                    "description": "Sensitive data at rest is encrypted where risk requires, keys are managed, and controls detect or prevent unauthorized data transfer.",
+                    "guidance": "Check encryption of databases, storage and backups, key management procedures and DLP coverage for email, web and endpoints.",
+                    "objectives": [
+                        "Sensitive data at rest is encrypted where required, with keys managed securely.",
+                        "Controls detect or prevent unauthorized transfer of sensitive data."
+                    ]
+                },
+                {
+                    "id": "HT-PRV-03",
+                    "title": "Privacy practices",
+                    "description": "Personal and health information is collected, used and disclosed only as permitted, individuals are given notice, and their rights requests are handled.",
+                    "guidance": "Review the notice of privacy practices, minimum necessary rules, handling of individual rights requests and accounting of disclosures where required.",
+                    "objectives": [
+                        "Notice of privacy practices is provided to individuals as required.",
+                        "Use and disclosure of personal information is limited to permitted purposes and the minimum necessary.",
+                        "Individual rights requests are handled within required timeframes."
+                    ]
+                }
+            ]
+        }
+    ]
+}

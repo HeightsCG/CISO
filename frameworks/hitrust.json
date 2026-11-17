@@ -1,0 +1,1250 @@
+{
+    "key": "hitrust",
+    "name": "HITRUST CSF",
+    "version": "HCG control set 2026",
+    "full_name": "HITRUST CSF readiness: HCG control set organized by the HITRUST assessment domains",
+    "issuing_body": "Heights Consulting Group, organized on the HITRUST CSF assessment domains (HITRUST Alliance)",
+    "standard_codes": [
+        "HITRUST"
+    ],
+    "aliases": [
+        "HITRUST",
+        "HITRUST CSF",
+        "HITRUST e1",
+        "HITRUST i1",
+        "HITRUST r2"
+    ],
+    "content_licence": "hcg_authored",
+    "notice": "HCG readiness control set for HITRUST CSF assessments. HITRUST CSF requirement statements, numbering and scoring are licensed by HITRUST Alliance and are not reproduced; controls here carry HCG numbering and are grouped by the HITRUST assessment domains. A HITRUST e1, i1 or r2 certification requires a validated assessment by an authorized external assessor submitted through HITRUST.",
+    "sources": [
+        {
+            "id": "hcg",
+            "title": "HCG HITRUST readiness control set: domains, controls, guidance and test points",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "hcg",
+        "objectives": "hcg",
+        "guidance": "hcg"
+    },
+    "control_flags": {
+        "type": "hcg for an HCG-written readiness control."
+    },
+    "terminology": {
+        "control": "control",
+        "controls": "controls",
+        "family": "theme",
+        "families": "themes",
+        "objective": "test point",
+        "objectives": "test points",
+        "plan": "Corrective action plan",
+        "plan_short": "Corrective action plan",
+        "score": "Implementation score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable controls implemented, with partial implementation counting as half. HITRUST scores r2 requirements on maturity levels and i1 and e1 requirements on implementation; this percentage is an HCG readiness measure, not a HITRUST score."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A control is implemented only when every HCG test point under it is met.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
+            "id": "scope_applicability",
+            "type": "applicability",
+            "summary": "All domains apply unless excluded from the assessment scope with justification; controls fully inherited from a service provider are marked met only when the provider's assurance evidence is obtained.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "In the implementation score a partially implemented control counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "HITRUST CSF",
+            "definition": "A certifiable framework that harmonizes requirements from many standards and regulations, including HIPAA, NIST and ISO, maintained by HITRUST Alliance."
+        },
+        {
+            "term": "e1, i1 and r2",
+            "definition": "HITRUST's assessment types: e1 covers essential cybersecurity hygiene, i1 a broader leading-practice set, and r2 a risk-based, tailored set scored on maturity."
+        },
+        {
+            "term": "Inheritance",
+            "definition": "Relying on a service provider's validated HITRUST controls for part of the organization's own assessment."
+        },
+        {
+            "term": "Corrective action plan (CAP)",
+            "definition": "A plan for remediating a requirement that did not meet the scoring threshold, with owner, actions and target date."
+        }
+    ],
+    "display_name": "HITRUST CSF (HCG control set 2026)",
+    "counts": {
+        "families": 19,
+        "controls": 37,
+        "objectives": 95
+    },
+    "families": [
+        {
+            "number": "HT-IPP",
+            "code": "HT-IPP",
+            "name": "Information Protection Program",
+            "controls": [
+                {
+                    "id": "HT-IPP-01",
+                    "number": "HT-IPP-01",
+                    "title": "Information security program and governance",
+                    "text": "",
+                    "description": "A documented information protection program, owned by a named executive, sets the scope, objectives, roles and resources for protecting the organization's information.",
+                    "guidance": "Look for a program charter or policy approved by management, a named security leader with defined authority, a governance forum that meets on a set schedule, and a budget or resource plan.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-IPP-01.a",
+                            "text": "A documented information protection program is approved by management and defines its scope.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-IPP-01.b",
+                            "text": "A named individual is accountable for the program with defined authority.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-IPP-01.c",
+                            "text": "Program performance is reported to senior management at planned intervals.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-IPP-02",
+                    "number": "HT-IPP-02",
+                    "title": "Policies and procedures",
+                    "text": "",
+                    "description": "Security policies and supporting procedures cover each control area, are approved, communicated, and reviewed at least annually.",
+                    "guidance": "Review the policy set for coverage, approval, version history and review dates, and check that each policy is backed by operational procedures that staff actually follow.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-IPP-02.a",
+                            "text": "Policies cover each control area in scope and are approved.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-IPP-02.b",
+                            "text": "Procedures describe how each policy is carried out.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-IPP-02.c",
+                            "text": "Policies and procedures are reviewed at least annually and after significant change.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-IPP-03",
+                    "number": "HT-IPP-03",
+                    "title": "Scope, inheritance and shared responsibility",
+                    "text": "",
+                    "description": "The assessment scope (organizational units, systems, facilities and data) is defined, and controls inherited from or shared with service providers are identified with their responsibility split.",
+                    "guidance": "Review the scoping worksheet and system inventory, and the control responsibility matrix showing which controls are performed by the organization, by a service provider, or shared.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-IPP-03.a",
+                            "text": "The scope of the assessment is documented, including systems, facilities and data types.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-IPP-03.b",
+                            "text": "Controls inherited from or shared with service providers are identified with the responsible party for each.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-IPP-03.c",
+                            "text": "Evidence of inherited controls (for example the provider's own assessment or report) is obtained.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-IPP-04",
+                    "number": "HT-IPP-04",
+                    "title": "Compliance with legal and contractual requirements",
+                    "text": "",
+                    "description": "Applicable legal, regulatory and contractual security and privacy requirements are identified and their compliance is checked.",
+                    "guidance": "Look for a register of applicable requirements (for example HIPAA, state laws, contracts) and periodic compliance reviews or internal audits.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-IPP-04.a",
+                            "text": "Applicable legal, regulatory and contractual requirements are documented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-IPP-04.b",
+                            "text": "Compliance with security policies and requirements is reviewed through internal audit or management review.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-EPP",
+            "code": "HT-EPP",
+            "name": "Endpoint Protection",
+            "controls": [
+                {
+                    "id": "HT-EPP-01",
+                    "number": "HT-EPP-01",
+                    "title": "Malware protection",
+                    "text": "",
+                    "description": "Endpoints and servers run malware protection that is centrally managed, kept up to date and cannot be disabled by users.",
+                    "guidance": "Check the endpoint protection console for coverage against the asset inventory, signature or engine currency, alert handling and tamper protection.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-EPP-01.a",
+                            "text": "Malware protection is installed on all in-scope endpoints and servers.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-EPP-01.b",
+                            "text": "Protection is kept current and centrally monitored, and alerts are handled.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-EPP-01.c",
+                            "text": "Users cannot disable or uninstall the protection.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-EPP-02",
+                    "number": "HT-EPP-02",
+                    "title": "Endpoint hardening and host firewall",
+                    "text": "",
+                    "description": "Endpoints are built to a secure baseline with a host firewall enabled and unnecessary services removed.",
+                    "guidance": "Sample endpoints against the documented baseline: host firewall, disabled services, local administrator restrictions and disk encryption for laptops.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-EPP-02.a",
+                            "text": "Endpoints are configured to a documented secure baseline.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-EPP-02.b",
+                            "text": "Host firewalls are enabled and centrally managed.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-EPP-02.c",
+                            "text": "Laptops holding sensitive data use full-disk encryption.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-PMS",
+            "code": "HT-PMS",
+            "name": "Portable Media Security",
+            "controls": [
+                {
+                    "id": "HT-PMS-01",
+                    "number": "HT-PMS-01",
+                    "title": "Removable media controls",
+                    "text": "",
+                    "description": "Use of removable media is restricted, sensitive data on removable media is encrypted, and media is sanitized before disposal or reuse.",
+                    "guidance": "Review the media policy, device control settings that block or restrict USB storage, encryption of approved media and sanitization records.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-PMS-01.a",
+                            "text": "Use of removable media is restricted to approved, business-justified cases.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-PMS-01.b",
+                            "text": "Sensitive data written to removable media is encrypted.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-PMS-01.c",
+                            "text": "Media is sanitized or destroyed before disposal or reuse, and this is recorded.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-MDS",
+            "code": "HT-MDS",
+            "name": "Mobile Device Security",
+            "controls": [
+                {
+                    "id": "HT-MDS-01",
+                    "number": "HT-MDS-01",
+                    "title": "Mobile device management",
+                    "text": "",
+                    "description": "Mobile devices that access organizational data are enrolled in device management, which enforces screen lock, encryption and remote wipe.",
+                    "guidance": "Check the MDM console for enrolment coverage, enforced settings, jailbreak or root detection and remote wipe capability, and the bring-your-own-device policy.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-MDS-01.a",
+                            "text": "Mobile devices accessing organizational data are enrolled in device management.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-MDS-01.b",
+                            "text": "Screen lock, encryption and remote wipe are enforced.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-MDS-01.c",
+                            "text": "Lost or stolen devices are reported and wiped.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-WLS",
+            "code": "HT-WLS",
+            "name": "Wireless Security",
+            "controls": [
+                {
+                    "id": "HT-WLS-01",
+                    "number": "HT-WLS-01",
+                    "title": "Wireless network protection",
+                    "text": "",
+                    "description": "Wireless networks use strong encryption and authentication, guest wireless is separated from internal networks, and rogue access points are detected.",
+                    "guidance": "Review wireless configuration (WPA2/WPA3 Enterprise), segmentation of guest networks and records of rogue access point scans.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-WLS-01.a",
+                            "text": "Corporate wireless networks use strong encryption and individual authentication.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-WLS-01.b",
+                            "text": "Guest wireless is segregated from internal networks.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-WLS-01.c",
+                            "text": "Scans for rogue access points are performed at defined intervals.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-CFG",
+            "code": "HT-CFG",
+            "name": "Configuration Management",
+            "controls": [
+                {
+                    "id": "HT-CFG-01",
+                    "number": "HT-CFG-01",
+                    "title": "Secure baselines",
+                    "text": "",
+                    "description": "Secure configuration baselines exist for each system type and systems are checked for deviation.",
+                    "guidance": "Review baselines (for example derived from CIS benchmarks), configuration scanning results and handling of deviations.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-CFG-01.a",
+                            "text": "Documented secure baselines exist for operating systems, network devices, databases and cloud services in scope.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-CFG-01.b",
+                            "text": "Systems are checked against baselines and deviations are remediated or approved.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-CFG-02",
+                    "number": "HT-CFG-02",
+                    "title": "Change control",
+                    "text": "",
+                    "description": "Changes to systems are requested, risk-assessed, tested, approved and recorded, with emergency changes reviewed afterwards.",
+                    "guidance": "Sample changes from the change log for request, testing, approval, segregation between developer and approver, and post-implementation review.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-CFG-02.a",
+                            "text": "Changes are documented, tested and approved before implementation.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-CFG-02.b",
+                            "text": "Emergency changes are reviewed and approved after the fact.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-CFG-02.c",
+                            "text": "Development, test and production environments are separated.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-CFG-03",
+                    "number": "HT-CFG-03",
+                    "title": "Asset inventory",
+                    "text": "",
+                    "description": "An inventory of hardware, software and information assets in scope is maintained, with owners assigned.",
+                    "guidance": "Compare the inventory with discovery tools and sample assets for owner, classification and location.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-CFG-03.a",
+                            "text": "Hardware and software inventories are complete and current.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-CFG-03.b",
+                            "text": "Each asset has an assigned owner.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-VUL",
+            "code": "HT-VUL",
+            "name": "Vulnerability Management",
+            "controls": [
+                {
+                    "id": "HT-VUL-01",
+                    "number": "HT-VUL-01",
+                    "title": "Vulnerability scanning and patching",
+                    "text": "",
+                    "description": "Systems are scanned for vulnerabilities at defined intervals, and patches are applied within timeframes set by severity.",
+                    "guidance": "Review scan schedules and coverage, remediation timeframes by severity, and evidence that critical and high findings are fixed on time or formally accepted.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-VUL-01.a",
+                            "text": "Internal and external vulnerability scans are run at defined intervals across in-scope systems.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-VUL-01.b",
+                            "text": "Patches are applied within documented timeframes by severity.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-VUL-01.c",
+                            "text": "Exceptions are risk-accepted and tracked.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-VUL-02",
+                    "number": "HT-VUL-02",
+                    "title": "Penetration testing",
+                    "text": "",
+                    "description": "Penetration tests of in-scope systems are performed at least annually and after significant change, and findings are remediated.",
+                    "guidance": "Review the latest test reports, tester independence, scope and remediation tracking.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-VUL-02.a",
+                            "text": "Penetration tests are performed at least annually by qualified, independent testers.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-VUL-02.b",
+                            "text": "Findings are tracked to remediation and retested.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-NET",
+            "code": "HT-NET",
+            "name": "Network Protection",
+            "controls": [
+                {
+                    "id": "HT-NET-01",
+                    "number": "HT-NET-01",
+                    "title": "Network segmentation and boundary protection",
+                    "text": "",
+                    "description": "Networks are segmented by function and sensitivity, and boundary devices restrict traffic to what is needed.",
+                    "guidance": "Review network diagrams, firewall rule sets and rule review records, and segmentation of systems holding sensitive data.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-NET-01.a",
+                            "text": "Network diagrams are current and show segmentation and data flows.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-NET-01.b",
+                            "text": "Firewall rules restrict traffic to approved services and are reviewed at least every six months.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-NET-01.c",
+                            "text": "Systems holding sensitive data are segregated from general networks.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-NET-02",
+                    "number": "HT-NET-02",
+                    "title": "Remote access",
+                    "text": "",
+                    "description": "Remote access to internal networks uses encrypted connections and multi-factor authentication and is logged.",
+                    "guidance": "Check VPN or zero trust access configuration, MFA enforcement, session timeouts and logging.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-NET-02.a",
+                            "text": "Remote access uses encrypted channels and multi-factor authentication.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-NET-02.b",
+                            "text": "Remote sessions are logged and time out after inactivity.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-TXP",
+            "code": "HT-TXP",
+            "name": "Transmission Protection",
+            "controls": [
+                {
+                    "id": "HT-TXP-01",
+                    "number": "HT-TXP-01",
+                    "title": "Encryption in transit",
+                    "text": "",
+                    "description": "Sensitive data sent over public or untrusted networks is encrypted using current protocols, including email and file transfer.",
+                    "guidance": "Check TLS configuration of external services, secure email and file transfer methods, and disabled weak protocols and ciphers.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-TXP-01.a",
+                            "text": "Sensitive data transmitted over public networks is encrypted with current protocols.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-TXP-01.b",
+                            "text": "Weak protocols and ciphers are disabled.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-TXP-01.c",
+                            "text": "Secure methods are used for email and file transfer of sensitive data.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-PWD",
+            "code": "HT-PWD",
+            "name": "Password Management",
+            "controls": [
+                {
+                    "id": "HT-PWD-01",
+                    "number": "HT-PWD-01",
+                    "title": "Password and authenticator management",
+                    "text": "",
+                    "description": "Passwords meet length and complexity requirements, are stored securely, and are changed when compromise is suspected, and default credentials are changed.",
+                    "guidance": "Review password policy settings in the directory and key applications, storage of credentials, password manager use and handling of default and shared accounts.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-PWD-01.a",
+                            "text": "Password policy settings enforce documented length and complexity requirements.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-PWD-01.b",
+                            "text": "Default passwords are changed before systems go into use.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-PWD-01.c",
+                            "text": "Passwords are stored and transmitted only in protected form.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-ACC",
+            "code": "HT-ACC",
+            "name": "Access Control",
+            "controls": [
+                {
+                    "id": "HT-ACC-01",
+                    "number": "HT-ACC-01",
+                    "title": "User provisioning and deprovisioning",
+                    "text": "",
+                    "description": "User access is requested, approved and granted on least privilege, and removed promptly when people leave or change roles.",
+                    "guidance": "Sample joiners, movers and leavers for approval records and timely removal, comparing HR records with directory accounts.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-ACC-01.a",
+                            "text": "Access is approved before it is granted and follows least privilege.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-ACC-01.b",
+                            "text": "Access is removed within a defined period of termination or role change.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-ACC-02",
+                    "number": "HT-ACC-02",
+                    "title": "Access reviews",
+                    "text": "",
+                    "description": "User and privileged access is reviewed at defined intervals by owners, and inappropriate access is removed.",
+                    "guidance": "Review evidence of completed access reviews for in-scope systems and the removals that resulted.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-ACC-02.a",
+                            "text": "User access to in-scope systems is reviewed at least annually, and privileged access more often.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-ACC-02.b",
+                            "text": "Inappropriate access found in reviews is removed and recorded.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-ACC-03",
+                    "number": "HT-ACC-03",
+                    "title": "Privileged access and multi-factor authentication",
+                    "text": "",
+                    "description": "Privileged accounts are restricted, separate from day-to-day accounts and protected by multi-factor authentication.",
+                    "guidance": "Check the list of privileged accounts, use of separate admin accounts, MFA on privileged and remote access, and segregation of duties.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-ACC-03.a",
+                            "text": "Privileged access is limited to named people with a business need.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-ACC-03.b",
+                            "text": "Privileged and remote access requires multi-factor authentication.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-ACC-03.c",
+                            "text": "Incompatible duties are segregated.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-LOG",
+            "code": "HT-LOG",
+            "name": "Audit Logging and Monitoring",
+            "controls": [
+                {
+                    "id": "HT-LOG-01",
+                    "number": "HT-LOG-01",
+                    "title": "Audit logging",
+                    "text": "",
+                    "description": "Security-relevant events are logged on in-scope systems, logs are protected from change and retained for a defined period.",
+                    "guidance": "Check log sources against the inventory, logged event types (logons, privileged actions, changes to sensitive data), log integrity protection and retention.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-LOG-01.a",
+                            "text": "Security-relevant events are logged on in-scope systems.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-LOG-01.b",
+                            "text": "Logs are protected from unauthorized change and retained for a defined period.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-LOG-01.c",
+                            "text": "System clocks are synchronized.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-LOG-02",
+                    "number": "HT-LOG-02",
+                    "title": "Monitoring and alerting",
+                    "text": "",
+                    "description": "Logs are collected centrally and reviewed or monitored for suspicious activity, with alerts investigated.",
+                    "guidance": "Review the SIEM or log management setup, alert rules, review frequency and evidence of alert investigation.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-LOG-02.a",
+                            "text": "Logs are aggregated centrally and monitored for suspicious activity.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-LOG-02.b",
+                            "text": "Alerts are investigated and escalated as incidents where warranted.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-ETA",
+            "code": "HT-ETA",
+            "name": "Education, Training and Awareness",
+            "controls": [
+                {
+                    "id": "HT-ETA-01",
+                    "number": "HT-ETA-01",
+                    "title": "Security and privacy training",
+                    "text": "",
+                    "description": "Workforce members receive security and privacy training at onboarding and at least annually, with role-based training for those with security duties.",
+                    "guidance": "Review training content, completion records, phishing exercises and role-based training for administrators and developers.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-ETA-01.a",
+                            "text": "Security and privacy awareness training is completed at onboarding and annually.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-ETA-01.b",
+                            "text": "Role-based training is provided to people with security responsibilities.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-ETA-01.c",
+                            "text": "Completion is tracked and followed up.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-TPA",
+            "code": "HT-TPA",
+            "name": "Third Party Assurance",
+            "controls": [
+                {
+                    "id": "HT-TPA-01",
+                    "number": "HT-TPA-01",
+                    "title": "Third-party risk assessment",
+                    "text": "",
+                    "description": "Third parties that access, process or host the organization's sensitive information are identified, risk-assessed before engagement and reassessed periodically.",
+                    "guidance": "Review the third-party inventory, risk tiering, due diligence questionnaires or assurance reports obtained, and reassessment schedule.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-TPA-01.a",
+                            "text": "An inventory of third parties with access to sensitive information is maintained.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-TPA-01.b",
+                            "text": "Third parties are risk-assessed before engagement and periodically after.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-TPA-01.c",
+                            "text": "Assurance evidence (for example certifications or audit reports) is obtained and reviewed.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-TPA-02",
+                    "number": "HT-TPA-02",
+                    "title": "Third-party agreements",
+                    "text": "",
+                    "description": "Agreements with third parties set security and privacy requirements, breach notification, right to audit and return or destruction of data.",
+                    "guidance": "Sample contracts and business associate agreements for required security clauses.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-TPA-02.a",
+                            "text": "Contracts with third parties include security, privacy and breach notification requirements.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-TPA-02.b",
+                            "text": "Business associate agreements are in place where required.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-INC",
+            "code": "HT-INC",
+            "name": "Incident Management",
+            "controls": [
+                {
+                    "id": "HT-INC-01",
+                    "number": "HT-INC-01",
+                    "title": "Incident response plan",
+                    "text": "",
+                    "description": "A documented incident response plan defines roles, severity levels, escalation, containment, notification and recovery, and is tested at least annually.",
+                    "guidance": "Review the plan, the incident response team and contacts, breach notification procedures and evidence of tabletop or other tests.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-INC-01.a",
+                            "text": "A documented incident response plan defines roles, severity levels and escalation.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-INC-01.b",
+                            "text": "The plan covers breach notification to individuals, regulators and partners as required.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-INC-01.c",
+                            "text": "The plan is tested at least annually and updated from lessons learned.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-INC-02",
+                    "number": "HT-INC-02",
+                    "title": "Incident handling and reporting",
+                    "text": "",
+                    "description": "Workforce members know how to report incidents, and incidents are recorded, investigated, contained and reviewed.",
+                    "guidance": "Review the incident register and a sample of incidents for timely response, root cause and lessons learned.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-INC-02.a",
+                            "text": "Workforce members are told how to report suspected incidents.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-INC-02.b",
+                            "text": "Incidents are recorded with their handling, root cause and lessons learned.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-BCD",
+            "code": "HT-BCD",
+            "name": "Business Continuity and Disaster Recovery",
+            "controls": [
+                {
+                    "id": "HT-BCD-01",
+                    "number": "HT-BCD-01",
+                    "title": "Continuity and recovery planning",
+                    "text": "",
+                    "description": "Business impact analysis sets recovery priorities, and business continuity and disaster recovery plans are documented and tested.",
+                    "guidance": "Review the BIA, recovery time and point objectives, the plans and test results.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-BCD-01.a",
+                            "text": "A business impact analysis sets recovery time and point objectives for critical systems.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-BCD-01.b",
+                            "text": "Business continuity and disaster recovery plans are documented and tested at least annually.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-BCD-02",
+                    "number": "HT-BCD-02",
+                    "title": "Backup",
+                    "text": "",
+                    "description": "Backups of critical data and systems are performed, protected, stored separately and tested for restoration.",
+                    "guidance": "Check backup schedules and success monitoring, encryption and offsite or immutable copies, and restore test records.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-BCD-02.a",
+                            "text": "Backups of critical data run on a defined schedule and failures are followed up.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-BCD-02.b",
+                            "text": "Backups are encrypted and a copy is stored separately from production.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-BCD-02.c",
+                            "text": "Restores are tested at defined intervals.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-RSK",
+            "code": "HT-RSK",
+            "name": "Risk Management",
+            "controls": [
+                {
+                    "id": "HT-RSK-01",
+                    "number": "HT-RSK-01",
+                    "title": "Risk assessment",
+                    "text": "",
+                    "description": "A formal risk assessment of in-scope systems and information is performed at least annually and after significant change, using a defined method.",
+                    "guidance": "Review the risk methodology, the most recent assessment and how threats and vulnerabilities to sensitive data were evaluated.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-RSK-01.a",
+                            "text": "A documented risk assessment method defines likelihood, impact and acceptance criteria.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-RSK-01.b",
+                            "text": "Risk assessments are performed at least annually and after significant change.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-RSK-02",
+                    "number": "HT-RSK-02",
+                    "title": "Risk treatment and corrective action plans",
+                    "text": "",
+                    "description": "Risks are treated, accepted or transferred by authorized people, and gaps are tracked in corrective action plans to closure.",
+                    "guidance": "Review the risk register, acceptance approvals and corrective action plans with owners, dates and status.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-RSK-02.a",
+                            "text": "Risks have a treatment decision approved by an authorized owner.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-RSK-02.b",
+                            "text": "Corrective action plans record owner, target date and status for each gap and are tracked to closure.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-PHY",
+            "code": "HT-PHY",
+            "name": "Physical and Environmental Security",
+            "controls": [
+                {
+                    "id": "HT-PHY-01",
+                    "number": "HT-PHY-01",
+                    "title": "Physical access",
+                    "text": "",
+                    "description": "Physical access to facilities and areas holding sensitive systems or information is restricted, logged and reviewed, and visitors are escorted.",
+                    "guidance": "Inspect access controls for data centres and secure areas, badge access reviews and visitor logs. For cloud-hosted systems, rely on the provider's assurance evidence.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-PHY-01.a",
+                            "text": "Access to secure areas is restricted to authorized people and reviewed.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-PHY-01.b",
+                            "text": "Visitors are logged and escorted.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-PHY-02",
+                    "number": "HT-PHY-02",
+                    "title": "Environmental protection and equipment",
+                    "text": "",
+                    "description": "Facilities housing systems are protected against fire, water, power and temperature risks, and equipment is maintained and disposed of securely.",
+                    "guidance": "Check fire suppression, power protection, environmental monitoring, maintenance records and secure disposal records.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-PHY-02.a",
+                            "text": "Environmental protections are in place and maintained for facilities housing in-scope systems.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-PHY-02.b",
+                            "text": "Equipment is disposed of or reused only after data is securely removed.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "HT-PRV",
+            "code": "HT-PRV",
+            "name": "Data Protection and Privacy",
+            "controls": [
+                {
+                    "id": "HT-PRV-01",
+                    "number": "HT-PRV-01",
+                    "title": "Data classification and handling",
+                    "text": "",
+                    "description": "Information is classified by sensitivity and handled, labelled, retained and disposed of according to its classification.",
+                    "guidance": "Review the classification scheme, handling rules, data inventory or flow maps for sensitive data, and retention schedule.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-PRV-01.a",
+                            "text": "A classification scheme with handling rules is documented and communicated.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-PRV-01.b",
+                            "text": "Locations and flows of sensitive data are documented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-PRV-01.c",
+                            "text": "Data is retained and disposed of according to a retention schedule.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-PRV-02",
+                    "number": "HT-PRV-02",
+                    "title": "Encryption at rest and data loss prevention",
+                    "text": "",
+                    "description": "Sensitive data at rest is encrypted where risk requires, keys are managed, and controls detect or prevent unauthorized data transfer.",
+                    "guidance": "Check encryption of databases, storage and backups, key management procedures and DLP coverage for email, web and endpoints.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-PRV-02.a",
+                            "text": "Sensitive data at rest is encrypted where required, with keys managed securely.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-PRV-02.b",
+                            "text": "Controls detect or prevent unauthorized transfer of sensitive data.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "HT-PRV-03",
+                    "number": "HT-PRV-03",
+                    "title": "Privacy practices",
+                    "text": "",
+                    "description": "Personal and health information is collected, used and disclosed only as permitted, individuals are given notice, and their rights requests are handled.",
+                    "guidance": "Review the notice of privacy practices, minimum necessary rules, handling of individual rights requests and accounting of disclosures where required.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "HT-PRV-03.a",
+                            "text": "Notice of privacy practices is provided to individuals as required.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-PRV-03.b",
+                            "text": "Use and disclosure of personal information is limited to permitted purposes and the minimum necessary.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "HT-PRV-03.c",
+                            "text": "Individual rights requests are handled within required timeframes.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        }
+    ]
+}

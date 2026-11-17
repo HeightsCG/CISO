@@ -1,0 +1,116 @@
+{
+    "key": "hitrust",
+    "name": "HITRUST CSF",
+    "version": "HCG control set 2026",
+    "full_name": "HITRUST CSF readiness: HCG control set organized by the HITRUST assessment domains",
+    "issuing_body": "Heights Consulting Group, organized on the HITRUST CSF assessment domains (HITRUST Alliance)",
+    "standard_codes": [
+        "HITRUST"
+    ],
+    "aliases": [
+        "HITRUST",
+        "HITRUST CSF",
+        "HITRUST e1",
+        "HITRUST i1",
+        "HITRUST r2"
+    ],
+    "content_licence": "hcg_authored",
+    "notice": "HCG readiness control set for HITRUST CSF assessments. HITRUST CSF requirement statements, numbering and scoring are licensed by HITRUST Alliance and are not reproduced; controls here carry HCG numbering and are grouped by the HITRUST assessment domains. A HITRUST e1, i1 or r2 certification requires a validated assessment by an authorized external assessor submitted through HITRUST.",
+    "sources": [
+        {
+            "id": "hcg",
+            "title": "HCG HITRUST readiness control set: domains, controls, guidance and test points",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "hcg",
+        "objectives": "hcg",
+        "guidance": "hcg"
+    },
+    "control_flags": {
+        "type": "hcg for an HCG-written readiness control."
+    },
+    "terminology": {
+        "control": "control",
+        "controls": "controls",
+        "family": "theme",
+        "families": "themes",
+        "objective": "test point",
+        "objectives": "test points",
+        "plan": "Corrective action plan",
+        "plan_short": "Corrective action plan",
+        "score": "Implementation score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable controls implemented, with partial implementation counting as half. HITRUST scores r2 requirements on maturity levels and i1 and e1 requirements on implementation; this percentage is an HCG readiness measure, not a HITRUST score."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A control is implemented only when every HCG test point under it is met.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
+            "id": "scope_applicability",
+            "type": "applicability",
+            "summary": "All domains apply unless excluded from the assessment scope with justification; controls fully inherited from a service provider are marked met only when the provider's assurance evidence is obtained.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "In the implementation score a partially implemented control counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "HITRUST CSF",
+            "definition": "A certifiable framework that harmonizes requirements from many standards and regulations, including HIPAA, NIST and ISO, maintained by HITRUST Alliance."
+        },
+        {
+            "term": "e1, i1 and r2",
+            "definition": "HITRUST's assessment types: e1 covers essential cybersecurity hygiene, i1 a broader leading-practice set, and r2 a risk-based, tailored set scored on maturity."
+        },
+        {
+            "term": "Inheritance",
+            "definition": "Relying on a service provider's validated HITRUST controls for part of the organization's own assessment."
+        },
+        {
+            "term": "Corrective action plan (CAP)",
+            "definition": "A plan for remediating a requirement that did not meet the scoring threshold, with owner, actions and target date."
+        }
+    ]
+}
