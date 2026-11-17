@@ -1,0 +1,570 @@
+{
+    "key": "nist-800-30",
+    "name": "NIST SP 800-30",
+    "version": "Revision 1",
+    "full_name": "NIST SP 800-30 Rev. 1 Guide for Conducting Risk Assessments",
+    "issuing_body": "National Institute of Standards and Technology",
+    "standard_codes": [
+        "NIST-800-30"
+    ],
+    "aliases": [
+        "SP 800-30",
+        "800-30r1",
+        "NIST risk assessment",
+        "Guide for Conducting Risk Assessments"
+    ],
+    "content_licence": "public_domain",
+    "notice": "The assessable items are the 15 tasks of the SP 800-30 risk assessment process, with the key activities NIST lists for each task. Task statements and activities are quoted from the publication.",
+    "sources": [
+        {
+            "id": "sp80030",
+            "title": "NIST SP 800-30 Revision 1, Guide for Conducting Risk Assessments",
+            "version": "Revision 1 (September 2012)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-30r1.pdf",
+            "file": "nist80030/NIST.SP.800-30r1.pdf",
+            "sha256": "f214087f0bdb35932a28c16eb93932a33c67a6edfb5e6f1638866bd201c98e04"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG scoring conventions",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "sp80030",
+        "objectives": "sp80030"
+    },
+    "control_flags": {
+        "type": "task: a task of the SP 800-30 risk assessment process."
+    },
+    "terminology": {
+        "control": "task",
+        "controls": "tasks",
+        "family": "step",
+        "families": "steps",
+        "objective": "key activity",
+        "objectives": "key activities",
+        "plan": "Action plan",
+        "plan_short": "Action plan",
+        "score": "Process maturity"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Performed"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Performed"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Performed"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of tasks performed, with partial performance counting as half. NIST defines no score; this is an HCG measure of how fully the organization's risk assessment process follows SP 800-30."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A task is performed only when each of its key activities is performed.",
+            "source": "hcg",
+            "cite": "HCG convention"
+        },
+        {
+            "id": "process_steps",
+            "type": "applicability",
+            "summary": "The risk assessment process has four steps, prepare, conduct, communicate and maintain, and every task applies to a full risk assessment.",
+            "source": "sp80030",
+            "cite": "NIST SP 800-30 Rev. 1, Chapter 3",
+            "quote": "The second step in the risk assessment process is to conduct the assessment."
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A partially performed task counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG scoring convention"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "Risk assessment",
+            "definition": "The process of identifying, estimating and prioritizing risks to organizational operations, assets, individuals, other organizations and the Nation."
+        },
+        {
+            "term": "Threat source",
+            "definition": "The intent and method targeted at exploiting a vulnerability, or a situation and method that may accidentally exploit one."
+        },
+        {
+            "term": "Predisposing condition",
+            "definition": "A condition within the organization that affects the likelihood that threat events result in adverse impacts."
+        },
+        {
+            "term": "Risk tiers",
+            "definition": "Tier 1 organization, Tier 2 mission and business process, Tier 3 information system."
+        }
+    ],
+    "display_name": "NIST SP 800-30 (Revision 1)",
+    "counts": {
+        "families": 4,
+        "controls": 15,
+        "objectives": 46
+    },
+    "families": [
+        {
+            "number": "Step 1",
+            "code": "S1",
+            "name": "Step 1: Prepare for the Assessment",
+            "controls": [
+                {
+                    "id": "1-1",
+                    "number": "Task 1-1",
+                    "title": "Identify Purpose",
+                    "text": "Identify the purpose of the risk assessment in terms of the information that the assessment is intended to produce and the decisions the assessment is intended to support.",
+                    "type": "task",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1-1.a",
+                            "text": "Identify the purpose of the risk assessment.",
+                            "source": "sp80030"
+                        }
+                    ],
+                    "source": "sp80030"
+                },
+                {
+                    "id": "1-2",
+                    "number": "Task 1-2",
+                    "title": "Identify Scope",
+                    "text": "Identify the scope of the risk assessment in terms of organizational applicability, time frame supported, and architectural/technology considerations.",
+                    "type": "task",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1-2.a",
+                            "text": "Identify the scope of the risk assessment.",
+                            "source": "sp80030"
+                        }
+                    ],
+                    "source": "sp80030"
+                },
+                {
+                    "id": "1-3",
+                    "number": "Task 1-3",
+                    "title": "Identify Assumptions and Constraints",
+                    "text": "Identify the specific assumptions and constraints under which the risk assessment is conducted.",
+                    "type": "task",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1-3.a",
+                            "text": "Identify the assumptions and constraints under which the risk assessment is conducted.",
+                            "source": "sp80030"
+                        }
+                    ],
+                    "source": "sp80030"
+                },
+                {
+                    "id": "1-4",
+                    "number": "Task 1-4",
+                    "title": "Identify Information Sources",
+                    "text": "Identify the sources of descriptive, threat, vulnerability, and impact information to be used in the risk assessment.",
+                    "type": "task",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1-4.a",
+                            "text": "Identify sources of threat, vulnerability, and impact information to be used in the risk assessment (see Tables D-1, E-1, F-1, H-1, and I-1 as tailored by the organization).",
+                            "source": "sp80030"
+                        }
+                    ],
+                    "source": "sp80030"
+                },
+                {
+                    "id": "1-5",
+                    "number": "Task 1-5",
+                    "title": "Identify Risk Model and Analytic Approach",
+                    "text": "Identify the risk model and analytic approach to be used in the risk assessment.",
+                    "type": "task",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "1-5.a",
+                            "text": "Define or refine the risk model, assessment approach, and analysis approach to be used in the risk assessment.",
+                            "source": "sp80030"
+                        }
+                    ],
+                    "source": "sp80030"
+                }
+            ]
+        },
+        {
+            "number": "Step 2",
+            "code": "S2",
+            "name": "Step 2: Conduct the Assessment",
+            "controls": [
+                {
+                    "id": "2-1",
+                    "number": "Task 2-1",
+                    "title": "Identify Threat Sources",
+                    "text": "Identify and characterize threat sources of concern, including capability, intent, and targeting characteristics for adversarial threats and range of effects for non-adversarial threats.",
+                    "type": "task",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2-1.a",
+                            "text": "Identify threat source inputs (see Table D-1, as tailored by the organization).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-1.b",
+                            "text": "Identify threat sources (see Table D-2, as tailored by the organization).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-1.c",
+                            "text": "Determine if threat sources are relevant to the organization and in scope (see Table D-1, as tailored by the organization).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-1.d",
+                            "text": "Create or update the assessment of threat sources (see Table D-7 for adversarial threat sources and Table D-8 for non-adversarial threat sources, as tailored by the organization).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-1.e",
+                            "text": "For relevant adversarial threat sources: Assess adversary capability (see Table D-3, as tailored by the organization).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-1.f",
+                            "text": "For relevant adversarial threat sources: Assess adversary intent (see Table D-4, as tailored by the organization).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-1.g",
+                            "text": "For relevant adversarial threat sources: Assess adversary targeting (see Table D-5, as tailored by the organization).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-1.h",
+                            "text": "For relevant non-adversarial threat sources: Assess the range of effects from threat sources (see Table D-6, as tailored by the organization).",
+                            "source": "sp80030"
+                        }
+                    ],
+                    "source": "sp80030"
+                },
+                {
+                    "id": "2-2",
+                    "number": "Task 2-2",
+                    "title": "Identify Threat Events",
+                    "text": "Identify potential threat events, relevance of the events, and the threat sources that could initiate the events.",
+                    "type": "task",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2-2.a",
+                            "text": "Identify threat event inputs (see Table E-1, as tailored by the organization).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-2.b",
+                            "text": "Identify threat events (see Table E-2 for adversarial threat events and Table E-3 for non-adversarial threat events, as tailored by the organization); create or update Table E-5.",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-2.c",
+                            "text": "Identify threat sources that could initiate the threat events (see Table D-7 and Table D-8, as tailored by the organization); update Table E-5.",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-2.d",
+                            "text": "Assess the relevance of threat events to the organization (see Table E-4, as tailored by the organization); update Table E-5.",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-2.e",
+                            "text": "Update Columns 1-6 in Table I-5 for adversarial risk (see Table E-5 and Table D-7); or update Columns 1-4 in Table I-7 for non-adversarial risk (see Table E-5 and Table D-8).",
+                            "source": "sp80030"
+                        }
+                    ],
+                    "source": "sp80030"
+                },
+                {
+                    "id": "2-3",
+                    "number": "Task 2-3",
+                    "title": "Identify Vulnerabilities and Predisposing Conditions",
+                    "text": "Identify vulnerabilities and predisposing conditions that affect the likelihood that threat events of concern result in adverse impacts.",
+                    "type": "task",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2-3.a",
+                            "text": "Identify vulnerability and predisposing condition inputs (see Table F-1, as tailored by the organization).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-3.b",
+                            "text": "Identify vulnerabilities using organization-defined information sources; create or update Table F-3.",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-3.c",
+                            "text": "Assess the severity of identified vulnerabilities (see Table F-2, as tailored by the organization); update Table F-3.",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-3.d",
+                            "text": "Identify predisposing conditions (see Table F-4, as tailored by the organization); create or update Table F-6.",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-3.e",
+                            "text": "Assess the pervasiveness of predisposing conditions (see Table F-5, as tailored by the organization); update Table F-6.",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-3.f",
+                            "text": "Update Column 8 in Table I-5 for adversarial risk; or update Column 6 in Table I-7 for non-adversarial risk (see Table F-3 and Table F-6).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-3.g",
+                            "text": "Update Column 9 in Table I-5 for adversarial risk; or update Column 7 in Table I-7 for non-adversarial risk (see Table F-2 and Table F-5).",
+                            "source": "sp80030"
+                        }
+                    ],
+                    "source": "sp80030"
+                },
+                {
+                    "id": "2-4",
+                    "number": "Task 2-4",
+                    "title": "Determine Likelihood",
+                    "text": "Determine the likelihood that threat events of concern result in adverse impacts, considering: (i) the characteristics of the threat sources that could initiate the events; (ii) the vulnerabilities/predisposing conditions identified; and (iii) the organizational susceptibility reflecting the safeguards/countermeasures planned or implemented to impede such events.",
+                    "type": "task",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2-4.a",
+                            "text": "Identify likelihood determination inputs (see Table G-1, as tailored by the organization).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-4.b",
+                            "text": "Identify likelihood determination factors using organization-defined information sources (e.g., threat source characteristics, vulnerabilities, predisposing conditions).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-4.c",
+                            "text": "Assess the likelihood of threat event initiation for adversarial threats and the likelihood of threat event occurrence for non-adversarial threats (see Table G-2 and Table G-3, as tailored by the organization).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-4.d",
+                            "text": "Assess the likelihood of threat events resulting in adverse impacts, given likelihood of initiation or occurrence (see Table G-4, as tailored by the organization).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-4.e",
+                            "text": "Assess the overall likelihood of threat event initiation/occurrence and likelihood of threat events resulting in adverse impacts (see Table G-5, as tailored by the organization).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-4.f",
+                            "text": "Update Columns 7, 10, and 11 in Table I-5 for adversarial risk (see Table G-2, Table G-4, and Table G-5); or update Columns 5, 8, and 9 in Table I-7 for non-adversarial risk (see Table G-3, Table G-4, and Table G-5).",
+                            "source": "sp80030"
+                        }
+                    ],
+                    "source": "sp80030"
+                },
+                {
+                    "id": "2-5",
+                    "number": "Task 2-5",
+                    "title": "Determine Impact",
+                    "text": "Determine the adverse impacts from threat events of concern considering: (i) the characteristics of the threat sources that could initiate the events; (ii) the vulnerabilities/predisposing conditions identified; and (iii) the susceptibility reflecting the safeguards/countermeasures planned or implemented to impede such events.",
+                    "type": "task",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2-5.a",
+                            "text": "Identify impact determination inputs (see Table H-1 as tailored by the organization).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-5.b",
+                            "text": "Identify impact determination factors using organization-defined information sources.",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-5.c",
+                            "text": "Identify adverse impacts and affected assets (see Table H-2, as tailored by the organization); create or update Table H-4.",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-5.d",
+                            "text": "Assess the maximum impact associated with the affected assets (see Table H-3, as tailored by the organization); update Table H-4.",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-5.e",
+                            "text": "Update Column 12 in Table I-5 for adversarial risk; or update Column 10 in Table I-7 for non-adversarial risk.",
+                            "source": "sp80030"
+                        }
+                    ],
+                    "source": "sp80030"
+                },
+                {
+                    "id": "2-6",
+                    "number": "Task 2-6",
+                    "title": "Determine Risk",
+                    "text": "Determine the risk to the organization from threat events of concern considering: (i) the impact that would result from the events; and (ii) the likelihood of the events occurring.",
+                    "type": "task",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2-6.a",
+                            "text": "Identify risk and uncertainty determination inputs (see Table I-1, as tailored by the organization).",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "2-6.b",
+                            "text": "Determine risk (see Table I-2 and Table I-3, as tailored by the organization); update Column 13 in Table I-5 for adversarial risk and Column 11 in Table I-7 for non-adversarial risk.",
+                            "source": "sp80030"
+                        }
+                    ],
+                    "source": "sp80030"
+                }
+            ]
+        },
+        {
+            "number": "Step 3",
+            "code": "S3",
+            "name": "Step 3: Communicate and Share Assessment Results",
+            "controls": [
+                {
+                    "id": "3-1",
+                    "number": "Task 3-1",
+                    "title": "Communicate Risk Assessment Results",
+                    "text": "Communicate risk assessment results to organizational decision makers to support risk responses.",
+                    "type": "task",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3-1.a",
+                            "text": "Determine the appropriate method (e.g., executive briefing, risk assessment report, or dashboard) to communicate risk assessment results.",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "3-1.b",
+                            "text": "Communicate risk assessment results to designated organizational stakeholders.",
+                            "source": "sp80030"
+                        }
+                    ],
+                    "source": "sp80030"
+                },
+                {
+                    "id": "3-2",
+                    "number": "Task 3-2",
+                    "title": "Share Risk-related Information",
+                    "text": "Share risk-related information produced during the risk assessment with appropriate organizational personnel.",
+                    "type": "task",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3-2.a",
+                            "text": "Share the risk assessment results and supporting evidence in accordance with organizational policies and guidance.",
+                            "source": "sp80030"
+                        }
+                    ],
+                    "source": "sp80030"
+                }
+            ]
+        },
+        {
+            "number": "Step 4",
+            "code": "S4",
+            "name": "Step 4: Maintain the Assessment",
+            "controls": [
+                {
+                    "id": "4-1",
+                    "number": "Task 4-1",
+                    "title": "Monitor Risk Factors",
+                    "text": "Conduct ongoing monitoring of the risk factors that contribute to changes in risk to organizational operations and assets, individuals, other organizations, or the Nation.",
+                    "type": "task",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4-1.a",
+                            "text": "Identify key risk factors that have been identified for ongoing monitoring.",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "4-1.b",
+                            "text": "Identify the frequency of risk factor monitoring activities and the circumstances under which the risk assessment needs to be updated.",
+                            "source": "sp80030"
+                        }
+                    ],
+                    "source": "sp80030"
+                },
+                {
+                    "id": "4-2",
+                    "number": "Task 4-2",
+                    "title": "Update Risk Assessment",
+                    "text": "Update existing risk assessment using the results from ongoing monitoring of risk factors.",
+                    "type": "task",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4-2.a",
+                            "text": "Reconfirm the purpose, scope, and assumptions of the risk assessment.",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "4-2.b",
+                            "text": "Conduct the appropriate risk assessment tasks, as needed.",
+                            "source": "sp80030"
+                        },
+                        {
+                            "id": "4-2.c",
+                            "text": "Communicate the subsequent risk assessment results to specified organizational personnel.",
+                            "source": "sp80030"
+                        }
+                    ],
+                    "source": "sp80030"
+                }
+            ]
+        }
+    ]
+}

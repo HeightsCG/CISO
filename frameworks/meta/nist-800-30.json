@@ -1,0 +1,124 @@
+{
+    "key": "nist-800-30",
+    "name": "NIST SP 800-30",
+    "version": "Revision 1",
+    "full_name": "NIST SP 800-30 Rev. 1 Guide for Conducting Risk Assessments",
+    "issuing_body": "National Institute of Standards and Technology",
+    "standard_codes": [
+        "NIST-800-30"
+    ],
+    "aliases": [
+        "SP 800-30",
+        "800-30r1",
+        "NIST risk assessment",
+        "Guide for Conducting Risk Assessments"
+    ],
+    "content_licence": "public_domain",
+    "notice": "The assessable items are the 15 tasks of the SP 800-30 risk assessment process, with the key activities NIST lists for each task. Task statements and activities are quoted from the publication.",
+    "sources": [
+        {
+            "id": "sp80030",
+            "title": "NIST SP 800-30 Revision 1, Guide for Conducting Risk Assessments",
+            "version": "Revision 1 (September 2012)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-30r1.pdf",
+            "file": "nist80030/NIST.SP.800-30r1.pdf",
+            "sha256": "f214087f0bdb35932a28c16eb93932a33c67a6edfb5e6f1638866bd201c98e04"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG scoring conventions",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "sp80030",
+        "objectives": "sp80030"
+    },
+    "control_flags": {
+        "type": "task: a task of the SP 800-30 risk assessment process."
+    },
+    "terminology": {
+        "control": "task",
+        "controls": "tasks",
+        "family": "step",
+        "families": "steps",
+        "objective": "key activity",
+        "objectives": "key activities",
+        "plan": "Action plan",
+        "plan_short": "Action plan",
+        "score": "Process maturity"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Performed"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Performed"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Performed"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of tasks performed, with partial performance counting as half. NIST defines no score; this is an HCG measure of how fully the organization's risk assessment process follows SP 800-30."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A task is performed only when each of its key activities is performed.",
+            "source": "hcg",
+            "cite": "HCG convention"
+        },
+        {
+            "id": "process_steps",
+            "type": "applicability",
+            "summary": "The risk assessment process has four steps, prepare, conduct, communicate and maintain, and every task applies to a full risk assessment.",
+            "source": "sp80030",
+            "cite": "NIST SP 800-30 Rev. 1, Chapter 3",
+            "quote": "The second step in the risk assessment process is to conduct the assessment."
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A partially performed task counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG scoring convention"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "Risk assessment",
+            "definition": "The process of identifying, estimating and prioritizing risks to organizational operations, assets, individuals, other organizations and the Nation."
+        },
+        {
+            "term": "Threat source",
+            "definition": "The intent and method targeted at exploiting a vulnerability, or a situation and method that may accidentally exploit one."
+        },
+        {
+            "term": "Predisposing condition",
+            "definition": "A condition within the organization that affects the likelihood that threat events result in adverse impacts."
+        },
+        {
+            "term": "Risk tiers",
+            "definition": "Tier 1 organization, Tier 2 mission and business process, Tier 3 information system."
+        }
+    ]
+}

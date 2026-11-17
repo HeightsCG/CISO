@@ -180,6 +180,7 @@ class Poam
         'sox-itgc' => 'none',
         'nist-800-63' => 'none',
         'nist-800-207' => 'none',
+        'nist-800-30' => 'none',
         'nydfs-500' => 'none',
         'nis2' => 'none',
         'dora' => 'none',
