@@ -145,6 +145,11 @@
             "definition": "Autoridade Nacional de Proteção de Dados, Brazil's data protection authority."
         }
     ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "LGPD",
+        "order": 32
+    },
     "display_name": "LGPD (Lei nº 13.709/2018, updated to Lei nº 15.352/2026)",
     "counts": {
         "families": 12,

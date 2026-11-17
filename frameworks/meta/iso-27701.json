@@ -140,5 +140,10 @@
             "term": "Statement of applicability",
             "definition": "The record of which reference controls an organization applies, which it excludes, and why."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "ISO/IEC 27701",
+        "order": 36
+    }
 }

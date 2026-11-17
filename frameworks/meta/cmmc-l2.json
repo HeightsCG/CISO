@@ -292,5 +292,10 @@
             "term": "MFA",
             "definition": "Multi-factor authentication: signing in with two or more independent factors."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "US federal",
+        "name": "CMMC 2.0",
+        "order": 3
+    }
 }

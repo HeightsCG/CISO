@@ -225,21 +225,18 @@ $(document).ready(function () {
 <section class="land__band" id="frameworks">
     <div class="land__wrap">
         <h2 class="land__band-title">Built on the frameworks aviation answers to</h2>
-        <ul class="land__marks">
-            <li>EASA Part-IS</li>
-            <li>TSA Aviation Cybersecurity</li>
-            <li>CMMC 2.0</li>
-            <li>NIST CSF 2.0</li>
-            <li>NIST SP 800-171</li>
-            <li>NIST SP 800-53</li>
-            <li>ISO/IEC 27001</li>
-            <li>SOC 2</li>
-            <li>PCI DSS 4.0.1</li>
-            <li>FedRAMP</li>
-            <li>HIPAA Security Rule</li>
-            <li>NYDFS 500</li>
-            <li>FTC Safeguards Rule</li>
-        </ul>
+        <div class="land__catalogue">
+            <?php foreach (FrameworkLibrary::catalogue() as $group) { ?>
+            <div class="land__catalogue-group">
+                <h3 class="land__catalogue-label"><?php echo htmlspecialchars($group['group'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                <ul class="land__marks">
+                    <?php foreach ($group['names'] as $name) { ?>
+                    <li><?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?></li>
+                    <?php } ?>
+                </ul>
+            </div>
+            <?php } ?>
+        </div>
     </div>
 </section>
 
@@ -304,7 +301,7 @@ $(document).ready(function () {
         <ol class="land__steps">
             <li>
                 <h3 class="land__h3">Set up the client</h3>
-                <p>Add the client, choose the frameworks that apply, and invite the client's team to their own portal.</p>
+                <p>Add the client, start an assessment against each framework they answer to, and invite the client's team to their own portal.</p>
             </li>
             <li>
                 <h3 class="land__h3">Assess and collect evidence</h3>

@@ -307,5 +307,10 @@
             "term": "APT",
             "definition": "Advanced persistent threat: a well-resourced adversary that pursues long-term access to a target."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "US federal",
+        "name": "CMMC 2.0",
+        "order": 3
+    }
 }

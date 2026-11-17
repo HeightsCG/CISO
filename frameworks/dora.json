@@ -188,6 +188,11 @@
             "definition": "The European Supervisory Authorities: the European Banking Authority, the European Insurance and Occupational Pensions Authority and the European Securities and Markets Authority."
         }
     ],
+    "catalogue": {
+        "group": "Industry",
+        "name": "DORA",
+        "order": 24
+    },
     "display_name": "DORA (EU 2022/2554)",
     "counts": {
         "families": 20,

@@ -121,5 +121,10 @@
             "term": "Maturity level",
             "definition": "Maturity Level One to Three, each aimed at mitigating a higher level of adversary tradecraft and targeting; Maturity Level Zero means weaknesses remain."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Security",
+        "name": "Essential Eight",
+        "order": 16
+    }
 }

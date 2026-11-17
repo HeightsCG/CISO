@@ -232,5 +232,10 @@
             "term": "AI Office",
             "definition": "The European Commission's function for supervising general-purpose AI models and supporting implementation of the Regulation."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "AI",
+        "name": "EU AI Act",
+        "order": 38
+    }
 }

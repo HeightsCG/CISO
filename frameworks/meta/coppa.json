@@ -137,5 +137,10 @@
             "term": "FTC",
             "definition": "Federal Trade Commission, the U.S. agency that issues and enforces the COPPA Rule."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "COPPA",
+        "order": 31
+    }
 }

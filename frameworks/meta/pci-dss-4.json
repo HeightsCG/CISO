@@ -145,5 +145,10 @@
             "term": "SAQ",
             "definition": "Self-Assessment Questionnaire: the self-assessment form for smaller merchants and service providers."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Industry",
+        "name": "PCI DSS 4.0.1",
+        "order": 18
+    }
 }

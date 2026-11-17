@@ -161,5 +161,10 @@
             "term": "Recognised legitimate interest",
             "definition": "A lawful basis in Article 6(1)(ea) for processing that is necessary for one of the purposes listed in Annex 1, such as safeguarding national security or responding to an emergency."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "UK GDPR",
+        "order": 28
+    }
 }

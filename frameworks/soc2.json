@@ -160,6 +160,11 @@
             "definition": "Complementary user entity control: a control the service organization's customers must operate for the system's controls to work as described."
         }
     ],
+    "catalogue": {
+        "group": "Security",
+        "name": "SOC 2",
+        "order": 13
+    },
     "display_name": "SOC 2 Trust Services Criteria (2017, revised points of focus 2022)",
     "counts": {
         "families": 13,

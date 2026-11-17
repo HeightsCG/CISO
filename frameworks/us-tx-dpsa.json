@@ -148,6 +148,11 @@
             "definition": "A documented assessment, required before targeted advertising, sale of personal data, certain profiling and processing of sensitive data, that weighs the benefits of processing against the risks to consumers."
         }
     ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "US state privacy laws",
+        "order": 30
+    },
     "display_name": "Texas Data Privacy and Security Act (Business and Commerce Code as published November 2026)",
     "counts": {
         "families": 11,

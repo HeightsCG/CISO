@@ -128,5 +128,10 @@
             "term": "CDM",
             "definition": "Continuous diagnostics and mitigation: a system that reports and maintains the state of enterprise assets."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "NIST guidance",
+        "name": "NIST SP 800-207",
+        "order": 46
+    }
 }

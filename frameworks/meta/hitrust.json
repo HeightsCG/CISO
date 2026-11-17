@@ -112,5 +112,10 @@
             "term": "Corrective action plan (CAP)",
             "definition": "A plan for remediating a requirement that did not meet the scoring threshold, with owner, actions and target date."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Industry",
+        "name": "HITRUST CSF",
+        "order": 20
+    }
 }

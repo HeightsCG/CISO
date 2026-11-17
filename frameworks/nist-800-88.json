@@ -122,6 +122,11 @@
             "definition": "Sanitizing the encryption keys used to encrypt the target data, leaving only ciphertext on the media."
         }
     ],
+    "catalogue": {
+        "group": "NIST guidance",
+        "name": "NIST SP 800-88",
+        "order": 45
+    },
     "display_name": "NIST SP 800-88 (Revision 2)",
     "counts": {
         "families": 9,

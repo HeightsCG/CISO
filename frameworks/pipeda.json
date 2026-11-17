@@ -156,6 +156,11 @@
             "definition": "The threshold for reporting a breach, assessed from the sensitivity of the information and the probability that it has been or will be misused."
         }
     ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "PIPEDA",
+        "order": 33
+    },
     "display_name": "PIPEDA (current to 26 March 2026)",
     "counts": {
         "families": 13,

@@ -333,6 +333,11 @@
             "definition": "Air traffic management and air navigation services."
         }
     ],
+    "catalogue": {
+        "group": "Aviation",
+        "name": "EASA Part-IS",
+        "order": 1
+    },
     "display_name": "EASA Part-IS.I.OR (EU 2023/203)",
     "counts": {
         "families": 4,

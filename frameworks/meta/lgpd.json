@@ -144,5 +144,10 @@
             "term": "ANPD",
             "definition": "Autoridade Nacional de Proteção de Dados, Brazil's data protection authority."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "LGPD",
+        "order": 32
+    }
 }

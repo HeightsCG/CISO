@@ -125,5 +125,10 @@
             "term": "Exercise",
             "definition": "A planned activity that tests or validates business continuity strategies, solutions and plans."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Security",
+        "name": "ISO 22301",
+        "order": 12
+    }
 }

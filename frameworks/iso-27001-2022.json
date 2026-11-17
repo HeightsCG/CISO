@@ -215,6 +215,11 @@
             "definition": "Information and communication technology."
         }
     ],
+    "catalogue": {
+        "group": "Security",
+        "name": "ISO/IEC 27001",
+        "order": 9
+    },
     "display_name": "ISO/IEC 27001 (2022)",
     "counts": {
         "families": 5,

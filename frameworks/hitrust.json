@@ -113,6 +113,11 @@
             "definition": "A plan for remediating a requirement that did not meet the scoring threshold, with owner, actions and target date."
         }
     ],
+    "catalogue": {
+        "group": "Industry",
+        "name": "HITRUST CSF",
+        "order": 20
+    },
     "display_name": "HITRUST CSF (HCG control set 2026)",
     "counts": {
         "families": 19,

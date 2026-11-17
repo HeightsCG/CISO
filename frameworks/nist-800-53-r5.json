@@ -158,6 +158,11 @@
             "definition": "Open Security Controls Assessment Language, NIST's machine-readable format for control catalogs."
         }
     ],
+    "catalogue": {
+        "group": "US federal",
+        "name": "NIST SP 800-53",
+        "order": 5
+    },
     "display_name": "NIST SP 800-53 (Rev 5)",
     "counts": {
         "families": 20,

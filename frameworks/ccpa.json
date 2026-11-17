@@ -172,6 +172,11 @@
             "definition": "A request from a consumer, or someone authorized to act for them, that the business can reasonably verify comes from the consumer the information is about."
         }
     ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "CCPA",
+        "order": 29
+    },
     "display_name": "CCPA (as amended, effective 1 January 2025)",
     "counts": {
         "families": 10,

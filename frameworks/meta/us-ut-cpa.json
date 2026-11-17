@@ -136,5 +136,10 @@
             "term": "Pseudonymous data",
             "definition": "Personal data that cannot be attributed to a specific individual without additional information that is kept separately under appropriate safeguards."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "US state privacy laws",
+        "order": 30
+    }
 }

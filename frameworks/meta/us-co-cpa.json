@@ -139,5 +139,10 @@
             "term": "Heightened risk of harm",
             "definition": "Processing such as targeted advertising, selling personal data, certain profiling and processing of sensitive data, which requires a data protection assessment."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "US state privacy laws",
+        "order": 30
+    }
 }

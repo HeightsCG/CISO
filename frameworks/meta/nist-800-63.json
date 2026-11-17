@@ -155,5 +155,10 @@
             "term": "Phishing resistance",
             "definition": "The ability of an authentication protocol to prevent the disclosure of authentication secrets and valid authenticator outputs to an impostor verifier."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "NIST guidance",
+        "name": "NIST SP 800-63",
+        "order": 44
+    }
 }

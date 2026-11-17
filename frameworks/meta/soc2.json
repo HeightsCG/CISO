@@ -159,5 +159,10 @@
             "term": "CUEC",
             "definition": "Complementary user entity control: a control the service organization's customers must operate for the system's controls to work as described."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Security",
+        "name": "SOC 2",
+        "order": 13
+    }
 }

@@ -233,6 +233,11 @@
             "definition": "The European Commission's function for supervising general-purpose AI models and supporting implementation of the Regulation."
         }
     ],
+    "catalogue": {
+        "group": "AI",
+        "name": "EU AI Act",
+        "order": 38
+    },
     "display_name": "EU AI Act (EU 2024/1689)",
     "counts": {
         "families": 32,

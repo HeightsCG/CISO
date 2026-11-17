@@ -155,5 +155,10 @@
             "term": "Real risk of significant harm",
             "definition": "The threshold for reporting a breach, assessed from the sensitivity of the information and the probability that it has been or will be misused."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "PIPEDA",
+        "order": 33
+    }
 }

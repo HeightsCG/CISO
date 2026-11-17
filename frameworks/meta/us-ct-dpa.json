@@ -139,5 +139,10 @@
             "term": "Heightened risk of harm to minors",
             "definition": "Processing of a minor's personal data in a way that presents a reasonably foreseeable risk of unfair treatment, financial or physical injury, or intrusion on the minor's privacy; Part II requires assessments and safeguards for it."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "US state privacy laws",
+        "order": 30
+    }
 }

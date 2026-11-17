@@ -247,5 +247,10 @@
             "term": "OR",
             "definition": "Operational requirement: a finding that cannot be remediated without breaking the system."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "US federal",
+        "name": "FedRAMP",
+        "order": 4
+    }
 }

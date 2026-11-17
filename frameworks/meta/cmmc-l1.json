@@ -193,5 +193,10 @@
             "term": "POA&M",
             "definition": "Plan of Action and Milestones: the documented plan for closing requirements that are not yet met. Not permitted at Level 1."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "US federal",
+        "name": "CMMC 2.0",
+        "order": 3
+    }
 }

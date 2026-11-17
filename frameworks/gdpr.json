@@ -181,6 +181,11 @@
             "definition": "The independent public authority a Member State establishes to monitor the application of the Regulation."
         }
     ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "GDPR",
+        "order": 27
+    },
     "display_name": "GDPR (EU 2016/679)",
     "counts": {
         "families": 39,

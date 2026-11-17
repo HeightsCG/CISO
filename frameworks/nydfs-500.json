@@ -447,6 +447,11 @@
             "definition": "Endpoint detection and response: software that monitors endpoints for anomalous activity such as lateral movement."
         }
     ],
+    "catalogue": {
+        "group": "Industry",
+        "name": "NYDFS 500",
+        "order": 21
+    },
     "display_name": "NYDFS 23 NYCRR 500 (Second Amendment 2023)",
     "counts": {
         "families": 1,

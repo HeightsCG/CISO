@@ -146,6 +146,11 @@
             "definition": "Open Security Controls Assessment Language, NIST's machine-readable format for control catalogs."
         }
     ],
+    "catalogue": {
+        "group": "US federal",
+        "name": "NIST SP 800-171",
+        "order": 6
+    },
     "display_name": "NIST SP 800-171 (Rev 3)",
     "counts": {
         "families": 17,

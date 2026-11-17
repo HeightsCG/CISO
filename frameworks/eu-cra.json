@@ -224,6 +224,11 @@
             "definition": "Computer security incident response team; the CSIRT designated as coordinator receives vulnerability and incident notifications."
         }
     ],
+    "catalogue": {
+        "group": "Industry",
+        "name": "EU Cyber Resilience Act",
+        "order": 26
+    },
     "display_name": "EU Cyber Resilience Act (EU 2024/2847)",
     "counts": {
         "families": 10,

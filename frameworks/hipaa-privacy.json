@@ -160,6 +160,11 @@
             "definition": "A person or organization that creates, receives, maintains or transmits protected health information on behalf of a covered entity."
         }
     ],
+    "catalogue": {
+        "group": "Industry",
+        "name": "HIPAA",
+        "order": 19
+    },
     "display_name": "HIPAA Privacy Rule (45 CFR 164 Subpart E)",
     "counts": {
         "families": 14,

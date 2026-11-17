@@ -126,6 +126,11 @@
             "definition": "A planned activity that tests or validates business continuity strategies, solutions and plans."
         }
     ],
+    "catalogue": {
+        "group": "Security",
+        "name": "ISO 22301",
+        "order": 12
+    },
     "display_name": "ISO 22301 (HCG control set 2026)",
     "counts": {
         "families": 7,

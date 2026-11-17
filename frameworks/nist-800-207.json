@@ -129,6 +129,11 @@
             "definition": "Continuous diagnostics and mitigation: a system that reports and maintains the state of enterprise assets."
         }
     ],
+    "catalogue": {
+        "group": "NIST guidance",
+        "name": "NIST SP 800-207",
+        "order": 46
+    },
     "display_name": "NIST SP 800-207 (August 2020)",
     "counts": {
         "families": 4,

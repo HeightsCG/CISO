@@ -151,6 +151,11 @@
             "definition": "Information about racial or ethnic origin, political opinions, religious beliefs, sexual orientation, criminal record and similar matters, and health, genetic and biometric information."
         }
     ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "Australian Privacy Act",
+        "order": 35
+    },
     "display_name": "Australian Privacy Act (compilation No. 104)",
     "counts": {
         "families": 14,

@@ -141,6 +141,11 @@
             "definition": "The record of which reference controls an organization applies, which it excludes, and why."
         }
     ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "ISO/IEC 27701",
+        "order": 36
+    },
     "display_name": "ISO/IEC 27701 (HCG control set 2026)",
     "counts": {
         "families": 16,

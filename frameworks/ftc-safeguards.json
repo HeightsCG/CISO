@@ -184,6 +184,11 @@
             "definition": "Multi-factor authentication: verification of at least two of knowledge, possession and inherence factors."
         }
     ],
+    "catalogue": {
+        "group": "Industry",
+        "name": "FTC Safeguards Rule",
+        "order": 22
+    },
     "display_name": "FTC Safeguards Rule (16 CFR Part 314)",
     "counts": {
         "families": 1,

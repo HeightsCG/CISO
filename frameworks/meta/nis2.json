@@ -176,5 +176,10 @@
             "term": "Significant incident",
             "definition": "An incident that causes or can cause severe operational disruption or financial loss for the entity, or considerable damage to other persons."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Industry",
+        "name": "NIS2",
+        "order": 25
+    }
 }

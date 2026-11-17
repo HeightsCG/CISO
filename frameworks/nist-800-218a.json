@@ -119,6 +119,11 @@
             "definition": "The numerical parameters learned during training that determine a model's outputs."
         }
     ],
+    "catalogue": {
+        "group": "AI",
+        "name": "NIST SP 800-218A",
+        "order": 41
+    },
     "display_name": "NIST SP 800-218A (July 2024)",
     "counts": {
         "families": 20,

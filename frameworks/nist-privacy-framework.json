@@ -135,6 +135,11 @@
             "definition": "National Institute of Standards and Technology, the U.S. agency that publishes the Privacy Framework."
         }
     ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "NIST Privacy Framework",
+        "order": 37
+    },
     "display_name": "NIST Privacy Framework (1.0)",
     "counts": {
         "families": 18,

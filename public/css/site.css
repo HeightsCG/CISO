@@ -7405,6 +7405,48 @@ table.data--light.reports__table {
     color: #FFFFFF;
 }
 
+.land__catalogue {
+    display: grid;
+    gap: 28px;
+}
+
+.land__catalogue-group {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    align-items: baseline;
+    gap: 8px 32px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.land__catalogue-group:first-child {
+    padding-top: 0;
+    border-top: 0;
+}
+
+.land__catalogue-label {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.land__catalogue .land__marks {
+    gap: 10px 28px;
+}
+
+.land__catalogue .land__marks li {
+    font-size: 17px;
+}
+
+@media (max-width: 720px) {
+    .land__catalogue-group {
+        grid-template-columns: 1fr;
+    }
+}
+
 .land__section {
     padding: 120px 0;
 }

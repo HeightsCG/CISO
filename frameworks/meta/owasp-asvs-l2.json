@@ -107,5 +107,10 @@
             "term": "Verification level",
             "definition": "One of three cumulative ASVS levels that set how many requirements apply, chosen by the risk the application carries."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Security",
+        "name": "OWASP ASVS",
+        "order": 17
+    }
 }

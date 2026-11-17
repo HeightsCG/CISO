@@ -173,6 +173,11 @@
             "definition": "Cybersecurity Assessment Plan: in this control set, the operator's plan for proactively assessing whether its cybersecurity measures are effective."
         }
     ],
+    "catalogue": {
+        "group": "Aviation",
+        "name": "TSA Aviation Cybersecurity",
+        "order": 2
+    },
     "display_name": "TSA Aviation Cybersecurity (HCG control set 2026)",
     "counts": {
         "families": 8,

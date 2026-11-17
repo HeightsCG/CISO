@@ -217,5 +217,10 @@
             "term": "NIST",
             "definition": "National Institute of Standards and Technology, the U.S. agency that publishes the 800-171 requirements."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "US federal",
+        "name": "NIST SP 800-171",
+        "order": 6
+    }
 }

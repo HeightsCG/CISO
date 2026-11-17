@@ -446,5 +446,10 @@
             "term": "EDR",
             "definition": "Endpoint detection and response: software that monitors endpoints for anomalous activity such as lateral movement."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Industry",
+        "name": "NYDFS 500",
+        "order": 21
+    }
 }

@@ -308,6 +308,11 @@
             "definition": "Advanced persistent threat: a well-resourced adversary that pursues long-term access to a target."
         }
     ],
+    "catalogue": {
+        "group": "US federal",
+        "name": "CMMC 2.0",
+        "order": 3
+    },
     "display_name": "CMMC Level 3 (32 CFR Part 170)",
     "counts": {
         "families": 10,

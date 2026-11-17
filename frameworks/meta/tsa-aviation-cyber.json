@@ -172,5 +172,10 @@
             "term": "CAP",
             "definition": "Cybersecurity Assessment Plan: in this control set, the operator's plan for proactively assessing whether its cybersecurity measures are effective."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Aviation",
+        "name": "TSA Aviation Cybersecurity",
+        "order": 2
+    }
 }

@@ -157,5 +157,10 @@
             "term": "OSCAL",
             "definition": "Open Security Controls Assessment Language, NIST's machine-readable format for control catalogs."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "US federal",
+        "name": "NIST SP 800-53",
+        "order": 5
+    }
 }

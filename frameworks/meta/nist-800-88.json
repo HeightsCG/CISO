@@ -121,5 +121,10 @@
             "term": "Cryptographic erase (CE)",
             "definition": "Sanitizing the encryption keys used to encrypt the target data, leaving only ciphertext on the media."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "NIST guidance",
+        "name": "NIST SP 800-88",
+        "order": 45
+    }
 }

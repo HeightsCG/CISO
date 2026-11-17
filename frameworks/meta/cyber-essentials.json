@@ -127,5 +127,10 @@
             "term": "CVSS",
             "definition": "Common Vulnerability Scoring System; Cyber Essentials treats a CVSS v3 base score of 7 or above as critical or high risk."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Security",
+        "name": "Cyber Essentials",
+        "order": 15
+    }
 }

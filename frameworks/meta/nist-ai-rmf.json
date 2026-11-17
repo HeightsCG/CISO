@@ -148,5 +148,10 @@
             "term": "NIST",
             "definition": "National Institute of Standards and Technology, the U.S. agency that publishes the AI RMF."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "AI",
+        "name": "NIST AI RMF",
+        "order": 40
+    }
 }

@@ -145,5 +145,10 @@
             "term": "Business associate",
             "definition": "A person or organization that creates, receives, maintains or transmits protected health information on behalf of a covered entity."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Industry",
+        "name": "HIPAA",
+        "order": 19
+    }
 }

@@ -120,5 +120,10 @@
             "term": "Maturity stages",
             "definition": "Traditional, Initial, Advanced and Optimal: the progression from manual, static configuration to automated, dynamic, fully integrated zero trust."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "US federal",
+        "name": "CISA Zero Trust Maturity Model",
+        "order": 7
+    }
 }

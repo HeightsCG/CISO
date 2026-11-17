@@ -125,5 +125,10 @@
             "term": "Shared responsibility",
             "definition": "The division of security tasks between the cloud service customer and provider, which varies by service model."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Security",
+        "name": "ISO/IEC 27017",
+        "order": 10
+    }
 }

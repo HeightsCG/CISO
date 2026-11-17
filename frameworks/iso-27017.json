@@ -126,6 +126,11 @@
             "definition": "The division of security tasks between the cloud service customer and provider, which varies by service model."
         }
     ],
+    "catalogue": {
+        "group": "Security",
+        "name": "ISO/IEC 27017",
+        "order": 10
+    },
     "display_name": "ISO/IEC 27017 (HCG control set 2026)",
     "counts": {
         "families": 4,

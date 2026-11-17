@@ -33,6 +33,56 @@ class FrameworkLibrary {
         return self::$definitions;
     }
 
+    /** Headings of the public framework catalogue, in display order. */
+    const CATALOGUE_GROUPS = array(
+        'Aviation',
+        'US federal',
+        'Security',
+        'Industry',
+        'Privacy',
+        'AI',
+        'NIST guidance'
+    );
+
+    /**
+     * The library as a public catalogue: each heading with its framework names, one entry
+     * per name (levels and revisions of a framework share one name), in catalogue order.
+     */
+    public static function catalogue(): array
+    {
+        $entries = array();
+
+        foreach (self::all() as $definition) {
+            $entry = $definition['catalogue'];
+            $entries[$entry['group'].'|'.$entry['name']] = $entry;
+        }
+
+        uasort($entries, function ($a, $b) {
+            return $a['order'] <=> $b['order'];
+        });
+
+        $groups = array();
+
+        foreach (self::CATALOGUE_GROUPS as $group) {
+            $names = array();
+
+            foreach ($entries as $entry) {
+                if ($entry['group'] === $group) {
+                    $names[] = $entry['name'];
+                }
+            }
+
+            if (count($names) > 0) {
+                $groups[] = array(
+                    'group' => $group,
+                    'names' => $names
+                );
+            }
+        }
+
+        return $groups;
+    }
+
     public static function get(string $key): ?array
     {
         return self::all()[$key] ?? null;

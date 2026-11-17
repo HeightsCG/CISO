@@ -123,5 +123,10 @@
             "term": "NIST",
             "definition": "National Institute of Standards and Technology, the U.S. agency that publishes the SSDF."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "NIST guidance",
+        "name": "NIST SSDF",
+        "order": 47
+    }
 }

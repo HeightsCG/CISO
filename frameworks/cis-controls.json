@@ -119,6 +119,11 @@
             "definition": "CIS's tiers for prioritizing Safeguards: IG1 is essential cyber hygiene for every organization, IG2 adds Safeguards for organizations with more complex IT, and IG3 adds Safeguards for organizations facing sophisticated attacks."
         }
     ],
+    "catalogue": {
+        "group": "Security",
+        "name": "CIS Controls",
+        "order": 14
+    },
     "display_name": "CIS Controls (HCG control set 2026)",
     "counts": {
         "families": 18,

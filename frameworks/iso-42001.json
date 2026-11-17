@@ -129,6 +129,11 @@
             "definition": "An assessment of the potential consequences of an AI system for individuals, groups and society."
         }
     ],
+    "catalogue": {
+        "group": "AI",
+        "name": "ISO/IEC 42001",
+        "order": 39
+    },
     "display_name": "ISO/IEC 42001 (HCG control set 2026)",
     "counts": {
         "families": 16,

@@ -120,5 +120,10 @@
             "term": "Subprocessor",
             "definition": "A subcontractor engaged by the PII processor to process customer PII."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Security",
+        "name": "ISO/IEC 27018",
+        "order": 11
+    }
 }

@@ -177,6 +177,11 @@
             "definition": "An incident that causes or can cause severe operational disruption or financial loss for the entity, or considerable damage to other persons."
         }
     ],
+    "catalogue": {
+        "group": "Industry",
+        "name": "NIS2",
+        "order": 25
+    },
     "display_name": "NIS 2 Directive (EU 2022/2555)",
     "counts": {
         "families": 3,

@@ -132,6 +132,11 @@
             "definition": "Something the organization should consider doing."
         }
     ],
+    "catalogue": {
+        "group": "NIST guidance",
+        "name": "NIST SP 800-61",
+        "order": 43
+    },
     "display_name": "NIST SP 800-61 (Revision 3)",
     "counts": {
         "families": 22,

@@ -194,6 +194,11 @@
             "definition": "Plan of Action and Milestones: the documented plan for closing requirements that are not yet met. Not permitted at Level 1."
         }
     ],
+    "catalogue": {
+        "group": "US federal",
+        "name": "CMMC 2.0",
+        "order": 3
+    },
     "display_name": "CMMC Level 1 (32 CFR Part 170)",
     "counts": {
         "families": 6,

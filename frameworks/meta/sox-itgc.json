@@ -152,5 +152,10 @@
             "term": "SOC 1 report",
             "definition": "A service auditor's report on a service organization's controls relevant to user entities' financial reporting."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Industry",
+        "name": "SOX ITGC",
+        "order": 23
+    }
 }

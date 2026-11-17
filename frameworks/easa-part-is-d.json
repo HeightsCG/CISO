@@ -339,6 +339,11 @@
             "definition": "Apron management services, regulated with aerodromes under Part-ADR.OR."
         }
     ],
+    "catalogue": {
+        "group": "Aviation",
+        "name": "EASA Part-IS",
+        "order": 1
+    },
     "display_name": "EASA Part-IS.D.OR (EU 2022/1645)",
     "counts": {
         "families": 4,

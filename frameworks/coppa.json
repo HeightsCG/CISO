@@ -138,6 +138,11 @@
             "definition": "Federal Trade Commission, the U.S. agency that issues and enforces the COPPA Rule."
         }
     ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "COPPA",
+        "order": 31
+    },
     "display_name": "COPPA Rule (16 CFR Part 312)",
     "counts": {
         "families": 6,

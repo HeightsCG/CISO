@@ -153,6 +153,11 @@
             "definition": "A service auditor's report on a service organization's controls relevant to user entities' financial reporting."
         }
     ],
+    "catalogue": {
+        "group": "Industry",
+        "name": "SOX ITGC",
+        "order": 23
+    },
     "display_name": "SOX ITGC (HCG control set 2026)",
     "counts": {
         "families": 5,

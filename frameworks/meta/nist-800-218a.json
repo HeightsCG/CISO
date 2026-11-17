@@ -118,5 +118,10 @@
             "term": "AI model weights",
             "definition": "The numerical parameters learned during training that determine a model's outputs."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "AI",
+        "name": "NIST SP 800-218A",
+        "order": 41
+    }
 }

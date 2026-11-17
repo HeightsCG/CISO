@@ -187,6 +187,11 @@
             "definition": "National Institute of Standards and Technology, the U.S. agency that publishes the CSF."
         }
     ],
+    "catalogue": {
+        "group": "Security",
+        "name": "NIST CSF 2.0",
+        "order": 8
+    },
     "display_name": "NIST CSF (2.0)",
     "counts": {
         "families": 22,

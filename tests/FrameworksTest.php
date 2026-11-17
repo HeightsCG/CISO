@@ -98,6 +98,8 @@ foreach (FrameworkBuilder::keys() as $key) {
         Assert::true(strpos($d['name'], $d['version']) === false, $key.' repeats its version inside its name');
         Assert::true(strpos($d['version'], '(') === false && strpos($d['name'], '(') === false, $key.' display name would nest brackets: '.$d['display_name']);
         Assert::true(in_array($d['content_licence'], array('public_domain', 'open', 'ids_titles_only', 'hcg_authored'), true), $key.' has an unknown content licence');
+        Assert::true(isset($d['catalogue']['group'], $d['catalogue']['name'], $d['catalogue']['order']), $key.' has no catalogue entry for the public framework list');
+        Assert::true(in_array($d['catalogue']['group'] ?? '', array('Aviation', 'US federal', 'Security', 'Industry', 'Privacy', 'AI', 'NIST guidance'), true), $key.' has an unknown catalogue group');
         $deliverables = array('results_report', 'executive_briefing', 'remediation_plan', 'score_summary', 'governing_document');
         Assert::same(array(), array_values(array_diff($d['deliverables'], $deliverables)), $key.' lists unknown deliverables');
 

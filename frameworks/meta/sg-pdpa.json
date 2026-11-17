@@ -148,5 +148,10 @@
             "term": "Notifiable data breach",
             "definition": "A data breach that results in, or is likely to result in, significant harm to an affected individual, or that is of a significant scale (500 or more individuals)."
         }
-    ]
+    ],
+    "catalogue": {
+        "group": "Privacy",
+        "name": "Singapore PDPA",
+        "order": 34
+    }
 }
