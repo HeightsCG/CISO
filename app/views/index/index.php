@@ -32,7 +32,7 @@
             <div class="panel record__panel dash__panel">
                 <div class="panel__head">
                     <h2 class="panel__title">Milestones</h2>
-                    <select id="milestone_days" class="form-select dash__window" aria-label="Milestones due within">
+                    <select id="milestone_days" class="form-select" data-width="128px" aria-label="Milestones due within">
                         <option value="7">7 days</option>
                         <option value="30" selected>30 days</option>
                         <option value="60">60 days</option>

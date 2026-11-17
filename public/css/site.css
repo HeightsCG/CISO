@@ -12148,8 +12148,3 @@ a.land__nav-cta:hover {
     pointer-events: none;
     background-color: var(--surface-inset);
 }
-
-.dash__window {
-    width: auto;
-    min-width: 112px;
-}
