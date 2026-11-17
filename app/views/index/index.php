@@ -91,11 +91,10 @@ $(document).ready(function () {
         return MONTHS[num(parts[1]) - 1] + ' ' + num(parts[2]);
     }
 
-    function kpi(label, value, sub, tone) {
+    function kpi(label, value, tone) {
         return '<div class="kpi__cell">'
             + '<dt class="kpi__label">' + label + '</dt>'
             + '<dd class="kpi__value' + (tone === '' ? '' : ' ' + tone) + '">' + value + '</dd>'
-            + '<dd class="kpi__sub">' + sub + '</dd>'
             + '</div>';
     }
 
@@ -106,40 +105,13 @@ $(document).ready(function () {
         var counts = counts_by_result();
         var assessed = counts['Implemented'] + counts['Partially Implemented'] + counts['Not Implemented'];
         var implemented = assessed > 0 ? Math.round(counts['Implemented'] / assessed * 100) : 0;
-        var open_items = num(p.open_count);
-        var overdue = num(p.overdue_count);
 
         $('#kpis').html(
-            kpi(
-                'Not Started',
-                group(statuses['Planned']),
-                statuses['Planned'] === 1 ? 'assessment planned' : 'assessments planned',
-                ''
-            )
-            + kpi(
-                'In Progress',
-                group(statuses['In Progress']),
-                statuses['In Progress'] === 1 ? 'assessment underway' : 'assessments underway',
-                ''
-            )
-            + kpi(
-                'Completed',
-                group(statuses['Complete']),
-                statuses['Complete'] === 1 ? 'assessment complete' : 'assessments complete',
-                ''
-            )
-            + kpi(
-                'Implementation',
-                implemented + '%',
-                'of assessed controls fully implemented',
-                ''
-            )
-            + kpi(
-                'Open POA&amp;M Items',
-                group(open_items),
-                overdue > 0 ? '<span class="kpi__alert"><i class="fa-regular fa-clock"></i> ' + group(overdue) + ' overdue</span>' : 'none overdue',
-                ''
-            )
+            kpi('Not Started', group(statuses['Planned']), '')
+            + kpi('In Progress', group(statuses['In Progress']), '')
+            + kpi('Completed', group(statuses['Complete']), '')
+            + kpi('Implementation', implemented + '%', '')
+            + kpi('Open POA&amp;M Items', group(num(p.open_count)), '')
         );
     }
 
