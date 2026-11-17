@@ -31,15 +31,13 @@
         <div class="col-lg-6 dash__col">
             <div class="panel record__panel dash__panel">
                 <div class="panel__head">
-                    <div class="dash__title-group">
-                        <h2 class="panel__title">Milestones</h2>
-                        <select id="milestone_days" class="form-select dash__window" aria-label="Milestones due within">
-                            <option value="7">7 days</option>
-                            <option value="30" selected>30 days</option>
-                            <option value="60">60 days</option>
-                            <option value="90">90 days</option>
-                        </select>
-                    </div>
+                    <h2 class="panel__title">Milestones</h2>
+                    <select id="milestone_days" class="form-select dash__window" aria-label="Milestones due within">
+                        <option value="7">7 days</option>
+                        <option value="30" selected>30 days</option>
+                        <option value="60">60 days</option>
+                        <option value="90">90 days</option>
+                    </select>
                 </div>
                 <div class="panel__body dash__scroll">
                     <ul class="metriclist dash__milestones" id="milestones"></ul>
