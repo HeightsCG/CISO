@@ -1,0 +1,935 @@
+{
+    "key": "nist-800-88",
+    "name": "NIST SP 800-88",
+    "version": "Revision 2",
+    "full_name": "NIST SP 800-88 Rev. 2 Guidelines for Media Sanitization",
+    "issuing_body": "National Institute of Standards and Technology",
+    "standard_codes": [
+        "NIST-800-88"
+    ],
+    "aliases": [
+        "SP 800-88",
+        "800-88r2",
+        "Media sanitization",
+        "Data sanitization",
+        "Cryptographic erase"
+    ],
+    "content_licence": "public_domain",
+    "notice": "SP 800-88r2 sets no SHALL requirements. Each section of its sanitization methods and media sanitization program guidance is assessed against the sentences saying what organizations should or must do, quoted word for word.",
+    "sources": [
+        {
+            "id": "sp80088",
+            "title": "NIST SP 800-88 Revision 2, Guidelines for Media Sanitization",
+            "version": "Revision 2 (September 2025)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-88r2.pdf",
+            "file": "nist80088/NIST.SP.800-88r2.pdf",
+            "sha256": "39bb805c72723ed74f08e5806cd8463ca2554a62abb4f97b9d19c0398a8a7c55"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG scoring conventions",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "sp80088",
+        "objectives": "sp80088"
+    },
+    "control_flags": {
+        "type": "section for a numbered section of SP 800-88r2 sections 3 or 4 that contains guidance on what organizations should do."
+    },
+    "terminology": {
+        "control": "section",
+        "controls": "sections",
+        "family": "topic",
+        "families": "topics",
+        "objective": "practice",
+        "objectives": "practices",
+        "plan": "Action plan",
+        "plan_short": "Action plan",
+        "score": "Sanitization program score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Followed"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Followed"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Followed"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable sections whose practices are followed, with partial counting as half. NIST defines no score; this is an HCG measure."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A section is followed only when each of its applicable practices is followed.",
+            "source": "hcg",
+            "cite": "HCG convention"
+        },
+        {
+            "id": "policy_contents",
+            "type": "applicability",
+            "summary": "Practices for a sanitization method or cryptographic erase apply only where the organization uses that method; roles that the organization does not have are marked not applicable.",
+            "source": "sp80088",
+            "cite": "NIST SP 800-88r2, 4.1",
+            "quote": "Such a policy should address the following:"
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A partially followed section counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG scoring convention"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "Clear",
+            "definition": "Sanitization using logical techniques to protect against simple, non-invasive data recovery."
+        },
+        {
+            "term": "Purge",
+            "definition": "Sanitization using physical or logical techniques that make data recovery infeasible using state-of-the-art laboratory techniques."
+        },
+        {
+            "term": "Destroy",
+            "definition": "Sanitization that renders data recovery infeasible and the media unusable for storing data."
+        },
+        {
+            "term": "Cryptographic erase (CE)",
+            "definition": "Sanitizing the encryption keys used to encrypt the target data, leaving only ciphertext on the media."
+        }
+    ],
+    "display_name": "NIST SP 800-88 (Revision 2)",
+    "counts": {
+        "families": 9,
+        "controls": 33,
+        "objectives": 62
+    },
+    "families": [
+        {
+            "number": "3.1",
+            "code": "3.1",
+            "name": "Sanitization Methods",
+            "controls": [
+                {
+                    "id": "3.1",
+                    "number": "3.1",
+                    "title": "Sanitization Methods",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 3.1, Sanitization Methods, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.1.1",
+                            "text": "As storage technology evolves, these sanitization techniques need to be updated on a regular basis, so the latest version of standards (e.g., IEEE 2883 [13]) should be consulted.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "3.1.1",
+                    "number": "3.1.1",
+                    "title": "Clear Sanitization Method",
+                    "text": "",
+                    "description": "The 3 statements of SP 800-88r2 section 3.1.1, Clear Sanitization Method, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.1.1.1",
+                            "text": "For certain ISM (e.g., SSDs with overprovisioning), such practices should be avoided as very little confidentiality protection is achieved.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "3.1.1.2",
+                            "text": "If additional assurances are needed, a more secure sanitization method in the form of purge (see Sec. 3.1.2) or destroy (see Sec. 3.1.3) should be used.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "3.1.1.3",
+                            "text": "Although the host interface can be the same or very similar across ISM with varying underlying ISM types, sanitization techniques must be carefully matched to the ISM.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "3.1.2",
+                    "number": "3.1.2",
+                    "title": "Purge Sanitization Method",
+                    "text": "",
+                    "description": "The 5 statements of SP 800-88r2 section 3.1.2, Purge Sanitization Method, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.1.2.1",
+                            "text": "When possible, the purge sanitization method should be used instead of the clear sanitization method.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "3.1.2.2",
+                            "text": "Logical purge sanitization techniques can vary by ISM type, so IEEE 2883 [13]should be consulted to determine acceptable purge sanitization techniques, which can include overwrite, block erase, and cryptographic erase using dedicated, standardized device sanitize commands that apply ISM-specific techniques to bypass the abstraction inherent in typical read and write commands.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "3.1.2.3",
+                            "text": "As such, organizations should clearly understand their purge sanitization technique options and the effectiveness of the technique prior to storing sensitive data on such ISM.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "3.1.2.4",
+                            "text": "Degaussing should not be used for non-magnetic ISM (e.g., flash storage, such as SSDs).",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "3.1.2.5",
+                            "text": "At the time of this writing, degaussing is not considered an approved destroy sanitization technique (see Sec. 3.1.3), but IEEE 2883 [13] and/or NSA/CSS Policy Manual 9-12 [16] should be consulted for further clarification.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "3.1.3",
+                    "number": "3.1.3",
+                    "title": "Destroy Sanitization Method",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 3.1.3, Destroy Sanitization Method, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.1.3.1",
+                            "text": "Pulverize and shred techniques for ISM should be avoided for anything but the lowest security categories of data.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                }
+            ]
+        },
+        {
+            "number": "3.2",
+            "code": "3.2",
+            "name": "Use of Cryptography and Cryptographic Erase",
+            "controls": [
+                {
+                    "id": "3.2",
+                    "number": "3.2",
+                    "title": "Use of Cryptography and Cryptographic Erase",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 3.2, Use of Cryptography and Cryptographic Erase, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.2.1",
+                            "text": "Federal agencies must use encryption modules validated to the current FIPS-140 standard [1] in order to have assurance that the conditions stated above have been verified for the self-encrypting drive (SED).",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "3.2.1",
+                    "number": "3.2.1",
+                    "title": "Strength of Cryptography for CE",
+                    "text": "",
+                    "description": "The 2 statements of SP 800-88r2 section 3.2.1, Strength of Cryptography for CE, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.2.1.1",
+                            "text": "In order for encryption to provide confidentiality, the cryptographic algorithm (e.g., the Advanced Encryption Standard [30]) used for encryption and its mode of operation must be designed and implemented so that an unauthorized party cannot determine the decryption key associated with the encryption or be able to derive the plaintext directly without using the appropriate key to decrypt the encrypted information (i.e., ciphertext) [31].",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "3.2.1.2",
+                            "text": "In this case, the security strength and level of assurance of the wrapping techniques used should be commensurate with the level of strength of the cryptographic encryption operation.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "3.2.2",
+                    "number": "3.2.2",
+                    "title": "Applicability of CE",
+                    "text": "",
+                    "description": "The 2 statements of SP 800-88r2 section 3.2.2, Applicability of CE, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.2.2.1",
+                            "text": "Sanitization using CE should not be trusted on ISM that have been backed up or escrowed unless the organization has a high level of confidence regarding how and where the keys were stored and managed outside of the ISM.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "3.2.2.2",
+                            "text": "Such backed up or escrowed copies of data, credentials, or keys should be subject to a separate ISM sanitization policy.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "3.2.3",
+                    "number": "3.2.3",
+                    "title": "Sanitization of Keys",
+                    "text": "",
+                    "description": "The 3 statements of SP 800-88r2 section 3.2.3, Sanitization of Keys, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.2.3.1",
+                            "text": "ISO/IEC 27040 [15] further specifies that all copies of the target cryptographic keys must be able to be sanitized.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "3.2.3.2",
+                            "text": "As part of a CE operation, steps should be taken to guard against continued use of keys that may have been recovered prior to the CE operation.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "3.2.3.3",
+                            "text": "For example, if the wrapped versions of keys had previously been unwrapped and the keys inside them stored to volatile memory or written into a register in a data encryption engine, the elimination of all unwrapped versions of the key must also be assured, preferably by direct key sanitization, but may require a hard reset or powering off the ISM for some period of time.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "3.2.4",
+                    "number": "3.2.4",
+                    "title": "Quality of Cryptographic Implementations",
+                    "text": "",
+                    "description": "The 2 statements of SP 800-88r2 section 3.2.4, Quality of Cryptographic Implementations, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.2.4.1",
+                            "text": "Generally accepted and standardized mechanisms should be used, as applicable.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "3.2.4.2",
+                            "text": "Federal agencies must use encryption modules that have been validated to the current FIPS- 140 in order to have assurance that the conditions stated above have been verified for the ISM.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "3.2.5",
+                    "number": "3.2.5",
+                    "title": "Traceability of CE Operations",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 3.2.5, Traceability of CE Operations, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.2.5.1",
+                            "text": "When applicable, details about the key-wrapping key and/or key-derivation key algorithms used should be provided, including their strengths and (if applicable) their mode of operation.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                }
+            ]
+        },
+        {
+            "number": "4.1",
+            "code": "4.1",
+            "name": "Storage Sanitization Policy",
+            "controls": [
+                {
+                    "id": "4.1",
+                    "number": "4.1",
+                    "title": "Storage Sanitization Policy",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 4.1, Storage Sanitization Policy, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.1.1",
+                            "text": "Such a policy should address the following: • Alignment of the organization’s data classification scheme (e.g., low, medium, and high security categorizations) with minimum acceptable sanitization methods (i.e., clear, purge, and destroy) • Requirements for the disposal and/or reuse of storage assets • Expected outcomes from storage sanitization activities (e.g., identification of specific, acceptable sanitization techniques [13]) • Documentation or evidence associated with sanitization activities (see Sec. 4.6) • The identification of roles and responsibilities (see Sec. 4.7) and personnel competencies, skills, and training • The use of sanitization tools, including equipment calibration, testing, and maintenance • Type of assurances (e.g., guarantees, assessment results, formal certifications) that the ISM vendor should provide for the sanitization capabilities",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                }
+            ]
+        },
+        {
+            "number": "4.2",
+            "code": "4.2",
+            "name": "Sanitization Scope",
+            "controls": [
+                {
+                    "id": "4.2",
+                    "number": "4.2",
+                    "title": "Sanitization Scope",
+                    "text": "",
+                    "description": "The 2 statements of SP 800-88r2 section 4.2, Sanitization Scope, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.2.1",
+                            "text": "Organizations should understand the potential risks of this approach and make appropriate decisions that balance missions and specific use cases.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.2.2",
+                            "text": "If the alternative to partial ISM sanitization is not performing sanitization at all, partial ISM sanitization provides benefits that should be considered.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                }
+            ]
+        },
+        {
+            "number": "4.3",
+            "code": "4.3",
+            "name": "Storage Sanitization and Disposition Decision Framework",
+            "controls": [
+                {
+                    "id": "4.3",
+                    "number": "4.3",
+                    "title": "Storage Sanitization and Disposition Decision Framework",
+                    "text": "",
+                    "description": "The 2 statements of SP 800-88r2 section 4.3, Storage Sanitization and Disposition Decision Framework, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.3.1",
+                            "text": "The data confidentiality level should be identified using the procedures described in FIPS 199 [2].",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.3.2",
+                            "text": "The risk decision should include the potential consequences of information disclosure, the cost of information retrieval and its efficacy, the cost of sanitization and its efficacy, and how long the data will remain sensitive.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "4.3.1",
+                    "number": "4.3.1",
+                    "title": "Information Decisions in the System Life Cycle",
+                    "text": "",
+                    "description": "The 7 statements of SP 800-88r2 section 4.3.1, Information Decisions in the System Life Cycle, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.3.1.1",
+                            "text": "The need and methods for conducting media sanitization should be identified and developed before arriving at the disposal phase in the system life cycle.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.3.1.2",
+                            "text": "ISM sanitization controls should be developed, documented, and deployed when the initial system security plan is developed [12].",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.3.1.3",
+                            "text": "Although this is mostly a business decision, system owners must understand that this decision will affect the types of resources needed for sanitization throughout the entire system life cycle.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.3.1.4",
+                            "text": "While volatility statements are useful, caution should be applied when comparing statements across vendors because vendors can state volatility details differently.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.3.1.5",
+                            "text": "These characteristics can be used to drive the types of questions that ISM users should ask vendors.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.3.1.6",
+                            "text": "Organizations should take care when identifying ISM for sanitization.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.3.1.7",
+                            "text": "Disposal without sanitization should be considered only if information disclosure would have no impact on the organization’s mission, would not result in damage to organizational assets, and would not result in financial loss or harm to any individuals.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "4.3.2",
+                    "number": "4.3.2",
+                    "title": "Determination of Security Categorization",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 4.3.2, Determination of Security Categorization, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.3.2.1",
+                            "text": "Organizations should label these ISM with their internal operating confidentiality levels and associate a type of sanitization described in this document.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "4.3.4",
+                    "number": "4.3.4",
+                    "title": "Control of Media",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 4.3.4, Control of Media, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.3.4.1",
+                            "text": "This aspect must be considered when media leaves organizational control.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "4.3.5",
+                    "number": "4.3.5",
+                    "title": "Data Protection Level",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 4.3.5, Data Protection Level, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.3.5.1",
+                            "text": "When identifying whether sanitization is necessary, both organizational control and the data protection level should be considered.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "4.3.6",
+                    "number": "4.3.6",
+                    "title": "Sanitization and Disposal Decision",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 4.3.6, Sanitization and Disposal Decision, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.3.6.1",
+                            "text": "Once a sanitization decision has been made, the organization should record the decision and ensure that a process and proper resources are in place to support that decision.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                }
+            ]
+        },
+        {
+            "number": "4.4",
+            "code": "4.4",
+            "name": "Performing Sanitization",
+            "controls": [
+                {
+                    "id": "4.4",
+                    "number": "4.4",
+                    "title": "Performing Sanitization",
+                    "text": "",
+                    "description": "The 3 statements of SP 800-88r2 section 4.4, Performing Sanitization, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.4.1",
+                            "text": "After the requirement to sanitize media has been established, the sanitization should be performed based on the selected sanitization method (i.e., clear, purge, or destroy) and in a manner that complies with IEEE 2883 [13]. or a standard that is identified as acceptable by organizational policy (e.g., NSA/CSS Policy 6-22 [17], NSA/CSS Policy Manual 9-12 [16]).",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.4.2",
+                            "text": "The option that provides the most confidentiality protection should be used.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.4.3",
+                            "text": "When the purge sanitization technique of CE is used for an ISM, Sec. 3.2 should be consulted for additional considerations or requirements.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                }
+            ]
+        },
+        {
+            "number": "4.5",
+            "code": "4.5",
+            "name": "Sanitization Assurance",
+            "controls": [
+                {
+                    "id": "4.5",
+                    "number": "4.5",
+                    "title": "Sanitization Assurance",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 4.5, Sanitization Assurance, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.5.1",
+                            "text": "Repeated sanitization should recheck the reusability of media because a previous sanitization technique may have rendered the media unusable or inoperable.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "4.5.1",
+                    "number": "4.5.1",
+                    "title": "Sanitization Verification",
+                    "text": "",
+                    "description": "The 2 statements of SP 800-88r2 section 4.5.1, Sanitization Verification, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.5.1.1",
+                            "text": "The sanitization results should be inspected to verify that the sanitization technique was completed successfully.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.5.1.2",
+                            "text": "For physical purge sanitization techniques, the equipment performing the sanitization should be checked to confirm that it completed its operation successfully.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "4.5.2",
+                    "number": "4.5.2",
+                    "title": "Sanitization Validation",
+                    "text": "",
+                    "description": "The 2 statements of SP 800-88r2 section 4.5.2, Sanitization Validation, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.5.2.1",
+                            "text": "Any identified errors, anomalies, or other issues should be analyzed, and risks to data confidentiality should be assessed.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.5.2.2",
+                            "text": "Unacceptable data confidentiality risks associated with the sanitization operation should result in the sanitization not being accepted (i.e., rejected) as sufficient to ensure the confidentiality of sensitive data (i.e., an additional sanitization method is needed).",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                }
+            ]
+        },
+        {
+            "number": "4.6",
+            "code": "4.6",
+            "name": "Documentation",
+            "controls": [
+                {
+                    "id": "4.6",
+                    "number": "4.6",
+                    "title": "Documentation",
+                    "text": "",
+                    "description": "The 3 statements of SP 800-88r2 section 4.6, Documentation, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.6.1",
+                            "text": "Following sanitization, a certificate of sanitization (see Appendix C) should be completed for each ISM that has been sanitized, per the organization’s policies.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.6.2",
+                            "text": "When fully completed, the certificate should record at least the following details: • Manufacturer • Model • Serial number • Organizationally assigned media or property number (if applicable) • Media type (i.e., hard copy or ISM) • Media source (e.g., user, computer) • Pre-sanitization confidentiality categorization (optional) • Sanitization method (i.e., clear, purge, destroy) • Sanitization technique (e.g., degauss, overwrite, block erase, CE) • Tool used, including version • Verification method • Information of individuals performing verification and validation: o Name of person o Position/title of person o Date o Location o Contact information (e.g., phone number) o Signature",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.6.3",
+                            "text": "If the ISM has been successfully validated (see Sec. 4.5) and the sanitization results in a lower confidentiality level for the ISM, all markings on the ISM that indicate the previous confidentiality level should be removed.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                }
+            ]
+        },
+        {
+            "number": "4.7",
+            "code": "4.7",
+            "name": "Roles and Responsibilities",
+            "controls": [
+                {
+                    "id": "4.7.1",
+                    "number": "4.7.1",
+                    "title": "Program Managers/Agency Heads",
+                    "text": "",
+                    "description": "The 3 statements of SP 800-88r2 section 4.7.1, Program Managers/Agency Heads, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.7.1.1",
+                            "text": "Program managers are responsible for establishing an effective information security governance structure, including the organization’s computer security program and its overall goals, objectives, and priorities.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.7.1.2",
+                            "text": "Agency heads are responsible for providing adequate resources to the program to ensure its success.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.7.1.3",
+                            "text": "Allocated resources should correctly identify the types and locations of information.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "4.7.2",
+                    "number": "4.7.2",
+                    "title": "Chief Information Officer (CIO)",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 4.7.2, Chief Information Officer (CIO), on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.7.2.1",
+                            "text": "The CIO is responsible for promulgating the information security policy, which includes information disposition and media sanitization.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "4.7.3",
+                    "number": "4.7.3",
+                    "title": "Information System Owner",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 4.7.3, Information System Owner, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.7.3.1",
+                            "text": "The information system owner is responsible for ensuring that maintenance or contractual agreements are in place and sufficiently protect the confidentiality of the system ISM and information commensurate with the impact of disclosure.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "4.7.4",
+                    "number": "4.7.4",
+                    "title": "Information Owner/Steward",
+                    "text": "",
+                    "description": "The 2 statements of SP 800-88r2 section 4.7.4, Information Owner/Steward, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.7.4.1",
+                            "text": "The information owner is responsible for ensuring the appropriate supervision of on-site ISM maintenance by service providers.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.7.4.2",
+                            "text": "The information owner should fully understand the sensitivity of the information under their control, its confidentiality, and the basic requirements for media sanitization.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "4.7.5",
+                    "number": "4.7.5",
+                    "title": "Senior Agency Information Security Officer (SAISO)",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 4.7.5, Senior Agency Information Security Officer (SAISO), on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.7.5.1",
+                            "text": "The SAISO is responsible for ensuring that the requirements of the information security policy with regard to information disposition and media sanitization are implemented and exercised in a timely and appropriate manner throughout the organization.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "4.7.6",
+                    "number": "4.7.6",
+                    "title": "System Security Manager/Officer",
+                    "text": "",
+                    "description": "The 2 statements of SP 800-88r2 section 4.7.6, System Security Manager/Officer, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.7.6.1",
+                            "text": "The system security manager/office often is responsible for day-to-day security implementation and administration.",
+                            "source": "sp80088"
+                        },
+                        {
+                            "id": "4.7.6.2",
+                            "text": "Although not normally part of the computer security program management office, this person is responsible for coordinating the security efforts of particular systems.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "4.7.7",
+                    "number": "4.7.7",
+                    "title": "Property Management Officer",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 4.7.7, Property Management Officer, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.7.7.1",
+                            "text": "The property management officer is responsible for identifying and tracking sanitized ISM that are redistributed within the organization, donated to external entities, or destroyed.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "4.7.8",
+                    "number": "4.7.8",
+                    "title": "Records Management Officer",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 4.7.8, Records Management Officer, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.7.8.1",
+                            "text": "The records management officer is responsible for advising the system and/or data owner or custodian of retention requirements so that the sanitization of media will not destroy records that should be preserved.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "4.7.9",
+                    "number": "4.7.9",
+                    "title": "Privacy Officer",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 4.7.9, Privacy Officer, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.7.9.1",
+                            "text": "The privacy officer is responsible for providing advice on issues surrounding the disposition of privacy information and the media upon which it is recorded.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                },
+                {
+                    "id": "4.7.10",
+                    "number": "4.7.10",
+                    "title": "Users",
+                    "text": "",
+                    "description": "The 1 statement of SP 800-88r2 section 4.7.10, Users, on what organizations should do.",
+                    "type": "section",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "4.7.10.1",
+                            "text": "Users are responsible for knowing and understanding the confidentiality of the information they are using to accomplish their assigned work and ensure proper handling of information.",
+                            "source": "sp80088"
+                        }
+                    ],
+                    "source": "sp80088"
+                }
+            ]
+        }
+    ]
+}

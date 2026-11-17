@@ -1,0 +1,125 @@
+{
+    "key": "nist-800-88",
+    "name": "NIST SP 800-88",
+    "version": "Revision 2",
+    "full_name": "NIST SP 800-88 Rev. 2 Guidelines for Media Sanitization",
+    "issuing_body": "National Institute of Standards and Technology",
+    "standard_codes": [
+        "NIST-800-88"
+    ],
+    "aliases": [
+        "SP 800-88",
+        "800-88r2",
+        "Media sanitization",
+        "Data sanitization",
+        "Cryptographic erase"
+    ],
+    "content_licence": "public_domain",
+    "notice": "SP 800-88r2 sets no SHALL requirements. Each section of its sanitization methods and media sanitization program guidance is assessed against the sentences saying what organizations should or must do, quoted word for word.",
+    "sources": [
+        {
+            "id": "sp80088",
+            "title": "NIST SP 800-88 Revision 2, Guidelines for Media Sanitization",
+            "version": "Revision 2 (September 2025)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-88r2.pdf",
+            "file": "nist80088/NIST.SP.800-88r2.pdf",
+            "sha256": "39bb805c72723ed74f08e5806cd8463ca2554a62abb4f97b9d19c0398a8a7c55"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG scoring conventions",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "sp80088",
+        "objectives": "sp80088"
+    },
+    "control_flags": {
+        "type": "section for a numbered section of SP 800-88r2 sections 3 or 4 that contains guidance on what organizations should do."
+    },
+    "terminology": {
+        "control": "section",
+        "controls": "sections",
+        "family": "topic",
+        "families": "topics",
+        "objective": "practice",
+        "objectives": "practices",
+        "plan": "Action plan",
+        "plan_short": "Action plan",
+        "score": "Sanitization program score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Followed"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Followed"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Followed"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable sections whose practices are followed, with partial counting as half. NIST defines no score; this is an HCG measure."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A section is followed only when each of its applicable practices is followed.",
+            "source": "hcg",
+            "cite": "HCG convention"
+        },
+        {
+            "id": "policy_contents",
+            "type": "applicability",
+            "summary": "Practices for a sanitization method or cryptographic erase apply only where the organization uses that method; roles that the organization does not have are marked not applicable.",
+            "source": "sp80088",
+            "cite": "NIST SP 800-88r2, 4.1",
+            "quote": "Such a policy should address the following:"
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A partially followed section counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG scoring convention"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "Clear",
+            "definition": "Sanitization using logical techniques to protect against simple, non-invasive data recovery."
+        },
+        {
+            "term": "Purge",
+            "definition": "Sanitization using physical or logical techniques that make data recovery infeasible using state-of-the-art laboratory techniques."
+        },
+        {
+            "term": "Destroy",
+            "definition": "Sanitization that renders data recovery infeasible and the media unusable for storing data."
+        },
+        {
+            "term": "Cryptographic erase (CE)",
+            "definition": "Sanitizing the encryption keys used to encrypt the target data, leaving only ciphertext on the media."
+        }
+    ]
+}
