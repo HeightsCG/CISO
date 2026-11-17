@@ -616,6 +616,15 @@ class ReportKnowledge {
                 'complaint*' => 1,
                 'protected health information' => 1,
                 'de-identif*' => 3,
+                'dados pessoais' => 3,
+                'titular*' => 2,
+                'consentimento' => 3,
+                'tratamento de dados' => 2,
+                'encarregado' => 2,
+                'anonimiza*' => 3,
+                'privacidade' => 3,
+                'controlador*' => 1,
+                'operador*' => 1,
                 'record*' => 0.5
             ),
             'configuration' => array(

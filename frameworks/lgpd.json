@@ -1,0 +1,1680 @@
+{
+    "key": "lgpd",
+    "name": "LGPD",
+    "version": "Lei nº 13.709/2018, updated to Lei nº 15.352/2026",
+    "full_name": "Lei Geral de Proteção de Dados Pessoais (LGPD), Lei nº 13.709, de 14 de agosto de 2018",
+    "issuing_body": "Presidência da República / Congresso Nacional (Brazil)",
+    "standard_codes": [
+        "LGPD"
+    ],
+    "aliases": [
+        "LGPD",
+        "Lei Geral de Proteção de Dados",
+        "Lei 13.709",
+        "Brazil data protection law",
+        "Brazilian General Data Protection Law"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against the Portuguese text of the law as updated by the Câmara dos Deputados, including amendments through Lei nº 15.352/2026. Regulations and guidance issued by the Autoridade Nacional de Proteção de Dados (ANPD) may add to or specify these obligations. Brazilian legislative texts are not protected by copyright (Lei nº 9.610/1998, art. 8º, IV).",
+    "sources": [
+        {
+            "id": "lgpd",
+            "title": "Lei nº 13.709, de 14 de agosto de 2018 (norma atualizada)",
+            "version": "Updated text including Lei nº 15.352, de 25/2/2026",
+            "publisher": "Câmara dos Deputados, Centro de Documentação e Informação",
+            "url": "https://www2.camara.leg.br/legin/fed/lei/2018/lei-13709-14-agosto-2018-787077-normaatualizada-pl.html",
+            "file": "lgpd/lei-13709-2018-norma-atualizada-camara.html",
+            "sha256": "5ade20f12d206504f3beb13a0595d144efc891229ad0e6badcebfa97a8a83596",
+            "date": "2026-02-26"
+        }
+    ],
+    "source_of": {
+        "controls": "lgpd",
+        "objectives": "lgpd"
+    },
+    "control_flags": {
+        "type": "caput for an article's main provision; paragraph for one of its paragraphs (§ or parágrafo único)."
+    },
+    "terminology": {
+        "control": "obligation",
+        "controls": "obligations",
+        "family": "article",
+        "families": "articles",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable obligations that are implemented. The LGPD defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "An obligation is implemented only when each of its applicable incisos is met.",
+            "source": "lgpd",
+            "cite": "HCG convention applied to the LGPD's structure"
+        },
+        {
+            "id": "territorial_scope",
+            "type": "applicability",
+            "summary": "The LGPD applies to any processing by a natural person or a public or private legal entity, wherever based, if the processing takes place in Brazil, targets goods or services to or processes data of individuals in Brazil, or concerns data collected in Brazil.",
+            "source": "lgpd",
+            "cite": "Lei nº 13.709/2018, art. 3º",
+            "quote": "Esta Lei aplica-se a qualquer operação de tratamento realizada por pessoa natural ou por pessoa jurídica de direito público ou privado, independentemente do meio, do país de sua sede ou do país onde estejam localizados os dados"
+        },
+        {
+            "id": "exclusions",
+            "type": "applicability",
+            "summary": "Purely private non-economic processing by individuals, and processing exclusively for journalistic, artistic, academic, public security, national defence or criminal investigation purposes, fall outside the law.",
+            "source": "lgpd",
+            "cite": "Lei nº 13.709/2018, art. 4º",
+            "quote": "Esta Lei não se aplica ao tratamento de dados pessoais:"
+        },
+        {
+            "id": "records",
+            "type": "retention",
+            "summary": "Controllers and processors must keep a record of their processing operations, especially those based on legitimate interest.",
+            "source": "lgpd",
+            "cite": "Lei nº 13.709/2018, art. 37",
+            "quote": "O controlador e o operador devem manter registro das operações de tratamento de dados pessoais que realizarem"
+        },
+        {
+            "id": "dpo_designation",
+            "type": "applicability",
+            "summary": "The controller must appoint a data protection officer (encarregado).",
+            "source": "lgpd",
+            "cite": "Lei nº 13.709/2018, art. 41",
+            "quote": "O controlador deverá indicar encarregado pelo tratamento de dados pessoais."
+        },
+        {
+            "id": "incident_notification",
+            "type": "deadline",
+            "summary": "The controller must notify the ANPD and data subjects of a security incident that may cause relevant risk or harm; the ANPD's regulation sets the timeframe.",
+            "source": "lgpd",
+            "cite": "Lei nº 13.709/2018, art. 48",
+            "quote": "O controlador deverá comunicar à autoridade nacional e ao titular a ocorrência de incidente de segurança que possa acarretar risco ou dano relevante aos titulares."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "Controlador",
+            "definition": "Controller: the natural or legal person who makes decisions about the processing of personal data."
+        },
+        {
+            "term": "Operador",
+            "definition": "Processor: the natural or legal person who processes personal data on behalf of the controller."
+        },
+        {
+            "term": "Encarregado",
+            "definition": "Data protection officer: the person appointed to act as the channel between the controller, data subjects and the ANPD."
+        },
+        {
+            "term": "Titular",
+            "definition": "Data subject: the natural person to whom the personal data relate."
+        },
+        {
+            "term": "ANPD",
+            "definition": "Autoridade Nacional de Proteção de Dados, Brazil's data protection authority."
+        }
+    ],
+    "display_name": "LGPD (Lei nº 13.709/2018, updated to Lei nº 15.352/2026)",
+    "counts": {
+        "families": 12,
+        "controls": 97,
+        "objectives": 90
+    },
+    "families": [
+        {
+            "number": "G1",
+            "code": "G1",
+            "name": "Capítulo I – Disposições preliminares",
+            "controls": [
+                {
+                    "id": "Art. 6",
+                    "number": "Art. 6",
+                    "text": "As atividades de tratamento de dados pessoais deverão observar a boa-fé e os seguintes princípios:",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 6, I",
+                            "text": "I - finalidade: realização do tratamento para propósitos legítimos, específicos, explícitos e informados ao titular, sem possibilidade de tratamento posterior de forma incompatível com essas finalidades;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 6, II",
+                            "text": "II - adequação: compatibilidade do tratamento com as finalidades informadas ao titular, de acordo com o contexto do tratamento;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 6, III",
+                            "text": "III - necessidade: limitação do tratamento ao mínimo necessário para a realização de suas finalidades, com abrangência dos dados pertinentes, proporcionais e não excessivos em relação às finalidades do tratamento de dados;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 6, IV",
+                            "text": "IV - livre acesso: garantia, aos titulares, de consulta facilitada e gratuita sobre a forma e a duração do tratamento, bem como sobre a integralidade de seus dados pessoais;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 6, V",
+                            "text": "V - qualidade dos dados: garantia, aos titulares, de exatidão, clareza, relevância e atualização dos dados, de acordo com a necessidade e para o cumprimento da finalidade de seu tratamento;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 6, VI",
+                            "text": "VI - transparência: garantia, aos titulares, de informações claras, precisas e facilmente acessíveis sobre a realização do tratamento e os respectivos agentes de tratamento, observados os segredos comercial e industrial;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 6, VII",
+                            "text": "VII - segurança: utilização de medidas técnicas e administrativas aptas a proteger os dados pessoais de acessos não autorizados e de situações acidentais ou ilícitas de destruição, perda, alteração, comunicação ou difusão;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 6, VIII",
+                            "text": "VIII - prevenção: adoção de medidas para prevenir a ocorrência de danos em virtude do tratamento de dados pessoais;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 6, IX",
+                            "text": "IX - não discriminação: impossibilidade de realização do tratamento para fins discriminatórios ilícitos ou abusivos;",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                }
+            ]
+        },
+        {
+            "number": "G2",
+            "code": "G2",
+            "name": "Capítulo II – Do tratamento de dados pessoais, Seção I – Dos Requisitos para o Tratamento de Dados Pessoais",
+            "controls": [
+                {
+                    "id": "Art. 7",
+                    "number": "Art. 7",
+                    "text": "O tratamento de dados pessoais somente poderá ser realizado nas seguintes hipóteses:",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 7, I",
+                            "text": "I - mediante o fornecimento de consentimento pelo titular;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 7, II",
+                            "text": "II - para o cumprimento de obrigação legal ou regulatória pelo controlador;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 7, III",
+                            "text": "III - pela administração pública, para o tratamento e uso compartilhado de dados necessários à execução de políticas públicas previstas em leis e regulamentos ou respaldadas em contratos, convênios ou instrumentos congêneres, observadas as disposições do Capítulo IV desta Lei;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 7, IV",
+                            "text": "IV - para a realização de estudos por órgão de pesquisa, garantida, sempre que possível, a anonimização dos dados pessoais;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 7, V",
+                            "text": "V - quando necessário para a execução de contrato ou de procedimentos preliminares relacionados a contrato do qual seja parte o titular, a pedido do titular dos dados;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 7, VI",
+                            "text": "VI - para o exercício regular de direitos em processo judicial, administrativo ou arbitral, esse último nos termos da Lei nº 9.307, de 23 de setembro de 1996 (Lei de Arbitragem);",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 7, VII",
+                            "text": "VII - para a proteção da vida ou da incolumidade física do titular ou de terceiro;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 7, VIII",
+                            "text": "VIII - para a tutela da saúde, exclusivamente, em procedimento realizado por profissionais de saúde, serviços de saúde ou autoridade sanitária;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 7, IX",
+                            "text": "IX - quando necessário para atender aos interesses legítimos do controlador ou de terceiro, exceto no caso de prevalecerem direitos e liberdades fundamentais do titular que exijam a proteção dos dados pessoais; ou",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 7, X",
+                            "text": "X - para a proteção do crédito, inclusive quanto ao disposto na legislação pertinente.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 7, § 3º",
+                    "number": "Art. 7, § 3º",
+                    "text": "O tratamento de dados pessoais cujo acesso é público deve considerar a finalidade, a boa-fé e o interesse público que justificaram sua disponibilização.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 7, § 4º",
+                    "number": "Art. 7, § 4º",
+                    "text": "É dispensada a exigência do consentimento previsto no caput deste artigo para os dados tornados manifestamente públicos pelo titular, resguardados os direitos do titular e os princípios previstos nesta Lei.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 7, § 5º",
+                    "number": "Art. 7, § 5º",
+                    "text": "O controlador que obteve o consentimento referido no inciso I do caput deste artigo que necessitar comunicar ou compartilhar dados pessoais com outros controladores deverá obter consentimento específico do titular para esse fim, ressalvadas as hipóteses de dispensa do consentimento previstas nesta Lei.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 7, § 6º",
+                    "number": "Art. 7, § 6º",
+                    "text": "A eventual dispensa da exigência do consentimento não desobriga os agentes de tratamento das demais obrigações previstas nesta Lei, especialmente da observância dos princípios gerais e da garantia dos direitos do titular.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 7, § 7º",
+                    "number": "Art. 7, § 7º",
+                    "text": "O tratamento posterior dos dados pessoais a que se referem os §§ 3º e 4º deste artigo poderá ser realizado para novas finalidades, desde que observados os propósitos legítimos e específicos para o novo tratamento e a preservação dos direitos do titular, assim como os fundamentos e os princípios previstos nesta Lei.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 8",
+                    "number": "Art. 8",
+                    "text": "O consentimento previsto no inciso I do art. 7º desta Lei deverá ser fornecido por escrito ou por outro meio que demonstre a manifestação de vontade do titular.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 8, § 1º",
+                    "number": "Art. 8, § 1º",
+                    "text": "Caso o consentimento seja fornecido por escrito, esse deverá constar de cláusula destacada das demais cláusulas contratuais.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 8, § 2º",
+                    "number": "Art. 8, § 2º",
+                    "text": "Cabe ao controlador o ônus da prova de que o consentimento foi obtido em conformidade com o disposto nesta Lei.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 8, § 3º",
+                    "number": "Art. 8, § 3º",
+                    "text": "É vedado o tratamento de dados pessoais mediante vício de consentimento.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 8, § 4º",
+                    "number": "Art. 8, § 4º",
+                    "text": "O consentimento deverá referir-se a finalidades determinadas, e as autorizações genéricas para o tratamento de dados pessoais serão nulas.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 8, § 5º",
+                    "number": "Art. 8, § 5º",
+                    "text": "O consentimento pode ser revogado a qualquer momento mediante manifestação expressa do titular, por procedimento gratuito e facilitado, ratificados os tratamentos realizados sob amparo do consentimento anteriormente manifestado enquanto não houver requerimento de eliminação, nos termos do inciso VI do caput do art. 18 desta Lei.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 8, § 6º",
+                    "number": "Art. 8, § 6º",
+                    "text": "Em caso de alteração de informação referida nos incisos I, II, III ou V do art. 9º desta Lei, o controlador deverá informar ao titular, com destaque de forma específica do teor das alterações, podendo o titular, nos casos em que o seu consentimento é exigido, revogá-lo caso discorde da alteração.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 9",
+                    "number": "Art. 9",
+                    "text": "O titular tem direito ao acesso facilitado às informações sobre o tratamento de seus dados, que deverão ser disponibilizadas de forma clara, adequada e ostensiva acerca de, entre outras características previstas em regulamentação para o atendimento do princípio do livre acesso:",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 9, I",
+                            "text": "I - finalidade específica do tratamento;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 9, II",
+                            "text": "II - forma e duração do tratamento, observados os segredos comercial e industrial;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 9, III",
+                            "text": "III - identificação do controlador;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 9, IV",
+                            "text": "IV - informações de contato do controlador;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 9, V",
+                            "text": "V - informações acerca do uso compartilhado de dados pelo controlador e a finalidade;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 9, VI",
+                            "text": "VI - responsabilidades dos agentes que realizarão o tratamento; e",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 9, VII",
+                            "text": "VII - direitos do titular, com menção explícita aos direitos contidos no art. 18 desta Lei.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 9, § 1º",
+                    "number": "Art. 9, § 1º",
+                    "text": "Na hipótese em que o consentimento é requerido, esse será considerado nulo caso as informações fornecidas ao titular tenham conteúdo enganoso ou abusivo ou não tenham sido apresentadas previamente com transparência, de forma clara e inequívoca.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 9, § 2º",
+                    "number": "Art. 9, § 2º",
+                    "text": "Na hipótese em que o consentimento é requerido, se houver mudanças da finalidade para o tratamento de dados pessoais não compatíveis com o consentimento original, o controlador deverá informar previamente o titular sobre as mudanças de finalidade, podendo o titular revogar o consentimento, caso discorde das alterações.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 9, § 3º",
+                    "number": "Art. 9, § 3º",
+                    "text": "Quando o tratamento de dados pessoais for condição para o fornecimento de produto ou de serviço ou para o exercício de direito, o titular será informado com destaque sobre esse fato e sobre os meios pelos quais poderá exercer os direitos do titular elencados no art. 18 desta Lei.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 10",
+                    "number": "Art. 10",
+                    "text": "O legítimo interesse do controlador somente poderá fundamentar tratamento de dados pessoais para finalidades legítimas, consideradas a partir de situações concretas, que incluem, mas não se limitam a:",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 10, I",
+                            "text": "I - apoio e promoção de atividades do controlador; e",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 10, II",
+                            "text": "II - proteção, em relação ao titular, do exercício regular de seus direitos ou prestação de serviços que o beneficiem, respeitadas as legítimas expectativas dele e os direitos e liberdades fundamentais, nos termos desta Lei.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 10, § 1º",
+                    "number": "Art. 10, § 1º",
+                    "text": "Quando o tratamento for baseado no legítimo interesse do controlador, somente os dados pessoais estritamente necessários para a finalidade pretendida poderão ser tratados.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 10, § 2º",
+                    "number": "Art. 10, § 2º",
+                    "text": "O controlador deverá adotar medidas para garantir a transparência do tratamento de dados baseado em seu legítimo interesse.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                }
+            ]
+        },
+        {
+            "number": "G3",
+            "code": "G3",
+            "name": "Capítulo II – Do tratamento de dados pessoais, Seção II – Do Tratamento de Dados Pessoais Sensíveis",
+            "controls": [
+                {
+                    "id": "Art. 11",
+                    "number": "Art. 11",
+                    "text": "O tratamento de dados pessoais sensíveis somente poderá ocorrer nas seguintes hipóteses:",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 11, I",
+                            "text": "I - quando o titular ou seu responsável legal consentir, de forma específica e destacada, para finalidades específicas;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 11, II",
+                            "text": "II - sem fornecimento de consentimento do titular, nas hipóteses em que for indispensável para: a) cumprimento de obrigação legal ou regulatória pelo controlador; b) tratamento compartilhado de dados necessários à execução, pela administração pública, de políticas públicas previstas em leis ou regulamentos; c) realização de estudos por órgão de pesquisa, garantida, sempre que possível, a anonimização dos dados pessoais sensíveis; d) exercício regular de direitos, inclusive em contrato e em processo judicial, administrativo e arbitral, este último nos termos da Lei nº 9.307, de 23 de setembro de 1996 (Lei de Arbitragem); e) proteção da vida ou da incolumidade física do titular ou de terceiro; f) tutela da saúde, exclusivamente, em procedimento realizado por profissionais de saúde, serviços de saúde ou autoridade sanitária; ou g) garantia da prevenção à fraude e à segurança do titular, nos processos de identificação e autenticação de cadastro em sistemas eletrônicos, resguardados os direitos mencionados no art. 9º desta Lei e exceto no caso de prevalecerem direitos e liberdades fundamentais do titular que exijam a proteção dos dados pessoais.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 11, § 1º",
+                    "number": "Art. 11, § 1º",
+                    "text": "Aplica-se o disposto neste artigo a qualquer tratamento de dados pessoais que revele dados pessoais sensíveis e que possa causar dano ao titular, ressalvado o disposto em legislação específica.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 11, § 2º",
+                    "number": "Art. 11, § 2º",
+                    "text": "Nos casos de aplicação do disposto nas alíneas \"a\" e \"b\" do inciso II do caput deste artigo pelos órgãos e pelas entidades públicas, será dada publicidade à referida dispensa de consentimento, nos termos do inciso I do caput do art. 23 desta Lei.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 11, § 3º",
+                    "number": "Art. 11, § 3º",
+                    "text": "A comunicação ou o uso compartilhado de dados pessoais sensíveis entre controladores com objetivo de obter vantagem econômica poderá ser objeto de vedação ou de regulamentação por parte da autoridade nacional, ouvidos os órgãos setoriais do Poder Público, no âmbito de suas competências.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 11, § 4º",
+                    "number": "Art. 11, § 4º",
+                    "text": "É vedada a comunicação ou o uso compartilhado entre controladores de dados pessoais sensíveis referentes à saúde com objetivo de obter vantagem econômica, exceto nas hipóteses relativas a prestação de serviços de saúde, de assistência farmacêutica e de assistência à saúde, desde que observado o § 5º deste artigo, incluídos os serviços auxiliares de diagnose e terapia, em benefício dos interesses dos titulares de dados, e para permitir:",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 11, § 4º, I",
+                            "text": "I - a portabilidade de dados quando solicitada pelo titular; ou",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 11, § 4º, II",
+                            "text": "II - as transações financeiras e administrativas resultantes do uso e da prestação dos serviços de que trata este parágrafo.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 11, § 5º",
+                    "number": "Art. 11, § 5º",
+                    "text": "É vedado às operadoras de planos privados de assistência à saúde o tratamento de dados de saúde para a prática de seleção de riscos na contratação de qualquer modalidade, assim como na contratação e exclusão de beneficiários.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 12",
+                    "number": "Art. 12",
+                    "text": "Os dados anonimizados não serão considerados dados pessoais para os fins desta Lei, salvo quando o processo de anonimização ao qual foram submetidos for revertido, utilizando exclusivamente meios próprios, ou quando, com esforços razoáveis, puder ser revertido.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 12, § 1º",
+                    "number": "Art. 12, § 1º",
+                    "text": "A determinação do que seja razoável deve levar em consideração fatores objetivos, tais como custo e tempo necessários para reverter o processo de anonimização, de acordo com as tecnologias disponíveis, e a utilização exclusiva de meios próprios.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 12, § 2º",
+                    "number": "Art. 12, § 2º",
+                    "text": "Poderão ser igualmente considerados como dados pessoais, para os fins desta Lei, aqueles utilizados para formação do perfil comportamental de determinada pessoa natural, se identificada.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 13",
+                    "number": "Art. 13",
+                    "text": "Na realização de estudos em saúde pública, os órgãos de pesquisa poderão ter acesso a bases de dados pessoais, que serão tratados exclusivamente dentro do órgão e estritamente para a finalidade de realização de estudos e pesquisas e mantidos em ambiente controlado e seguro, conforme práticas de segurança previstas em regulamento específico e que incluam, sempre que possível, a anonimização ou pseudonimização dos dados, bem como considerem os devidos padrões éticos relacionados a estudos e pesquisas.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 13, § 1º",
+                    "number": "Art. 13, § 1º",
+                    "text": "A divulgação dos resultados ou de qualquer excerto do estudo ou da pesquisa de que trata o caput deste artigo em nenhuma hipótese poderá revelar dados pessoais.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 13, § 2º",
+                    "number": "Art. 13, § 2º",
+                    "text": "O órgão de pesquisa será o responsável pela segurança da informação prevista no caput deste artigo, não permitida, em circunstância alguma, a transferência dos dados a terceiro.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 13, § 3º",
+                    "number": "Art. 13, § 3º",
+                    "text": "O acesso aos dados de que trata este artigo será objeto de regulamentação por parte da autoridade nacional e das autoridades da área de saúde e sanitárias, no âmbito de suas competências.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 13, § 4º",
+                    "number": "Art. 13, § 4º",
+                    "text": "Para os efeitos deste artigo, a pseudonimização é o tratamento por meio do qual um dado perde a possibilidade de associação, direta ou indireta, a um indivíduo, senão pelo uso de informação adicional mantida separadamente pelo controlador em ambiente controlado e seguro.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                }
+            ]
+        },
+        {
+            "number": "G4",
+            "code": "G4",
+            "name": "Capítulo II – Do tratamento de dados pessoais, Seção III – Do Tratamento de Dados Pessoais de Crianças e de Adolescentes",
+            "controls": [
+                {
+                    "id": "Art. 14",
+                    "number": "Art. 14",
+                    "text": "O tratamento de dados pessoais de crianças e de adolescentes deverá ser realizado em seu melhor interesse, nos termos deste artigo e da legislação pertinente.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 14, § 1º",
+                    "number": "Art. 14, § 1º",
+                    "text": "O tratamento de dados pessoais de crianças deverá ser realizado com o consentimento específico e em destaque dado por pelo menos um dos pais ou pelo responsável legal.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 14, § 2º",
+                    "number": "Art. 14, § 2º",
+                    "text": "No tratamento de dados de que trata o § 1º deste artigo, os controladores deverão manter pública a informação sobre os tipos de dados coletados, a forma de sua utilização e os procedimentos para o exercício dos direitos a que se refere o art. 18 desta Lei.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 14, § 3º",
+                    "number": "Art. 14, § 3º",
+                    "text": "Poderão ser coletados dados pessoais de crianças sem o consentimento a que se refere o § 1º deste artigo quando a coleta for necessária para contatar os pais ou o responsável legal, utilizados uma única vez e sem armazenamento, ou para sua proteção, e em nenhum caso poderão ser repassados a terceiro sem o consentimento de que trata o § 1º deste artigo.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 14, § 4º",
+                    "number": "Art. 14, § 4º",
+                    "text": "Os controladores não deverão condicionar a participação dos titulares de que trata o § 1º deste artigo em jogos, aplicações de internet ou outras atividades ao fornecimento de informações pessoais além das estritamente necessárias à atividade.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 14, § 5º",
+                    "number": "Art. 14, § 5º",
+                    "text": "O controlador deve realizar todos os esforços razoáveis para verificar que o consentimento a que se refere o § 1º deste artigo foi dado pelo responsável pela criança, consideradas as tecnologias disponíveis.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 14, § 6º",
+                    "number": "Art. 14, § 6º",
+                    "text": "As informações sobre o tratamento de dados referidas neste artigo deverão ser fornecidas de maneira simples, clara e acessível, consideradas as características físico-motoras, perceptivas, sensoriais, intelectuais e mentais do usuário, com uso de recursos audiovisuais quando adequado, de forma a proporcionar a informação necessária aos pais ou ao responsável legal e adequada ao entendimento da criança.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                }
+            ]
+        },
+        {
+            "number": "G5",
+            "code": "G5",
+            "name": "Capítulo II – Do tratamento de dados pessoais, Seção IV – Do Término do Tratamento de Dados",
+            "controls": [
+                {
+                    "id": "Art. 15",
+                    "number": "Art. 15",
+                    "text": "O término do tratamento de dados pessoais ocorrerá nas seguintes hipóteses:",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 15, I",
+                            "text": "I - verificação de que a finalidade foi alcançada ou de que os dados deixaram de ser necessários ou pertinentes ao alcance da finalidade específica almejada;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 15, II",
+                            "text": "II - fim do período de tratamento;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 15, III",
+                            "text": "III - comunicação do titular, inclusive no exercício de seu direito de revogação do consentimento conforme disposto no § 5º do art. 8º desta Lei, resguardado o interesse público; ou",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 15, IV",
+                            "text": "IV - determinação da autoridade nacional, quando houver violação ao disposto nesta Lei.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 16",
+                    "number": "Art. 16",
+                    "text": "Os dados pessoais serão eliminados após o término de seu tratamento, no âmbito e nos limites técnicos das atividades, autorizada a conservação para as seguintes finalidades:",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 16, I",
+                            "text": "I - cumprimento de obrigação legal ou regulatória pelo controlador;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 16, II",
+                            "text": "II - estudo por órgão de pesquisa, garantida, sempre que possível, a anonimização dos dados pessoais;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 16, III",
+                            "text": "III - transferência a terceiro, desde que respeitados os requisitos de tratamento de dados dispostos nesta Lei; ou",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 16, IV",
+                            "text": "IV - uso exclusivo do controlador, vedado seu acesso por terceiro, e desde que anonimizados os dados.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                }
+            ]
+        },
+        {
+            "number": "G6",
+            "code": "G6",
+            "name": "Capítulo III – Dos direitos do titular",
+            "controls": [
+                {
+                    "id": "Art. 17",
+                    "number": "Art. 17",
+                    "text": "Toda pessoa natural tem assegurada a titularidade de seus dados pessoais e garantidos os direitos fundamentais de liberdade, de intimidade e de privacidade, nos termos desta Lei.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 18",
+                    "number": "Art. 18",
+                    "text": "O titular dos dados pessoais tem direito a obter do controlador, em relação aos dados do titular por ele tratados, a qualquer momento e mediante requisição:",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 18, I",
+                            "text": "I - confirmação da existência de tratamento;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 18, II",
+                            "text": "II - acesso aos dados;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 18, III",
+                            "text": "III - correção de dados incompletos, inexatos ou desatualizados;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 18, IV",
+                            "text": "IV - anonimização, bloqueio ou eliminação de dados desnecessários, excessivos ou tratados em desconformidade com o disposto nesta Lei;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 18, V",
+                            "text": "V - portabilidade dos dados a outro fornecedor de serviço ou produto, mediante requisição expressa, de acordo com a regulamentação da autoridade nacional, observados os segredos comercial e industrial;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 18, VI",
+                            "text": "VI - eliminação dos dados pessoais tratados com o consentimento do titular, exceto nas hipóteses previstas no art. 16 desta Lei;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 18, VII",
+                            "text": "VII - informação das entidades públicas e privadas com as quais o controlador realizou uso compartilhado de dados;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 18, VIII",
+                            "text": "VIII - informação sobre a possibilidade de não fornecer consentimento e sobre as consequências da negativa;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 18, IX",
+                            "text": "IX - revogação do consentimento, nos termos do § 5º do art. 8º desta Lei.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 18, § 1º",
+                    "number": "Art. 18, § 1º",
+                    "text": "O titular dos dados pessoais tem o direito de peticionar em relação aos seus dados contra o controlador perante a autoridade nacional.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 18, § 2º",
+                    "number": "Art. 18, § 2º",
+                    "text": "O titular pode opor-se a tratamento realizado com fundamento em uma das hipóteses de dispensa de consentimento, em caso de descumprimento ao disposto nesta Lei.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 18, § 3º",
+                    "number": "Art. 18, § 3º",
+                    "text": "Os direitos previstos neste artigo serão exercidos mediante requerimento expresso do titular ou de representante legalmente constituído, a agente de tratamento.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 18, § 4º",
+                    "number": "Art. 18, § 4º",
+                    "text": "Em caso de impossibilidade de adoção imediata da providência de que trata o § 3º deste artigo, o controlador enviará ao titular resposta em que poderá:",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 18, § 4º, I",
+                            "text": "I - comunicar que não é agente de tratamento dos dados e indicar, sempre que possível, o agente; ou",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 18, § 4º, II",
+                            "text": "II - indicar as razões de fato ou de direito que impedem a adoção imediata da providência.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 18, § 5º",
+                    "number": "Art. 18, § 5º",
+                    "text": "O requerimento referido no § 3º deste artigo será atendido sem custos para o titular, nos prazos e nos termos previstos em regulamento.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 18, § 6º",
+                    "number": "Art. 18, § 6º",
+                    "text": "O responsável deverá informar, de maneira imediata, aos agentes de tratamento com os quais tenha realizado uso compartilhado de dados a correção, a eliminação, a anonimização ou o bloqueio dos dados, para que repitam idêntico procedimento, exceto nos casos em que esta comunicação seja comprovadamente impossível ou implique esforço desproporcional.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 18, § 7º",
+                    "number": "Art. 18, § 7º",
+                    "text": "A portabilidade dos dados pessoais a que se refere o inciso V do caput deste artigo não inclui dados que já tenham sido anonimizados pelo controlador.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 18, § 8º",
+                    "number": "Art. 18, § 8º",
+                    "text": "O direito a que se refere o § 1º deste artigo também poderá ser exercido perante os organismos de defesa do consumidor.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 19",
+                    "number": "Art. 19",
+                    "text": "A confirmação de existência ou o acesso a dados pessoais serão providenciados, mediante requisição do titular:",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 19, I",
+                            "text": "I - em formato simplificado, imediatamente; ou",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 19, II",
+                            "text": "II - por meio de declaração clara e completa, que indique a origem dos dados, a inexistência de registro, os critérios utilizados e a finalidade do tratamento, observados os segredos comercial e industrial, fornecida no prazo de até 15 (quinze) dias, contado da data do requerimento do titular.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 19, § 1º",
+                    "number": "Art. 19, § 1º",
+                    "text": "Os dados pessoais serão armazenados em formato que favoreça o exercício do direito de acesso.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 19, § 2º",
+                    "number": "Art. 19, § 2º",
+                    "text": "As informações e os dados poderão ser fornecidos, a critério do titular:",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 19, § 2º, I",
+                            "text": "I - por meio eletrônico, seguro e idôneo para esse fim; ou",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 19, § 2º, II",
+                            "text": "II - sob forma impressa.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 19, § 3º",
+                    "number": "Art. 19, § 3º",
+                    "text": "Quando o tratamento tiver origem no consentimento do titular ou em contrato, o titular poderá solicitar cópia eletrônica integral de seus dados pessoais, observados os segredos comercial e industrial, nos termos de regulamentação da autoridade nacional, em formato que permita a sua utilização subsequente, inclusive em outras operações de tratamento.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 20",
+                    "number": "Art. 20",
+                    "text": "O titular dos dados tem direito a solicitar a revisão de decisões tomadas unicamente com base em tratamento automatizado de dados pessoais que afetem seus interesses, incluídas as decisões destinadas a definir o seu perfil pessoal, profissional, de consumo e de crédito ou os aspectos de sua personalidade.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 20, § 1º",
+                    "number": "Art. 20, § 1º",
+                    "text": "O controlador deverá fornecer, sempre que solicitadas, informações claras e adequadas a respeito dos critérios e dos procedimentos utilizados para a decisão automatizada, observados os segredos comercial e industrial.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 20, § 2º",
+                    "number": "Art. 20, § 2º",
+                    "text": "Em caso de não oferecimento de informações de que trata o § 1º deste artigo baseado na observância de segredo comercial e industrial, a autoridade nacional poderá realizar auditoria para verificação de aspectos discriminatórios em tratamento automatizado de dados pessoais.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 21",
+                    "number": "Art. 21",
+                    "text": "Os dados pessoais referentes ao exercício regular de direitos pelo titular não podem ser utilizados em seu prejuízo.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 22",
+                    "number": "Art. 22",
+                    "text": "A defesa dos interesses e dos direitos dos titulares de dados poderá ser exercida em juízo, individual ou coletivamente, na forma do disposto na legislação pertinente, acerca dos instrumentos de tutela individual e coletiva.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                }
+            ]
+        },
+        {
+            "number": "G7",
+            "code": "G7",
+            "name": "Capítulo V – Da transferência internacional de dados",
+            "controls": [
+                {
+                    "id": "Art. 33",
+                    "number": "Art. 33",
+                    "text": "A transferência internacional de dados pessoais somente é permitida nos seguintes casos:",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 33, I",
+                            "text": "I - para países ou organismos internacionais que proporcionem grau de proteção de dados pessoais adequado ao previsto nesta Lei;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 33, II",
+                            "text": "II - quando o controlador oferecer e comprovar garantias de cumprimento dos princípios, dos direitos do titular e do regime de proteção de dados previstos nesta Lei, na forma de: a) cláusulas contratuais específicas para determinada transferência; b) cláusulas-padrão contratuais; c) normas corporativas globais; d) selos, certificados e códigos de conduta regularmente emitidos;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 33, III",
+                            "text": "III - quando a transferência for necessária para a cooperação jurídica internacional entre órgãos públicos de inteligência, de investigação e de persecução, de acordo com os instrumentos de direito internacional;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 33, IV",
+                            "text": "IV - quando a transferência for necessária para a proteção da vida ou da incolumidade física do titular ou de terceiro;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 33, V",
+                            "text": "V - quando a autoridade nacional autorizar a transferência;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 33, VI",
+                            "text": "VI - quando a transferência resultar em compromisso assumido em acordo de cooperação internacional;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 33, VII",
+                            "text": "VII - quando a transferência for necessária para a execução de política pública ou atribuição legal do serviço público, sendo dada publicidade nos termos do inciso I do caput do art. 23 desta Lei;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 33, VIII",
+                            "text": "VIII - quando o titular tiver fornecido o seu consentimento específico e em destaque para a transferência, com informação prévia sobre o caráter internacional da operação, distinguindo claramente esta de outras finalidades; ou",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 33, IX",
+                            "text": "IX - quando necessário para atender as hipóteses previstas nos incisos II, V e VI do art. 7º desta Lei.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 33, parágrafo único",
+                    "number": "Art. 33, parágrafo único",
+                    "text": "Para os fins do inciso I deste artigo, as pessoas jurídicas de direito público referidas no parágrafo único do art. 1º da Lei nº 12.527, de 18 de novembro de 2011 (Lei de Acesso à Informação), no âmbito de suas competências legais, e responsáveis, no âmbito de suas atividades, poderão requerer à autoridade nacional a avaliação do nível de proteção a dados pessoais conferido por país ou organismo internacional.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 34",
+                    "number": "Art. 34",
+                    "text": "O nível de proteção de dados do país estrangeiro ou do organismo internacional mencionado no inciso I do caput do art. 33 desta Lei será avaliado pela autoridade nacional, que levará em consideração:",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 34, I",
+                            "text": "I - as normas gerais e setoriais da legislação em vigor no país de destino ou no organismo internacional;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 34, II",
+                            "text": "II - a natureza dos dados;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 34, III",
+                            "text": "III - a observância dos princípios gerais de proteção de dados pessoais e direitos dos titulares previstos nesta Lei;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 34, IV",
+                            "text": "IV - a adoção de medidas de segurança previstas em regulamento;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 34, V",
+                            "text": "V - a existência de garantias judiciais e institucionais para o respeito aos direitos de proteção de dados pessoais; e",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 34, VI",
+                            "text": "VI - outras circunstâncias específicas relativas à transferência.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 35",
+                    "number": "Art. 35",
+                    "text": "A definição do conteúdo de cláusulas-padrão contratuais, bem como a verificação de cláusulas contratuais específicas para uma determinada transferência, normas corporativas globais ou selos, certificados e códigos de conduta, a que se refere o inciso II do caput do art. 33 desta Lei, será realizada pela autoridade nacional.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 35, § 1º",
+                    "number": "Art. 35, § 1º",
+                    "text": "Para a verificação do disposto no caput deste artigo, deverão ser considerados os requisitos, as condições e as garantias mínimas para a transferência que observem os direitos, as garantias e os princípios desta Lei.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 35, § 2º",
+                    "number": "Art. 35, § 2º",
+                    "text": "Na análise de cláusulas contratuais, de documentos ou de normas corporativas globais submetidas à aprovação da autoridade nacional, poderão ser requeridas informações suplementares ou realizadas diligências de verificação quanto às operações de tratamento, quando necessário.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 35, § 4º",
+                    "number": "Art. 35, § 4º",
+                    "text": "Os atos realizados por organismo de certificação poderão ser revistos pela autoridade nacional e, caso em desconformidade com esta Lei, submetidos a revisão ou anulados.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 35, § 5º",
+                    "number": "Art. 35, § 5º",
+                    "text": "As garantias suficientes de observância dos princípios gerais de proteção e dos direitos do titular referidas no caput deste artigo serão também analisadas de acordo com as medidas técnicas e organizacionais adotadas pelo operador, de acordo com o previsto nos §§ 1º e 2º do art. 46 desta Lei.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 36",
+                    "number": "Art. 36",
+                    "text": "As alterações nas garantias apresentadas como suficientes de observância dos princípios gerais de proteção e dos direitos do titular referidas no inciso II do art. 33 desta Lei deverão ser comunicadas à autoridade nacional.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                }
+            ]
+        },
+        {
+            "number": "G8",
+            "code": "G8",
+            "name": "Capítulo VI – Dos agentes de tratamento de dados pessoais, Seção I – Do Controlador e do Operador",
+            "controls": [
+                {
+                    "id": "Art. 37",
+                    "number": "Art. 37",
+                    "text": "O controlador e o operador devem manter registro das operações de tratamento de dados pessoais que realizarem, especialmente quando baseado no legítimo interesse.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 38, parágrafo único",
+                    "number": "Art. 38, parágrafo único",
+                    "text": "Observado o disposto no caput deste artigo, o relatório deverá conter, no mínimo, a descrição dos tipos de dados coletados, a metodologia utilizada para a coleta e para a garantia da segurança das informações e a análise do controlador com relação a medidas, salvaguardas e mecanismos de mitigação de risco adotados.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 39",
+                    "number": "Art. 39",
+                    "text": "O operador deverá realizar o tratamento segundo as instruções fornecidas pelo controlador, que verificará a observância das próprias instruções e das normas sobre a matéria.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                }
+            ]
+        },
+        {
+            "number": "G9",
+            "code": "G9",
+            "name": "Capítulo VI – Dos agentes de tratamento de dados pessoais, Seção II – Do Encarregado pelo Tratamento de Dados Pessoais",
+            "controls": [
+                {
+                    "id": "Art. 41",
+                    "number": "Art. 41",
+                    "text": "O controlador deverá indicar encarregado pelo tratamento de dados pessoais.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 41, § 1º",
+                    "number": "Art. 41, § 1º",
+                    "text": "A identidade e as informações de contato do encarregado deverão ser divulgadas publicamente, de forma clara e objetiva, preferencialmente no sítio eletrônico do controlador.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 41, § 2º",
+                    "number": "Art. 41, § 2º",
+                    "text": "As atividades do encarregado consistem em:",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 41, § 2º, I",
+                            "text": "I - aceitar reclamações e comunicações dos titulares, prestar esclarecimentos e adotar providências;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 41, § 2º, II",
+                            "text": "II - receber comunicações da autoridade nacional e adotar providências;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 41, § 2º, III",
+                            "text": "III - orientar os funcionários e os contratados da entidade a respeito das práticas a serem tomadas em relação à proteção de dados pessoais; e",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 41, § 2º, IV",
+                            "text": "IV - executar as demais atribuições determinadas pelo controlador ou estabelecidas em normas complementares.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                }
+            ]
+        },
+        {
+            "number": "G10",
+            "code": "G10",
+            "name": "Capítulo VI – Dos agentes de tratamento de dados pessoais, Seção III – Da Responsabilidade e do Ressarcimento de Danos",
+            "controls": [
+                {
+                    "id": "Art. 42",
+                    "number": "Art. 42",
+                    "text": "O controlador ou o operador que, em razão do exercício de atividade de tratamento de dados pessoais, causar a outrem dano patrimonial, moral, individual ou coletivo, em violação à legislação de proteção de dados pessoais, é obrigado a repará-lo.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 42, § 1º",
+                    "number": "Art. 42, § 1º",
+                    "text": "A fim de assegurar a efetiva indenização ao titular dos dados:",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 42, § 1º, I",
+                            "text": "I - o operador responde solidariamente pelos danos causados pelo tratamento quando descumprir as obrigações da legislação de proteção de dados ou quando não tiver seguido as instruções lícitas do controlador, hipótese em que o operador equipara-se ao controlador, salvo nos casos de exclusão previstos no art. 43 desta Lei;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 42, § 1º, II",
+                            "text": "II - os controladores que estiverem diretamente envolvidos no tratamento do qual decorreram danos ao titular dos dados respondem solidariamente, salvo nos casos de exclusão previstos no art. 43 desta Lei.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 42, § 3º",
+                    "number": "Art. 42, § 3º",
+                    "text": "As ações de reparação por danos coletivos que tenham por objeto a responsabilização nos termos do caput deste artigo podem ser exercidas coletivamente em juízo, observado o disposto na legislação pertinente.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 42, § 4º",
+                    "number": "Art. 42, § 4º",
+                    "text": "Aquele que reparar o dano ao titular tem direito de regresso contra os demais responsáveis, na medida de sua participação no evento danoso.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 43",
+                    "number": "Art. 43",
+                    "text": "Os agentes de tratamento só não serão responsabilizados quando provarem:",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 43, I",
+                            "text": "I - que não realizaram o tratamento de dados pessoais que lhes é atribuído;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 43, II",
+                            "text": "II - que, embora tenham realizado o tratamento de dados pessoais que lhes é atribuído, não houve violação à legislação de proteção de dados; ou",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 43, III",
+                            "text": "III - que o dano é decorrente de culpa exclusiva do titular dos dados ou de terceiro.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 44",
+                    "number": "Art. 44",
+                    "text": "O tratamento de dados pessoais será irregular quando deixar de observar a legislação ou quando não fornecer a segurança que o titular dele pode esperar, consideradas as circunstâncias relevantes, entre as quais:",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 44, I",
+                            "text": "I - o modo pelo qual é realizado;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 44, II",
+                            "text": "II - o resultado e os riscos que razoavelmente dele se esperam;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 44, III",
+                            "text": "III - as técnicas de tratamento de dados pessoais disponíveis à época em que foi realizado.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 44, parágrafo único",
+                    "number": "Art. 44, parágrafo único",
+                    "text": "Responde pelos danos decorrentes da violação da segurança dos dados o controlador ou o operador que, ao deixar de adotar as medidas de segurança previstas no art. 46 desta Lei, der causa ao dano.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 45",
+                    "number": "Art. 45",
+                    "text": "As hipóteses de violação do direito do titular no âmbito das relações de consumo permanecem sujeitas às regras de responsabilidade previstas na legislação pertinente.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                }
+            ]
+        },
+        {
+            "number": "G11",
+            "code": "G11",
+            "name": "Capítulo VII – Da segurança e das boas práticas, Seção I – Da Segurança e do Sigilo de Dados",
+            "controls": [
+                {
+                    "id": "Art. 46",
+                    "number": "Art. 46",
+                    "text": "Os agentes de tratamento devem adotar medidas de segurança, técnicas e administrativas aptas a proteger os dados pessoais de acessos não autorizados e de situações acidentais ou ilícitas de destruição, perda, alteração, comunicação ou qualquer forma de tratamento inadequado ou ilícito.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 46, § 2º",
+                    "number": "Art. 46, § 2º",
+                    "text": "As medidas de que trata o caput deste artigo deverão ser observadas desde a fase de concepção do produto ou do serviço até a sua execução.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 47",
+                    "number": "Art. 47",
+                    "text": "Os agentes de tratamento ou qualquer outra pessoa que intervenha em uma das fases do tratamento obriga-se a garantir a segurança da informação prevista nesta Lei em relação aos dados pessoais, mesmo após o seu término.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 48",
+                    "number": "Art. 48",
+                    "text": "O controlador deverá comunicar à autoridade nacional e ao titular a ocorrência de incidente de segurança que possa acarretar risco ou dano relevante aos titulares.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 48, § 1º",
+                    "number": "Art. 48, § 1º",
+                    "text": "A comunicação será feita em prazo razoável, conforme definido pela autoridade nacional, e deverá mencionar, no mínimo:",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 48, § 1º, I",
+                            "text": "I - a descrição da natureza dos dados pessoais afetados;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 48, § 1º, II",
+                            "text": "II - as informações sobre os titulares envolvidos;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 48, § 1º, III",
+                            "text": "III - a indicação das medidas técnicas e de segurança utilizadas para a proteção dos dados, observados os segredos comercial e industrial;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 48, § 1º, IV",
+                            "text": "IV - os riscos relacionados ao incidente;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 48, § 1º, V",
+                            "text": "V - os motivos da demora, no caso de a comunicação não ter sido imediata; e",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 48, § 1º, VI",
+                            "text": "VI - as medidas que foram ou que serão adotadas para reverter ou mitigar os efeitos do prejuízo.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 48, § 3º",
+                    "number": "Art. 48, § 3º",
+                    "text": "No juízo de gravidade do incidente, será avaliada eventual comprovação de que foram adotadas medidas técnicas adequadas que tornem os dados pessoais afetados ininteligíveis, no âmbito e nos limites técnicos de seus serviços, para terceiros não autorizados a acessá-los.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 49",
+                    "number": "Art. 49",
+                    "text": "Os sistemas utilizados para o tratamento de dados pessoais devem ser estruturados de forma a atender aos requisitos de segurança, aos padrões de boas práticas e de governança e aos princípios gerais previstos nesta Lei e às demais normas regulamentares.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                }
+            ]
+        },
+        {
+            "number": "G12",
+            "code": "G12",
+            "name": "Capítulo VII – Da segurança e das boas práticas, Seção II – Das Boas Práticas e da Governança",
+            "controls": [
+                {
+                    "id": "Art. 50",
+                    "number": "Art. 50",
+                    "text": "Os controladores e operadores, no âmbito de suas competências, pelo tratamento de dados pessoais, individualmente ou por meio de associações, poderão formular regras de boas práticas e de governança que estabeleçam as condições de organização, o regime de funcionamento, os procedimentos, incluindo reclamações e petições de titulares, as normas de segurança, os padrões técnicos, as obrigações específicas para os diversos envolvidos no tratamento, as ações educativas, os mecanismos internos de supervisão e de mitigação de riscos e outros aspectos relacionados ao tratamento de dados pessoais.",
+                    "type": "caput",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 50, § 1º",
+                    "number": "Art. 50, § 1º",
+                    "text": "Ao estabelecer regras de boas práticas, o controlador e o operador levarão em consideração, em relação ao tratamento e aos dados, a natureza, o escopo, a finalidade e a probabilidade e a gravidade dos riscos e dos benefícios decorrentes de tratamento de dados do titular.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 50, § 2º",
+                    "number": "Art. 50, § 2º",
+                    "text": "Na aplicação dos princípios indicados nos incisos VII e VIII do caput do art. 6º desta Lei, o controlador, observados a estrutura, a escala e o volume de suas operações, bem como a sensibilidade dos dados tratados e a probabilidade e a gravidade dos danos para os titulares dos dados, poderá:",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "Art. 50, § 2º, I",
+                            "text": "I - implementar programa de governança em privacidade que, no mínimo: a) demonstre o comprometimento do controlador em adotar processos e políticas internas que assegurem o cumprimento, de forma abrangente, de normas e boas práticas relativas à proteção de dados pessoais; b) seja aplicável a todo o conjunto de dados pessoais que estejam sob seu controle, independentemente do modo como se realizou sua coleta; c) seja adaptado à estrutura, à escala e ao volume de suas operações, bem como à sensibilidade dos dados tratados; d) estabeleça políticas e salvaguardas adequadas com base em processo de avaliação sistemática de impactos e riscos à privacidade; e) tenha o objetivo de estabelecer relação de confiança com o titular, por meio de atuação transparente e que assegure mecanismos de participação do titular; f) esteja integrado a sua estrutura geral de governança e estabeleça e aplique mecanismos de supervisão internos e externos; g) conte com planos de resposta a incidentes e remediação; e h) seja atualizado constantemente com base em informações obtidas a partir de monitoramento contínuo e avaliações periódicas;",
+                            "source": "lgpd"
+                        },
+                        {
+                            "id": "Art. 50, § 2º, II",
+                            "text": "II - demonstrar a efetividade de seu programa de governança em privacidade quando apropriado e, em especial, a pedido da autoridade nacional ou de outra entidade responsável por promover o cumprimento de boas práticas ou códigos de conduta, os quais, de forma independente, promovam o cumprimento desta Lei.",
+                            "source": "lgpd"
+                        }
+                    ],
+                    "source": "lgpd"
+                },
+                {
+                    "id": "Art. 50, § 3º",
+                    "number": "Art. 50, § 3º",
+                    "text": "As regras de boas práticas e de governança deverão ser publicadas e atualizadas periodicamente e poderão ser reconhecidas e divulgadas pela autoridade nacional.",
+                    "type": "paragraph",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "lgpd"
+                }
+            ]
+        }
+    ]
+}

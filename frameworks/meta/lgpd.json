@@ -1,0 +1,148 @@
+{
+    "key": "lgpd",
+    "name": "LGPD",
+    "version": "Lei nº 13.709/2018, updated to Lei nº 15.352/2026",
+    "full_name": "Lei Geral de Proteção de Dados Pessoais (LGPD), Lei nº 13.709, de 14 de agosto de 2018",
+    "issuing_body": "Presidência da República / Congresso Nacional (Brazil)",
+    "standard_codes": [
+        "LGPD"
+    ],
+    "aliases": [
+        "LGPD",
+        "Lei Geral de Proteção de Dados",
+        "Lei 13.709",
+        "Brazil data protection law",
+        "Brazilian General Data Protection Law"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Assessed against the Portuguese text of the law as updated by the Câmara dos Deputados, including amendments through Lei nº 15.352/2026. Regulations and guidance issued by the Autoridade Nacional de Proteção de Dados (ANPD) may add to or specify these obligations. Brazilian legislative texts are not protected by copyright (Lei nº 9.610/1998, art. 8º, IV).",
+    "sources": [
+        {
+            "id": "lgpd",
+            "title": "Lei nº 13.709, de 14 de agosto de 2018 (norma atualizada)",
+            "version": "Updated text including Lei nº 15.352, de 25/2/2026",
+            "publisher": "Câmara dos Deputados, Centro de Documentação e Informação",
+            "url": "https://www2.camara.leg.br/legin/fed/lei/2018/lei-13709-14-agosto-2018-787077-normaatualizada-pl.html",
+            "file": "lgpd/lei-13709-2018-norma-atualizada-camara.html",
+            "sha256": "5ade20f12d206504f3beb13a0595d144efc891229ad0e6badcebfa97a8a83596",
+            "date": "2026-02-26"
+        }
+    ],
+    "source_of": {
+        "controls": "lgpd",
+        "objectives": "lgpd"
+    },
+    "control_flags": {
+        "type": "caput for an article's main provision; paragraph for one of its paragraphs (§ or parágrafo único)."
+    },
+    "terminology": {
+        "control": "obligation",
+        "controls": "obligations",
+        "family": "article",
+        "families": "articles",
+        "objective": "element",
+        "objectives": "elements",
+        "plan": "Remediation plan",
+        "plan_short": "Remediation plan",
+        "score": "Compliance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable obligations that are implemented. The LGPD defines no score; this percentage is an HCG measure of progress."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "An obligation is implemented only when each of its applicable incisos is met.",
+            "source": "lgpd",
+            "cite": "HCG convention applied to the LGPD's structure"
+        },
+        {
+            "id": "territorial_scope",
+            "type": "applicability",
+            "summary": "The LGPD applies to any processing by a natural person or a public or private legal entity, wherever based, if the processing takes place in Brazil, targets goods or services to or processes data of individuals in Brazil, or concerns data collected in Brazil.",
+            "source": "lgpd",
+            "cite": "Lei nº 13.709/2018, art. 3º",
+            "quote": "Esta Lei aplica-se a qualquer operação de tratamento realizada por pessoa natural ou por pessoa jurídica de direito público ou privado, independentemente do meio, do país de sua sede ou do país onde estejam localizados os dados"
+        },
+        {
+            "id": "exclusions",
+            "type": "applicability",
+            "summary": "Purely private non-economic processing by individuals, and processing exclusively for journalistic, artistic, academic, public security, national defence or criminal investigation purposes, fall outside the law.",
+            "source": "lgpd",
+            "cite": "Lei nº 13.709/2018, art. 4º",
+            "quote": "Esta Lei não se aplica ao tratamento de dados pessoais:"
+        },
+        {
+            "id": "records",
+            "type": "retention",
+            "summary": "Controllers and processors must keep a record of their processing operations, especially those based on legitimate interest.",
+            "source": "lgpd",
+            "cite": "Lei nº 13.709/2018, art. 37",
+            "quote": "O controlador e o operador devem manter registro das operações de tratamento de dados pessoais que realizarem"
+        },
+        {
+            "id": "dpo_designation",
+            "type": "applicability",
+            "summary": "The controller must appoint a data protection officer (encarregado).",
+            "source": "lgpd",
+            "cite": "Lei nº 13.709/2018, art. 41",
+            "quote": "O controlador deverá indicar encarregado pelo tratamento de dados pessoais."
+        },
+        {
+            "id": "incident_notification",
+            "type": "deadline",
+            "summary": "The controller must notify the ANPD and data subjects of a security incident that may cause relevant risk or harm; the ANPD's regulation sets the timeframe.",
+            "source": "lgpd",
+            "cite": "Lei nº 13.709/2018, art. 48",
+            "quote": "O controlador deverá comunicar à autoridade nacional e ao titular a ocorrência de incidente de segurança que possa acarretar risco ou dano relevante aos titulares."
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "Controlador",
+            "definition": "Controller: the natural or legal person who makes decisions about the processing of personal data."
+        },
+        {
+            "term": "Operador",
+            "definition": "Processor: the natural or legal person who processes personal data on behalf of the controller."
+        },
+        {
+            "term": "Encarregado",
+            "definition": "Data protection officer: the person appointed to act as the channel between the controller, data subjects and the ANPD."
+        },
+        {
+            "term": "Titular",
+            "definition": "Data subject: the natural person to whom the personal data relate."
+        },
+        {
+            "term": "ANPD",
+            "definition": "Autoridade Nacional de Proteção de Dados, Brazil's data protection authority."
+        }
+    ]
+}
