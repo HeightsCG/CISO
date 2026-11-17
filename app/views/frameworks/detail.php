@@ -1,4 +1,4 @@
-<div class="page">
+<div class="page page--list">
     <header class="headline">
         <div class="headline__text">
             <h1 class="headline__title"><?php echo htmlspecialchars($this->standard['standard_name'], ENT_QUOTES, 'UTF-8'); ?></h1>
@@ -12,11 +12,11 @@
 
     <?php echo ($this->standard['description'] === '' ? '' : '<div class="panel record__panel"><div class="panel__body"><p class="standard__description">'.nl2br(htmlspecialchars($this->standard['description'], ENT_QUOTES, 'UTF-8')).'</p></div></div>'); ?>
 
-    <div class="panel record__panel">
+    <div class="panel listpage">
         <div class="panel__head roster__toolbar">
             <input type="search" id="control_search" class="input roster__search" placeholder="Search by identifier or title..." autocomplete="off" spellcheck="false">
         </div>
-        <div class="panel__body panel__body--flush">
+        <div class="panel__body panel__body--flush listpage__body">
             <div class="table-wrap">
                 <table class="data controls__table">
                     <thead>
