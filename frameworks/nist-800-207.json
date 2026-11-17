@@ -1,0 +1,825 @@
+{
+    "key": "nist-800-207",
+    "name": "NIST SP 800-207",
+    "version": "August 2020",
+    "full_name": "NIST SP 800-207 Zero Trust Architecture",
+    "issuing_body": "National Institute of Standards and Technology",
+    "standard_codes": [
+        "NIST-800-207"
+    ],
+    "aliases": [
+        "SP 800-207",
+        "Zero Trust",
+        "ZTA",
+        "Zero Trust Architecture"
+    ],
+    "content_licence": "public_domain",
+    "notice": "SP 800-207 describes zero trust tenets and architecture rather than mandatory requirements. Each assessable item is a tenet, network assumption, logical component or migration step quoted from the publication; test points are written by HCG.",
+    "sources": [
+        {
+            "id": "sp800207",
+            "title": "NIST SP 800-207, Zero Trust Architecture",
+            "version": "August 2020",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-207.pdf",
+            "file": "nist800207/NIST.SP.800-207.pdf",
+            "sha256": "0290d6ece24874287316f4bf430fef770aa4ec08a2227c8f2c1e5b2ff975e03d"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG test points for SP 800-207",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "sp800207",
+        "objectives": "hcg"
+    },
+    "control_flags": {
+        "type": "tenet, assumption, component or step: the part of SP 800-207 the item comes from."
+    },
+    "terminology": {
+        "control": "element",
+        "controls": "elements",
+        "family": "section",
+        "families": "sections",
+        "objective": "test point",
+        "objectives": "test points",
+        "plan": "Action plan",
+        "plan_short": "Action plan",
+        "score": "Zero trust readiness"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "In Place"
+        },
+        {
+            "key": "partial",
+            "label": "Partially In Place"
+        },
+        {
+            "key": "not_met",
+            "label": "Not In Place"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable elements in place, with partial counting as half. NIST defines no score; this is an HCG readiness measure."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "An element is in place only when every HCG test point under it is met.",
+            "source": "hcg",
+            "cite": "HCG test points"
+        },
+        {
+            "id": "tenets_are_goals",
+            "type": "applicability",
+            "summary": "The tenets are goals; an element not fully implemented in its purest form is assessed as partially in place rather than not applicable.",
+            "source": "sp800207",
+            "cite": "NIST SP 800-207, 2.1",
+            "quote": "These tenets are the ideal goal, though it must be acknowledged that not all tenets may be fully implemented in their purest form for a given strategy."
+        },
+        {
+            "id": "enterprise_scope",
+            "type": "applicability",
+            "summary": "The tenets apply to work within the organization and with partners, not to anonymous public or consumer-facing processes.",
+            "source": "sp800207",
+            "cite": "NIST SP 800-207, 2.1",
+            "quote": "These tenets apply to work done within an organization or in collaboration with one or more partner organizations and not to anonymous public or consumer-facing business processes."
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A partially implemented element counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG scoring convention"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "Zero trust (ZT)",
+            "definition": "A set of cybersecurity paradigms that move defenses from static, network-based perimeters to focus on users, assets and resources."
+        },
+        {
+            "term": "Policy decision point (PDP)",
+            "definition": "The policy engine and policy administrator together, which decide and set up access."
+        },
+        {
+            "term": "Policy enforcement point (PEP)",
+            "definition": "The component that enables, monitors and terminates connections between a subject and a resource."
+        },
+        {
+            "term": "CDM",
+            "definition": "Continuous diagnostics and mitigation: a system that reports and maintains the state of enterprise assets."
+        }
+    ],
+    "display_name": "NIST SP 800-207 (August 2020)",
+    "counts": {
+        "families": 4,
+        "controls": 31,
+        "objectives": 57
+    },
+    "families": [
+        {
+            "number": "2.1",
+            "code": "2.1",
+            "name": "Tenets of Zero Trust",
+            "controls": [
+                {
+                    "id": "2.1.1",
+                    "number": "2.1.1",
+                    "title": "Tenet 1: All data sources and computing services are considered resources",
+                    "text": "All data sources and computing services are considered resources. A network may be composed of multiple classes of devices. A network may also have small footprint devices that send data to aggregators/storage, software as a service (SaaS), systems sending instructions to actuators, and other functions. Also, an enterprise may decide to classify personally owned devices as resources if they can access enterprise-owned resources.",
+                    "type": "tenet",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2.1.1.a",
+                            "text": "All data sources, computing services, SaaS applications and devices that can access enterprise resources, including personally owned devices where permitted, are inventoried as resources.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "2.1.1.b",
+                            "text": "Each resource has an owner and is covered by access policy.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "2.1.2",
+                    "number": "2.1.2",
+                    "title": "Tenet 2: All communication is secured regardless of network location",
+                    "text": "All communication is secured regardless of network location. Network location alone does not imply trust. Access requests from assets located on enterprise-owned network infrastructure (e.g., inside a legacy network perimeter) must meet the same security requirements as access requests and communication from any other nonenterprise-owned network. In other words, trust should not be automatically granted based on the device being on enterprise network infrastructure. All communication should be done in the most secure manner available, protect confidentiality and integrity, and provide source authentication.",
+                    "type": "tenet",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2.1.2.a",
+                            "text": "Access requests from inside the enterprise network are subject to the same authentication and authorization as requests from outside.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "2.1.2.b",
+                            "text": "Communications are encrypted and integrity-protected with source authentication, regardless of network location.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "2.1.3",
+                    "number": "2.1.3",
+                    "title": "Tenet 3: Access to individual enterprise resources is granted on a per-session basis",
+                    "text": "Access to individual enterprise resources is granted on a per-session basis. Trust in the requester is evaluated before the access is granted. Access should also be granted with the least privileges needed to complete the task. This could mean only “sometime recently” for this particular transaction and may not occur directly before initiating a session or performing a transaction with a resource. However, authentication and authorization to one resource will not automatically grant access to a different resource.",
+                    "type": "tenet",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2.1.3.a",
+                            "text": "Access is granted per session to an individual resource, with trust in the requester evaluated before access.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "2.1.3.b",
+                            "text": "Access is limited to the least privilege needed for the task, and access to one resource does not grant access to another.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "2.1.4",
+                    "number": "2.1.4",
+                    "title": "Tenet 4: Access to resources is determined by dynamic policy—including the observable state of client identity, application/service, and the requesting asset—and may include other behavioral and environmental attributes",
+                    "text": "Access to resources is determined by dynamic policy—including the observable state of client identity, application/service, and the requesting asset—and may include other behavioral and environmental attributes. An organization protects resources by defining what resources it has, who its members are (or ability to authenticate users from a federated community), and what access to resources those members need. For zero trust, client identity can include the user account (or service identity) and any associated attributes assigned by the enterprise to that account or artifacts to authenticate automated tasks. Requesting asset state can include device characteristics such as software versions installed, network location, time/date of request, previously observed behavior, and installed credentials. Behavioral attributes include, but not limited to, automated subject analytics, device analytics, and measured deviations from observed usage patterns. Policy is the set of access rules based on attributes that an organization assigns to a subject, data asset, or application. Environmental attributes may include such factors as requestor network location, time, reported active attacks, etc. These rules and attributes are based on the needs of the business process and acceptable level of risk. Resource access and action permission policies can vary based on the sensitivity of the resource/data. Least privilege principles are applied to restrict both visibility and accessibility.",
+                    "type": "tenet",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2.1.4.a",
+                            "text": "Access policy is defined from attributes of the subject identity, the application or service and the requesting asset.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "2.1.4.b",
+                            "text": "Policy can take behavioral and environmental attributes (such as location, time, device posture and threat state) into account.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "2.1.4.c",
+                            "text": "Policy varies with the sensitivity of the resource or data.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "2.1.5",
+                    "number": "2.1.5",
+                    "title": "Tenet 5: The enterprise monitors and measures the integrity and security posture of all owned and associated assets",
+                    "text": "The enterprise monitors and measures the integrity and security posture of all owned and associated assets. No asset is inherently trusted. The enterprise evaluates the security posture of the asset when evaluating a resource request. An enterprise implementing a ZTA should establish a continuous diagnostics and mitigation (CDM) or similar system to monitor the state of devices and applications and should apply patches/fixes as needed. Assets that are discovered to be subverted, have known vulnerabilities, and/or are not managed by the enterprise may be treated differently (including denial of all connections to enterprise resources) than devices owned by or associated with the enterprise that are deemed to be in their most secure state. This may also apply to associated devices (e.g., personally owned devices) that may be allowed to access some resources but not others. This, too, requires a robust monitoring and reporting system in place to provide actionable data about the current state of enterprise resources.",
+                    "type": "tenet",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2.1.5.a",
+                            "text": "The security posture of owned and associated assets is continuously monitored (for example through a CDM or endpoint management system).",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "2.1.5.b",
+                            "text": "Asset posture is evaluated as part of each access decision, and non-compliant or unmanaged assets are restricted or denied.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "2.1.5.c",
+                            "text": "Patches and fixes are applied based on monitoring results.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "2.1.6",
+                    "number": "2.1.6",
+                    "title": "Tenet 6: All resource authentication and authorization are dynamic and strictly enforced before access is allowed",
+                    "text": "All resource authentication and authorization are dynamic and strictly enforced before access is allowed. This is a constant cycle of obtaining access, scanning and assessing threats, adapting, and continually reevaluating trust in ongoing communication. An enterprise implementing a ZTA would be expected to have Identity, Credential, and Access Management (ICAM) and asset management systems in place. This includes the use of multifactor authentication (MFA) for access to some or all enterprise resources. Continual monitoring with possible reauthentication and reauthorization occurs throughout user transactions, as defined and enforced by policy (e.g., time-based, new resource requested, resource modification, anomalous subject activity detected) that strives to achieve a balance of security, availability, usability, and cost-efficiency.",
+                    "type": "tenet",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2.1.6.a",
+                            "text": "An identity, credential and access management (ICAM) system and asset management system are in place.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "2.1.6.b",
+                            "text": "Multi-factor authentication is used for access to enterprise resources.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "2.1.6.c",
+                            "text": "Sessions are continuously monitored, with reauthentication and reauthorization triggered by policy (for example time, new resource or anomalous activity).",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "2.1.7",
+                    "number": "2.1.7",
+                    "title": "Tenet 7: The enterprise collects as much information as possible about the current state of assets, network infrastructure and communications and uses it to improve its security posture",
+                    "text": "The enterprise collects as much information as possible about the current state of assets, network infrastructure and communications and uses it to improve its security posture. An enterprise should collect data about asset security posture, network traffic and access requests, process that data, and use any insight gained to improve policy creation and enforcement. This data can also be used to provide context for access requests from subjects (see Section 3.3.1).",
+                    "type": "tenet",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2.1.7.a",
+                            "text": "Data on asset posture, network traffic and access requests is collected centrally.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "2.1.7.b",
+                            "text": "Collected data is analysed and used to improve access policy and enforcement.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                }
+            ]
+        },
+        {
+            "number": "2.2",
+            "code": "2.2",
+            "name": "A Zero Trust View of a Network",
+            "controls": [
+                {
+                    "id": "2.2.1",
+                    "number": "2.2.1",
+                    "title": "Assumption 1: The entire enterprise private network is not considered an implicit trust zone",
+                    "text": "The entire enterprise private network is not considered an implicit trust zone. Assets should always act as if an attacker is present on the enterprise network, and communication should be done in the most secure manner available (see tenet 2 above). This entails actions such as authenticating all connections and encrypting all traffic.",
+                    "type": "assumption",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2.2.1.a",
+                            "text": "The enterprise private network is not treated as an implicit trust zone in network and access design.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "2.2.1.b",
+                            "text": "Internal connections are authenticated and internal traffic is encrypted.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "2.2.2",
+                    "number": "2.2.2",
+                    "title": "Assumption 2: Devices on the network may not be owned or configurable by the enterprise",
+                    "text": "Devices on the network may not be owned or configurable by the enterprise. Visitors and/or contracted services may include nonenterprise-owned assets that need network access to perform their role. This includes bring-your-own-device (BYOD) policies that allow enterprise subjects to use nonenterprise-owned devices to access enterprise resources.",
+                    "type": "assumption",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2.2.2.a",
+                            "text": "Access by non-enterprise-owned devices (BYOD, contractors, visitors) is governed by defined policy.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "2.2.2.b",
+                            "text": "Non-enterprise-owned devices are identified and given access appropriate to their posture.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "2.2.3",
+                    "number": "2.2.3",
+                    "title": "Assumption 3: No resource is inherently trusted",
+                    "text": "No resource is inherently trusted. Every asset must have its security posture evaluated via a PEP before a request is granted to an enterprise-owned resource (similar to tenet 6 above for assets as well as subjects). This evaluation should be continual for as long as the session lasts. Enterprise-owned devices may have artifacts that enable authentication and provide a confidence level higher than the same request coming from nonenterprise-owned devices. Subject credentials alone are insufficient for device authentication to an enterprise resource.",
+                    "type": "assumption",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2.2.3.a",
+                            "text": "Every asset's security posture is evaluated by a policy enforcement point before access to an enterprise resource is granted.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "2.2.3.b",
+                            "text": "Device authentication is required in addition to subject credentials.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "2.2.4",
+                    "number": "2.2.4",
+                    "title": "Assumption 4: Not all enterprise resources are on enterprise-owned infrastructure",
+                    "text": "Not all enterprise resources are on enterprise-owned infrastructure. Resources include remote enterprise subjects as well as cloud services. Enterprise-owned or - managed assets may need to utilize the local (i.e., nonenterprise) network for basic connectivity and network services (e.g., DNS resolution).",
+                    "type": "assumption",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2.2.4.a",
+                            "text": "Resources on non-enterprise infrastructure (cloud services, remote subjects) are included in the zero trust architecture.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "2.2.4.b",
+                            "text": "Dependencies on non-enterprise network services (such as DNS) are identified and protected.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "2.2.5",
+                    "number": "2.2.5",
+                    "title": "Assumption 5: Remote enterprise subjects and assets cannot fully trust their local network connection",
+                    "text": "Remote enterprise subjects and assets cannot fully trust their local network connection. Remote subjects should assume that the local (i.e., nonenterprise-owned) network is hostile. Assets should assume that all traffic is being monitored and potentially modified. All connection requests should be authenticated and authorized, and all communications should be done in the most secure manner possible (i.e., provide confidentiality, integrity protection, and source authentication). See the tenets of ZTA above.",
+                    "type": "assumption",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2.2.5.a",
+                            "text": "Remote connections are authenticated, authorized and encrypted, assuming the local network is hostile.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "2.2.5.b",
+                            "text": "Remote assets are configured to operate safely on untrusted networks.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "2.2.6",
+                    "number": "2.2.6",
+                    "title": "Assumption 6: Assets and workflows moving between enterprise and nonenterprise infrastructure should have a consistent security policy and posture",
+                    "text": "Assets and workflows moving between enterprise and nonenterprise infrastructure should have a consistent security policy and posture. Assets and workloads should retain their security posture when moving to or from enterprise-owned infrastructure. This includes devices that move from enterprise networks to nonenterprise networks (i.e. remote users). This also includes workloads migrating from on-premises data centers to nonenterprise cloud instances.",
+                    "type": "assumption",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "2.2.6.a",
+                            "text": "Security policy and posture are applied consistently to assets and workloads on enterprise and non-enterprise infrastructure.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "2.2.6.b",
+                            "text": "Workloads moving to or from cloud environments keep their security controls.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                }
+            ]
+        },
+        {
+            "number": "3",
+            "code": "3",
+            "name": "Logical Components of Zero Trust Architecture",
+            "controls": [
+                {
+                    "id": "3.PE",
+                    "number": "3.PE",
+                    "title": "Policy engine (PE)",
+                    "text": "This component is responsible for the ultimate decision to grant access to a resource for a given subject. The PE uses enterprise policy as well as input from external sources (e.g., CDM systems, threat intelligence services described below) as input to a trust algorithm (see Section 3.3 for more details) to grant, deny, or revoke access to the resource. The PE is paired with the policy administrator component. The policy engine makes and logs the decision (as approved, or denied), and the policy administrator executes the decision.",
+                    "type": "component",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.PE.a",
+                            "text": "A policy engine makes and logs grant, deny or revoke decisions for access to resources.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "3.PE.b",
+                            "text": "The policy engine uses enterprise policy and external inputs (such as CDM and threat intelligence) in a defined trust algorithm.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "3.PA",
+                    "number": "3.PA",
+                    "title": "Policy administrator (PA)",
+                    "text": "This component is responsible for establishing and/or shutting down the communication path between a subject and a resource (via commands to relevant PEPs). It would generate any session-specific authentication and authentication token or credential used by a client to access an enterprise resource. It is closely tied to the PE and relies on its decision to ultimately allow or deny a session. If the session is authorized and the request authenticated, the PA configures the PEP to allow the session to start. If the session is denied (or a previous approval is countermanded), the PA signals to the PEP to shut down the connection. Some implementations may treat the PE and PA as a single service; here, it is divided into its two logical components. The PA communicates with the PEP when creating the communication path. This communication is done via the control plane.",
+                    "type": "component",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.PA.a",
+                            "text": "A policy administrator establishes and shuts down communication paths based on policy engine decisions.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "3.PA.b",
+                            "text": "Session-specific credentials or tokens are issued for authorized sessions.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "3.PEP",
+                    "number": "3.PEP",
+                    "title": "Policy enforcement point (PEP)",
+                    "text": "This system is responsible for enabling, monitoring, and eventually terminating connections between a subject and an enterprise resource. The PEP communicates with the PA to forward requests and/or receive policy updates from the PA. This is a single logical component in ZTA but may be broken into two different components: the client (e.g., agent on a laptop) and resource side (e.g., gateway component in front of resource that controls access) or a single portal component that acts as a gatekeeper for communication paths. Beyond the PEP is the trust zone (see Section 2) hosting the enterprise resource.",
+                    "type": "component",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.PEP.a",
+                            "text": "Policy enforcement points enable, monitor and terminate connections between subjects and resources.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "3.PEP.b",
+                            "text": "No path to protected resources bypasses a policy enforcement point.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "3.CDM",
+                    "number": "3.CDM",
+                    "title": "Continuous diagnostics and mitigation (CDM) system",
+                    "text": "This gathers information about the enterprise asset’s current state and applies updates to configuration and software components. An enterprise CDM system provides the policy engine with the information about the asset making an access request, such as whether it is running the appropriate patched operating system (OS), the integrity of enterprise-approved software components or presence of non-approved components and whether the asset has any known vulnerabilities. CDM systems are also responsible for identifying and potentially enforcing a subset of polices on nonenterprise devices active on enterprise infrastructure.",
+                    "type": "component",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.CDM.a",
+                            "text": "A continuous diagnostics and mitigation or equivalent system reports asset state (patch level, approved software, known vulnerabilities) to access decisions.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "3.ICS",
+                    "number": "3.ICS",
+                    "title": "Industry compliance system",
+                    "text": "This ensures that the enterprise remains compliant with any regulatory regime that it may fall under (e.g., FISMA, healthcare or financial industry information security requirements). This includes all the policy rules that an enterprise develops to ensure compliance.",
+                    "type": "component",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.ICS.a",
+                            "text": "Regulatory and industry compliance requirements are encoded in policy rules used for access decisions.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "3.TIF",
+                    "number": "3.TIF",
+                    "title": "Threat intelligence feed(s)",
+                    "text": "This provides information from internal or external sources that help the policy engine make access decisions. These could be multiple services that take data from internal and/or multiple external sources and provide information about newly discovered attacks or vulnerabilities. This also includes newly discovered flaws in software, newly identified malware, and reported attacks to other assets that the policy engine will want to deny access to from enterprise assets.",
+                    "type": "component",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.TIF.a",
+                            "text": "Threat intelligence from internal and external sources feeds access decisions.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "3.LOG",
+                    "number": "3.LOG",
+                    "title": "Network and system activity logs",
+                    "text": "This enterprise system aggregates asset logs, network traffic, resource access actions, and other events that provide real-time (or near-real-time) feedback on the security posture of enterprise information systems.",
+                    "type": "component",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.LOG.a",
+                            "text": "Asset logs, network traffic and resource access events are aggregated and available as near-real-time feedback on security posture.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "3.DAP",
+                    "number": "3.DAP",
+                    "title": "Data access policies",
+                    "text": "These are the attributes, rules, and policies about access to enterprise resources. This set of rules could be encoded in (via management interface) or dynamically generated by the policy engine. These policies are the starting point for authorizing access to a resource as they provide the basic access privileges for accounts and applications/services in the enterprise. These policies should be based on the defined mission roles and needs of the organization.",
+                    "type": "component",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.DAP.a",
+                            "text": "Data access policies define the attributes and rules for access to enterprise resources, based on mission roles and needs.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "3.DAP.b",
+                            "text": "Data access policies are maintained and reviewed.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "3.PKI",
+                    "number": "3.PKI",
+                    "title": "Enterprise public key infrastructure (PKI)",
+                    "text": "This system is responsible for generating and logging certificates issued by the enterprise to resources, subjects, services and applications. This also includes the global certificate authority ecosystem and the Federal PKI,4 which may or may not be integrated with the enterprise PKI. This could also be a PKI that is not built upon X.509 certificates.",
+                    "type": "component",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.PKI.a",
+                            "text": "An enterprise PKI issues and logs certificates for resources, subjects, services and applications.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "3.IDM",
+                    "number": "3.IDM",
+                    "title": "ID management system",
+                    "text": "This is responsible for creating, storing, and managing enterprise user accounts and identity records (e.g., lightweight directory access protocol (LDAP) server). This system contains the necessary subject information (e.g., name, email address, certificates) and other enterprise characteristics such as role, access attributes, and assigned assets. This system often utilizes other systems (such as a PKI) for artifacts associated with user accounts. This system may be part of a larger federated community and may include nonenterprise employees or links to nonenterprise assets for collaboration.",
+                    "type": "component",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.IDM.a",
+                            "text": "An identity management system creates, stores and manages enterprise accounts and identity attributes, including roles and assigned assets.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "3.SIEM",
+                    "number": "3.SIEM",
+                    "title": "Security information and event management (SIEM) system",
+                    "text": "This collects security-centric information for later analysis. This data is then used to refine policies and warn of possible attacks against enterprise assets.",
+                    "type": "component",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "3.SIEM.a",
+                            "text": "A SIEM collects security information that is used to refine policy and warn of possible attacks.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                }
+            ]
+        },
+        {
+            "number": "7.3",
+            "code": "7.3",
+            "name": "Steps to Introducing ZTA to a Perimeter-Based Architected Network",
+            "controls": [
+                {
+                    "id": "7.3.1",
+                    "number": "7.3.1",
+                    "title": "Identify Actors on the Enterprise",
+                    "text": "For a zero trust enterprise to operate, the PE must have knowledge of enterprise subjects. Subjects could encompass both human and possible NPEs, such as service accounts that interact with resources. Users with special privileges, such as developers or system administrators, require additional scrutiny when being assigned attributes or roles. In many legacy security architectures, these accounts may have blanket permission to access all enterprise resources. ZTA should allow developers and administrators to have sufficient flexibility to satisfy their business requirements while using logs and audit actions to identify access behavior patterns. ZTA deployments may require administrators to satisfy a more stringent confidence level or criteria as outlined in NIST SP 800-63A, Section 5 [SP800-63A].",
+                    "type": "step",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.3.1.a",
+                            "text": "Subjects (users and non-person entities such as service accounts) and their privileges are identified.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.3.1.b",
+                            "text": "Privileged and service accounts are documented.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "7.3.2",
+                    "number": "7.3.2",
+                    "title": "Identify Assets Owned by the Enterprise",
+                    "text": "As mentioned in Section 2.1, one of the key requirements of ZTA is the ability to identify and manage devices. ZTA also requires the ability to identify and monitor nonenterprise-owned devices that may be on enterprise-owned network infrastructure or that access enterprise resources. The ability to manage enterprise assets is key to the successful deployment of ZTA. This includes hardware components (e.g., laptops, phones, IoT devices) and digital artifacts (e.g., user accounts, applications, digital certificates). It may not be possible to conduct a complete census on all enterprise-owned assets, so an enterprise should consider building the capability to quickly identify, categorize, and assess newly discovered assets that are on enterprise-owned infrastructure. This goes beyond simply cataloging and maintaining a database of enterprise assets. This also includes configuration management and monitoring. The ability to observe the current state of an asset is part of the process of evaluating access requests (see Section 2.1). This means that the enterprise must be able to configure, survey, and update enterprise assets, such as virtual assets and containers. This also includes both its physical (as best estimated) and network location. This information should inform the PE when making resource access decisions. Nonenterprise-owned assets and enterprise-owned “shadow IT” should also be cataloged as well as possible. This may include whatever is visible by the enterprise (e.g., MAC address, network location) and augmented by administrator data entry. This information is not only used for access decisions (as collaborator and BYOD assets may need to contact PEPs) but also for monitoring and forensics logging by the enterprise. Shadow IT presents a special problem in that these resources are enterprise-owned but not managed like other resources. Certain ZTA approaches (mainly network-based) may even cause shadow IT components to become unusable as they may not be known and included in network access policies. Many federal agencies have already begun identifying enterprise assets. Agencies that have established CDM program capabilities, such as HWAM [HWAM] and Software Asset Management (SWAM) [SWAM], have a rich set of data to draw from when enacting a ZTA. Agencies may also have a list of ZTA candidate processes that involve High Value Assets (HVA) [M-19-03] that have been identified as key to the agency mission. This work would need to exist enterprise- or agency-wide before any business process could be (re)designed with a ZTA. These programs must be designed to be expandable and adaptable to changes in the enterprise, not only when migrating to ZTA but also when accounting for new assets, services, and business processes that become part of the enterprise.",
+                    "type": "step",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.3.2.a",
+                            "text": "Enterprise assets (hardware, software, services, data) are identified and catalogued, including shadow IT.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.3.2.b",
+                            "text": "Asset attributes needed for access decisions are recorded.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "7.3.3",
+                    "number": "7.3.3",
+                    "title": "Identify Key Processes and Evaluate Risks Associated with Executing Process",
+                    "text": "The third inventory that an agency should undertake is to identify and rank the business processes, data flows, and their relation in the missions of the agency. Business processes should inform the circumstances under which resource access requests are granted and denied. An enterprise may wish to start with a low-risk business process for the first transition to ZTA as disruptions will likely not negatively impact the entire organization. Once enough experience is gained, more critical business processes can become candidates. Business processes that utilize cloud-based resources or are used by remote workers are often good candidates for ZTA and would likely see improvements to availability and security. Rather than project the enterprise perimeter into the cloud or bring clients into the enterprise network via a VPN, enterprise clients can request cloud services directly. The enterprise’s PEPs ensure that enterprise policies are followed before resource access is granted to a client. Planners should also consider potential tradeoffs in performance, user experience, and possible increased workflow fragility that may occur when implementing ZTA for a given business process.",
+                    "type": "step",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.3.3.a",
+                            "text": "Business processes, data flows and their dependencies are identified.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.3.3.b",
+                            "text": "Processes are ranked by risk to choose candidates for the first zero trust migration.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "7.3.4",
+                    "number": "7.3.4",
+                    "title": "Formulating Policies for the ZTA Candidate",
+                    "text": "The process of identifying a candidate service or business workflow depends on several factors: the importance of the process to the organization, the group of subjects affected, and the current state of resources used for the workflow. The value of the asset or workflow based on risk to the asset or workflow can be evaluated using the NIST Risk Management Framework [SP800-37]. After the asset or workflow is identified, identify all upstream resources (e.g., ID management systems, databases, micro-services), downstream resources (e.g., logging, security monitoring), and entities (e.g., subjects, service accounts) that are used or affected by the workflow. This may influence the candidate choice as a first migration to ZTA. An application/service used by an identified subset of enterprise subjects (e.g., a purchasing system) may be preferred over one that is vital to the entire subject base of the enterprise (e.g., email). The enterprise administrators then need to determine the set of criteria (if using a criteria-based TA) or confidence level weights (if using a score-based TA) for the resources used in the candidate business process (see Section 3.3.1). Administrators may need to adjust these criteria or values during the tuning phase. These adjustments are necessary to ensure that policies are effective but do not hinder access to resources.",
+                    "type": "step",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.3.4.a",
+                            "text": "Access policies for the candidate process are written in terms of subjects, resources and attributes.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.3.4.b",
+                            "text": "Trust levels and confidence thresholds for access are defined.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "7.3.5",
+                    "number": "7.3.5",
+                    "title": "Identifying Candidate Solutions",
+                    "text": "Once a list of candidate business processes has been developed, enterprise architects can compose a list of candidate solutions. Some deployment models (see Section 3.1) are better suited to particular workflows and current enterprise ecosystems. Likewise, some vendor solutions are better suited to some use cases than others. These are some factors to consider: • Does the solution require that components be installed on the client asset? This may limit business processes where nonenterprise-owned assets are used or desired, such as BYOD or cross-agency collaborations. • Does the solution work where the business process resources exist entirely on enterprise premises? Some solutions assume that requested resources will reside in the cloud (so-called north-south traffic) and not within an enterprise perimeter (east-west traffic). The location of candidate business process resources will influence candidate solutions as well as the ZTA for the process. • Does the solution provide a means to log interactions for analysis? A key component of ZT is the collection and use of data related to the process flow that feeds back into the PE when making access decisions. • Does the solution provide broad support for different applications, services, and protocols? Some solutions may support a broad range of protocols (web, secure shell [SSH], etc.) and transports (IPv4 and IPv6), while others may only work with a narrow focus such as web or email. • Does the solution require changes to subject behavior? Some solutions may require additional steps to perform a given workflow. This may change how enterprise subjects perform the workflow. One solution is to model an existing business process as a pilot program rather than just a replacement. This pilot program could be made general to apply to several business processes or be made specific to one use case. The pilot can be used as a “proving ground” for ZTA before transitioning subjects to the ZTA deployment and away from the legacy process infrastructure.",
+                    "type": "step",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.3.5.a",
+                            "text": "Candidate zero trust solutions are evaluated against the enterprise's requirements and deployment model.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "7.3.6",
+                    "number": "7.3.6",
+                    "title": "Initial Deployment and Monitoring",
+                    "text": "Once the candidate workflow and ZTA components are chosen, the initial deployment can start. Enterprise administrators must implement the developed policies by using the selected components but may wish to operate in an observation and monitoring mode at first. Few enterprise policy sets are complete in their first iterations: important user accounts (e.g., administrator accounts) may be denied access to resources they need or may not need all the access privileges they have been assigned. The new ZT business workflow could be operated in reporting-only mode for some time to make sure the policies are effective and workable. This also allows the enterprise to gain an understanding of baseline asset and resource access requests, behavior, and communication patterns. Reporting-only means that access should be granted for most requests, and logs and traces of connections should be compared with the initial developed policy. Basic policies such as denying requests that fail MFA or appear from known, attacker controlled or subverted IP addresses should be enforced and logged, but after initial deployment, access polices should be more lenient to collect data from actual interactions of the ZT workflow. Once the baseline activity patterns for the workflow has been established, anomalous behavior can be more easily identify. If it is not possible to operate in a more lenient nature, enterprise network operators should monitor logs closely and be prepared to modify access policies based on operational experience.",
+                    "type": "step",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.3.6.a",
+                            "text": "The initial deployment is run in a monitoring mode with policies tuned from observed traffic.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.3.6.b",
+                            "text": "Access and policy decisions are logged and reviewed during the initial deployment.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                },
+                {
+                    "id": "7.3.7",
+                    "number": "7.3.7",
+                    "title": "Expanding the ZTA",
+                    "text": "When enough confidence is gained and the workflow policy set is refined, the enterprise enters the steady operational phase. The network and assets are still monitored, and traffic is logged (see Section 2.1), but responses and policy modifications are done at a lower tempo as they should not be severe. The subjects and stakeholders of the resources and processes involved should also provide feedback to improve operations. At this stage, the enterprise administrators can begin planning the next phase of ZT deployment. Like the previous rollout, a candidate workflow and solution set need to be identified and initial policies developed. However, if a change occurs to the workflow, the operating ZT architecture needs to be reevaluated. Significate changes to the system—such as new devices, major updates to software (especially ZT logical components), and shifts in organizational structure—may result in changes to the workflow or policies. In effect, the entire process should be reconsidered with the assumption that some of the work has already been done. For example, new devices have been purchased, but no new user accounts have been created, so only the device inventory needs to be updated.",
+                    "type": "step",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "7.3.7.a",
+                            "text": "The zero trust architecture is expanded to further processes in planned phases.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "7.3.7.b",
+                            "text": "Policies and monitoring are reviewed when new resources, subjects or processes are added.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "sp800207"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,123 @@
+{
+    "objectives": {
+        "2.1.1": [
+            "All data sources, computing services, SaaS applications and devices that can access enterprise resources, including personally owned devices where permitted, are inventoried as resources.",
+            "Each resource has an owner and is covered by access policy."
+        ],
+        "2.1.2": [
+            "Access requests from inside the enterprise network are subject to the same authentication and authorization as requests from outside.",
+            "Communications are encrypted and integrity-protected with source authentication, regardless of network location."
+        ],
+        "2.1.3": [
+            "Access is granted per session to an individual resource, with trust in the requester evaluated before access.",
+            "Access is limited to the least privilege needed for the task, and access to one resource does not grant access to another."
+        ],
+        "2.1.4": [
+            "Access policy is defined from attributes of the subject identity, the application or service and the requesting asset.",
+            "Policy can take behavioral and environmental attributes (such as location, time, device posture and threat state) into account.",
+            "Policy varies with the sensitivity of the resource or data."
+        ],
+        "2.1.5": [
+            "The security posture of owned and associated assets is continuously monitored (for example through a CDM or endpoint management system).",
+            "Asset posture is evaluated as part of each access decision, and non-compliant or unmanaged assets are restricted or denied.",
+            "Patches and fixes are applied based on monitoring results."
+        ],
+        "2.1.6": [
+            "An identity, credential and access management (ICAM) system and asset management system are in place.",
+            "Multi-factor authentication is used for access to enterprise resources.",
+            "Sessions are continuously monitored, with reauthentication and reauthorization triggered by policy (for example time, new resource or anomalous activity)."
+        ],
+        "2.1.7": [
+            "Data on asset posture, network traffic and access requests is collected centrally.",
+            "Collected data is analysed and used to improve access policy and enforcement."
+        ],
+        "2.2.1": [
+            "The enterprise private network is not treated as an implicit trust zone in network and access design.",
+            "Internal connections are authenticated and internal traffic is encrypted."
+        ],
+        "2.2.2": [
+            "Access by non-enterprise-owned devices (BYOD, contractors, visitors) is governed by defined policy.",
+            "Non-enterprise-owned devices are identified and given access appropriate to their posture."
+        ],
+        "2.2.3": [
+            "Every asset's security posture is evaluated by a policy enforcement point before access to an enterprise resource is granted.",
+            "Device authentication is required in addition to subject credentials."
+        ],
+        "2.2.4": [
+            "Resources on non-enterprise infrastructure (cloud services, remote subjects) are included in the zero trust architecture.",
+            "Dependencies on non-enterprise network services (such as DNS) are identified and protected."
+        ],
+        "2.2.5": [
+            "Remote connections are authenticated, authorized and encrypted, assuming the local network is hostile.",
+            "Remote assets are configured to operate safely on untrusted networks."
+        ],
+        "2.2.6": [
+            "Security policy and posture are applied consistently to assets and workloads on enterprise and non-enterprise infrastructure.",
+            "Workloads moving to or from cloud environments keep their security controls."
+        ],
+        "3.PE": [
+            "A policy engine makes and logs grant, deny or revoke decisions for access to resources.",
+            "The policy engine uses enterprise policy and external inputs (such as CDM and threat intelligence) in a defined trust algorithm."
+        ],
+        "3.PA": [
+            "A policy administrator establishes and shuts down communication paths based on policy engine decisions.",
+            "Session-specific credentials or tokens are issued for authorized sessions."
+        ],
+        "3.PEP": [
+            "Policy enforcement points enable, monitor and terminate connections between subjects and resources.",
+            "No path to protected resources bypasses a policy enforcement point."
+        ],
+        "3.CDM": [
+            "A continuous diagnostics and mitigation or equivalent system reports asset state (patch level, approved software, known vulnerabilities) to access decisions."
+        ],
+        "3.ICS": [
+            "Regulatory and industry compliance requirements are encoded in policy rules used for access decisions."
+        ],
+        "3.TIF": [
+            "Threat intelligence from internal and external sources feeds access decisions."
+        ],
+        "3.LOG": [
+            "Asset logs, network traffic and resource access events are aggregated and available as near-real-time feedback on security posture."
+        ],
+        "3.DAP": [
+            "Data access policies define the attributes and rules for access to enterprise resources, based on mission roles and needs.",
+            "Data access policies are maintained and reviewed."
+        ],
+        "3.PKI": [
+            "An enterprise PKI issues and logs certificates for resources, subjects, services and applications."
+        ],
+        "3.IDM": [
+            "An identity management system creates, stores and manages enterprise accounts and identity attributes, including roles and assigned assets."
+        ],
+        "3.SIEM": [
+            "A SIEM collects security information that is used to refine policy and warn of possible attacks."
+        ],
+        "7.3.1": [
+            "Subjects (users and non-person entities such as service accounts) and their privileges are identified.",
+            "Privileged and service accounts are documented."
+        ],
+        "7.3.2": [
+            "Enterprise assets (hardware, software, services, data) are identified and catalogued, including shadow IT.",
+            "Asset attributes needed for access decisions are recorded."
+        ],
+        "7.3.3": [
+            "Business processes, data flows and their dependencies are identified.",
+            "Processes are ranked by risk to choose candidates for the first zero trust migration."
+        ],
+        "7.3.4": [
+            "Access policies for the candidate process are written in terms of subjects, resources and attributes.",
+            "Trust levels and confidence thresholds for access are defined."
+        ],
+        "7.3.5": [
+            "Candidate zero trust solutions are evaluated against the enterprise's requirements and deployment model."
+        ],
+        "7.3.6": [
+            "The initial deployment is run in a monitoring mode with policies tuned from observed traffic.",
+            "Access and policy decisions are logged and reviewed during the initial deployment."
+        ],
+        "7.3.7": [
+            "The zero trust architecture is expanded to further processes in planned phases.",
+            "Policies and monitoring are reviewed when new resources, subjects or processes are added."
+        ]
+    }
+}
