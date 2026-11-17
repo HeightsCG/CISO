@@ -1,0 +1,243 @@
+{
+    "families": [
+        {
+            "code": "ITGC-GOV",
+            "name": "ITGC Scoping and Governance",
+            "controls": [
+                {
+                    "id": "ITGC-GOV-01",
+                    "title": "In-scope systems and ITGC matrix",
+                    "description": "The applications, databases, operating systems and infrastructure that support financially significant processes and key reports are identified, and the ITGCs that cover them are documented in a control matrix.",
+                    "guidance": "Review the system inventory mapped to significant accounts and key controls, the ITGC risk and control matrix (control owner, frequency, type, evidence), and how scope is refreshed each year with the external auditor.",
+                    "objectives": [
+                        "Systems relevant to financial reporting are identified and mapped to significant processes and key automated controls.",
+                        "An ITGC matrix records each control's owner, frequency, nature (manual or automated) and evidence.",
+                        "Scope is reviewed at least annually and on significant system change."
+                    ]
+                },
+                {
+                    "id": "ITGC-GOV-02",
+                    "title": "Segregation of duties",
+                    "description": "Incompatible duties in IT and in financial applications are identified and separated, or compensating controls exist where separation is not practical.",
+                    "guidance": "Review the SoD rule set or conflict matrix for key applications, conflict reports and resolutions, and compensating controls (for example independent review of activity) where conflicts are accepted.",
+                    "objectives": [
+                        "A documented conflict matrix defines incompatible duties for in-scope systems.",
+                        "Conflicts are detected periodically and resolved or covered by documented compensating controls.",
+                        "Developers do not have the ability to move changes into production unreviewed."
+                    ]
+                },
+                {
+                    "id": "ITGC-GOV-03",
+                    "title": "Service organizations",
+                    "description": "Where an outsourced provider operates in-scope systems or controls, SOC 1 reports are obtained and evaluated, including complementary user entity controls.",
+                    "guidance": "Review the list of relevant service organizations, the SOC 1 Type 2 reports obtained, the evaluation of exceptions and coverage period, bridge letters, and the operation of complementary user entity controls.",
+                    "objectives": [
+                        "Service organizations relevant to financial reporting are identified.",
+                        "SOC 1 reports are obtained, reviewed for scope, period and exceptions, and the review is documented.",
+                        "Complementary user entity controls listed in the reports are in place and tested."
+                    ]
+                },
+                {
+                    "id": "ITGC-GOV-04",
+                    "title": "Testing, evidence and deficiency evaluation",
+                    "description": "ITGCs are tested for design and operating effectiveness, evidence is retained, and deficiencies are evaluated for their effect on financial reporting and remediated.",
+                    "guidance": "Review test plans, sample sizes, the evidence and testing tracker, deficiency evaluation (deficiency, significant deficiency, material weakness) and remediation tracking.",
+                    "objectives": [
+                        "Each ITGC is tested for design and operating effectiveness with evidence retained.",
+                        "Deficiencies are evaluated for severity and their impact on dependent automated controls and reports.",
+                        "Remediation is tracked and retested before year end where possible."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "ITGC-AC",
+            "name": "Access to Programs and Data",
+            "controls": [
+                {
+                    "id": "ITGC-AC-01",
+                    "title": "User access provisioning",
+                    "description": "Access to in-scope applications, databases and operating systems is requested, approved by an appropriate person and granted as approved.",
+                    "guidance": "Sample new users and access changes across the period and agree each to an approved request made before access was granted.",
+                    "objectives": [
+                        "New and changed access is approved by an authorized person before it is granted.",
+                        "Access granted matches what was approved."
+                    ]
+                },
+                {
+                    "id": "ITGC-AC-02",
+                    "title": "Timely removal of access",
+                    "description": "Access of terminated users and users who change roles is removed within a defined period.",
+                    "guidance": "Compare HR termination lists with system account lists and last-login data, and sample terminations for removal within the defined period.",
+                    "objectives": [
+                        "Access is removed within a defined period of termination.",
+                        "Access no longer needed after a role change is removed.",
+                        "Terminated users did not use their accounts after termination."
+                    ]
+                },
+                {
+                    "id": "ITGC-AC-03",
+                    "title": "Periodic user access review",
+                    "description": "Application owners review user access and privileges to in-scope systems at least quarterly, and inappropriate access is removed.",
+                    "guidance": "Check that review populations were complete and accurate, reviewers were appropriate and independent, and changes requested in the review were made.",
+                    "objectives": [
+                        "User access to in-scope systems is reviewed at defined intervals by appropriate owners.",
+                        "The completeness and accuracy of the user lists reviewed is validated.",
+                        "Changes identified in the review are completed and evidenced."
+                    ]
+                },
+                {
+                    "id": "ITGC-AC-04",
+                    "title": "Privileged access",
+                    "description": "Administrator, superuser and direct database access to in-scope systems is restricted to authorized people and its use is monitored.",
+                    "guidance": "Review lists of privileged accounts at application, database and operating system level, justification for each, shared and generic account controls, and review of privileged activity logs.",
+                    "objectives": [
+                        "Privileged access is limited to authorized people with a documented need.",
+                        "Shared and generic privileged accounts are controlled and their use is attributable.",
+                        "Privileged activity is logged and reviewed."
+                    ]
+                },
+                {
+                    "id": "ITGC-AC-05",
+                    "title": "Authentication",
+                    "description": "Authentication to in-scope systems meets password and multi-factor requirements, and system-level security settings are configured as required.",
+                    "guidance": "Inspect password and lockout settings for each in-scope layer, MFA for remote and privileged access, and single sign-on configuration.",
+                    "objectives": [
+                        "Password and lockout settings meet the documented standard on each in-scope system.",
+                        "Remote and privileged access requires multi-factor authentication."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "ITGC-PC",
+            "name": "Program Change",
+            "controls": [
+                {
+                    "id": "ITGC-PC-01",
+                    "title": "Change authorization, testing and approval",
+                    "description": "Changes to in-scope applications, databases, configurations and infrastructure are authorized, tested and approved before being moved to production.",
+                    "guidance": "Sample changes from a complete population (ideally from system-generated change logs) for a request, testing evidence, user acceptance and approval before deployment.",
+                    "objectives": [
+                        "Changes are documented and authorized.",
+                        "Changes are tested, including user acceptance testing where relevant.",
+                        "Changes are approved before deployment to production."
+                    ]
+                },
+                {
+                    "id": "ITGC-PC-02",
+                    "title": "Segregation of development and production",
+                    "description": "People who develop changes cannot deploy them to production, and development, test and production environments are separated.",
+                    "guidance": "Review who can deploy to production, environment separation and any developer access to production with its monitoring.",
+                    "objectives": [
+                        "Developers cannot migrate their own changes to production, or such migrations are independently reviewed.",
+                        "Development, test and production environments are separated."
+                    ]
+                },
+                {
+                    "id": "ITGC-PC-03",
+                    "title": "Emergency changes",
+                    "description": "Emergency changes follow a defined process and are documented, tested where possible and approved after implementation within a defined period.",
+                    "guidance": "Sample emergency changes for retrospective approval within the defined period and for appropriate justification.",
+                    "objectives": [
+                        "Emergency changes follow a documented process.",
+                        "Emergency changes are approved retrospectively within a defined period."
+                    ]
+                },
+                {
+                    "id": "ITGC-PC-04",
+                    "title": "Change monitoring",
+                    "description": "Changes deployed to production are compared with approved change records to detect unauthorized changes.",
+                    "guidance": "Review change detection reports, deployment logs reconciled to tickets, and follow-up of unmatched changes.",
+                    "objectives": [
+                        "Production changes are reconciled to approved change records at defined intervals.",
+                        "Unauthorized changes are investigated and resolved."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "ITGC-PD",
+            "name": "Program Development",
+            "controls": [
+                {
+                    "id": "ITGC-PD-01",
+                    "title": "System development and acquisition",
+                    "description": "New systems and major upgrades follow a development or acquisition lifecycle with requirements, design review, testing and management approval.",
+                    "guidance": "Review the SDLC or project methodology, and for new in-scope systems check requirements, testing, user sign-off and go-live approval.",
+                    "objectives": [
+                        "New in-scope systems follow a documented lifecycle with defined approvals.",
+                        "Testing and user acceptance are completed and signed off before go-live."
+                    ]
+                },
+                {
+                    "id": "ITGC-PD-02",
+                    "title": "Data conversion and migration",
+                    "description": "Data migrated into new or upgraded systems is complete and accurate, with reconciliations reviewed and approved.",
+                    "guidance": "Review the migration plan, reconciliations of record counts and balances, exceptions and sign-off.",
+                    "objectives": [
+                        "Data migrations are reconciled for completeness and accuracy.",
+                        "Reconciliation results and exceptions are reviewed and approved before go-live."
+                    ]
+                },
+                {
+                    "id": "ITGC-PD-03",
+                    "title": "Post-implementation review",
+                    "description": "After go-live, new systems are reviewed to confirm they operate as intended and that key automated controls and reports work correctly.",
+                    "guidance": "Check post-implementation reviews and validation of key automated controls, interfaces and reports in the new system.",
+                    "objectives": [
+                        "A post-implementation review is completed for new in-scope systems.",
+                        "Key automated controls, interfaces and reports are validated in the new system."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "ITGC-CO",
+            "name": "Computer Operations",
+            "controls": [
+                {
+                    "id": "ITGC-CO-01",
+                    "title": "Job scheduling and monitoring",
+                    "description": "Scheduled jobs and interfaces that process financial data are authorized, monitored, and failures are resolved.",
+                    "guidance": "Review who can change job schedules, job failure alerts, the resolution log and interface reconciliations.",
+                    "objectives": [
+                        "Changes to scheduled jobs are restricted and authorized.",
+                        "Job and interface failures are detected, logged and resolved."
+                    ]
+                },
+                {
+                    "id": "ITGC-CO-02",
+                    "title": "Backup and recovery",
+                    "description": "Financial data and in-scope systems are backed up on schedule, backup failures are resolved, and restores are tested.",
+                    "guidance": "Review backup configuration, failure monitoring and resolution, offsite or immutable copies and restore tests.",
+                    "objectives": [
+                        "Backups of in-scope systems and data run on a defined schedule.",
+                        "Backup failures are investigated and resolved.",
+                        "Restores are tested at defined intervals."
+                    ]
+                },
+                {
+                    "id": "ITGC-CO-03",
+                    "title": "Incident and problem management",
+                    "description": "IT incidents and problems affecting in-scope systems are recorded, prioritized, resolved and reviewed for impact on financial data.",
+                    "guidance": "Review the incident log for in-scope systems and assess whether any incident affected processing or data integrity.",
+                    "objectives": [
+                        "Incidents affecting in-scope systems are recorded and resolved.",
+                        "Incidents that may affect financial data are assessed and escalated."
+                    ]
+                },
+                {
+                    "id": "ITGC-CO-04",
+                    "title": "Physical and environmental protection",
+                    "description": "Data centres and server rooms housing in-scope systems restrict physical access and protect against environmental threats.",
+                    "guidance": "Review physical access lists and reviews for the facility, or the hosting provider's SOC report where hosted externally.",
+                    "objectives": [
+                        "Physical access to facilities housing in-scope systems is restricted and reviewed.",
+                        "Where hosted externally, the provider's assurance report covers physical security."
+                    ]
+                }
+            ]
+        }
+    ]
+}

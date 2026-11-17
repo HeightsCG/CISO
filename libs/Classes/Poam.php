@@ -177,6 +177,7 @@ class Poam
         'iso-27018' => 'none',
         'hitrust' => 'none',
         'cis-controls' => 'none',
+        'sox-itgc' => 'none',
         'nydfs-500' => 'none',
         'nis2' => 'none',
         'dora' => 'none',

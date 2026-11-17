@@ -1,0 +1,156 @@
+{
+    "key": "sox-itgc",
+    "name": "SOX ITGC",
+    "version": "HCG control set 2026",
+    "full_name": "Sarbanes-Oxley Act Section 404 IT general controls: HCG control set",
+    "issuing_body": "Heights Consulting Group, for internal control over financial reporting under SOX Section 404 and SEC Rule 13a-15",
+    "standard_codes": [
+        "SOX-ITGC"
+    ],
+    "aliases": [
+        "SOX",
+        "SOX 404",
+        "SOX ITGC",
+        "IT general controls",
+        "ICFR"
+    ],
+    "content_licence": "hcg_authored",
+    "notice": "HCG control set for IT general controls supporting internal control over financial reporting. SOX and the SEC rules set the obligation to maintain and assess internal control but do not list IT controls; the controls here follow the four ITGC domains auditors commonly test (access to programs and data, program change, program development, computer operations) and are written by HCG. Management's assessment and the auditor's attestation are performed against the company's chosen control framework (commonly COSO 2013) and PCAOB AS 2201.",
+    "sources": [
+        {
+            "id": "usc7262",
+            "title": "15 U.S.C. 7262, Management assessment of internal controls (Sarbanes-Oxley Act section 404)",
+            "version": "United States Code, 2023 edition",
+            "publisher": "U.S. Government Publishing Office",
+            "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap98-subchapIV-sec7262.htm",
+            "file": "sox/15-usc-7262.html",
+            "sha256": "8b32ef33da722fa516fa3704c0815e55bba31633215bdc044eb52a0bdf0a53d7"
+        },
+        {
+            "id": "cfr13a15",
+            "title": "17 CFR 240.13a-15, Controls and procedures",
+            "version": "eCFR as of 1 November 2026",
+            "publisher": "eCFR, Office of the Federal Register",
+            "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-11-01/title-17.xml?part=240&section=240.13a-15",
+            "file": "sox/17-cfr-240-13a-15.xml",
+            "date": "2026-11-01",
+            "sha256": "2886a598242915ddd147ada9d336b6c4f10404c2413fd30fa812d3bd332c9710"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG SOX ITGC control set: controls, guidance and test points",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "hcg",
+        "objectives": "hcg",
+        "guidance": "hcg"
+    },
+    "control_flags": {
+        "type": "hcg for an HCG-written readiness control."
+    },
+    "terminology": {
+        "control": "control",
+        "controls": "controls",
+        "family": "theme",
+        "families": "themes",
+        "objective": "test point",
+        "objectives": "test points",
+        "plan": "Corrective action plan",
+        "plan_short": "Corrective action plan",
+        "score": "Implementation score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable ITGCs operating effectively, with partial effectiveness counting as half. SOX defines no score; management concludes whether internal control over financial reporting is effective, and any material weakness means it is not. This percentage is an HCG readiness measure."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "An ITGC is effective only when every HCG test point under it is met.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
+            "id": "management_assessment",
+            "type": "applicability",
+            "summary": "Management must assess the effectiveness of internal control over financial reporting as of each fiscal year end; ITGCs are in scope where they support systems relevant to financial reporting.",
+            "source": "cfr13a15",
+            "cite": "17 CFR 240.13a-15(c)",
+            "quote": "the effectiveness, as of the end of each fiscal year, of the issuer's internal control over financial reporting"
+        },
+        {
+            "id": "recognized_framework",
+            "type": "applicability",
+            "summary": "Management's evaluation must be based on a suitable, recognized control framework, commonly COSO 2013; these ITGCs support that framework's control activities over technology.",
+            "source": "cfr13a15",
+            "cite": "17 CFR 240.13a-15(c)",
+            "quote": "must be a suitable, recognized control framework that is established by a body or group that has followed due-process procedures"
+        },
+        {
+            "id": "auditor_attestation",
+            "type": "applicability",
+            "summary": "The external auditor must attest to management's assessment, except for emerging growth companies and issuers that are neither large accelerated nor accelerated filers.",
+            "source": "usc7262",
+            "cite": "15 U.S.C. 7262(b) and (c)",
+            "quote": "shall attest to, and report on, the assessment made by the management of the issuer"
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "In the readiness score a partially effective ITGC counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "ICFR",
+            "definition": "Internal control over financial reporting: the process that provides reasonable assurance about the reliability of financial reporting."
+        },
+        {
+            "term": "ITGC",
+            "definition": "IT general control: a control over the IT environment (access, change, development, operations) that supports the reliable operation of application controls and the integrity of financial data."
+        },
+        {
+            "term": "Material weakness",
+            "definition": "A deficiency, or combination of deficiencies, in ICFR such that there is a reasonable possibility that a material misstatement will not be prevented or detected on a timely basis."
+        },
+        {
+            "term": "Significant deficiency",
+            "definition": "A deficiency in ICFR less severe than a material weakness yet important enough to merit the attention of those overseeing financial reporting."
+        },
+        {
+            "term": "SOC 1 report",
+            "definition": "A service auditor's report on a service organization's controls relevant to user entities' financial reporting."
+        }
+    ]
+}

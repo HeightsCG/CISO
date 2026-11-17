@@ -1,0 +1,724 @@
+{
+    "key": "sox-itgc",
+    "name": "SOX ITGC",
+    "version": "HCG control set 2026",
+    "full_name": "Sarbanes-Oxley Act Section 404 IT general controls: HCG control set",
+    "issuing_body": "Heights Consulting Group, for internal control over financial reporting under SOX Section 404 and SEC Rule 13a-15",
+    "standard_codes": [
+        "SOX-ITGC"
+    ],
+    "aliases": [
+        "SOX",
+        "SOX 404",
+        "SOX ITGC",
+        "IT general controls",
+        "ICFR"
+    ],
+    "content_licence": "hcg_authored",
+    "notice": "HCG control set for IT general controls supporting internal control over financial reporting. SOX and the SEC rules set the obligation to maintain and assess internal control but do not list IT controls; the controls here follow the four ITGC domains auditors commonly test (access to programs and data, program change, program development, computer operations) and are written by HCG. Management's assessment and the auditor's attestation are performed against the company's chosen control framework (commonly COSO 2013) and PCAOB AS 2201.",
+    "sources": [
+        {
+            "id": "usc7262",
+            "title": "15 U.S.C. 7262, Management assessment of internal controls (Sarbanes-Oxley Act section 404)",
+            "version": "United States Code, 2023 edition",
+            "publisher": "U.S. Government Publishing Office",
+            "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap98-subchapIV-sec7262.htm",
+            "file": "sox/15-usc-7262.html",
+            "sha256": "8b32ef33da722fa516fa3704c0815e55bba31633215bdc044eb52a0bdf0a53d7"
+        },
+        {
+            "id": "cfr13a15",
+            "title": "17 CFR 240.13a-15, Controls and procedures",
+            "version": "eCFR as of 1 November 2026",
+            "publisher": "eCFR, Office of the Federal Register",
+            "url": "https://www.ecfr.gov/api/versioner/v1/full/2026-11-01/title-17.xml?part=240&section=240.13a-15",
+            "file": "sox/17-cfr-240-13a-15.xml",
+            "date": "2026-11-01",
+            "sha256": "2886a598242915ddd147ada9d336b6c4f10404c2413fd30fa812d3bd332c9710"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG SOX ITGC control set: controls, guidance and test points",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "hcg",
+        "objectives": "hcg",
+        "guidance": "hcg"
+    },
+    "control_flags": {
+        "type": "hcg for an HCG-written readiness control."
+    },
+    "terminology": {
+        "control": "control",
+        "controls": "controls",
+        "family": "theme",
+        "families": "themes",
+        "objective": "test point",
+        "objectives": "test points",
+        "plan": "Corrective action plan",
+        "plan_short": "Corrective action plan",
+        "score": "Implementation score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable ITGCs operating effectively, with partial effectiveness counting as half. SOX defines no score; management concludes whether internal control over financial reporting is effective, and any material weakness means it is not. This percentage is an HCG readiness measure."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "An ITGC is effective only when every HCG test point under it is met.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
+            "id": "management_assessment",
+            "type": "applicability",
+            "summary": "Management must assess the effectiveness of internal control over financial reporting as of each fiscal year end; ITGCs are in scope where they support systems relevant to financial reporting.",
+            "source": "cfr13a15",
+            "cite": "17 CFR 240.13a-15(c)",
+            "quote": "the effectiveness, as of the end of each fiscal year, of the issuer's internal control over financial reporting"
+        },
+        {
+            "id": "recognized_framework",
+            "type": "applicability",
+            "summary": "Management's evaluation must be based on a suitable, recognized control framework, commonly COSO 2013; these ITGCs support that framework's control activities over technology.",
+            "source": "cfr13a15",
+            "cite": "17 CFR 240.13a-15(c)",
+            "quote": "must be a suitable, recognized control framework that is established by a body or group that has followed due-process procedures"
+        },
+        {
+            "id": "auditor_attestation",
+            "type": "applicability",
+            "summary": "The external auditor must attest to management's assessment, except for emerging growth companies and issuers that are neither large accelerated nor accelerated filers.",
+            "source": "usc7262",
+            "cite": "15 U.S.C. 7262(b) and (c)",
+            "quote": "shall attest to, and report on, the assessment made by the management of the issuer"
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "In the readiness score a partially effective ITGC counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "ICFR",
+            "definition": "Internal control over financial reporting: the process that provides reasonable assurance about the reliability of financial reporting."
+        },
+        {
+            "term": "ITGC",
+            "definition": "IT general control: a control over the IT environment (access, change, development, operations) that supports the reliable operation of application controls and the integrity of financial data."
+        },
+        {
+            "term": "Material weakness",
+            "definition": "A deficiency, or combination of deficiencies, in ICFR such that there is a reasonable possibility that a material misstatement will not be prevented or detected on a timely basis."
+        },
+        {
+            "term": "Significant deficiency",
+            "definition": "A deficiency in ICFR less severe than a material weakness yet important enough to merit the attention of those overseeing financial reporting."
+        },
+        {
+            "term": "SOC 1 report",
+            "definition": "A service auditor's report on a service organization's controls relevant to user entities' financial reporting."
+        }
+    ],
+    "display_name": "SOX ITGC (HCG control set 2026)",
+    "counts": {
+        "families": 5,
+        "controls": 20,
+        "objectives": 49
+    },
+    "families": [
+        {
+            "number": "ITGC-GOV",
+            "code": "ITGC-GOV",
+            "name": "ITGC Scoping and Governance",
+            "controls": [
+                {
+                    "id": "ITGC-GOV-01",
+                    "number": "ITGC-GOV-01",
+                    "title": "In-scope systems and ITGC matrix",
+                    "text": "",
+                    "description": "The applications, databases, operating systems and infrastructure that support financially significant processes and key reports are identified, and the ITGCs that cover them are documented in a control matrix.",
+                    "guidance": "Review the system inventory mapped to significant accounts and key controls, the ITGC risk and control matrix (control owner, frequency, type, evidence), and how scope is refreshed each year with the external auditor.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-GOV-01.a",
+                            "text": "Systems relevant to financial reporting are identified and mapped to significant processes and key automated controls.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-GOV-01.b",
+                            "text": "An ITGC matrix records each control's owner, frequency, nature (manual or automated) and evidence.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-GOV-01.c",
+                            "text": "Scope is reviewed at least annually and on significant system change.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "ITGC-GOV-02",
+                    "number": "ITGC-GOV-02",
+                    "title": "Segregation of duties",
+                    "text": "",
+                    "description": "Incompatible duties in IT and in financial applications are identified and separated, or compensating controls exist where separation is not practical.",
+                    "guidance": "Review the SoD rule set or conflict matrix for key applications, conflict reports and resolutions, and compensating controls (for example independent review of activity) where conflicts are accepted.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-GOV-02.a",
+                            "text": "A documented conflict matrix defines incompatible duties for in-scope systems.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-GOV-02.b",
+                            "text": "Conflicts are detected periodically and resolved or covered by documented compensating controls.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-GOV-02.c",
+                            "text": "Developers do not have the ability to move changes into production unreviewed.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "ITGC-GOV-03",
+                    "number": "ITGC-GOV-03",
+                    "title": "Service organizations",
+                    "text": "",
+                    "description": "Where an outsourced provider operates in-scope systems or controls, SOC 1 reports are obtained and evaluated, including complementary user entity controls.",
+                    "guidance": "Review the list of relevant service organizations, the SOC 1 Type 2 reports obtained, the evaluation of exceptions and coverage period, bridge letters, and the operation of complementary user entity controls.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-GOV-03.a",
+                            "text": "Service organizations relevant to financial reporting are identified.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-GOV-03.b",
+                            "text": "SOC 1 reports are obtained, reviewed for scope, period and exceptions, and the review is documented.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-GOV-03.c",
+                            "text": "Complementary user entity controls listed in the reports are in place and tested.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "ITGC-GOV-04",
+                    "number": "ITGC-GOV-04",
+                    "title": "Testing, evidence and deficiency evaluation",
+                    "text": "",
+                    "description": "ITGCs are tested for design and operating effectiveness, evidence is retained, and deficiencies are evaluated for their effect on financial reporting and remediated.",
+                    "guidance": "Review test plans, sample sizes, the evidence and testing tracker, deficiency evaluation (deficiency, significant deficiency, material weakness) and remediation tracking.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-GOV-04.a",
+                            "text": "Each ITGC is tested for design and operating effectiveness with evidence retained.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-GOV-04.b",
+                            "text": "Deficiencies are evaluated for severity and their impact on dependent automated controls and reports.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-GOV-04.c",
+                            "text": "Remediation is tracked and retested before year end where possible.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "ITGC-AC",
+            "code": "ITGC-AC",
+            "name": "Access to Programs and Data",
+            "controls": [
+                {
+                    "id": "ITGC-AC-01",
+                    "number": "ITGC-AC-01",
+                    "title": "User access provisioning",
+                    "text": "",
+                    "description": "Access to in-scope applications, databases and operating systems is requested, approved by an appropriate person and granted as approved.",
+                    "guidance": "Sample new users and access changes across the period and agree each to an approved request made before access was granted.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-AC-01.a",
+                            "text": "New and changed access is approved by an authorized person before it is granted.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-AC-01.b",
+                            "text": "Access granted matches what was approved.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "ITGC-AC-02",
+                    "number": "ITGC-AC-02",
+                    "title": "Timely removal of access",
+                    "text": "",
+                    "description": "Access of terminated users and users who change roles is removed within a defined period.",
+                    "guidance": "Compare HR termination lists with system account lists and last-login data, and sample terminations for removal within the defined period.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-AC-02.a",
+                            "text": "Access is removed within a defined period of termination.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-AC-02.b",
+                            "text": "Access no longer needed after a role change is removed.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-AC-02.c",
+                            "text": "Terminated users did not use their accounts after termination.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "ITGC-AC-03",
+                    "number": "ITGC-AC-03",
+                    "title": "Periodic user access review",
+                    "text": "",
+                    "description": "Application owners review user access and privileges to in-scope systems at least quarterly, and inappropriate access is removed.",
+                    "guidance": "Check that review populations were complete and accurate, reviewers were appropriate and independent, and changes requested in the review were made.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-AC-03.a",
+                            "text": "User access to in-scope systems is reviewed at defined intervals by appropriate owners.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-AC-03.b",
+                            "text": "The completeness and accuracy of the user lists reviewed is validated.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-AC-03.c",
+                            "text": "Changes identified in the review are completed and evidenced.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "ITGC-AC-04",
+                    "number": "ITGC-AC-04",
+                    "title": "Privileged access",
+                    "text": "",
+                    "description": "Administrator, superuser and direct database access to in-scope systems is restricted to authorized people and its use is monitored.",
+                    "guidance": "Review lists of privileged accounts at application, database and operating system level, justification for each, shared and generic account controls, and review of privileged activity logs.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-AC-04.a",
+                            "text": "Privileged access is limited to authorized people with a documented need.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-AC-04.b",
+                            "text": "Shared and generic privileged accounts are controlled and their use is attributable.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-AC-04.c",
+                            "text": "Privileged activity is logged and reviewed.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "ITGC-AC-05",
+                    "number": "ITGC-AC-05",
+                    "title": "Authentication",
+                    "text": "",
+                    "description": "Authentication to in-scope systems meets password and multi-factor requirements, and system-level security settings are configured as required.",
+                    "guidance": "Inspect password and lockout settings for each in-scope layer, MFA for remote and privileged access, and single sign-on configuration.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-AC-05.a",
+                            "text": "Password and lockout settings meet the documented standard on each in-scope system.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-AC-05.b",
+                            "text": "Remote and privileged access requires multi-factor authentication.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "ITGC-PC",
+            "code": "ITGC-PC",
+            "name": "Program Change",
+            "controls": [
+                {
+                    "id": "ITGC-PC-01",
+                    "number": "ITGC-PC-01",
+                    "title": "Change authorization, testing and approval",
+                    "text": "",
+                    "description": "Changes to in-scope applications, databases, configurations and infrastructure are authorized, tested and approved before being moved to production.",
+                    "guidance": "Sample changes from a complete population (ideally from system-generated change logs) for a request, testing evidence, user acceptance and approval before deployment.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-PC-01.a",
+                            "text": "Changes are documented and authorized.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-PC-01.b",
+                            "text": "Changes are tested, including user acceptance testing where relevant.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-PC-01.c",
+                            "text": "Changes are approved before deployment to production.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "ITGC-PC-02",
+                    "number": "ITGC-PC-02",
+                    "title": "Segregation of development and production",
+                    "text": "",
+                    "description": "People who develop changes cannot deploy them to production, and development, test and production environments are separated.",
+                    "guidance": "Review who can deploy to production, environment separation and any developer access to production with its monitoring.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-PC-02.a",
+                            "text": "Developers cannot migrate their own changes to production, or such migrations are independently reviewed.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-PC-02.b",
+                            "text": "Development, test and production environments are separated.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "ITGC-PC-03",
+                    "number": "ITGC-PC-03",
+                    "title": "Emergency changes",
+                    "text": "",
+                    "description": "Emergency changes follow a defined process and are documented, tested where possible and approved after implementation within a defined period.",
+                    "guidance": "Sample emergency changes for retrospective approval within the defined period and for appropriate justification.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-PC-03.a",
+                            "text": "Emergency changes follow a documented process.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-PC-03.b",
+                            "text": "Emergency changes are approved retrospectively within a defined period.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "ITGC-PC-04",
+                    "number": "ITGC-PC-04",
+                    "title": "Change monitoring",
+                    "text": "",
+                    "description": "Changes deployed to production are compared with approved change records to detect unauthorized changes.",
+                    "guidance": "Review change detection reports, deployment logs reconciled to tickets, and follow-up of unmatched changes.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-PC-04.a",
+                            "text": "Production changes are reconciled to approved change records at defined intervals.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-PC-04.b",
+                            "text": "Unauthorized changes are investigated and resolved.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "ITGC-PD",
+            "code": "ITGC-PD",
+            "name": "Program Development",
+            "controls": [
+                {
+                    "id": "ITGC-PD-01",
+                    "number": "ITGC-PD-01",
+                    "title": "System development and acquisition",
+                    "text": "",
+                    "description": "New systems and major upgrades follow a development or acquisition lifecycle with requirements, design review, testing and management approval.",
+                    "guidance": "Review the SDLC or project methodology, and for new in-scope systems check requirements, testing, user sign-off and go-live approval.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-PD-01.a",
+                            "text": "New in-scope systems follow a documented lifecycle with defined approvals.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-PD-01.b",
+                            "text": "Testing and user acceptance are completed and signed off before go-live.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "ITGC-PD-02",
+                    "number": "ITGC-PD-02",
+                    "title": "Data conversion and migration",
+                    "text": "",
+                    "description": "Data migrated into new or upgraded systems is complete and accurate, with reconciliations reviewed and approved.",
+                    "guidance": "Review the migration plan, reconciliations of record counts and balances, exceptions and sign-off.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-PD-02.a",
+                            "text": "Data migrations are reconciled for completeness and accuracy.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-PD-02.b",
+                            "text": "Reconciliation results and exceptions are reviewed and approved before go-live.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "ITGC-PD-03",
+                    "number": "ITGC-PD-03",
+                    "title": "Post-implementation review",
+                    "text": "",
+                    "description": "After go-live, new systems are reviewed to confirm they operate as intended and that key automated controls and reports work correctly.",
+                    "guidance": "Check post-implementation reviews and validation of key automated controls, interfaces and reports in the new system.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-PD-03.a",
+                            "text": "A post-implementation review is completed for new in-scope systems.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-PD-03.b",
+                            "text": "Key automated controls, interfaces and reports are validated in the new system.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        },
+        {
+            "number": "ITGC-CO",
+            "code": "ITGC-CO",
+            "name": "Computer Operations",
+            "controls": [
+                {
+                    "id": "ITGC-CO-01",
+                    "number": "ITGC-CO-01",
+                    "title": "Job scheduling and monitoring",
+                    "text": "",
+                    "description": "Scheduled jobs and interfaces that process financial data are authorized, monitored, and failures are resolved.",
+                    "guidance": "Review who can change job schedules, job failure alerts, the resolution log and interface reconciliations.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-CO-01.a",
+                            "text": "Changes to scheduled jobs are restricted and authorized.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-CO-01.b",
+                            "text": "Job and interface failures are detected, logged and resolved.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "ITGC-CO-02",
+                    "number": "ITGC-CO-02",
+                    "title": "Backup and recovery",
+                    "text": "",
+                    "description": "Financial data and in-scope systems are backed up on schedule, backup failures are resolved, and restores are tested.",
+                    "guidance": "Review backup configuration, failure monitoring and resolution, offsite or immutable copies and restore tests.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-CO-02.a",
+                            "text": "Backups of in-scope systems and data run on a defined schedule.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-CO-02.b",
+                            "text": "Backup failures are investigated and resolved.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-CO-02.c",
+                            "text": "Restores are tested at defined intervals.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "ITGC-CO-03",
+                    "number": "ITGC-CO-03",
+                    "title": "Incident and problem management",
+                    "text": "",
+                    "description": "IT incidents and problems affecting in-scope systems are recorded, prioritized, resolved and reviewed for impact on financial data.",
+                    "guidance": "Review the incident log for in-scope systems and assess whether any incident affected processing or data integrity.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-CO-03.a",
+                            "text": "Incidents affecting in-scope systems are recorded and resolved.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-CO-03.b",
+                            "text": "Incidents that may affect financial data are assessed and escalated.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                },
+                {
+                    "id": "ITGC-CO-04",
+                    "number": "ITGC-CO-04",
+                    "title": "Physical and environmental protection",
+                    "text": "",
+                    "description": "Data centres and server rooms housing in-scope systems restrict physical access and protect against environmental threats.",
+                    "guidance": "Review physical access lists and reviews for the facility, or the hosting provider's SOC report where hosted externally.",
+                    "type": "hcg",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ITGC-CO-04.a",
+                            "text": "Physical access to facilities housing in-scope systems is restricted and reviewed.",
+                            "source": "hcg"
+                        },
+                        {
+                            "id": "ITGC-CO-04.b",
+                            "text": "Where hosted externally, the provider's assurance report covers physical security.",
+                            "source": "hcg"
+                        }
+                    ],
+                    "source": "hcg"
+                }
+            ]
+        }
+    ]
+}
