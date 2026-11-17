@@ -31,11 +31,19 @@
         <div class="col-lg-6 dash__col">
             <div class="panel record__panel dash__panel">
                 <div class="panel__head">
-                    <h2 class="panel__title">Milestones, Next 30 Days</h2>
+                    <div class="dash__title-group">
+                        <h2 class="panel__title">Milestones</h2>
+                        <select id="milestone_days" class="form-select dash__window" aria-label="Milestones due within">
+                            <option value="7">7 days</option>
+                            <option value="30" selected>30 days</option>
+                            <option value="60">60 days</option>
+                            <option value="90">90 days</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="panel__body dash__scroll">
                     <ul class="metriclist dash__milestones" id="milestones"></ul>
-                    <p class="controls__empty" id="milestones_empty" hidden>No POA&amp;M milestones are due in the next 30 days.</p>
+                    <p class="controls__empty" id="milestones_empty" hidden></p>
                 </div>
             </div>
         </div>
@@ -205,11 +213,23 @@ $(document).ready(function () {
 
     function render_milestones() {
 
+        var days = parseInt($('#milestone_days').val(), 10);
+        var cutoff = new Date();
         var html = '';
+        var shown = 0;
+
+        cutoff.setDate(cutoff.getDate() + days);
+        cutoff = cutoff.getFullYear() + '-' + String(cutoff.getMonth() + 1).padStart(2, '0') + '-' + String(cutoff.getDate()).padStart(2, '0');
 
         for (var i = 0; i < data.milestones.length; i++) {
 
             var m = data.milestones[i];
+
+            if (m.due_date > cutoff) {
+                continue;
+            }
+
+            shown++;
 
             html += '<li class="metric rowlink">'
                 + '<span class="metric__label"><a class="rowlink__a" href="/assessments/detail/id/' + m.assessment_id + '">' + esc(m.milestone_text) + '</a>'
@@ -220,8 +240,14 @@ $(document).ready(function () {
         }
 
         $('#milestones').html(html);
-        $('#milestones_empty').prop('hidden', data.milestones.length > 0);
+        $('#milestones_empty').prop('hidden', shown > 0).text('No POA&M milestones are due in the next ' + days + ' days.');
     }
+
+    $('#milestone_days').on('change', function () {
+        if (data.milestones) {
+            render_milestones();
+        }
+    });
 
     function load() {
         ApiDataSvc.apiCall('post', 'load_dashboard', {}, function (payload) {

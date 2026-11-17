@@ -105,7 +105,10 @@ class DashboardModel extends Model {
         return parent::select($sql, $where);
     }
 
-    /** Milestones not yet completed that are due today or within the next 30 days. */
+    /**
+     * Milestones not yet completed that are due today or within the next 90 days, the
+     * longest window the dashboard offers; the page narrows it to the window chosen.
+     */
     public function upcoming_milestones($company_id)
     {
         $where = array(
@@ -129,11 +132,11 @@ class DashboardModel extends Model {
                     and
                     m.milestone_status <> 'Completed'
                     and
-                    m.due_date BETWEEN CURDATE() and CURDATE() + INTERVAL 30 DAY
+                    m.due_date BETWEEN CURDATE() and CURDATE() + INTERVAL 90 DAY
                 ORDER BY
                     m.due_date,
                     p.poam_ref
-                LIMIT 50";
+                LIMIT 200";
         return parent::select($sql, $where);
     }
 
