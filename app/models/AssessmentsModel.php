@@ -266,7 +266,7 @@ class AssessmentsModel extends Model {
         return $assessment_id;
     }
 
-    /** The standard an assessment is being cut from, active and in this org only. */
+    /** The standard an assessment is being cut from: active, from the shared library or this org's own. */
     public function assessment_standard($standard_id, $company_id)
     {
         $where = array(
@@ -284,7 +284,7 @@ class AssessmentsModel extends Model {
                 WHERE
                     s.id = :id
                     and
-                    s.company_id = :company_id
+                    s.company_id IN (0, :company_id)
                     and
                     s.standard_status = 'Active'
                     and

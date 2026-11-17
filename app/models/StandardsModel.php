@@ -5,9 +5,14 @@ class StandardsModel extends Model {
         parent::__construct();
     }
 
+    /**
+     * The standards an organisation can use: the shared framework library (company_id 0,
+     * loaded from frameworks/*.json and read-only) plus its own custom standards.
+     */
     public function load_standards($company_id)
     {
         $where = array(
+            'viewer' => $company_id,
             'company_id' => $company_id
         );
         $sql = "SELECT
@@ -18,16 +23,17 @@ class StandardsModel extends Model {
                     s.standard_status,
                     s.date_created,
                     s.date_updated,
+                    (s.company_id = 0) AS shared,
                     DATE_FORMAT(s.date_created, df.sql_format) AS date_created_display,
                     DATE_FORMAT(s.date_updated, df.sql_format) AS date_updated_display,
                     COUNT(sc.id) AS control_count
                 FROM
                     standards s
-                    JOIN companies co ON co.id = s.company_id
+                    JOIN companies co ON co.id = :viewer
                     JOIN date_formats df ON df.id = co.date_format_id
                     LEFT JOIN standard_controls sc ON sc.standard_id = s.id and sc.deleted = 0
                 WHERE
-                    s.company_id = :company_id
+                    s.company_id IN (0, :company_id)
                     and
                     s.deleted = 0
                 GROUP BY
@@ -38,6 +44,7 @@ class StandardsModel extends Model {
                     s.standard_status,
                     s.date_created,
                     s.date_updated,
+                    s.company_id,
                     df.sql_format
                 ORDER BY
                     s.standard_name";
@@ -60,7 +67,7 @@ class StandardsModel extends Model {
                     standards s
                     LEFT JOIN standard_controls sc ON sc.standard_id = s.id and sc.deleted = 0
                 WHERE
-                    s.company_id = :company_id
+                    s.company_id IN (0, :company_id)
                     and
                     s.standard_status = 'Active'
                     and
@@ -93,7 +100,7 @@ class StandardsModel extends Model {
                 FROM
                     standards s
                 WHERE
-                    s.company_id = :company_id
+                    s.company_id IN (0, :company_id)
                     and
                     s.standard_status = 'Active'
                     and
@@ -103,14 +110,20 @@ class StandardsModel extends Model {
         return parent::select($sql, $where);
     }
 
+    /**
+     * A standard the organisation can read: its own, or one from the shared library.
+     * `shared` is 1 for library rows, which no organisation may change.
+     */
     public function get_standard($standard_id, $company_id)
     {
         $where = array(
             'id' => $standard_id,
+            'viewer' => $company_id,
             'company_id' => $company_id
         );
         $sql = "SELECT
                     s.*,
+                    (s.company_id = 0) AS shared,
                     DATE_FORMAT(s.date_created, df.sql_format) AS date_created_display,
                     DATE_FORMAT(s.date_updated, df.sql_format) AS date_updated_display,
                     (
@@ -120,149 +133,15 @@ class StandardsModel extends Model {
                     ) AS control_count
                 FROM
                     standards s
-                    JOIN companies co ON co.id = s.company_id
+                    JOIN companies co ON co.id = :viewer
                     JOIN date_formats df ON df.id = co.date_format_id
                 WHERE
                     s.id = :id
                     and
-                    s.company_id = :company_id
+                    s.company_id IN (0, :company_id)
                     and
                     s.deleted = 0";
         return parent::select($sql, $where);
-    }
-
-    public function add_standard(
-        $company_id,
-        $standard_name,
-        $short_code,
-        $version,
-        $description,
-        $standard_status,
-        $created_by
-    )
-    {
-        $data = array(
-            'company_id' => $company_id,
-            'standard_name' => $standard_name,
-            'short_code' => $short_code,
-            'version' => $version,
-            'description' => $description,
-            'standard_status' => $standard_status,
-            'created_by' => $created_by,
-            'updated_by' => $created_by,
-            'date_created' => date('Y-m-d H:i:s'),
-            'date_updated' => date('Y-m-d H:i:s'),
-            'deleted' => 0
-        );
-        return parent::insert('standards', $data);
-    }
-
-    public function update_standard(
-        $standard_id,
-        $company_id,
-        $standard_name,
-        $short_code,
-        $version,
-        $description,
-        $standard_status,
-        $updated_by
-    )
-    {
-        $where = array(
-            'id' => $standard_id,
-            'company_id' => $company_id
-        );
-        $data = array(
-            'standard_name' => $standard_name,
-            'short_code' => $short_code,
-            'version' => $version,
-            'description' => $description,
-            'standard_status' => $standard_status,
-            'updated_by' => $updated_by,
-            'date_updated' => date('Y-m-d H:i:s')
-        );
-        return parent::update('standards', $data, 'id = :id and company_id = :company_id', $where);
-    }
-
-    public function delete_standard($standard_id, $company_id, $updated_by)
-    {
-        $where = array(
-            'id' => $standard_id,
-            'company_id' => $company_id
-        );
-        $data = array(
-            'deleted' => 1,
-            'updated_by' => $updated_by,
-            'date_updated' => date('Y-m-d H:i:s')
-        );
-        $rows = parent::update('standards', $data, 'id = :id and company_id = :company_id', $where);
-
-        if ($rows > 0) {
-            $this->delete_controls_for_standard($standard_id, $updated_by);
-        }
-
-        return $rows;
-    }
-
-    /**
-     * The standard and every control it owns are copied together or not at all —
-     * a half-copied framework is worse than no copy, because nothing on screen
-     * distinguishes it from a complete one.
-     */
-    public function duplicate_standard(
-        $standard_id,
-        $company_id,
-        $standard_name,
-        $short_code,
-        $version,
-        $created_by
-    )
-    {
-        $rows = $this->get_standard($standard_id, $company_id);
-
-        if (!is_array($rows) || count($rows) !== 1) {
-            return 0;
-        }
-
-        $source = $rows[0];
-
-        $this->db->beginTransaction();
-
-        try {
-
-            $new_id = $this->add_standard(
-                $company_id,
-                $standard_name,
-                $short_code,
-                $version,
-                $source['description'],
-                'Active',
-                $created_by
-            );
-
-            $controls = $this->load_controls($standard_id, $company_id);
-
-            foreach ($controls as $control) {
-                $this->add_control(
-                    $new_id,
-                    $control['control_identifier'],
-                    $control['control_title'],
-                    $control['description'],
-                    $control['family'],
-                    $control['sort_order'],
-                    $created_by,
-                    $control['parent_identifier'] ?? ''
-                );
-            }
-
-            $this->db->commit();
-
-        } catch (Exception $e) {
-            $this->db->rollBack();
-            throw $e;
-        }
-
-        return $new_id;
     }
 
     public function load_controls($standard_id, $company_id)
@@ -286,7 +165,7 @@ class StandardsModel extends Model {
                 WHERE
                     sc.standard_id = :standard_id
                     and
-                    s.company_id = :company_id
+                    s.company_id IN (0, :company_id)
                     and
                     sc.deleted = 0
                     and
@@ -296,133 +175,6 @@ class StandardsModel extends Model {
                     sc.sort_order,
                     sc.control_identifier";
         return parent::select($sql, $where);
-    }
-
-    public function get_control($control_id, $company_id)
-    {
-        $where = array(
-            'id' => $control_id,
-            'company_id' => $company_id
-        );
-        $sql = "SELECT
-                    sc.*
-                FROM
-                    standard_controls sc
-                    JOIN standards s ON s.id = sc.standard_id
-                WHERE
-                    sc.id = :id
-                    and
-                    s.company_id = :company_id
-                    and
-                    sc.deleted = 0
-                    and
-                    s.deleted = 0";
-        return parent::select($sql, $where);
-    }
-
-    /**
-     * Live identifiers for a standard, used to reject duplicates on save and to
-     * skip them on import. Keyed lowercase so `AC.L2-3.1.1` and `ac.l2-3.1.1`
-     * cannot both be added.
-     */
-    public function control_identifiers($standard_id, $exclude_control_id = 0)
-    {
-        $where = array(
-            'standard_id' => $standard_id,
-            'exclude_id' => $exclude_control_id
-        );
-        $sql = "SELECT
-                    sc.control_identifier
-                FROM
-                    standard_controls sc
-                WHERE
-                    sc.standard_id = :standard_id
-                    and
-                    sc.id <> :exclude_id
-                    and
-                    sc.deleted = 0";
-        $rows = parent::select($sql, $where);
-
-        $identifiers = array();
-
-        foreach ($rows as $row) {
-            $identifiers[mb_strtolower($row['control_identifier'])] = 1;
-        }
-
-        return $identifiers;
-    }
-
-    public function max_sort_order($standard_id)
-    {
-        $where = array(
-            'standard_id' => $standard_id
-        );
-        $sql = "SELECT
-                    COALESCE(MAX(sc.sort_order), 0) AS max_sort_order
-                FROM
-                    standard_controls sc
-                WHERE
-                    sc.standard_id = :standard_id
-                    and
-                    sc.deleted = 0";
-        $rows = parent::select($sql, $where);
-
-        return (int) $rows[0]['max_sort_order'];
-    }
-
-    public function add_control(
-        $standard_id,
-        $control_identifier,
-        $control_title,
-        $description,
-        $family,
-        $sort_order,
-        $created_by,
-        $parent_identifier = ''
-    )
-    {
-        $data = array(
-            'standard_id' => $standard_id,
-            'control_identifier' => $control_identifier,
-            'parent_identifier' => $parent_identifier,
-            'control_title' => $control_title,
-            'description' => $description,
-            'family' => $family,
-            'sort_order' => $sort_order,
-            'created_by' => $created_by,
-            'updated_by' => $created_by,
-            'date_created' => date('Y-m-d H:i:s'),
-            'date_updated' => date('Y-m-d H:i:s'),
-            'deleted' => 0
-        );
-        return parent::insert('standard_controls', $data);
-    }
-
-    public function update_control(
-        $control_id,
-        $standard_id,
-        $control_identifier,
-        $control_title,
-        $description,
-        $family,
-        $sort_order,
-        $updated_by
-    )
-    {
-        $where = array(
-            'id' => $control_id,
-            'standard_id' => $standard_id
-        );
-        $data = array(
-            'control_identifier' => $control_identifier,
-            'control_title' => $control_title,
-            'description' => $description,
-            'family' => $family,
-            'sort_order' => $sort_order,
-            'updated_by' => $updated_by,
-            'date_updated' => date('Y-m-d H:i:s')
-        );
-        return parent::update('standard_controls', $data, 'id = :id and standard_id = :standard_id', $where);
     }
 
     public function delete_control($control_id, $standard_id, $updated_by)
@@ -437,55 +189,6 @@ class StandardsModel extends Model {
             'date_updated' => date('Y-m-d H:i:s')
         );
         return parent::update('standard_controls', $data, 'id = :id and standard_id = :standard_id', $where);
-    }
-
-    private function delete_controls_for_standard($standard_id, $updated_by)
-    {
-        $where = array(
-            'standard_id' => $standard_id
-        );
-        $data = array(
-            'deleted' => 1,
-            'updated_by' => $updated_by,
-            'date_updated' => date('Y-m-d H:i:s')
-        );
-        return parent::update('standard_controls', $data, 'standard_id = :standard_id', $where);
-    }
-
-    /**
-     * Bulk insert for CSV import. Every row lands or none do, so a file that fails
-     * partway through leaves the standard exactly as it was.
-     */
-    public function import_controls($standard_id, $controls, $created_by)
-    {
-        $sort_order = $this->max_sort_order($standard_id);
-
-        $this->db->beginTransaction();
-
-        try {
-
-            foreach ($controls as $control) {
-                $sort_order++;
-                $this->add_control(
-                    $standard_id,
-                    $control['control_identifier'],
-                    $control['control_title'],
-                    $control['description'],
-                    $control['family'],
-                    $sort_order,
-                    $created_by,
-                    $control['parent_identifier'] ?? ''
-                );
-            }
-
-            $this->db->commit();
-
-        } catch (Exception $e) {
-            $this->db->rollBack();
-            throw $e;
-        }
-
-        return count($controls);
     }
 
     public function framework_standard($company_id, $framework_key, $short_code)
@@ -630,20 +333,6 @@ class StandardsModel extends Model {
         return parent::update('standard_controls', $data, 'id = :id and standard_id = :standard_id', $where);
     }
 
-    public function archive_standard($standard_id, $company_id, $user_id)
-    {
-        $data = array(
-            'standard_status' => 'Archived',
-            'updated_by' => $user_id,
-            'date_updated' => date('Y-m-d H:i:s')
-        );
-        $where = array(
-            'id' => $standard_id,
-            'company_id' => $company_id
-        );
-        return parent::update('standards', $data, 'id = :id and company_id = :company_id', $where);
-    }
-
     public function rename_assessments($standard_id, $company_id, $standard_name, $version, $framework_key)
     {
         $data = array(
@@ -651,6 +340,13 @@ class StandardsModel extends Model {
             'version' => $version,
             'framework_key' => $framework_key
         );
+        // A shared library standard serves every organisation's assessments; an organisation's own standard only its own.
+        if ((int) $company_id === 0) {
+            return parent::update('assessments', $data, 'standard_id = :standard_id', array(
+                'standard_id' => $standard_id
+            ));
+        }
+
         $where = array(
             'standard_id' => $standard_id,
             'company_id' => $company_id

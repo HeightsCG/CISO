@@ -97,8 +97,11 @@ class FrameworkLibrary {
         return $name.' ('.$version.')';
     }
 
+    /** company_id of the shared framework library, which every organisation reads and none may change. */
+    const SHARED = 0;
+
     /**
-     * Loads one definition into a company's library: updates the standard that
+     * Loads one definition into the shared library (company_id SHARED): updates the standard that
      * already serves it (matched by framework key, then short code) or adds it,
      * updates controls in place by identifier, adds new ones and removes ones
      * the definition no longer has. Returns the standard id.

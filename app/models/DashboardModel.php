@@ -34,7 +34,7 @@ class DashboardModel extends Model {
                         WHERE e.company_id = :c5 and e.deleted = 0
                         and e.evidence_private = 1) AS private_count,
                     (SELECT COUNT(*) FROM standards s
-                        WHERE s.company_id = :c6 and s.deleted = 0) AS standard_count";
+                        WHERE s.company_id IN (0, :c6) and s.deleted = 0) AS standard_count";
         return parent::select($sql, $where);
     }
 
