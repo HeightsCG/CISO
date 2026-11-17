@@ -282,7 +282,8 @@ return array(
             'us-ut-cpa' => 'privacy',
             'us-mt-cdpa' => 'privacy',
             'iso-22301' => 'continuity',
-            'iso-27701' => 'privacy'
+            'iso-27701' => 'privacy',
+            'nist-800-63' => 'identity'
         );
 
         foreach (glob(ROOT.'/frameworks/*.json') as $file) {

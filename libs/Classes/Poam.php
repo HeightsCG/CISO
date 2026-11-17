@@ -178,6 +178,7 @@ class Poam
         'hitrust' => 'none',
         'cis-controls' => 'none',
         'sox-itgc' => 'none',
+        'nist-800-63' => 'none',
         'nydfs-500' => 'none',
         'nis2' => 'none',
         'dora' => 'none',

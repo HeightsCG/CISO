@@ -1,0 +1,159 @@
+{
+    "key": "nist-800-63",
+    "name": "NIST SP 800-63",
+    "version": "Revision 4",
+    "full_name": "NIST SP 800-63-4 Digital Identity Guidelines (with 800-63A, 800-63B and 800-63C)",
+    "issuing_body": "National Institute of Standards and Technology",
+    "standard_codes": [
+        "NIST-800-63"
+    ],
+    "aliases": [
+        "SP 800-63",
+        "800-63-4",
+        "800-63A",
+        "800-63B",
+        "800-63C",
+        "Digital Identity Guidelines",
+        "IAL",
+        "AAL",
+        "FAL"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Requirements are the SHALL and SHALL NOT statements of NIST SP 800-63-4 and its three volumes, quoted word for word. Many apply only at a given identity, authentication or federation assurance level, or only to a particular authenticator type or federation model; mark the others not applicable.",
+    "sources": [
+        {
+            "id": "sp80063",
+            "title": "NIST SP 800-63-4, Digital Identity Guidelines",
+            "version": "Revision 4 (July 2025)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-63-4.pdf",
+            "file": "nist80063/NIST.SP.800-63-4.pdf",
+            "sha256": "2f5b107de218a0fc3fe7f7e91b2ece5babb001eda5745b7c568a3cc876002f2d"
+        },
+        {
+            "id": "sp80063a",
+            "title": "NIST SP 800-63A-4, Digital Identity Guidelines: Identity Proofing and Enrollment",
+            "version": "Revision 4 (July 2025)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-63A-4.pdf",
+            "file": "nist80063/NIST.SP.800-63A-4.pdf",
+            "sha256": "f83654182f0b012f17f6901e6d03e12ef2ba422b341aee875e837094f23e9ad3"
+        },
+        {
+            "id": "sp80063b",
+            "title": "NIST SP 800-63B-4, Digital Identity Guidelines: Authentication and Authenticator Management",
+            "version": "Revision 4 (July 2025)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-63B-4.pdf",
+            "file": "nist80063/NIST.SP.800-63B-4.pdf",
+            "sha256": "d9ab89576b5ae2cfb3ba37781110788dea27a85a5079496dbfc1a79834670afd"
+        },
+        {
+            "id": "sp80063c",
+            "title": "NIST SP 800-63C-4, Digital Identity Guidelines: Federation and Assertions",
+            "version": "Revision 4 (July 2025)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-63C-4.pdf",
+            "file": "nist80063/NIST.SP.800-63C-4.pdf",
+            "sha256": "dce901711d044dcdd672fe28c2b012558786db0532e634bd65fa9506f88b3cdb"
+        }
+    ],
+    "source_of": {
+        "controls": "sp80063",
+        "objectives": "sp80063"
+    },
+    "control_flags": {
+        "type": "section for a numbered section of a volume that contains SHALL requirements."
+    },
+    "terminology": {
+        "control": "section",
+        "controls": "sections",
+        "family": "chapter",
+        "families": "chapters",
+        "objective": "requirement",
+        "objectives": "requirements",
+        "plan": "Action plan",
+        "plan_short": "Action plan",
+        "score": "Conformance score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Conforms"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Conforms"
+        },
+        {
+            "key": "not_met",
+            "label": "Does Not Conform"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable sections that conform, with partial conformity counting as half. NIST defines no score; this is an HCG measure."
+    },
+    "rules": [
+        {
+            "id": "shall_is_mandatory",
+            "type": "rollup",
+            "summary": "Every SHALL and SHALL NOT statement is mandatory for conformance, so a section conforms only when each of its applicable requirements is met.",
+            "source": "sp80063b",
+            "cite": "NIST SP 800-63B-4, 1.1 Notations",
+            "quote": "indicate requirements to be followed strictly in order to conform to the publication and from which no deviation is permitted."
+        },
+        {
+            "id": "assurance_levels",
+            "type": "applicability",
+            "summary": "Requirements tied to an assurance level (IAL, AAL or FAL) apply only when that level is selected for the service, and requirements for a given authenticator type or federation model apply only when it is used; others are marked not applicable.",
+            "source": "sp80063",
+            "cite": "NIST SP 800-63-4, 3.3",
+            "quote": "The output of this step is a set of assigned xALs and baseline controls for each user"
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A partially conforming section counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG scoring convention"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "IAL",
+            "definition": "Identity assurance level: the strength of the identity proofing process."
+        },
+        {
+            "term": "AAL",
+            "definition": "Authentication assurance level: the strength of the authentication process."
+        },
+        {
+            "term": "FAL",
+            "definition": "Federation assurance level: the strength of the federation process and assertions."
+        },
+        {
+            "term": "CSP",
+            "definition": "Credential service provider: the entity that issues or registers subscriber authenticators."
+        },
+        {
+            "term": "RP",
+            "definition": "Relying party: the entity that relies on the subscriber's authenticators or a federated assertion to grant access."
+        },
+        {
+            "term": "Phishing resistance",
+            "definition": "The ability of an authentication protocol to prevent the disclosure of authentication secrets and valid authenticator outputs to an impostor verifier."
+        }
+    ]
+}
