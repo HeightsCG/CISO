@@ -1,0 +1,124 @@
+{
+    "key": "iso-27018",
+    "name": "ISO/IEC 27018",
+    "version": "HCG control set 2026",
+    "full_name": "ISO/IEC 27018:2025 Information security, cybersecurity and privacy protection - Guidelines for protection of personally identifiable information (PII) in public clouds acting as PII processors: HCG control set",
+    "issuing_body": "Heights Consulting Group, structured on ISO/IEC 27018:2025 (ISO/IEC JTC 1/SC 27)",
+    "standard_codes": [
+        "ISO-27018"
+    ],
+    "aliases": [
+        "ISO 27018",
+        "ISO/IEC 27018",
+        "Cloud privacy",
+        "PII in public cloud"
+    ],
+    "content_licence": "hcg_authored",
+    "notice": "HCG control set based on ISO/IEC 27018:2025, third edition. Control numbers and titles are used for identification only; the standard's text is licensed by ISO and IEC and is not reproduced. Controls marked HCG are written by HCG for the standard's public cloud PII processor extended control set and do not carry its Annex A numbering. ISO/IEC 27018 is a code of practice assessed alongside an ISO/IEC 27001 information security management system.",
+    "sources": [
+        {
+            "id": "iso27018",
+            "title": "ISO/IEC 27018:2025 sample preview (contents list)",
+            "version": "Third edition, 2025-08",
+            "publisher": "ISO/IEC, distributed by iTeh Standards",
+            "url": "https://cdn.standards.iteh.ai/samples/iso/iso-iec-27018-2025/587b47b2419242b5a3c054b854046899/iso-iec-27018-2025.pdf",
+            "file": "iso27018/iso-iec-27018-2025-sample.pdf",
+            "sha256": "bd7a89b15bc5d82dadc2903300b7e5ebe4a118f1921ac9d481c15301466d55af"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG ISO/IEC 27018 control set: descriptions, guidance, test points and PII processor extended controls",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "iso27018",
+        "objectives": "hcg",
+        "guidance": "hcg"
+    },
+    "control_flags": {
+        "type": "clause for a control of the standard (official number and title), or hcg for an HCG-written control in the public cloud PII processor extended control areas."
+    },
+    "terminology": {
+        "control": "control",
+        "controls": "controls",
+        "family": "theme",
+        "families": "themes",
+        "objective": "test point",
+        "objectives": "test points",
+        "plan": "Corrective action plan",
+        "plan_short": "Corrective action plan",
+        "score": "Implementation score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable controls implemented, with partial implementation counting as half. ISO/IEC 27018 defines no score; this percentage is an HCG measure of readiness."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A control is implemented only when every HCG test point under it is met.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
+            "id": "processor_scope",
+            "type": "applicability",
+            "summary": "The control set applies where the organization provides a public cloud service and processes PII as a processor for its cloud service customers. Controls excluded in the ISO/IEC 27001 statement of applicability with justification are marked not applicable.",
+            "source": "hcg",
+            "cite": "ISO/IEC 27018:2025, 1 Scope"
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "In the implementation score a partially implemented control counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "ISO/IEC 27018",
+            "definition": "The code of practice for protecting PII in public clouds acting as PII processors."
+        },
+        {
+            "term": "PII processor",
+            "definition": "An organization that processes PII on behalf of, and on the instructions of, a PII controller."
+        },
+        {
+            "term": "Cloud service customer",
+            "definition": "The organization that uses the public cloud service and is usually the PII controller."
+        },
+        {
+            "term": "Subprocessor",
+            "definition": "A subcontractor engaged by the PII processor to process customer PII."
+        }
+    ]
+}

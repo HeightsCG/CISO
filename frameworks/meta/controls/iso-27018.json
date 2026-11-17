@@ -1,0 +1,1128 @@
+{
+    "families": [
+        {
+            "code": "5",
+            "name": "Organizational controls",
+            "controls": [
+                {
+                    "id": "5.1",
+                    "title": "Policies for information security",
+                    "description": "The organization has a top-level security policy plus supporting topic policies, approved by management, shared with the people they apply to, and kept current.",
+                    "guidance": "Review the policy set for approval, ownership, review dates and distribution, and confirm staff acknowledge the policies relevant to them. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Policies for information security is implemented for the public cloud service in scope.",
+                        "Where policies for information security affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.2",
+                    "title": "Information security roles and responsibilities",
+                    "description": "Security responsibilities are defined and assigned to roles so it is clear who does what.",
+                    "guidance": "Look for documented security roles (for example asset owners, risk owners, security lead) and check that assignees are aware of and carry out their duties. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Information security roles and responsibilities is implemented for the public cloud service in scope.",
+                        "A person or role is responsible for privacy of customer PII in the public cloud service."
+                    ]
+                },
+                {
+                    "id": "5.3",
+                    "title": "Segregation of duties",
+                    "description": "Incompatible tasks are split between different people so no single person can both carry out and conceal misuse or error.",
+                    "guidance": "Review a list of conflicting duties (for example requesting and approving access, developing and deploying code) and test that systems and workflows enforce the separation or that compensating oversight exists. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Segregation of duties is implemented for the public cloud service in scope.",
+                        "Where segregation of duties affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.4",
+                    "title": "Management responsibilities",
+                    "description": "Managers make sure their staff and contractors follow the organization's security policies and procedures.",
+                    "guidance": "Interview managers about how they set expectations and support compliance, and look for security responsibilities in management objectives or performance reviews. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Management responsibilities is implemented for the public cloud service in scope.",
+                        "Where management responsibilities affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.5",
+                    "title": "Contact with authorities",
+                    "description": "The organization knows which authorities to contact for security matters, such as regulators, law enforcement or national CERTs, and keeps those contacts ready.",
+                    "guidance": "Check for a current list of authority contacts with conditions for contacting them, and examples of when contact was made where relevant. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Contact with authorities is implemented for the public cloud service in scope.",
+                        "Where contact with authorities affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.6",
+                    "title": "Contact with special interest groups",
+                    "description": "The organization keeps in touch with security forums, professional bodies and industry groups to stay informed and share knowledge.",
+                    "guidance": "Look for memberships, subscriptions or participation records and evidence that information gained is passed to the people who need it. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Contact with special interest groups is implemented for the public cloud service in scope.",
+                        "Where contact with special interest groups affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.7",
+                    "title": "Threat intelligence",
+                    "description": "The organization gathers and analyses information about threats relevant to it and uses that to inform its defences.",
+                    "guidance": "Ask for threat intelligence sources, analysis outputs and examples of decisions or control changes that resulted from them. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Threat intelligence is implemented for the public cloud service in scope.",
+                        "Where threat intelligence affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.8",
+                    "title": "Information security in project management",
+                    "description": "Security is considered from the start and throughout every project, whatever its type.",
+                    "guidance": "Review the project methodology for security checkpoints and sample recent projects for security requirements, risk assessments and sign-off. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Information security in project management is implemented for the public cloud service in scope.",
+                        "Where information security in project management affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.9",
+                    "title": "Inventory of information and other associated assets",
+                    "description": "The organization keeps an up-to-date inventory of its information and related assets, with an owner for each.",
+                    "guidance": "Inspect the asset inventory for completeness, accuracy and named owners, and spot-check items found in the environment against it. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Inventory of information and other associated assets is implemented for the public cloud service in scope.",
+                        "Where inventory of information and other associated assets affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.10",
+                    "title": "Acceptable use of information and other associated assets",
+                    "description": "There are written rules for how information and assets may and may not be used and handled.",
+                    "guidance": "Obtain the acceptable use rules and confirm users have acknowledged them and that handling procedures exist for sensitive assets. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Acceptable use of information and other associated assets is implemented for the public cloud service in scope.",
+                        "Staff are told the rules for handling customer PII, including that it may be used only on customer instructions."
+                    ]
+                },
+                {
+                    "id": "5.11",
+                    "title": "Return of assets",
+                    "description": "Staff and other users give back organizational assets when they leave or their contract or role ends.",
+                    "guidance": "Sample leavers and check return records for laptops, tokens, badges and documents, and confirm the process covers data held on personal devices. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Return of assets is implemented for the public cloud service in scope.",
+                        "Where return of assets affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.12",
+                    "title": "Classification of information",
+                    "description": "Information is classified according to its sensitivity and importance so that it receives the right level of protection.",
+                    "guidance": "Review the classification scheme and check that information owners have applied it to key information sets and systems. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Classification of information is implemented for the public cloud service in scope.",
+                        "Where classification of information affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.13",
+                    "title": "Labelling of information",
+                    "description": "Information carries labels that match its classification so people know how to handle it.",
+                    "guidance": "Check labelling procedures for documents, email and systems, and sample information to see whether labels are applied as required. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Labelling of information is implemented for the public cloud service in scope.",
+                        "Where labelling of information affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.14",
+                    "title": "Information transfer",
+                    "description": "Rules and agreements govern how information is sent, both within the organization and to outside parties, by any channel.",
+                    "guidance": "Review transfer procedures and agreements and test controls on email, file sharing, removable media and verbal transfer of sensitive information. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Information transfer is implemented for the public cloud service in scope.",
+                        "Transfers of customer PII by physical media or networks are recorded and protected."
+                    ]
+                },
+                {
+                    "id": "5.15",
+                    "title": "Access control",
+                    "description": "Access to information and systems is governed by rules based on business need and security requirements.",
+                    "guidance": "Obtain the access control policy and check that it defines need-to-know and least-privilege principles and that system access matches it. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Access control is implemented for the public cloud service in scope.",
+                        "Where access control affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.16",
+                    "title": "Identity management",
+                    "description": "Every identity that can access systems, whether a person, device or service, is managed across its whole life from creation to removal.",
+                    "guidance": "Review identity lifecycle procedures and sample accounts for unique ownership, approval at creation and timely removal; look for shared or orphaned accounts. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Identity management is implemented for the public cloud service in scope.",
+                        "Where identity management affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.17",
+                    "title": "Authentication information",
+                    "description": "Passwords, keys and other authentication secrets are issued and managed securely, and users know how to protect them.",
+                    "guidance": "Check how initial credentials are issued, password and secret rules, secret storage, and user guidance on protecting authentication details. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Authentication information is implemented for the public cloud service in scope.",
+                        "Unique user IDs are issued to everyone with access to customer PII, and shared IDs are not used."
+                    ]
+                },
+                {
+                    "id": "5.18",
+                    "title": "Access rights",
+                    "description": "Access rights are granted, reviewed, changed and removed according to the access rules and the person's current role.",
+                    "guidance": "Sample access requests for approval, review records from periodic access recertification, and check that movers and leavers had rights changed promptly. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Access rights is implemented for the public cloud service in scope.",
+                        "An up-to-date record of users with access to customer PII is kept."
+                    ]
+                },
+                {
+                    "id": "5.19",
+                    "title": "Information security in supplier relationships",
+                    "description": "The organization manages the security risks that come from using suppliers' products and services.",
+                    "guidance": "Review the supplier security process, supplier inventory with risk ratings, and due-diligence records for key suppliers. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Information security in supplier relationships is implemented for the public cloud service in scope.",
+                        "Where information security in supplier relationships affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.20",
+                    "title": "Addressing information security within supplier agreements",
+                    "description": "Agreements with suppliers spell out the security requirements each supplier must meet.",
+                    "guidance": "Sample supplier contracts for security clauses appropriate to the risk, such as confidentiality, incident notification, audit rights and data handling. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Addressing information security within supplier agreements is implemented for the public cloud service in scope.",
+                        "Where addressing information security within supplier agreements affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.21",
+                    "title": "Managing information security in the ICT supply chain",
+                    "description": "The organization manages security risks that pass down the technology supply chain, including suppliers' own suppliers.",
+                    "guidance": "Look for requirements on suppliers to flow security obligations down, component provenance checks, and monitoring of critical technology supply chains. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Managing information security in the ICT supply chain is implemented for the public cloud service in scope.",
+                        "Where managing information security in the ICT supply chain affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.22",
+                    "title": "Monitoring, review and change management of supplier services",
+                    "description": "The organization watches how suppliers perform on security and manages changes to the services they provide.",
+                    "guidance": "Check supplier review records, performance reports or audits, and how changes to supplier services were assessed before acceptance. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Monitoring, review and change management of supplier services is implemented for the public cloud service in scope.",
+                        "Where monitoring, review and change management of supplier services affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.23",
+                    "title": "Information security for use of cloud services",
+                    "description": "The organization sets security requirements for cloud services and manages how it selects, uses, oversees and exits them.",
+                    "guidance": "Review the cloud security policy, the cloud service inventory, shared-responsibility analysis for key services, and exit plans. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Information security for use of cloud services is implemented for the public cloud service in scope.",
+                        "Where information security for use of cloud services affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.24",
+                    "title": "Information security incident management planning and preparation",
+                    "description": "The organization has prepared for security incidents with defined processes, roles and communication paths before one happens.",
+                    "guidance": "Obtain the incident response plan, role assignments and contact lists, and look for training or exercise records. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Information security incident management planning and preparation is implemented for the public cloud service in scope.",
+                        "Incident procedures cover breaches of customer PII and notification of the affected cloud service customer."
+                    ]
+                },
+                {
+                    "id": "5.25",
+                    "title": "Assessment and decision on information security events",
+                    "description": "Security events are assessed to decide whether they are incidents, so that real incidents are recognized and escalated.",
+                    "guidance": "Check triage criteria and sample event records to see how classification decisions were made and recorded. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Assessment and decision on information security events is implemented for the public cloud service in scope.",
+                        "Where assessment and decision on information security events affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.26",
+                    "title": "Response to information security incidents",
+                    "description": "Security incidents are handled according to the documented response procedures.",
+                    "guidance": "Sample incident tickets and compare the actions taken, timing and communications with the documented procedure. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Response to information security incidents is implemented for the public cloud service in scope.",
+                        "Breaches of customer PII are notified to the cloud service customer without undue delay."
+                    ]
+                },
+                {
+                    "id": "5.27",
+                    "title": "Learning from information security incidents",
+                    "description": "Lessons from incidents are captured and used to strengthen controls and reduce the chance or impact of future incidents.",
+                    "guidance": "Look for post-incident reviews and evidence that resulting actions were tracked and completed. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Learning from information security incidents is implemented for the public cloud service in scope.",
+                        "Where learning from information security incidents affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.28",
+                    "title": "Collection of evidence",
+                    "description": "The organization can identify, gather and preserve evidence about security events in a way that will stand up if needed.",
+                    "guidance": "Review evidence-handling procedures, chain-of-custody forms and tooling, and check whether recent incidents followed them. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Collection of evidence is implemented for the public cloud service in scope.",
+                        "Where collection of evidence affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.29",
+                    "title": "Information security during disruption",
+                    "description": "The organization has planned how to keep information protected at the right level while operations are disrupted.",
+                    "guidance": "Check continuity and crisis plans for security requirements during disruption, and look for test results that include security aspects. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Information security during disruption is implemented for the public cloud service in scope.",
+                        "Where information security during disruption affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.30",
+                    "title": "ICT readiness for business continuity",
+                    "description": "Technology services are prepared and tested so they can be restored in time to meet business continuity needs.",
+                    "guidance": "Review business impact analysis outputs, recovery objectives, IT recovery plans and recent recovery test results against those objectives. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "ICT readiness for business continuity is implemented for the public cloud service in scope.",
+                        "Where ICT readiness for business continuity affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.31",
+                    "title": "Legal, statutory, regulatory and contractual requirements",
+                    "description": "The organization identifies the laws, regulations and contracts that bear on information security and keeps track of how it meets them.",
+                    "guidance": "Obtain the legal and regulatory register with owners and review dates and check how new or changed obligations are picked up. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Legal, statutory, regulatory and contractual requirements is implemented for the public cloud service in scope.",
+                        "Contracts with cloud service customers set out the processor's obligations for customer PII."
+                    ]
+                },
+                {
+                    "id": "5.32",
+                    "title": "Intellectual property rights",
+                    "description": "The organization respects intellectual property, including software licensing and copyrighted material.",
+                    "guidance": "Check software licence management records against deployed software and review policies on use of third-party content. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Intellectual property rights is implemented for the public cloud service in scope.",
+                        "Where intellectual property rights affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.33",
+                    "title": "Protection of records",
+                    "description": "Records are protected from loss, destruction, falsification and unauthorized access or release for as long as they must be kept.",
+                    "guidance": "Review the records retention schedule and check sample records for storage protection, integrity and correct disposal. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Protection of records is implemented for the public cloud service in scope.",
+                        "Where protection of records affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.34",
+                    "title": "Privacy and protection of PII",
+                    "description": "The organization meets its obligations for privacy and the protection of personal data.",
+                    "guidance": "Look for a privacy policy, data inventory or records of processing, a named privacy role, and evidence of compliance with applicable privacy laws. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Privacy and protection of PII is implemented for the public cloud service in scope.",
+                        "The organization supports the cloud service customer in meeting its privacy obligations for PII."
+                    ]
+                },
+                {
+                    "id": "5.35",
+                    "title": "Independent review of information security",
+                    "description": "The organization's approach to information security is independently reviewed at planned intervals and after significant changes.",
+                    "guidance": "Obtain reports from independent reviews (internal audit, external assessors) and confirm the reviewers were independent of the area reviewed. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Independent review of information security is implemented for the public cloud service in scope.",
+                        "Where independent review of information security affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.36",
+                    "title": "Compliance with policies, rules and standards for information security",
+                    "description": "Compliance with the organization's own security policies, rules and standards is regularly checked.",
+                    "guidance": "Review compliance check schedules, results such as configuration reviews or policy attestations, and follow-up of exceptions. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Compliance with policies, rules and standards for information security is implemented for the public cloud service in scope.",
+                        "Where compliance with policies, rules and standards for information security affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "5.37",
+                    "title": "Documented operating procedures",
+                    "description": "Operating procedures for information processing facilities are written down and available to the people who need them.",
+                    "guidance": "Sample operational procedures (backups, start-up and shutdown, monitoring) for currency, approval and availability to operators. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Documented operating procedures is implemented for the public cloud service in scope.",
+                        "Where documented operating procedures affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "6",
+            "name": "People controls",
+            "controls": [
+                {
+                    "id": "6.1",
+                    "title": "Screening",
+                    "description": "Background checks are done on candidates before they join and repeated where appropriate, in proportion to the role and the law.",
+                    "guidance": "Sample personnel files for completed screening appropriate to role risk, and check the screening policy reflects legal constraints. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Screening is implemented for the public cloud service in scope.",
+                        "Where screening affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "6.2",
+                    "title": "Terms and conditions of employment",
+                    "description": "Employment contracts and terms state the security responsibilities of both the staff member and the organization.",
+                    "guidance": "Review contract templates and a sample of signed agreements for security and confidentiality clauses. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Terms and conditions of employment is implemented for the public cloud service in scope.",
+                        "Where terms and conditions of employment affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "6.3",
+                    "title": "Information security awareness, education and training",
+                    "description": "Staff and relevant contractors receive security awareness, education and training suited to their roles, and it is kept up to date.",
+                    "guidance": "Check the training plan, completion rates and role-specific training for high-risk roles, and how content is refreshed. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Information security awareness, education and training is implemented for the public cloud service in scope.",
+                        "Where information security awareness, education and training affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "6.4",
+                    "title": "Disciplinary process",
+                    "description": "There is a formal, communicated process for dealing with people who break security policy.",
+                    "guidance": "Obtain the disciplinary process and confirm staff are informed of it; where violations occurred, check it was followed consistently. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Disciplinary process is implemented for the public cloud service in scope.",
+                        "Where disciplinary process affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "6.5",
+                    "title": "Responsibilities after termination or change of employment",
+                    "description": "Security duties that continue after someone leaves or changes role are defined, communicated and enforced.",
+                    "guidance": "Review exit and transfer procedures for reminders of ongoing confidentiality duties, and sample leaver records. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Responsibilities after termination or change of employment is implemented for the public cloud service in scope.",
+                        "Where responsibilities after termination or change of employment affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "6.6",
+                    "title": "Confidentiality or non-disclosure agreements",
+                    "description": "Confidentiality or non-disclosure agreements reflecting the organization's needs are in place, signed and periodically reviewed.",
+                    "guidance": "Check NDA templates for currency and sample signed agreements for staff, contractors and relevant third parties. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Confidentiality or non-disclosure agreements is implemented for the public cloud service in scope.",
+                        "Everyone with access to customer PII is bound by confidentiality obligations."
+                    ]
+                },
+                {
+                    "id": "6.7",
+                    "title": "Remote working",
+                    "description": "Security measures protect information when people work away from the organization's premises.",
+                    "guidance": "Review the remote working policy and technical controls such as VPN, device encryption and secure home-working guidance, and test a sample of remote setups. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Remote working is implemented for the public cloud service in scope.",
+                        "Where remote working affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "6.8",
+                    "title": "Information security event reporting",
+                    "description": "People have a quick, simple way to report security events they notice, and they know to use it.",
+                    "guidance": "Confirm the reporting channel exists and is publicized, and review reports received to judge whether staff use it. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Information security event reporting is implemented for the public cloud service in scope.",
+                        "Where information security event reporting affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "7",
+            "name": "Physical controls",
+            "controls": [
+                {
+                    "id": "7.1",
+                    "title": "Physical security perimeters",
+                    "description": "Physical boundaries are defined and used to protect areas that hold information and related assets.",
+                    "guidance": "Walk the site to verify that perimeters such as walls, doors and fencing match the defined secure areas and have no obvious gaps. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Physical security perimeters is implemented for the public cloud service in scope.",
+                        "Where physical security perimeters affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "7.2",
+                    "title": "Physical entry",
+                    "description": "Entry to secure areas is controlled so only authorized people get in.",
+                    "guidance": "Test access control systems, visitor logs and badge procedures, and review access lists for secure areas. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Physical entry is implemented for the public cloud service in scope.",
+                        "Where physical entry affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "7.3",
+                    "title": "Securing offices, rooms and facilities",
+                    "description": "Offices, rooms and facilities are designed and run with physical security in mind.",
+                    "guidance": "Inspect sensitive rooms for locks, discreet signage and placement away from public access, and review facility security measures. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Securing offices, rooms and facilities is implemented for the public cloud service in scope.",
+                        "Where securing offices, rooms and facilities affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "7.4",
+                    "title": "Physical security monitoring",
+                    "description": "Premises are monitored to detect unauthorized physical access.",
+                    "guidance": "Check CCTV, alarms or guard patrols cover key areas, and review monitoring logs and alarm response records. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Physical security monitoring is implemented for the public cloud service in scope.",
+                        "Where physical security monitoring affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "7.5",
+                    "title": "Protecting against physical and environmental threats",
+                    "description": "Facilities are protected against natural and man-made physical threats such as fire, flood, and power or environmental failures.",
+                    "guidance": "Review the physical threat assessment and inspect protections such as fire suppression, water detection and environmental monitoring. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Protecting against physical and environmental threats is implemented for the public cloud service in scope.",
+                        "Where protecting against physical and environmental threats affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "7.6",
+                    "title": "Working in secure areas",
+                    "description": "Additional rules govern behaviour and work inside secure areas.",
+                    "guidance": "Review secure area rules (for example no unsupervised visitors, no personal recording devices) and observe whether they are followed. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Working in secure areas is implemented for the public cloud service in scope.",
+                        "Where working in secure areas affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "7.7",
+                    "title": "Clear desk and clear screen",
+                    "description": "Desks are kept clear of sensitive papers and media, and screens are locked or cleared when unattended.",
+                    "guidance": "Check the policy and screen-lock settings, and do a walk-through to spot unattended sensitive material or unlocked sessions. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Clear desk and clear screen is implemented for the public cloud service in scope.",
+                        "Where clear desk and clear screen affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "7.8",
+                    "title": "Equipment siting and protection",
+                    "description": "Equipment is placed and protected to reduce physical and environmental risks and unauthorized access.",
+                    "guidance": "Inspect server rooms and equipment locations for appropriate siting, environmental protection and restricted access. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Equipment siting and protection is implemented for the public cloud service in scope.",
+                        "Where equipment siting and protection affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "7.9",
+                    "title": "Security of assets off-premises",
+                    "description": "Assets taken off-site, such as laptops and phones, are protected.",
+                    "guidance": "Review the off-site asset policy, encryption and tracking of mobile assets, and check records of assets taken off-site. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Security of assets off-premises is implemented for the public cloud service in scope.",
+                        "Where security of assets off-premises affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "7.10",
+                    "title": "Storage media",
+                    "description": "Storage media are managed securely from acquisition through use, transport and disposal.",
+                    "guidance": "Check removable media controls, encryption, transport procedures and disposal records with certificates where used. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Storage media is implemented for the public cloud service in scope.",
+                        "Storage media containing customer PII is encrypted or otherwise protected when it leaves the organization's premises."
+                    ]
+                },
+                {
+                    "id": "7.11",
+                    "title": "Supporting utilities",
+                    "description": "Power, cooling and other supporting utilities are protected against failures and disruption.",
+                    "guidance": "Inspect UPS, generators and HVAC, and review maintenance and test records. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Supporting utilities is implemented for the public cloud service in scope.",
+                        "Where supporting utilities affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "7.12",
+                    "title": "Cabling security",
+                    "description": "Power and data cables are protected from interception, interference and damage.",
+                    "guidance": "Inspect cabling routes, patch areas and cabinets for physical protection and separation of power and data. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Cabling security is implemented for the public cloud service in scope.",
+                        "Where cabling security affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "7.13",
+                    "title": "Equipment maintenance",
+                    "description": "Equipment is maintained properly to keep information available, intact and confidential.",
+                    "guidance": "Review maintenance schedules and records, including controls over third-party maintenance staff and equipment leaving for repair. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Equipment maintenance is implemented for the public cloud service in scope.",
+                        "Where equipment maintenance affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "7.14",
+                    "title": "Secure disposal or re-use of equipment",
+                    "description": "Before equipment is disposed of or reused, sensitive data and licensed software are removed or securely overwritten.",
+                    "guidance": "Check disposal and reuse procedures and sample wipe or destruction certificates. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Secure disposal or re-use of equipment is implemented for the public cloud service in scope.",
+                        "Storage holding customer PII is securely wiped or destroyed before reuse or disposal."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "8",
+            "name": "Technological controls",
+            "controls": [
+                {
+                    "id": "8.1",
+                    "title": "User endpoint devices",
+                    "description": "Information on laptops, phones and other user devices is protected.",
+                    "guidance": "Review endpoint standards and device management tooling, and test a sample of devices for encryption, patching and security settings. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "User endpoint devices is implemented for the public cloud service in scope.",
+                        "Where user endpoint devices affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.2",
+                    "title": "Privileged access rights",
+                    "description": "Privileged access is tightly restricted and closely managed.",
+                    "guidance": "Obtain the list of privileged accounts, check approval and periodic review, and confirm privileged activity is separated from everyday accounts and logged. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Privileged access rights is implemented for the public cloud service in scope.",
+                        "Where privileged access rights affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.3",
+                    "title": "Information access restriction",
+                    "description": "Access to information and application functions is limited in line with the access control rules.",
+                    "guidance": "Test system access configuration against role definitions, looking for excessive or unauthorized access. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Information access restriction is implemented for the public cloud service in scope.",
+                        "Where information access restriction affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.4",
+                    "title": "Access to source code",
+                    "description": "Access to source code, development tools and software libraries is controlled.",
+                    "guidance": "Review repository permissions, branch protection and change history to confirm only authorized people can read or change code. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Access to source code is implemented for the public cloud service in scope.",
+                        "Where access to source code affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.5",
+                    "title": "Secure authentication",
+                    "description": "Authentication technology and procedures are strong enough for the sensitivity of the access being granted.",
+                    "guidance": "Check MFA coverage for remote, privileged and sensitive access, session controls and login protections such as lockout. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Secure authentication is implemented for the public cloud service in scope.",
+                        "Where secure authentication affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.6",
+                    "title": "Capacity management",
+                    "description": "Use of computing, storage and network resources is monitored and adjusted to meet current and expected needs.",
+                    "guidance": "Review capacity monitoring dashboards, thresholds, alerts and capacity plans. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Capacity management is implemented for the public cloud service in scope.",
+                        "Where capacity management affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.7",
+                    "title": "Protection against malware",
+                    "description": "Systems are protected against malware, backed by user awareness.",
+                    "guidance": "Check anti-malware coverage and update status across endpoints and servers, and review detections and responses. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Protection against malware is implemented for the public cloud service in scope.",
+                        "Where protection against malware affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.8",
+                    "title": "Management of technical vulnerabilities",
+                    "description": "The organization learns of technical vulnerabilities in its systems, assesses its exposure, and takes timely action.",
+                    "guidance": "Review scanning coverage and results, patching timelines against defined targets, and handling of exceptions. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Management of technical vulnerabilities is implemented for the public cloud service in scope.",
+                        "Where management of technical vulnerabilities affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.9",
+                    "title": "Configuration management",
+                    "description": "Secure configurations for hardware, software, services and networks are defined, applied, monitored and reviewed.",
+                    "guidance": "Obtain configuration baselines and test a sample of systems for drift; review change records for configuration updates. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Configuration management is implemented for the public cloud service in scope.",
+                        "Where configuration management affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.10",
+                    "title": "Information deletion",
+                    "description": "Information that is no longer needed is deleted from systems, devices and storage.",
+                    "guidance": "Check deletion procedures and retention-driven deletion jobs, and sample systems for data kept beyond its retention period. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Information deletion is implemented for the public cloud service in scope.",
+                        "Customer PII is securely deleted when the customer requests it or the contract ends, including from backups within a defined period."
+                    ]
+                },
+                {
+                    "id": "8.11",
+                    "title": "Data masking",
+                    "description": "Data masking hides sensitive data, such as personal data, where policy, law or business need requires it.",
+                    "guidance": "Review where masking, tokenization or pseudonymization is applied, for example in test environments and reports, and test whether it works. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Data masking is implemented for the public cloud service in scope.",
+                        "Where data masking affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.12",
+                    "title": "Data leakage prevention",
+                    "description": "Measures detect and prevent unauthorized leakage of sensitive information from systems, networks and devices.",
+                    "guidance": "Review DLP tooling and rules, monitored channels, alerts raised and how they were handled. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Data leakage prevention is implemented for the public cloud service in scope.",
+                        "Where data leakage prevention affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.13",
+                    "title": "Information backup",
+                    "description": "Backups of information, software and systems are taken and tested in line with an agreed backup policy.",
+                    "guidance": "Check backup schedules and success logs, offsite or immutable copies, and recent restore test results. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Information backup is implemented for the public cloud service in scope.",
+                        "Backups of customer PII are protected and restoration of customer PII is logged."
+                    ]
+                },
+                {
+                    "id": "8.14",
+                    "title": "Redundancy of information processing facilities",
+                    "description": "Systems are built with enough redundancy to meet availability requirements.",
+                    "guidance": "Review architecture diagrams for single points of failure and evidence of failover testing for critical services. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Redundancy of information processing facilities is implemented for the public cloud service in scope.",
+                        "Where redundancy of information processing facilities affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.15",
+                    "title": "Logging",
+                    "description": "Logs of activities, exceptions, faults and other relevant events are produced, kept, protected and analysed.",
+                    "guidance": "Check log sources, retention, protection against tampering, and evidence of log review or SIEM use. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Logging is implemented for the public cloud service in scope.",
+                        "Logs record access to and changes of customer PII and are protected and retained for a defined period."
+                    ]
+                },
+                {
+                    "id": "8.16",
+                    "title": "Monitoring activities",
+                    "description": "Networks, systems and applications are watched for abnormal behaviour, and potential incidents are acted on.",
+                    "guidance": "Review monitoring coverage, alert rules, on-call arrangements and a sample of alerts with their response. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Monitoring activities is implemented for the public cloud service in scope.",
+                        "Where monitoring activities affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.17",
+                    "title": "Clock synchronization",
+                    "description": "System clocks are synchronized to approved time sources so that logs and events line up.",
+                    "guidance": "Check NTP configuration on a sample of systems and the approved time sources. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Clock synchronization is implemented for the public cloud service in scope.",
+                        "Where clock synchronization affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.18",
+                    "title": "Use of privileged utility programs",
+                    "description": "Utility programs that can bypass system or application controls are restricted and tightly controlled.",
+                    "guidance": "Identify powerful utilities in use, check who can run them, and review logging of their use. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Use of privileged utility programs is implemented for the public cloud service in scope.",
+                        "Where use of privileged utility programs affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.19",
+                    "title": "Installation of software on operational systems",
+                    "description": "Software installation on operational systems is controlled.",
+                    "guidance": "Review installation rights, allow-listing or software deployment controls, and sample installed software against approved lists. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Installation of software on operational systems is implemented for the public cloud service in scope.",
+                        "Where installation of software on operational systems affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.20",
+                    "title": "Networks security",
+                    "description": "Networks and network devices are secured, managed and controlled to protect the information on systems and applications.",
+                    "guidance": "Review network diagrams, device hardening, administrative access to network devices, and firewall rule reviews. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Networks security is implemented for the public cloud service in scope.",
+                        "Where networks security affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.21",
+                    "title": "Security of network services",
+                    "description": "Security mechanisms, service levels and requirements for network services are identified, put in place and monitored.",
+                    "guidance": "Check network service agreements and security features (for example encryption, DDoS protection) and monitoring of provider performance. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Security of network services is implemented for the public cloud service in scope.",
+                        "Where security of network services affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.22",
+                    "title": "Segregation of networks",
+                    "description": "Groups of information services, users and systems are separated into different network segments.",
+                    "guidance": "Review segmentation design and test that controls between segments, such as firewall rules or VLANs, enforce the intended separation. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Segregation of networks is implemented for the public cloud service in scope.",
+                        "Where segregation of networks affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.23",
+                    "title": "Web filtering",
+                    "description": "Access to external websites is managed to reduce exposure to malicious content.",
+                    "guidance": "Review web filtering tooling, blocked categories and exception handling, and test coverage for remote users. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Web filtering is implemented for the public cloud service in scope.",
+                        "Where web filtering affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.24",
+                    "title": "Use of cryptography",
+                    "description": "Rules for using cryptography, including managing keys, are defined and put into practice.",
+                    "guidance": "Obtain the cryptography policy and key management procedures and check encryption in transit and at rest for key systems. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Use of cryptography is implemented for the public cloud service in scope.",
+                        "Customer PII transmitted over public networks is encrypted."
+                    ]
+                },
+                {
+                    "id": "8.25",
+                    "title": "Secure development lifecycle",
+                    "description": "Rules for developing software and systems securely are set and followed throughout the development life cycle.",
+                    "guidance": "Review the secure SDLC standard and sample projects for security activities at each phase. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Secure development lifecycle is implemented for the public cloud service in scope.",
+                        "Where secure development lifecycle affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.26",
+                    "title": "Application security requirements",
+                    "description": "Security requirements are identified, specified and approved when building or buying applications.",
+                    "guidance": "Sample application projects or purchases for documented security requirements and their approval. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Application security requirements is implemented for the public cloud service in scope.",
+                        "Where application security requirements affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.27",
+                    "title": "Secure system architecture and engineering principles",
+                    "description": "Principles for designing secure systems are defined, documented, kept current and applied to all system development.",
+                    "guidance": "Check for documented secure architecture principles and evidence they were applied in recent design reviews. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Secure system architecture and engineering principles is implemented for the public cloud service in scope.",
+                        "Where secure system architecture and engineering principles affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.28",
+                    "title": "Secure coding",
+                    "description": "Secure coding practices are applied to software development.",
+                    "guidance": "Review coding standards, developer training, code review records and static analysis results. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Secure coding is implemented for the public cloud service in scope.",
+                        "Where secure coding affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.29",
+                    "title": "Security testing in development and acceptance",
+                    "description": "Security testing is defined and carried out during development and before systems are accepted into use.",
+                    "guidance": "Look for security test plans and results (for example SAST, DAST, penetration tests) and acceptance criteria tied to them. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Security testing in development and acceptance is implemented for the public cloud service in scope.",
+                        "Where security testing in development and acceptance affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.30",
+                    "title": "Outsourced development",
+                    "description": "The organization directs, monitors and reviews outsourced development work.",
+                    "guidance": "Review outsourced development contracts for security requirements, and evidence of oversight such as code reviews or acceptance testing. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Outsourced development is implemented for the public cloud service in scope.",
+                        "Where outsourced development affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.31",
+                    "title": "Separation of development, test and production environments",
+                    "description": "Development, test and production environments are kept separate and secured.",
+                    "guidance": "Check environment separation, access differences between environments and controls on promotion to production. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Separation of development, test and production environments is implemented for the public cloud service in scope.",
+                        "Where separation of development, test and production environments affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.32",
+                    "title": "Change management",
+                    "description": "Changes to information processing facilities and systems go through change management.",
+                    "guidance": "Sample changes for request, impact assessment, approval, testing and post-implementation review. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Change management is implemented for the public cloud service in scope.",
+                        "Where change management affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.33",
+                    "title": "Test information",
+                    "description": "Information used for testing is chosen carefully and protected.",
+                    "guidance": "Check whether production data is used in test, and if so how it is approved, masked and removed after use. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Test information is implemented for the public cloud service in scope.",
+                        "Where test information affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                },
+                {
+                    "id": "8.34",
+                    "title": "Protection of information systems during audit testing",
+                    "description": "Audits and other assurance tests on operational systems are planned and agreed between the tester and management to limit disruption.",
+                    "guidance": "Review audit or testing plans for agreed scope, timing, access restrictions and approval from system owners. For a public cloud PII processor, check how the control protects customer PII.",
+                    "objectives": [
+                        "Protection of information systems during audit testing is implemented for the public cloud service in scope.",
+                        "Where protection of information systems during audit testing affects customer PII, the protection it gives to PII processed for cloud service customers is documented."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HCG-INS",
+            "name": "Customer instructions and purpose (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-INS-01",
+                    "title": "Processing only on customer instructions",
+                    "description": "Customer PII is processed only for the purposes and on the documented instructions of the cloud service customer.",
+                    "guidance": "Review the contract and data processing terms, how instructions are captured, and how the organization refuses or flags instructions that would break the law.",
+                    "objectives": [
+                        "Customer PII is processed only for purposes set out in the contract and on the customer's documented instructions.",
+                        "The customer is told when an instruction appears to infringe applicable law."
+                    ]
+                },
+                {
+                    "id": "HCG-INS-02",
+                    "title": "No marketing use of customer PII",
+                    "description": "Customer PII is not used for marketing or advertising without the customer's express consent, and consent is never a condition of using the service.",
+                    "guidance": "Check policies and technical controls that prevent secondary use of customer PII, and any consent records.",
+                    "objectives": [
+                        "Customer PII is not used for marketing or advertising without express consent.",
+                        "Use of the service does not depend on consent to marketing use."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HCG-MIN",
+            "name": "Data minimization and temporary files (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-MIN-01",
+                    "title": "Temporary files",
+                    "description": "Temporary files and documents containing customer PII are deleted within a defined period.",
+                    "guidance": "Look for a defined retention period for temporary files, automated cleanup and checks that it works.",
+                    "objectives": [
+                        "Temporary files containing customer PII are erased within a defined, documented period."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HCG-DIS",
+            "name": "Use, retention and disclosure (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-DIS-01",
+                    "title": "Legally binding disclosure requests",
+                    "description": "The cloud service customer is told of legally binding requests to disclose its PII unless the law prohibits it, and requests that are not legally binding are rejected.",
+                    "guidance": "Review the law enforcement request procedure, notification records and the register of requests.",
+                    "objectives": [
+                        "Legally binding disclosure requests are notified to the customer unless prohibited.",
+                        "Requests that are not legally binding are rejected or referred to the customer."
+                    ]
+                },
+                {
+                    "id": "HCG-DIS-02",
+                    "title": "Records of disclosures",
+                    "description": "Disclosures of customer PII to third parties are recorded, including what was disclosed, to whom and when.",
+                    "guidance": "Check a disclosure register and the approval process for disclosures.",
+                    "objectives": [
+                        "Every disclosure of customer PII to a third party is recorded with what, to whom and when."
+                    ]
+                },
+                {
+                    "id": "HCG-DIS-03",
+                    "title": "Return, transfer and disposal",
+                    "description": "At the end of the contract customer PII is returned, transferred or securely disposed of under a policy made available to the customer.",
+                    "guidance": "Review the exit and data return policy, deletion procedures and evidence of completed returns or deletions.",
+                    "objectives": [
+                        "A policy on return, transfer and disposal of customer PII is made available to the customer.",
+                        "Customer PII is returned or securely deleted at contract end within the agreed period."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HCG-OPEN",
+            "name": "Openness and transparency (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-OPEN-01",
+                    "title": "Disclosure of subcontracted processing",
+                    "description": "The use of subcontractors to process customer PII is disclosed to the customer before use, with changes notified so the customer can object or terminate.",
+                    "guidance": "Look for a published subprocessor list, change notifications and flow-down of obligations in subprocessor contracts.",
+                    "objectives": [
+                        "Subprocessors of customer PII are disclosed to the customer before use.",
+                        "Changes to subprocessors are notified with an opportunity to object.",
+                        "Subprocessors are bound to equivalent PII protection obligations."
+                    ]
+                },
+                {
+                    "id": "HCG-OPEN-02",
+                    "title": "Location of customer PII",
+                    "description": "The countries where customer PII may be stored or processed are specified to the customer, and changes are notified in advance.",
+                    "guidance": "Check service documentation or contracts listing processing locations, and the change notification process.",
+                    "objectives": [
+                        "The countries where customer PII may be processed are documented and given to the customer.",
+                        "Changes to processing locations are notified to the customer in advance."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HCG-PRIN",
+            "name": "Support for PII principals' rights (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-PRIN-01",
+                    "title": "Supporting access, correction and erasure",
+                    "description": "The organization gives the cloud service customer the means to meet requests from PII principals to access, correct or erase their PII.",
+                    "guidance": "Review product features and support procedures for rights requests and the handling of requests received directly from PII principals.",
+                    "objectives": [
+                        "The customer can fulfil PII principals' access, correction and erasure requests using the service or with the organization's support.",
+                        "Requests received directly from PII principals are passed to the customer."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HCG-ACC",
+            "name": "Accountability and breach notification (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-ACC-01",
+                    "title": "Breach notification to the customer",
+                    "description": "Breaches involving customer PII are notified to the cloud service customer promptly, with the information the customer needs to meet its own obligations.",
+                    "guidance": "Review contractual notification timeframes, the breach procedure and records of notifications, including the details provided.",
+                    "objectives": [
+                        "Breach notification terms, including timeframes, are agreed in the contract.",
+                        "Notifications include the nature of the breach, likely consequences and measures taken.",
+                        "A record of breaches and notifications is kept."
+                    ]
+                },
+                {
+                    "id": "HCG-ACC-02",
+                    "title": "Retention of security policies and records",
+                    "description": "Copies of security policies and operating procedures are retained for a defined period after they are replaced, to support investigations and audits.",
+                    "guidance": "Check the retention period for superseded policies and procedures and evidence they are kept.",
+                    "objectives": [
+                        "Superseded security policies and procedures are retained for a defined period."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "HCG-SEC",
+            "name": "Information security for customer PII (HCG)",
+            "controls": [
+                {
+                    "id": "HCG-SEC-01",
+                    "title": "Restriction of hard copy and removable media",
+                    "description": "Creation of hard copy material and use of removable media containing customer PII is restricted, authorized and recorded.",
+                    "guidance": "Review policy on printing and removable media for customer PII and logs of authorized use.",
+                    "objectives": [
+                        "Hard copy and removable media containing customer PII are created only when authorized and recorded."
+                    ]
+                },
+                {
+                    "id": "HCG-SEC-02",
+                    "title": "Encryption and secure disposal of PII",
+                    "description": "Customer PII is encrypted in transit over public networks and on portable media, and is securely disposed of when no longer needed.",
+                    "guidance": "Check encryption configuration for data in transit and on portable media, and disposal records.",
+                    "objectives": [
+                        "Customer PII sent over public networks or held on portable media is encrypted.",
+                        "Customer PII is securely disposed of when no longer needed."
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,129 @@
+{
+    "key": "iso-27017",
+    "name": "ISO/IEC 27017",
+    "version": "HCG control set 2026",
+    "full_name": "ISO/IEC 27017:2026 Information security, cybersecurity and privacy protection - Information security controls based on ISO/IEC 27002 for cloud services: HCG control set",
+    "issuing_body": "Heights Consulting Group, structured on ISO/IEC 27017:2026 (ISO/IEC JTC 1/SC 27)",
+    "standard_codes": [
+        "ISO-27017"
+    ],
+    "aliases": [
+        "ISO 27017",
+        "ISO/IEC 27017",
+        "Cloud security controls",
+        "ITU-T X.1631"
+    ],
+    "content_licence": "hcg_authored",
+    "notice": "HCG control set based on ISO/IEC 27017:2026, second edition. Control numbers and titles are used for identification only; the standard's text is licensed by ISO and IEC and is not reproduced. Descriptions, guidance and test points are written by HCG. ISO/IEC 27017 is a code of practice: it is assessed alongside an ISO/IEC 27001 information security management system, not certified on its own.",
+    "sources": [
+        {
+            "id": "iso27017",
+            "title": "ISO/IEC 27017:2026 sample preview (contents list and opening clauses)",
+            "version": "Second edition, 2026",
+            "publisher": "ISO/IEC, distributed by iTeh Standards",
+            "url": "https://cdn.standards.iteh.ai/samples/iso/iso-iec-27017-2026/13881abecf944901a95c62cb5a555a49/iso-iec-27017-2026.pdf",
+            "file": "iso27017/iso-iec-27017-2026-sample.pdf",
+            "sha256": "9377146b1ff1674ba378346b27cc075573776cd11a1da91c3dee0fbc48648041"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG ISO/IEC 27017 control set: descriptions, guidance and cloud test points",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "iso27017",
+        "objectives": "hcg",
+        "guidance": "hcg"
+    },
+    "control_flags": {
+        "type": "clause for a control of the standard (official number and title, including the four cloud-specific CLD controls)."
+    },
+    "terminology": {
+        "control": "control",
+        "controls": "controls",
+        "family": "theme",
+        "families": "themes",
+        "objective": "test point",
+        "objectives": "test points",
+        "plan": "Corrective action plan",
+        "plan_short": "Corrective action plan",
+        "score": "Implementation score"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Implemented"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Implemented"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Implemented"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable controls implemented, with partial implementation counting as half. ISO/IEC 27017 defines no score; this percentage is an HCG measure of readiness."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "A control is implemented only when every HCG test point under it is met.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        },
+        {
+            "id": "role_applicability",
+            "type": "applicability",
+            "summary": "Each control is assessed for the role the organization plays for the cloud service in scope: cloud service customer, cloud service provider, or both. Controls excluded in the ISO/IEC 27001 statement of applicability with justification are marked not applicable.",
+            "source": "iso27017",
+            "cite": "ISO/IEC 27017:2026, 1 Scope",
+            "quote": "This document provides controls and guidance for cloud service customers (CSCs) and cloud service providers (CSPs)."
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "In the implementation score a partially implemented control counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG control set"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "ISO/IEC 27017",
+            "definition": "The code of practice for information security controls for cloud services, giving cloud-specific guidance on the ISO/IEC 27002 controls and adding cloud-only controls."
+        },
+        {
+            "term": "Cloud service customer (CSC)",
+            "definition": "An organization that uses cloud services."
+        },
+        {
+            "term": "Cloud service provider (CSP)",
+            "definition": "An organization that makes cloud services available."
+        },
+        {
+            "term": "Cloud service partner",
+            "definition": "A party that supports a cloud service provider or customer, such as a reseller, integrator or auditor."
+        },
+        {
+            "term": "Shared responsibility",
+            "definition": "The division of security tasks between the cloud service customer and provider, which varies by service model."
+        }
+    ]
+}

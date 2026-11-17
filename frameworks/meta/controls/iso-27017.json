@@ -1,0 +1,1000 @@
+{
+    "families": [
+        {
+            "code": "5",
+            "name": "Cloud service specific guidance related to organizational controls",
+            "controls": [
+                {
+                    "id": "5.1",
+                    "title": "Policies for information security",
+                    "description": "The organization has a top-level security policy plus supporting topic policies, approved by management, shared with the people they apply to, and kept current.",
+                    "guidance": "Review the policy set for approval, ownership, review dates and distribution, and confirm staff acknowledge the policies relevant to them. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Policies for information security is implemented for the cloud services in scope.",
+                        "Information security policies address the use and provision of cloud services, including the cloud-specific risks and shared responsibilities."
+                    ]
+                },
+                {
+                    "id": "5.2",
+                    "title": "Information security roles and responsibilities",
+                    "description": "Security responsibilities are defined and assigned to roles so it is clear who does what.",
+                    "guidance": "Look for documented security roles (for example asset owners, risk owners, security lead) and check that assignees are aware of and carry out their duties. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Information security roles and responsibilities is implemented for the cloud services in scope.",
+                        "Security roles for cloud services are allocated between the cloud service customer and provider and documented."
+                    ]
+                },
+                {
+                    "id": "5.3",
+                    "title": "Segregation of duties",
+                    "description": "Incompatible tasks are split between different people so no single person can both carry out and conceal misuse or error.",
+                    "guidance": "Review a list of conflicting duties (for example requesting and approving access, developing and deploying code) and test that systems and workflows enforce the separation or that compensating oversight exists. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Segregation of duties is implemented for the cloud services in scope.",
+                        "Responsibility for segregation of duties between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.4",
+                    "title": "Management responsibilities",
+                    "description": "Managers make sure their staff and contractors follow the organization's security policies and procedures.",
+                    "guidance": "Interview managers about how they set expectations and support compliance, and look for security responsibilities in management objectives or performance reviews. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Management responsibilities is implemented for the cloud services in scope.",
+                        "Responsibility for management responsibilities between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.5",
+                    "title": "Contact with authorities",
+                    "description": "The organization knows which authorities to contact for security matters, such as regulators, law enforcement or national CERTs, and keeps those contacts ready.",
+                    "guidance": "Check for a current list of authority contacts with conditions for contacting them, and examples of when contact was made where relevant. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Contact with authorities is implemented for the cloud services in scope.",
+                        "Responsibility for contact with authorities between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.6",
+                    "title": "Contact with special interest groups",
+                    "description": "The organization keeps in touch with security forums, professional bodies and industry groups to stay informed and share knowledge.",
+                    "guidance": "Look for memberships, subscriptions or participation records and evidence that information gained is passed to the people who need it. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Contact with special interest groups is implemented for the cloud services in scope.",
+                        "Responsibility for contact with special interest groups between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.7",
+                    "title": "Threat intelligence",
+                    "description": "The organization gathers and analyses information about threats relevant to it and uses that to inform its defences.",
+                    "guidance": "Ask for threat intelligence sources, analysis outputs and examples of decisions or control changes that resulted from them. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Threat intelligence is implemented for the cloud services in scope.",
+                        "Responsibility for threat intelligence between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.8",
+                    "title": "Information security in project management",
+                    "description": "Security is considered from the start and throughout every project, whatever its type.",
+                    "guidance": "Review the project methodology for security checkpoints and sample recent projects for security requirements, risk assessments and sign-off. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Information security in project management is implemented for the cloud services in scope.",
+                        "Responsibility for information security in project management between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.9",
+                    "title": "Inventory of information and other associated assets",
+                    "description": "The organization keeps an up-to-date inventory of its information and related assets, with an owner for each.",
+                    "guidance": "Inspect the asset inventory for completeness, accuracy and named owners, and spot-check items found in the environment against it. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Inventory of information and other associated assets is implemented for the cloud services in scope.",
+                        "The asset inventory includes cloud service assets, including customer data and derived data held in cloud services, and identifies who owns them."
+                    ]
+                },
+                {
+                    "id": "5.10",
+                    "title": "Acceptable use of information and other associated assets",
+                    "description": "There are written rules for how information and assets may and may not be used and handled.",
+                    "guidance": "Obtain the acceptable use rules and confirm users have acknowledged them and that handling procedures exist for sensitive assets. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Acceptable use of information and other associated assets is implemented for the cloud services in scope.",
+                        "Responsibility for acceptable use of information and other associated assets between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.11",
+                    "title": "Return of assets",
+                    "description": "Staff and other users give back organizational assets when they leave or their contract or role ends.",
+                    "guidance": "Sample leavers and check return records for laptops, tokens, badges and documents, and confirm the process covers data held on personal devices. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Return of assets is implemented for the cloud services in scope.",
+                        "Responsibility for return of assets between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.12",
+                    "title": "Classification of information",
+                    "description": "Information is classified according to its sensitivity and importance so that it receives the right level of protection.",
+                    "guidance": "Review the classification scheme and check that information owners have applied it to key information sets and systems. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Classification of information is implemented for the cloud services in scope.",
+                        "Responsibility for classification of information between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.13",
+                    "title": "Labelling of information",
+                    "description": "Information carries labels that match its classification so people know how to handle it.",
+                    "guidance": "Check labelling procedures for documents, email and systems, and sample information to see whether labels are applied as required. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Labelling of information is implemented for the cloud services in scope.",
+                        "Responsibility for labelling of information between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.14",
+                    "title": "Information transfer",
+                    "description": "Rules and agreements govern how information is sent, both within the organization and to outside parties, by any channel.",
+                    "guidance": "Review transfer procedures and agreements and test controls on email, file sharing, removable media and verbal transfer of sensitive information. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Information transfer is implemented for the cloud services in scope.",
+                        "Responsibility for information transfer between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.15",
+                    "title": "Access control",
+                    "description": "Access to information and systems is governed by rules based on business need and security requirements.",
+                    "guidance": "Obtain the access control policy and check that it defines need-to-know and least-privilege principles and that system access matches it. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Access control is implemented for the cloud services in scope.",
+                        "Access control for cloud services covers both customer administrators and provider personnel, with administrative access to cloud management interfaces restricted."
+                    ]
+                },
+                {
+                    "id": "5.16",
+                    "title": "Identity management",
+                    "description": "Every identity that can access systems, whether a person, device or service, is managed across its whole life from creation to removal.",
+                    "guidance": "Review identity lifecycle procedures and sample accounts for unique ownership, approval at creation and timely removal; look for shared or orphaned accounts. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Identity management is implemented for the cloud services in scope.",
+                        "Identities used for cloud services, including service accounts, are managed through their lifecycle, and the provider offers registration and deregistration functions to customers."
+                    ]
+                },
+                {
+                    "id": "5.17",
+                    "title": "Authentication information",
+                    "description": "Passwords, keys and other authentication secrets are issued and managed securely, and users know how to protect them.",
+                    "guidance": "Check how initial credentials are issued, password and secret rules, secret storage, and user guidance on protecting authentication details. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Authentication information is implemented for the cloud services in scope.",
+                        "Authentication information for cloud service accounts is allocated and protected, and the provider documents the authentication options available to customers."
+                    ]
+                },
+                {
+                    "id": "5.18",
+                    "title": "Access rights",
+                    "description": "Access rights are granted, reviewed, changed and removed according to the access rules and the person's current role.",
+                    "guidance": "Sample access requests for approval, review records from periodic access recertification, and check that movers and leavers had rights changed promptly. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Access rights is implemented for the cloud services in scope.",
+                        "Access rights to cloud services are provisioned, reviewed and revoked, including rights granted through the provider's management tools."
+                    ]
+                },
+                {
+                    "id": "5.19",
+                    "title": "Information security in supplier relationships",
+                    "description": "The organization manages the security risks that come from using suppliers' products and services.",
+                    "guidance": "Review the supplier security process, supplier inventory with risk ratings, and due-diligence records for key suppliers. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Information security in supplier relationships is implemented for the cloud services in scope.",
+                        "Cloud service providers are treated as suppliers, with their security assessed before use."
+                    ]
+                },
+                {
+                    "id": "5.20",
+                    "title": "Addressing information security within supplier agreements",
+                    "description": "Agreements with suppliers spell out the security requirements each supplier must meet.",
+                    "guidance": "Sample supplier contracts for security clauses appropriate to the risk, such as confidentiality, incident notification, audit rights and data handling. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Addressing information security within supplier agreements is implemented for the cloud services in scope.",
+                        "Cloud service agreements state security responsibilities, data location, incident notification, audit rights and data return and deletion."
+                    ]
+                },
+                {
+                    "id": "5.21",
+                    "title": "Managing information security in the ICT supply chain",
+                    "description": "The organization manages security risks that pass down the technology supply chain, including suppliers' own suppliers.",
+                    "guidance": "Look for requirements on suppliers to flow security obligations down, component provenance checks, and monitoring of critical technology supply chains. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Managing information security in the ICT supply chain is implemented for the cloud services in scope.",
+                        "The provider identifies its own ICT supply chain dependencies (for example peer cloud providers) and manages their security."
+                    ]
+                },
+                {
+                    "id": "5.22",
+                    "title": "Monitoring, review and change management of supplier services",
+                    "description": "The organization watches how suppliers perform on security and manages changes to the services they provide.",
+                    "guidance": "Check supplier review records, performance reports or audits, and how changes to supplier services were assessed before acceptance. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Monitoring, review and change management of supplier services is implemented for the cloud services in scope.",
+                        "Cloud provider security is monitored, for example through certifications, reports and service change notices."
+                    ]
+                },
+                {
+                    "id": "5.23",
+                    "title": "Information security for use of cloud services",
+                    "description": "The organization sets security requirements for cloud services and manages how it selects, uses, oversees and exits them.",
+                    "guidance": "Review the cloud security policy, the cloud service inventory, shared-responsibility analysis for key services, and exit plans. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Information security for use of cloud services is implemented for the cloud services in scope.",
+                        "Processes for acquiring, using, managing and exiting cloud services are defined in line with the organization's security requirements.",
+                        "An exit strategy covers data return or migration and deletion when a cloud service ends."
+                    ]
+                },
+                {
+                    "id": "5.24",
+                    "title": "Information security incident management planning and preparation",
+                    "description": "The organization has prepared for security incidents with defined processes, roles and communication paths before one happens.",
+                    "guidance": "Obtain the incident response plan, role assignments and contact lists, and look for training or exercise records. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Information security incident management planning and preparation is implemented for the cloud services in scope.",
+                        "Incident management responsibilities between the customer and provider are agreed, including how incidents are reported each way."
+                    ]
+                },
+                {
+                    "id": "5.25",
+                    "title": "Assessment and decision on information security events",
+                    "description": "Security events are assessed to decide whether they are incidents, so that real incidents are recognized and escalated.",
+                    "guidance": "Check triage criteria and sample event records to see how classification decisions were made and recorded. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Assessment and decision on information security events is implemented for the cloud services in scope.",
+                        "Responsibility for assessment and decision on information security events between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.26",
+                    "title": "Response to information security incidents",
+                    "description": "Security incidents are handled according to the documented response procedures.",
+                    "guidance": "Sample incident tickets and compare the actions taken, timing and communications with the documented procedure. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Response to information security incidents is implemented for the cloud services in scope.",
+                        "The provider notifies affected customers of incidents within agreed timeframes and supports their response."
+                    ]
+                },
+                {
+                    "id": "5.27",
+                    "title": "Learning from information security incidents",
+                    "description": "Lessons from incidents are captured and used to strengthen controls and reduce the chance or impact of future incidents.",
+                    "guidance": "Look for post-incident reviews and evidence that resulting actions were tracked and completed. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Learning from information security incidents is implemented for the cloud services in scope.",
+                        "Responsibility for learning from information security incidents between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.28",
+                    "title": "Collection of evidence",
+                    "description": "The organization can identify, gather and preserve evidence about security events in a way that will stand up if needed.",
+                    "guidance": "Review evidence-handling procedures, chain-of-custody forms and tooling, and check whether recent incidents followed them. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Collection of evidence is implemented for the cloud services in scope.",
+                        "Arrangements exist to obtain digital evidence from the cloud environment, including from the provider when needed."
+                    ]
+                },
+                {
+                    "id": "5.29",
+                    "title": "Information security during disruption",
+                    "description": "The organization has planned how to keep information protected at the right level while operations are disrupted.",
+                    "guidance": "Check continuity and crisis plans for security requirements during disruption, and look for test results that include security aspects. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Information security during disruption is implemented for the cloud services in scope.",
+                        "Responsibility for information security during disruption between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.30",
+                    "title": "ICT readiness for business continuity",
+                    "description": "Technology services are prepared and tested so they can be restored in time to meet business continuity needs.",
+                    "guidance": "Review business impact analysis outputs, recovery objectives, IT recovery plans and recent recovery test results against those objectives. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "ICT readiness for business continuity is implemented for the cloud services in scope.",
+                        "Business continuity arrangements account for cloud service availability, provider resilience and recovery responsibilities."
+                    ]
+                },
+                {
+                    "id": "5.31",
+                    "title": "Legal, statutory, regulatory and contractual requirements",
+                    "description": "The organization identifies the laws, regulations and contracts that bear on information security and keeps track of how it meets them.",
+                    "guidance": "Obtain the legal and regulatory register with owners and review dates and check how new or changed obligations are picked up. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Legal, statutory, regulatory and contractual requirements is implemented for the cloud services in scope.",
+                        "Legal and regulatory requirements that depend on data location and jurisdiction are identified for each cloud service."
+                    ]
+                },
+                {
+                    "id": "5.32",
+                    "title": "Intellectual property rights",
+                    "description": "The organization respects intellectual property, including software licensing and copyrighted material.",
+                    "guidance": "Check software licence management records against deployed software and review policies on use of third-party content. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Intellectual property rights is implemented for the cloud services in scope.",
+                        "Responsibility for intellectual property rights between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.33",
+                    "title": "Protection of records",
+                    "description": "Records are protected from loss, destruction, falsification and unauthorized access or release for as long as they must be kept.",
+                    "guidance": "Review the records retention schedule and check sample records for storage protection, integrity and correct disposal. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Protection of records is implemented for the cloud services in scope.",
+                        "Records held in cloud services are protected, including records the provider keeps about the customer's use of the service."
+                    ]
+                },
+                {
+                    "id": "5.34",
+                    "title": "Privacy and protection of PII",
+                    "description": "The organization meets its obligations for privacy and the protection of personal data.",
+                    "guidance": "Look for a privacy policy, data inventory or records of processing, a named privacy role, and evidence of compliance with applicable privacy laws. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Privacy and protection of PII is implemented for the cloud services in scope.",
+                        "Processing of PII in cloud services is covered by agreements that allocate privacy responsibilities."
+                    ]
+                },
+                {
+                    "id": "5.35",
+                    "title": "Independent review of information security",
+                    "description": "The organization's approach to information security is independently reviewed at planned intervals and after significant changes.",
+                    "guidance": "Obtain reports from independent reviews (internal audit, external assessors) and confirm the reviewers were independent of the area reviewed. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Independent review of information security is implemented for the cloud services in scope.",
+                        "Independent assurance of the provider (for example certifications or audit reports) is obtained and reviewed."
+                    ]
+                },
+                {
+                    "id": "5.36",
+                    "title": "Compliance with policies, rules and standards for information security",
+                    "description": "Compliance with the organization's own security policies, rules and standards is regularly checked.",
+                    "guidance": "Review compliance check schedules, results such as configuration reviews or policy attestations, and follow-up of exceptions. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Compliance with policies, rules and standards for information security is implemented for the cloud services in scope.",
+                        "Responsibility for compliance with policies, rules and standards for information security between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.37",
+                    "title": "Documented operating procedures",
+                    "description": "Operating procedures for information processing facilities are written down and available to the people who need them.",
+                    "guidance": "Sample operational procedures (backups, start-up and shutdown, monitoring) for currency, approval and availability to operators. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Documented operating procedures is implemented for the cloud services in scope.",
+                        "Responsibility for documented operating procedures between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "5.38",
+                    "title": "CLD - Shared roles and responsibilities within a cloud computing environment",
+                    "description": "Responsibilities for information security in each cloud service are divided between the cloud service customer and the cloud service provider, documented, agreed and communicated to the people who need them.",
+                    "guidance": "Look for a shared responsibility matrix per service and service model (IaaS, PaaS, SaaS) covering identity, data, network, logging, backup, patching, incident handling and deletion, agreed in the contract or service documentation and reflected in internal procedures on both sides.",
+                    "objectives": [
+                        "A shared responsibility matrix exists for each cloud service in scope and identifies who performs each security activity.",
+                        "The division of responsibilities is agreed in the service agreement or published service documentation.",
+                        "Internal procedures and roles reflect the responsibilities the organization holds."
+                    ]
+                },
+                {
+                    "id": "5.39",
+                    "title": "CLD - Agreement on the roles and responsibilities of the cloud service partner",
+                    "description": "Where a cloud service partner (such as a reseller, integrator or managed service provider) is involved, its information security roles and responsibilities are agreed with the customer and the provider.",
+                    "guidance": "Check agreements with cloud service partners for defined security responsibilities, access to customer environments, incident notification and handover of responsibilities at contract end.",
+                    "objectives": [
+                        "Security roles and responsibilities of each cloud service partner are documented in an agreement.",
+                        "Partner access to customer cloud environments is defined, controlled and reviewed."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "6",
+            "name": "Cloud service specific guidance related to people controls",
+            "controls": [
+                {
+                    "id": "6.1",
+                    "title": "Screening",
+                    "description": "Background checks are done on candidates before they join and repeated where appropriate, in proportion to the role and the law.",
+                    "guidance": "Sample personnel files for completed screening appropriate to role risk, and check the screening policy reflects legal constraints. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Screening is implemented for the cloud services in scope.",
+                        "Responsibility for screening between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "6.2",
+                    "title": "Terms and conditions of employment",
+                    "description": "Employment contracts and terms state the security responsibilities of both the staff member and the organization.",
+                    "guidance": "Review contract templates and a sample of signed agreements for security and confidentiality clauses. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Terms and conditions of employment is implemented for the cloud services in scope.",
+                        "Responsibility for terms and conditions of employment between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "6.3",
+                    "title": "Information security awareness, education and training",
+                    "description": "Staff and relevant contractors receive security awareness, education and training suited to their roles, and it is kept up to date.",
+                    "guidance": "Check the training plan, completion rates and role-specific training for high-risk roles, and how content is refreshed. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Information security awareness, education and training is implemented for the cloud services in scope.",
+                        "Responsibility for information security awareness, education and training between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "6.4",
+                    "title": "Disciplinary process",
+                    "description": "There is a formal, communicated process for dealing with people who break security policy.",
+                    "guidance": "Obtain the disciplinary process and confirm staff are informed of it; where violations occurred, check it was followed consistently. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Disciplinary process is implemented for the cloud services in scope.",
+                        "Responsibility for disciplinary process between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "6.5",
+                    "title": "Responsibilities after termination or change of employment",
+                    "description": "Security duties that continue after someone leaves or changes role are defined, communicated and enforced.",
+                    "guidance": "Review exit and transfer procedures for reminders of ongoing confidentiality duties, and sample leaver records. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Responsibilities after termination or change of employment is implemented for the cloud services in scope.",
+                        "Responsibility for responsibilities after termination or change of employment between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "6.6",
+                    "title": "Confidentiality or non-disclosure agreements",
+                    "description": "Confidentiality or non-disclosure agreements reflecting the organization's needs are in place, signed and periodically reviewed.",
+                    "guidance": "Check NDA templates for currency and sample signed agreements for staff, contractors and relevant third parties. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Confidentiality or non-disclosure agreements is implemented for the cloud services in scope.",
+                        "Responsibility for confidentiality or non-disclosure agreements between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "6.7",
+                    "title": "Remote working",
+                    "description": "Security measures protect information when people work away from the organization's premises.",
+                    "guidance": "Review the remote working policy and technical controls such as VPN, device encryption and secure home-working guidance, and test a sample of remote setups. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Remote working is implemented for the cloud services in scope.",
+                        "Responsibility for remote working between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "6.8",
+                    "title": "Information security event reporting",
+                    "description": "People have a quick, simple way to report security events they notice, and they know to use it.",
+                    "guidance": "Confirm the reporting channel exists and is publicized, and review reports received to judge whether staff use it. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Information security event reporting is implemented for the cloud services in scope.",
+                        "Responsibility for information security event reporting between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "7",
+            "name": "Cloud service specific guidance related to physical controls",
+            "controls": [
+                {
+                    "id": "7.1",
+                    "title": "Physical security perimeters",
+                    "description": "Physical boundaries are defined and used to protect areas that hold information and related assets.",
+                    "guidance": "Walk the site to verify that perimeters such as walls, doors and fencing match the defined secure areas and have no obvious gaps. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Physical security perimeters is implemented for the cloud services in scope.",
+                        "Responsibility for physical security perimeters between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "7.2",
+                    "title": "Physical entry",
+                    "description": "Entry to secure areas is controlled so only authorized people get in.",
+                    "guidance": "Test access control systems, visitor logs and badge procedures, and review access lists for secure areas. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Physical entry is implemented for the cloud services in scope.",
+                        "Responsibility for physical entry between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "7.3",
+                    "title": "Securing offices, rooms and facilities",
+                    "description": "Offices, rooms and facilities are designed and run with physical security in mind.",
+                    "guidance": "Inspect sensitive rooms for locks, discreet signage and placement away from public access, and review facility security measures. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Securing offices, rooms and facilities is implemented for the cloud services in scope.",
+                        "Responsibility for securing offices, rooms and facilities between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "7.4",
+                    "title": "Physical security monitoring",
+                    "description": "Premises are monitored to detect unauthorized physical access.",
+                    "guidance": "Check CCTV, alarms or guard patrols cover key areas, and review monitoring logs and alarm response records. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Physical security monitoring is implemented for the cloud services in scope.",
+                        "Responsibility for physical security monitoring between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "7.5",
+                    "title": "Protecting against physical and environmental threats",
+                    "description": "Facilities are protected against natural and man-made physical threats such as fire, flood, and power or environmental failures.",
+                    "guidance": "Review the physical threat assessment and inspect protections such as fire suppression, water detection and environmental monitoring. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Protecting against physical and environmental threats is implemented for the cloud services in scope.",
+                        "Responsibility for protecting against physical and environmental threats between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "7.6",
+                    "title": "Working in secure areas",
+                    "description": "Additional rules govern behaviour and work inside secure areas.",
+                    "guidance": "Review secure area rules (for example no unsupervised visitors, no personal recording devices) and observe whether they are followed. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Working in secure areas is implemented for the cloud services in scope.",
+                        "Responsibility for working in secure areas between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "7.7",
+                    "title": "Clear desk and clear screen",
+                    "description": "Desks are kept clear of sensitive papers and media, and screens are locked or cleared when unattended.",
+                    "guidance": "Check the policy and screen-lock settings, and do a walk-through to spot unattended sensitive material or unlocked sessions. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Clear desk and clear screen is implemented for the cloud services in scope.",
+                        "Responsibility for clear desk and clear screen between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "7.8",
+                    "title": "Equipment siting and protection",
+                    "description": "Equipment is placed and protected to reduce physical and environmental risks and unauthorized access.",
+                    "guidance": "Inspect server rooms and equipment locations for appropriate siting, environmental protection and restricted access. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Equipment siting and protection is implemented for the cloud services in scope.",
+                        "Responsibility for equipment siting and protection between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "7.9",
+                    "title": "Security of assets off-premises",
+                    "description": "Assets taken off-site, such as laptops and phones, are protected.",
+                    "guidance": "Review the off-site asset policy, encryption and tracking of mobile assets, and check records of assets taken off-site. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Security of assets off-premises is implemented for the cloud services in scope.",
+                        "Responsibility for security of assets off-premises between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "7.10",
+                    "title": "Storage media",
+                    "description": "Storage media are managed securely from acquisition through use, transport and disposal.",
+                    "guidance": "Check removable media controls, encryption, transport procedures and disposal records with certificates where used. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Storage media is implemented for the cloud services in scope.",
+                        "Responsibility for storage media between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "7.11",
+                    "title": "Supporting utilities",
+                    "description": "Power, cooling and other supporting utilities are protected against failures and disruption.",
+                    "guidance": "Inspect UPS, generators and HVAC, and review maintenance and test records. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Supporting utilities is implemented for the cloud services in scope.",
+                        "Responsibility for supporting utilities between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "7.12",
+                    "title": "Cabling security",
+                    "description": "Power and data cables are protected from interception, interference and damage.",
+                    "guidance": "Inspect cabling routes, patch areas and cabinets for physical protection and separation of power and data. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Cabling security is implemented for the cloud services in scope.",
+                        "Responsibility for cabling security between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "7.13",
+                    "title": "Equipment maintenance",
+                    "description": "Equipment is maintained properly to keep information available, intact and confidential.",
+                    "guidance": "Review maintenance schedules and records, including controls over third-party maintenance staff and equipment leaving for repair. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Equipment maintenance is implemented for the cloud services in scope.",
+                        "Responsibility for equipment maintenance between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "7.14",
+                    "title": "Secure disposal or re-use of equipment",
+                    "description": "Before equipment is disposed of or reused, sensitive data and licensed software are removed or securely overwritten.",
+                    "guidance": "Check disposal and reuse procedures and sample wipe or destruction certificates. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Secure disposal or re-use of equipment is implemented for the cloud services in scope.",
+                        "Responsibility for secure disposal or re-use of equipment between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                }
+            ]
+        },
+        {
+            "code": "8",
+            "name": "Cloud service specific guidance related to technological controls",
+            "controls": [
+                {
+                    "id": "8.1",
+                    "title": "User endpoint devices",
+                    "description": "Information on laptops, phones and other user devices is protected.",
+                    "guidance": "Review endpoint standards and device management tooling, and test a sample of devices for encryption, patching and security settings. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "User endpoint devices is implemented for the cloud services in scope.",
+                        "Responsibility for user endpoint devices between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.2",
+                    "title": "Privileged access rights",
+                    "description": "Privileged access is tightly restricted and closely managed.",
+                    "guidance": "Obtain the list of privileged accounts, check approval and periodic review, and confirm privileged activity is separated from everyday accounts and logged. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Privileged access rights is implemented for the cloud services in scope.",
+                        "Privileged access to cloud management interfaces uses strong authentication and is restricted, logged and reviewed."
+                    ]
+                },
+                {
+                    "id": "8.3",
+                    "title": "Information access restriction",
+                    "description": "Access to information and application functions is limited in line with the access control rules.",
+                    "guidance": "Test system access configuration against role definitions, looking for excessive or unauthorized access. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Information access restriction is implemented for the cloud services in scope.",
+                        "Responsibility for information access restriction between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.4",
+                    "title": "Access to source code",
+                    "description": "Access to source code, development tools and software libraries is controlled.",
+                    "guidance": "Review repository permissions, branch protection and change history to confirm only authorized people can read or change code. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Access to source code is implemented for the cloud services in scope.",
+                        "Responsibility for access to source code between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.5",
+                    "title": "Secure authentication",
+                    "description": "Authentication technology and procedures are strong enough for the sensitivity of the access being granted.",
+                    "guidance": "Check MFA coverage for remote, privileged and sensitive access, session controls and login protections such as lockout. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Secure authentication is implemented for the cloud services in scope.",
+                        "Responsibility for secure authentication between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.6",
+                    "title": "Capacity management",
+                    "description": "Use of computing, storage and network resources is monitored and adjusted to meet current and expected needs.",
+                    "guidance": "Review capacity monitoring dashboards, thresholds, alerts and capacity plans. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Capacity management is implemented for the cloud services in scope.",
+                        "Capacity of cloud resources is monitored, and the provider manages capacity to prevent service degradation."
+                    ]
+                },
+                {
+                    "id": "8.7",
+                    "title": "Protection against malware",
+                    "description": "Systems are protected against malware, backed by user awareness.",
+                    "guidance": "Check anti-malware coverage and update status across endpoints and servers, and review detections and responses. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Protection against malware is implemented for the cloud services in scope.",
+                        "Responsibility for protection against malware between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.8",
+                    "title": "Management of technical vulnerabilities",
+                    "description": "The organization learns of technical vulnerabilities in its systems, assesses its exposure, and takes timely action.",
+                    "guidance": "Review scanning coverage and results, patching timelines against defined targets, and handling of exceptions. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Management of technical vulnerabilities is implemented for the cloud services in scope.",
+                        "Vulnerability management responsibilities for each layer of the cloud stack are assigned, and the provider informs customers of vulnerabilities that affect them."
+                    ]
+                },
+                {
+                    "id": "8.9",
+                    "title": "Configuration management",
+                    "description": "Secure configurations for hardware, software, services and networks are defined, applied, monitored and reviewed.",
+                    "guidance": "Obtain configuration baselines and test a sample of systems for drift; review change records for configuration updates. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Configuration management is implemented for the cloud services in scope.",
+                        "Cloud resource configurations are defined as secure baselines and monitored for drift."
+                    ]
+                },
+                {
+                    "id": "8.10",
+                    "title": "Information deletion",
+                    "description": "Information that is no longer needed is deleted from systems, devices and storage.",
+                    "guidance": "Check deletion procedures and retention-driven deletion jobs, and sample systems for data kept beyond its retention period. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Information deletion is implemented for the cloud services in scope.",
+                        "Customer data is deleted from cloud services, including copies and backups, when no longer required or when the service ends, with confirmation available."
+                    ]
+                },
+                {
+                    "id": "8.11",
+                    "title": "Data masking",
+                    "description": "Data masking hides sensitive data, such as personal data, where policy, law or business need requires it.",
+                    "guidance": "Review where masking, tokenization or pseudonymization is applied, for example in test environments and reports, and test whether it works. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Data masking is implemented for the cloud services in scope.",
+                        "Responsibility for data masking between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.12",
+                    "title": "Data leakage prevention",
+                    "description": "Measures detect and prevent unauthorized leakage of sensitive information from systems, networks and devices.",
+                    "guidance": "Review DLP tooling and rules, monitored channels, alerts raised and how they were handled. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Data leakage prevention is implemented for the cloud services in scope.",
+                        "Responsibility for data leakage prevention between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.13",
+                    "title": "Information backup",
+                    "description": "Backups of information, software and systems are taken and tested in line with an agreed backup policy.",
+                    "guidance": "Check backup schedules and success logs, offsite or immutable copies, and recent restore test results. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Information backup is implemented for the cloud services in scope.",
+                        "Backup responsibilities for cloud-hosted data are defined, and backups are tested for restore."
+                    ]
+                },
+                {
+                    "id": "8.14",
+                    "title": "Redundancy of information processing facilities",
+                    "description": "Systems are built with enough redundancy to meet availability requirements.",
+                    "guidance": "Review architecture diagrams for single points of failure and evidence of failover testing for critical services. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Redundancy of information processing facilities is implemented for the cloud services in scope.",
+                        "Cloud services are deployed with redundancy that meets availability requirements, for example across zones or regions."
+                    ]
+                },
+                {
+                    "id": "8.15",
+                    "title": "Logging",
+                    "description": "Logs of activities, exceptions, faults and other relevant events are produced, kept, protected and analysed.",
+                    "guidance": "Check log sources, retention, protection against tampering, and evidence of log review or SIEM use. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Logging is implemented for the cloud services in scope.",
+                        "Logs are available for cloud services, with responsibility for collecting, protecting and reviewing them agreed between customer and provider."
+                    ]
+                },
+                {
+                    "id": "8.16",
+                    "title": "Monitoring activities",
+                    "description": "Networks, systems and applications are watched for abnormal behaviour, and potential incidents are acted on.",
+                    "guidance": "Review monitoring coverage, alert rules, on-call arrangements and a sample of alerts with their response. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Monitoring activities is implemented for the cloud services in scope.",
+                        "Cloud services are monitored, and the provider gives customers the monitoring capabilities needed for their part of the service."
+                    ]
+                },
+                {
+                    "id": "8.17",
+                    "title": "Clock synchronization",
+                    "description": "System clocks are synchronized to approved time sources so that logs and events line up.",
+                    "guidance": "Check NTP configuration on a sample of systems and the approved time sources. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Clock synchronization is implemented for the cloud services in scope.",
+                        "Clocks in cloud services are synchronized and the provider documents its time source to customers."
+                    ]
+                },
+                {
+                    "id": "8.18",
+                    "title": "Use of privileged utility programs",
+                    "description": "Utility programs that can bypass system or application controls are restricted and tightly controlled.",
+                    "guidance": "Identify powerful utilities in use, check who can run them, and review logging of their use. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Use of privileged utility programs is implemented for the cloud services in scope.",
+                        "Responsibility for use of privileged utility programs between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.19",
+                    "title": "Installation of software on operational systems",
+                    "description": "Software installation on operational systems is controlled.",
+                    "guidance": "Review installation rights, allow-listing or software deployment controls, and sample installed software against approved lists. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Installation of software on operational systems is implemented for the cloud services in scope.",
+                        "Responsibility for installation of software on operational systems between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.20",
+                    "title": "Network security",
+                    "description": "Networks and network devices are secured, managed and controlled to protect the information on systems and applications.",
+                    "guidance": "Review network diagrams, device hardening, administrative access to network devices, and firewall rule reviews. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Network security is implemented for the cloud services in scope.",
+                        "Network security of the cloud environment, including virtual networks, is designed, configured and monitored."
+                    ]
+                },
+                {
+                    "id": "8.21",
+                    "title": "Security of network services",
+                    "description": "Security mechanisms, service levels and requirements for network services are identified, put in place and monitored.",
+                    "guidance": "Check network service agreements and security features (for example encryption, DDoS protection) and monitoring of provider performance. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Security of network services is implemented for the cloud services in scope.",
+                        "Responsibility for security of network services between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.22",
+                    "title": "Segregation of networks",
+                    "description": "Groups of information services, users and systems are separated into different network segments.",
+                    "guidance": "Review segmentation design and test that controls between segments, such as firewall rules or VLANs, enforce the intended separation. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Segregation of networks is implemented for the cloud services in scope.",
+                        "Networks are segregated within the cloud environment, including between tenants and between the customer's own workloads."
+                    ]
+                },
+                {
+                    "id": "8.23",
+                    "title": "Web filtering",
+                    "description": "Access to external websites is managed to reduce exposure to malicious content.",
+                    "guidance": "Review web filtering tooling, blocked categories and exception handling, and test coverage for remote users. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Web filtering is implemented for the cloud services in scope.",
+                        "Responsibility for web filtering between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.24",
+                    "title": "Use of cryptography",
+                    "description": "Rules for using cryptography, including managing keys, are defined and put into practice.",
+                    "guidance": "Obtain the cryptography policy and key management procedures and check encryption in transit and at rest for key systems. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Use of cryptography is implemented for the cloud services in scope.",
+                        "Encryption of data in cloud services is applied where needed, with key management responsibilities agreed and customer-managed keys considered."
+                    ]
+                },
+                {
+                    "id": "8.25",
+                    "title": "Secure development life cycle",
+                    "description": "Rules for developing software and systems securely are set and followed throughout the development life cycle.",
+                    "guidance": "Review the secure SDLC standard and sample projects for security activities at each phase. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Secure development life cycle is implemented for the cloud services in scope.",
+                        "Responsibility for secure development life cycle between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.26",
+                    "title": "Application security requirements",
+                    "description": "Security requirements are identified, specified and approved when building or buying applications.",
+                    "guidance": "Sample application projects or purchases for documented security requirements and their approval. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Application security requirements is implemented for the cloud services in scope.",
+                        "Responsibility for application security requirements between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.27",
+                    "title": "Secure system architecture and engineering principles",
+                    "description": "Principles for designing secure systems are defined, documented, kept current and applied to all system development.",
+                    "guidance": "Check for documented secure architecture principles and evidence they were applied in recent design reviews. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Secure system architecture and engineering principles is implemented for the cloud services in scope.",
+                        "Responsibility for secure system architecture and engineering principles between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.28",
+                    "title": "Secure coding",
+                    "description": "Secure coding practices are applied to software development.",
+                    "guidance": "Review coding standards, developer training, code review records and static analysis results. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Secure coding is implemented for the cloud services in scope.",
+                        "Responsibility for secure coding between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.29",
+                    "title": "Security testing in development and acceptance",
+                    "description": "Security testing is defined and carried out during development and before systems are accepted into use.",
+                    "guidance": "Look for security test plans and results (for example SAST, DAST, penetration tests) and acceptance criteria tied to them. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Security testing in development and acceptance is implemented for the cloud services in scope.",
+                        "Responsibility for security testing in development and acceptance between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.30",
+                    "title": "Outsourced development",
+                    "description": "The organization directs, monitors and reviews outsourced development work.",
+                    "guidance": "Review outsourced development contracts for security requirements, and evidence of oversight such as code reviews or acceptance testing. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Outsourced development is implemented for the cloud services in scope.",
+                        "Responsibility for outsourced development between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.31",
+                    "title": "Separation of development, test and production environments",
+                    "description": "Development, test and production environments are kept separate and secured.",
+                    "guidance": "Check environment separation, access differences between environments and controls on promotion to production. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Separation of development, test and production environments is implemented for the cloud services in scope.",
+                        "Responsibility for separation of development, test and production environments between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.32",
+                    "title": "Change management",
+                    "description": "Changes to information processing facilities and systems go through change management.",
+                    "guidance": "Sample changes for request, impact assessment, approval, testing and post-implementation review. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Change management is implemented for the cloud services in scope.",
+                        "Changes to the cloud service that could affect customers are communicated to them in advance."
+                    ]
+                },
+                {
+                    "id": "8.33",
+                    "title": "Test information",
+                    "description": "Information used for testing is chosen carefully and protected.",
+                    "guidance": "Check whether production data is used in test, and if so how it is approved, masked and removed after use. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Test information is implemented for the cloud services in scope.",
+                        "Responsibility for test information between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.34",
+                    "title": "Protection of information systems during audit and testing",
+                    "description": "Audits and other assurance tests on operational systems are planned and agreed between the tester and management to limit disruption.",
+                    "guidance": "Review audit or testing plans for agreed scope, timing, access restrictions and approval from system owners. For cloud services, check how the customer and provider share this control.",
+                    "objectives": [
+                        "Protection of information systems during audit and testing is implemented for the cloud services in scope.",
+                        "Responsibility for protection of information systems during audit and testing between the cloud service customer and the cloud service provider is documented and agreed."
+                    ]
+                },
+                {
+                    "id": "8.35",
+                    "title": "CLD - Segregation in virtual computing environments",
+                    "description": "Virtual environments of different cloud service customers are segregated, and virtual machines and containers are hardened, so one tenant cannot access or affect another.",
+                    "guidance": "For providers, review tenant isolation design (hypervisor, container, storage and network isolation), testing of isolation and hardening baselines for images. For customers, review hardening of their own virtual machines and images.",
+                    "objectives": [
+                        "Tenant environments are logically segregated at the compute, storage and network layers, and isolation is tested.",
+                        "Virtual machine and container images are hardened to a documented baseline before use."
+                    ]
+                },
+                {
+                    "id": "8.36",
+                    "title": "CLD - Detection and prevention of unauthorized use of cloud services",
+                    "description": "The organization can detect and prevent unauthorized use of cloud services, including unsanctioned services and abuse of the services it provides.",
+                    "guidance": "For customers, look for cloud service discovery (for example CASB or network logs) and a process for approving services. For providers, look for monitoring of abuse of the service and terms that allow action against it.",
+                    "objectives": [
+                        "Use of cloud services is monitored to detect unsanctioned or unauthorized use.",
+                        "Detected unauthorized use is investigated and acted on."
+                    ]
+                }
+            ]
+        }
+    ]
+}
