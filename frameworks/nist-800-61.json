@@ -1,0 +1,2362 @@
+{
+    "key": "nist-800-61",
+    "name": "NIST SP 800-61",
+    "version": "Revision 3",
+    "full_name": "NIST SP 800-61 Rev. 3 Incident Response Recommendations and Considerations for Cyber Risk Management: CSF 2.0 Community Profile",
+    "issuing_body": "National Institute of Standards and Technology",
+    "standard_codes": [
+        "NIST-800-61"
+    ],
+    "aliases": [
+        "SP 800-61",
+        "800-61r3",
+        "Incident response",
+        "NIST incident response",
+        "Computer Security Incident Handling Guide"
+    ],
+    "content_licence": "public_domain",
+    "notice": "SP 800-61 Rev. 3 is a CSF 2.0 Community Profile for incident response. Each CSF outcome carries NIST's incident response priority; its recommendations are the test points, and NIST's considerations and notes are shown as guidance. All text is quoted from the publication.",
+    "sources": [
+        {
+            "id": "sp80061",
+            "title": "NIST SP 800-61 Revision 3, Incident Response Recommendations and Considerations for Cyber Risk Management",
+            "version": "Revision 3 (April 2025)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r3.pdf",
+            "file": "nist80061/NIST.SP.800-61r3.pdf",
+            "sha256": "e5593d6bb85daecec7e8d9549400c7b3473bcc3f06e469c82218073afa7fba2d"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG scoring conventions",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "sp80061",
+        "objectives": "sp80061",
+        "guidance": "sp80061"
+    },
+    "control_flags": {
+        "type": "subcategory for a CSF 2.0 outcome; category or function for a higher-level row carrying recommendations that apply beneath it.",
+        "priority": "NIST's incident response priority for the outcome: High, Medium or Low."
+    },
+    "terminology": {
+        "control": "outcome",
+        "controls": "outcomes",
+        "family": "category",
+        "families": "categories",
+        "objective": "recommendation",
+        "objectives": "recommendations",
+        "plan": "Action plan",
+        "plan_short": "Action plan",
+        "score": "Incident response readiness"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Achieved"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Achieved"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Achieved"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable outcomes achieved, with partial counting as half. NIST defines no score; this is an HCG readiness measure."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "An outcome is achieved only when each of its applicable recommendations is followed.",
+            "source": "hcg",
+            "cite": "HCG convention"
+        },
+        {
+            "id": "priorities",
+            "type": "applicability",
+            "summary": "NIST's High, Medium and Low priorities are a starting point; organizations can adjust them. Outcomes with Low priority indirectly support incident response.",
+            "source": "sp80061",
+            "cite": "NIST SP 800-61r3, section 3",
+            "quote": "These priorities are intended as a starting point for organizations, who are encouraged to customize this Community Profile to reflect their own priorities and needs."
+        },
+        {
+            "id": "not_all_apply",
+            "type": "na_handling",
+            "summary": "Not every recommendation applies to every organization; one that does not is marked not applicable. Recommendations at a Function or Category level apply to the outcomes beneath it.",
+            "source": "sp80061",
+            "cite": "NIST SP 800-61r3, section 3",
+            "quote": "The recommendations, considerations, and notes are not comprehensive, and not all of them will be applicable to every organization."
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A partially achieved outcome counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG scoring convention"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "Cybersecurity incident",
+            "definition": "An occurrence that actually or imminently jeopardizes the integrity, confidentiality or availability of information or an information system, or violates security policies or acceptable use policies."
+        },
+        {
+            "term": "Community Profile",
+            "definition": "A baseline of CSF outcomes created for shared interests among many organizations, here for incident response."
+        },
+        {
+            "term": "Recommendation (R)",
+            "definition": "Something the organization should do."
+        },
+        {
+            "term": "Consideration (C)",
+            "definition": "Something the organization should consider doing."
+        }
+    ],
+    "display_name": "NIST SP 800-61 (Revision 3)",
+    "counts": {
+        "families": 22,
+        "controls": 113,
+        "objectives": 106
+    },
+    "families": [
+        {
+            "number": "GV.OC",
+            "code": "GV.OC",
+            "name": "Organizational Context",
+            "controls": [
+                {
+                    "id": "GV.OC-01",
+                    "number": "GV.OC-01",
+                    "text": "The organizational mission is understood and informs cybersecurity risk management",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.OC-02",
+                    "number": "GV.OC-02",
+                    "text": "Internal and external stakeholders are understood, and their needs and expectations regarding cybersecurity risk management are understood and considered",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.OC-03",
+                    "number": "GV.OC-03",
+                    "text": "Legal, regulatory, and contractual requirements regarding cybersecurity — including privacy and civil liberties obligations — are understood and managed",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "GV.OC-03.R1",
+                            "text": "Cybersecurity requirements should include all requirements related to incident notifications, data breach reporting, and other aspects of incident response.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.OC-04",
+                    "number": "GV.OC-04",
+                    "text": "Critical objectives, capabilities, and services that external stakeholders depend on or expect from the organization are understood and communicated",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: Understanding critical external dependencies on the organization’s operations can aid in prioritizing response and recovery efforts.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.OC-05",
+                    "number": "GV.OC-05",
+                    "text": "Outcomes, capabilities, and services that the organization depends on are understood and communicated",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: Understanding critical dependencies on external resources (e.g., cloud-based hosting providers and managed service providers) can aid in prioritizing response and recovery efforts.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "GV.RM",
+            "code": "GV.RM",
+            "name": "Risk Management Strategy",
+            "controls": [
+                {
+                    "id": "GV.RM-01",
+                    "number": "GV.RM-01",
+                    "text": "Risk management objectives are established and agreed to by organizational stakeholders",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.RM-02",
+                    "number": "GV.RM-02",
+                    "text": "Risk appetite and risk tolerance statements are established, communicated, and maintained",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.RM-03",
+                    "number": "GV.RM-03",
+                    "text": "Cybersecurity risk management activities and outcomes are included in enterprise risk management processes",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "GV.RM-03.R1",
+                            "text": "Have processes in place so that incident-related decision-making will be informed by other types of risks that the organization faces (e.g., privacy, operational, safety, reputational, AI) and not just cybersecurity risks in isolation.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.RM-04",
+                    "number": "GV.RM-04",
+                    "text": "Strategic direction that describes appropriate risk response options is established and communicated",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.RM-05",
+                    "number": "GV.RM-05",
+                    "text": "Lines of communication across the organization are established for cybersecurity risks, including risks from suppliers and other third parties",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.RM-06",
+                    "number": "GV.RM-06",
+                    "text": "A standardized method for calculating, documenting, categorizing, and prioritizing cybersecurity risks is established and communicated",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: Having a standardized method for calculating cybersecurity risks can aid in prioritizing response and recovery efforts and in comparing the estimated and actual impacts of incidents.\nN2: Such a method can also be used to establish criteria and inform decision making on when to escalate or elevate incident response activities.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.RM-07",
+                    "number": "GV.RM-07",
+                    "text": "Strategic opportunities (i.e., positive risks) are characterized and are included in organizational cybersecurity risk discussions",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "GV.RR",
+            "code": "GV.RR",
+            "name": "Roles, Responsibilities, and Authorities",
+            "controls": [
+                {
+                    "id": "GV.RR",
+                    "number": "GV.RR",
+                    "text": "Cybersecurity roles, responsibilities, and authorities to foster accountability, performance assessment, and continuous improvement are established and communicated",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "",
+                    "type": "category",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "GV.RR.R1",
+                            "text": "Cybersecurity roles, responsibilities, and authorities should include incident response.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061",
+                    "title": "Roles, Responsibilities, and Authorities (applies to the whole category)"
+                },
+                {
+                    "id": "GV.RR-01",
+                    "number": "GV.RR-01",
+                    "text": "Organizational leadership is responsible and accountable for cybersecurity risk and fosters a culture that is risk-aware, ethical, and continually improving",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "GV.RR-01.R1",
+                            "text": "See the recommendation for GV.RR.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.RR-02",
+                    "number": "GV.RR-02",
+                    "text": "Roles, responsibilities, and authorities related to cybersecurity risk management are established, communicated, understood, and enforced",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: Roles and responsibilities that involve cybersecurity incident response typically exist throughout an organization and often include third parties (e.g., those under contract) to help perform incident response activities for the organization.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "GV.RR-02.R1",
+                            "text": "All roles and responsibilities involving cybersecurity incident response should be documented in an organization’s policies.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "GV.RR-02.R2",
+                            "text": "All appropriate individuals or parties should be designated the authority necessary to fulfill their incident response-related responsibilities.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "GV.RR-02.R3",
+                            "text": "See the recommendation for GV.RR.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.RR-03",
+                    "number": "GV.RR-03",
+                    "text": "Adequate resources are allocated commensurate with the cybersecurity risk strategy, roles, responsibilities, and policies",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.RR-04",
+                    "number": "GV.RR-04",
+                    "text": "Cybersecurity is included in human resources practices",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "GV.PO",
+            "code": "GV.PO",
+            "name": "Policy",
+            "controls": [
+                {
+                    "id": "GV.PO",
+                    "number": "GV.PO",
+                    "text": "Organizational cybersecurity policy is established, communicated, and enforced",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "category",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "GV.PO.R1",
+                            "text": "Cybersecurity policies should include an incident response policy.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061",
+                    "title": "Policy (applies to the whole category)"
+                },
+                {
+                    "id": "GV.PO-01",
+                    "number": "GV.PO-01",
+                    "text": "Policy for managing cybersecurity risks is established based on organizational context, cybersecurity strategy, and priorities and is communicated and enforced",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.PO-02",
+                    "number": "GV.PO-02",
+                    "text": "Policy for managing cybersecurity risks is reviewed, updated, communicated, and enforced to reflect changes in requirements, threats, technology, and organizational mission",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "GV.OV",
+            "code": "GV.OV",
+            "name": "Oversight",
+            "controls": [
+                {
+                    "id": "GV.OV-01",
+                    "number": "GV.OV-01",
+                    "text": "Cybersecurity risk management strategy outcomes are reviewed to inform and adjust strategy and direction",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "GV.OV-01.R1",
+                            "text": "Take past cybersecurity incidents into account when adjusting the organization’s cybersecurity risk management strategy and direction.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.OV-02",
+                    "number": "GV.OV-02",
+                    "text": "The cybersecurity risk management strategy is reviewed and adjusted to ensure coverage of organizational requirements and risks",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "GV.OV-02.R1",
+                            "text": "Take risks from past cybersecurity incidents into account when reviewing the organization’s cybersecurity risk management strategy.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.OV-03",
+                    "number": "GV.OV-03",
+                    "text": "Organizational cybersecurity risk management performance is evaluated and reviewed for adjustments needed",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "GV.SC",
+            "code": "GV.SC",
+            "name": "Cybersecurity Supply Chain Risk Management",
+            "controls": [
+                {
+                    "id": "GV.SC-01",
+                    "number": "GV.SC-01",
+                    "text": "A cybersecurity supply chain risk management program, strategy, objectives, policies, and processes are established and agreed to by organizational stakeholders",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.SC-02",
+                    "number": "GV.SC-02",
+                    "text": "Cybersecurity roles and responsibilities for suppliers, customers, and partners are established, communicated, and coordinated internally and externally",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "N1: See GV.RR-02 for additional information on cybersecurity incident response-related roles and responsibilities for third parties.",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.SC-03",
+                    "number": "GV.SC-03",
+                    "text": "Cybersecurity supply chain risk management is integrated into cybersecurity and enterprise risk management, risk assessment, and improvement processes",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.SC-04",
+                    "number": "GV.SC-04",
+                    "text": "Suppliers are known and prioritized by criticality",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.SC-05",
+                    "number": "GV.SC-05",
+                    "text": "Requirements to address cybersecurity risks in supply chains are established, prioritized, and integrated into contracts and other types of agreements with suppliers and other relevant third parties",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "GV.SC-05.R1",
+                            "text": "Cybersecurity supply chain risk management requirements should include cybersecurity performance and vulnerability, threat, and incident disclosure and information sharing.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.SC-06",
+                    "number": "GV.SC-06",
+                    "text": "Planning and due diligence are performed to reduce risks before entering into formal supplier or other third-party relationships",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.SC-07",
+                    "number": "GV.SC-07",
+                    "text": "The risks posed by a supplier, their products and services, and other third parties are understood, recorded, prioritized, assessed, responded to, and monitored over the course of the relationship",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.SC-08",
+                    "number": "GV.SC-08",
+                    "text": "Relevant suppliers and other third parties are included in incident planning, response, and recovery activities",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: The GV.SC-08 Subcategory is specific to incident planning, response, and recovery.\nN2: See ID.IM-02 for more information on tests and exercises.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.SC-09",
+                    "number": "GV.SC-09",
+                    "text": "Supply chain security practices are integrated into cybersecurity and enterprise risk management programs, and their performance is monitored throughout the technology product and service life cycle",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "GV.SC-10",
+                    "number": "GV.SC-10",
+                    "text": "Cybersecurity supply chain risk management plans include provisions for activities that occur after the conclusion of a partnership or service agreement",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "ID.AM",
+            "code": "ID.AM",
+            "name": "Asset Management",
+            "controls": [
+                {
+                    "id": "ID.AM-01",
+                    "number": "ID.AM-01",
+                    "text": "Inventories of hardware managed by the organization are maintained",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID.AM-01.R1",
+                            "text": "Make current and automatically updated inventories of the internal and external hardware used by the organization available for use in finding and addressing vulnerabilities, monitoring operations and usage to detect adverse cybersecurity events, and identifying “shadow IT” usage.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.AM-02",
+                    "number": "ID.AM-02",
+                    "text": "Inventories of software, services, and systems managed by the organization are maintained",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID.AM-02.R1",
+                            "text": "Make current and automatically updated inventories of the internal and external software, services, and systems used by the organization available for use in finding and addressing vulnerabilities, monitoring operations and usage to detect adverse cybersecurity events, and identifying “shadow IT” usage.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.AM-03",
+                    "number": "ID.AM-03",
+                    "text": "Representations of the organization’s authorized network communication and internal and external network data flows are maintained",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: Maintaining network data flow representations can improve the accuracy of detecting malicious data flows and communication.\nC1: Consider leveraging automation and zero trust architectures to automatically create and maintain network data flow representations.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.AM-04",
+                    "number": "ID.AM-04",
+                    "text": "Inventories of services provided by suppliers are maintained",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID.AM-04.R1",
+                            "text": "Current and automatically updated inventories of the services provided by the organization’s suppliers should be available for use in finding and addressing vulnerabilities, monitoring operations and usage to detect adverse cybersecurity events, and identifying “shadow IT” usage.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.AM-05",
+                    "number": "ID.AM-05",
+                    "text": "Assets are prioritized based on classification, criticality, resources, and impact on the mission",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID.AM-05.R1",
+                            "text": "Prioritizing the organization’s assets — including hardware, software, services, systems, and data — and being aware of the dependencies between those and other assets should help indicate where the organization should focus its resources in terms of protection, detection, response, and recovery.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.AM-07",
+                    "number": "ID.AM-07",
+                    "text": "Inventories of data and corresponding metadata for designated data types are maintained",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID.AM-07.R1",
+                            "text": "Having data inventories that include data classifications, owners, and logical and physical locations should provide valuable information on what data may have been involved in an incident.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.AM-08",
+                    "number": "ID.AM-08",
+                    "text": "Systems, hardware, software, services, and data are managed throughout their life cycles",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID.AM-08.R1",
+                            "text": "Managing hardware, software, services, and systems throughout their life cycles should take cybersecurity into consideration, such as configuring them securely, reducing attack surfaces, and updating inventory information as assets are transferred or relocated.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "ID.RA",
+            "code": "ID.RA",
+            "name": "Risk Assessment",
+            "controls": [
+                {
+                    "id": "ID.RA-01",
+                    "number": "ID.RA-01",
+                    "text": "Vulnerabilities in assets are identified, validated, and recorded",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for ID.RA.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID.RA-01.R1",
+                            "text": "Understand current known cybersecurity vulnerabilities to make informed decisions when assessing risks. This should include all types of known cybersecurity vulnerabilities, such as flaws in software (including firmware and software-based services) developed by the organization and third parties, software misconfigurations, network and system design and implementation weaknesses, physical vulnerabilities and resilience issues in facilities that house computing assets, and integrity violations in hardware and software (e.g., counterfeit, evidence of tampering).",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.RA-02",
+                    "number": "ID.RA-02",
+                    "text": "Cyber threat intelligence is received from information sharing forums and sources",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Cyber threat intelligence (CTI) is threat information that has been aggregated, transformed, analyzed, interpreted, or enriched to provide the necessary context for decision-making processes. Organizations can receive CTI from automated CTI feeds, information sharing forums, and other sources.\nN2: CTI is useful for incident response and recovery in several ways, including obtaining information on new threats, improving the accuracy of cybersecurity technologies with incident detection or response capabilities, and understanding the tactics, techniques, and procedures (TTPs) used by attackers. TTPs describe the behavior of an actor. Information on threats and their TTPs is widely available through repositories and knowledge bases.\nN3: [SP800-150] provides guidelines on consuming, using, and storing CTIs, as well as establishing CTI relationships.\nN4: See the notes for ID.RA.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.RA-03",
+                    "number": "ID.RA-03",
+                    "text": "Internal and external threats to the organization are identified and recorded",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: Other possible methods that organizations could consider for identifying threats include threat hunting and the use of deception technologies.\nN2: See the notes for ID.RA.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID.RA-03.R1",
+                            "text": "Identify internal and external threats during routine operations and from CTI.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.RA-04",
+                    "number": "ID.RA-04",
+                    "text": "Potential impacts and likelihoods of threats exploiting vulnerabilities are identified and recorded",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: Recording the potential impacts and likelihoods of threats exploiting vulnerabilities is necessary for determining risk.\nN2: See the notes for ID.RA.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.RA-05",
+                    "number": "ID.RA-05",
+                    "text": "Threats, vulnerabilities, likelihoods, and impacts are used to understand inherent risk and inform risk response prioritization",
+                    "description": "Incident response priority: High.",
+                    "guidance": "C1: Consider using threat modeling and other methods to inform the understanding of attack vectors, attack surfaces, and lateral paths through organizational assets, among other factors that contribute to risk.\nN1: See the notes for ID.RA.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID.RA-05.R1",
+                            "text": "Organizations with mechanisms in place for estimating cybersecurity risk as part of their cybersecurity risk management programs should use those mechanisms for incident response purposes.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.RA-06",
+                    "number": "ID.RA-06",
+                    "text": "Risk responses are chosen, prioritized, planned, tracked, and communicated",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Risk responses are needed to prevent future incidents from occurring and existing incidents from reoccurring.\nN2: The four types of risk responses are 1) Accept (accept the risk as is), 2) Mitigate (reduce the risk by eliminating the vulnerabilities and/or deploying additional security controls to reduce vulnerability exploitation), 3) Transfer (reduce the risk by sharing some of the consequences with another party), and 4) Avoid (ensure that the risk does not occur by eliminating the attack surface).\nN3: See [IR8286] for more information on risk responses.\nN4: See the notes for ID.RA.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID.RA-06.R1",
+                            "text": "The organization’s policies, processes, and procedures should provide guidance (e.g., criteria) for making decisions regarding appropriate risk responses in various situations.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.RA-07",
+                    "number": "ID.RA-07",
+                    "text": "Changes and exceptions are managed, assessed for risk impact, recorded, and tracked",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for ID.RA.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.RA-08",
+                    "number": "ID.RA-08",
+                    "text": "Processes for receiving, analyzing, and responding to vulnerability disclosures are established",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: A vulnerability disclosure is when a third party reports a suspected vulnerability in one of the organization’s systems to the organization.\nN2: See [SP800-216] for more information on vulnerability disclosure.\nN3: See Section 4.5.2 of [SP800-150] for guidance on using data formats that may assist with maintaining cross-references between asset inventories and sources of vulnerability disclosures.\nN4: See the notes for ID.RA.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.RA-09",
+                    "number": "ID.RA-09",
+                    "text": "The authenticity and integrity of hardware and software are assessed prior to acquisition and use",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for ID.RA.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.RA-10",
+                    "number": "ID.RA-10",
+                    "text": "Critical suppliers are assessed prior to acquisition",
+                    "description": "Incident response priority: Low.",
+                    "guidance": "N1: See the notes for ID.RA.",
+                    "type": "subcategory",
+                    "priority": "Low",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "ID.IM",
+            "code": "ID.IM",
+            "name": "Improvement",
+            "controls": [
+                {
+                    "id": "ID.IM-01",
+                    "number": "ID.IM-01",
+                    "text": "Improvements are identified from evaluations",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: Possible evaluation forms include self-assessments, third-party assessments, and independent audits.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID.IM-01.R1",
+                            "text": "Periodically evaluate incident response program performance to identify problems and deficiencies that should be corrected.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.IM-02",
+                    "number": "ID.IM-02",
+                    "text": "Improvements are identified from security tests and exercises, including those done in coordination with suppliers and relevant third parties",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Incident response exercises and tests may provide helpful information for program evaluation and prepare staff and involved third parties (e.g., critical service providers and product suppliers) for future incident response activities.\nN2: See [SP800-84] for more information on simulations, tabletop discussions, and other forms of exercises.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.IM-03",
+                    "number": "ID.IM-03",
+                    "text": "Improvements are identified from the execution of operational processes, procedures, and activities",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: The execution of operational processes, procedures, and activities includes all incident response and recovery efforts.\nN2: Improvements that affect incident response can be made to the incident response program itself (e.g., plan, policy, processes, procedures) or to other aspects of the organization’s cybersecurity risk management activities (e.g., identifying TTPs that are not currently being blocked by safeguards or flagged by detection technologies).\nN3: Improvements are often identified when creating follow-up reports for incidents or holding “lessons learned” meetings when an incident’s recovery efforts are concluding, especially if the incident was major. This provides an opportunity to review what happened, what actions were taken, and how effective those actions were, as well as hear from all parties involved in the incident. Such a meeting can help identify and prioritize potential improvements to the organization’s incident response program and cybersecurity risk management efforts.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "ID.IM-04",
+                    "number": "ID.IM-04",
+                    "text": "Incident response plans and other cybersecurity plans that affect operations are established, communicated, maintained, and improved",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Several types of cybersecurity plans are relevant to incident response, including 1) incident response plans, which provide the roadmap for implementing the incident response capability; 2) vulnerability management plans, which help identify and assess all types of vulnerabilities and prioritize, test, and implement risk responses; and 3) business continuity plans.\nN2: Business continuity planning professionals who are made aware of cybersecurity incidents and their impacts can fine-tune business impact assessments, risk assessments, and continuity of operations plans. Further, because business continuity planners have extensive expertise in minimizing operational disruption during severe circumstances, they may be valuable in planning responses to specific incident types, such as denial-of-service (DoS) conditions.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID.IM-04.R1",
+                            "text": "Synchronize business continuity plans with incident response plans since incidents can undermine business resilience.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "ID.IM-04.R2",
+                            "text": "Review and update all cybersecurity plans periodically or when a need for significant improvements is identified.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "ID.IM-04.R3",
+                            "text": "Base each cybersecurity plan on the organization’s unique requirements, mission, size, structure, and functions.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "ID.IM-04.R4",
+                            "text": "Each cybersecurity plan should identify the resources and management support needed to carry it out successfully.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "PR.AA",
+            "code": "PR.AA",
+            "name": "Identity Management, Authentication, and Access Control",
+            "controls": [
+                {
+                    "id": "PR.AA-01",
+                    "number": "PR.AA-01",
+                    "text": "Identities and credentials for authorized users, services, and hardware are managed by the organization",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.AA-02",
+                    "number": "PR.AA-02",
+                    "text": "Identities are proofed and bound to credentials based on the context of interactions",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.AA-03",
+                    "number": "PR.AA-03",
+                    "text": "Users, services, and hardware are authenticated",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.AA-04",
+                    "number": "PR.AA-04",
+                    "text": "Identity assertions are protected, conveyed, and verified",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.AA-05",
+                    "number": "PR.AA-05",
+                    "text": "Access permissions, entitlements, and authorizations are defined in a policy, managed, enforced, and reviewed, and incorporate the principles of least privilege and separation of duties",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.AA-06",
+                    "number": "PR.AA-06",
+                    "text": "Physical access to assets is managed, monitored, and enforced commensurate with risk",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "PR.AT",
+            "code": "PR.AT",
+            "name": "Awareness and Training",
+            "controls": [
+                {
+                    "id": "PR.AT-01",
+                    "number": "PR.AT-01",
+                    "text": "Personnel are provided with awareness and training so that they possess the knowledge and skills to perform general tasks with cybersecurity risks in mind",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.AT-02",
+                    "number": "PR.AT-02",
+                    "text": "Individuals in specialized roles are provided with awareness and training so that they possess the knowledge and skills to perform relevant tasks with cybersecurity risks in mind",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "PR.AT-02.R1",
+                            "text": "Role-based training should include incident-related responsibilities.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "PR.DS",
+            "code": "PR.DS",
+            "name": "Data Security",
+            "controls": [
+                {
+                    "id": "PR.DS-01",
+                    "number": "PR.DS-01",
+                    "text": "The confidentiality, integrity, and availability of data-at-rest are protected",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.DS-02",
+                    "number": "PR.DS-02",
+                    "text": "The confidentiality, integrity, and availability of data-in-transit are protected",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.DS-10",
+                    "number": "PR.DS-10",
+                    "text": "The confidentiality, integrity, and availability of data-in-use are protected",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.DS-11",
+                    "number": "PR.DS-11",
+                    "text": "Backups of data are created, protected, maintained, and tested",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Backups can be particularly important for recovery purposes when data integrity or availability is affected.\nN1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "PR.PS",
+            "code": "PR.PS",
+            "name": "Platform Security",
+            "controls": [
+                {
+                    "id": "PR.PS-01",
+                    "number": "PR.PS-01",
+                    "text": "Configuration management practices are established and applied",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.PS-02",
+                    "number": "PR.PS-02",
+                    "text": "Software is maintained, replaced, and removed commensurate with risk",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.PS-03",
+                    "number": "PR.PS-03",
+                    "text": "Hardware is maintained, replaced, and removed commensurate with risk",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.PS-04",
+                    "number": "PR.PS-04",
+                    "text": "Log records are generated and made available for continuous monitoring",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: Logs are particularly important for recording and preserving information that is vital to incident detection, response, and recovery activities.\nN2: For more information on log management, see [SP800-92r1].\nN3: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.PS-05",
+                    "number": "PR.PS-05",
+                    "text": "Installation and execution of unauthorized software are prevented",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.PS-06",
+                    "number": "PR.PS-06",
+                    "text": "Secure software development practices are integrated, and their performance is monitored throughout the software development life cycle",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: For more information on secure software development practices, including responding to vulnerabilities or incidents that involve released software, see [SP800- 218].\nN2: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "PR.IR",
+            "code": "PR.IR",
+            "name": "Technology Infrastructure Resilience",
+            "controls": [
+                {
+                    "id": "PR.IR-01",
+                    "number": "PR.IR-01",
+                    "text": "Networks and environments are protected from unauthorized logical access and usage",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.IR-02",
+                    "number": "PR.IR-02",
+                    "text": "The organization’s technology assets are protected from environmental threats",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.IR-03",
+                    "number": "PR.IR-03",
+                    "text": "Mechanisms are implemented to achieve resilience requirements in normal and adverse situations",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "PR.IR-04",
+                    "number": "PR.IR-04",
+                    "text": "Adequate resource capacity to ensure availability is maintained",
+                    "description": "Incident response priority: Medium.",
+                    "guidance": "N1: See the notes for PR.",
+                    "type": "subcategory",
+                    "priority": "Medium",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "DE.CM",
+            "code": "DE.CM",
+            "name": "Continuous Monitoring",
+            "controls": [
+                {
+                    "id": "DE.CM",
+                    "number": "DE.CM",
+                    "text": "Assets are monitored to find anomalies, indicators of compromise, and other potentially adverse events",
+                    "description": "Incident response priority: High.",
+                    "guidance": "C1: Consider using cyber threat information with continuous monitoring to help identify potentially malicious activities that may have otherwise been considered benign.",
+                    "type": "category",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DE.CM.R1",
+                            "text": "Continuous monitoring for unauthorized activity, deviations from expected activity, and changes in security posture should involve the following types of assets at all times: networks and network services; computing hardware and software, runtime environments, and their data; the physical environment; personnel activity and technology usage; and external service provider activities.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "DE.CM.R2",
+                            "text": "Tune the continuous monitoring technologies to reduce false positives and false negatives to acceptable levels.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061",
+                    "title": "Continuous Monitoring (applies to the whole category)"
+                },
+                {
+                    "id": "DE.CM-01",
+                    "number": "DE.CM-01",
+                    "text": "Networks and network services are monitored to find potentially adverse events",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DE.CM-01.R1",
+                            "text": "Monitoring should include wired and wireless networks, network communications and flows, network services (e.g., DNS and BGP), and the presence of unauthorized or rogue networks within facilities.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "DE.CM-02",
+                    "number": "DE.CM-02",
+                    "text": "The physical environment is monitored to find potentially adverse events",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DE.CM-02.R1",
+                            "text": "Monitoring the physical environment should include all successful and failed access attempts into all controlled areas, the movement of people and equipment into and out of secure areas of facilities, and signs of tampering with physical access controls.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "DE.CM-03",
+                    "number": "DE.CM-03",
+                    "text": "Personnel activity and technology usage are monitored to find potentially adverse events",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DE.CM-03.R1",
+                            "text": "Monitoring personnel activity and technology usage should include anomalous user activity or unusual patterns of activity, authentication and logical access attempts, and the use of deception technology.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "DE.CM-06",
+                    "number": "DE.CM-06",
+                    "text": "External service provider activities and services are monitored to find potentially adverse events",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DE.CM-06.R1",
+                            "text": "Monitoring external service provider activities and services should include remote and on-site administration and maintenance activities that providers perform on organizational systems and deviations from expected behavior by cloud-based services, internet service providers, and other service providers.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "DE.CM-09",
+                    "number": "DE.CM-09",
+                    "text": "Computing hardware and software, runtime environments, and their data are monitored to find potentially adverse events",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DE.CM-09.R1",
+                            "text": "Monitor email, web, file sharing, collaboration services, and other common attack vectors to detect malware, phishing, data leaks, exfiltration, and other adverse events.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "DE.CM-09.R2",
+                            "text": "Monitor authentication attempts to identify attacks against credentials and unauthorized credential use.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "DE.CM-09.R3",
+                            "text": "Monitor software and hardware configurations for deviations from security baselines.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "DE.CM-09.R4",
+                            "text": "Monitor hardware and software, including cybersecurity protection mechanisms, for signs of tampering, failure, or compromise.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "DE.CM-09.R5",
+                            "text": "Monitor endpoints for cyber health issues (e.g., missing patches, malware infections, or unauthorized software), and redirect endpoints with issues to a remediation environment before access is authorized.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "DE.AE",
+            "code": "DE.AE",
+            "name": "Adverse Event Analysis",
+            "controls": [
+                {
+                    "id": "DE.AE",
+                    "number": "DE.AE",
+                    "text": "Anomalies, indicators of compromise, and other potentially adverse events are analyzed to characterize the events and detect cybersecurity incidents",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Adverse event analysis involves studying the data on potentially adverse events collected by continuous monitoring to find possible attacks and compromises and declaring when an incident has occurred so as to initiate incident response activities.\nN2: The fidelity of events varies based on many factors. Anomalies may have benign or malicious foundations. Some incidents are relatively easy to find amid the noise, while others require deep, specialized technical knowledge and experience.\nN3: CTI can be invaluable in detecting malicious activity early, reducing its impact, and shortening recovery time. Signs of an incident may be more obvious later in the attack life cycle, but the incident’s impact and scope may be much larger.",
+                    "type": "category",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DE.AE.R1",
+                            "text": "The volume of potentially adverse events to be analyzed is generally quite high, so organizations should rely on technical solutions that filter large event datasets down to a subset that is suitable for human viewing and analysis.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "DE.AE.R2",
+                            "text": "Organizations should strive to find incidents earlier in the attack life cycle and take a proactive approach to incident detection and response.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061",
+                    "title": "Adverse Event Analysis (applies to the whole category)"
+                },
+                {
+                    "id": "DE.AE-02",
+                    "number": "DE.AE-02",
+                    "text": "Potentially adverse events are analyzed to better understand associated activities",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DE.AE-02.R1",
+                            "text": "Use tools (e.g., security information and event management [SIEM]; security orchestration, automation, and response [SOAR]) to continuously monitor log events for known malicious and suspicious activity and to generate reports on their findings.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "DE.AE-02.R2",
+                            "text": "Utilize up-to-date CTI in log analysis tools to improve detection accuracy and characterize threat actors, their methods, and indicators of compromise.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "DE.AE-02.R3",
+                            "text": "Regularly conduct manual reviews of log events for technologies that cannot be sufficiently monitored through automation.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "DE.AE-03",
+                    "number": "DE.AE-03",
+                    "text": "Information is correlated from multiple sources",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DE.AE-03.R1",
+                            "text": "Constantly transfer the log data generated by other sources to a relatively small number of log servers.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "DE.AE-03.R2",
+                            "text": "Use event correlation technology (e.g., SIEM, SOAR) to gather pieces of related data captured by multiple sources.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "DE.AE-03.R3",
+                            "text": "Utilize CTI to help correlate events among log sources.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "DE.AE-04",
+                    "number": "DE.AE-04",
+                    "text": "The estimated impact and scope of adverse events are understood",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DE.AE-04.R1",
+                            "text": "Estimate the impact and scope of adverse events through automated (e.g., SIEM, SOAR) and/or manual means, and review and refine the estimates.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "DE.AE-06",
+                    "number": "DE.AE-06",
+                    "text": "Information on adverse events is provided to authorized staff and tools",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DE.AE-06.R1",
+                            "text": "Generate alerts and provide them to cybersecurity and incident response tools and staff (e.g., the SOC and incident responders).",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "DE.AE-06.R2",
+                            "text": "Make log analysis findings accessible to incident responders and other authorized personnel at all times.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "DE.AE-06.R3",
+                            "text": "Consider automatically creating and assigning tickets in the organization’s ticketing system when certain types of alerts occur.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "DE.AE-07",
+                    "number": "DE.AE-07",
+                    "text": "Cyber threat intelligence and other contextual information are integrated into the analysis",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: See [SP800-150] for guidelines on consuming, using, and storing CTIs, as well as establishing CTI relationships.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DE.AE-07.R1",
+                            "text": "Integrate up-to-date CTI and other contextual information (e.g., asset inventories) into adverse event analysis to improve detection accuracy and characterize threat actors, their methods, and indicators of compromise.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "DE.AE-07.R2",
+                            "text": "Rapidly acquire and analyze vulnerability disclosures for the organization’s technologies from suppliers, vendors, and third-party security advisories.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "DE.AE-08",
+                    "number": "DE.AE-08",
+                    "text": "Incidents are declared when adverse events meet the defined incident criteria",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DE.AE-08.R1",
+                            "text": "Apply incident criteria to known and assumed characteristics of analyzed activity, and consider known false positives to determine whether an incident should be declared.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "RS.MA",
+            "code": "RS.MA",
+            "name": "Incident Management",
+            "controls": [
+                {
+                    "id": "RS.MA",
+                    "number": "RS.MA",
+                    "text": "Responses to detected cybersecurity incidents are managed",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Incident management involves overseeing responses to all incidents and shifting priorities and resources as needed. Evaluating the overall risk from an incident and applying the appropriate prioritization are perhaps the most critical decision points in the incident response process.\nN2: Examples of possible risk evaluation factors include asset criticality, functional impact of the incident, data impact of the incident, stage of observed activity, threat actor characterization, and recoverability.",
+                    "type": "category",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RS.MA.R1",
+                            "text": "Because of resource limitations, incidents should not be handled on a first-come, first-served basis.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.MA.R2",
+                            "text": "Incident triage, prioritization, escalation, and elevation and decisions regarding when to initiate recovery processes should all be based on a set of risk evaluation factors. This set can range from simple to incredibly complex, depending on the needs and maturity of an organization.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.MA.R3",
+                            "text": "The incident response status should be tracked for each incident along with pertinent information, such as an incident summary, indicators of compromise related to the incident, the status and expected time frame for each assigned action, and next steps to be taken.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061",
+                    "title": "Incident Management (applies to the whole category)"
+                },
+                {
+                    "id": "RS.MA-01",
+                    "number": "RS.MA-01",
+                    "text": "The incident response plan is executed in coordination with relevant third parties once an incident is declared",
+                    "description": "Incident response priority: High.",
+                    "guidance": "C1: Consider designating an incident lead for each incident.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RS.MA-01.R1",
+                            "text": "Detection technologies should automatically report incidents that they have confirmed.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.MA-01.R2",
+                            "text": "If appropriate, contact the organization’s incident response service provider to request assistance.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.MA-01.R3",
+                            "text": "Initiate execution of other cybersecurity plans as needed (e.g., business continuity and disaster recovery plans) to support incident response.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "RS.MA-02",
+                    "number": "RS.MA-02",
+                    "text": "Incident reports are triaged and validated",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RS.MA-02.R1",
+                            "text": "Perform a preliminary review of a new incident report to verify that a cybersecurity incident has occurred, then estimate the severity of the incident and the level of urgency needed to respond to it.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.MA-02.R2",
+                            "text": "Have mechanisms in place for third parties to report possible incidents that involve the organization. Reports should be carefully monitored and taken seriously. For example, the organization might be contacted by a party claiming that its systems are being attacked by a system at the organization. External users may report other indicators, such as an unavailable service. Other incident response teams may also report incidents to the organization.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "RS.MA-03",
+                    "number": "RS.MA-03",
+                    "text": "Incidents are categorized and prioritized",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Every response strategy decision has trade-offs. For example, a strategy that supports observing the attacker’s behavior or conducting a more thorough investigation may be at odds with the need to quickly return to normal operations.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RS.MA-03.R1",
+                            "text": "Perform a more detailed review of incidents to help categorize them by incident type (e.g., data breach, ransomware, account takeover, denial of service).",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.MA-03.R2",
+                            "text": "Prioritize how quickly incident response should be performed for each incident based on its scope, likely impact, time-critical nature, and resource availability.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.MA-03.R3",
+                            "text": "Select incident response strategies for active incidents by balancing the need to quickly recover from an incident with the need to observe the attacker or conduct a more thorough investigation.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "RS.MA-04",
+                    "number": "RS.MA-04",
+                    "text": "Incidents are escalated or elevated as needed",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Escalation generally refers to increasing resources or time frames, while elevation usually indicates involving a higher level of management in the response efforts.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RS.MA-04.R1",
+                            "text": "Track and validate the status of all ongoing incidents so that incidents in need of more response resources or a change in response strategy can be identified and the necessary changes initiated rapidly.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "RS.MA-05",
+                    "number": "RS.MA-05",
+                    "text": "The criteria for initiating incident recovery are applied",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RS.MA-05.R1",
+                            "text": "Apply incident recovery criteria to known and assumed characteristics of the incident to determine when an incident’s recovery processes should be initiated.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.MA-05.R2",
+                            "text": "Take the possible operational disruption of incident recovery activities into account to determine when recovery should be initiated.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "RS.AN",
+            "code": "RS.AN",
+            "name": "Incident Analysis",
+            "controls": [
+                {
+                    "id": "RS.AN-03",
+                    "number": "RS.AN-03",
+                    "text": "Analysis is performed to establish what has taken place during an incident and the root cause of the incident",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: This information may also be helpful for identifying weaknesses in cybersecurity risk management that should be addressed to prevent similar incidents from occurring in the future.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RS.AN-03.R1",
+                            "text": "Determine the sequence of events that have occurred during the incident and which assets and resources were involved in each of those events.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.AN-03.R2",
+                            "text": "Attempt to determine what vulnerabilities, threats, and threat actors were directly or indirectly involved in the incident.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.AN-03.R3",
+                            "text": "Analyze the incident to find the underlying or systemic root causes.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.AN-03.R4",
+                            "text": "Check any deployed cyber deception technology for additional information on attacker behavior.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "RS.AN-06",
+                    "number": "RS.AN-06",
+                    "text": "Actions performed during an investigation are recorded, and the records’ integrity and provenance are preserved",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Facts discovered and actions taken during incident response tasks can be recorded by many means, including a paper logbook, audio/video recordings, or automatic session monitoring and logging, as permitted by the organization’s incident response plan and policy.\nN2: Incident response records can contain sensitive information, such as data on exploited vulnerabilities, recent data breaches, and users who may have performed inappropriate actions. The incident lead is often responsible for ensuring that incident response records are properly safeguarded.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RS.AN-06.R1",
+                            "text": "Safeguard the confidentiality and integrity of incident response records, and ensure that only authorized personnel have access.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "RS.AN-07",
+                    "number": "RS.AN-07",
+                    "text": "Incident data and metadata are collected, and their integrity and provenance are preserved",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Many incident responses involve the collection of incident data and metadata. Formal evidence gathering and handling using chain-of-custody procedures might not be performed for every incident that occurs (e.g., most malware incidents will not result in prosecution). However, collected incident data is still considered evidence, which is defined as “grounds for belief or disbelief; data on which to base proof or to establish truth or falsehood” [SP800-160v1].",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RS.AN-07.R1",
+                            "text": "Collect and retain evidence from an incident in accordance with the organization’s evidence preservation procedures and data retention policies, and consider factors such as the possibility of prosecution, and the cost of retaining the data and the hardware and software needed to access the data in the future.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "RS.AN-08",
+                    "number": "RS.AN-08",
+                    "text": "An incident’s magnitude is estimated and validated",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Determining the incident’s magnitude is often one of the most challenging aspects of incident response.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RS.AN-08.R1",
+                            "text": "Look for indicators of compromise, evidence of persistence, and other signs of an incident on both the assets known to be targeted and other potential targets. Skipping this activity or performing it in a superficial way may cause underestimation of the incident’s magnitude, thus allowing the incident to continue indefinitely on other targets without the organization’s knowledge or monitoring.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "RS.CO",
+            "code": "RS.CO",
+            "name": "Incident Response Reporting and Communication",
+            "controls": [
+                {
+                    "id": "RS.CO",
+                    "number": "RS.CO",
+                    "text": "Response activities are coordinated with internal and external stakeholders, as required by laws, regulations, or policies",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Incident response reporting and communication activities tend to fall into four categories. Incident coordination involves communicating current and planned incident response activities for a particular incident among the internal and external parties with incident response roles and responsibilities. Incident notification involves formally informing affected customers, employees, partners, regulators, or others about a data breach or other incident. Public communication involves communicating to the public about the status of a particular incident, such as responding to media inquiries. Incident information sharing involves sharing cybersecurity threat information with others, usually voluntarily, based on activity observed within the organization’s technology assets.",
+                    "type": "category",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RS.CO.R1",
+                            "text": "Organizations should have mechanisms in place in advance to coordinate with affected parties about incidents when needed.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061",
+                    "title": "Incident Response Reporting and Communication (applies to the whole category)"
+                },
+                {
+                    "id": "RS.CO-02",
+                    "number": "RS.CO-02",
+                    "text": "Internal and external stakeholders are notified of incidents",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RS.CO-02.R1",
+                            "text": "When an incident is analyzed and prioritized, the incident response team should coordinate with the appropriate individuals inside and outside of the organization so that all who need to be involved will play their roles.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.CO-02.R2",
+                            "text": "Follow established procedures concerning incident coordination that include what must be reported to whom and at what times (e.g., initial notification, regular status updates).",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.CO-02.R3",
+                            "text": "Perform notifications in compliance with the current incident notification-related laws and regulations that pertain to the organization’s sectors, geographic locations, customer locations, and any other characteristics that apply to the organization. Incident notification is an evolving topic, and new laws and regulations are being established frequently.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.CO-02.R4",
+                            "text": "Notify affected third parties of data breaches and other cybersecurity incidents in accordance with regulatory, legal, and contractual requirements.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.CO-02.R5",
+                            "text": "Notify law enforcement agencies and regulatory bodies of incidents based on criteria in the incident response plan and management approval. Designated individuals should contact these parties in a manner consistent with the requirements of the law and the organization’s policies and procedures.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "RS.CO-03",
+                    "number": "RS.CO-03",
+                    "text": "Information is shared with designated internal and external stakeholders",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Voluntary incident information sharing is often mutually beneficial because the same threats and attacks simultaneously affect multiple organizations. An example is sharing information about observed TTPs with a sector-specific Information Sharing and Analysis Center (ISAC).\nN2: Sharing defensive tactics between organizations can enhance overall situational awareness and increase the resiliency of all. There is a cost to threat actors to develop or purchase exploits and to deploy them. The effective identification and dissemination of detection techniques lowers the attackers’ return on investment and increases their costs.\nN3: Incident handlers might coordinate their efforts with colleagues at partner organizations to share tactical, technical information on mitigating an attack that spans those organizations. The organizations participating in this type of relationship are usually peers without authority over each other. In addition to choosing to share information, they may also pool resources to solve common problems.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RS.CO-03.R1",
+                            "text": "Securely share information with stakeholders consistent with the organization’s response plans and information sharing agreements, including contracts with suppliers.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.CO-03.R2",
+                            "text": "Regularly update senior leadership on the status of major incidents.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.CO-03.R3",
+                            "text": "Notify human resources when malicious insider activity has occurred.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.CO-03.R4",
+                            "text": "Establish and follow media communications procedures for incident response that comply with the organization’s policies on media interaction and information disclosure.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "RS.MI",
+            "code": "RS.MI",
+            "name": "Incident Mitigation",
+            "controls": [
+                {
+                    "id": "RS.MI",
+                    "number": "RS.MI",
+                    "text": "Activities are performed to prevent expansion of an event and mitigate its effects",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Manually selecting containment and eradication actions may be easier and faster if the organization has criteria and procedures in place. Criteria could take the incident type into account (e.g., a cloud-based services compromise or a user endpoint ransomware infection) and use some of the risk evaluation factors in RS.MA. Another factor to consider is the duration of the containment measure (e.g., an emergency workaround that must be removed within hours, a temporary workaround to be removed within two weeks, or a permanent solution). The eradication measure’s duration could be similarly evaluated.",
+                    "type": "category",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RS.MI.R1",
+                            "text": "In some instances, organizations redirect an attacker to a sandbox so that they can monitor the attacker’s activity, usually to gather additional evidence. This delays containment and eradication activities. The incident response team should first discuss the feasibility of this strategy with the legal department before executing it. The intentional delay can be dangerous because an attacker could escalate unauthorized access or compromise other systems.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061",
+                    "title": "Incident Mitigation (applies to the whole category)"
+                },
+                {
+                    "id": "RS.MI-01",
+                    "number": "RS.MI-01",
+                    "text": "Incidents are contained",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Containment refers to preventing the expansion of an incident. Containment can prevent additional damage and avoid overwhelming the organization’s resources. Most incidents require some form of containment.\nC1: Consider configuring cybersecurity technologies (e.g., antivirus software) and the cybersecurity features of other technologies (e.g., operating systems, network infrastructure devices) to automatically perform some containment actions, like quarantining malware, transferring a compromised endpoint to an isolated remediation network, or halting the execution of an infected container.\nC2: Consider authorizing third parties (e.g., the organization’s internet service providers and cloud service providers) to automatically act to contain certain types of incidents (e.g., large-scale DDoS attacks) on behalf of the organization.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RS.MI-01.R1",
+                            "text": "Allow incident handlers to manually select and perform containment actions instead of or in addition to automated containment measures.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "RS.MI-02",
+                    "number": "RS.MI-02",
+                    "text": "Incidents are eradicated",
+                    "description": "Incident response priority: High.",
+                    "guidance": "N1: Eradication refers to mitigating an incident’s effects. After containment, eradication may be necessary to eliminate persistence mechanisms and entry points, such as deleting malware, disabling breached user accounts, and identifying and mitigating all exploited vulnerabilities.\nC1: Consider configuring cybersecurity technologies and the cybersecurity features of other technologies (e.g., operating systems, network infrastructure devices) to automatically perform some eradication actions.\nC2: Consider authorizing third parties (e.g., the organization’s internet service providers and cloud service providers) to automatically act to eradicate certain types of incidents on behalf of the organization.",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RS.MI-02.R1",
+                            "text": "Identify all affected hosts and services within the organization so that all flaws and weaknesses can be remediated.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RS.MI-02.R2",
+                            "text": "Allow incident handlers to manually select and perform eradication actions instead of or in addition to automated eradication measures.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "RC.RP",
+            "code": "RC.RP",
+            "name": "Incident Recovery Plan Execution",
+            "controls": [
+                {
+                    "id": "RC.RP-01",
+                    "number": "RC.RP-01",
+                    "text": "The recovery portion of the incident response plan is executed once initiated from the incident response process",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RC.RP-01.R1",
+                            "text": "Begin recovery procedures during or after incident response processes.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RC.RP-01.R2",
+                            "text": "Inform all individuals with recovery responsibilities about the plans for recovery and the authorizations required to implement each aspect of the plans.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "RC.RP-02",
+                    "number": "RC.RP-02",
+                    "text": "Recovery actions are selected, scoped, prioritized, and performed",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RC.RP-02.R1",
+                            "text": "Recovery actions should take timeliness, precision, and reliability (e.g., restoring only the affected files versus restoring all files) into account.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RC.RP-02.R2",
+                            "text": "Select recovery actions based on the criteria defined in the incident response plan and available resources.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RC.RP-02.R3",
+                            "text": "Change planned recovery actions based on a reassessment of organizational needs and resources.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "RC.RP-03",
+                    "number": "RC.RP-03",
+                    "text": "The integrity of backups and other restoration assets is verified before using them for restoration",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RC.RP-03.R1",
+                            "text": "Check restoration assets for indicators of compromise, file corruption, and other integrity issues before use.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "RC.RP-04",
+                    "number": "RC.RP-04",
+                    "text": "Critical mission functions and cybersecurity risk management are considered to establish post-incident operational norms",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RC.RP-04.R1",
+                            "text": "Validate that essential services are restored in the appropriate order.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RC.RP-04.R2",
+                            "text": "Work with system owners to confirm the successful restoration of systems and the return to normal operations.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RC.RP-04.R3",
+                            "text": "Monitor the performance of restored systems to verify the adequacy of the restoration.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "RC.RP-05",
+                    "number": "RC.RP-05",
+                    "text": "The integrity of restored assets is verified, systems and services are restored, and normal operating status is confirmed",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RC.RP-05.R1",
+                            "text": "Check restored assets for indicators of compromise, and remediate the root causes of the incident before production use.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RC.RP-05.R2",
+                            "text": "Verify the correctness and adequacy of the restoration actions taken before putting a restored system online.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "RC.RP-06",
+                    "number": "RC.RP-06",
+                    "text": "The end of incident recovery is declared based on criteria, and incident-related documentation is completed",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RC.RP-06.R1",
+                            "text": "Prepare an after-action report that documents the incident itself, the response and recovery actions taken, and lessons learned.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                }
+            ]
+        },
+        {
+            "number": "RC.CO",
+            "code": "RC.CO",
+            "name": "Incident Recovery Communication",
+            "controls": [
+                {
+                    "id": "RC.CO-03",
+                    "number": "RC.CO-03",
+                    "text": "Recovery activities and progress in restoring operational capabilities are communicated to designated internal and external stakeholders",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RC.CO-03.R1",
+                            "text": "Securely share recovery information, including restoration progress, consistent with response plans and information sharing agreements.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RC.CO-03.R2",
+                            "text": "Regularly update senior leadership on recovery status and restoration progress for major incidents.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RC.CO-03.R3",
+                            "text": "Follow the rules and protocols defined in contracts for incident information sharing between the organization and its suppliers.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RC.CO-03.R4",
+                            "text": "Coordinate crisis communication between the organization and its critical suppliers.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                },
+                {
+                    "id": "RC.CO-04",
+                    "number": "RC.CO-04",
+                    "text": "Public updates on incident recovery are shared using approved methods and messaging",
+                    "description": "Incident response priority: High.",
+                    "guidance": "",
+                    "type": "subcategory",
+                    "priority": "High",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "RC.CO-04.R1",
+                            "text": "Follow the organization’s breach notification procedures for recovering from a data breach incident.",
+                            "source": "sp80061"
+                        },
+                        {
+                            "id": "RC.CO-04.R2",
+                            "text": "Explain the steps being taken to recover from the incident and to prevent a recurrence.",
+                            "source": "sp80061"
+                        }
+                    ],
+                    "source": "sp80061"
+                }
+            ]
+        }
+    ]
+}

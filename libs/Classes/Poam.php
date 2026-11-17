@@ -181,6 +181,7 @@ class Poam
         'nist-800-63' => 'none',
         'nist-800-207' => 'none',
         'nist-800-30' => 'none',
+        'nist-800-61' => 'none',
         'nydfs-500' => 'none',
         'nis2' => 'none',
         'dora' => 'none',

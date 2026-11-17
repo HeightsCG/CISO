@@ -1,0 +1,135 @@
+{
+    "key": "nist-800-61",
+    "name": "NIST SP 800-61",
+    "version": "Revision 3",
+    "full_name": "NIST SP 800-61 Rev. 3 Incident Response Recommendations and Considerations for Cyber Risk Management: CSF 2.0 Community Profile",
+    "issuing_body": "National Institute of Standards and Technology",
+    "standard_codes": [
+        "NIST-800-61"
+    ],
+    "aliases": [
+        "SP 800-61",
+        "800-61r3",
+        "Incident response",
+        "NIST incident response",
+        "Computer Security Incident Handling Guide"
+    ],
+    "content_licence": "public_domain",
+    "notice": "SP 800-61 Rev. 3 is a CSF 2.0 Community Profile for incident response. Each CSF outcome carries NIST's incident response priority; its recommendations are the test points, and NIST's considerations and notes are shown as guidance. All text is quoted from the publication.",
+    "sources": [
+        {
+            "id": "sp80061",
+            "title": "NIST SP 800-61 Revision 3, Incident Response Recommendations and Considerations for Cyber Risk Management",
+            "version": "Revision 3 (April 2025)",
+            "publisher": "NIST",
+            "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r3.pdf",
+            "file": "nist80061/NIST.SP.800-61r3.pdf",
+            "sha256": "e5593d6bb85daecec7e8d9549400c7b3473bcc3f06e469c82218073afa7fba2d"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG scoring conventions",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "sp80061",
+        "objectives": "sp80061",
+        "guidance": "sp80061"
+    },
+    "control_flags": {
+        "type": "subcategory for a CSF 2.0 outcome; category or function for a higher-level row carrying recommendations that apply beneath it.",
+        "priority": "NIST's incident response priority for the outcome: High, Medium or Low."
+    },
+    "terminology": {
+        "control": "outcome",
+        "controls": "outcomes",
+        "family": "category",
+        "families": "categories",
+        "objective": "recommendation",
+        "objectives": "recommendations",
+        "plan": "Action plan",
+        "plan_short": "Action plan",
+        "score": "Incident response readiness"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Achieved"
+        },
+        {
+            "key": "partial",
+            "label": "Partially Achieved"
+        },
+        {
+            "key": "not_met",
+            "label": "Not Achieved"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "Percentage of applicable outcomes achieved, with partial counting as half. NIST defines no score; this is an HCG readiness measure."
+    },
+    "rules": [
+        {
+            "id": "objective_rollup",
+            "type": "rollup",
+            "summary": "An outcome is achieved only when each of its applicable recommendations is followed.",
+            "source": "hcg",
+            "cite": "HCG convention"
+        },
+        {
+            "id": "priorities",
+            "type": "applicability",
+            "summary": "NIST's High, Medium and Low priorities are a starting point; organizations can adjust them. Outcomes with Low priority indirectly support incident response.",
+            "source": "sp80061",
+            "cite": "NIST SP 800-61r3, section 3",
+            "quote": "These priorities are intended as a starting point for organizations, who are encouraged to customize this Community Profile to reflect their own priorities and needs."
+        },
+        {
+            "id": "not_all_apply",
+            "type": "na_handling",
+            "summary": "Not every recommendation applies to every organization; one that does not is marked not applicable. Recommendations at a Function or Category level apply to the outcomes beneath it.",
+            "source": "sp80061",
+            "cite": "NIST SP 800-61r3, section 3",
+            "quote": "The recommendations, considerations, and notes are not comprehensive, and not all of them will be applicable to every organization."
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A partially achieved outcome counts as half. This is an HCG convention.",
+            "source": "hcg",
+            "cite": "HCG scoring convention"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "Cybersecurity incident",
+            "definition": "An occurrence that actually or imminently jeopardizes the integrity, confidentiality or availability of information or an information system, or violates security policies or acceptable use policies."
+        },
+        {
+            "term": "Community Profile",
+            "definition": "A baseline of CSF outcomes created for shared interests among many organizations, here for incident response."
+        },
+        {
+            "term": "Recommendation (R)",
+            "definition": "Something the organization should do."
+        },
+        {
+            "term": "Consideration (C)",
+            "definition": "Something the organization should consider doing."
+        }
+    ]
+}
