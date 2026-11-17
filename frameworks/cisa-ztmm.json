@@ -1,0 +1,1414 @@
+{
+    "key": "cisa-ztmm",
+    "name": "CISA Zero Trust Maturity Model",
+    "version": "Version 2.0",
+    "full_name": "CISA Zero Trust Maturity Model, Version 2.0 (April 2023)",
+    "issuing_body": "Cybersecurity and Infrastructure Security Agency",
+    "standard_codes": [
+        "CISA-ZTMM"
+    ],
+    "aliases": [
+        "ZTMM",
+        "Zero Trust Maturity Model",
+        "CISA zero trust",
+        "Zero trust pillars"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Each function of the five pillars and the cross-cutting capabilities is assessed against CISA's maturity stages. The Traditional stage is the function's starting point; the Initial, Advanced and Optimal stage descriptions are the test points. All text is CISA's.",
+    "sources": [
+        {
+            "id": "ztmm",
+            "title": "CISA Zero Trust Maturity Model, Version 2.0",
+            "version": "2.0 (April 2023)",
+            "publisher": "Cybersecurity and Infrastructure Security Agency",
+            "url": "https://www.cisa.gov/sites/default/files/2023-04/zero_trust_maturity_model_v2_508.pdf",
+            "file": "cisa-ztmm/zero_trust_maturity_model_v2_508.pdf",
+            "sha256": "4a95fdff55a64e2468b69af075b7f208176b88c751af92aefc3b7dacad26fdb4"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG scoring conventions",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "ztmm",
+        "objectives": "ztmm"
+    },
+    "control_flags": {
+        "type": "function for a pillar function; cross_cutting for Visibility and Analytics, Automation and Orchestration, or Governance."
+    },
+    "terminology": {
+        "control": "function",
+        "controls": "functions",
+        "family": "pillar",
+        "families": "pillars",
+        "objective": "maturity stage",
+        "objectives": "maturity stages",
+        "plan": "Zero trust roadmap",
+        "plan_short": "Roadmap",
+        "score": "Zero trust maturity"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Optimal"
+        },
+        {
+            "key": "partial",
+            "label": "Initial or Advanced"
+        },
+        {
+            "key": "not_met",
+            "label": "Traditional"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "A function is rated by the highest stage it fully reaches: Traditional (no stage met), Initial, Advanced or Optimal (all three stages met). The percentage counts Optimal functions in full and Initial or Advanced as half; it is an HCG summary, and CISA's own measure is the stage per function."
+    },
+    "rules": [
+        {
+            "id": "stage_rollup",
+            "type": "rollup",
+            "summary": "A function is Optimal only when its Initial, Advanced and Optimal stages are all met; meeting Initial or Advanced only is a partial result.",
+            "source": "hcg",
+            "cite": "HCG convention"
+        },
+        {
+            "id": "stages_progressive",
+            "type": "applicability",
+            "summary": "Stages build on each other: each subsequent stage requires greater protection, detail and complexity, so a stage is met only if the stages below it are met. Agencies may sit at different stages for different functions.",
+            "source": "ztmm",
+            "cite": "CISA ZTMM v2.0, section 3",
+            "quote": "Each subsequent stage requires greater levels of protection, detail, and complexity for adoption."
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A function at Initial or Advanced counts as half in the HCG summary percentage.",
+            "source": "hcg",
+            "cite": "HCG scoring convention"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "Zero trust",
+            "definition": "An approach where access to resources is limited to only those who need it and only for the resources needed, with decisions made per request based on continuously evaluated trust."
+        },
+        {
+            "term": "Pillars",
+            "definition": "CISA's five zero trust areas: Identity, Devices, Networks, Applications and Workloads, and Data."
+        },
+        {
+            "term": "Cross-cutting capabilities",
+            "definition": "Visibility and Analytics, Automation and Orchestration, and Governance, which support all five pillars."
+        },
+        {
+            "term": "Maturity stages",
+            "definition": "Traditional, Initial, Advanced and Optimal: the progression from manual, static configuration to automated, dynamic, fully integrated zero trust."
+        }
+    ],
+    "display_name": "CISA Zero Trust Maturity Model (Version 2.0)",
+    "counts": {
+        "families": 6,
+        "controls": 40,
+        "objectives": 120
+    },
+    "families": [
+        {
+            "number": "ID",
+            "code": "ID",
+            "name": "Identity",
+            "controls": [
+                {
+                    "id": "ID-01",
+                    "number": "ID-01",
+                    "title": "Authentication",
+                    "text": "Agency authenticates identity using either passwords or multi-factor authentication (MFA) with static access for entity identity.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID-01.initial",
+                            "text": "Agency authenticates identity using MFA, which may include passwords as one factor and requires validation of multiple entity attributes (e.g., locale or activity).",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "ID-01.advanced",
+                            "text": "Agency begins to authenticate all identity using phishing-resistant MFA and attributes, including initial implementation of password-less MFA via FIDO2 or PIV.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "ID-01.optimal",
+                            "text": "Agency continuously validates identity with phishing-resistant MFA, not just when access is initially granted.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "ID-02",
+                    "number": "ID-02",
+                    "title": "Identity Stores",
+                    "text": "Agency only uses self-managed, on-premises (i.e., planned, deployed, and maintained by agency) identity stores.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID-02.initial",
+                            "text": "Agency has a combination of self-managed identity stores and hosted identity store(s) (e.g., cloud or other agency) with minimal integration between the store(s) (e.g., Single Sign-on.).",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "ID-02.advanced",
+                            "text": "Agency begins to securely consolidate and integrate some self-managed and hosted identity stores.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "ID-02.optimal",
+                            "text": "Agency securely integrates their identity stores across all partners and environments as appropriate.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "ID-03",
+                    "number": "ID-03",
+                    "title": "Risk Assessments",
+                    "text": "Agency makes limited determinations for identity risk (i.e., likelihood that an identity is compromised).",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID-03.initial",
+                            "text": "Agency determines identity risk using manual methods and static rules to support visibility.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "ID-03.advanced",
+                            "text": "Agency determines identity risk with some automated analysis and dynamic rules to inform access decisions and response activities.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "ID-03.optimal",
+                            "text": "Agency determines identity risk in real time based on continuous analysis and dynamic rules to deliver ongoing protection.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "ID-04",
+                    "number": "ID-04",
+                    "title": "Access Management",
+                    "text": "Agency authorizes permanent access with periodic review for both privileged and unprivileged accounts.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID-04.initial",
+                            "text": "Agency authorizes access, including for privileged access requests, that expires with automated review.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "ID-04.advanced",
+                            "text": "Agency authorizes need-based and session-based access, including for privileged access request, that is tailored to actions and resources.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "ID-04.optimal",
+                            "text": "Agency uses automation to authorize just-in-time and just-enough access tailored to individual actions and individual resource needs.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "ID-05",
+                    "number": "ID-05",
+                    "title": "Visibility and Analytics Capability",
+                    "text": "Agency collects user and entity activity logs, especially for privileged credentials, and performs some routine manual analysis.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID-05.initial",
+                            "text": "Agency collects user and entity activity logs and performs routine manual analysis and some automated analysis, with limited correlation between log types.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "ID-05.advanced",
+                            "text": "Agency performs automated analysis across some user and entity activity log types and augments collection to address gaps in visibility.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "ID-05.optimal",
+                            "text": "Agency maintains comprehensive visibility and situational awareness across enterprise by performing automated analysis over user activity log types, including behavior-based analytics.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "ID-06",
+                    "number": "ID-06",
+                    "title": "Automation and Orchestration Capability",
+                    "text": "Agency manually orchestrates (onboards, offboards, and disables) self-managed identities (users and entities), with little integration, and performs regular review.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID-06.initial",
+                            "text": "Agency manually orchestrates privileged and external identities and automates orchestration of non-privileged users and of self-managed entities.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "ID-06.advanced",
+                            "text": "Agency manually orchestrates privileged user identities and automates orchestration of all identities with integration across all environments.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "ID-06.optimal",
+                            "text": "Agency automates orchestration of all identities with full integration across all environments based on behaviors, enrollments, and deployment needs.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "ID-07",
+                    "number": "ID-07",
+                    "title": "Governance Capability",
+                    "text": "Agency implements identity policies (authentication, credentials, access, lifecycle, etc.) with enforcement via static technical mechanisms and manual review.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "ID-07.initial",
+                            "text": "Agency defines and begins implementing identity policies for enterprise-wide enforcement with minimal automation and manual updates.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "ID-07.advanced",
+                            "text": "Agency implements identity policies for enterprise-wide enforcement with automation and updates policies periodically.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "ID-07.optimal",
+                            "text": "Agency implements and fully automates enterprise-wide identity policies for all users and entities across all systems with continuous enforcement and dynamic updates.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                }
+            ]
+        },
+        {
+            "number": "DV",
+            "code": "DV",
+            "name": "Devices",
+            "controls": [
+                {
+                    "id": "DV-01",
+                    "number": "DV-01",
+                    "title": "Policy Enforcement & Compliance Monitoring",
+                    "text": "Agency has limited, if any, visibility (i.e., ability to inspect device behavior) into device compliance with few methods of enforcing policies or managing software, configurations, or vulnerabilities.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DV-01.initial",
+                            "text": "Agency receives self-reported device characteristics (e.g., keys, tokens, users, etc., on the device) but has limited enforcement mechanisms. Agency has a preliminary, basic process in place to approve software use and push updates and configuration changes to devices.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DV-01.advanced",
+                            "text": "Agency has verified insights (i.e., an administrator can inspect and verify the data on device) on initial access to device and enforces compliance for most devices and virtual assets. Agency uses automated methods to manage devices and virtual assets, approve software, and identify vulnerabilities and install patches.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DV-01.optimal",
+                            "text": "Agency continuously verifies insights and enforces compliance throughout the lifetime of devices and virtual assets. Agency integrates device, software, configuration, and vulnerability management across all agency environments, including for virtual assets.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "DV-02",
+                    "number": "DV-02",
+                    "title": "Asset & Supply Chain Risk Management",
+                    "text": "Agency does not track physical or virtual assets in an enterprise-wide or cross-vendor manner and manages its own supply chain acquisition of devices and services in ad hoc fashion with a limited view of enterprise risks.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DV-02.initial",
+                            "text": "Agency tracks all physical and some virtual assets and manages supply chain risks by establishing policies and control baselines according to federal recommendations using a robust framework, (e.g., NIST SCRM.)",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DV-02.advanced",
+                            "text": "Agency begins to develop a comprehensive enterprise view of physical and virtual assets via automated processes that can function across multiple vendors to verify acquisitions, track development cycles, and provide third-party assessments.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DV-02.optimal",
+                            "text": "Agency has a comprehensive, at- or near-real-time view of all assets across vendors and service providers, automates its supply chain risk management as applicable, builds operations that tolerate supply chain failures, and incorporates best practices.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "DV-03",
+                    "number": "DV-03",
+                    "title": "Resource Access (Formerly Data Access)",
+                    "text": "Agency does not require visibility into devices or virtual assets used to access resources.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DV-03.initial",
+                            "text": "Agency requires some devices or virtual assets to report characteristics then use this information to approve resource access.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DV-03.advanced",
+                            "text": "Agency’s initial resource access considers verified device or virtual asset insights.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DV-03.optimal",
+                            "text": "Agency’s resource access considers real-time risk analytics within devices and virtual assets.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "DV-04",
+                    "number": "DV-04",
+                    "title": "Device Threat Protection",
+                    "text": "Agency manually deploys threat protection capabilities to some devices.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DV-04.initial",
+                            "text": "Agency has some automated processes for deploying and updating threat protection capabilities to devices and to virtual assets with limited policy enforcement and compliance monitoring integration.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DV-04.advanced",
+                            "text": "Agency begins to consolidate threat protection capabilities to centralized solutions for devices and virtual assets and integrates most of these capabilities with policy enforcement and compliance monitoring.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DV-04.optimal",
+                            "text": "Agency has a centralized threat protection security solution(s) deployed with advanced capabilities for all devices and virtual assets and a unified approach for device threat protection, policy enforcement, and compliance monitoring.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "DV-05",
+                    "number": "DV-05",
+                    "title": "Visibility and Analytics Capability",
+                    "text": "Agency uses a physically labeled inventory and limited software monitoring to review devices on a regular basis with some manual analysis.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DV-05.initial",
+                            "text": "Agency uses digital identifiers (e.g., interface addresses, digital tags) alongside a manual inventory and endpoint monitoring of devices when available. Some agency devices and virtual assets are under automated analysis (e.g., software-based scanning) for anomaly detection based on risk.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DV-05.advanced",
+                            "text": "Agency automates both inventory collection (including endpoint monitoring on all standard user devices, e.g., desktops and laptops, mobile phones, tablets, and their virtual assets) and anomaly detection to detect unauthorized devices.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DV-05.optimal",
+                            "text": "Agency automates status collection of all network-connected devices and virtual assets while correlating with identities, conducting endpoint monitoring, and performing anomaly detection to inform resource access. Agency tracks patterns of provisioning and/or de-provisioning of virtual assets for anomalies.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "DV-06",
+                    "number": "DV-06",
+                    "title": "Automation and Orchestration Capability",
+                    "text": "Agency manually provisions, configures, and/or registers devices within the enterprise.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DV-06.initial",
+                            "text": "Agency begins to use tools and scripts to automate the process of provisioning, configuration, registration, and/or deprovisioning for devices and virtual assets.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DV-06.advanced",
+                            "text": "Agency has implemented monitoring and enforcement mechanisms to identify and manually disconnect or isolate non-compliant (vulnerable, unverified certificate; unregistered mac address) devices and virtual assets.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DV-06.optimal",
+                            "text": "Agency has fully automated processes for provisioning, registering, monitoring, isolating, remediating, and deprovisioning devices and virtual assets.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "DV-07",
+                    "number": "DV-07",
+                    "title": "Governance Capability",
+                    "text": "Agency sets some policies for the lifecycle of their traditional and peripheral computing devices and relies on manual processes to maintain (e.g., update, patch, sanitize) these devices.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DV-07.initial",
+                            "text": "Agency sets and enforces policies for the procurement of new devices, the lifecycle of non-traditional computing devices and virtual assets, and for regularly conducting monitoring and scanning of devices.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DV-07.advanced",
+                            "text": "Agency sets enterprise-wide policies for the lifecycle of devices and virtual assets, including their enumeration and accountability, with some automated enforcement mechanisms.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DV-07.optimal",
+                            "text": "Agency automates policies for the lifecycle of all network-connected devices and virtual assets across the enterprise.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                }
+            ]
+        },
+        {
+            "number": "NW",
+            "code": "NW",
+            "name": "Networks",
+            "controls": [
+                {
+                    "id": "NW-01",
+                    "number": "NW-01",
+                    "title": "Network Segmentation",
+                    "text": "Agency defines their network architecture using large perimeter/macro-segmentation with minimal restrictions on reachability within network segments. Agency may also rely on multi-service interconnections (e.g., bulk traffic VPN tunnels).",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "NW-01.initial",
+                            "text": "Agency begins to deploy network architecture with the isolation of critical workloads, constraining connectivity to least function principles, and a transition toward service-specific interconnections.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "NW-01.advanced",
+                            "text": "Agency expands deployment of endpoint and application profile isolation mechanisms to more of their network architecture with ingress/egress micro-perimeters and service-specific interconnections.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "NW-01.optimal",
+                            "text": "Agency network architecture consists of fully distributed ingress/egress micro-perimeters and extensive micro-segmentation based around application profiles with dynamic just-in-time and just-enough connectivity for service-specific interconnections.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "NW-02",
+                    "number": "NW-02",
+                    "title": "Network Traffic Management",
+                    "text": "Agency manually implements static network rules and configurations to manage traffic at service provisioning, with limited monitoring capabilities (e.g., application performance monitoring or anomaly detection) and manual audits and reviews of profile changes for mission critical applications.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "NW-02.initial",
+                            "text": "Agency establishes application profiles with distinct traffic management features and begins to map all applications to these profiles. Agency expands application of static rules to all applications and performs periodic manual audits of application profile assessments.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "NW-02.advanced",
+                            "text": "Agency implements dynamic network rules and configurations for resource optimization that are periodically adapted based upon automated risk-aware and risk-responsive application profile assessments and monitoring.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "NW-02.optimal",
+                            "text": "Agency implements dynamic network rules and configurations that continuously evolve to meet application profile needs and reprioritize applications based on mission criticality, risk, etc.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "NW-03",
+                    "number": "NW-03",
+                    "title": "Traffic Encryption (Formerly Encryption)",
+                    "text": "Agency encrypts minimal traffic and relies on manual or ad hoc processes to manage and secure encryption keys.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "NW-03.initial",
+                            "text": "Agency begins to encrypt all traffic to internal applications, to prefer encryption for traffic to external applications, to formalize key management policies, and to secure server/service encryption keys.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "NW-03.advanced",
+                            "text": "Agency ensures encryption for all applicable internal and external traffic protocols, manages issuance and rotation of keys and certificates, and begins to incorporate best practices for cryptographic agility.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "NW-03.optimal",
+                            "text": "Agency continues to encrypt traffic as appropriate, enforces least privilege principles for secure key management enterprise-wide, and incorporates best practices for cryptographic agility as widely as possible.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "NW-04",
+                    "number": "NW-04",
+                    "title": "Network Resilience",
+                    "text": "Agency configures network capabilities on a case-by-case basis to only match individual application availability demands with limited resilience mechanisms for workloads not deemed mission critical.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "NW-04.initial",
+                            "text": "Agency begins to configure network capabilities to manage availability demands for additional applications and expand resilience mechanisms for workloads not deemed mission critical.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "NW-04.advanced",
+                            "text": "Agency has configured network capabilities to dynamically manage the availability demands and resilience mechanisms for the majority of their applications.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "NW-04.optimal",
+                            "text": "Agency integrates holistic delivery and awareness in adapting to changes in availability demands for all workloads and provides proportionate resilience.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "NW-05",
+                    "number": "NW-05",
+                    "title": "Visibility and Analytics Capability",
+                    "text": "Agency incorporates limited boundary-focused network monitoring capabilities with minimal analysis to start developing centralized situational awareness.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "NW-05.initial",
+                            "text": "Agency employs network monitoring capabilities based on known indicators of compromise (including network enumeration) to develop situational awareness in each environment and begins to correlate telemetry across traffic types and environments for analysis and threat hunting activities.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "NW-05.advanced",
+                            "text": "Agency deploys anomaly-based network detection capabilities to develop situational awareness across all environments, begins to correlate telemetry from multiple sources for analysis, and incorporates automated processes for robust threat hunting activities.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "NW-05.optimal",
+                            "text": "Agency maintains visibility into communication across all agency networks and environments while enabling enterprise-wide situational awareness and advanced monitoring capabilities that automate telemetry correlation across all detection sources.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "NW-06",
+                    "number": "NW-06",
+                    "title": "Automation and Orchestration Capability",
+                    "text": "Agency uses manual processes to manage the configuration and resource lifecycle for agency networks and environments with periodic integration of policy requirements and situational awareness.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "NW-06.initial",
+                            "text": "Agency begins using automated methods to manage the configuration and resource lifecycle for some agency networks or environments and ensures that all resources have a defined lifetime based on policies and telemetry.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "NW-06.advanced",
+                            "text": "Agency uses automated change management methods (e.g., CI/CD) to manage the configuration and resource lifecycle for all agency networks and environments, responding to and enforcing policies and protections against perceived risks.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "NW-06.optimal",
+                            "text": "Agency networks and environments are defined using infrastructure-as-code managed by automated change management methods, including automated initiation and expiration to align with changing needs.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "NW-07",
+                    "number": "NW-07",
+                    "title": "Governance Capability",
+                    "text": "Agency implements static network policies (access, protocols, segmentation, alerts, and remediation) with an approach focused on perimeter protections.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "NW-07.initial",
+                            "text": "Agency defines and begins to implement policies tailored to individual network segments and resources while also inheriting corporate-wide rules as appropriate.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "NW-07.advanced",
+                            "text": "Agency incorporates automation in implementing tailored policies and facilitates the transition from perimeter-focused protections.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "NW-07.optimal",
+                            "text": "Agency implements enterprise-wide network policies that enable tailored, local controls; dynamic updates; and secure external connections based on application and user workflows.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                }
+            ]
+        },
+        {
+            "number": "AW",
+            "code": "AW",
+            "name": "Applications and Workloads",
+            "controls": [
+                {
+                    "id": "AW-01",
+                    "number": "AW-01",
+                    "title": "Application Access (Formerly Access Authorization)",
+                    "text": "Agency authorizes access to applications primarily based on local authorization and static attributes.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "AW-01.initial",
+                            "text": "Agency begins to implement authorizing access capabilities to applications that incorporate contextual information (e.g., identity, device compliance, and/or other attributes) per request with expiration.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "AW-01.advanced",
+                            "text": "Agency automates application access decisions with expanded contextual information and enforced expiration conditions that adhere to least privilege principles.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "AW-01.optimal",
+                            "text": "Agency continuously authorizes application access, incorporating real-time risk analytics and factors such as behavior or usage patterns.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "AW-02",
+                    "number": "AW-02",
+                    "title": "Application Threat Protections (Formerly Threat Protections)",
+                    "text": "Agency threat protections have minimal integration with application workflows, applying general purpose protections for known threats.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "AW-02.initial",
+                            "text": "Agency integrates threat protections into mission critical application workflows, applying protections against known threats and some application-specific threats.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "AW-02.advanced",
+                            "text": "Agency integrates threat protections into all application workflows, protecting against some application-specific and targeted threats.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "AW-02.optimal",
+                            "text": "Agency integrates advanced threat protections into all application workflows, offering real-time visibility and content-aware protections against sophisticated attacks tailored to applications.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "AW-03",
+                    "number": "AW-03",
+                    "title": "Accessible Applications (Formerly Accessibility)",
+                    "text": "Agency makes some mission critical applications available only over private networks and protected public network connections (e.g., VPN) with monitoring.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "AW-03.initial",
+                            "text": "Agency makes some of their applicable mission critical applications available over open public networks to authorized users with need via brokered connections.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "AW-03.advanced",
+                            "text": "Agency makes most of their applicable mission critical applications available over open public network connections to authorized users as needed.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "AW-03.optimal",
+                            "text": "Agency makes all applicable applications available over open public networks to authorized users and devices, where appropriate, as needed.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "AW-04",
+                    "number": "AW-04",
+                    "title": "Secure Application Development and Deployment Workflow",
+                    "text": "Agency has ad hoc development, testing, and production environments with non-robust code deployment mechanisms.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "AW-04.initial",
+                            "text": "Agency provides infrastructure for development, testing, and production environments (including automation) with formal code deployment mechanisms through CI/CD pipelines and requisite access controls in support of least privilege principles.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "AW-04.advanced",
+                            "text": "Agency uses distinct and coordinated teams for development, security, and operations while removing developer access to production environment for code deployment.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "AW-04.optimal",
+                            "text": "Agency leverages immutable workloads where feasible, only allowing changes to take effect through redeployment, and removes administrator access to deployment environments in favor of automated processes for code deployment.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "AW-05",
+                    "number": "AW-05",
+                    "title": "Application Security Testing (Formerly Application Security)",
+                    "text": "Agency performs application security testing prior to deployment, primarily via manual testing methods.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "AW-05.initial",
+                            "text": "Agency begins to use static and dynamic (i.e., application is executing) testing methods to perform security testing, including manual expert analysis, prior to application deployment.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "AW-05.advanced",
+                            "text": "Agency integrates application security testing into the application development and deployment process, including the use of periodic dynamic testing methods.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "AW-05.optimal",
+                            "text": "Agency integrates application security testing throughout the software development lifecycle across the enterprise with routine automated testing of deployed applications.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "AW-06",
+                    "number": "AW-06",
+                    "title": "Visibility and Analytics Capability",
+                    "text": "Agency performs some performance and security monitoring of mission critical applications with limited aggregation and analytics.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "AW-06.initial",
+                            "text": "Agency begins to automate application profile (e.g., state, health, and performance) and security monitoring for improved log collection, aggregation, and analytics.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "AW-06.advanced",
+                            "text": "Agency automates profile and security monitoring for most applications with heuristics to identify application-specific and enterprise-wide trends and refines processes over time to address gaps in visibility.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "AW-06.optimal",
+                            "text": "Agency performs continuous and dynamic monitoring across all applications to maintain enterprise-wide comprehensive visibility.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "AW-07",
+                    "number": "AW-07",
+                    "title": "Automation and Orchestration Capability",
+                    "text": "Agency manually establishes static application hosting location and access at provisioning with limited maintenance and review.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "AW-07.initial",
+                            "text": "Agency periodically modifies application configurations (including location and access) to meet relevant security and performance goals.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "AW-07.advanced",
+                            "text": "Agency automates application configurations to respond to operational and environmental changes.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "AW-07.optimal",
+                            "text": "Agency automates application configurations to continuously optimize for security and performance.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "AW-08",
+                    "number": "AW-08",
+                    "title": "Governance Capability",
+                    "text": "Agency relies primarily on manual enforcement policies for application access, development, deployment, software asset management, security testing and evaluation (ST&E) at technology insertion, patching, and tracking software dependencies.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "AW-08.initial",
+                            "text": "Agency begins to automate policy enforcement for application development (including access to development infrastructure), deployment, software asset management, ST&E at technology insertion, patching, and tracking software dependencies based upon mission needs (for example, with Software Bill of Materials).",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "AW-08.advanced",
+                            "text": "Agency implements tiered, tailored policies enterprise-wide for applications and all aspects of the application development and deployment lifecycles and leverages automation, where possible, to support enforcement.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "AW-08.optimal",
+                            "text": "Agency fully automates policies governing applications development and deployment, including incorporating dynamic updates for applications through the CI/CD pipeline.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                }
+            ]
+        },
+        {
+            "number": "DA",
+            "code": "DA",
+            "name": "Data",
+            "controls": [
+                {
+                    "id": "DA-01",
+                    "number": "DA-01",
+                    "title": "Data Inventory Management",
+                    "text": "Agency manually identifies and inventories some agency data (e.g., mission critical data).",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DA-01.initial",
+                            "text": "Agency begins to automate data inventory processes for both on-premises and in cloud environments, covering most agency data, and begins to incorporate protections against data loss.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DA-01.advanced",
+                            "text": "Agency automates data inventory and tracking enterprise-wide, covering all applicable agency data, with data loss prevention strategies based upon static attributes and/or labels.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DA-01.optimal",
+                            "text": "Agency continuously inventories all applicable agency data and employs robust data loss prevention strategies that dynamically block suspected data exfiltration.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "DA-02",
+                    "number": "DA-02",
+                    "title": "Data Categorization",
+                    "text": "Agency employs limited and ad hoc data categorization capabilities.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DA-02.initial",
+                            "text": "Agency begins to implement a data categorization strategy with defined labels and manual enforcement mechanisms.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DA-02.advanced",
+                            "text": "Agency automates some data categorization and labeling processes in a consistent, tiered, targeted manner with simple, structured formats and regular review.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DA-02.optimal",
+                            "text": "Agency automates data categorization and labeling enterprise-wide with robust techniques; granular, structured formats; and mechanisms to address all data types.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "DA-03",
+                    "number": "DA-03",
+                    "title": "Data Availability",
+                    "text": "Agency primarily makes data available from on-premises data stores with some off-site backups.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DA-03.initial",
+                            "text": "Agency makes some data available from redundant, highly available data stores (e.g., cloud) and maintains off-site backups for on-premises data.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DA-03.advanced",
+                            "text": "Agency primarily makes data available from redundant, highly available data stores and ensures access to historical data.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DA-03.optimal",
+                            "text": "Agency uses dynamic methods to optimize data availability, including historical data, according to user and entity need.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "DA-04",
+                    "number": "DA-04",
+                    "title": "Data Access",
+                    "text": "Agency governs user and entity access (e.g., permissions to read, write, copy, grant others access, etc.) to data through static access controls.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DA-04.initial",
+                            "text": "Agency begins to deploy automated data access controls that incorporate elements of least privilege across the enterprise.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DA-04.advanced",
+                            "text": "Agency automates data access controls that consider various attributes such as identity, device risk, application, data category, etc., and are time limited where applicable.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DA-04.optimal",
+                            "text": "Agency automates dynamic just-in-time and just-enough data access controls enterprise-wide with continuous review of permissions.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "DA-05",
+                    "number": "DA-05",
+                    "title": "Data Encryption",
+                    "text": "Agency encrypts minimal agency data at rest and in transit and relies on manual or ad hoc processes to manage and secure encryption keys.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "function",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DA-05.initial",
+                            "text": "Agency encrypts all data in transit and, where feasible, data at rest (e.g., mission critical data and data stored in external environments) and begins to formalize key management policies and secure encryption keys.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DA-05.advanced",
+                            "text": "Agency encrypts all data at rest and in transit across the enterprise to the maximum extent possible, begins to incorporate cryptographic agility, and protects encryption keys (i.e., secrets are not hard coded and are rotated on a regular basis).",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DA-05.optimal",
+                            "text": "Agency encrypts data in use where appropriate, enforces least privilege principles for secure key management enterprise-wide, and applies encryption using up-to-date standards and cryptographic agility to the extent possible.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "DA-06",
+                    "number": "DA-06",
+                    "title": "Visibility and Analytics Capability",
+                    "text": "Agency has limited visibility into data including location, access, and usage, with analysis consisting primarily of manual processes.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DA-06.initial",
+                            "text": "Agency obtains visibility based on data inventory management, categorization, encryption, and access attempts, with some automated analysis and correlation.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DA-06.advanced",
+                            "text": "Agency maintains data visibility in a more comprehensive, enterprise-wide manner with automated analysis and correlation and begins to employ predictive analytics.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DA-06.optimal",
+                            "text": "Agency has visibility across the full data lifecycle with robust analytics, including predictive analytics, that support comprehensive views of agency data and continuous security posture assessment.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "DA-07",
+                    "number": "DA-07",
+                    "title": "Automation and Orchestration Capability",
+                    "text": "Agency implements data lifecycle and security policies (e.g., access, usage, storage, encryption, configurations, protections, backups, categorization, sanitization) through manual, and potentially ad hoc, processes.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DA-07.initial",
+                            "text": "Agency uses some automated processes to implement data lifecycle and security policies.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DA-07.advanced",
+                            "text": "Agency implements data lifecycle and security policies primarily through automated methods for most agency data in a consistent, tiered, targeted manner across the enterprise.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DA-07.optimal",
+                            "text": "Agency automates, to the maximum extent possible, data lifecycles and security policies for all agency data across the enterprise.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "DA-08",
+                    "number": "DA-08",
+                    "title": "Governance Capability",
+                    "text": "Agency relies on ad hoc data governance policies (e.g., for protection, categorization, access, inventorying, storage, recovery, removal, etc.) with manual implementation.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "DA-08.initial",
+                            "text": "Agency defines high-level data governance policies and relies primarily on manual, segmented implementation.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DA-08.advanced",
+                            "text": "Agency begins integration of data lifecycle policy enforcement across the enterprise, enabling more unified definitions for data governance policies.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "DA-08.optimal",
+                            "text": "Agency data lifecycle policies are unified to the maximum extent possible and dynamically enforced across the enterprise.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                }
+            ]
+        },
+        {
+            "number": "CC",
+            "code": "CC",
+            "name": "Cross-Cutting Capabilities",
+            "controls": [
+                {
+                    "id": "CC-01",
+                    "number": "CC-01",
+                    "title": "Visibility and Analytics",
+                    "text": "Agency manually collects limited logs across their enterprise with low fidelity and minimal analysis.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CC-01.initial",
+                            "text": "Agency begins to automate the collection and analysis of logs and events for mission critical functions and regularly assesses processes for gaps in visibility.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "CC-01.advanced",
+                            "text": "Agency expands the automated collection of logs and events enterprise-wide (including virtual environments) for centralized analysis that correlates across multiple sources.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "CC-01.optimal",
+                            "text": "Agency maintains comprehensive visibility enterprise-wide via centralized dynamic monitoring and advanced analysis of logs and events.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "CC-02",
+                    "number": "CC-02",
+                    "title": "Automation and Orchestration",
+                    "text": "Agency relies on static and manual processes to orchestrate operations and response activities with limited automation.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CC-02.initial",
+                            "text": "Agency begins automating orchestration and response activities in support of critical mission functions.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "CC-02.advanced",
+                            "text": "Agency automates orchestration and response activities enterprise-wide, leveraging contextual information from multiple sources to inform decisions.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "CC-02.optimal",
+                            "text": "Agency orchestration and response activities dynamically respond to enterprise-wide changing requirements and environmental changes.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                },
+                {
+                    "id": "CC-03",
+                    "number": "CC-03",
+                    "title": "Governance",
+                    "text": "Agency implements policies in an ad hoc manner across the enterprise, with policies enforced via manual processes or static technical mechanisms.",
+                    "description": "Traditional stage shown as the text; the Initial, Advanced and Optimal stages are the test points.",
+                    "type": "cross_cutting",
+                    "weight": null,
+                    "partial_weight": null,
+                    "objectives": [
+                        {
+                            "id": "CC-03.initial",
+                            "text": "Agency defines and begins implementing policies for enterprise-wide enforcement with minimal automation and manual updates.",
+                            "stage": "Initial",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "CC-03.advanced",
+                            "text": "Agency implements tiered, tailored policies enterprise-wide and leverages automation where possible to support enforcement. Access policy decisions incorporate contextual information from multiple sources.",
+                            "stage": "Advanced",
+                            "source": "ztmm"
+                        },
+                        {
+                            "id": "CC-03.optimal",
+                            "text": "Agency implements and fully automates enterprise-wide policies that enable tailored local controls with continuous enforcement and dynamic updates.",
+                            "stage": "Optimal",
+                            "source": "ztmm"
+                        }
+                    ],
+                    "source": "ztmm"
+                }
+            ]
+        }
+    ]
+}

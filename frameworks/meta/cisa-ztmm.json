@@ -1,0 +1,124 @@
+{
+    "key": "cisa-ztmm",
+    "name": "CISA Zero Trust Maturity Model",
+    "version": "Version 2.0",
+    "full_name": "CISA Zero Trust Maturity Model, Version 2.0 (April 2023)",
+    "issuing_body": "Cybersecurity and Infrastructure Security Agency",
+    "standard_codes": [
+        "CISA-ZTMM"
+    ],
+    "aliases": [
+        "ZTMM",
+        "Zero Trust Maturity Model",
+        "CISA zero trust",
+        "Zero trust pillars"
+    ],
+    "content_licence": "public_domain",
+    "notice": "Each function of the five pillars and the cross-cutting capabilities is assessed against CISA's maturity stages. The Traditional stage is the function's starting point; the Initial, Advanced and Optimal stage descriptions are the test points. All text is CISA's.",
+    "sources": [
+        {
+            "id": "ztmm",
+            "title": "CISA Zero Trust Maturity Model, Version 2.0",
+            "version": "2.0 (April 2023)",
+            "publisher": "Cybersecurity and Infrastructure Security Agency",
+            "url": "https://www.cisa.gov/sites/default/files/2023-04/zero_trust_maturity_model_v2_508.pdf",
+            "file": "cisa-ztmm/zero_trust_maturity_model_v2_508.pdf",
+            "sha256": "4a95fdff55a64e2468b69af075b7f208176b88c751af92aefc3b7dacad26fdb4"
+        },
+        {
+            "id": "hcg",
+            "title": "HCG scoring conventions",
+            "version": "HCG 2026-11",
+            "publisher": "Heights Consulting Group"
+        }
+    ],
+    "source_of": {
+        "controls": "ztmm",
+        "objectives": "ztmm"
+    },
+    "control_flags": {
+        "type": "function for a pillar function; cross_cutting for Visibility and Analytics, Automation and Orchestration, or Governance."
+    },
+    "terminology": {
+        "control": "function",
+        "controls": "functions",
+        "family": "pillar",
+        "families": "pillars",
+        "objective": "maturity stage",
+        "objectives": "maturity stages",
+        "plan": "Zero trust roadmap",
+        "plan_short": "Roadmap",
+        "score": "Zero trust maturity"
+    },
+    "result_scale": [
+        {
+            "key": "met",
+            "label": "Optimal"
+        },
+        {
+            "key": "partial",
+            "label": "Initial or Advanced"
+        },
+        {
+            "key": "not_met",
+            "label": "Traditional"
+        },
+        {
+            "key": "na",
+            "label": "Not Applicable"
+        }
+    ],
+    "scoring": {
+        "model": "percentage",
+        "summary": "A function is rated by the highest stage it fully reaches: Traditional (no stage met), Initial, Advanced or Optimal (all three stages met). The percentage counts Optimal functions in full and Initial or Advanced as half; it is an HCG summary, and CISA's own measure is the stage per function."
+    },
+    "rules": [
+        {
+            "id": "stage_rollup",
+            "type": "rollup",
+            "summary": "A function is Optimal only when its Initial, Advanced and Optimal stages are all met; meeting Initial or Advanced only is a partial result.",
+            "source": "hcg",
+            "cite": "HCG convention"
+        },
+        {
+            "id": "stages_progressive",
+            "type": "applicability",
+            "summary": "Stages build on each other: each subsequent stage requires greater protection, detail and complexity, so a stage is met only if the stages below it are met. Agencies may sit at different stages for different functions.",
+            "source": "ztmm",
+            "cite": "CISA ZTMM v2.0, section 3",
+            "quote": "Each subsequent stage requires greater levels of protection, detail, and complexity for adoption."
+        },
+        {
+            "id": "partial_credit",
+            "type": "partial_credit",
+            "value": 0.5,
+            "summary": "A function at Initial or Advanced counts as half in the HCG summary percentage.",
+            "source": "hcg",
+            "cite": "HCG scoring convention"
+        }
+    ],
+    "deliverables": [
+        "results_report",
+        "executive_briefing",
+        "remediation_plan",
+        "score_summary"
+    ],
+    "glossary": [
+        {
+            "term": "Zero trust",
+            "definition": "An approach where access to resources is limited to only those who need it and only for the resources needed, with decisions made per request based on continuously evaluated trust."
+        },
+        {
+            "term": "Pillars",
+            "definition": "CISA's five zero trust areas: Identity, Devices, Networks, Applications and Workloads, and Data."
+        },
+        {
+            "term": "Cross-cutting capabilities",
+            "definition": "Visibility and Analytics, Automation and Orchestration, and Governance, which support all five pillars."
+        },
+        {
+            "term": "Maturity stages",
+            "definition": "Traditional, Initial, Advanced and Optimal: the progression from manual, static configuration to automated, dynamic, fully integrated zero trust."
+        }
+    ]
+}
