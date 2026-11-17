@@ -75,6 +75,57 @@ class FrameworkBuilder {
         return $meta;
     }
 
+    /**
+     * The public catalogue: a small summary of every built definition, holding only what the
+     * public framework pages and the home page need, so they never decode the full
+     * definitions (which run to several megabytes). Section names and counts only.
+     */
+    public static function catalogue(): array
+    {
+        $catalogue = array();
+
+        foreach (self::keys() as $key) {
+            $definition = json_decode(file_get_contents(dirname(__DIR__).'/'.$key.'.json'), true);
+            $families = array();
+            $applies = array();
+
+            foreach ($definition['families'] as $family) {
+                $families[] = array(
+                    'code' => (string) $family['code'],
+                    'name' => (string) $family['name'],
+                    'count' => count($family['controls'])
+                );
+            }
+
+            foreach ($definition['rules'] as $rule) {
+                if (($rule['type'] ?? '') === 'applicability' && !empty($rule['summary'])) {
+                    $applies[] = $rule['summary'];
+                }
+            }
+
+            $catalogue[$key] = array(
+                'key' => $key,
+                'name' => $definition['name'],
+                'version' => $definition['version'],
+                'full_name' => $definition['full_name'],
+                'issuing_body' => $definition['issuing_body'],
+                'catalogue' => $definition['catalogue'],
+                'control_term' => $definition['terminology']['controls'] ?? 'controls',
+                'family_term' => $definition['terminology']['families'] ?? 'families',
+                'scoring' => $definition['scoring']['summary'] ?? '',
+                'notice' => $definition['notice'] ?? '',
+                'applies' => $applies,
+                'glossary' => $definition['glossary'] ?? array(),
+                'controls' => $definition['counts']['controls'],
+                'objectives' => $definition['counts']['objectives'],
+                'families' => $families
+            );
+            unset($definition);
+        }
+
+        return $catalogue;
+    }
+
     public static function encode(array $definition): string
     {
         return json_encode($definition, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)."\n";

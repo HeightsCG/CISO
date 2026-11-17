@@ -5,6 +5,8 @@
  *
  *   php frameworks/build.php            build every framework, then the crosswalk
  *   php frameworks/build.php cmmc-l2    build one
+ *
+ * Either way the public catalogue (frameworks/catalogue/catalogue.json) is rebuilt last.
  */
 require __DIR__.'/lib/Source.php';
 require __DIR__.'/lib/FrameworkBuilder.php';
@@ -27,3 +29,6 @@ if (count(array_slice($argv, 1)) === 0) {
     file_put_contents(__DIR__.'/crosswalk/crosswalk.json', FrameworkBuilder::encode($crosswalk));
     echo 'crosswalk: '.count($crosswalk['links']).' links in '.count($crosswalk['counts'])." sets\n";
 }
+
+file_put_contents(__DIR__.'/catalogue/catalogue.json', FrameworkBuilder::encode(FrameworkBuilder::catalogue()));
+echo "catalogue: written\n";

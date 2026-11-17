@@ -129,7 +129,7 @@ class Main {
     /** Number of frameworks in the shared library, for public copy. */
     public static function framework_count(): int
     {
-        return count(FrameworkLibrary::all());
+        return count(FrameworkLibrary::summaries());
     }
 
     /** The home page's meta description, kept to search-snippet length. */
@@ -191,7 +191,7 @@ class Main {
      * visitors get the landing page on every URL, so only the root is
      * indexable and every other path points its canonical at the root.
      */
-    public static function landing_meta(string $path = '/', string $page_name = ''): string
+    public static function landing_meta(string $path = '/', string $page_name = '', ?array $faq = null, array $crumbs = array()): string
     {
         $base   = self::canonical_base();
         $name   = self::site_name();
@@ -275,7 +275,7 @@ class Main {
                     )
                 ),
                 array(
-                    '@type'       => ($path === '/' ? 'WebPage' : 'ContactPage'),
+                    '@type'       => ($path === '/demo' ? 'ContactPage' : 'WebPage'),
                     '@id'         => $page.'#webpage',
                     'url'         => $page,
                     'name'        => ($page_name === '' ? $name.' | Aviation cybersecurity governance' : $page_name),
@@ -291,27 +291,50 @@ class Main {
             )
         );
 
-        if ($path === '/') {
+        if ($faq === null && $path === '/') {
+            $faq = self::landing_faq();
+        }
+
+        if (!empty($faq)) {
             $questions = array();
 
-            foreach (self::landing_faq() as $faq) {
+            foreach ($faq as $item) {
                 $questions[] = array(
                     '@type' => 'Question',
-                    'name' => $faq[0],
+                    'name' => $item[0],
                     'acceptedAnswer' => array(
                         '@type' => 'Answer',
-                        'text' => $faq[1]
+                        'text' => $item[1]
                     )
                 );
             }
 
             $graph['@graph'][] = array(
                 '@type' => 'FAQPage',
-                '@id' => $home.'#faq',
+                '@id' => $page.'#faq',
                 'isPartOf' => array(
                     '@id' => $home.'#website'
                 ),
                 'mainEntity' => $questions
+            );
+        }
+
+        if (count($crumbs) > 0) {
+            $items = array();
+
+            foreach (array_values($crumbs) as $i => $crumb) {
+                $items[] = array(
+                    '@type' => 'ListItem',
+                    'position' => $i + 1,
+                    'name' => $crumb[0],
+                    'item' => $base.$crumb[1]
+                );
+            }
+
+            $graph['@graph'][] = array(
+                '@type' => 'BreadcrumbList',
+                '@id' => $page.'#breadcrumb',
+                'itemListElement' => $items
             );
         }
 

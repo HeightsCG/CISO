@@ -96,4 +96,5 @@ Pricing is quoted on request, based on the size of the team and the number of or
 ## Links
 
 - [Home page](https://ciso.aero/): product overview, supported frameworks, FAQ and sign-in
+- [Frameworks](https://ciso.aero/compliance): one page per framework, at https://ciso.aero/compliance/<name> (for example https://ciso.aero/compliance/easa-part-is), with who it applies to, how it is structured, the frameworks mapped to it and how CISO.aero assesses it
 - [Book a demo or request pricing](https://ciso.aero/demo): request a live walkthrough or a price quote

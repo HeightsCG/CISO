@@ -167,7 +167,7 @@ $(document).ready(function () {
         <a class="land__brand" href="/"><img src="/images/logo-dark.png" alt="CISO.aero" width="640" height="154"></a>
         <nav class="land__links" aria-label="Sections">
             <a href="#platform">Platform</a>
-            <a href="#frameworks">Frameworks</a>
+            <a href="/compliance">Frameworks</a>
             <a href="#aviation">Aviation</a>
             <a href="#security">Security</a>
             <a href="#faq">FAQ</a>
@@ -232,7 +232,7 @@ $(document).ready(function () {
                 <h3 class="land__catalogue-label"><?php echo htmlspecialchars($group['group'], ENT_QUOTES, 'UTF-8'); ?></h3>
                 <ul class="land__marks">
                     <?php foreach ($group['names'] as $name) { ?>
-                    <li><?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?></li>
+                    <li><a href="/compliance/<?php echo htmlspecialchars(FrameworkLibrary::slug($name), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?></a></li>
                     <?php } ?>
                 </ul>
             </div>

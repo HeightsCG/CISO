@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /$
 Allow: /demo
+Allow: /compliance
 Allow: /llms.txt
 Allow: /images/
 Allow: /css/
@@ -27,6 +28,7 @@ User-agent: DuckAssistBot
 User-agent: MistralAI-User
 Allow: /$
 Allow: /demo
+Allow: /compliance
 Allow: /llms.txt
 Allow: /images/
 Disallow: /api/

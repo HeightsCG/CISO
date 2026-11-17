@@ -2,6 +2,7 @@
     <div class="land__wrap land__footer-inner">
         <img src="/images/logo-dark.png" alt="CISO.aero" width="640" height="154" loading="lazy">
         <span>&copy; 2026 CISO.aero</span>
+        <a class="land__footer-link" href="/compliance">Frameworks</a>
         <button type="button" class="land__footer-link" data-bs-toggle="modal" data-bs-target="#privacy_modal">Privacy</button>
         <button type="button" class="land__footer-link" data-bs-toggle="modal" data-bs-target="#terms_modal">Terms of Use</button>
     </div>

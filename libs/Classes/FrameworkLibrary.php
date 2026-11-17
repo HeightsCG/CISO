@@ -52,7 +52,7 @@ class FrameworkLibrary {
     {
         $entries = array();
 
-        foreach (self::all() as $definition) {
+        foreach (self::summaries() as $definition) {
             $entry = $definition['catalogue'];
             $entries[$entry['group'].'|'.$entry['name']] = $entry;
         }
@@ -81,6 +81,162 @@ class FrameworkLibrary {
         }
 
         return $groups;
+    }
+
+    /** URL slug of a catalogue name: "ISO/IEC 27001" -> "iso-iec-27001". */
+    public static function slug(string $name): string
+    {
+        return trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($name)), '-');
+    }
+
+    /**
+     * The public catalogue (frameworks/catalogue/catalogue.json, written by the build): a
+     * small summary of every framework, so public pages never decode the full definitions.
+     */
+    public static function summaries(): array
+    {
+        static $summaries = null;
+
+        if ($summaries === null) {
+            $summaries = json_decode(file_get_contents(self::directory().'/catalogue/catalogue.json'), true);
+        }
+
+        return $summaries;
+    }
+
+    /**
+     * The public page for one catalogue entry (a framework and its levels or revisions):
+     * facts drawn only from the catalogue summaries and the crosswalk. Null for an unknown
+     * slug. Pages carry section names and counts, never requirement text.
+     */
+    public static function page(string $slug): ?array
+    {
+        $members = array();
+        $group = '';
+        $name = '';
+        $all = self::summaries();
+
+        foreach ($all as $key => $summary) {
+            if (self::slug($summary['catalogue']['name']) === $slug) {
+                $members[$key] = $summary;
+                $group = $summary['catalogue']['group'];
+                $name = $summary['catalogue']['name'];
+            }
+        }
+
+        if (count($members) === 0) {
+            return null;
+        }
+
+        $parts = array();
+        $applies = array();
+        $glossary = array();
+        $notices = array();
+        $issuers = array();
+        $requirements = 0;
+
+        foreach ($members as $key => $summary) {
+            $requirements += $summary['controls'];
+            $issuers[$summary['issuing_body']] = true;
+            $parts[] = $summary;
+
+            foreach ($summary['applies'] as $line) {
+                $applies[$line] = true;
+            }
+
+            foreach ($summary['glossary'] as $term) {
+                $glossary[$term['term']] = $term['definition'];
+            }
+
+            if ($summary['notice'] !== '') {
+                $notices[$summary['notice']] = true;
+            }
+        }
+
+        // Related frameworks: other catalogue entries linked through the crosswalk.
+        $crosswalk = json_decode(file_get_contents(self::directory().'/crosswalk/crosswalk.json'), true);
+        $sources = array();
+
+        foreach ($crosswalk['sources'] as $source) {
+            $sources[$source['id']] = $source['title'];
+        }
+
+        $related = array();
+
+        foreach ($crosswalk['sets'] as $set) {
+            foreach (array(array($set['from'], $set['to']), array($set['to'], $set['from'])) as $pair) {
+                if (!isset($members[$pair[0]]) || !isset($all[$pair[1]]) || isset($members[$pair[1]])) {
+                    continue;
+                }
+
+                $other = $all[$pair[1]]['catalogue']['name'];
+                $related[$other] = array(
+                    'name' => $other,
+                    'slug' => self::slug($other),
+                    'links' => ($related[$other]['links'] ?? 0) + ($crosswalk['counts'][$set['id']] ?? 0),
+                    'source' => $sources[$set['source']] ?? ''
+                );
+            }
+        }
+
+        unset($crosswalk);
+        usort($related, function ($a, $b) {
+            return $b['links'] <=> $a['links'];
+        });
+
+        $first = reset($members);
+        $applies = array_keys($applies);
+        $faq = array(
+            array(
+                'What is '.$name.'?',
+                (count($parts) === 1 ? $first['full_name'] : $name.' has '.count($parts).' parts: '.implode('; ', array_column($parts, 'full_name'))).'. Issued by '.implode(' and ', array_keys($issuers)).'.'
+            ),
+            array(
+                'How does CISO.aero assess '.$name.'?',
+                'Each of the '.number_format($requirements).' '.$first['control_term'].' is broken into plain-English points the assessor marks met, not met or not applicable, and the result is calculated from those answers. '.$first['scoring']
+            )
+        );
+
+        if (count($applies) > 0) {
+            array_splice($faq, 1, 0, array(array(
+                'What are the scope and applicability rules of '.$name.'?',
+                implode(' ', $applies)
+            )));
+        }
+
+        if (count($related) > 0) {
+            $faq[] = array(
+                'Which frameworks map to '.$name.'?',
+                implode(', ', array_column(array_slice($related, 0, 6), 'name')).'. Evidence attached for '.$name.' is offered against the linked controls of those frameworks.'
+            );
+        }
+
+        $faq[] = array(
+            'What reports does CISO.aero produce for '.$name.'?',
+            'Results, gap analysis, statement of applicability, remediation plan and executive summary for the '.$name.' assessment, downloadable as PDF, Word or Excel.'
+        );
+
+        return array(
+            'slug' => $slug,
+            'name' => $name,
+            'group' => $group,
+            'requirements' => $requirements,
+            'parts' => $parts,
+            'applies' => $applies,
+            'related' => $related,
+            'glossary' => $glossary,
+            'notices' => array_keys($notices),
+            'faq' => $faq,
+            'description' => self::page_description($name, $requirements, $first['control_term'])
+        );
+    }
+
+    /** Meta description for a framework page, kept to search-snippet length. */
+    private static function page_description(string $name, int $requirements, string $control_term): string
+    {
+        $text = 'Assess '.$name.' with CISO.aero: '.number_format($requirements).' '.$control_term.' broken into plain-English points, evidence reused across frameworks, and reports for leadership.';
+
+        return mb_strlen($text) <= 160 ? $text : 'Assess '.$name.' with CISO.aero: '.number_format($requirements).' '.$control_term.', evidence reused across frameworks, reports for leadership.';
     }
 
     public static function get(string $key): ?array

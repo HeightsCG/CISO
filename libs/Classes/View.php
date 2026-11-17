@@ -89,6 +89,16 @@ class View {
         require Main::lib_path().'/Layout/demo.php';
     }
 
+    public function compliance_index(): void
+    {
+        require Main::lib_path().'/Layout/compliance_index.php';
+    }
+
+    public function compliance_page(): void
+    {
+        require Main::lib_path().'/Layout/compliance_page.php';
+    }
+
     public function login_form(): void
     {
         $file = $this->login_file();
